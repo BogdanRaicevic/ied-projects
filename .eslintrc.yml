@@ -4,6 +4,7 @@ env:
 extends:
   - plugin:react/recommended
   - google
+  - prettier
 parser: '@typescript-eslint/parser'
 parserOptions:
   ecmaFeatures:
@@ -13,7 +14,9 @@ parserOptions:
 plugins:
   - react
   - '@typescript-eslint'
+  - prettier
 rules: {
   - "react/react-in-jsx-scope": off
   - "require-jsdoc": off
+  - "prettier/prettier": error
 }
