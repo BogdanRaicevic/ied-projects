@@ -1,0 +1,31 @@
+import {
+  Approval,
+  Business,
+  Comment,
+  ConfirmationNumber,
+  DonutSmall,
+  Email,
+  Height,
+  Home,
+  LocationCity,
+  MonitorHeart,
+  Phone,
+  SwitchAccount,
+  Warning,
+} from "@mui/icons-material";
+
+export const companyFormMetadata = [
+  { key: "naziv", label: "Naziv kompanije", inputAdornment: <Business /> },
+  { key: "adresa", label: "Adresa", inputAdornment: <Home /> },
+  { key: "grad", label: "Grad", inputAdornment: <LocationCity /> },
+  { key: "opstina", label: "Opstina", inputAdornment: <DonutSmall /> },
+  { key: "pib", label: "PIB", inputAdornment: <ConfirmationNumber /> },
+  { key: "telefon", label: "Telefon", inputAdornment: <Phone /> },
+  { key: "email", label: "Email", inputAdornment: <Email /> },
+  { key: "ptt", label: "Postanski broj", inputAdornment: <Approval /> },
+  { key: "tipFirme", label: "Tip firme", inputAdornment: <SwitchAccount /> },
+  { key: "velicina", label: "Velicina firme", inputAdornment: <Height /> },
+  { key: "stanje", label: "Stanje firme", inputAdornment: <MonitorHeart /> },
+  { key: "odjava", label: "Odjava", inputAdornment: <Warning /> },
+  { key: "komentari", label: "Komentari", inputAdornment: <Comment /> },
+];
