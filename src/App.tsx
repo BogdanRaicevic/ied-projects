@@ -1,4 +1,5 @@
 import Container from "@mui/material/Container";
+import CompaniesDataGrid from "./components/DataGrid";
 import AddClient from "./components/Forms/AddClient";
 import CompanyForm from "./components/Forms/AddCompany";
 import Navigation from "./components/Navigation";
@@ -11,6 +12,7 @@ function App() {
 
       <AddClient></AddClient>
       <CompanyForm></CompanyForm>
+      <CompaniesDataGrid></CompaniesDataGrid>
     </Container>
   );
 }

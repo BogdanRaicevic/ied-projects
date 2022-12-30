@@ -11,11 +11,13 @@ import {
   MonitorHeart,
   Phone,
   SwitchAccount,
+  TravelExplore,
   Warning,
 } from "@mui/icons-material";
 
 export const companyFormMetadata = [
   { key: "naziv", label: "Naziv kompanije", inputAdornment: <Business /> },
+  { key: "sajt", label: "Sajt", inputAdornment: <TravelExplore /> },
   { key: "adresa", label: "Adresa", inputAdornment: <Home /> },
   { key: "grad", label: "Grad", inputAdornment: <LocationCity /> },
   { key: "opstina", label: "Opstina", inputAdornment: <DonutSmall /> },
