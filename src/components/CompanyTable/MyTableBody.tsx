@@ -22,11 +22,11 @@ export function MyTableBody(
 
   return (
     <TableBody {...getTableBodyProps()}>
-      {rows.map((row, i) => {
+      {rows.map((row) => {
         prepareRow(row);
 
         return (
-          <>
+          <Fragment key={row.id}>
             <StyledTableRow {...row.getRowProps()}>
               {row.cells.map((cell) => {
                 return <TableCell {...cell.getCellProps()}>{cell.render("Cell")}</TableCell>;
@@ -37,7 +37,7 @@ export function MyTableBody(
                 <TableCell colSpan={8}>{renderRowSubComponent({ row })}</TableCell>
               </StyledTableRow>
             ) : null}
-          </>
+          </Fragment>
         );
       })}
     </TableBody>

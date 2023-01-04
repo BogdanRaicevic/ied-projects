@@ -22,7 +22,7 @@ function App() {
       ></MyTable>
     );
   }, []);
-  const companyInitialState = { hiddenColumns: ["zaposleni"] };
+  const companyInitialState = { hiddenColumns: ["id", "zaposleni"] };
 
   return (
     <Container component="main" maxWidth="lg">
