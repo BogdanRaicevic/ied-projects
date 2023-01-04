@@ -35,16 +35,7 @@ export function MyTableBody(
               </StyledTableRow>
               {row.isExpanded ? (
                 <StyledTableRow>
-                  <TableCell colSpan={visibleColumns.length}>
-                    {/*
-                            Inside it, call our renderRowSubComponent function. In reality,
-                            you could pass whatever you want as props to
-                            a component like this, including the entire
-                            table instance. But for this example, we'll just
-                            pass the row
-                          */}
-                    {renderRowSubComponent({ row })}
-                  </TableCell>
+                  <TableCell colSpan={visibleColumns.length}>{renderRowSubComponent({ row })}</TableCell>
                 </StyledTableRow>
               ) : null}
             </>

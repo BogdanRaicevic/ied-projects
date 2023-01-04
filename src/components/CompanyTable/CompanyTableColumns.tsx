@@ -1,4 +1,4 @@
-import { IOptionalZaposleni } from "../../fakeData/companyData";
+import { IOptionalCompanyData, IOptionalZaposleni } from "../../fakeData/companyData";
 export const CompanyTableColumns = [
   {
     // Make an expander cell
@@ -69,10 +69,35 @@ export const CompanyTableColumns = [
   {
     Header: "Zaposleni",
     id: "zaposleni" as const,
-    accessor: (data) => {
-      return data.zaposleni.map((z: IOptionalZaposleni) => {
-        return JSON.stringify(z);
-      });
+    accessor: (data: IOptionalCompanyData[]) => {
+      return data.zaposleni.map((z: IOptionalZaposleni) => z);
     },
+  },
+];
+
+export const ZaposleniTableColumns = [
+  {
+    Header: "ID",
+    accessor: "id" as const,
+  },
+  {
+    Header: "ID Firme",
+    accessor: "firmaId" as const,
+  },
+  {
+    Header: "Ime",
+    accessor: "ime" as const,
+  },
+  {
+    Header: "Prezime",
+    accessor: "prezime" as const,
+  },
+  {
+    Header: "Email",
+    accessor: "email" as const,
+  },
+  {
+    Header: "Telefon",
+    accessor: "telefon" as const,
   },
 ];
