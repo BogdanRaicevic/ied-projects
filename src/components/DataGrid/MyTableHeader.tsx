@@ -1,5 +1,5 @@
 import { ImportExport, KeyboardArrowDown, KeyboardArrowUp } from "@mui/icons-material";
-import { styled, TableCell, tableCellClasses, TableHead, TableRow } from "@mui/material";
+import { styled, TableCell, tableCellClasses, TableHead, TableRow, Typography } from "@mui/material";
 import { HeaderGroup } from "react-table";
 import { IOptionalCompanyData } from "../../fakeData/companyData";
 
@@ -25,8 +25,8 @@ export function MyTableHead(headerGroups: HeaderGroup<IOptionalCompanyData>[]) {
               align="left"
               {...column.getHeaderProps(column.getSortByToggleProps())}
             >
-              <span style={{ display: "flex", minWidth: "15em" }}>
-                {column.render("Header")}
+              <span style={{ display: "flex" }}>
+                <Typography noWrap>{column.render("Header")}</Typography>
                 <span style={{ marginLeft: 10 }}>
                   {column.isSorted ? (
                     column.isSortedDesc ? (
