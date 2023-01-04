@@ -22,26 +22,24 @@ export function MyTableBody(
 
   return (
     <TableBody {...getTableBodyProps()}>
-      <Fragment>
-        {rows.map((row, i) => {
-          prepareRow(row);
+      {rows.map((row, i) => {
+        prepareRow(row);
 
-          return (
-            <>
-              <StyledTableRow {...row.getRowProps()}>
-                {row.cells.map((cell) => {
-                  return <TableCell {...cell.getCellProps()}>{cell.render("Cell")}</TableCell>;
-                })}
+        return (
+          <>
+            <StyledTableRow {...row.getRowProps()}>
+              {row.cells.map((cell) => {
+                return <TableCell {...cell.getCellProps()}>{cell.render("Cell")}</TableCell>;
+              })}
+            </StyledTableRow>
+            {row.isExpanded ? (
+              <StyledTableRow>
+                <TableCell colSpan={8}>{renderRowSubComponent({ row })}</TableCell>
               </StyledTableRow>
-              {row.isExpanded ? (
-                <StyledTableRow>
-                  <TableCell>{renderRowSubComponent({ row })}</TableCell>
-                </StyledTableRow>
-              ) : null}
-            </>
-          );
-        })}
-      </Fragment>
+            ) : null}
+          </>
+        );
+      })}
     </TableBody>
   );
 }
