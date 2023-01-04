@@ -19,12 +19,17 @@ export function MyTableHead(headerGroups: HeaderGroup<IOptionalCompanyData>[]) {
       {headerGroups.map((headerGroup) => (
         <TableRow {...headerGroup.getHeaderGroupProps()}>
           {headerGroup.headers.map((column) => (
-            <StyledTableCell component={"th"} scope="row" align="left" {...column.getHeaderProps()}>
+            <StyledTableCell
+              component={"th"}
+              scope="row"
+              align="left"
+              {...column.getHeaderProps(column.getSortByToggleProps())}
+            >
               <span style={{ display: "flex", minWidth: "15em" }}>
                 {column.render("Header")}
                 <span style={{ marginLeft: 10 }}>
-                  {false ? (
-                    false ? (
+                  {column.isSorted ? (
+                    column.isSortedDesc ? (
                       <KeyboardArrowDown></KeyboardArrowDown>
                     ) : (
                       <KeyboardArrowUp></KeyboardArrowUp>

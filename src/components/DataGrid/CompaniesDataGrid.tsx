@@ -1,7 +1,7 @@
 import { useMemo } from "react";
-import { useTable } from "react-table";
+import { useTable, useSortBy } from "react-table";
 import { companiesData, IOptionalCompanyData } from "../../fakeData/companyData";
-import { CompanyGridColumns } from "./columns";
+import { CompanyGridColumns } from "./CompanyGridColumns";
 import Table from "@mui/material/Table";
 import TableContainer from "@mui/material/TableContainer";
 import { Paper } from "@mui/material";
@@ -12,7 +12,7 @@ export default function CompaniesDataGrid() {
   const columns = useMemo(() => CompanyGridColumns, []);
   const data: IOptionalCompanyData[] = useMemo(() => companiesData, []);
 
-  const tableInstance = useTable({ columns, data });
+  const tableInstance = useTable({ columns, data }, useSortBy);
   const { getTableBodyProps, getTableProps, headerGroups, rows, prepareRow } = tableInstance;
 
   return (
