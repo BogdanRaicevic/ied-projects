@@ -1,3 +1,4 @@
+import { ImportExport, KeyboardArrowDown, KeyboardArrowUp } from "@mui/icons-material";
 import { styled, TableCell, tableCellClasses, TableHead, TableRow } from "@mui/material";
 import { HeaderGroup } from "react-table";
 import { IOptionalCompanyData } from "../../fakeData/companyData";
@@ -19,7 +20,20 @@ export function MyTableHead(headerGroups: HeaderGroup<IOptionalCompanyData>[]) {
         <TableRow {...headerGroup.getHeaderGroupProps()}>
           {headerGroup.headers.map((column) => (
             <StyledTableCell component={"th"} scope="row" align="left" {...column.getHeaderProps()}>
-              {column.render("Header")}
+              <span style={{ display: "flex", minWidth: "15em" }}>
+                {column.render("Header")}
+                <span style={{ marginLeft: 10 }}>
+                  {false ? (
+                    false ? (
+                      <KeyboardArrowDown></KeyboardArrowDown>
+                    ) : (
+                      <KeyboardArrowUp></KeyboardArrowUp>
+                    )
+                  ) : (
+                    <ImportExport></ImportExport>
+                  )}
+                </span>
+              </span>
             </StyledTableCell>
           ))}
         </TableRow>
