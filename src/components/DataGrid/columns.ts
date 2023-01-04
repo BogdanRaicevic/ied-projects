@@ -1,66 +1,66 @@
-export const companyGridColumns = [
+export const CompanyGridColumns = [
   {
     Header: "ID",
-    accessor: "id",
+    accessor: "id" as const,
   },
   {
     Header: "Naziv kompanije",
-    accessor: "naziv",
+    accessor: "naziv" as const,
   },
   {
     Header: "Sajt",
-    accessor: "sajt",
+    accessor: "sajt" as const,
   },
   {
     Header: "Adresa",
-    accessor: "adresa",
+    accessor: "adresa" as const,
   },
   {
     Header: "Grad",
-    accessor: "grad",
+    accessor: "grad" as const,
   },
   {
     Header: "Opstina",
-    accessor: "opstina",
+    accessor: "opstina" as const,
   },
   {
     Header: "PIB",
-    accessor: "pib",
+    accessor: "pib" as const,
   },
   {
     Header: "Postanski broj",
-    accessor: "ptt",
+    accessor: "ptt" as const,
   },
   {
     Header: "Email",
-    accessor: "email",
+    accessor: "email" as const,
   },
   {
     Header: "Telefon",
-    accessor: "telefon",
+    accessor: "telefon" as const,
   },
   {
     Header: "Tip firme",
-    accessor: "tipFirme",
+    accessor: "tipFirme" as const,
   },
   {
     Header: "Velicina",
-    accessor: "velicina",
+    accessor: "velicina" as const,
   },
   {
     Header: "Stanje",
-    accessor: "stanje",
+    accessor: "stanje" as const,
   },
   {
     Header: "Odjava",
-    accessor: "odjava",
+    accessor: "odjava" as const,
   },
   {
     Header: "Komentari",
-    accessor: "komentari",
+    accessor: "komentari" as const,
   },
   {
     Header: "Zaposleni",
-    accessor: "zaposleni",
+    accessor: "zaposleni" as const,
   },
 ];

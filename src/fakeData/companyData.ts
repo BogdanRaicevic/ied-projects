@@ -1,4 +1,25 @@
-export const companiesData = [
+export interface ICompanyData {
+  id: number; // this will be the old id
+  sajt: string;
+  naziv: string;
+  adresa: string;
+  grad: string;
+  opstina: string;
+  pib: number;
+  ptt: number;
+  telefon: string;
+  email: string;
+  tipFirme: string;
+  velicina: string;
+  stanje: string;
+  odjava: boolean;
+  komentari: string;
+  zaposleni: number[];
+}
+
+export interface IOptionalCompanyData extends Partial<ICompanyData> {}
+
+export const companiesData: IOptionalCompanyData[] = [
   {
     id: 1,
     sajt: "asdf.com",
@@ -11,7 +32,7 @@ export const companiesData = [
     telefon: "011234234",
     email: "asdf@asdf.com",
     tipFirme: "doo",
-    velicinaFirme: "velika",
+    velicina: "velika",
     stanje: "likvidna",
     odjava: false,
     komentari: "11.11.2022",
@@ -29,7 +50,7 @@ export const companiesData = [
     telefon: "011234234",
     email: "asdf@bbbb.com",
     tipFirme: "preduzetnik",
-    velicinaFirme: "srednja",
+    velicina: "srednja",
     stanje: "stecaj",
     odjava: true,
     komentari: "11.11.2022",
@@ -47,7 +68,7 @@ export const companiesData = [
     telefon: "011234234",
     email: "asdf@cccc.com",
     tipFirme: "budzet",
-    velicinaFirme: "velika",
+    velicina: "velika",
     stanje: "likvidna",
     odjava: false,
     komentari: "11.11.2022",
@@ -65,11 +86,11 @@ export const companiesData = [
     telefon: "011234234",
     email: "asdf@dddd.com",
     tipFirme: "Akcionarsko drustvo",
-    velicinaFirme: "mala",
+    velicina: "mala",
     stanje: "blokada",
     odjava: false,
     komentari: "11.11.2022",
-    zposleni: [4],
+    zaposleni: [4],
   },
   {
     sajt: "gggg.com",
@@ -83,7 +104,7 @@ export const companiesData = [
     telefon: "011234234",
     email: "asdf@gggg.com",
     tipFirme: "doo",
-    velicinaFirme: "velika",
+    velicina: "velika",
     stanje: "likvidna",
     odjava: true,
     komentari: "11.11.2022",
