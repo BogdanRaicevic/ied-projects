@@ -5,7 +5,7 @@ import { Paper } from "@mui/material";
 import { MyTableHead } from "./MyTableHeader";
 import { MyTableBody } from "./MyTableBody";
 
-export default function CompaniesTable({ columns, data, initialState, renderRowSubComponent }) {
+export default function CompanyTable({ columns, data, initialState, renderRowSubComponent }) {
   const tableInstance = useTable({ columns, data, initialState }, useSortBy, useExpanded);
   const { getTableBodyProps, getTableProps, headerGroups, rows, prepareRow, visibleColumns } = tableInstance;
 

@@ -1,2 +1,2 @@
-import CompaniesTable from "./CompaniesTable";
-export default CompaniesTable;
+import CompanyTable from "./CompanyTable";
+export default CompanyTable;

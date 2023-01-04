@@ -1,7 +1,7 @@
 import Container from "@mui/material/Container";
 import { useCallback, useMemo } from "react";
-import CompaniesTable from "./components/CompanyTable";
-import { CompanyTableColumns, ZaposleniTableColumns } from "./components/CompanyTable/CompanyTableColumns";
+import MyTable from "./components/CompanyTable";
+import { CompanyTableColumns, ZaposleniTableColumns } from "./components/CompanyTable/TableColumns";
 import AddClient from "./components/Forms/AddClient";
 import CompanyForm from "./components/Forms/AddCompany";
 import Navigation from "./components/Navigation";
@@ -10,20 +10,19 @@ import { IOptionalCompanyData, companiesData } from "./fakeData/companyData";
 function App() {
   const columns = useMemo(() => CompanyTableColumns, []);
   const data: IOptionalCompanyData[] = useMemo(() => companiesData, []);
+  const zaposleniInitialState = { hiddenColumns: ["id", "firmaId"] };
 
   const renderRowSubComponent = useCallback(({ row }) => {
-    console.log(JSON.stringify(row.values));
     return (
-      <CompaniesTable
+      <MyTable
         columns={ZaposleniTableColumns}
         data={row.values.zaposleni}
         initialState={zaposleniInitialState}
         renderRowSubComponent={false}
-      ></CompaniesTable>
+      ></MyTable>
     );
   }, []);
   const companyInitialState = { hiddenColumns: ["zaposleni"] };
-  const zaposleniInitialState = { hiddenColumns: ["id", "firmaId"] };
 
   return (
     <Container component="main" maxWidth="lg">
@@ -32,12 +31,12 @@ function App() {
 
       <AddClient></AddClient>
       <CompanyForm></CompanyForm>
-      <CompaniesTable
+      <MyTable
         columns={columns}
         data={data}
         initialState={companyInitialState}
         renderRowSubComponent={renderRowSubComponent}
-      ></CompaniesTable>
+      ></MyTable>
     </Container>
   );
 }

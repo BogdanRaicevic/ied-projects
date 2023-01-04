@@ -35,7 +35,7 @@ export function MyTableBody(
               </StyledTableRow>
               {row.isExpanded ? (
                 <StyledTableRow>
-                  <TableCell colSpan={visibleColumns.length}>{renderRowSubComponent({ row })}</TableCell>
+                  <TableCell>{renderRowSubComponent({ row })}</TableCell>
                 </StyledTableRow>
               ) : null}
             </>
