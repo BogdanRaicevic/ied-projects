@@ -14,7 +14,8 @@ export interface ICompanyData {
   stanje: string;
   odjava: boolean;
   komentari: string;
-  zaposleni: number[];
+  lastTouched: Date;
+  zaposleni: IOptionalZaposleni[];
 }
 
 export interface IOptionalCompanyData extends Partial<ICompanyData> {}
@@ -36,7 +37,25 @@ export const companiesData: IOptionalCompanyData[] = [
     stanje: "likvidna",
     odjava: false,
     komentari: "11.11.2022",
-    zaposleni: [1, 5],
+    lastTouched: new Date(),
+    zaposleni: [
+      {
+        id: 1,
+        firmaId: 1,
+        ime: "ime 1",
+        prezime: "prezime 1",
+        email: "e1@asdf.com",
+        telefon: "12341234",
+      },
+      {
+        id: 5,
+        firmaId: 1,
+        ime: "ime 5",
+        prezime: "prezime 5",
+        email: "e2@asdf.com",
+        telefon: "12341234",
+      },
+    ],
   },
   {
     sajt: "",
@@ -54,6 +73,7 @@ export const companiesData: IOptionalCompanyData[] = [
     stanje: "stecaj",
     odjava: true,
     komentari: "11.11.2022",
+    lastTouched: new Date(),
     zaposleni: [],
   },
   {
@@ -72,7 +92,17 @@ export const companiesData: IOptionalCompanyData[] = [
     stanje: "likvidna",
     odjava: false,
     komentari: "11.11.2022",
-    zaposleni: [2],
+    lastTouched: new Date(),
+    zaposleni: [
+      {
+        id: 2,
+        firmaId: 3,
+        ime: "ime 2",
+        prezime: "prezime 2",
+        email: "e1@cccc.com",
+        telefon: "12341234",
+      },
+    ],
   },
   {
     sajt: "",
@@ -90,7 +120,17 @@ export const companiesData: IOptionalCompanyData[] = [
     stanje: "blokada",
     odjava: false,
     komentari: "11.11.2022",
-    zaposleni: [4],
+    lastTouched: new Date(),
+    zaposleni: [
+      {
+        id: 4,
+        firmaId: 4,
+        ime: "ime 4",
+        prezime: "prezime 4",
+        email: "e1@dddd.com",
+        telefon: "12341234",
+      },
+    ],
   },
   {
     sajt: "gggg.com",
@@ -108,9 +148,30 @@ export const companiesData: IOptionalCompanyData[] = [
     stanje: "likvidna",
     odjava: true,
     komentari: "11.11.2022",
-    zaposleni: [3],
+    lastTouched: new Date(),
+    zaposleni: [
+      {
+        id: 3,
+        firmaId: 4,
+        ime: "ime 3",
+        prezime: "prezime 3",
+        email: "e1@gggg.com",
+        telefon: "12341234",
+      },
+    ],
   },
 ];
+
+export interface IZaposleni {
+  id: number;
+  firmaId: number;
+  ime: string;
+  prezime: string;
+  email: string;
+  telefon: string;
+}
+
+export interface IOptionalZaposleni extends Partial<IZaposleni> {}
 
 export const zaposleniData = [
   {

@@ -1,4 +1,11 @@
-export const CompanyGridColumns = [
+import { IOptionalZaposleni } from "../../fakeData/companyData";
+export const CompanyTableColumns = [
+  {
+    // Make an expander cell
+    Header: () => null, // No header
+    id: "expander", // It needs an ID,
+    Cell: ({ row }) => <span {...row.getToggleRowExpandedProps()}>{row.isExpanded ? "👇" : "👉"}</span>,
+  },
   {
     Header: "ID",
     accessor: "id" as const,
@@ -61,6 +68,11 @@ export const CompanyGridColumns = [
   },
   {
     Header: "Zaposleni",
-    accessor: "zaposleni" as const,
+    id: "zaposleni" as const,
+    accessor: (data) => {
+      return data.zaposleni.map((z: IOptionalZaposleni) => {
+        return JSON.stringify(z);
+      });
+    },
   },
 ];
