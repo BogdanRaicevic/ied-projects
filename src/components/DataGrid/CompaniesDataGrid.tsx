@@ -4,10 +4,10 @@ import { companiesData, IOptionalCompanyData } from "../../fakeData/companyData"
 import { CompanyGridColumns } from "./columns";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
-import TableCell from "@mui/material/TableCell";
+import TableCell, { tableCellClasses } from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
-import { TableRow } from "@mui/material";
+import { Paper, styled, TableRow } from "@mui/material";
 
 export default function CompaniesDataGrid() {
   const columns = useMemo(() => CompanyGridColumns, []);
@@ -16,14 +16,36 @@ export default function CompaniesDataGrid() {
   const tableInstance = useTable({ columns, data });
   const { getTableBodyProps, getTableProps, headerGroups, rows, prepareRow } = tableInstance;
 
+  const StyledTableCell = styled(TableCell)(({ theme }) => ({
+    [`&.${tableCellClasses.head}`]: {
+      backgroundColor: theme.palette.common.black,
+      color: theme.palette.common.white,
+    },
+    [`&.${tableCellClasses.body}`]: {
+      fontSize: 14,
+    },
+  }));
+
+  const StyledTableRow = styled(TableRow)(({ theme }) => ({
+    "&:nth-of-type(odd)": {
+      backgroundColor: theme.palette.action.hover,
+    },
+    // hide last border
+    "&:last-child td, &:last-child th": {
+      border: 0,
+    },
+  }));
+
   return (
-    <TableContainer>
+    <TableContainer component={Paper}>
       <Table {...getTableProps()}>
         <TableHead>
           {headerGroups.map((headerGroup) => (
             <TableRow {...headerGroup.getHeaderGroupProps()}>
               {headerGroup.headers.map((column) => (
-                <TableCell {...column.getHeaderProps()}>{column.render("Header")}</TableCell>
+                <StyledTableCell component={"th"} scope="row" align="left" {...column.getHeaderProps()}>
+                  {column.render("Header")}
+                </StyledTableCell>
               ))}
             </TableRow>
           ))}
@@ -32,11 +54,11 @@ export default function CompaniesDataGrid() {
           {rows.map((row, i) => {
             prepareRow(row);
             return (
-              <TableRow {...row.getRowProps()}>
+              <StyledTableRow {...row.getRowProps()}>
                 {row.cells.map((cell) => {
                   return <TableCell {...cell.getCellProps()}>{cell.render("Cell")}</TableCell>;
                 })}
-              </TableRow>
+              </StyledTableRow>
             );
           })}
         </TableBody>
