@@ -1,4 +1,6 @@
 import { IOptionalCompanyData, IOptionalZaposleni } from "../../fakeData/companyData";
+import MyModal from "../Modal";
+
 export const CompanyTableColumns = [
   {
     // Make an expander cell
@@ -13,6 +15,9 @@ export const CompanyTableColumns = [
   {
     Header: "Naziv kompanije",
     accessor: "naziv" as const,
+    Cell: (props) => {
+      return <MyModal buttonText={props.value} content={props.row.values}></MyModal>;
+    },
   },
   {
     Header: "Sajt",
