@@ -1,3 +1,5 @@
+import PageTitle from "../components/PageTitle";
+
 export default function Sertifikati() {
-  return <h1>Sertifikati</h1>;
+  return <PageTitle title={"Sertifikati"}></PageTitle>;
 }

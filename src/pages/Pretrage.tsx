@@ -1,3 +1,5 @@
+import PageTitle from "../components/PageTitle";
+
 export default function Pretrage() {
-  return <h1>pretrage</h1>;
+  return <PageTitle title={"Pretrage"} />;
 }

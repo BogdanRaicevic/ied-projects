@@ -1,6 +1,8 @@
+import { Typography } from "@mui/material";
 import { useMemo, useCallback } from "react";
 import CompanyTable from "../components/CompanyTable";
 import { CompanyTableColumns, ZaposleniTableColumns } from "../components/CompanyTable/TableColumns";
+import PageTitle from "../components/PageTitle";
 import { IOptionalCompanyData, companiesData } from "../fakeData/companyData";
 
 export default function Evidencija() {
@@ -21,11 +23,14 @@ export default function Evidencija() {
   const companyInitialState = { hiddenColumns: ["id", "zaposleni"] };
 
   return (
-    <CompanyTable
-      columns={columns}
-      data={data}
-      initialState={companyInitialState}
-      renderRowSubComponent={renderRowSubComponent}
-    ></CompanyTable>
+    <>
+      <PageTitle title={"Evidencija"} />
+      <CompanyTable
+        columns={columns}
+        data={data}
+        initialState={companyInitialState}
+        renderRowSubComponent={renderRowSubComponent}
+      ></CompanyTable>
+    </>
   );
 }

@@ -1,3 +1,5 @@
+import PageTitle from "../components/PageTitle";
+
 export default function Privremene() {
-  return <h1>Privremene</h1>;
+  return <PageTitle title={"Privremene"} />;
 }

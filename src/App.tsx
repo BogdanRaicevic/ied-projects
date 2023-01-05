@@ -7,7 +7,6 @@ function App() {
   return (
     <Container component="main" maxWidth="lg">
       <Navigation></Navigation>
-      <h1>Hello world</h1>
 
       <Routes>
         <Route path="/" element={<h1>hello</h1>}></Route>

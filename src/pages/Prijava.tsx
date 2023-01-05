@@ -1,3 +1,6 @@
+import { Typography } from "@mui/material";
+import PageTitle from "../components/PageTitle";
+
 export default function Prijava() {
-  return <h1>Prijava</h1>;
+  return <PageTitle title={"Prijava"} />;
 }

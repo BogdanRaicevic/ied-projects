@@ -1,3 +1,5 @@
+import PageTitle from "../components/PageTitle";
+
 export default function Racuni() {
-  return <h1>Racuni</h1>;
+  return <PageTitle title={"Racuni"}></PageTitle>;
 }
