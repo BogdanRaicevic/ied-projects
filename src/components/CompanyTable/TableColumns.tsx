@@ -100,6 +100,9 @@ export const ZaposleniTableColumns = [
   {
     Header: "Email",
     accessor: "email" as const,
+    Cell: (props) => {
+      return <MyModal buttonText={props.value} content={props.row.values}></MyModal>;
+    },
   },
   {
     Header: "Telefon",
