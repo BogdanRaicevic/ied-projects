@@ -2,9 +2,17 @@ import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
 import Button from "@mui/material/Button";
+import { Link as RouteLink } from "react-router-dom";
+import Link from "@mui/material/Link";
 
 export default function ApplicationNavBar() {
-  const navItems = ["Evidencija", "Privremene", "Pretrage", "Računi", "Sertifikati"];
+  const navItems = [
+    { text: "Evidencija", linkPath: "/evidencija" },
+    { text: "Privremene", linkPath: "/privremene" },
+    { text: "Pretrage", linkPath: "/pretrage" },
+    { text: "Računi", linkPath: "/racuni" },
+    { text: "Sertifikati", linkPath: "/sertifikati" },
+  ];
 
   return (
     <Box sx={{ flexGrow: 1 }}>
@@ -12,12 +20,14 @@ export default function ApplicationNavBar() {
         <Toolbar>
           <Box sx={{ flexGrow: 1, display: { xs: "none", sm: "block" } }}>
             {navItems.map((item) => (
-              <Button key={item} sx={{ color: "#fff" }}>
-                {item}
-              </Button>
+              <Link key={item.text} component={RouteLink} to={item.linkPath} sx={{ color: "white" }}>
+                <Button sx={{ color: "#fff" }}>{item.text}</Button>
+              </Link>
             ))}
           </Box>
-          <Button sx={{ color: "#fff" }}>PRIJAVA/ODJAVA</Button>
+          <Link component={RouteLink} to={"/prijava"} sx={{ color: "white" }}>
+            <Button sx={{ color: "#fff" }}>Prijava/Odjava</Button>
+          </Link>
         </Toolbar>
       </AppBar>
     </Box>
