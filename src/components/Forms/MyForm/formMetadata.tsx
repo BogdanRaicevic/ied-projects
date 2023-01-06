@@ -1,4 +1,5 @@
 import {
+  AccountCircle,
   Approval,
   Business,
   Comment,
@@ -9,6 +10,7 @@ import {
   Home,
   LocationCity,
   MonitorHeart,
+  Person,
   Phone,
   SwitchAccount,
   TravelExplore,
@@ -30,4 +32,11 @@ export const companyFormMetadata = [
   { key: "stanje", label: "Stanje firme", inputAdornment: <MonitorHeart /> },
   { key: "odjava", label: "Odjava", inputAdornment: <Warning /> },
   { key: "komentari", label: "Komentari", inputAdornment: <Comment /> },
+];
+
+export const zaposleniFormMetadata = [
+  { key: "ime", label: "Ime", inputAdornment: <AccountCircle /> },
+  { key: "prezime", label: "Prezime", inputAdornment: <Person /> },
+  { key: "email", label: "Email", inputAdornment: <Email /> },
+  { key: "telefon", label: "Telefon", inputAdornment: <Phone /> },
 ];

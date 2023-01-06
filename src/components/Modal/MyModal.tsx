@@ -4,20 +4,21 @@ import Modal from "@mui/material/Modal";
 import Fade from "@mui/material/Fade";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
+import MyForm from "../Forms/MyForm/MyForm";
 
 const style = {
   position: "absolute" as "absolute",
   top: "50%",
   left: "50%",
+  width: "80%",
   transform: "translate(-50%, -50%)",
-  width: 400,
   bgcolor: "background.paper",
-  border: "2px solid #000",
   boxShadow: 24,
   p: 4,
+  borderRadius: 1,
 };
 
-export default function MyModal({ buttonText, content }) {
+export default function MyModal({ modalTitle, buttonText, content, formMetadata }) {
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -35,9 +36,10 @@ export default function MyModal({ buttonText, content }) {
       >
         <Fade in={open}>
           <Box sx={style}>
-            <Typography id="transition-modal-title" variant="h6" component="h2">
-              {JSON.stringify(content)}
+            <Typography variant="h4" mb={2}>
+              {modalTitle}
             </Typography>
+            {<MyForm formMetadata={formMetadata} formData={content} />}
           </Box>
         </Fade>
       </Modal>

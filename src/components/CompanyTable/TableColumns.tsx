@@ -1,4 +1,5 @@
 import { IOptionalCompanyData, IOptionalZaposleni } from "../../fakeData/companyData";
+import { companyFormMetadata, zaposleniFormMetadata } from "../Forms/MyForm/formMetadata";
 import MyModal from "../Modal";
 
 export const CompanyTableColumns = [
@@ -16,7 +17,14 @@ export const CompanyTableColumns = [
     Header: "Naziv kompanije",
     accessor: "naziv" as const,
     Cell: (props) => {
-      return <MyModal buttonText={props.value} content={props.row.values}></MyModal>;
+      return (
+        <MyModal
+          modalTitle={"Kompanija"}
+          buttonText={props.value}
+          content={props.row.values}
+          formMetadata={companyFormMetadata}
+        ></MyModal>
+      );
     },
   },
   {
@@ -101,7 +109,14 @@ export const ZaposleniTableColumns = [
     Header: "Email",
     accessor: "email" as const,
     Cell: (props) => {
-      return <MyModal buttonText={props.value} content={props.row.values}></MyModal>;
+      return (
+        <MyModal
+          modalTitle={"Zaposleni"}
+          buttonText={props.value}
+          content={props.row.values}
+          formMetadata={zaposleniFormMetadata}
+        ></MyModal>
+      );
     },
   },
   {
