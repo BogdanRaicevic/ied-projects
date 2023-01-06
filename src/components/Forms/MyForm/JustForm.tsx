@@ -3,7 +3,7 @@ import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import { useState } from "react";
 
-export default function MyForm({ formMetadata, formData }) {
+export default function JustForm({ formMetadata, formData }) {
   const [data, setData] = useState(formData);
   console.log("my data", data);
 

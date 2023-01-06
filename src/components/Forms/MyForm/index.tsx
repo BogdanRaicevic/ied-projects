@@ -1,3 +1,3 @@
-import MyForm from "./MyForm";
+import MyForm from "./JustForm";
 
 export default MyForm;

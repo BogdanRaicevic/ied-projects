@@ -4,7 +4,8 @@ import Modal from "@mui/material/Modal";
 import Fade from "@mui/material/Fade";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
-import MyForm from "../Forms/MyForm/MyForm";
+import MyForm from "../Forms/MyForm/JustForm";
+import Divider from "@mui/material/Divider";
 
 const style = {
   position: "absolute" as "absolute",
@@ -39,6 +40,7 @@ export default function MyModal({ modalTitle, buttonText, content, formMetadata 
             <Typography variant="h4" mb={2}>
               {modalTitle}
             </Typography>
+            <Divider sx={{ mb: 4 }} />
             {<MyForm formMetadata={formMetadata} formData={content} />}
           </Box>
         </Fade>
