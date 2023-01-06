@@ -1,5 +1,5 @@
 import { styled, TableRow, TableBody, TableCell } from "@mui/material";
-import { Fragment, useCallback } from "react";
+import { Fragment } from "react";
 import { TablePropGetter, TableProps, Row } from "react-table";
 import { IOptionalCompanyData } from "../../fakeData/companyData";
 

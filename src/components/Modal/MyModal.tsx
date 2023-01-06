@@ -4,7 +4,7 @@ import Modal from "@mui/material/Modal";
 import Fade from "@mui/material/Fade";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
-import MyForm from "../Forms/MyForm/JustForm";
+import MyForm from "../Forms/MyForm/MyForm";
 import Divider from "@mui/material/Divider";
 
 const style = {
@@ -19,7 +19,7 @@ const style = {
   borderRadius: 1,
 };
 
-export default function MyModal({ modalTitle, buttonText, content, formMetadata }) {
+export default function MyModal({ modalTitle, formMetadata, buttonText, content }) {
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
