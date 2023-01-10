@@ -10,7 +10,13 @@ import {
 } from "@mui/material";
 import { Box } from "@mui/system";
 import { useForm } from "react-hook-form";
-import { ICompanyData, IOptionalCompanyData } from "../../../fakeData/companyData";
+import {
+  ICompanyData,
+  IOptionalCompanyData,
+  stanjaFirme,
+  tipoviFirme,
+  velicineFirme,
+} from "../../../fakeData/companyData";
 import { companyFormMetadata, IMetadata, InputTypes } from "../MyForm/formMetadata";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
@@ -29,7 +35,7 @@ const companySchema = z
     ptt: z.string().length(5, "PTT mora da ima 5 brojeva"),
     telefon: z.string(),
     email: z.string().email("Ne ispravna email adresa"),
-    tipFirme: z.string(),
+    tip: z.string(),
     velicina: z.string(),
     stanje: z.string(),
     odjava: z.boolean(),
@@ -58,14 +64,14 @@ const formInitialValues: IOptionalCompanyData = {
   ptt: "",
   telefon: "",
   email: "",
-  tipFirme: "",
+  tip: "",
   velicina: "",
   stanje: "",
   odjava: true,
   komentari: "",
   lastTouched: new Date(),
   zaposleni: [],
-} as const;
+};
 
 export default function CompanyForm() {
   const {
@@ -138,11 +144,23 @@ export default function CompanyForm() {
     }
 
     if (item.inputType === InputTypes.Select) {
+      let optionsData: string[] = [];
+      switch (item.key) {
+        case "tip":
+          optionsData = tipoviFirme;
+          break;
+        case "velicina":
+          optionsData = velicineFirme;
+          break;
+        case "stanje":
+          optionsData = stanjaFirme;
+          break;
+        default:
+          break;
+      }
       return (
         <Autocomplete
-          disablePortal
-          id="combo-box-demo"
-          options={["neki sadrzaj 1", "neki sadrzaj 3", "tst", "bogdan", "filip"]}
+          options={optionsData}
           renderInput={(params) => {
             return <TextField {...params} label={item.label} variant="outlined" />;
           }}

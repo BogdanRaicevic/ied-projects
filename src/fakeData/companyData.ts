@@ -5,11 +5,11 @@ export interface ICompanyData {
   adresa: string;
   grad: string;
   opstina: string;
-  pib: number;
-  ptt: number;
+  pib: string;
+  ptt: string;
   telefon: string;
   email: string;
-  tipFirme: string;
+  tip: string;
   velicina: string;
   stanje: string;
   odjava: boolean;
@@ -32,7 +32,7 @@ export const companiesData: IOptionalCompanyData[] = [
     ptt: 11070,
     telefon: "011234234",
     email: "asdf@asdf.com",
-    tipFirme: "doo",
+    tip: "doo",
     velicina: "velika",
     stanje: "likvidna",
     odjava: false,
@@ -68,7 +68,7 @@ export const companiesData: IOptionalCompanyData[] = [
     ptt: 22010,
     telefon: "011234234",
     email: "asdf@bbbb.com",
-    tipFirme: "preduzetnik",
+    tip: "preduzetnik",
     velicina: "srednja",
     stanje: "stecaj",
     odjava: true,
@@ -87,7 +87,7 @@ export const companiesData: IOptionalCompanyData[] = [
     ptt: 33033,
     telefon: "011234234",
     email: "asdf@cccc.com",
-    tipFirme: "budzet",
+    tip: "budzet",
     velicina: "velika",
     stanje: "likvidna",
     odjava: false,
@@ -115,7 +115,7 @@ export const companiesData: IOptionalCompanyData[] = [
     ptt: 44044,
     telefon: "011234234",
     email: "asdf@dddd.com",
-    tipFirme: "Akcionarsko drustvo",
+    tip: "Akcionarsko drustvo",
     velicina: "mala",
     stanje: "blokada",
     odjava: false,
@@ -143,7 +143,7 @@ export const companiesData: IOptionalCompanyData[] = [
     ptt: 55055,
     telefon: "011234234",
     email: "asdf@gggg.com",
-    tipFirme: "doo",
+    tip: "doo",
     velicina: "velika",
     stanje: "likvidna",
     odjava: true,
@@ -218,4 +218,4 @@ export const zaposleniData = [
 
 export const velicineFirme = ["mala", "srednja", "velika", "ne znam"];
 export const stanjaFirme = ["likvidna", "u blokadi", "bankrot", "ne znam"];
-export const tipoviFirme = ["doo", "preduzetnik", "akcionarsko drustvo", "ne znam"];
+export const tipoviFirme = ["doo", "preduzetnik", "akcionarsko drustvo", "budzet", "ne znam"];

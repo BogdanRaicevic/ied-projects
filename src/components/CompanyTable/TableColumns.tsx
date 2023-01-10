@@ -61,7 +61,7 @@ export const CompanyTableColumns = [
   },
   {
     Header: "Tip firme",
-    accessor: "tipFirme" as const,
+    accessor: "tip" as const,
   },
   {
     Header: "Velicina",

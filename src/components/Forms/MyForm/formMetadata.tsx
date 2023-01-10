@@ -43,7 +43,7 @@ export const companyFormMetadata: IMetadata[] = [
   { key: "telefon", label: "Telefon", inputAdornment: <Phone />, inputType: InputTypes.Text },
   { key: "email", label: "Email", inputAdornment: <Email />, inputType: InputTypes.Text },
   { key: "ptt", label: "Postanski broj", inputAdornment: <Approval />, inputType: InputTypes.Text },
-  { key: "tipFirme", label: "Tip firme", inputAdornment: <SwitchAccount />, inputType: InputTypes.Select },
+  { key: "tip", label: "Tip firme", inputAdornment: <SwitchAccount />, inputType: InputTypes.Select },
   { key: "velicina", label: "Velicina firme", inputAdornment: <Height />, inputType: InputTypes.Select },
   { key: "stanje", label: "Stanje firme", inputAdornment: <MonitorHeart />, inputType: InputTypes.Select },
   { key: "komentari", label: "Komentari", inputAdornment: <Comment />, inputType: InputTypes.TextMultiline },
