@@ -26,13 +26,13 @@ import Grid2 from "@mui/material/Unstable_Grid2/Grid2";
 const companySchema = z
   .object({
     id: z.string(),
-    sajt: z.string().max(50, "link za web sajt je predugacak").min(3, "link za websajt je prekratak"),
-    naziv: z.string().max(100).min(4, "Naziv firme je previse kratak"),
+    sajt: z.string().max(50, "link za web sajt je predugacak"),
+    naziv: z.string().max(100),
     adresa: z.string().max(150),
     grad: z.string().max(50),
     opstina: z.string().max(100),
-    pib: z.string().length(5),
-    ptt: z.string().length(5, "PTT mora da ima 5 brojeva"),
+    pib: z.string().regex(new RegExp("^[0-9]{9}$"), "PIB moze da se sastoji samo od brojeva 9 brojeva"),
+    ptt: z.string().regex(new RegExp("^[0-9]{5}$"), "PTT moze da se sastoji samo od 5 brojeva"),
     telefon: z.string(),
     email: z.string().email("Ne ispravna email adresa"),
     tip: z.string(),
@@ -90,7 +90,6 @@ export default function CompanyForm() {
   const [odjava, setOdjava] = useState(formInitialValues.odjava);
   const handleOdjava = () => {
     setOdjava((prev) => !prev);
-    console.log(odjava);
   };
 
   function renderFiled(register, item: IMetadata, errors: any) {
@@ -104,7 +103,7 @@ export default function CompanyForm() {
           }}
           name={item.key}
           defaultValue={formInitialValues[item.key]}
-          error={errors[item.key]}
+          error={errors[item.key] ? true : false}
           helperText={errors[item.key]?.message}
         />
       );
