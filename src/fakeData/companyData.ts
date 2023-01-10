@@ -215,3 +215,7 @@ export const zaposleniData = [
     telefon: "12341234",
   },
 ];
+
+export const velicineFirme = ["mala", "srednja", "velika", "ne znam"];
+export const stanjaFirme = ["likvidna", "u blokadi", "bankrot", "ne znam"];
+export const tipoviFirme = ["doo", "preduzetnik", "akcionarsko drustvo", "ne znam"];

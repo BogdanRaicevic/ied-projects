@@ -2,7 +2,6 @@ import { Button, FormControl, InputAdornment } from "@mui/material";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import { useState } from "react";
-import { IOptionalCompanyData, IOptionalZaposleni } from "../../../fakeData/companyData";
 
 export default function MyForm({ formMetadata, formData }) {
   const [data, setData] = useState(formData);
