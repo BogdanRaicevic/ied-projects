@@ -15,6 +15,7 @@ import { companyFormMetadata, IMetadata, InputTypes } from "../MyForm/formMetada
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { useState } from "react";
+import Grid2 from "@mui/material/Unstable_Grid2/Grid2";
 
 const companySchema = z
   .object({
@@ -154,7 +155,7 @@ export default function CompanyForm() {
     .filter((element) => element.inputType === InputTypes.Text)
     .map((item: IMetadata) => {
       return (
-        <FormControl key={item.key} sx={{ m: 2, width: "35ch" }}>
+        <FormControl fullWidth key={item.key}>
           {renderFiled(register, item, errors)}
         </FormControl>
       );
@@ -164,7 +165,7 @@ export default function CompanyForm() {
     .filter((element) => element.inputType === InputTypes.Select)
     .map((item: IMetadata) => {
       return (
-        <FormControl key={item.key} sx={{ m: 2, width: "35ch" }}>
+        <FormControl fullWidth key={item.key}>
           {renderFiled(register, item, errors)}
         </FormControl>
       );
@@ -174,7 +175,7 @@ export default function CompanyForm() {
     .filter((element) => element.inputType === InputTypes.Switch)
     .map((item: IMetadata) => {
       return (
-        <FormControl key={item.key} sx={{ m: 2, width: "35ch" }}>
+        <FormControl fullWidth key={item.key}>
           {renderFiled(register, item, errors)}
         </FormControl>
       );
@@ -184,27 +185,49 @@ export default function CompanyForm() {
     .filter((element) => element.inputType === InputTypes.TextMultiline)
     .map((item: IMetadata) => {
       return (
-        <FormControl key={item.key} sx={{ m: 2, width: "35ch" }}>
+        <FormControl fullWidth key={item.key}>
           {renderFiled(register, item, errors)}
         </FormControl>
       );
     });
 
   return (
-    <Box onSubmit={handleSubmit(onSubmit)} component="form" sx={{ display: "flex", flexWrap: "wrap" }}>
-      {switchItems}
-      {textItems}
-      <Divider sx={{ width: "100%", my: 4 }} />
+    <Box onSubmit={handleSubmit(onSubmit)} component="form" sx={{ display: "flex", flexWrap: "wrap", flexGrow: 1 }}>
+      <Grid2 container spacing={4}>
+        {switchItems.map((item) => {
+          return (
+            <Grid2 key={item.key} xs={12}>
+              {item}
+            </Grid2>
+          );
+        })}
+        <Divider sx={{ width: "100%", my: 4 }} />
 
-      {autocompleteItems}
-      <Divider sx={{ width: "100%", my: 4 }} />
+        {textItems.map((item) => {
+          return (
+            <Grid2 key={item.key} xs={12} md={6} lg={4}>
+              {item}
+            </Grid2>
+          );
+        })}
+        <Divider sx={{ width: "100%", my: 4 }} />
 
-      {textAreaItems}
-      <Divider sx={{ width: "100%", my: 4 }} />
+        {autocompleteItems.map((item) => {
+          return (
+            <Grid2 key={item.key} xs={12} md={6} lg={4}>
+              {item}
+            </Grid2>
+          );
+        })}
+        <Divider sx={{ width: "100%", my: 4 }} />
 
-      <Button sx={{ my: 2 }} size="large" variant="contained" color="success" type="submit">
-        Sačuvaj
-      </Button>
+        {textAreaItems}
+        <Divider sx={{ width: "100%", my: 4 }} />
+
+        <Button sx={{ my: 2 }} size="large" variant="contained" color="success" type="submit">
+          Sačuvaj
+        </Button>
+      </Grid2>
     </Box>
   );
 }
