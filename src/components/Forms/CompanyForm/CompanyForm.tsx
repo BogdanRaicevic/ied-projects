@@ -196,7 +196,7 @@ export default function CompanyForm() {
       <Grid2 container spacing={4}>
         {switchItems.map((item) => {
           return (
-            <Grid2 key={item.key} xs={12}>
+            <Grid2 sx={{ backgroundColor: odjava ? "salmon" : "lightgreen" }} key={item.key} xs={12}>
               {item}
             </Grid2>
           );
