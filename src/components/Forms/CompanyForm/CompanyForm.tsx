@@ -161,7 +161,24 @@ export default function CompanyForm() {
         <Autocomplete
           options={optionsData}
           renderInput={(params) => {
-            return <TextField {...params} label={item.label} variant="outlined" />;
+            return (
+              <TextField
+                {...params}
+                label={item.label}
+                variant="outlined"
+                InputProps={{
+                  ...params.InputProps,
+                  startAdornment: (
+                    <>
+                      <InputAdornment position="end" sx={{ m: 1 }}>
+                        {item.inputAdornment}
+                      </InputAdornment>
+                      {params.InputProps.startAdornment}
+                    </>
+                  ),
+                }}
+              />
+            );
           }}
         />
       );
