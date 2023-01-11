@@ -10,51 +10,14 @@ import {
 } from "@mui/material";
 import { Box } from "@mui/system";
 import { useForm } from "react-hook-form";
-import {
-  ICompanyData,
-  IOptionalCompanyData,
-  stanjaFirme,
-  tipoviFirme,
-  velicineFirme,
-} from "../../../fakeData/companyData";
-import { companyFormMetadata, IMetadata, InputTypes } from "../MyForm/formMetadata";
+import { stanjaFirme, tipoviFirme, velicineFirme } from "../../../fakeData/companyData";
+import { companyFormMetadata } from "../MyForm/formMetadata";
 import { zodResolver } from "@hookform/resolvers/zod";
-import * as z from "zod";
 import { useState } from "react";
 import Grid2 from "@mui/material/Unstable_Grid2/Grid2";
+import { Metadata, CompanySchema, InputTypesSchema, Company } from "../../../schemas/companySchemas";
 
-const companySchema = z
-  .object({
-    id: z.string(),
-    sajt: z.string().max(50, "link za web sajt je predugacak"),
-    naziv: z.string().max(100),
-    adresa: z.string().max(150),
-    grad: z.string().max(50),
-    opstina: z.string().max(100),
-    pib: z.string().regex(new RegExp("^[0-9]{9}$"), "PIB moze da se sastoji samo od brojeva 9 brojeva"),
-    ptt: z.string().regex(new RegExp("^[0-9]{5}$"), "PTT moze da se sastoji samo od 5 brojeva"),
-    telefon: z.string(),
-    email: z.string().email("Ne ispravna email adresa"),
-    tip: z.string(),
-    velicina: z.string(),
-    stanje: z.string(),
-    odjava: z.boolean(),
-    komentari: z.string(),
-    lastTouched: z.date(),
-    zaposleni: z.array(
-      z
-        .object({
-          ime: z.string(),
-          prezime: z.string(),
-          email: z.string(),
-          telefon: z.string(),
-        })
-        .optional()
-    ),
-  })
-  .optional();
-
-const formInitialValues: IOptionalCompanyData = {
+const formInitialValues: Company = {
   sajt: "",
   naziv: "",
   adresa: "",
@@ -78,11 +41,11 @@ export default function CompanyForm() {
     register,
     formState: { errors },
     handleSubmit,
-  } = useForm<ICompanyData>({
-    resolver: zodResolver(companySchema),
+  } = useForm<Company>({
+    resolver: zodResolver(CompanySchema),
   });
 
-  const onSubmit = (data: IOptionalCompanyData) => {
+  const onSubmit = (data: Company) => {
     console.log("hi");
     console.log(data);
   };
@@ -92,8 +55,8 @@ export default function CompanyForm() {
     setOdjava((prev) => !prev);
   };
 
-  function renderFiled(register, item: IMetadata, errors: any) {
-    if (item.inputType === InputTypes.Text) {
+  function renderFiled(register, item: Metadata, errors: any) {
+    if (item.inputType === InputTypesSchema.enum.Text) {
       return (
         <TextField
           {...register(item.key)}
@@ -109,7 +72,7 @@ export default function CompanyForm() {
       );
     }
 
-    if (item.inputType === InputTypes.TextMultiline) {
+    if (item.inputType === InputTypesSchema.enum.TextMultiline) {
       return (
         <TextField
           {...register(item.key)}
@@ -132,17 +95,24 @@ export default function CompanyForm() {
       );
     }
 
-    if (item.inputType === InputTypes.Switch) {
+    if (item.inputType === InputTypesSchema.enum.Switch) {
       return (
         <FormControlLabel
           sx={{ mx: "auto" }}
-          control={<Switch color="error" defaultChecked={formInitialValues[item.key]} onChange={handleOdjava} />}
+          control={
+            <Switch
+              {...register(item.key)}
+              color="error"
+              defaultChecked={formInitialValues[item.key]}
+              onChange={handleOdjava}
+            />
+          }
           label={odjava ? "ODJAVLJENI" : "Prijavljeni"}
         />
       );
     }
 
-    if (item.inputType === InputTypes.Select) {
+    if (item.inputType === InputTypesSchema.enum.Select) {
       let optionsData: string[] = [];
       switch (item.key) {
         case "tip":
@@ -159,6 +129,7 @@ export default function CompanyForm() {
       }
       return (
         <Autocomplete
+          {...register(item.key)}
           options={optionsData}
           renderInput={(params) => {
             return (
@@ -186,8 +157,8 @@ export default function CompanyForm() {
   }
 
   const textItems = companyFormMetadata
-    .filter((element) => element.inputType === InputTypes.Text)
-    .map((item: IMetadata) => {
+    .filter((element) => element.inputType === InputTypesSchema.enum.Text)
+    .map((item: Metadata) => {
       return (
         <FormControl fullWidth key={item.key}>
           {renderFiled(register, item, errors)}
@@ -196,8 +167,8 @@ export default function CompanyForm() {
     });
 
   const autocompleteItems = companyFormMetadata
-    .filter((element) => element.inputType === InputTypes.Select)
-    .map((item: IMetadata) => {
+    .filter((element) => element.inputType === InputTypesSchema.enum.Select)
+    .map((item: Metadata) => {
       return (
         <FormControl fullWidth key={item.key}>
           {renderFiled(register, item, errors)}
@@ -206,8 +177,8 @@ export default function CompanyForm() {
     });
 
   const switchItems = companyFormMetadata
-    .filter((element) => element.inputType === InputTypes.Switch)
-    .map((item: IMetadata) => {
+    .filter((element) => element.inputType === InputTypesSchema.enum.Switch)
+    .map((item: Metadata) => {
       return (
         <FormControl fullWidth key={item.key}>
           {renderFiled(register, item, errors)}
@@ -216,8 +187,8 @@ export default function CompanyForm() {
     });
 
   const textAreaItems = companyFormMetadata
-    .filter((element) => element.inputType === InputTypes.TextMultiline)
-    .map((item: IMetadata) => {
+    .filter((element) => element.inputType === InputTypesSchema.enum.TextMultiline)
+    .map((item: Metadata) => {
       return (
         <FormControl fullWidth key={item.key}>
           {renderFiled(register, item, errors)}

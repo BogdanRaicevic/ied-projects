@@ -1,9 +1,9 @@
 import { ImportExport, KeyboardArrowDown, KeyboardArrowUp } from "@mui/icons-material";
 import { styled, TableCell, tableCellClasses, TableHead, TableRow, Typography } from "@mui/material";
 import { HeaderGroup } from "react-table";
-import { IOptionalCompanyData } from "../../fakeData/companyData";
+import { Company } from "../../schemas/companySchemas";
 
-export function MyTableHead(headerGroups: HeaderGroup<IOptionalCompanyData>[]) {
+export function MyTableHead(headerGroups: HeaderGroup<Company>[]) {
   const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
       backgroundColor: theme.palette.common.black,

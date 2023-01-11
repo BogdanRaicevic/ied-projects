@@ -1,12 +1,12 @@
 import { styled, TableRow, TableBody, TableCell } from "@mui/material";
 import { Fragment } from "react";
 import { TablePropGetter, TableProps, Row } from "react-table";
-import { IOptionalCompanyData } from "../../fakeData/companyData";
+import { Company } from "../../schemas/companySchemas";
 
 export function MyTableBody(
-  getTableBodyProps: (propGetter?: TablePropGetter<IOptionalCompanyData> | undefined) => TableProps,
-  rows: Row<IOptionalCompanyData>[],
-  prepareRow: (row: Row<IOptionalCompanyData>) => void,
+  getTableBodyProps: (propGetter?: TablePropGetter<Company> | undefined) => TableProps,
+  rows: Row<Company>[],
+  prepareRow: (row: Row<Company>) => void,
   visibleColumns: string | any[],
   renderRowSubComponent: any
 ) {

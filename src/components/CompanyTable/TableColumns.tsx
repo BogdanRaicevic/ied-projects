@@ -1,4 +1,4 @@
-import { IOptionalCompanyData, IOptionalZaposleni } from "../../fakeData/companyData";
+import { Company, Zaposleni } from "../../schemas/companySchemas";
 import { companyFormMetadata, zaposleniFormMetadata } from "../Forms/MyForm/formMetadata";
 import MyModal from "../Modal";
 
@@ -82,8 +82,8 @@ export const CompanyTableColumns = [
   {
     Header: "Zaposleni",
     id: "zaposleni" as const,
-    accessor: (data: IOptionalCompanyData[]) => {
-      return data.zaposleni.map((z: IOptionalZaposleni) => z);
+    accessor: (data: Company[]) => {
+      return data.zaposleni.map((z: Zaposleni) => z);
     },
   },
 ];

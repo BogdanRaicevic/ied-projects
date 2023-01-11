@@ -6,11 +6,12 @@ import { CompanyTableColumns, ZaposleniTableColumns } from "../components/Compan
 import MyForm from "../components/Forms/MyForm";
 import { companyFormMetadata } from "../components/Forms/MyForm/formMetadata";
 import PageTitle from "../components/PageTitle";
-import { IOptionalCompanyData, companiesData } from "../fakeData/companyData";
+import { companiesData } from "../fakeData/companyData";
+import { Company } from "../schemas/companySchemas";
 
 export default function Evidencija() {
   const columns = useMemo(() => CompanyTableColumns, []);
-  const data: IOptionalCompanyData[] = useMemo(() => companiesData, []);
+  const data: Company[] = useMemo(() => companiesData, []);
   const zaposleniInitialState = { hiddenColumns: ["id", "firmaId"] };
 
   const renderRowSubComponent = useCallback(({ row }: any) => {
