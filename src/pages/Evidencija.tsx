@@ -1,10 +1,10 @@
 import { Add } from "@mui/icons-material";
-import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Fab, Typography } from "@mui/material";
-import zIndex from "@mui/material/styles/zIndex";
+import { Fab } from "@mui/material";
 import { useMemo, useCallback, useState } from "react";
 import CompanyTable from "../components/CompanyTable";
 import { CompanyTableColumns, ZaposleniTableColumns } from "../components/CompanyTable/TableColumns";
 import CompanyForm from "../components/Forms/CompanyForm";
+import MyDialog from "../components/MyDialog/MyDialog";
 import PageTitle from "../components/PageTitle";
 import { companiesData } from "../fakeData/companyData";
 import { Company } from "../schemas/companySchemas";
@@ -36,22 +36,9 @@ export default function Evidencija() {
       <Fab onClick={handleOpen} color="primary" aria-label="add">
         <Add />
       </Fab>
-      <Dialog fullScreen open={open} onClose={handleClose}>
-        <DialogTitle align="center" variant="h4" boxShadow={10} zIndex={999}>
-          Nova Firma
-        </DialogTitle>
-        <DialogContent>
-          <CompanyForm></CompanyForm>
-        </DialogContent>
-        <DialogActions>
-          <Button variant="outlined" color="warning" size="large" onClick={handleClose}>
-            Izađi
-          </Button>
-          <Button variant="contained" color="success" size="large" onClick={handleClose}>
-            Sačuvaj
-          </Button>
-        </DialogActions>
-      </Dialog>
+      <MyDialog open={open} handleClose={handleClose}>
+        <CompanyForm></CompanyForm>
+      </MyDialog>
       <CompanyTable
         columns={columns}
         data={data}
