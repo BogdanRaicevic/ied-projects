@@ -1,10 +1,10 @@
 import { Add } from "@mui/icons-material";
-import { Box, Divider, Fab, Fade, Modal, Typography } from "@mui/material";
+import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Fab, Typography } from "@mui/material";
+import zIndex from "@mui/material/styles/zIndex";
 import { useMemo, useCallback, useState } from "react";
 import CompanyTable from "../components/CompanyTable";
 import { CompanyTableColumns, ZaposleniTableColumns } from "../components/CompanyTable/TableColumns";
-import MyForm from "../components/Forms/MyForm";
-import { companyFormMetadata } from "../components/Forms/MyForm/formMetadata";
+import CompanyForm from "../components/Forms/CompanyForm";
 import PageTitle from "../components/PageTitle";
 import { companiesData } from "../fakeData/companyData";
 import { Company } from "../schemas/companySchemas";
@@ -30,41 +30,28 @@ export default function Evidencija() {
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
-  const style = {
-    position: "absolute" as "absolute",
-    top: "50%",
-    left: "50%",
-    width: "80%",
-    transform: "translate(-50%, -50%)",
-    bgcolor: "background.paper",
-    boxShadow: 24,
-    p: 4,
-    borderRadius: 1,
-  };
-
   return (
     <>
       <PageTitle title={"Evidencija"} />
       <Fab onClick={handleOpen} color="primary" aria-label="add">
         <Add />
       </Fab>
-      <Modal
-        aria-labelledby="transition-modal-title"
-        aria-describedby="transition-modal-description"
-        open={open}
-        onClose={handleClose}
-        closeAfterTransition
-      >
-        <Fade in={open}>
-          <Box sx={style}>
-            <Typography variant="h4" mb={2}>
-              {"Nova firma"}
-            </Typography>
-            <Divider sx={{ mb: 4 }} />
-            {<MyForm formMetadata={companyFormMetadata} formData={[]} />}
-          </Box>
-        </Fade>
-      </Modal>
+      <Dialog fullScreen open={open} onClose={handleClose}>
+        <DialogTitle align="center" variant="h4" boxShadow={10} zIndex={999}>
+          Nova Firma
+        </DialogTitle>
+        <DialogContent>
+          <CompanyForm></CompanyForm>
+        </DialogContent>
+        <DialogActions>
+          <Button variant="outlined" color="warning" size="large" onClick={handleClose}>
+            Izađi
+          </Button>
+          <Button variant="contained" color="success" size="large" onClick={handleClose}>
+            Sačuvaj
+          </Button>
+        </DialogActions>
+      </Dialog>
       <CompanyTable
         columns={columns}
         data={data}

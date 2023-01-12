@@ -100,7 +100,7 @@ export default function CompanyForm() {
     if (item.inputType === InputTypesSchema.enum.Switch) {
       return (
         <FormControlLabel
-          sx={{ mx: "auto" }}
+          sx={{ alignItems: "center", justifyContent: "center" }}
           control={
             <Switch
               {...register(item.key as keyof Company)}
@@ -171,8 +171,8 @@ export default function CompanyForm() {
   };
 
   return (
-    <Box onSubmit={handleSubmit(onSubmit)} component="form" sx={{ display: "flex", flexWrap: "wrap", flexGrow: 1 }}>
-      <Grid2 container spacing={4}>
+    <Box onSubmit={handleSubmit(onSubmit)} component="form" sx={{ mt: 4 }}>
+      <Grid2 container m={0} spacing={2}>
         {inputItems(InputTypesSchema.enum.Switch).map((item) => {
           return (
             <Grid2 sx={{ backgroundColor: odjava ? "salmon" : "lightgreen" }} key={item.key} xs={12}>
