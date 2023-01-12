@@ -9,7 +9,7 @@ import {
   Divider,
 } from "@mui/material";
 import { Box } from "@mui/system";
-import { useForm } from "react-hook-form";
+import { useForm, UseFormRegister } from "react-hook-form";
 import { stanjaFirme, tipoviFirme, velicineFirme } from "../../../fakeData/companyData";
 import { companyFormMetadata } from "../MyForm/formMetadata";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -31,7 +31,7 @@ const formInitialValues: Company = {
   tip: "",
   velicina: "",
   stanje: "",
-  odjava: true,
+  odjava: false,
   komentari: "",
   lastTouched: new Date(),
   zaposleni: [],
@@ -56,17 +56,17 @@ export default function CompanyForm() {
     setOdjava((prev) => !prev);
   };
 
-  function renderFiled(register, item: Metadata, errors: any) {
+  function renderFiled(register: UseFormRegister<Company>, item: Metadata, errors: any) {
     if (item.inputType === InputTypesSchema.enum.Text) {
       return (
         <TextField
-          {...register(item.key)}
+          {...register(item.key as keyof Company)}
           label={item.label}
           InputProps={{
             startAdornment: <InputAdornment position="start">{item.inputAdornment}</InputAdornment>,
           }}
           name={item.key}
-          defaultValue={formInitialValues[item.key]}
+          defaultValue={formInitialValues[item.key as keyof Company]}
           error={errors[item.key] ? true : false}
           helperText={errors[item.key]?.message}
         />
@@ -76,7 +76,7 @@ export default function CompanyForm() {
     if (item.inputType === InputTypesSchema.enum.TextMultiline) {
       return (
         <TextField
-          {...register(item.key)}
+          {...register(item.key as keyof Company)}
           label={item.label}
           InputProps={{
             startAdornment: (
@@ -89,7 +89,7 @@ export default function CompanyForm() {
           name={item.key}
           multiline
           rows={10}
-          defaultValue={formInitialValues[item.key]}
+          defaultValue={formInitialValues[item.key as keyof Company]}
           error={errors[item.key]}
           helperText={errors[item.key]?.message}
         />
@@ -102,9 +102,9 @@ export default function CompanyForm() {
           sx={{ mx: "auto" }}
           control={
             <Switch
-              {...register(item.key)}
+              {...register(item.key as keyof Company)}
               color="error"
-              defaultChecked={formInitialValues[item.key]}
+              defaultChecked={formInitialValues.odjava}
               onChange={handleOdjava}
             />
           }
@@ -130,7 +130,7 @@ export default function CompanyForm() {
       }
       return (
         <Autocomplete
-          {...register(item.key)}
+          {...register(item.key as keyof Company)}
           options={optionsData}
           renderInput={(params) => {
             return (
