@@ -16,6 +16,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import Grid2 from "@mui/material/Unstable_Grid2/Grid2";
 import { Metadata, CompanySchema, InputTypesSchema, Company } from "../../../schemas/companySchemas";
+import { z } from "zod";
 
 const formInitialValues: Company = {
   sajt: "",
@@ -156,50 +157,22 @@ export default function CompanyForm() {
     }
   }
 
-  const textItems = companyFormMetadata
-    .filter((element) => element.inputType === InputTypesSchema.enum.Text)
-    .map((item: Metadata) => {
-      return (
-        <FormControl fullWidth key={item.key}>
-          {renderFiled(register, item, errors)}
-        </FormControl>
-      );
-    });
-
-  const autocompleteItems = companyFormMetadata
-    .filter((element) => element.inputType === InputTypesSchema.enum.Select)
-    .map((item: Metadata) => {
-      return (
-        <FormControl fullWidth key={item.key}>
-          {renderFiled(register, item, errors)}
-        </FormControl>
-      );
-    });
-
-  const switchItems = companyFormMetadata
-    .filter((element) => element.inputType === InputTypesSchema.enum.Switch)
-    .map((item: Metadata) => {
-      return (
-        <FormControl fullWidth key={item.key}>
-          {renderFiled(register, item, errors)}
-        </FormControl>
-      );
-    });
-
-  const textAreaItems = companyFormMetadata
-    .filter((element) => element.inputType === InputTypesSchema.enum.TextMultiline)
-    .map((item: Metadata) => {
-      return (
-        <FormControl fullWidth key={item.key}>
-          {renderFiled(register, item, errors)}
-        </FormControl>
-      );
-    });
+  const inputItems = (inputType: z.infer<typeof InputTypesSchema>) => {
+    return companyFormMetadata
+      .filter((element) => element.inputType === inputType)
+      .map((item: Metadata) => {
+        return (
+          <FormControl fullWidth key={item.key}>
+            {renderFiled(register, item, errors)}
+          </FormControl>
+        );
+      });
+  };
 
   return (
     <Box onSubmit={handleSubmit(onSubmit)} component="form" sx={{ display: "flex", flexWrap: "wrap", flexGrow: 1 }}>
       <Grid2 container spacing={4}>
-        {switchItems.map((item) => {
+        {inputItems(InputTypesSchema.enum.Switch).map((item) => {
           return (
             <Grid2 sx={{ backgroundColor: odjava ? "salmon" : "lightgreen" }} key={item.key} xs={12}>
               {item}
@@ -208,7 +181,7 @@ export default function CompanyForm() {
         })}
         <Divider sx={{ width: "100%", my: 4 }} />
 
-        {textItems.map((item) => {
+        {inputItems(InputTypesSchema.enum.Text).map((item) => {
           return (
             <Grid2 key={item.key} xs={12} md={6} lg={4}>
               {item}
@@ -217,7 +190,7 @@ export default function CompanyForm() {
         })}
         <Divider sx={{ width: "100%", my: 4 }} />
 
-        {autocompleteItems.map((item) => {
+        {inputItems(InputTypesSchema.enum.Select).map((item) => {
           return (
             <Grid2 key={item.key} xs={12} md={6} lg={4}>
               {item}
@@ -226,7 +199,13 @@ export default function CompanyForm() {
         })}
         <Divider sx={{ width: "100%", my: 4 }} />
 
-        {textAreaItems}
+        {inputItems(InputTypesSchema.enum.TextMultiline).map((item) => {
+          return (
+            <Grid2 key={item.key} xs={12}>
+              {item}
+            </Grid2>
+          );
+        })}
         <Divider sx={{ width: "100%", my: 4 }} />
 
         <Button sx={{ my: 2 }} size="large" variant="contained" color="success" type="submit">
