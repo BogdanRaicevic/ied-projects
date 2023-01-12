@@ -7,6 +7,7 @@ import {
   Autocomplete,
   Switch,
   Divider,
+  Typography,
 } from "@mui/material";
 import { Box } from "@mui/system";
 import { useForm, UseFormRegister } from "react-hook-form";
@@ -108,7 +109,7 @@ export default function CompanyForm() {
               onChange={handleOdjava}
             />
           }
-          label={odjava ? "ODJAVLJENI" : "Prijavljeni"}
+          label={odjava ? <Typography>ODJAVLJENI</Typography> : <Typography>Prijavljeni</Typography>}
         />
       );
     }
