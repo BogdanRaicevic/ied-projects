@@ -1,0 +1,69 @@
+import { MRT_ColumnDef } from "material-react-table";
+import { Company, Zaposleni } from "../../schemas/companySchemas";
+
+export const myCompanyColumns: MRT_ColumnDef<Company>[] = [
+  {
+    header: "Naziv kompanije",
+    accessorKey: "naziv",
+  },
+  {
+    header: "Sajt",
+    accessorKey: "sajt",
+  },
+  {
+    header: "Adresa",
+    accessorKey: "adresa",
+  },
+  {
+    header: "Grad",
+    accessorKey: "grad",
+  },
+  {
+    header: "Opstina",
+    accessorKey: "opstina",
+  },
+  {
+    header: "Postanski broj",
+    accessorKey: "ptt",
+  },
+  {
+    header: "Telefon",
+    accessorKey: "telefon",
+  },
+  {
+    header: "Tip firme",
+    accessorKey: "tip",
+  },
+  {
+    header: "Velicina",
+    accessorKey: "velicina",
+  },
+  {
+    header: "Stanje",
+    accessorKey: "stanje",
+  },
+  {
+    header: "Odjava",
+    id: "odjava",
+    accessorFn: (row) => row.odjava.toString(),
+  },
+  {
+    header: "Komentari",
+    accessorKey: "komentari",
+  },
+];
+
+export const myZaposleniColumns: MRT_ColumnDef<Zaposleni>[] = [
+  {
+    header: "Ime i Prezime",
+    accessorFn: (row) => `${row.ime} ${row.prezime}`,
+  },
+  {
+    header: "Email",
+    accessorKey: "email",
+  },
+  {
+    header: "Telefon",
+    accessorKey: "telefon",
+  },
+];

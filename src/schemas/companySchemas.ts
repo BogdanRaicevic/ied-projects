@@ -1,38 +1,34 @@
 import * as z from "zod";
 
-export const ZaposleniSchema = z
-  .object({
-    id: z.string(),
-    firmaId: z.string(),
-    ime: z.string(),
-    prezime: z.string(),
-    email: z.string(),
-    telefon: z.string(),
-  })
-  .partial();
+export const ZaposleniSchema = z.object({
+  id: z.string(),
+  firmaId: z.string(),
+  ime: z.string(),
+  prezime: z.string(),
+  email: z.string(),
+  telefon: z.string(),
+});
 export type Zaposleni = z.infer<typeof ZaposleniSchema>;
 
-export const CompanySchema = z
-  .object({
-    id: z.string(),
-    sajt: z.string().max(50, "link za web sajt je predugacak"),
-    naziv: z.string().max(100),
-    adresa: z.string().max(150),
-    grad: z.string().max(50),
-    opstina: z.string().max(100),
-    pib: z.string().regex(new RegExp("^\\d{9}$"), "PIB moze da se sastoji samo od brojeva 9 brojeva"),
-    ptt: z.string().regex(new RegExp("^\\d{5}$"), "PTT moze da se sastoji samo od 5 brojeva"),
-    telefon: z.string(),
-    email: z.string().email("Ne ispravna email adresa").max(100, "Predugacka email adresa"),
-    tip: z.string(),
-    velicina: z.string(),
-    stanje: z.string(),
-    odjava: z.boolean(),
-    komentari: z.string().max(1000),
-    lastTouched: z.date(),
-    zaposleni: z.array(ZaposleniSchema),
-  })
-  .partial();
+export const CompanySchema = z.object({
+  id: z.string(),
+  sajt: z.string().max(50, "link za web sajt je predugacak"),
+  naziv: z.string().max(100),
+  adresa: z.string().max(150),
+  grad: z.string().max(50),
+  opstina: z.string().max(100),
+  pib: z.string().regex(new RegExp("^\\d{9}$"), "PIB moze da se sastoji samo od brojeva 9 brojeva"),
+  ptt: z.string().regex(new RegExp("^\\d{5}$"), "PTT moze da se sastoji samo od 5 brojeva"),
+  telefon: z.string(),
+  email: z.string().email("Ne ispravna email adresa").max(100, "Predugacka email adresa"),
+  tip: z.string(),
+  velicina: z.string(),
+  stanje: z.string(),
+  odjava: z.boolean(),
+  komentari: z.string().max(1000),
+  lastTouched: z.date(),
+  zaposleni: z.array(ZaposleniSchema),
+});
 export type Company = z.infer<typeof CompanySchema>;
 
 const inputTypes = ["Text", "Switch", "Select", "TextMultiline"] as const;
