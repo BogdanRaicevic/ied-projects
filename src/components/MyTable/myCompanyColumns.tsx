@@ -1,3 +1,4 @@
+import { ContentCopy } from "@mui/icons-material";
 import { MRT_ColumnDef } from "material-react-table";
 import { Company, Zaposleni } from "../../schemas/companySchemas";
 
@@ -9,6 +10,16 @@ export const myCompanyColumns: MRT_ColumnDef<Company>[] = [
   {
     header: "Sajt",
     accessorKey: "sajt",
+  },
+  {
+    header: "Email",
+    accessorKey: "email",
+    enableClickToCopy: true,
+    muiTableBodyCellCopyButtonProps: {
+      fullWidth: true,
+      startIcon: <ContentCopy />,
+      sx: { justifyContent: "flex-start" },
+    },
   },
   {
     header: "Adresa",
@@ -61,6 +72,12 @@ export const myZaposleniColumns: MRT_ColumnDef<Zaposleni>[] = [
   {
     header: "Email",
     accessorKey: "email",
+    enableClickToCopy: true,
+    muiTableBodyCellCopyButtonProps: {
+      fullWidth: true,
+      startIcon: <ContentCopy />,
+      sx: { justifyContent: "flex-start" },
+    },
   },
   {
     header: "Telefon",
