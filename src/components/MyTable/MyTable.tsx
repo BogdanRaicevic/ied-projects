@@ -20,6 +20,21 @@ export default function MyTable(props: Props) {
       enableColumnOrdering
       enableGlobalFilter={true} //turn off a feature
       renderDetailPanel={({ row }) => renderZaposleniTable(row)}
+      muiTableProps={{
+        sx: {
+          "table, th, td": {
+            border: 1,
+            borderColor: "lightgray",
+            borderStyle: "solid",
+          },
+          th: {
+            backgroundColor: "#adadad",
+          },
+          "& tr:nth-of-type(4n+1)": {
+            backgroundColor: "#e3f2f7",
+          },
+        },
+      }}
     />
   );
 
@@ -30,8 +45,14 @@ export default function MyTable(props: Props) {
           columns={zaposleniColumns}
           data={row.original.zaposleni}
           enableColumnOrdering
-          enableGlobalFilter={true} //turn off a feature
-          muiTableProps={{ width: 10 }}
+          enableGlobalFilter={true}
+          muiTableProps={{
+            sx: {
+              "& tr:nth-of-type(2n + 1)": {
+                backgroundColor: "#e3f2f7 !important",
+              },
+            },
+          }}
         />
       </Box>
     );
