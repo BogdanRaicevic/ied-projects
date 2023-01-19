@@ -52,7 +52,8 @@ export const companyFormMetadata: Metadata[] = [
   { key: "stanje", label: "Stanje firme", inputAdornment: <MonitorHeart />, inputType: InputTypesSchema.enum.Select },
   { key: "komentari", label: "Komentari", inputAdornment: <Comment />, inputType: InputTypesSchema.enum.TextMultiline },
 ];
-export const zaposleniFormMetadata: Metadata[] = [
+
+export const employeeFormMetadata: Metadata[] = [
   { key: "ime", label: "Ime", inputAdornment: <AccountCircle />, inputType: InputTypesSchema.enum.Text },
   { key: "prezime", label: "Prezime", inputAdornment: <Person />, inputType: InputTypesSchema.enum.Text },
   { key: "email", label: "Email", inputAdornment: <Email />, inputType: InputTypesSchema.enum.Text },
@@ -211,6 +212,18 @@ export default function CompanyForm() {
       });
   };
 
+  const employeeInputItems = (inputType: z.infer<typeof InputTypesSchema>) => {
+    return employeeFormMetadata
+      .filter((element) => element.inputType === inputType)
+      .map((item: Metadata, index: number) => {
+        return (
+          <FormControl fullWidth key={`${item.key}-${index}`}>
+            {renderFiled(register, item, errors)}
+          </FormControl>
+        );
+      });
+  };
+
   return (
     <Box onSubmit={handleSubmit(onSubmit)} component="form" sx={{ mt: 4 }}>
       <Grid2 container m={0} spacing={2}>
@@ -244,6 +257,17 @@ export default function CompanyForm() {
         {inputItems(InputTypesSchema.enum.TextMultiline).map((item) => {
           return (
             <Grid2 key={item.key} xs={12}>
+              {item}
+            </Grid2>
+          );
+        })}
+        <Divider sx={{ width: "100%", my: 4 }} />
+        <Button variant="contained" color="secondary">
+          Dodaj zaposlenog kompanije
+        </Button>
+        {employeeInputItems(InputTypesSchema.enum.Text).map((item) => {
+          return (
+            <Grid2 key={item.key} xs={12} md={6} lg={4}>
               {item}
             </Grid2>
           );
