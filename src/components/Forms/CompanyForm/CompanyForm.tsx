@@ -12,12 +12,52 @@ import {
 import { Box } from "@mui/system";
 import { useForm, UseFormRegister } from "react-hook-form";
 import { stanjaFirme, tipoviFirme, velicineFirme } from "../../../fakeData/companyData";
-import { companyFormMetadata } from "../MyForm/formMetadata";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import Grid2 from "@mui/material/Unstable_Grid2/Grid2";
 import { Metadata, CompanySchema, InputTypesSchema, Company } from "../../../schemas/companySchemas";
 import { z } from "zod";
+import {
+  Warning,
+  Business,
+  TravelExplore,
+  Home,
+  LocationCity,
+  DonutSmall,
+  ConfirmationNumber,
+  Phone,
+  Email,
+  Approval,
+  SwitchAccount,
+  Height,
+  MonitorHeart,
+  AccountCircle,
+  Person,
+  Comment,
+} from "@mui/icons-material";
+
+export const companyFormMetadata: Metadata[] = [
+  { key: "odjava", label: "Odjava", inputAdornment: <Warning />, inputType: InputTypesSchema.enum.Switch },
+  { key: "naziv", label: "Naziv kompanije", inputAdornment: <Business />, inputType: InputTypesSchema.enum.Text },
+  { key: "sajt", label: "Sajt", inputAdornment: <TravelExplore />, inputType: InputTypesSchema.enum.Text },
+  { key: "adresa", label: "Adresa", inputAdornment: <Home />, inputType: InputTypesSchema.enum.Text },
+  { key: "grad", label: "Grad", inputAdornment: <LocationCity />, inputType: InputTypesSchema.enum.Text },
+  { key: "opstina", label: "Opstina", inputAdornment: <DonutSmall />, inputType: InputTypesSchema.enum.Text },
+  { key: "pib", label: "PIB", inputAdornment: <ConfirmationNumber />, inputType: InputTypesSchema.enum.Text },
+  { key: "telefon", label: "Telefon", inputAdornment: <Phone />, inputType: InputTypesSchema.enum.Text },
+  { key: "email", label: "Email", inputAdornment: <Email />, inputType: InputTypesSchema.enum.Text },
+  { key: "ptt", label: "Postanski broj", inputAdornment: <Approval />, inputType: InputTypesSchema.enum.Text },
+  { key: "tip", label: "Tip firme", inputAdornment: <SwitchAccount />, inputType: InputTypesSchema.enum.Select },
+  { key: "velicina", label: "Velicina firme", inputAdornment: <Height />, inputType: InputTypesSchema.enum.Select },
+  { key: "stanje", label: "Stanje firme", inputAdornment: <MonitorHeart />, inputType: InputTypesSchema.enum.Select },
+  { key: "komentari", label: "Komentari", inputAdornment: <Comment />, inputType: InputTypesSchema.enum.TextMultiline },
+];
+export const zaposleniFormMetadata: Metadata[] = [
+  { key: "ime", label: "Ime", inputAdornment: <AccountCircle />, inputType: InputTypesSchema.enum.Text },
+  { key: "prezime", label: "Prezime", inputAdornment: <Person />, inputType: InputTypesSchema.enum.Text },
+  { key: "email", label: "Email", inputAdornment: <Email />, inputType: InputTypesSchema.enum.Text },
+  { key: "telefon", label: "Telefon", inputAdornment: <Phone />, inputType: InputTypesSchema.enum.Text },
+];
 
 const formInitialValues: Company = {
   sajt: "",
@@ -36,6 +76,7 @@ const formInitialValues: Company = {
   komentari: "",
   lastTouched: new Date(),
   zaposleni: [],
+  id: "",
 };
 
 export default function CompanyForm() {
