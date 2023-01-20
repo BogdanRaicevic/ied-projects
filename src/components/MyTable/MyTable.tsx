@@ -1,9 +1,9 @@
-import React, { useMemo } from "react";
-import MaterialReactTable from "material-react-table";
+import { Box } from "@mui/material";
 import type { MRT_ColumnDef } from "material-react-table"; // If using TypeScript (optional, but recommended)
+import MaterialReactTable from "material-react-table";
+import React, { useMemo } from "react";
 import { Company, Zaposleni } from "../../schemas/companySchemas";
 import { myCompanyColumns, myZaposleniColumns } from "./myCompanyColumns";
-import { Box } from "@mui/material";
 
 type Props = {
   data: Company[];
@@ -38,7 +38,7 @@ export default function MyTable(props: Props) {
     />
   );
 
-  function renderZaposleniTable(row): React.ReactNode {
+  function renderZaposleniTable(row: any): React.ReactNode {
     return (
       <Box width={1000} sx={{ boxShadow: 3 }}>
         <MaterialReactTable

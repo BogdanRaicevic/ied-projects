@@ -1,7 +1,7 @@
-import { Dialog, DialogTitle, DialogContent, DialogActions, Button } from "@mui/material";
 import { DomainAdd } from "@mui/icons-material";
+import { Button, Dialog, DialogActions, DialogContent, DialogTitle } from "@mui/material";
 
-export default function MyDialog(props) {
+export default function MyDialog(props: any) {
   return (
     <Dialog maxWidth="lg" open={props.open} onClose={props.handleClose}>
       <DialogTitle align="center" variant="h4" boxShadow={10} zIndex={999}>
