@@ -10,7 +10,7 @@ import {
   Typography,
 } from "@mui/material";
 import { Box } from "@mui/system";
-import { useForm, UseFormRegister } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { stanjaFirme, tipoviFirme, velicineFirme } from "../../../fakeData/companyData";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
@@ -56,8 +56,8 @@ export const companyFormMetadata: Metadata[] = [
 export const employeeFormMetadata: Metadata[] = [
   { key: "ime", label: "Ime", inputAdornment: <AccountCircle />, inputType: InputTypesSchema.enum.Text },
   { key: "prezime", label: "Prezime", inputAdornment: <Person />, inputType: InputTypesSchema.enum.Text },
-  { key: "email", label: "Email", inputAdornment: <Email />, inputType: InputTypesSchema.enum.Text },
-  { key: "telefon", label: "Telefon", inputAdornment: <Phone />, inputType: InputTypesSchema.enum.Text },
+  { key: "email-zaposlenog", label: "Email", inputAdornment: <Email />, inputType: InputTypesSchema.enum.Text },
+  { key: "telefon-zaposlenog", label: "Telefon", inputAdornment: <Phone />, inputType: InputTypesSchema.enum.Text },
 ];
 
 const formInitialValues: Company = {
@@ -75,7 +75,7 @@ const formInitialValues: Company = {
   stanje: "",
   odjava: false,
   komentari: "",
-  lastTouched: new Date(),
+  lastTouched: "",
   zaposleni: [],
   id: "",
 };
@@ -94,12 +94,19 @@ export default function CompanyForm() {
     console.log(data);
   };
 
+  const onError = (errors: any, e: any) => console.log(errors, e);
+
   const [odjava, setOdjava] = useState(formInitialValues.odjava);
   const handleOdjava = () => {
     setOdjava((prev) => !prev);
   };
 
-  function renderFiled(register: UseFormRegister<Company>, item: Metadata, errors: any) {
+  const [data, setData] = useState<Company>(formInitialValues);
+  const handleFormChange = (e: any) => {
+    setData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+  };
+
+  function renderFiled(item: Metadata, errors: any) {
     if (item.inputType === InputTypesSchema.enum.Text) {
       return (
         <TextField
@@ -110,7 +117,7 @@ export default function CompanyForm() {
           }}
           name={item.key}
           defaultValue={formInitialValues[item.key as keyof Company]}
-          error={errors[item.key] ? true : false}
+          error={Boolean(errors[item.key])}
           helperText={errors[item.key]?.message}
         />
       );
@@ -173,7 +180,7 @@ export default function CompanyForm() {
       }
       return (
         <Autocomplete
-          {...register(item.key as keyof Company)}
+          {...register(item.key as keyof Company)} // TODO: fix this
           options={optionsData}
           renderInput={(params) => {
             return (
@@ -206,7 +213,7 @@ export default function CompanyForm() {
       .map((item: Metadata) => {
         return (
           <FormControl fullWidth key={item.key}>
-            {renderFiled(register, item, errors)}
+            {renderFiled(item, errors)}
           </FormControl>
         );
       });
@@ -218,14 +225,14 @@ export default function CompanyForm() {
       .map((item: Metadata, index: number) => {
         return (
           <FormControl fullWidth key={`${item.key}-${index}`}>
-            {renderFiled(register, item, errors)}
+            {renderFiled(item, errors)}
           </FormControl>
         );
       });
   };
 
   return (
-    <Box onSubmit={handleSubmit(onSubmit)} component="form" sx={{ mt: 4 }}>
+    <Box onSubmit={handleSubmit(onSubmit, onError)} component="form" sx={{ mt: 4 }}>
       <Grid2 container m={0} spacing={2}>
         {inputItems(InputTypesSchema.enum.Switch).map((item) => {
           return (
@@ -262,7 +269,7 @@ export default function CompanyForm() {
           );
         })}
         <Divider sx={{ width: "100%", my: 4 }} />
-        <Button variant="contained" color="secondary">
+        {/* <Button variant="contained" color="secondary">
           Dodaj zaposlenog kompanije
         </Button>
         {employeeInputItems(InputTypesSchema.enum.Text).map((item) => {
@@ -272,7 +279,7 @@ export default function CompanyForm() {
             </Grid2>
           );
         })}
-        <Divider sx={{ width: "100%", my: 4 }} />
+        <Divider sx={{ width: "100%", my: 4 }} /> */}
 
         <Button sx={{ my: 2 }} size="large" variant="contained" color="success" type="submit">
           Sačuvaj

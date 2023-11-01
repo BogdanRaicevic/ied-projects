@@ -11,7 +11,7 @@ export const ZaposleniSchema = z.object({
 export type Zaposleni = z.infer<typeof ZaposleniSchema>;
 
 export const CompanySchema = z.object({
-  id: z.string(),
+  id: z.optional(z.string()),
   sajt: z.string().max(50, "link za web sajt je predugacak"),
   naziv: z.string().max(100),
   adresa: z.string().max(150),
@@ -26,8 +26,8 @@ export const CompanySchema = z.object({
   stanje: z.string(),
   odjava: z.boolean(),
   komentari: z.string().max(1000),
-  lastTouched: z.date(),
-  zaposleni: z.array(ZaposleniSchema),
+  lastTouched: z.optional(z.string()),
+  zaposleni: z.optional(z.array(ZaposleniSchema)),
 });
 export type Company = z.infer<typeof CompanySchema>;
 
