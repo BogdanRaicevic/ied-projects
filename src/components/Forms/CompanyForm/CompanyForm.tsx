@@ -10,7 +10,7 @@ import {
   Typography,
 } from "@mui/material";
 import { Box } from "@mui/system";
-import { useForm } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
 import { stanjaFirme, tipoviFirme, velicineFirme } from "../../../fakeData/companyData";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
@@ -85,6 +85,7 @@ export default function CompanyForm() {
     register,
     formState: { errors },
     handleSubmit,
+    control,
   } = useForm<Company>({
     resolver: zodResolver(CompanySchema),
   });
@@ -99,11 +100,6 @@ export default function CompanyForm() {
   const [odjava, setOdjava] = useState(formInitialValues.odjava);
   const handleOdjava = () => {
     setOdjava((prev) => !prev);
-  };
-
-  const [data, setData] = useState<Company>(formInitialValues);
-  const handleFormChange = (e: any) => {
-    setData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
   function renderFiled(item: Metadata, errors: any) {
@@ -178,31 +174,44 @@ export default function CompanyForm() {
         default:
           break;
       }
+
       return (
-        <Autocomplete
-          {...register(item.key as keyof Company)} // TODO: fix this
-          options={optionsData}
-          renderInput={(params) => {
+        <Controller
+          name={item.key as "tip" | "velicina" | "stanje"}
+          control={control}
+          render={({ field }) => {
+            const { onChange } = field;
             return (
-              <TextField
-                {...params}
-                label={item.label}
-                variant="outlined"
-                InputProps={{
-                  ...params.InputProps,
-                  startAdornment: (
-                    <>
-                      <InputAdornment position="end" sx={{ m: 1 }}>
-                        {item.inputAdornment}
-                      </InputAdornment>
-                      {params.InputProps.startAdornment}
-                    </>
-                  ),
+              <Autocomplete
+                {...register(item.key as keyof Company)} // TODO: fix this
+                options={optionsData}
+                renderInput={(params) => {
+                  return (
+                    <TextField
+                      {...params}
+                      label={item.label}
+                      variant="outlined"
+                      InputProps={{
+                        ...params.InputProps,
+                        startAdornment: (
+                          <>
+                            <InputAdornment position="end" sx={{ m: 1 }}>
+                              {item.inputAdornment}
+                            </InputAdornment>
+                            {params.InputProps.startAdornment}
+                          </>
+                        ),
+                      }}
+                    />
+                  );
+                }}
+                onChange={(event, newValue) => {
+                  onChange(newValue);
                 }}
               />
             );
           }}
-        />
+        ></Controller>
       );
     }
   }
