@@ -8,7 +8,6 @@ import Link from "@mui/material/Link";
 export default function ApplicationNavBar() {
   const navItems = [
     { text: "Evidencija", linkPath: "/evidencija" },
-    { text: "Privremene", linkPath: "/privremene" },
     { text: "Pretrage", linkPath: "/pretrage" },
     { text: "Računi", linkPath: "/racuni" },
     { text: "Sertifikati", linkPath: "/sertifikati" },
