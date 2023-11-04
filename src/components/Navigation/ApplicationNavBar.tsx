@@ -10,7 +10,6 @@ export default function ApplicationNavBar() {
     { text: "Evidencija", linkPath: "/evidencija" },
     { text: "Pretrage", linkPath: "/pretrage" },
     { text: "Računi", linkPath: "/racuni" },
-    { text: "Sertifikati", linkPath: "/sertifikati" },
   ];
 
   return (
