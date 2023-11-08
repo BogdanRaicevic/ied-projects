@@ -39,7 +39,7 @@ export default function IndeterminateCheckbox({ options }: IndeterminateCheckbox
   return (
     <div>
       <FormControlLabel
-        label="Parent"
+        label={options.parent}
         control={
           <Checkbox
             checked={checked.every((value) => value)}
