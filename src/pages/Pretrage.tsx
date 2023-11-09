@@ -2,7 +2,7 @@ import MyTable from "../components/MyTable";
 import PageTitle from "../components/PageTitle";
 import IndeterminateCheckbox from "../components/IndeterminateCheckbox";
 import { companiesData } from "../fakeData/companyData";
-import { FormControl, Grid } from "@mui/material";
+import { Grid } from "@mui/material";
 
 export default function Pretrage() {
   const gradovi = [
@@ -69,14 +69,16 @@ export default function Pretrage() {
     { parent: "Sve velicine firmi", children: ["Mikro", "Mala", "Srednja", "Velika", "Korporacija"] },
   ];
 
+  // merge this into one array
+  const arrayNames = ["gradovi", "delatnosti", "tipoviFirmi", "radnaMesta", "velicineFirmi"];
   const arrays = [gradovi, delatnosti, tipoviFirmi, radnaMesta, velicineFirmi];
 
   const components = arrays.map((array, index) => {
     return (
-      <Grid key={index} item xs={12} sm={2}>
+      <Grid key={arrayNames[index]} item xs={12} sm={2}>
         <div style={{ maxHeight: "300px", overflow: "auto" }}>
           {array.map((item, index) => (
-            <IndeterminateCheckbox key={index} options={item} />
+            <IndeterminateCheckbox key={arrayNames[index]} options={item} />
           ))}
         </div>
       </Grid>
