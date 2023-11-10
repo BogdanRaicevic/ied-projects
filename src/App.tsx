@@ -2,6 +2,7 @@ import Container from "@mui/material/Container";
 import { Route, Routes } from "react-router-dom";
 import Navigation from "./components/Navigation";
 import { Evidencija, Pretrage, Racuni, Prijava } from "./pages";
+import Firma from "./pages/Firma";
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
         <Route path="/pretrage" element={<Pretrage />}></Route>
         <Route path="/racuni" element={<Racuni />}></Route>
         <Route path="/prijava" element={<Prijava />}></Route>
+        <Route path="/firma" element={<Firma />}></Route>
       </Routes>
     </Container>
   );

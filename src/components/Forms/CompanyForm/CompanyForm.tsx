@@ -53,34 +53,14 @@ export const companyFormMetadata: Metadata[] = [
   { key: "komentari", label: "Komentari", inputAdornment: <Comment />, inputType: InputTypesSchema.enum.TextMultiline },
 ];
 
-export const employeeFormMetadata: Metadata[] = [
-  { key: "ime", label: "Ime", inputAdornment: <AccountCircle />, inputType: InputTypesSchema.enum.Text },
-  { key: "prezime", label: "Prezime", inputAdornment: <Person />, inputType: InputTypesSchema.enum.Text },
-  { key: "email-zaposlenog", label: "Email", inputAdornment: <Email />, inputType: InputTypesSchema.enum.Text },
-  { key: "telefon-zaposlenog", label: "Telefon", inputAdornment: <Phone />, inputType: InputTypesSchema.enum.Text },
-];
+// export const employeeFormMetadata: Metadata[] = [
+//   { key: "ime", label: "Ime", inputAdornment: <AccountCircle />, inputType: InputTypesSchema.enum.Text },
+//   { key: "prezime", label: "Prezime", inputAdornment: <Person />, inputType: InputTypesSchema.enum.Text },
+//   { key: "email-zaposlenog", label: "Email", inputAdornment: <Email />, inputType: InputTypesSchema.enum.Text },
+//   { key: "telefon-zaposlenog", label: "Telefon", inputAdornment: <Phone />, inputType: InputTypesSchema.enum.Text },
+// ];
 
-const formInitialValues: Company = {
-  sajt: "",
-  naziv: "",
-  adresa: "",
-  grad: "",
-  opstina: "",
-  pib: "",
-  ptt: "",
-  telefon: "",
-  email: "",
-  tip: "",
-  velicina: "",
-  stanje: "",
-  odjava: false,
-  komentari: "",
-  lastTouched: "",
-  zaposleni: [],
-  id: "",
-};
-
-export default function CompanyForm() {
+export default function CompanyForm(props: any) {
   const {
     register,
     formState: { errors },
@@ -90,17 +70,16 @@ export default function CompanyForm() {
     resolver: zodResolver(CompanySchema),
   });
 
+  // TODO: add types
+  const [company, setCompany] = useState(props);
+  console.log(company);
+
   const onSubmit = (data: Company) => {
     console.log("hi");
     console.log(data);
   };
 
   const onError = (errors: any, e: any) => console.log(errors, e);
-
-  const [odjava, setOdjava] = useState(formInitialValues.odjava);
-  const handleOdjava = () => {
-    setOdjava((prev) => !prev);
-  };
 
   function renderFiled(item: Metadata, errors: any) {
     if (item.inputType === InputTypesSchema.enum.Text) {
@@ -112,7 +91,7 @@ export default function CompanyForm() {
             startAdornment: <InputAdornment position="start">{item.inputAdornment}</InputAdornment>,
           }}
           name={item.key}
-          defaultValue={formInitialValues[item.key as keyof Company]}
+          defaultValue={company.data[item.key as keyof Company]}
           error={Boolean(errors[item.key])}
           helperText={errors[item.key]?.message}
         />
@@ -135,26 +114,9 @@ export default function CompanyForm() {
           name={item.key}
           multiline
           rows={10}
-          defaultValue={formInitialValues[item.key as keyof Company]}
+          defaultValue={company.data[item.key as keyof Company]}
           error={errors[item.key]}
           helperText={errors[item.key]?.message}
-        />
-      );
-    }
-
-    if (item.inputType === InputTypesSchema.enum.Switch) {
-      return (
-        <FormControlLabel
-          sx={{ alignItems: "center", justifyContent: "center" }}
-          control={
-            <Switch
-              {...register(item.key as keyof Company)}
-              color="error"
-              defaultChecked={formInitialValues.odjava}
-              onChange={handleOdjava}
-            />
-          }
-          label={odjava ? <Typography>ODJAVLJENI</Typography> : <Typography>Prijavljeni</Typography>}
         />
       );
     }
@@ -185,6 +147,7 @@ export default function CompanyForm() {
               <Autocomplete
                 {...register(item.key as keyof Company)} // TODO: fix this
                 options={optionsData}
+                defaultValue={company.data[item.key as keyof Company]}
                 renderInput={(params) => {
                   return (
                     <TextField
@@ -228,30 +191,21 @@ export default function CompanyForm() {
       });
   };
 
-  const employeeInputItems = (inputType: z.infer<typeof InputTypesSchema>) => {
-    return employeeFormMetadata
-      .filter((element) => element.inputType === inputType)
-      .map((item: Metadata, index: number) => {
-        return (
-          <FormControl fullWidth key={`${item.key}-${index}`}>
-            {renderFiled(item, errors)}
-          </FormControl>
-        );
-      });
-  };
+  // const employeeInputItems = (inputType: z.infer<typeof InputTypesSchema>) => {
+  //   return employeeFormMetadata
+  //     .filter((element) => element.inputType === inputType)
+  //     .map((item: Metadata, index: number) => {
+  //       return (
+  //         <FormControl fullWidth key={`${item.key}-${index}`}>
+  //           {renderFiled(item, errors)}
+  //         </FormControl>
+  //       );
+  //     });
+  // };
 
   return (
     <Box onSubmit={handleSubmit(onSubmit, onError)} component="form" sx={{ mt: 4 }}>
       <Grid2 container m={0} spacing={2}>
-        {inputItems(InputTypesSchema.enum.Switch).map((item) => {
-          return (
-            <Grid2 sx={{ backgroundColor: odjava ? "salmon" : "lightgreen" }} key={item.key} xs={12}>
-              {item}
-            </Grid2>
-          );
-        })}
-        <Divider sx={{ width: "100%", my: 4 }} />
-
         {inputItems(InputTypesSchema.enum.Text).map((item) => {
           return (
             <Grid2 key={item.key} xs={12} md={6} lg={4}>

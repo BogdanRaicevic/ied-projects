@@ -1,11 +1,17 @@
 import { ContentCopy } from "@mui/icons-material";
 import { MRT_ColumnDef } from "material-react-table";
 import { Company, Zaposleni } from "../../schemas/companySchemas";
+import { Link } from "react-router-dom";
 
 export const myCompanyColumns: MRT_ColumnDef<Company>[] = [
   {
     header: "Naziv kompanije",
     accessorKey: "naziv",
+    Cell: ({ row }) => (
+      <Link to={`/Firma`} state={row.original}>
+        {row.original.naziv}
+      </Link>
+    ),
   },
   {
     header: "Sajt",

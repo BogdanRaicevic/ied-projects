@@ -17,7 +17,7 @@ export const companiesData: Company[] = [
     stanje: "likvidna",
     odjava: false,
     komentari: "11.11.2022",
-    lastTouched: new Date(),
+    lastTouched: new Date().toISOString(),
     zaposleni: [
       {
         id: "1",
@@ -53,7 +53,7 @@ export const companiesData: Company[] = [
     stanje: "stecaj",
     odjava: true,
     komentari: "11.11.2022",
-    lastTouched: new Date(),
+    lastTouched: new Date().toISOString(),
     zaposleni: [],
   },
   {
@@ -72,7 +72,7 @@ export const companiesData: Company[] = [
     stanje: "likvidna",
     odjava: false,
     komentari: "11.11.2022",
-    lastTouched: new Date(),
+    lastTouched: new Date().toISOString(),
     zaposleni: [
       {
         id: "2",
@@ -100,7 +100,7 @@ export const companiesData: Company[] = [
     stanje: "blokada",
     odjava: false,
     komentari: "11.11.2022",
-    lastTouched: new Date(),
+    lastTouched: new Date().toISOString(),
     zaposleni: [
       {
         id: "4",
@@ -128,7 +128,7 @@ export const companiesData: Company[] = [
     stanje: "likvidna",
     odjava: true,
     komentari: "11.11.2022",
-    lastTouched: new Date(),
+    lastTouched: new Date().toISOString(),
     zaposleni: [
       {
         id: "3",
