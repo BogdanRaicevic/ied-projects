@@ -36,6 +36,13 @@ export const companiesData: Company[] = [
         telefon: "12341234",
       },
     ],
+    seminari: [
+      {
+        naziv: "Seminar 1",
+        datum: "2021-10-10",
+        ucesnici: ["Pera", "Mika", "Zika"],
+      },
+    ],
   },
   {
     sajt: "",
@@ -55,6 +62,23 @@ export const companiesData: Company[] = [
     komentari: "11.11.2022",
     lastTouched: new Date().toISOString(),
     zaposleni: [],
+    seminari: [
+      {
+        naziv: "Seminar 1",
+        datum: "2021-10-10",
+        ucesnici: ["Pera", "Mika", "Zika"],
+      },
+      {
+        naziv: "Seminar 2",
+        datum: "2023-10-10",
+        ucesnici: ["Joca", "Mika", "Boca"],
+      },
+      {
+        naziv: "Seminar 3",
+        datum: "2020-11-10",
+        ucesnici: ["Joca"],
+      },
+    ],
   },
   {
     sajt: "cccc.com",
@@ -81,6 +105,23 @@ export const companiesData: Company[] = [
         prezime: "prezime 2",
         email: "e1@cccc.com",
         telefon: "12341234",
+      },
+    ],
+    seminari: [
+      {
+        naziv: "Seminar 1",
+        datum: "2021-10-10",
+        ucesnici: ["Pera", "Mika", "Zika"],
+      },
+      {
+        naziv: "Seminar 2",
+        datum: "2023-10-10",
+        ucesnici: ["Joca", "Mika", "Boca"],
+      },
+      {
+        naziv: "Seminar 3",
+        datum: "2020-11-10",
+        ucesnici: ["Joca"],
       },
     ],
   },
@@ -111,6 +152,23 @@ export const companiesData: Company[] = [
         telefon: "12341234",
       },
     ],
+    seminari: [
+      {
+        naziv: "Seminar 1",
+        datum: "2021-10-10",
+        ucesnici: ["Pera", "Mika", "Zika"],
+      },
+      {
+        naziv: "Seminar 2",
+        datum: "2023-10-10",
+        ucesnici: ["Joca", "Mika", "Boca"],
+      },
+      {
+        naziv: "Seminar 3",
+        datum: "2020-11-10",
+        ucesnici: ["Joca"],
+      },
+    ],
   },
   {
     sajt: "gggg.com",
@@ -137,6 +195,23 @@ export const companiesData: Company[] = [
         prezime: "prezime 3",
         email: "e1@gggg.com",
         telefon: "12341234",
+      },
+    ],
+    seminari: [
+      {
+        naziv: "Seminar 1",
+        datum: "2021-10-10",
+        ucesnici: ["Pera", "Mika", "Zika"],
+      },
+      {
+        naziv: "Seminar 2",
+        datum: "2023-10-10",
+        ucesnici: ["Joca", "Mika", "Boca"],
+      },
+      {
+        naziv: "Seminar 3",
+        datum: "2020-11-10",
+        ucesnici: ["Joca"],
       },
     ],
   },

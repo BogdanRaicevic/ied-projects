@@ -7,6 +7,7 @@ import AttendeesList from "../AttendeesList";
 import { compareDesc, parse } from "date-fns";
 import { useState, useEffect } from "react";
 import { Button, Container } from "@mui/material";
+import { Company } from "../../schemas/companySchemas";
 
 type Seminar = {
   naziv: string;
@@ -14,28 +15,28 @@ type Seminar = {
   ucesnici: string[];
 };
 
-export default function AttendedSeminarsAccordion(props: { seminari: Seminar[] }) {
+export default function AttendedSeminarsAccordion(props: { firma: Company }) {
   const [expanded, setExpanded] = useState<string | false>(false);
 
   useEffect(() => {
-    if (props.seminari.length > 0) {
-      setExpanded(props.seminari[0].naziv);
+    if (props.firma.seminari.length > 0) {
+      setExpanded(props.firma.seminari[0].naziv);
     }
-  }, [props.seminari]);
+  }, [props.firma]);
 
   const handleChange = (panel: string) => (event: React.SyntheticEvent, isExpanded: boolean) => {
     setExpanded(isExpanded ? panel : false);
   };
 
   // TODO: find out why the data is logged twice
-  console.log("props : ", props.seminari);
+  console.log("Accordion PROPS : ", props.firma);
 
   const formatDate = (date: string) => {
     const parsedDate = parse(date, "yyyy-MM-dd", new Date());
     return parsedDate;
   };
 
-  const attendedSeminars = props.seminari
+  const attendedSeminars = props.firma?.seminari
     .sort((a, b) => compareDesc(formatDate(a.datum), formatDate(b.datum)))
     .map((seminar: Seminar) => {
       return (
@@ -49,6 +50,7 @@ export default function AttendedSeminarsAccordion(props: { seminari: Seminar[] }
               <Typography sx={{ width: "33%", flexShrink: 0 }}>Datum: {seminar.datum}</Typography>
               <Typography sx={{ flexShrink: 0 }}>Naziv: {seminar.naziv} </Typography>
             </Container>
+
             <Button
               variant="contained"
               color="primary"
@@ -63,7 +65,7 @@ export default function AttendedSeminarsAccordion(props: { seminari: Seminar[] }
             </Button>
           </AccordionSummary>
           <AccordionDetails>
-            <AttendeesList ucesnici={seminar.ucesnici}></AttendeesList>
+            <AttendeesList ucesnici={seminar.ucesnici} zaposleni={props.firma.zaposleni}></AttendeesList>
           </AccordionDetails>
         </Accordion>
       );

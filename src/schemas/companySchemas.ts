@@ -10,6 +10,14 @@ export const ZaposleniSchema = z.object({
 });
 export type Zaposleni = z.infer<typeof ZaposleniSchema>;
 
+export const PoseceniSeminarSchema = z.object({
+  naziv: z.string(),
+  datum: z.string(),
+  ucesnici: z.array(z.string()),
+});
+
+export type PoseceniSeminar = z.infer<typeof PoseceniSeminarSchema>;
+
 export const CompanySchema = z.object({
   id: z.optional(z.string()),
   sajt: z.string().max(50, "link za web sajt je predugacak"),
@@ -27,7 +35,8 @@ export const CompanySchema = z.object({
   odjava: z.boolean(),
   komentari: z.string().max(1000),
   lastTouched: z.optional(z.string()),
-  zaposleni: z.optional(z.array(ZaposleniSchema)),
+  zaposleni: z.array(ZaposleniSchema),
+  seminari: z.array(PoseceniSeminarSchema),
 });
 export type Company = z.infer<typeof CompanySchema>;
 
