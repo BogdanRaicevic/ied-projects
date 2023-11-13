@@ -1,14 +1,4 @@
-import {
-  FormControl,
-  TextField,
-  InputAdornment,
-  Button,
-  FormControlLabel,
-  Autocomplete,
-  Switch,
-  Divider,
-  Typography,
-} from "@mui/material";
+import { FormControl, TextField, InputAdornment, Button, Autocomplete, Divider } from "@mui/material";
 import { Box } from "@mui/system";
 import { useForm, Controller } from "react-hook-form";
 import { stanjaFirme, tipoviFirme, velicineFirme } from "../../../fakeData/companyData";
@@ -31,8 +21,6 @@ import {
   SwitchAccount,
   Height,
   MonitorHeart,
-  AccountCircle,
-  Person,
   Comment,
 } from "@mui/icons-material";
 
@@ -71,7 +59,7 @@ export default function CompanyForm(props: any) {
   });
 
   // TODO: add types
-  const [company, setCompany] = useState(props);
+  const [company, _setCompany] = useState(props);
   console.log(company);
 
   const onSubmit = (data: Company) => {
@@ -168,7 +156,7 @@ export default function CompanyForm(props: any) {
                     />
                   );
                 }}
-                onChange={(event, newValue) => {
+                onChange={(_event, newValue) => {
                   onChange(newValue);
                 }}
               />

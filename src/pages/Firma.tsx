@@ -1,4 +1,4 @@
-import MaterialReactTable from "material-react-table";
+import { MaterialReactTable } from "material-react-table";
 import { useLocation } from "react-router-dom";
 import { myZaposleniColumns } from "../components/MyTable/myCompanyColumns";
 import CompanyForm from "../components/Forms/CompanyForm";
@@ -8,6 +8,7 @@ export default function Firma() {
   const location = useLocation();
   const data = location.state;
 
+  // TODO: fix this to be like company table
   function renderZaposleniTable(): React.ReactNode {
     return (
       <MaterialReactTable
@@ -39,6 +40,7 @@ export default function Firma() {
       <h1>Firma: {data.naziv}</h1>
       <CompanyForm data={data}></CompanyForm>
       {renderZaposleniTable()}
+
       <AttendedSeminarsAccordion firma={data}></AttendedSeminarsAccordion>
     </>
   );
