@@ -16,12 +16,18 @@ export const myCompanyColumns: MRT_ColumnDef<Company>[] = [
     accessorKey: "email",
     enableClickToCopy: true,
     // TODO: Fix this
-    muiTableBodyCellCopyButtonProps: {
+    // muiTableBodyCellCopyButtonProps: {
+    // fullWidth: true,
+    // startIcon: <ContentCopy />,
+    // sx: { justifyContent: "flex-start" },
+    // },
+    muiCopyButtonProps: {
       fullWidth: true,
       startIcon: <ContentCopy />,
       sx: { justifyContent: "flex-start" },
     },
   },
+
   {
     header: "Adresa",
     accessorKey: "adresa",
@@ -74,7 +80,7 @@ export const myZaposleniColumns: MRT_ColumnDef<Zaposleni>[] = [
     accessorKey: "email",
     enableClickToCopy: true,
     // TODO: Fix this
-    muiTableBodyCellCopyButtonProps: {
+    muiCopyButtonProps: {
       fullWidth: true,
       startIcon: <ContentCopy />,
       sx: { justifyContent: "flex-start" },
