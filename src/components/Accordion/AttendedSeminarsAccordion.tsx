@@ -8,6 +8,8 @@ import { compareDesc, parse } from "date-fns";
 import { useState, useEffect } from "react";
 import { Button, Container } from "@mui/material";
 import { Company } from "../../schemas/companySchemas";
+import SelectSeminar from "./SelectSeminar";
+import { fakeSeminars } from "../../fakeData/seminarsData";
 
 type Seminar = {
   naziv: string;
@@ -15,28 +17,52 @@ type Seminar = {
   ucesnici: string[];
 };
 
-export default function AttendedSeminarsAccordion(props: { firma: Company }) {
+export default function AttendedSeminarsAccordion({ firma }: { firma: Company }) {
   const [expanded, setExpanded] = useState<string | false>(false);
 
   useEffect(() => {
-    if (props.firma.seminari.length > 0) {
-      setExpanded(props.firma.seminari[0].naziv);
+    if (firma.seminari.length > 0) {
+      setExpanded(firma.seminari[0].naziv);
     }
-  }, [props.firma]);
+  }, [firma]);
 
   const handleChange = (panel: string) => (event: React.SyntheticEvent, isExpanded: boolean) => {
     setExpanded(isExpanded ? panel : false);
   };
 
   // TODO: find out why the data is logged twice
-  console.log("Accordion PROPS : ", props.firma);
+  console.log("Accordion PROPS : ", firma);
 
   const formatDate = (date: string) => {
     const parsedDate = parse(date, "yyyy-MM-dd", new Date());
     return parsedDate;
   };
 
-  const attendedSeminars = props.firma?.seminari
+  const handleAddSeminar = (seminarId: string) => {
+    const selectedSEminar = fakeSeminars.find((seminar) => seminar.id === seminarId);
+
+    if (firma.seminari.find((seminar) => seminar.naziv === selectedSEminar?.naziv)) {
+      alert("Seminar je vec dodat!");
+      return;
+    }
+    if (selectedSEminar) {
+      firma.seminari.push({
+        naziv: selectedSEminar.naziv,
+        datum: selectedSEminar.datum,
+        ucesnici: [],
+      });
+
+      setExpanded(selectedSEminar.naziv);
+    }
+  };
+
+  const handleRemoveSeminar = (seminar: Seminar) => {
+    const index = firma.seminari.indexOf(seminar);
+    firma.seminari.splice(index, 1);
+    setExpanded(firma.seminari[0].naziv);
+  };
+
+  const attendedSeminars = firma?.seminari
     .sort((a, b) => compareDesc(formatDate(a.datum), formatDate(b.datum)))
     .map((seminar: Seminar) => {
       return (
@@ -63,9 +89,22 @@ export default function AttendedSeminarsAccordion(props: { firma: Company }) {
             >
               Generiši dokument
             </Button>
+            <Button
+              variant="outlined"
+              color="warning"
+              size="small"
+              onClick={(event) => {
+                event.stopPropagation(); // Prevents the accordion from expanding/collapsing
+                if (window.confirm("Da li ste sigurni da zelite da obriste seminar?")) {
+                  handleRemoveSeminar(seminar);
+                }
+              }}
+            >
+              Obrisi Seminar
+            </Button>
           </AccordionSummary>
           <AccordionDetails>
-            <AttendeesList ucesnici={seminar.ucesnici} zaposleni={props.firma.zaposleni}></AttendeesList>
+            <AttendeesList ucesnici={seminar.ucesnici} zaposleni={firma.zaposleni}></AttendeesList>
           </AccordionDetails>
         </Accordion>
       );
@@ -73,6 +112,7 @@ export default function AttendedSeminarsAccordion(props: { firma: Company }) {
 
   return (
     <div style={{ marginTop: "2em", marginBottom: "4em" }}>
+      <SelectSeminar onSeminarSelect={handleAddSeminar}></SelectSeminar>
       <h2>Posećeni Seminari: </h2>
       {attendedSeminars}
     </div>
