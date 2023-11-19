@@ -1,8 +1,8 @@
 import MyTable from "../components/MyTable";
 import PageTitle from "../components/PageTitle";
 import IndeterminateCheckbox from "../components/IndeterminateCheckbox";
-import { companiesData } from "../fakeData/companyData";
-import { Grid } from "@mui/material";
+import { companiesData, fakeRadnaMesta } from "../fakeData/companyData";
+import Grid from "@mui/material/Unstable_Grid2";
 
 export default function Pretrage() {
   const gradovi = [
@@ -59,23 +59,17 @@ export default function Pretrage() {
     },
   ];
 
-  const radnaMesta = [
-    { parent: "Sva radna mesta" },
-    { parent: "Administracija" },
-    { parent: "Budzet", children: ["LPA", "NBF", "NOU", "Sekretar"] },
-  ];
-
   const velicineFirmi = [
     { parent: "Sve velicine firmi", children: ["Mikro", "Mala", "Srednja", "Velika", "Korporacija"] },
   ];
 
   // merge this into one array
   const arrayNames = ["gradovi", "delatnosti", "tipoviFirmi", "radnaMesta", "velicineFirmi"];
-  const arrays = [gradovi, delatnosti, tipoviFirmi, radnaMesta, velicineFirmi];
+  const arrays = [gradovi, delatnosti, tipoviFirmi, fakeRadnaMesta, velicineFirmi];
 
   const components = arrays.map((array, index) => {
     return (
-      <Grid key={arrayNames[index]} item xs={12} sm={2}>
+      <Grid key={arrayNames[index]} xs={12} sm={2}>
         <div style={{ maxHeight: "300px", overflow: "auto" }}>
           {array.map((item, index) => (
             <IndeterminateCheckbox key={arrayNames[index]} options={item} />

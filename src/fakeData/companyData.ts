@@ -263,3 +263,9 @@ export const zaposleniData: Zaposleni[] = [
 export const velicineFirme = ["mala", "srednja", "velika", "ne znam"];
 export const stanjaFirme = ["likvidna", "u blokadi", "bankrot", "ne znam"];
 export const tipoviFirme = ["doo", "preduzetnik", "akcionarsko drustvo", "budzet", "ne znam"];
+
+export const fakeRadnaMesta = [
+  { parent: "Sva radna mesta" },
+  { parent: "Administracija" },
+  { parent: "Budzet", children: ["LPA", "NBF", "NOU", "Sekretar"] },
+];

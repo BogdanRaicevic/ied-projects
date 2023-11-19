@@ -11,7 +11,7 @@ export default function SelectSeminar({ onSeminarSelect }: { onSeminarSelect: (s
   };
 
   return (
-    <FormControl sx={{ width: "80%" }}>
+    <FormControl fullWidth>
       <InputLabel>Izaberi i dodaj Seminar</InputLabel>
       <Select value={""} label={"Izaberi Seminar"} onChange={handleChange}>
         {fakeSeminars.map((seminar) => (
