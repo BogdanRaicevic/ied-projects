@@ -8,7 +8,7 @@ import { compareDesc, parse } from "date-fns";
 import { useState, useEffect } from "react";
 import { Button, Container } from "@mui/material";
 import { Company } from "../../schemas/companySchemas";
-import SelectSeminar from "./SelectSeminar";
+import SelectSeminar from "../SelectSeminar";
 import { fakeSeminars } from "../../fakeData/seminarsData";
 
 type Seminar = {

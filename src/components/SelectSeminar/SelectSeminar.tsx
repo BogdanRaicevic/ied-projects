@@ -4,7 +4,7 @@ import FormControl from "@mui/material/FormControl";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import { fakeSeminars } from "../../fakeData/seminarsData";
 
-export default function SelectLabels({ onSeminarSelect }: { onSeminarSelect: (seminarId: string) => void }) {
+export default function SelectSeminar({ onSeminarSelect }: { onSeminarSelect: (seminarId: string) => void }) {
   const handleChange = (event: SelectChangeEvent<{ value: unknown }>) => {
     console.log("item: ", event.target.value);
     onSeminarSelect(event.target.value as string);
