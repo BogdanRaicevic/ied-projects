@@ -10,6 +10,7 @@ export default function ApplicationNavBar() {
     { text: "Evidencija", linkPath: "/evidencija" },
     { text: "Pretrage", linkPath: "/pretrage" },
     { text: "Računi", linkPath: "/racuni" },
+    { text: "Zaposleni", linkPath: "/zaposleni" },
   ];
 
   return (
@@ -18,7 +19,12 @@ export default function ApplicationNavBar() {
         <Toolbar>
           <Box sx={{ flexGrow: 1, display: { xs: "none", sm: "block" } }}>
             {navItems.map((item) => (
-              <Link key={item.text} component={RouteLink} to={item.linkPath} sx={{ color: "white" }}>
+              <Link
+                key={item.text}
+                component={RouteLink}
+                to={item.linkPath}
+                sx={{ color: "white" }}
+              >
                 <Button sx={{ color: "#fff" }}>{item.text}</Button>
               </Link>
             ))}

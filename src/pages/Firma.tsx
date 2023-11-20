@@ -3,34 +3,20 @@ import { useLocation } from "react-router-dom";
 import { myZaposleniColumns } from "../components/MyTable/myCompanyColumns";
 import CompanyForm from "../components/Forms/CompanyForm";
 import AttendedSeminarsAccordion from "../components/Accordion";
+import { Company } from "../schemas/companySchemas";
 
 export default function Firma() {
   const location = useLocation();
-  const data = location.state;
+  const data = location.state as Company;
 
   // TODO: fix this to be like company table
   function renderZaposleniTable(): React.ReactNode {
     return (
       <MaterialReactTable
         columns={myZaposleniColumns}
-        data={data.zaposleni}
+        data={data?.zaposleni || []}
         enableColumnOrdering
         enableGlobalFilter={true} //turn off a feature
-        muiTableProps={{
-          sx: {
-            "table, th, td": {
-              border: 1,
-              borderColor: "lightgray",
-              borderStyle: "solid",
-            },
-            th: {
-              backgroundColor: "#adadad",
-            },
-            "& tr:nth-of-type(4n+1)": {
-              backgroundColor: "#e3f2f7",
-            },
-          },
-        }}
       />
     );
   }
