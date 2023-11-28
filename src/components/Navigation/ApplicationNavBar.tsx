@@ -7,10 +7,11 @@ import Link from "@mui/material/Link";
 
 export default function ApplicationNavBar() {
   const navItems = [
-    { text: "Evidencija", linkPath: "/evidencija" },
+    // { text: "Evidencija", linkPath: "/evidencija" },
     { text: "Pretrage", linkPath: "/pretrage" },
-    { text: "Računi", linkPath: "/racuni" },
+    // { text: "Računi", linkPath: "/racuni" },
     { text: "Zaposleni", linkPath: "/zaposleni" },
+    { text: "Seminari", linkPath: "/seminari" },
   ];
 
   return (
