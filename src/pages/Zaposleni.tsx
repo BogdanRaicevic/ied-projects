@@ -18,8 +18,22 @@ export default function Zaposleni() {
         <Grid container spacing={3}>
           <Grid xs={4}>
             <TextField fullWidth sx={{ m: 1 }} id="email" label="Email" variant="outlined" />
-            <TextField fullWidth sx={{ m: 1 }} id="naziv-firme" label="Naiv Firme" variant="outlined" />
-            <TextField fullWidth sx={{ m: 1 }} id="id-sertifikata" label="ID sertifikata" variant="outlined" />
+            <TextField
+              fullWidth
+              sx={{ m: 1 }}
+              id="naziv-firme"
+              label="Naiv Firme"
+              variant="outlined"
+            />
+            <TextField
+              fullWidth
+              sx={{ m: 1 }}
+              id="id-sertifikata"
+              label="ID sertifikata"
+              variant="outlined"
+            />
+            <TextField fullWidth sx={{ m: 1 }} id="ime" label="Ime" variant="outlined" />
+            <TextField fullWidth sx={{ m: 1 }} id="prezime" label="Prezime" variant="outlined" />
           </Grid>
           <Grid xs={4}>
             {fakeRadnaMesta.map((item, index) => (
