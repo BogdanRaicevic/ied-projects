@@ -9,7 +9,7 @@ import { useState, useEffect } from "react";
 import { Button, Container } from "@mui/material";
 import { Company } from "../../schemas/companySchemas";
 import SelectSeminar from "../SelectSeminar";
-import { fakeSeminars } from "../../fakeData/seminarsData";
+import { fakeSeminarsOnFirma } from "../../fakeData/seminarsData";
 
 type Seminar = {
   naziv: string;
@@ -39,7 +39,7 @@ export default function AttendedSeminarsAccordion({ firma }: { firma: Company })
   };
 
   const handleAddSeminar = (seminarId: string) => {
-    const selectedSEminar = fakeSeminars.find((seminar) => seminar.id === seminarId);
+    const selectedSEminar = fakeSeminarsOnFirma.find((seminar) => seminar.id === seminarId);
 
     if (firma.seminari.find((seminar) => seminar.naziv === selectedSEminar?.naziv)) {
       alert("Seminar je vec dodat!");
@@ -71,7 +71,10 @@ export default function AttendedSeminarsAccordion({ firma }: { firma: Company })
           expanded={expanded === seminar.naziv}
           onChange={handleChange(seminar.naziv)}
         >
-          <AccordionSummary expandIcon={<ExpandMoreIcon />} sx={{ justifyContent: "space-between" }}>
+          <AccordionSummary
+            expandIcon={<ExpandMoreIcon />}
+            sx={{ justifyContent: "space-between" }}
+          >
             <Container>
               <Typography sx={{ width: "33%", flexShrink: 0 }}>Datum: {seminar.datum}</Typography>
               <Typography sx={{ flexShrink: 0 }}>Naziv: {seminar.naziv} </Typography>

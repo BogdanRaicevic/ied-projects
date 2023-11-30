@@ -78,8 +78,6 @@ function PaginatedList() {
                       <Typography>Poseceni seminari</Typography>
                       <List>
                         <ListItem>Sminar 1</ListItem>
-                        <ListItem>Seminar 3</ListItem>
-                        <ListItem>Seminar 6</ListItem>
                       </List>
                     </CardContent>
                   </Card>

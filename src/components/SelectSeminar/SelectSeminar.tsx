@@ -2,7 +2,7 @@ import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
-import { fakeSeminars } from "../../fakeData/seminarsData";
+import { fakeSeminarsOnFirma } from "../../fakeData/seminarsData";
 import { useState } from "react";
 
 export default function SelectSeminar({
@@ -21,7 +21,7 @@ export default function SelectSeminar({
     <FormControl fullWidth>
       <InputLabel>Izaberi i dodaj Seminar</InputLabel>
       <Select value={seminar as any} label={"Izaberi Seminar"} onChange={handleChange}>
-        {fakeSeminars.map((seminar) => (
+        {fakeSeminarsOnFirma.map((seminar) => (
           <MenuItem value={seminar.id} key={seminar.id}>
             {seminar.datum} - {seminar.naziv}
           </MenuItem>
