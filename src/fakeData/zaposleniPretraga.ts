@@ -1,4 +1,4 @@
-export const searchZaposleni = [
+export const fakeZaposleni = [
   {
     firma: {
       id: "nekiId1",
@@ -13,20 +13,23 @@ export const searchZaposleni = [
           prezime: "Prezime 1",
           email: "zaposleni1@firma1.com",
           radnaMesta: ["Sekretar", "Administracija"],
+          komentari: "Ovo je pocetak nekog komentara",
           seminari: [
             {
-              sminarId: "seminar1",
+              id: "seminar1",
               naziv: "Seminar 1: Javne nabavke",
               datum: "2023-10-10",
               predavac: "Pera",
-              maloprodajnaCena: 15000,
+              osnovnaCena: 15000,
+              tip: "Javne nabavke",
             },
             {
-              seminarId: "seminar3",
+              id: "seminar3",
               naziv: "Seminar 3: Word",
               datum: "2023-11-10",
               predavac: "Zare",
-              maloprodajnaCena: 13000,
+              osnovnaCena: 13000,
+              tip: "Word",
             },
           ],
         },
@@ -38,11 +41,12 @@ export const searchZaposleni = [
           radnaMesta: ["Budzet"],
           seminari: [
             {
-              sminarId: "seminar1",
+              id: "seminar1",
               naziv: "Seminar 1: Javne nabavke",
               datum: "2023-10-10",
               predavac: "Pera",
-              maloprodajnaCena: 15000,
+              osnovnaCena: 15000,
+              tip: "Javne nabavke",
             },
           ],
         },
@@ -54,11 +58,12 @@ export const searchZaposleni = [
           radnaMesta: ["LPA", "NOU"],
           seminari: [
             {
-              sminarId: "seminar2",
+              id: "seminar2",
               naziv: "Seminar 2: Excel",
               datum: "2023-12-10",
               predavac: "Jovan",
-              maloprodajnaCena: 15000,
+              osnovnaCena: 15000,
+              tip: "Excel",
             },
           ],
         },
