@@ -14,6 +14,7 @@ export const fakeZaposleni = [
           email: "zaposleni1@firma1.com",
           radnaMesta: ["Sekretar", "Administracija"],
           komentari: "Ovo je pocetak nekog komentara",
+          telefon: "123456789",
           seminari: [
             {
               id: "seminar1",
@@ -39,6 +40,7 @@ export const fakeZaposleni = [
           prezime: "Prezime 3",
           email: "zaposleni3@firma1.com",
           radnaMesta: ["Budzet"],
+          telefon: "21231221",
           seminari: [
             {
               id: "seminar1",
@@ -56,6 +58,7 @@ export const fakeZaposleni = [
           prezime: "Prezime 2",
           email: "zaposleni2@firma1.com",
           radnaMesta: ["LPA", "NOU"],
+          telefon: "",
           seminari: [
             {
               id: "seminar2",

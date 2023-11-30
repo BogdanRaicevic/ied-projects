@@ -14,6 +14,7 @@ import {
   AccordionSummary,
 } from "@mui/material";
 import { fakeZaposleni } from "../../fakeData/zaposleniPretraga";
+import PrijavaOdjava from "../PrijavaOdjava";
 
 const itemsPerPage = 5;
 
@@ -33,6 +34,7 @@ function PaginatedList() {
     radnaMesta: string[];
     id: string;
     seminari?: Seminar_Zaposleni[];
+    telefon: string;
   };
 
   type Seminar_Zaposleni = {
@@ -61,6 +63,7 @@ function PaginatedList() {
           value={z.prezime}
         />
         <TextField sx={{ m: 1 }} id="email" label="Email" variant="outlined" value={z.email} />
+        <PrijavaOdjava />
         <TextField
           sx={{ m: 1 }}
           id="broj-sertifikata"
@@ -68,7 +71,13 @@ function PaginatedList() {
           variant="outlined"
           value={z.brojSertifikata}
         />
-
+        <TextField
+          sx={{ m: 1 }}
+          id="telefon"
+          label="Telefon"
+          variant="outlined"
+          value={z.telefon}
+        />
         <TextField
           sx={{ m: 1, width: "100%" }}
           id="outlined-multiline-static"
