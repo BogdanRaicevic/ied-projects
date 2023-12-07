@@ -269,3 +269,13 @@ export const fakeRadnaMesta = [
   { parent: "Administracija" },
   { parent: "Budzet", children: ["LPA", "NBF", "NOU", "Sekretar"] },
 ];
+
+export const normalizedRadnaMesta = [
+  "Sva radna mesta",
+  "Administracija",
+  "Budzet",
+  "LPA",
+  "NBF",
+  "NOU",
+  "Sekretar",
+];

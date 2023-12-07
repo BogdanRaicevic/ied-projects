@@ -12,11 +12,18 @@ import {
   Box,
   ListItem,
   AccordionSummary,
+  Autocomplete,
+  Checkbox,
 } from "@mui/material";
 import { fakeZaposleni } from "../../fakeData/zaposleniPretraga";
 import PrijavaOdjava from "../PrijavaOdjava";
+import { normalizedRadnaMesta } from "../../fakeData/companyData";
+import CheckBoxOutlineBlankIcon from "@mui/icons-material/CheckBoxOutlineBlank";
+import CheckBoxIcon from "@mui/icons-material/CheckBox";
 
 const itemsPerPage = 5;
+const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
+const checkedIcon = <CheckBoxIcon fontSize="small" />;
 
 function PaginatedList() {
   const [page, setPage] = useState(1);
@@ -54,6 +61,8 @@ function PaginatedList() {
   const renderZaposleni = (zaposleni: Zaposleni[]) => {
     return zaposleni.map((z, index: number) => (
       <Box key={index} paddingBottom={5}>
+        <PrijavaOdjava />
+
         <TextField sx={{ m: 1 }} id="ime" label="Ime" variant="outlined" value={z.ime} />
         <TextField
           sx={{ m: 1 }}
@@ -63,7 +72,6 @@ function PaginatedList() {
           value={z.prezime}
         />
         <TextField sx={{ m: 1 }} id="email" label="Email" variant="outlined" value={z.email} />
-        <PrijavaOdjava />
         <TextField
           sx={{ m: 1 }}
           id="broj-sertifikata"
@@ -78,8 +86,31 @@ function PaginatedList() {
           variant="outlined"
           value={z.telefon}
         />
+
+        <Autocomplete
+          sx={{ m: 1, width: "98%" }}
+          multiple
+          limitTags={2}
+          id="multiple-radna-mesta"
+          options={normalizedRadnaMesta}
+          getOptionLabel={(option) => option}
+          renderOption={(props, option, { selected }) => (
+            <li {...props}>
+              <Checkbox
+                icon={icon}
+                checkedIcon={checkedIcon}
+                style={{ marginRight: 8 }}
+                checked={selected}
+              />
+              {option}
+            </li>
+          )}
+          renderInput={(params) => (
+            <TextField {...params} label="Radna mesta" placeholder="Radna mesta" />
+          )}
+        />
         <TextField
-          sx={{ m: 1, width: "100%" }}
+          sx={{ m: 1, width: "98%" }}
           id="outlined-multiline-static"
           label="Komentari"
           multiline
