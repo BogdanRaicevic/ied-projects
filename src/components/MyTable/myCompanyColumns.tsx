@@ -2,6 +2,7 @@ import { ContentCopy } from "@mui/icons-material";
 import { MRT_ColumnDef } from "material-react-table";
 import { Company, Zaposleni } from "../../schemas/companySchemas";
 import { Link } from "react-router-dom";
+import PrijavaOdjava from "../PrijavaOdjava";
 
 export const myCompanyColumns: MRT_ColumnDef<Company>[] = [
   {
@@ -13,6 +14,14 @@ export const myCompanyColumns: MRT_ColumnDef<Company>[] = [
           {row.original.naziv}
         </Link>
       );
+    },
+  },
+  {
+    header: "Prijavljeni",
+    accessorKey: "zeleMarketingMaterijal",
+    Cell: ({ row }) => {
+      // row.original.zeleMarketingMaterijal ? "Da" : "Ne";
+      return <PrijavaOdjava></PrijavaOdjava>;
     },
   },
   {

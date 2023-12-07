@@ -3,6 +3,7 @@ import { Company, Zaposleni } from "../schemas/companySchemas";
 export const companiesData: Company[] = [
   {
     id: "1",
+    zeleMarketingMaterijal: true,
     sajt: "asdf.com",
     naziv: "Prva",
     adresa: "neka adresa 1",
@@ -45,8 +46,9 @@ export const companiesData: Company[] = [
     ],
   },
   {
-    sajt: "",
     id: "2",
+    zeleMarketingMaterijal: false,
+    sajt: "",
     naziv: "Druga",
     adresa: "neka adresa 2",
     grad: "Sabac",
@@ -82,6 +84,7 @@ export const companiesData: Company[] = [
   },
   {
     sajt: "cccc.com",
+    zeleMarketingMaterijal: false,
     id: "3",
     naziv: "Treca",
     adresa: "neka adresa 3",
@@ -128,6 +131,7 @@ export const companiesData: Company[] = [
   {
     sajt: "",
     id: "4",
+    zeleMarketingMaterijal: true,
     naziv: "cetvrta",
     adresa: "neka adresa 3",
     grad: "Nis",
@@ -173,6 +177,7 @@ export const companiesData: Company[] = [
   {
     sajt: "gggg.com",
     id: "5",
+    zeleMarketingMaterijal: true,
     naziv: "Peta",
     adresa: "neka adresa 5",
     grad: "Novi Sad",

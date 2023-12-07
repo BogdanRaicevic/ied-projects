@@ -20,6 +20,7 @@ export type PoseceniSeminar = z.infer<typeof PoseceniSeminarSchema>;
 
 export const CompanySchema = z.object({
   id: z.optional(z.string()),
+  zeleMarketingMaterijal: z.boolean().default(false),
   sajt: z.string().max(50, "link za web sajt je predugacak"),
   naziv: z.string().max(100),
   adresa: z.string().max(150),
