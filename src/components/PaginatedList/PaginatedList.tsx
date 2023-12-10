@@ -11,8 +11,7 @@ import {
   AccordionSummary,
 } from "@mui/material";
 import { fakeZaposleni } from "../../fakeData/zaposleniPretraga";
-
-import { SingleZaposleni } from "./SingleZaposleni";
+import { SingleZaposleni } from "../Zaposleni/SingleZaposleni";
 
 const itemsPerPage = 5;
 
