@@ -6,6 +6,7 @@ export const fakeZaposleni = [
       email: "firma1@fimra1.com",
       pib: "123456789",
       maticniBroj: "123456789",
+      zeleMarketingMaterijal: true,
       zaposleni: [
         {
           id: "zaposleni1",
@@ -15,6 +16,7 @@ export const fakeZaposleni = [
           radnaMesta: ["Sekretar", "Administracija"],
           komentari: "Ovo je pocetak nekog komentara",
           telefon: "123456789",
+          zeleMarketingMaterijal: true,
           seminari: [
             {
               id: "seminar1",
@@ -41,6 +43,7 @@ export const fakeZaposleni = [
           email: "zaposleni3@firma1.com",
           radnaMesta: ["Budzet"],
           telefon: "21231221",
+          zeleMarketingMaterijal: false,
           seminari: [
             {
               id: "seminar1",
@@ -59,6 +62,7 @@ export const fakeZaposleni = [
           email: "zaposleni2@firma1.com",
           radnaMesta: ["LPA", "NOU"],
           telefon: "",
+          zeleMarketingMaterijal: true,
           seminari: [
             {
               id: "seminar2",

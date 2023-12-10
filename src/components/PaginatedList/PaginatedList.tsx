@@ -8,22 +8,13 @@ import {
   Typography,
   Accordion,
   AccordionDetails,
-  TextField,
-  Box,
-  ListItem,
   AccordionSummary,
-  Autocomplete,
-  Checkbox,
 } from "@mui/material";
 import { fakeZaposleni } from "../../fakeData/zaposleniPretraga";
-import PrijavaOdjava from "../PrijavaOdjava";
-import { normalizedRadnaMesta } from "../../fakeData/companyData";
-import CheckBoxOutlineBlankIcon from "@mui/icons-material/CheckBoxOutlineBlank";
-import CheckBoxIcon from "@mui/icons-material/CheckBox";
+
+import { SingleZaposleni } from "./SingleZaposleni";
 
 const itemsPerPage = 5;
-const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
-const checkedIcon = <CheckBoxIcon fontSize="small" />;
 
 function PaginatedList() {
   const [page, setPage] = useState(1);
@@ -42,6 +33,7 @@ function PaginatedList() {
     id: string;
     seminari?: Seminar_Zaposleni[];
     telefon: string;
+    zeleMarketingMaterijal: boolean;
   };
 
   type Seminar_Zaposleni = {
@@ -51,81 +43,8 @@ function PaginatedList() {
     id: string;
   };
 
-  const renderVisitedSeminari = (seminari: Seminar_Zaposleni[]) => {
-    return seminari.map((s) => (
-      <List>
-        <ListItem>{s.naziv}</ListItem>
-      </List>
-    ));
-  };
   const renderZaposleni = (zaposleni: Zaposleni[]) => {
-    return zaposleni.map((z, index: number) => (
-      <Box key={index} paddingBottom={5}>
-        <PrijavaOdjava />
-
-        <TextField sx={{ m: 1 }} id="ime" label="Ime" variant="outlined" value={z.ime} />
-        <TextField
-          sx={{ m: 1 }}
-          id="prezime"
-          label="Prezime"
-          variant="outlined"
-          value={z.prezime}
-        />
-        <TextField sx={{ m: 1 }} id="email" label="Email" variant="outlined" value={z.email} />
-        <TextField
-          sx={{ m: 1 }}
-          id="broj-sertifikata"
-          label="Broj sertifikata"
-          variant="outlined"
-          value={z.brojSertifikata}
-        />
-        <TextField
-          sx={{ m: 1 }}
-          id="telefon"
-          label="Telefon"
-          variant="outlined"
-          value={z.telefon}
-        />
-
-        <Autocomplete
-          sx={{ m: 1, width: "98%" }}
-          multiple
-          limitTags={2}
-          id="multiple-radna-mesta"
-          options={normalizedRadnaMesta}
-          getOptionLabel={(option) => option}
-          renderOption={(props, option, { selected }) => (
-            <li {...props}>
-              <Checkbox
-                icon={icon}
-                checkedIcon={checkedIcon}
-                style={{ marginRight: 8 }}
-                checked={selected}
-              />
-              {option}
-            </li>
-          )}
-          renderInput={(params) => (
-            <TextField {...params} label="Radna mesta" placeholder="Radna mesta" />
-          )}
-        />
-        <TextField
-          sx={{ m: 1, width: "98%" }}
-          id="outlined-multiline-static"
-          label="Komentari"
-          multiline
-          rows={4}
-          value={z.komentari}
-        ></TextField>
-
-        <Card>
-          <CardContent>
-            <Typography>Poseceni seminari:</Typography>
-            {renderVisitedSeminari(z.seminari || [])}
-          </CardContent>
-        </Card>
-      </Box>
-    ));
+    return zaposleni.map((z: Zaposleni, index: number) => <SingleZaposleni key={index} {...z} />);
   };
 
   return (

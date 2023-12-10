@@ -27,6 +27,7 @@ export const companiesData: Company[] = [
         prezime: "prezime 1",
         email: "e1@asdf.com",
         telefon: "12341234",
+        zeleMarketingMaterijal: true,
       },
       {
         id: "5",
@@ -35,6 +36,7 @@ export const companiesData: Company[] = [
         prezime: "prezime 5",
         email: "e2@asdf.com",
         telefon: "12341234",
+        zeleMarketingMaterijal: false,
       },
     ],
     seminari: [
@@ -108,6 +110,7 @@ export const companiesData: Company[] = [
         prezime: "prezime 2",
         email: "e1@cccc.com",
         telefon: "12341234",
+        zeleMarketingMaterijal: false,
       },
     ],
     seminari: [
@@ -154,6 +157,7 @@ export const companiesData: Company[] = [
         prezime: "prezime 4",
         email: "e1@dddd.com",
         telefon: "12341234",
+        zeleMarketingMaterijal: true,
       },
     ],
     seminari: [
@@ -200,6 +204,7 @@ export const companiesData: Company[] = [
         prezime: "prezime 3",
         email: "e1@gggg.com",
         telefon: "12341234",
+        zeleMarketingMaterijal: false,
       },
     ],
     seminari: [
@@ -230,6 +235,7 @@ export const zaposleniData: Zaposleni[] = [
     prezime: "prezime 1",
     email: "e1@asdf.com",
     telefon: "12341234",
+    zeleMarketingMaterijal: true,
   },
   {
     id: "2",
@@ -238,6 +244,7 @@ export const zaposleniData: Zaposleni[] = [
     prezime: "prezime 2",
     email: "e1@cccc.com",
     telefon: "12341234",
+    zeleMarketingMaterijal: true,
   },
   {
     id: "3",
@@ -246,6 +253,7 @@ export const zaposleniData: Zaposleni[] = [
     prezime: "prezime 3",
     email: "e1@gggg.com",
     telefon: "12341234",
+    zeleMarketingMaterijal: false,
   },
   {
     id: "4",
@@ -254,6 +262,7 @@ export const zaposleniData: Zaposleni[] = [
     prezime: "prezime 4",
     email: "e1@dddd.com",
     telefon: "12341234",
+    zeleMarketingMaterijal: false,
   },
   {
     id: "5",
@@ -262,6 +271,7 @@ export const zaposleniData: Zaposleni[] = [
     prezime: "prezime 5",
     email: "e2@asdf.com",
     telefon: "12341234",
+    zeleMarketingMaterijal: true,
   },
 ];
 

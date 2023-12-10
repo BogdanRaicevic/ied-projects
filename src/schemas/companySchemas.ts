@@ -7,6 +7,7 @@ export const ZaposleniSchema = z.object({
   prezime: z.string(),
   email: z.string(),
   telefon: z.string(),
+  zeleMarketingMaterijal: z.boolean().default(false),
 });
 export type Zaposleni = z.infer<typeof ZaposleniSchema>;
 
