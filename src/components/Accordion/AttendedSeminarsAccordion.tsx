@@ -21,7 +21,7 @@ export default function AttendedSeminarsAccordion({ firma }: { firma: Company })
   const [expanded, setExpanded] = useState<string | false>(false);
 
   useEffect(() => {
-    if (firma.seminari.length > 0) {
+    if (firma.seminari?.length > 0) {
       setExpanded(firma.seminari[0].naziv);
     }
   }, [firma]);
@@ -62,8 +62,8 @@ export default function AttendedSeminarsAccordion({ firma }: { firma: Company })
     setExpanded(firma.seminari[0].naziv);
   };
 
-  const attendedSeminars = firma?.seminari
-    .sort((a, b) => compareDesc(formatDate(a.datum), formatDate(b.datum)))
+  const attendedSeminars = firma.seminari
+    ?.sort((a, b) => compareDesc(formatDate(a.datum), formatDate(b.datum)))
     .map((seminar: Seminar) => {
       return (
         <Accordion
