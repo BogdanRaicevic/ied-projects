@@ -1,4 +1,4 @@
-import { Grid, TextField, Autocomplete } from "@mui/material";
+import { Grid, TextField, Autocomplete, Typography } from "@mui/material";
 import { tipoviSeminara } from "../../fakeData/seminarsData";
 
 type SingleSeminar = {
@@ -88,25 +88,15 @@ export function EssentialSeminarData(item: SingleSeminar) {
         />
       </Grid>
       <Grid xs={3}>
-        <TextField
-          sx={{ m: 1 }}
-          id="broj-firmi"
-          label="Broj firmi"
-          variant="outlined"
-          defaultValue={item.ucesnici.length}
-          disabled
-        />
+        <Typography sx={{ m: 1, p: 1, fontSize: "1.5em" }} id="broj-firmi">
+          Broj Firmi: {item.ucesnici.length}
+        </Typography>
       </Grid>
 
       <Grid xs={3}>
-        <TextField
-          sx={{ m: 1 }}
-          id="broj-ucesnika"
-          label="Broj ucesnika"
-          variant="outlined"
-          defaultValue={countZaposleni(item)}
-          disabled
-        />
+        <Typography sx={{ m: 1, p: 1, fontSize: "1.5em" }} id="broj-ucesnika">
+          Broj Ucesnika: {countZaposleni(item)}
+        </Typography>
       </Grid>
     </Grid>
   );
