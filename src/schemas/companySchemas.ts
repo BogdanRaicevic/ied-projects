@@ -53,3 +53,22 @@ export const MetadataSchema = z.object({
 });
 
 export type Metadata = z.infer<typeof MetadataSchema>;
+
+export const SeminarSchema = z.object({
+  naziv: z
+    .string()
+    .min(3, "Naziv mora da ima bar 3 karaktera")
+    .max(100, "Naziv ne sme da ima vise od 100 karaktera"),
+  predavac: z
+    .string()
+    .min(3, "Predavac mora da ima bar 3 karaktera")
+    .max(100, "Predavac ne sme da ima vise od 100 karaktera"),
+  osnovnaCena: z.number().min(0, "Cena ne moze da bude negativna"),
+  mesto: z
+    .string()
+    .min(3, "Mesto mora da ima bar 3 karaktera")
+    .max(100, "Mesto ne sme da ima vise od 100 karaktera"),
+  tipSeminara: z.string(),
+  datum: z.date().min(new Date(), "Datum ne sme da bude u proslosti"),
+});
+export type Seminar = z.infer<typeof SeminarSchema>;

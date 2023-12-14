@@ -20,25 +20,28 @@ import { fakeSeminarsOnSeminar } from "../fakeData/seminarsData";
 import { SetStateAction, useState } from "react";
 import { EssentialSeminarData } from "../components/Seminari/EssentialSeminarData";
 import { UcesniciSeminara } from "../components/Seminari/UcesniciSeminara";
+import CreateSeminarForm from "../components/Forms/CreateSeminarForm";
 
 export default function () {
   const parametriPretrage = () => (
-    <Box>
+    <>
       <h1>Parametri Pretrage</h1>
-      <TextField sx={{ m: 1 }} id="predavac" label="Predavac" variant="outlined" />
-      <TextField sx={{ m: 1 }} id="naziv" label="Naziv seminara" variant="outlined" />
-      <TextField sx={{ m: 1 }} id="tip" label="Tip Seminara" variant="outlined" />
-      <TextField sx={{ m: 1 }} id="broj-ucesnika" label="Broj ucesnika" variant="outlined" />
-      <FormControl sx={{ m: 1 }}>
-        <LocalizationProvider dateAdapter={AdapterDateFns}>
-          <DatePicker format="yyyy/MM/dd" label="Pocetni datum" />
-          <Box display="flex" alignItems="center" justifyContent="center">
-            <UnfoldLess />
-          </Box>
-          <DatePicker format="yyyy/MM/dd" label="Kranji datum" />
-        </LocalizationProvider>
-      </FormControl>
-    </Box>
+      <Box>
+        <TextField sx={{ m: 1 }} id="predavac" label="Predavac" variant="outlined" />
+        <TextField sx={{ m: 1 }} id="naziv" label="Naziv seminara" variant="outlined" />
+        <TextField sx={{ m: 1 }} id="tip" label="Tip Seminara" variant="outlined" />
+        <TextField sx={{ m: 1 }} id="broj-ucesnika" label="Broj ucesnika" variant="outlined" />
+        <FormControl sx={{ m: 1 }}>
+          <LocalizationProvider dateAdapter={AdapterDateFns}>
+            <DatePicker format="yyyy/MM/dd" label="Pocetni datum" />
+            <Box display="flex" alignItems="center" justifyContent="center">
+              <UnfoldLess />
+            </Box>
+            <DatePicker format="yyyy/MM/dd" label="Kranji datum" />
+          </LocalizationProvider>
+        </FormControl>
+      </Box>
+    </>
   );
 
   const [page, setPage] = useState(1);
@@ -94,6 +97,10 @@ export default function () {
       <Button sx={{ m: 1 }} size="large" variant="contained" color="info" type="submit">
         Pretrazi
       </Button>
+      <Button sx={{ m: 1 }} size="large" variant="contained" color="success" type="submit">
+        Kreiraj novi seminar
+      </Button>
+      <CreateSeminarForm></CreateSeminarForm>
       <h2>Seminari</h2>
       {seminariLista()}
     </>

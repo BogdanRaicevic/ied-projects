@@ -1,5 +1,6 @@
-import { Grid, TextField, Autocomplete, Typography } from "@mui/material";
+import { TextField, Autocomplete, Typography } from "@mui/material";
 import { tipoviSeminara } from "../../fakeData/seminarsData";
+import Grid from "@mui/system/Unstable_Grid";
 
 type SingleSeminar = {
   id: string;
@@ -81,10 +82,10 @@ export function EssentialSeminarData(item: SingleSeminar) {
         <Autocomplete
           sx={{ m: 1 }}
           disablePortal
-          id="tipovi-seminara"
+          id="tip-seminara"
           options={tipoviSeminara}
           defaultValue={item.tipSeminara}
-          renderInput={(params) => <TextField {...params} label="Tipovi Seminara" />}
+          renderInput={(params) => <TextField {...params} label="Tip Seminara" />}
         />
       </Grid>
       <Grid xs={3}>
