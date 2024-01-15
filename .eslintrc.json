@@ -12,6 +12,8 @@
   "rules": {
     "react/react-in-jsx-scope": "off",
     "require-jsdoc": "off",
-    "no-unused-vars": ["warn"]
+    "no-unused-vars": ["warn"],
+    "prettier/prettier": "error",
+    "linebreak-style": "off"
   }
 }
