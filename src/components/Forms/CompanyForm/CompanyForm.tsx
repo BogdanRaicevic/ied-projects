@@ -141,7 +141,7 @@ export default function CompanyForm(props: any) {
   });
 
   // TODO: add types
-  const [company, setCompany] = useState(props);
+  const [company, _setCompany] = useState(props);
   console.log(company);
 
   const onSubmit = (data: Company) => {

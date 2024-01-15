@@ -17,7 +17,7 @@ export default function CreateSeminarForm() {
     resolver: zodResolver(SeminarSchema),
   });
 
-  const [seminar, setSeminar] = useState<Seminar>();
+  const [_seminar, setSeminar] = useState<Seminar>();
 
   const handleSaveSeminar = (data: any) => {
     setSeminar(data);
