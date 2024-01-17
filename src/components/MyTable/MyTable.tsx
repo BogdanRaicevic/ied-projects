@@ -14,7 +14,8 @@ type Props = {
 export default function MyTable({ data }: Props) {
   const table = useMaterialReactTable({
     columns: useMemo<MRT_ColumnDef<Company>[]>(() => myCompanyColumns, []),
-    data: useMemo<Company[]>(() => data, [data]), //data must be memoized or stable (useState, useMemo, defined outside of this component, etc.)
+    // data must be memoized or stable (useState, useMemo, defined outside of this component, etc.)
+    data: useMemo<Company[]>(() => data, [data]),
     enableColumnFilterModes: true,
     enableColumnOrdering: true,
     enableColumnPinning: true,
