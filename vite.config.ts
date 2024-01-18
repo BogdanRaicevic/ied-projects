@@ -3,7 +3,7 @@ import { defineConfig } from "vite";
 import { dependencies } from "./package.json";
 
 function renderChunks(deps: Record<string, string>) {
-  const chunks = {};
+  const chunks: Record<string, string[]> = {}; // Add index signature to allow indexing with a string key
   Object.keys(deps).forEach((key) => {
     if (["react", "react-router-dom", "react-dom"].includes(key)) return;
     chunks[key] = [key];
