@@ -284,7 +284,6 @@ export default function CompanyForm(props: any) {
           );
         })}
         <Divider sx={{ width: "100%", my: 4 }} />
-
         {inputItems(InputTypesSchema.enum.Select).map((item) => {
           return (
             <Grid2 key={item.key} xs={12} md={6} lg={4}>
@@ -293,7 +292,6 @@ export default function CompanyForm(props: any) {
           );
         })}
         <Divider sx={{ width: "100%", my: 4 }} />
-
         {inputItems(InputTypesSchema.enum.TextMultiline).map((item) => {
           return (
             <Grid2 key={item.key} xs={12}>
@@ -301,10 +299,7 @@ export default function CompanyForm(props: any) {
             </Grid2>
           );
         })}
-        <Divider sx={{ width: "100%", my: 4 }} />
-        {/* <Button variant="contained" color="secondary">
-          Dodaj zaposlenog kompanije
-        </Button>
+        {/* 
         {employeeInputItems(InputTypesSchema.enum.Text).map((item) => {
           return (
             <Grid2 key={item.key} xs={12} md={6} lg={4}>
@@ -312,10 +307,13 @@ export default function CompanyForm(props: any) {
             </Grid2>
           );
         })}
-        <Divider sx={{ width: "100%", my: 4 }} /> */}
-
+        */}
         <Button sx={{ my: 2 }} size="large" variant="contained" color="success" type="submit">
           Sačuvaj
+        </Button>
+        <Divider sx={{ width: "100%", my: 2 }} />{" "}
+        <Button sx={{ my: 2 }} size="large" variant="contained" color="secondary" type="submit">
+          Dodaj zaposlenog
         </Button>
       </Grid2>
     </Box>

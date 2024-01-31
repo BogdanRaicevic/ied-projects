@@ -18,7 +18,7 @@ export default function Firma() {
         columns={myZaposleniColumns}
         data={data?.zaposleni || []}
         enableColumnOrdering
-        enableGlobalFilter={true} //turn off a feature
+        enableGlobalFilter={true}
       />
     );
   }

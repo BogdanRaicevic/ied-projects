@@ -8,6 +8,8 @@ export const ZaposleniSchema = z.object({
   email: z.string(),
   telefon: z.string(),
   zeleMarketingMaterijal: z.boolean().default(false),
+  brojSertifikata: z.string(),
+  komentari: z.string().max(1000),
 });
 export type Zaposleni = z.infer<typeof ZaposleniSchema>;
 
