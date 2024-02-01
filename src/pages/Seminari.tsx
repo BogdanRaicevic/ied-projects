@@ -21,8 +21,9 @@ import { SetStateAction, useState } from "react";
 import { EssentialSeminarData } from "../components/Seminari/EssentialSeminarData";
 import { UcesniciSeminara } from "../components/Seminari/UcesniciSeminara";
 import CreateSeminarForm from "../components/Forms/CreateSeminarForm";
+import { format } from "date-fns";
 
-export default function () {
+export default function Seminari() {
   const parametriPretrage = () => (
     <>
       <h1>Parametri Pretrage</h1>
@@ -49,20 +50,26 @@ export default function () {
   const handleChange = (_event: any, value: SetStateAction<number>) => {
     setPage(value);
   };
+
   const itemsPerPage = 5;
-  const items = fakeSeminarsOnSeminar;
+
+  const [seminars, setSeminars] = useState([...fakeSeminarsOnSeminar]);
+  const addSeminar = (newSeminar: any) => {
+    setSeminars([newSeminar, ...seminars]);
+  };
 
   const seminariLista = () => (
     <div>
       <List>
-        {items.slice((page - 1) * itemsPerPage, page * itemsPerPage).map((item, index) => (
+        {seminars.slice((page - 1) * itemsPerPage, page * itemsPerPage).map((seminar, index) => (
           <Card key={index} sx={{ mb: 1 }}>
             <CardContent sx={{ backgroundColor: "#ead5d3" }}>
               <Typography variant="h6" component="div">
-                {"Seminar: " + item.naziv} {/* Replace with your company name variable */}
+                {"Seminar: " + seminar.naziv} {/* Replace with your company name variable */}
               </Typography>
               <Typography variant="body2" color="text.secondary">
-                {"Datum: " + item.datum} {/* Replace with your company id variable */}
+                {"Datum: " + format(seminar.datum, "yyyy.MM.dd")}
+                {/* Replace with your company id variable */}
               </Typography>
 
               <Accordion>
@@ -71,11 +78,11 @@ export default function () {
                   aria-controls="panel1a-content"
                   id="panel1a-header"
                 >
-                  <Typography>Ime i prezime zaposlenog: {item.ucesnici[0].naziv}</Typography>
+                  <Typography>Detalji seminara</Typography>
                 </AccordionSummary>
                 <AccordionDetails>
-                  <EssentialSeminarData {...item} />
-                  <UcesniciSeminara {...item} />
+                  <EssentialSeminarData {...seminar} />
+                  <UcesniciSeminara {...seminar} />
                 </AccordionDetails>
               </Accordion>
             </CardContent>
@@ -84,7 +91,7 @@ export default function () {
       </List>
       <Pagination
         sx={{ mb: 5 }}
-        count={Math.ceil(items.length / itemsPerPage)}
+        count={Math.ceil(seminars.length / itemsPerPage)}
         page={page}
         onChange={handleChange}
       />
@@ -97,10 +104,7 @@ export default function () {
       <Button sx={{ m: 1 }} size="large" variant="contained" color="info" type="submit">
         Pretrazi
       </Button>
-      <Button sx={{ m: 1 }} size="large" variant="contained" color="success" type="submit">
-        Kreiraj novi seminar
-      </Button>
-      <CreateSeminarForm></CreateSeminarForm>
+      <CreateSeminarForm onAddSeminar={addSeminar}></CreateSeminarForm>
       <h2>Seminari</h2>
       {seminariLista()}
     </>

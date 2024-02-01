@@ -4,7 +4,7 @@ import { Box } from "@mui/system";
 type SingleSeminar = {
   id: string;
   naziv: string;
-  datum: string;
+  datum: Date;
   predavac: string;
   tipSeminara: string;
   maloprodajnaCena: number;
@@ -41,7 +41,7 @@ export function UcesniciSeminara(item: SingleSeminar) {
     <Card sx={{ mt: 4 }}>
       <CardContent>
         <Typography>Ucesnici</Typography>
-        {item.ucesnici.map((ucesnik: any, index: number) => {
+        {item.ucesnici?.map((ucesnik: any, index: number) => {
           return (
             <List key={index}>
               <Box>

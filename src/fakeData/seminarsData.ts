@@ -40,7 +40,7 @@ export const fakeSeminarsOnSeminar = [
   {
     id: "seminar1",
     naziv: "Seminar 1: Javne nabavke",
-    datum: "2023-10-10",
+    datum: new Date("2023-10-10"),
     predavac: "Pera",
     tipSeminara: "Javne nabavke",
     maloprodajnaCena: 15000,
@@ -70,7 +70,7 @@ export const fakeSeminarsOnSeminar = [
     id: "seminar2",
     naziv: "Seminar 2: Zastita na radu",
     tipSeminara: "Zastita na radu",
-    datum: "2023-12-10",
+    datum: new Date("2023-12-10"),
     predavac: "Zare",
     maloprodajnaCena: 15000,
     mesto: "Novi Sad, Hotel Balkan",

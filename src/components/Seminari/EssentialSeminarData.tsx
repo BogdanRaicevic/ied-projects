@@ -5,7 +5,7 @@ import Grid from "@mui/system/Unstable_Grid";
 type SingleSeminar = {
   id: string;
   naziv: string;
-  datum: string;
+  datum: Date;
   predavac: string;
   tipSeminara: string;
   maloprodajnaCena: number;
@@ -25,6 +25,7 @@ type SingleSeminar = {
 export function EssentialSeminarData(item: SingleSeminar) {
   const countZaposleni = (seminar: any) => {
     let count = 0;
+    if (!seminar.ucesnici) return count;
     seminar.ucesnici.forEach((ucesnik: any) => {
       count += ucesnik.zaposleni.length;
     });
@@ -90,7 +91,7 @@ export function EssentialSeminarData(item: SingleSeminar) {
       </Grid>
       <Grid xs={3}>
         <Typography sx={{ m: 1, p: 1, fontSize: "1.5em" }} id="broj-firmi">
-          Broj Firmi: {item.ucesnici.length}
+          Broj Firmi: {item.ucesnici?.length || 0}
         </Typography>
       </Grid>
 

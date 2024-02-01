@@ -3,25 +3,28 @@ import { tipoviSeminara } from "../../../fakeData/seminarsData";
 import { Controller, useForm } from "react-hook-form";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
-import { useState } from "react";
 import { Seminar, SeminarSchema } from "../../../schemas/companySchemas";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Grid2 from "@mui/material/Unstable_Grid2/Grid2";
 
-export default function CreateSeminarForm() {
+interface CreateSeminarFormProps {
+  onAddSeminar: (data: any) => void;
+}
+
+export default function CreateSeminarForm({ onAddSeminar }: CreateSeminarFormProps) {
   const {
     handleSubmit,
     control,
     formState: { errors },
   } = useForm<Seminar>({
     resolver: zodResolver(SeminarSchema),
+    defaultValues: {
+      datum: new Date(),
+    },
   });
 
-  const [_seminar, setSeminar] = useState<Seminar>();
-
   const handleSaveSeminar = (data: any) => {
-    setSeminar(data);
-    console.log("seminar", data);
+    onAddSeminar(data);
   };
 
   const onError = (errors: any, e: any) => {
@@ -143,7 +146,8 @@ export default function CreateSeminarForm() {
           <Controller
             control={control}
             name="datum"
-            render={({ field }) => (
+            rules={{ required: true }}
+            render={({ field, fieldState }) => (
               <FormControl fullWidth sx={{ m: 1 }}>
                 <LocalizationProvider dateAdapter={AdapterDateFns}>
                   <DatePicker
@@ -151,7 +155,19 @@ export default function CreateSeminarForm() {
                     label="Datum odrzavanja"
                     disablePast
                     value={field.value}
-                    onChange={(newValue) => (field.value = newValue as Date)}
+                    onChange={(newValue) => {
+                      field.onChange(newValue);
+                      return newValue;
+                    }}
+                    slots={{
+                      textField: ({ ...params }) => (
+                        <TextField
+                          {...params}
+                          error={!!fieldState.invalid}
+                          helperText={fieldState.error && "Datum odrzavanja is required"}
+                        />
+                      ),
+                    }}
                   />
                 </LocalizationProvider>
               </FormControl>
@@ -159,7 +175,9 @@ export default function CreateSeminarForm() {
           ></Controller>
         </Grid2>
       </Grid2>
-      <Button type="submit">Submit</Button>
+      <Button sx={{ m: 1 }} size="large" variant="contained" color="success" type="submit">
+        Kreiraj novi seminar
+      </Button>
     </Box>
   );
 }
