@@ -9,12 +9,14 @@ import Grid2 from "@mui/material/Unstable_Grid2/Grid2";
 
 interface CreateSeminarFormProps {
   seminarData?: Seminar;
+  isInUpdateForm?: boolean;
   saveOrUpdateSeminar: (data: any) => void;
 }
 
 export default function CreateSeminarForm({
   saveOrUpdateSeminar,
   seminarData,
+  isInUpdateForm,
 }: CreateSeminarFormProps) {
   const {
     handleSubmit,
@@ -36,7 +38,12 @@ export default function CreateSeminarForm({
   };
 
   return (
-    <Box onSubmit={handleSubmit(handleSaveSeminar, onError)} component="form">
+    <Box
+      mx={2}
+      display={"flex"}
+      onSubmit={handleSubmit(handleSaveSeminar, onError)}
+      component="form"
+    >
       <Grid2 container spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 12 }}>
         <Grid2 xs={4}>
           <Controller
@@ -177,10 +184,27 @@ export default function CreateSeminarForm({
             )}
           ></Controller>
         </Grid2>
+
+        <Box ml={2} display="flex" justifyContent="space-between" width="100%">
+          <Box display="flex">
+            <Button sx={{ m: 1 }} size="large" variant="contained" color="success" type="submit">
+              Sacuvaj seminar
+            </Button>
+
+            {isInUpdateForm && (
+              <Button sx={{ m: 1 }} size="large" variant="contained" color="warning" type="button">
+                Arhiviraj Seminar
+              </Button>
+            )}
+          </Box>
+
+          {isInUpdateForm && (
+            <Button sx={{ m: 1 }} size="large" variant="contained" color="error" type="button">
+              Permanento Obrisi
+            </Button>
+          )}
+        </Box>
       </Grid2>
-      <Button sx={{ m: 1 }} size="large" variant="contained" color="success" type="submit">
-        Kreiraj novi seminar
-      </Button>
     </Box>
   );
 }

@@ -44,6 +44,7 @@ export function EssentialSeminarData(item: SingleSeminar) {
       <CreateSeminarForm
         seminarData={seminar}
         saveOrUpdateSeminar={updateSeminar}
+        isInUpdateForm={true}
       ></CreateSeminarForm>
       <Grid xs={3}>
         <Typography sx={{ m: 1, p: 1, fontSize: "1.5em" }} id="broj-firmi">
