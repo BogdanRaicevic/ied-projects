@@ -60,7 +60,10 @@ export default function Pretrage() {
   ];
 
   const velicineFirmi = [
-    { parent: "Sve velicine firmi", children: ["Mikro", "Mala", "Srednja", "Velika", "Korporacija"] },
+    {
+      parent: "Sve velicine firmi",
+      children: ["Mikro", "Mala", "Srednja", "Velika", "Korporacija"],
+    },
   ];
 
   // merge this into one array

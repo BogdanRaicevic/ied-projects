@@ -7,7 +7,7 @@ type SingleSeminar = {
   datum: Date;
   predavac: string;
   tipSeminara: string;
-  maloprodajnaCena: number;
+  osnovnaCena: number;
   mesto: string;
   ucesnici: {
     naziv: string;

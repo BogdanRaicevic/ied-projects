@@ -43,7 +43,7 @@ export const fakeSeminarsOnSeminar = [
     datum: new Date("2023-10-10"),
     predavac: "Pera",
     tipSeminara: "Javne nabavke",
-    maloprodajnaCena: 15000,
+    osnovnaCena: 15000,
     mesto: "Beograd, Hotel Moskva",
     ucesnici: [
       {
@@ -72,7 +72,7 @@ export const fakeSeminarsOnSeminar = [
     tipSeminara: "Zastita na radu",
     datum: new Date("2023-12-10"),
     predavac: "Zare",
-    maloprodajnaCena: 15000,
+    osnovnaCena: 15000,
     mesto: "Novi Sad, Hotel Balkan",
     ucesnici: [
       {

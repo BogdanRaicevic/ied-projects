@@ -8,17 +8,18 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import Grid2 from "@mui/material/Unstable_Grid2/Grid2";
 
 interface CreateSeminarFormProps {
+  seminarData?: Seminar;
   onAddSeminar: (data: any) => void;
 }
 
-export default function CreateSeminarForm({ onAddSeminar }: CreateSeminarFormProps) {
+export default function CreateSeminarForm({ onAddSeminar, seminarData }: CreateSeminarFormProps) {
   const {
     handleSubmit,
     control,
     formState: { errors },
   } = useForm<Seminar>({
     resolver: zodResolver(SeminarSchema),
-    defaultValues: {
+    defaultValues: seminarData || {
       datum: new Date(),
     },
   });

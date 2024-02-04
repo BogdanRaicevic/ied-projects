@@ -1,6 +1,6 @@
-import { TextField, Autocomplete, Typography } from "@mui/material";
-import { tipoviSeminara } from "../../fakeData/seminarsData";
+import { Typography } from "@mui/material";
 import Grid from "@mui/system/Unstable_Grid";
+import CreateSeminarForm from "../Forms/CreateSeminarForm";
 
 type SingleSeminar = {
   id: string;
@@ -8,7 +8,7 @@ type SingleSeminar = {
   datum: Date;
   predavac: string;
   tipSeminara: string;
-  maloprodajnaCena: number;
+  osnovnaCena: number;
   mesto: string;
   ucesnici: {
     naziv: string;
@@ -34,61 +34,12 @@ export function EssentialSeminarData(item: SingleSeminar) {
 
   return (
     <Grid container spacing={2}>
-      <Grid xs={3}>
-        <TextField
-          sx={{ m: 1 }}
-          id="naziv"
-          label="Naziv"
-          variant="outlined"
-          defaultValue={item.naziv}
-        />
-      </Grid>
-      <Grid xs={3}>
-        <TextField
-          sx={{ m: 1 }}
-          id="datum"
-          label="Datum"
-          variant="outlined"
-          defaultValue={item.datum}
-        />
-      </Grid>
-      <Grid xs={3}>
-        <TextField
-          sx={{ m: 1 }}
-          id="predavac"
-          label="Predavac"
-          variant="outlined"
-          defaultValue={item.predavac}
-        />
-      </Grid>
-      <Grid xs={3}>
-        <TextField
-          sx={{ m: 1 }}
-          id="mesto"
-          label="Mesto odrazavanja"
-          variant="outlined"
-          defaultValue={item.mesto}
-        />
-      </Grid>
-      <Grid xs={3}>
-        <TextField
-          sx={{ m: 1 }}
-          id="osnovna-cena"
-          label="Osnovna cena"
-          variant="outlined"
-          defaultValue={item.maloprodajnaCena}
-        />
-      </Grid>
-      <Grid xs={3}>
-        <Autocomplete
-          sx={{ m: 1 }}
-          disablePortal
-          id="tip-seminara"
-          options={tipoviSeminara}
-          defaultValue={item.tipSeminara}
-          renderInput={(params) => <TextField {...params} label="Tip Seminara" />}
-        />
-      </Grid>
+      <CreateSeminarForm
+        seminarData={item}
+        onAddSeminar={function (data: any): void {
+          throw new Error("Function not implemented.");
+        }}
+      ></CreateSeminarForm>
       <Grid xs={3}>
         <Typography sx={{ m: 1, p: 1, fontSize: "1.5em" }} id="broj-firmi">
           Broj Firmi: {item.ucesnici?.length || 0}
