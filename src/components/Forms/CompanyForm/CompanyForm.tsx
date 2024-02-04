@@ -5,6 +5,7 @@ import {
   Button,
   Autocomplete,
   Divider,
+  Dialog,
 } from "@mui/material";
 import { Box } from "@mui/system";
 import { useForm, Controller } from "react-hook-form";
@@ -17,6 +18,7 @@ import {
   CompanySchema,
   InputTypesSchema,
   Company,
+  Zaposleni,
 } from "../../../schemas/companySchemas";
 import { z } from "zod";
 import {
@@ -35,6 +37,7 @@ import {
   MonitorHeart,
   Comment,
 } from "@mui/icons-material";
+import { ZaposleniForm } from "../../Zaposleni/ZaposleniFrom";
 
 export const companyFormMetadata: Metadata[] = [
   {
@@ -273,6 +276,18 @@ export default function CompanyForm(props: any) {
   //     });
   // };
 
+  // State to control the visibility of the modal
+  const [open, setOpen] = useState(false);
+
+  const handleZaposleniSubmit = (zaposleniData: Zaposleni) => {
+    // Update the employeeInputItems array here...
+    // You might need to use a state variable for this array if you want the changes to persist
+    console.log("this is zaposleni data", zaposleniData);
+    // Close the modal
+
+    setOpen(false);
+  };
+
   return (
     <Box onSubmit={handleSubmit(onSubmit, onError)} component="form" sx={{ mt: 4 }}>
       <Grid2 container m={0} spacing={2}>
@@ -312,9 +327,21 @@ export default function CompanyForm(props: any) {
           Sačuvaj
         </Button>
         <Divider sx={{ width: "100%", my: 2 }} />{" "}
-        <Button sx={{ my: 2 }} size="large" variant="contained" color="secondary" type="submit">
+        <Button
+          sx={{ my: 2 }}
+          size="large"
+          variant="contained"
+          color="secondary"
+          type="button"
+          onClick={() => setOpen(true)}
+        >
           Dodaj zaposlenog
         </Button>
+        <Dialog open={open}>
+          <Box sx={{ p: 2 }}>
+            <ZaposleniForm onSubmit={handleZaposleniSubmit} />
+          </Box>
+        </Dialog>
       </Grid2>
     </Box>
   );

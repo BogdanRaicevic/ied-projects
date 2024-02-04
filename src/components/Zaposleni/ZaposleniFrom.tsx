@@ -1,29 +1,41 @@
-import { TextField, Autocomplete, Checkbox } from "@mui/material";
+import { TextField, Autocomplete, Checkbox, Button } from "@mui/material";
 import { Box } from "@mui/system";
 import { normalizedRadnaMesta } from "../../fakeData/companyData";
-import PrijavaOdjava from "../PrijavaOdjava";
 import CheckBoxOutlineBlankIcon from "@mui/icons-material/CheckBoxOutlineBlank";
 import CheckBoxIcon from "@mui/icons-material/CheckBox";
-import { useState } from "react";
 import { Zaposleni } from "../../schemas/companySchemas";
+import { useState } from "react";
 
-export function ZaposleniForm({ zaposleni }: { zaposleni: Zaposleni }) {
+type ZaposleniFormProps = {
+  zaposleni?: Zaposleni;
+  onSubmit: (zaposleniData: Zaposleni) => void;
+};
+
+export function ZaposleniForm({ zaposleni = {} as Zaposleni, onSubmit }: ZaposleniFormProps) {
   const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
   const checkedIcon = <CheckBoxIcon fontSize="small" />;
 
-  const [zaposleniPrijava, setZaposleniPrijava] = useState<Zaposleni>(zaposleni || {});
-
+  const [zaposleniFormData, setZaposleniFormData] = useState(zaposleni);
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setZaposleniPrijava({ ...zaposleniPrijava, zeleMarketingMaterijal: event.target.checked });
+    setZaposleniFormData({
+      ...zaposleniFormData,
+      [event.target.id]: event.target.value,
+    });
+  };
+  const handleRadnaMestaChange = (event: React.SyntheticEvent, newValue: string[]) => {
+    setZaposleniFormData({
+      ...zaposleniFormData,
+      radnaMesta: newValue,
+    });
   };
 
-  return (
-    <Box paddingBottom={5}>
-      <PrijavaOdjava
-        prijavljeniValue={zaposleniPrijava.zeleMarketingMaterijal}
-        prijavaChange={handleChange}
-      />
+  function handleDodajZaposlenog(event: React.FormEvent) {
+    event.preventDefault();
+    onSubmit(zaposleniFormData);
+  }
 
+  return (
+    <Box paddingBottom={5} component="form" onSubmit={handleDodajZaposlenog}>
       <TextField sx={{ m: 1 }} id="ime" label="Ime" variant="outlined" value={zaposleni.ime} />
       <TextField
         sx={{ m: 1 }}
@@ -31,6 +43,7 @@ export function ZaposleniForm({ zaposleni }: { zaposleni: Zaposleni }) {
         label="Prezime"
         variant="outlined"
         value={zaposleni.prezime}
+        onChange={handleChange}
       />
       <TextField
         sx={{ m: 1 }}
@@ -38,6 +51,7 @@ export function ZaposleniForm({ zaposleni }: { zaposleni: Zaposleni }) {
         label="Email"
         variant="outlined"
         value={zaposleni.email}
+        onChange={handleChange}
       />
       <TextField
         sx={{ m: 1 }}
@@ -45,6 +59,7 @@ export function ZaposleniForm({ zaposleni }: { zaposleni: Zaposleni }) {
         label="Broj sertifikata"
         variant="outlined"
         value={zaposleni.brojSertifikata}
+        onChange={handleChange}
       />
       <TextField
         sx={{ m: 1 }}
@@ -52,6 +67,7 @@ export function ZaposleniForm({ zaposleni }: { zaposleni: Zaposleni }) {
         label="Telefon"
         variant="outlined"
         value={zaposleni.telefon}
+        onChange={handleChange}
       />
 
       <Autocomplete
@@ -61,6 +77,7 @@ export function ZaposleniForm({ zaposleni }: { zaposleni: Zaposleni }) {
         id="multiple-radna-mesta"
         options={normalizedRadnaMesta}
         getOptionLabel={(option) => option}
+        onChange={handleRadnaMestaChange}
         renderOption={(props, option, { selected }) => (
           <li {...props}>
             <Checkbox
@@ -83,7 +100,11 @@ export function ZaposleniForm({ zaposleni }: { zaposleni: Zaposleni }) {
         multiline
         rows={4}
         value={zaposleni.komentari}
+        onChange={handleChange}
       ></TextField>
+      <Button sx={{ m: 1 }} variant="contained" type="submit">
+        Sacuvaj zaposlenog
+      </Button>
     </Box>
   );
 }

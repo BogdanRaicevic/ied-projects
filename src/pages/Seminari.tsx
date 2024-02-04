@@ -68,7 +68,7 @@ export default function Seminari() {
                 {"Seminar: " + seminar.naziv} {/* Replace with your company name variable */}
               </Typography>
               <Typography variant="body2" color="text.secondary">
-                {"Datum: " + format(seminar.datum, "yyyy.MM.dd")}
+                {"Datum: " + format(seminar.datum, "dd.MM.yyyy")}
                 {/* Replace with your company id variable */}
               </Typography>
 

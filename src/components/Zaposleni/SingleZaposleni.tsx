@@ -1,6 +1,8 @@
 import { Card, CardContent, Typography, List, ListItem } from "@mui/material";
 import { Box } from "@mui/system";
 import { ZaposleniForm } from "./ZaposleniFrom";
+import PrijavaOdjava from "../PrijavaOdjava";
+import { useState } from "react";
 
 type Seminar_Zaposleni = {
   naziv: string;
@@ -33,9 +35,22 @@ export function SingleZaposleni(zaposleni: Zaposleni) {
     );
   };
 
+  const [zaposleniPrijava, setZaposleniPrijava] = useState<Zaposleni>(zaposleni);
+
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setZaposleniPrijava({ ...zaposleniPrijava, zeleMarketingMaterijal: event.target.checked });
+  };
+
   return (
     <Box paddingBottom={5}>
-      <ZaposleniForm zaposleni={zaposleni as any}></ZaposleniForm>
+      <PrijavaOdjava
+        prijavljeniValue={zaposleniPrijava.zeleMarketingMaterijal}
+        prijavaChange={handleChange}
+      />
+      {
+        // TODO: Fix zaposleni form missing on submit
+      }
+      <ZaposleniForm onSubmit={() => {}} zaposleni={zaposleni as any}></ZaposleniForm>
 
       <Card>
         <CardContent>
