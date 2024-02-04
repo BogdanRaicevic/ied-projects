@@ -104,7 +104,7 @@ export default function Seminari() {
       <Button sx={{ m: 1 }} size="large" variant="contained" color="info" type="submit">
         Pretrazi
       </Button>
-      <CreateSeminarForm onAddSeminar={addSeminar}></CreateSeminarForm>
+      <CreateSeminarForm saveOrUpdateSeminar={addSeminar}></CreateSeminarForm>
       <h2>Seminari</h2>
       {seminariLista()}
     </>

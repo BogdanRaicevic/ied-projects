@@ -1,6 +1,7 @@
 import { Typography } from "@mui/material";
 import Grid from "@mui/system/Unstable_Grid";
 import CreateSeminarForm from "../Forms/CreateSeminarForm";
+import { useState } from "react";
 
 type SingleSeminar = {
   id: string;
@@ -32,23 +33,27 @@ export function EssentialSeminarData(item: SingleSeminar) {
     return count;
   };
 
+  const [seminar, setSeminar] = useState(item);
+
+  function updateSeminar(data: any): void {
+    setSeminar(data);
+  }
+
   return (
     <Grid container spacing={2}>
       <CreateSeminarForm
-        seminarData={item}
-        onAddSeminar={function (data: any): void {
-          throw new Error("Function not implemented.");
-        }}
+        seminarData={seminar}
+        saveOrUpdateSeminar={updateSeminar}
       ></CreateSeminarForm>
       <Grid xs={3}>
         <Typography sx={{ m: 1, p: 1, fontSize: "1.5em" }} id="broj-firmi">
-          Broj Firmi: {item.ucesnici?.length || 0}
+          Broj Firmi: {seminar.ucesnici?.length || 0}
         </Typography>
       </Grid>
 
       <Grid xs={3}>
         <Typography sx={{ m: 1, p: 1, fontSize: "1.5em" }} id="broj-ucesnika">
-          Broj Ucesnika: {countZaposleni(item)}
+          Broj Ucesnika: {countZaposleni(seminar)}
         </Typography>
       </Grid>
     </Grid>

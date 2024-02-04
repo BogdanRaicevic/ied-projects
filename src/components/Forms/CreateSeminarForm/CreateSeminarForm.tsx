@@ -9,10 +9,13 @@ import Grid2 from "@mui/material/Unstable_Grid2/Grid2";
 
 interface CreateSeminarFormProps {
   seminarData?: Seminar;
-  onAddSeminar: (data: any) => void;
+  saveOrUpdateSeminar: (data: any) => void;
 }
 
-export default function CreateSeminarForm({ onAddSeminar, seminarData }: CreateSeminarFormProps) {
+export default function CreateSeminarForm({
+  saveOrUpdateSeminar,
+  seminarData,
+}: CreateSeminarFormProps) {
   const {
     handleSubmit,
     control,
@@ -25,7 +28,7 @@ export default function CreateSeminarForm({ onAddSeminar, seminarData }: CreateS
   });
 
   const handleSaveSeminar = (data: any) => {
-    onAddSeminar(data);
+    saveOrUpdateSeminar(data);
   };
 
   const onError = (errors: any, e: any) => {
@@ -152,9 +155,8 @@ export default function CreateSeminarForm({ onAddSeminar, seminarData }: CreateS
               <FormControl fullWidth sx={{ m: 1 }}>
                 <LocalizationProvider dateAdapter={AdapterDateFns}>
                   <DatePicker
-                    format="yyyy/MM/dd"
+                    format="dd/MM/yyyy"
                     label="Datum odrzavanja"
-                    disablePast
                     value={field.value}
                     onChange={(newValue) => {
                       field.onChange(newValue);
