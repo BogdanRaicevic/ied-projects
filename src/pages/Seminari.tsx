@@ -129,7 +129,10 @@ export default function Seminari() {
       <Dialog open={open} onClose={handleClose} maxWidth="lg">
         <DialogTitle>Create Seminar</DialogTitle>
         <DialogContent>
-          <CreateSeminarForm saveOrUpdateSeminar={addSeminar}></CreateSeminarForm>
+          <CreateSeminarForm
+            saveOrUpdateSeminar={addSeminar}
+            closeDialog={handleClose}
+          ></CreateSeminarForm>
         </DialogContent>
       </Dialog>
       <h2>Seminari</h2>

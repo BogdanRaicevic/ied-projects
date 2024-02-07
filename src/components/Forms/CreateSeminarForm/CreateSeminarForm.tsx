@@ -11,12 +11,14 @@ interface CreateSeminarFormProps {
   seminarData?: Seminar;
   isInUpdateForm?: boolean;
   saveOrUpdateSeminar: (data: any) => void;
+  closeDialog?: () => void;
 }
 
 export default function CreateSeminarForm({
   saveOrUpdateSeminar,
   seminarData,
   isInUpdateForm,
+  closeDialog,
 }: CreateSeminarFormProps) {
   const {
     handleSubmit,
@@ -31,6 +33,9 @@ export default function CreateSeminarForm({
 
   const handleSaveSeminar = (data: any) => {
     saveOrUpdateSeminar(data);
+    if (closeDialog) {
+      closeDialog();
+    }
   };
 
   const onError = (errors: any, e: any) => {
