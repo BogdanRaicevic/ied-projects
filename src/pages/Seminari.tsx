@@ -7,6 +7,9 @@ import {
   Button,
   Card,
   CardContent,
+  Dialog,
+  DialogContent,
+  DialogTitle,
   FormControl,
   List,
   Pagination,
@@ -98,13 +101,37 @@ export default function Seminari() {
     </div>
   );
 
+  const [open, setOpen] = useState(false);
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
   return (
     <>
       {parametriPretrage()}
       <Button sx={{ m: 1 }} size="large" variant="contained" color="info" type="submit">
         Pretrazi
       </Button>
-      <CreateSeminarForm saveOrUpdateSeminar={addSeminar}></CreateSeminarForm>
+      <Button
+        sx={{ m: 1 }}
+        size="large"
+        variant="contained"
+        color="secondary"
+        onClick={handleClickOpen}
+      >
+        Kreiraj seimnar
+      </Button>
+      <Dialog open={open} onClose={handleClose} maxWidth="lg">
+        <DialogTitle>Create Seminar</DialogTitle>
+        <DialogContent>
+          <CreateSeminarForm saveOrUpdateSeminar={addSeminar}></CreateSeminarForm>
+        </DialogContent>
+      </Dialog>
       <h2>Seminari</h2>
       {seminariLista()}
     </>
