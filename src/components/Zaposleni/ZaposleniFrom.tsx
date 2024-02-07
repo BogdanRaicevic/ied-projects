@@ -22,7 +22,7 @@ export function ZaposleniForm({ zaposleni = {} as Zaposleni, onSubmit }: Zaposle
       [event.target.id]: event.target.value,
     });
   };
-  const handleRadnaMestaChange = (event: React.SyntheticEvent, newValue: string[]) => {
+  const handleRadnaMestaChange = (_event: React.SyntheticEvent, newValue: string[]) => {
     setZaposleniFormData({
       ...zaposleniFormData,
       radnaMesta: newValue,

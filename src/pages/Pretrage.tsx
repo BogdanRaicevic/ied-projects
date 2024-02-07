@@ -3,7 +3,7 @@ import PageTitle from "../components/PageTitle";
 import IndeterminateCheckbox from "../components/IndeterminateCheckbox";
 import { companiesData, fakeRadnaMesta } from "../fakeData/companyData";
 import Grid from "@mui/material/Unstable_Grid2";
-import { Button, Input, TextField } from "@mui/material";
+import { Button, TextField } from "@mui/material";
 import { Box } from "@mui/system";
 
 export default function Pretrage() {

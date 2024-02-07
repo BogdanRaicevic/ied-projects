@@ -28,6 +28,9 @@ export const companiesData: Company[] = [
         email: "e1@asdf.com",
         telefon: "12341234",
         zeleMarketingMaterijal: true,
+        brojSertifikata: "123",
+        komentari: "komentar 1",
+        radnaMesta: ["Sekretar", "LPA"],
       },
       {
         id: "5",
@@ -37,6 +40,9 @@ export const companiesData: Company[] = [
         email: "e2@asdf.com",
         telefon: "12341234",
         zeleMarketingMaterijal: false,
+        brojSertifikata: "123",
+        komentari: "komentar 1",
+        radnaMesta: ["Sekretar", "LPA"],
       },
     ],
     seminari: [
@@ -111,6 +117,9 @@ export const companiesData: Company[] = [
         email: "e1@cccc.com",
         telefon: "12341234",
         zeleMarketingMaterijal: false,
+        brojSertifikata: "123",
+        komentari: "komentar 1",
+        radnaMesta: ["Sekretar", "LPA"],
       },
     ],
     seminari: [
@@ -158,6 +167,9 @@ export const companiesData: Company[] = [
         email: "e1@dddd.com",
         telefon: "12341234",
         zeleMarketingMaterijal: true,
+        brojSertifikata: "123",
+        komentari: "komentar 1",
+        radnaMesta: ["Sekretar", "LPA"],
       },
     ],
     seminari: [
@@ -205,6 +217,9 @@ export const companiesData: Company[] = [
         email: "e1@gggg.com",
         telefon: "12341234",
         zeleMarketingMaterijal: false,
+        brojSertifikata: "123",
+        komentari: "komentar 1",
+        radnaMesta: ["Sekretar", "LPA"],
       },
     ],
     seminari: [
@@ -236,6 +251,9 @@ export const zaposleniData: Zaposleni[] = [
     email: "e1@asdf.com",
     telefon: "12341234",
     zeleMarketingMaterijal: true,
+    brojSertifikata: "123",
+    komentari: "komentar 1",
+    radnaMesta: ["Sekretar", "LPA"],
   },
   {
     id: "2",
@@ -245,6 +263,9 @@ export const zaposleniData: Zaposleni[] = [
     email: "e1@cccc.com",
     telefon: "12341234",
     zeleMarketingMaterijal: true,
+    brojSertifikata: "123",
+    komentari: "komentar 1",
+    radnaMesta: ["Sekretar", "LPA"],
   },
   {
     id: "3",
@@ -254,6 +275,9 @@ export const zaposleniData: Zaposleni[] = [
     email: "e1@gggg.com",
     telefon: "12341234",
     zeleMarketingMaterijal: false,
+    brojSertifikata: "123",
+    komentari: "komentar 1",
+    radnaMesta: ["Sekretar", "LPA"],
   },
   {
     id: "4",
@@ -263,6 +287,9 @@ export const zaposleniData: Zaposleni[] = [
     email: "e1@dddd.com",
     telefon: "12341234",
     zeleMarketingMaterijal: false,
+    brojSertifikata: "123",
+    komentari: "komentar 1",
+    radnaMesta: ["Sekretar", "LPA"],
   },
   {
     id: "5",
@@ -272,6 +299,9 @@ export const zaposleniData: Zaposleni[] = [
     email: "e2@asdf.com",
     telefon: "12341234",
     zeleMarketingMaterijal: true,
+    brojSertifikata: "123",
+    komentari: "komentar 1",
+    radnaMesta: ["Sekretar", "LPA"],
   },
 ];
 
