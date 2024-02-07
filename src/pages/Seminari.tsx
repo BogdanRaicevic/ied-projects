@@ -111,10 +111,19 @@ export default function Seminari() {
     setOpen(false);
   };
 
+  const handleSearch = () => {};
+
   return (
     <>
       {parametriPretrage()}
-      <Button sx={{ m: 1 }} size="large" variant="contained" color="info" type="submit">
+      <Button
+        sx={{ m: 1 }}
+        size="large"
+        variant="contained"
+        color="info"
+        type="submit"
+        onClick={handleSearch}
+      >
         Pretrazi
       </Button>
       <Button
