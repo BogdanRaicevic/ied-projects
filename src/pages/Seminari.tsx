@@ -61,36 +61,58 @@ export default function Seminari() {
     setSeminars([newSeminar, ...seminars]);
   };
 
+  const [showArchived, setShowArchived] = useState(false);
+
+  const handleArchivedSeminars = () => {
+    setShowArchived(!showArchived);
+  };
+
   const seminariLista = () => (
     <div>
-      <List>
-        {seminars.slice((page - 1) * itemsPerPage, page * itemsPerPage).map((seminar, index) => (
-          <Card key={index} sx={{ mb: 1 }}>
-            <CardContent sx={{ backgroundColor: "#ead5d3" }}>
-              <Typography variant="h6" component="div">
-                {"Seminar: " + seminar.naziv} {/* Replace with your company name variable */}
-              </Typography>
-              <Typography variant="body2" color="text.secondary">
-                {"Datum: " + format(seminar.datum, "dd.MM.yyyy")}
-                {/* Replace with your company id variable */}
-              </Typography>
+      <Button
+        sx={{ m: 1 }}
+        size="large"
+        variant="contained"
+        color="info"
+        onClick={handleArchivedSeminars}
+      >
+        Prikazi/Sakriji Arhivirane seminare
+      </Button>
 
-              <Accordion>
-                <AccordionSummary
-                  expandIcon={<ExpandMoreIcon />}
-                  aria-controls="panel1a-content"
-                  id="panel1a-header"
-                >
-                  <Typography>Detalji seminara</Typography>
-                </AccordionSummary>
-                <AccordionDetails>
-                  <EssentialSeminarData {...seminar} />
-                  <UcesniciSeminara {...seminar} />
-                </AccordionDetails>
-              </Accordion>
-            </CardContent>
-          </Card>
-        ))}
+      <List>
+        {seminars.slice((page - 1) * itemsPerPage, page * itemsPerPage).map((seminar, index) => {
+          if (showArchived && seminar?.arhiviran) {
+            return null;
+          }
+
+          return (
+            <Card key={index} sx={{ mb: 1 }}>
+              <CardContent sx={{ backgroundColor: "#ead5d3" }}>
+                <Typography variant="h6" component="div">
+                  {"Seminar: " + seminar.naziv} {/* Replace with your company name variable */}
+                </Typography>
+                <Typography variant="body2" color="text.secondary">
+                  {"Datum: " + format(seminar.datum, "dd.MM.yyyy")}
+                  {/* Replace with your company id variable */}
+                </Typography>
+
+                <Accordion>
+                  <AccordionSummary
+                    expandIcon={<ExpandMoreIcon />}
+                    aria-controls="panel1a-content"
+                    id="panel1a-header"
+                  >
+                    <Typography>Detalji seminara</Typography>
+                  </AccordionSummary>
+                  <AccordionDetails>
+                    <EssentialSeminarData {...seminar} />
+                    <UcesniciSeminara {...seminar} />
+                  </AccordionDetails>
+                </Accordion>
+              </CardContent>
+            </Card>
+          );
+        })}
       </List>
       <Pagination
         sx={{ mb: 5 }}
@@ -145,6 +167,7 @@ export default function Seminari() {
         </DialogContent>
       </Dialog>
       <h2>Seminari</h2>
+
       {seminariLista()}
     </>
   );

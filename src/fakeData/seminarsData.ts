@@ -68,6 +68,7 @@ export const fakeSeminarsOnSeminar = [
   },
   {
     id: "seminar2",
+    arhiviran: false,
     naziv: "Seminar 2: Zastita na radu",
     tipSeminara: "Zastita na radu",
     datum: new Date("2023-12-10"),
@@ -108,6 +109,30 @@ export const fakeSeminarsOnSeminar = [
             ime: "Zaposleni 6",
             prezime: "Zaposleni 6",
             email: "zaposleni6@emial.com",
+          },
+        ],
+      },
+    ],
+  },
+  {
+    id: "seminar3",
+    arhiviran: true,
+    naziv: "Seminar 3: Zastita na radu",
+    tipSeminara: "Zastita na radu",
+    datum: new Date("2023-12-11"),
+    predavac: "Zare",
+    osnovnaCena: 15000,
+    mesto: "Novi Sad, Hotel Balkan",
+    ucesnici: [
+      {
+        naziv: "Firma 4",
+        id: "nekiId4",
+        zaposleni: [
+          {
+            id: "zaposleni7",
+            ime: "Zaposleni 7",
+            prezime: "Zaposleni 7",
+            email: "zaposleni7@emial.com",
           },
         ],
       },
