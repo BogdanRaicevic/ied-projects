@@ -74,5 +74,22 @@ export const SeminarSchema = z.object({
     .max(100, "Mesto ne sme da ima vise od 100 karaktera"),
   tipSeminara: z.string(),
   datum: z.date(),
+  arhiviran: z.boolean().default(false).optional(),
+  ucesnici: z
+    .array(
+      z.object({
+        naziv: z.string(),
+        id: z.string(),
+        zaposleni: z.array(
+          z.object({
+            id: z.string(),
+            ime: z.string(),
+            prezime: z.string(),
+            email: z.string(),
+          })
+        ),
+      })
+    )
+    .optional(),
 });
 export type Seminar = z.infer<typeof SeminarSchema>;

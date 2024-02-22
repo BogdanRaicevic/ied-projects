@@ -1,6 +1,6 @@
 import { Typography } from "@mui/material";
 import Grid from "@mui/system/Unstable_Grid";
-import CreateSeminarForm from "../Forms/CreateSeminarForm";
+import SeminarForm from "../Forms/SeminarForm";
 import { useState } from "react";
 
 type SingleSeminar = {
@@ -41,11 +41,11 @@ export function EssentialSeminarData(item: SingleSeminar) {
 
   return (
     <Grid container spacing={2}>
-      <CreateSeminarForm
+      <SeminarForm
         seminarData={seminar}
         saveOrUpdateSeminar={updateSeminar}
         isInUpdateForm={true}
-      ></CreateSeminarForm>
+      ></SeminarForm>
       <Grid xs={3}>
         <Typography sx={{ m: 1, p: 1, fontSize: "1.5em" }} id="broj-firmi">
           Broj Firmi: {seminar.ucesnici?.length || 0}

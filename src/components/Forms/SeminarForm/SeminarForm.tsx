@@ -6,6 +6,12 @@ import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { Seminar, SeminarSchema } from "../../../schemas/companySchemas";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Grid2 from "@mui/material/Unstable_Grid2/Grid2";
+import {
+  ArchiveSeminarButton,
+  CancelSeminarButton,
+  DeleteSeminarButton,
+  SaveSeminarButton,
+} from "../SeminarFormButton";
 
 interface CreateSeminarFormProps {
   seminarData?: Seminar;
@@ -32,6 +38,7 @@ export default function CreateSeminarForm({
   });
 
   const handleSaveSeminar = (data: any) => {
+    console.log("da li sam ovde", data);
     saveOrUpdateSeminar(data);
     if (closeDialog) {
       closeDialog();
@@ -40,6 +47,12 @@ export default function CreateSeminarForm({
 
   const onError = (errors: any, e: any) => {
     console.log(errors, e);
+  };
+
+  const handleArchiveSeminar = (data: any) => {
+    const seminar = { ...data, arhiviran: true };
+    saveOrUpdateSeminar(seminar);
+    console.log(seminar);
   };
 
   return (
@@ -142,6 +155,7 @@ export default function CreateSeminarForm({
                   sx={{ m: 1 }}
                   id="tip-seminara"
                   options={tipoviSeminara}
+                  value={field.value || ""}
                   renderInput={(params) => (
                     <TextField
                       {...params}
@@ -192,21 +206,19 @@ export default function CreateSeminarForm({
 
         <Box ml={2} display="flex" justifyContent="space-between" width="100%">
           <Box display="flex">
-            <Button sx={{ m: 1 }} size="large" variant="contained" color="success" type="submit">
-              Sacuvaj seminar
-            </Button>
-
+            <SaveSeminarButton onSubmit={handleSubmit(handleSaveSeminar, onError)} />
             {isInUpdateForm && (
-              <Button sx={{ m: 1 }} size="large" variant="contained" color="warning" type="button">
-                Arhiviraj Seminar
-              </Button>
+              // TODO: implement archive seminar
+              <ArchiveSeminarButton onSubmit={handleSubmit(handleArchiveSeminar, onError)} />
             )}
           </Box>
 
           {isInUpdateForm && (
-            <Button sx={{ m: 1 }} size="large" variant="contained" color="error" type="button">
-              Permanento Obrisi
-            </Button>
+            <Box>
+              {/* TODO: implement cancel and delete seminar */}
+              <CancelSeminarButton onSubmit={handleSubmit(handleSaveSeminar, onError)} />
+              <DeleteSeminarButton onSubmit={handleSubmit(handleSaveSeminar, onError)} />
+            </Box>
           )}
         </Box>
       </Grid2>

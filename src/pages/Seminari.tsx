@@ -23,8 +23,9 @@ import { fakeSeminarsOnSeminar } from "../fakeData/seminarsData";
 import { SetStateAction, useState } from "react";
 import { EssentialSeminarData } from "../components/Seminari/EssentialSeminarData";
 import { UcesniciSeminara } from "../components/Seminari/UcesniciSeminara";
-import CreateSeminarForm from "../components/Forms/CreateSeminarForm";
+import SeminarForm from "../components/Forms/SeminarForm";
 import { format } from "date-fns";
+import { Seminar } from "../schemas/companySchemas";
 
 export default function Seminari() {
   const parametriPretrage = () => (
@@ -57,8 +58,13 @@ export default function Seminari() {
   const itemsPerPage = 5;
 
   const [seminars, setSeminars] = useState([...fakeSeminarsOnSeminar]);
-  const addSeminar = (newSeminar: any) => {
-    setSeminars([newSeminar, ...seminars]);
+  const addSeminar = (newSeminar: Seminar) => {
+    // TODO: fix any
+    console.log("new seminar", newSeminar);
+    setSeminars((prevSeminars): any => {
+      console.log("prev seminars", prevSeminars);
+      return [...prevSeminars, newSeminar];
+    });
   };
 
   const [showArchived, setShowArchived] = useState(false);
@@ -160,10 +166,7 @@ export default function Seminari() {
       <Dialog open={open} onClose={handleClose} maxWidth="lg">
         <DialogTitle>Create Seminar</DialogTitle>
         <DialogContent>
-          <CreateSeminarForm
-            saveOrUpdateSeminar={addSeminar}
-            closeDialog={handleClose}
-          ></CreateSeminarForm>
+          <SeminarForm saveOrUpdateSeminar={addSeminar} closeDialog={handleClose}></SeminarForm>
         </DialogContent>
       </Dialog>
       <h2>Seminari</h2>
