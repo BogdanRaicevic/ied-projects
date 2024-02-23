@@ -102,4 +102,20 @@ export const myZaposleniColumns: MRT_ColumnDef<Zaposleni>[] = [
     header: "Telefon",
     accessorKey: "telefon",
   },
+  // TODO: there are multiple sertificate numbers
+  // {
+  //   header: "Broj sertifikata",
+  //   accessorKey: "brojSertifikata",
+  // },
+  {
+    header: "Radna mesta",
+    accessorKey: "radnaMesta",
+    accessorFn: (row) => row.radnaMesta.join(", "),
+  },
+  {
+    header: "Komentari",
+    accessorKey: "komentari",
+    accessorFn: (row) =>
+      row.komentari.substring(0, 100) + (row.komentari.length > 100 ? "..." : ""),
+  },
 ];
