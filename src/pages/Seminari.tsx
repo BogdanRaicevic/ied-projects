@@ -60,9 +60,7 @@ export default function Seminari() {
   const [seminars, setSeminars] = useState([...fakeSeminarsOnSeminar]);
   const addSeminar = (newSeminar: Seminar) => {
     // TODO: fix any
-    console.log("new seminar", newSeminar);
     setSeminars((prevSeminars): any => {
-      console.log("prev seminars", prevSeminars);
       return [...prevSeminars, newSeminar];
     });
   };

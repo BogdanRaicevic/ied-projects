@@ -51,8 +51,19 @@ export default function CreateSeminarForm({
 
   const handleArchiveSeminar = (data: any) => {
     const seminar = { ...data, arhiviran: true };
+    // TODO: i need state management to update seminar
     saveOrUpdateSeminar(seminar);
     console.log(seminar);
+  };
+
+  const handleCancelSeminar = (data: any) => {
+    // TODO: i need state management to update seminar
+  };
+
+  const handleDeleteSeminar = (data: any) => {
+    if (window.confirm("Potvrdi da obrises seminar?")) {
+      // TODO: BE code to delete seminar
+    }
   };
 
   return (
@@ -208,7 +219,6 @@ export default function CreateSeminarForm({
           <Box display="flex">
             <SaveSeminarButton onSubmit={handleSubmit(handleSaveSeminar, onError)} />
             {isInUpdateForm && (
-              // TODO: implement archive seminar
               <ArchiveSeminarButton onSubmit={handleSubmit(handleArchiveSeminar, onError)} />
             )}
           </Box>
@@ -216,8 +226,8 @@ export default function CreateSeminarForm({
           {isInUpdateForm && (
             <Box>
               {/* TODO: implement cancel and delete seminar */}
-              <CancelSeminarButton onSubmit={handleSubmit(handleSaveSeminar, onError)} />
-              <DeleteSeminarButton onSubmit={handleSubmit(handleSaveSeminar, onError)} />
+              <CancelSeminarButton onSubmit={handleSubmit(handleCancelSeminar, onError)} />
+              <DeleteSeminarButton onSubmit={handleSubmit(handleDeleteSeminar, onError)} />
             </Box>
           )}
         </Box>
