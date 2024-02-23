@@ -1,4 +1,4 @@
-import { TextField, Autocomplete, FormControl, Button, Box } from "@mui/material";
+import { TextField, Autocomplete, FormControl, Box } from "@mui/material";
 import { tipoviSeminara } from "../../../fakeData/seminarsData";
 import { Controller, useForm } from "react-hook-form";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
@@ -56,11 +56,11 @@ export default function SeminarForm({
     console.log(seminar);
   };
 
-  const handleCancelSeminar = (data: any) => {
+  const handleCancelSeminar = (_data: any) => {
     // TODO: i need state management to update seminar
   };
 
-  const handleDeleteSeminar = (data: any) => {
+  const handleDeleteSeminar = (_data: any) => {
     if (window.confirm("Potvrdi da obrises seminar?")) {
       // TODO: BE code to delete seminar
     }
