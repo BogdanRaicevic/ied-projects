@@ -6,6 +6,8 @@ import {
   Autocomplete,
   Divider,
   Dialog,
+  DialogContent,
+  DialogTitle,
 } from "@mui/material";
 import { Box } from "@mui/system";
 import { useForm, Controller } from "react-hook-form";
@@ -278,6 +280,9 @@ export default function CompanyForm(props: any) {
 
   // State to control the visibility of the modal
   const [open, setOpen] = useState(false);
+  const handleClose = () => {
+    setOpen(false);
+  };
 
   const handleZaposleniSubmit = (zaposleniData: Zaposleni) => {
     // Update the employeeInputItems array here...
@@ -337,10 +342,13 @@ export default function CompanyForm(props: any) {
         >
           Dodaj zaposlenog
         </Button>
-        <Dialog open={open}>
-          <Box sx={{ p: 2 }}>
-            <ZaposleniForm onSubmit={handleZaposleniSubmit} />
-          </Box>
+        <Dialog open={open} onClose={handleClose} maxWidth="lg">
+          <DialogTitle>Zaposleni</DialogTitle>
+          <DialogContent>
+            <Box sx={{ p: 2 }}>
+              <ZaposleniForm onSubmit={handleZaposleniSubmit} />
+            </Box>
+          </DialogContent>
         </Dialog>
       </Grid2>
     </Box>

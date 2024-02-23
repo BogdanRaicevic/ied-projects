@@ -162,7 +162,7 @@ export default function Seminari() {
         Kreiraj seimnar
       </Button>
       <Dialog open={open} onClose={handleClose} maxWidth="lg">
-        <DialogTitle>Create Seminar</DialogTitle>
+        <DialogTitle>Seminar</DialogTitle>
         <DialogContent>
           <SeminarForm saveOrUpdateSeminar={addSeminar} closeDialog={handleClose}></SeminarForm>
         </DialogContent>

@@ -20,7 +20,7 @@ interface CreateSeminarFormProps {
   closeDialog?: () => void;
 }
 
-export default function CreateSeminarForm({
+export default function SeminarForm({
   saveOrUpdateSeminar,
   seminarData,
   isInUpdateForm,
