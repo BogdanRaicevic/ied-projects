@@ -39,7 +39,7 @@ import {
   MonitorHeart,
   Comment,
 } from "@mui/icons-material";
-import { ZaposleniForm } from "../../Zaposleni/ZaposleniFrom";
+import ZaposleniDialog from "../../Dialogs/ZaposleniDialog";
 
 export const companyFormMetadata: Metadata[] = [
   {
@@ -342,14 +342,7 @@ export default function CompanyForm(props: any) {
         >
           Dodaj zaposlenog
         </Button>
-        <Dialog open={open} onClose={handleClose} maxWidth="lg">
-          <DialogTitle>Zaposleni</DialogTitle>
-          <DialogContent>
-            <Box sx={{ p: 2 }}>
-              <ZaposleniForm onSubmit={handleZaposleniSubmit} />
-            </Box>
-          </DialogContent>
-        </Dialog>
+        <ZaposleniDialog open={open} onClose={handleClose} onSubmit={handleZaposleniSubmit} />
       </Grid2>
     </Box>
   );

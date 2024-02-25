@@ -1,15 +1,42 @@
-import { MaterialReactTable } from "material-react-table";
+import { MRT_Row, MaterialReactTable } from "material-react-table";
 import { useLocation } from "react-router-dom";
 import { myZaposleniColumns } from "../components/MyTable/myCompanyColumns";
 import CompanyForm from "../components/Forms/CompanyForm";
 import AttendedSeminarsAccordion from "../components/Accordion";
-import { Company } from "../schemas/companySchemas";
+import { Company, Zaposleni } from "../schemas/companySchemas";
 import PrijavaOdjava from "../components/PrijavaOdjava";
 import { useState } from "react";
+import { Tooltip, IconButton } from "@mui/material";
+import { Box } from "@mui/system";
+import DeleteIcon from "@mui/icons-material/Delete";
+import EditIcon from "@mui/icons-material/Edit";
+import ZaposleniDialog from "../components/Dialogs/ZaposleniDialog";
 
 export default function Firma() {
   const location = useLocation();
   const [data, setData] = useState((location.state as Company) || {});
+
+  const handleEdit = (row: MRT_Row<Zaposleni>) => {
+    console.log("edit row", row);
+    setOpen(true); // Open the dialog
+  };
+
+  const handleDelete = (row: MRT_Row<Zaposleni>) => {
+    if (window.confirm("Are you sure you want to delete this user?")) {
+      // deleteUser(row.original.id);
+      console.log("deleted", row);
+    }
+  };
+
+  const [open, setOpen] = useState(false);
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  const handleZaposleniSubmit = (zaposleniData: Zaposleni) => {
+    console.log("this is zaposleni data", zaposleniData);
+    setOpen(false);
+  };
 
   // TODO: fix this to be like company table
   function renderZaposleniTable(): React.ReactNode {
@@ -19,6 +46,21 @@ export default function Firma() {
         data={data?.zaposleni || []}
         enableColumnOrdering
         enableGlobalFilter={true}
+        enableEditing={true}
+        renderRowActions={({ row }) => (
+          <Box sx={{ display: "flex", gap: "1rem" }}>
+            <Tooltip title="Edit">
+              <IconButton onClick={() => handleEdit(row)}>
+                <EditIcon />
+              </IconButton>
+            </Tooltip>
+            <Tooltip title="Delete">
+              <IconButton color="error" onClick={() => handleDelete(row)}>
+                <DeleteIcon />
+              </IconButton>
+            </Tooltip>
+          </Box>
+        )}
       />
     );
   }
@@ -36,7 +78,7 @@ export default function Firma() {
       ></PrijavaOdjava>
       <CompanyForm data={data}></CompanyForm>
       {renderZaposleniTable()}
-
+      <ZaposleniDialog open={open} onClose={handleClose} onSubmit={handleZaposleniSubmit} />
       <AttendedSeminarsAccordion firma={data}></AttendedSeminarsAccordion>
     </>
   );
