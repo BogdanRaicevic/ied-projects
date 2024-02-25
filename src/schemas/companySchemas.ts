@@ -1,16 +1,16 @@
 import * as z from "zod";
 
 export const ZaposleniSchema = z.object({
-  id: z.string(),
-  firmaId: z.string(),
-  ime: z.string(),
-  prezime: z.string(),
+  id: z.string().optional(),
+  firmaId: z.string().optional(),
+  ime: z.string().min(3, "Ime mora da ima bar 3 karaktera"),
+  prezime: z.string().min(3, "Prezime mora da ima bar 3 karaktera"),
   email: z.string(),
   telefon: z.string(),
-  zeleMarketingMaterijal: z.boolean().default(false),
-  brojSertifikata: z.string(),
+  zeleMarketingMaterijal: z.boolean().default(true),
+  brojSertifikata: z.string().optional(),
   komentari: z.string().max(1000),
-  radnaMesta: z.array(z.string()),
+  radnaMesta: z.any(),
 });
 export type Zaposleni = z.infer<typeof ZaposleniSchema>;
 

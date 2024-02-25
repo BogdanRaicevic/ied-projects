@@ -38,7 +38,6 @@ export default function SeminarForm({
   });
 
   const handleSaveSeminar = (data: any) => {
-    console.log("da li sam ovde", data);
     saveOrUpdateSeminar(data);
     if (closeDialog) {
       closeDialog();
