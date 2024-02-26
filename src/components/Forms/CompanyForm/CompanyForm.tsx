@@ -5,9 +5,6 @@ import {
   Button,
   Autocomplete,
   Divider,
-  Dialog,
-  DialogContent,
-  DialogTitle,
 } from "@mui/material";
 import { Box } from "@mui/system";
 import { useForm, Controller } from "react-hook-form";
@@ -20,7 +17,6 @@ import {
   CompanySchema,
   InputTypesSchema,
   Company,
-  Zaposleni,
 } from "../../../schemas/companySchemas";
 import { z } from "zod";
 import {
@@ -39,7 +35,6 @@ import {
   MonitorHeart,
   Comment,
 } from "@mui/icons-material";
-import ZaposleniDialog from "../../Dialogs/ZaposleniDialog";
 
 export const companyFormMetadata: Metadata[] = [
   {
@@ -128,13 +123,6 @@ export const companyFormMetadata: Metadata[] = [
   },
 ];
 
-// export const employeeFormMetadata: Metadata[] = [
-//   { key: "ime", label: "Ime", inputAdornment: <AccountCircle />, inputType: InputTypesSchema.enum.Text },
-//   { key: "prezime", label: "Prezime", inputAdornment: <Person />, inputType: InputTypesSchema.enum.Text },
-//   { key: "email-zaposlenog", label: "Email", inputAdornment: <Email />, inputType: InputTypesSchema.enum.Text },
-//   { key: "telefon-zaposlenog", label: "Telefon", inputAdornment: <Phone />, inputType: InputTypesSchema.enum.Text },
-// ];
-
 export default function CompanyForm(props: any) {
   const {
     register,
@@ -154,7 +142,7 @@ export default function CompanyForm(props: any) {
     console.log(data);
   };
 
-  const onError = (errors: any, e: any) => console.log(errors, e);
+  const onError = (errors: any, e: any) => console.log("Company form errors: ", errors, e);
 
   function renderFiled(item: Metadata, errors: any) {
     if (item.inputType === InputTypesSchema.enum.Text) {
@@ -266,33 +254,6 @@ export default function CompanyForm(props: any) {
       });
   };
 
-  // const employeeInputItems = (inputType: z.infer<typeof InputTypesSchema>) => {
-  //   return employeeFormMetadata
-  //     .filter((element) => element.inputType === inputType)
-  //     .map((item: Metadata, index: number) => {
-  //       return (
-  //         <FormControl fullWidth key={`${item.key}-${index}`}>
-  //           {renderFiled(item, errors)}
-  //         </FormControl>
-  //       );
-  //     });
-  // };
-
-  // State to control the visibility of the modal
-  const [open, setOpen] = useState(false);
-  const handleClose = () => {
-    setOpen(false);
-  };
-
-  const handleZaposleniSubmit = (zaposleniData: Zaposleni) => {
-    // Update the employeeInputItems array here...
-    // You might need to use a state variable for this array if you want the changes to persist
-    console.log("this is zaposleni data", zaposleniData);
-    // Close the modal
-
-    setOpen(false);
-  };
-
   return (
     <Box onSubmit={handleSubmit(onSubmit, onError)} component="form" sx={{ mt: 4 }}>
       <Grid2 container m={0} spacing={2}>
@@ -319,30 +280,10 @@ export default function CompanyForm(props: any) {
             </Grid2>
           );
         })}
-        {/* 
-        {employeeInputItems(InputTypesSchema.enum.Text).map((item) => {
-          return (
-            <Grid2 key={item.key} xs={12} md={6} lg={4}>
-              {item}
-            </Grid2>
-          );
-        })}
-        */}
         <Button sx={{ my: 2 }} size="large" variant="contained" color="success" type="submit">
           Sačuvaj
         </Button>
         <Divider sx={{ width: "100%", my: 2 }} />{" "}
-        <Button
-          sx={{ my: 2 }}
-          size="large"
-          variant="contained"
-          color="secondary"
-          type="button"
-          onClick={() => setOpen(true)}
-        >
-          Dodaj zaposlenog
-        </Button>
-        <ZaposleniDialog open={open} onClose={handleClose} onSubmit={handleZaposleniSubmit} />
       </Grid2>
     </Box>
   );

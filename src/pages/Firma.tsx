@@ -6,7 +6,7 @@ import AttendedSeminarsAccordion from "../components/Accordion";
 import { Company, Zaposleni } from "../schemas/companySchemas";
 import PrijavaOdjava from "../components/PrijavaOdjava";
 import { useState } from "react";
-import { Tooltip, IconButton } from "@mui/material";
+import { Tooltip, IconButton, Button } from "@mui/material";
 import { Box } from "@mui/system";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
@@ -18,7 +18,7 @@ export default function Firma() {
   const [selectedRow, setSelectedRow] = useState<MRT_Row<Zaposleni> | null>(null);
 
   const handleEdit = (row: MRT_Row<Zaposleni>) => {
-    console.log("edit row", row);
+    console.log("edit row", row.original);
     setSelectedRow(row); // Update the selected row data
     setOpen(true); // Open the dialog
   };
@@ -79,6 +79,19 @@ export default function Firma() {
         prijavaChange={handlePrijavaChange}
       ></PrijavaOdjava>
       <CompanyForm data={data}></CompanyForm>
+      <Button
+        sx={{ my: 2 }}
+        size="large"
+        variant="contained"
+        color="secondary"
+        type="button"
+        onClick={() => {
+          setSelectedRow(null);
+          setOpen(true);
+        }}
+      >
+        Dodaj zaposlenog
+      </Button>
       {renderZaposleniTable()}
       <ZaposleniDialog
         zaposleni={selectedRow?.original}
