@@ -13,7 +13,7 @@ type ZaposleniFormProps = {
   onSubmit: (zaposleniData: Zaposleni) => void;
 };
 
-export function ZaposleniForm({ zaposleni = {} as Zaposleni, onSubmit }: ZaposleniFormProps) {
+export function ZaposleniForm({ zaposleni, onSubmit }: ZaposleniFormProps) {
   const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
   const checkedIcon = <CheckBoxIcon fontSize="small" />;
 
@@ -37,8 +37,18 @@ export function ZaposleniForm({ zaposleni = {} as Zaposleni, onSubmit }: Zaposle
   };
 
   useEffect(() => {
-    for (const [key, value] of Object.entries(zaposleni)) {
-      setValue(key as keyof Zaposleni, value);
+    if (zaposleni) {
+      for (const [key, value] of Object.entries(zaposleni)) {
+        setValue(key as keyof Zaposleni, value);
+      }
+    } else {
+      // Reset form values when zaposleni is undefined
+      setValue("ime", "");
+      setValue("prezime", "");
+      setValue("email", "");
+      setValue("telefon", "");
+      setValue("radnaMesta", []);
+      setValue("komentari", "");
     }
   }, [zaposleni, setValue]);
 
@@ -94,6 +104,7 @@ export function ZaposleniForm({ zaposleni = {} as Zaposleni, onSubmit }: Zaposle
         control={control}
         render={({ field, fieldState: { error } }) => (
           <Autocomplete
+            value={field.value || []}
             sx={{ m: 1, width: "98%" }}
             multiple
             limitTags={2}

@@ -15,9 +15,11 @@ import ZaposleniDialog from "../components/Dialogs/ZaposleniDialog";
 export default function Firma() {
   const location = useLocation();
   const [data, setData] = useState((location.state as Company) || {});
+  const [selectedRow, setSelectedRow] = useState<MRT_Row<Zaposleni> | null>(null);
 
   const handleEdit = (row: MRT_Row<Zaposleni>) => {
     console.log("edit row", row);
+    setSelectedRow(row); // Update the selected row data
     setOpen(true); // Open the dialog
   };
 
@@ -78,7 +80,12 @@ export default function Firma() {
       ></PrijavaOdjava>
       <CompanyForm data={data}></CompanyForm>
       {renderZaposleniTable()}
-      <ZaposleniDialog open={open} onClose={handleClose} onSubmit={handleZaposleniSubmit} />
+      <ZaposleniDialog
+        zaposleni={selectedRow?.original}
+        open={open}
+        onClose={handleClose}
+        onSubmit={handleZaposleniSubmit}
+      />
       <AttendedSeminarsAccordion firma={data}></AttendedSeminarsAccordion>
     </>
   );

@@ -10,7 +10,7 @@ export const ZaposleniSchema = z.object({
   zeleMarketingMaterijal: z.boolean().default(true),
   brojSertifikata: z.string().optional(),
   komentari: z.string().max(1000),
-  radnaMesta: z.any(),
+  radnaMesta: z.array(z.string()),
 });
 export type Zaposleni = z.infer<typeof ZaposleniSchema>;
 
