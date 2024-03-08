@@ -1,12 +1,16 @@
 import MyTable from "../components/MyTable";
 import PageTitle from "../components/PageTitle";
 import IndeterminateCheckbox from "../components/IndeterminateCheckbox";
-import { companiesData, fakeRadnaMesta } from "../fakeData/companyData";
+import { fakeRadnaMesta } from "../fakeData/companyData";
 import Grid from "@mui/material/Unstable_Grid2";
 import { Button, TextField } from "@mui/material";
 import { Box } from "@mui/system";
+import { useCompanyStore } from "../store";
+
 
 export default function Pretrage() {
+  const { companiesData } = useCompanyStore();
+
   const gradovi = [
     { parent: "SVI Gradovi" },
     {

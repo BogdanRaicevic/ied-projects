@@ -4,8 +4,6 @@ import { useState } from "react";
 import CompanyForm from "../components/Forms/CompanyForm";
 import MyDialog from "../components/MyDialog/MyDialog";
 import PageTitle from "../components/PageTitle";
-// import { companiesData } from "../fakeData/companyData";
-// import { Company } from "../schemas/companySchemas";
 
 export default function Evidencija() {
   const [open, setOpen] = useState(false);
