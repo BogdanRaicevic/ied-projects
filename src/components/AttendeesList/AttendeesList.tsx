@@ -23,7 +23,7 @@ export default function AttendeesList({ ucesnici, zaposleni }: AttendeesListProp
     setAttendees(newUcesnici);
   };
   const handleAddItems = (items: string[]) => {
-    setAttendees((prevItems) => [...prevItems, ...items]);
+    setAttendees([...items]);
   };
 
   const [open, setOpen] = useState(false);
@@ -37,8 +37,8 @@ export default function AttendeesList({ ucesnici, zaposleni }: AttendeesListProp
   };
 
   const handleChecked = (checked: string[]) => {
-    console.log("checked: ", checked);
-    handleAddItems(checked);
+    const uniqueChecked = [...new Set([...attendees, ...checked])];
+    handleAddItems(uniqueChecked);
   };
 
   return (

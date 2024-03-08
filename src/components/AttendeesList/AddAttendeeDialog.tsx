@@ -15,14 +15,12 @@ export default function AddAttendeeDialog({ open, onClose, onChecked, zaposleni 
   const handleToggle = (value: string) => () => {
     const currentIndex = checked.indexOf(value);
     const newChecked = [...checked];
-
     if (currentIndex === -1) {
+      // Only add the value if it doesn't already exist in the checked state
       newChecked.push(value);
     } else {
       newChecked.splice(currentIndex, 1);
     }
-
-    console.log("newChecked: ", newChecked);
 
     setChecked(newChecked);
   };
@@ -30,6 +28,7 @@ export default function AddAttendeeDialog({ open, onClose, onChecked, zaposleni 
   const handleClose = () => {
     onChecked(checked);
     onClose();
+    setChecked([]);
   };
 
   return (
