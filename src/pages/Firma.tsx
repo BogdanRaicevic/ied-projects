@@ -12,6 +12,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import ZaposleniDialog from "../components/Dialogs/ZaposleniDialog";
 import { useCompanyStore } from "../store";
+import { v4 } from "uuid";
 
 const defaultCompanyData: Company = {
   zaposleni: [],
@@ -80,10 +81,26 @@ export default function Firma() {
   };
 
   const handleZaposleniSubmit = (zaposleniData: Zaposleni) => {
-    console.log("this is zaposleni data", zaposleniData);
-    const updatedZaposleni = company?.zaposleni.map((zaposleni: Zaposleni) =>
-      zaposleni.id === zaposleniData.id ? zaposleniData : zaposleni
+    const existingZaposleni = company?.zaposleni.find(
+      (zaposleni: Zaposleni) => zaposleni.id === zaposleniData.id
     );
+    let updatedZaposleni;
+
+    if (existingZaposleni) {
+      // If the zaposleni exists, update it
+      updatedZaposleni = company?.zaposleni.map((zaposleni: Zaposleni) => {
+        if (zaposleni.id === zaposleniData.id) {
+          return zaposleniData;
+        }
+        return zaposleni;
+      });
+    } else {
+      // If the zaposleni doesn't exist, add it to the array
+      const newZaposleni = { ...zaposleniData, id: v4() };
+      console.log(" ja sam nov ------->", newZaposleni);
+      updatedZaposleni = [...(company?.zaposleni || []), newZaposleni];
+    }
+
     const updatedCompany: Company = {
       ...defaultCompanyData,
       ...company,
