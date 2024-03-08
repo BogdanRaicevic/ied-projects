@@ -5,29 +5,51 @@ import CompanyForm from "../components/Forms/CompanyForm";
 import AttendedSeminarsAccordion from "../components/Accordion";
 import { Company, Zaposleni } from "../schemas/companySchemas";
 import PrijavaOdjava from "../components/PrijavaOdjava";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Tooltip, IconButton, Button } from "@mui/material";
 import { Box } from "@mui/system";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import ZaposleniDialog from "../components/Dialogs/ZaposleniDialog";
+import { useCompanyStore } from "../store";
 
 export default function Firma() {
   const location = useLocation();
-  const [data, setData] = useState((location.state as Company) || {});
+  const { companiesData, updateCompany } = useCompanyStore();
+
+  const [company, setCompany] = useState(
+    companiesData.find((item) => item.id === location.state.id) || null
+  );
+
+  useEffect(() => {
+    const company = companiesData.find((item) => item.id === location.state.id);
+    if (company) {
+      setCompany(company);
+    }
+  }, [companiesData, location.state.id]);
+
   const [selectedRow, setSelectedRow] = useState<MRT_Row<Zaposleni> | null>(null);
 
   const handleEdit = (row: MRT_Row<Zaposleni>) => {
     console.log("edit row", row.original);
-    setSelectedRow(row); // Update the selected row data
-    setOpen(true); // Open the dialog
+    const updatedZaposleni = company?.zaposleni.map((zaposleni) =>
+      zaposleni.id === row.original.id ? row.original : zaposleni
+    );
+    const updatedCompany = {
+      ...company,
+      zaposleni: updatedZaposleni,
+    };
+    updateCompany(company?.id!, updatedCompany);
+    setSelectedRow(row);
+    setOpen(true);
   };
 
   const handleDelete = (row: MRT_Row<Zaposleni>) => {
-    if (window.confirm("Are you sure you want to delete this user?")) {
-      // deleteUser(row.original.id);
-      console.log("deleted", row);
-    }
+    const updatedCompany = {
+      ...company,
+      zaposleni: company?.zaposleni.filter((zaposleni) => zaposleni.id !== row.original.id),
+    };
+    updateCompany(company?.id!, updatedCompany);
   };
 
   const [open, setOpen] = useState(false);
@@ -37,6 +59,14 @@ export default function Firma() {
 
   const handleZaposleniSubmit = (zaposleniData: Zaposleni) => {
     console.log("this is zaposleni data", zaposleniData);
+    const updatedZaposleni = company?.zaposleni.map((zaposleni) =>
+      zaposleni.id === zaposleniData.id ? zaposleniData : zaposleni
+    );
+    const updatedCompany = {
+      ...company,
+      zaposleni: updatedZaposleni,
+    };
+    updateCompany(company?.id!, updatedCompany);
     setOpen(false);
   };
 
@@ -45,7 +75,7 @@ export default function Firma() {
     return (
       <MaterialReactTable
         columns={myZaposleniColumns}
-        data={data?.zaposleni || []}
+        data={company?.zaposleni || []}
         enableColumnOrdering
         enableGlobalFilter={true}
         enableEditing={true}
@@ -68,17 +98,17 @@ export default function Firma() {
   }
 
   function handlePrijavaChange(event: React.ChangeEvent<HTMLInputElement>) {
-    setData((prevState) => ({ ...prevState, zeleMarketingMaterijal: event.target.checked }));
+    setCompany((prevState) => ({ ...prevState, zeleMarketingMaterijal: event.target.checked }));
   }
 
   return (
     <>
-      <h1>Firma: {data?.naziv}</h1>
+      <h1>Firma: {company?.naziv}</h1>
       <PrijavaOdjava
-        prijavljeniValue={data.zeleMarketingMaterijal}
+        prijavljeniValue={company?.zeleMarketingMaterijal || true}
         prijavaChange={handlePrijavaChange}
       ></PrijavaOdjava>
-      <CompanyForm data={data}></CompanyForm>
+      <CompanyForm data={company}></CompanyForm>
       <Button
         sx={{ my: 2 }}
         size="large"
@@ -99,7 +129,7 @@ export default function Firma() {
         onClose={handleClose}
         onSubmit={handleZaposleniSubmit}
       />
-      <AttendedSeminarsAccordion firma={data}></AttendedSeminarsAccordion>
+      <AttendedSeminarsAccordion firma={company as any}></AttendedSeminarsAccordion>
     </>
   );
 }

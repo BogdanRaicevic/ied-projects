@@ -12,7 +12,9 @@ interface IndeterminateCheckboxProps {
 }
 
 export default function IndeterminateCheckbox({ options }: IndeterminateCheckboxProps) {
-  const [checked, setChecked] = React.useState(() => new Array(options.children?.length).fill(false));
+  const [checked, setChecked] = React.useState(() =>
+    new Array(options.children?.length).fill(false)
+  );
 
   const handleChangeParent = (event: React.ChangeEvent<HTMLInputElement>) => {
     setChecked(new Array(options.children?.length).fill(event.target.checked));

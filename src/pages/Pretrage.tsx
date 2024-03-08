@@ -7,7 +7,6 @@ import { Button, TextField } from "@mui/material";
 import { Box } from "@mui/system";
 import { useCompanyStore } from "../store";
 
-
 export default function Pretrage() {
   const { companiesData } = useCompanyStore();
 

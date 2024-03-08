@@ -1,14 +1,30 @@
-import {create} from 'zustand';
+import { create } from "zustand";
 
-import { companiesData } from './fakeData/companyData';
-import { Company } from './schemas/companySchemas';
+import { companiesData } from "./fakeData/companyData";
+import { Company } from "./schemas/companySchemas";
 
 type CompanyState = {
   companiesData: Company[];
-  updateCompaniesData: (newData: Company[]) => void;
+  updateCompany: (id: string, newCompanyData: Company) => void;
+  deleteCompany: (id: string) => void;
 };
 
 export const useCompanyStore = create<CompanyState>((set) => ({
   companiesData: companiesData,
-  updateCompaniesData: (newData) => set({ companiesData: newData }),
+  updateCompany: (id, newCompanyData) => {
+    set((state) => {
+      return {
+        companiesData: state.companiesData.map((company) =>
+          company.id === id ? newCompanyData : company
+        ),
+      };
+    });
+  },
+  deleteCompany: (id) => {
+    set((state) => {
+      return {
+        companiesData: state.companiesData.filter((c) => c.id !== id),
+      };
+    });
+  },
 }));
