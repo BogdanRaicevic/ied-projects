@@ -13,12 +13,32 @@ import EditIcon from "@mui/icons-material/Edit";
 import ZaposleniDialog from "../components/Dialogs/ZaposleniDialog";
 import { useCompanyStore } from "../store";
 
+const defaultCompanyData: Company = {
+  zaposleni: [],
+  zeleMarketingMaterijal: true,
+  sajt: "",
+  naziv: "",
+  adresa: "",
+  grad: "",
+  opstina: "",
+  pib: "",
+  ptt: "",
+  telefon: "",
+  email: "",
+  tip: "",
+  velicina: "",
+  stanje: "",
+  odjava: false,
+  komentari: "",
+  seminari: [],
+};
+
 export default function Firma() {
   const location = useLocation();
   const { companiesData, updateCompany } = useCompanyStore();
 
   const [company, setCompany] = useState(
-    companiesData.find((item) => item.id === location.state.id) || null
+    companiesData.find((item) => item.id === location.state.id)
   );
 
   useEffect(() => {
@@ -35,9 +55,10 @@ export default function Firma() {
     const updatedZaposleni = company?.zaposleni.map((zaposleni) =>
       zaposleni.id === row.original.id ? row.original : zaposleni
     );
-    const updatedCompany = {
+    const updatedCompany: Company = {
+      ...defaultCompanyData,
       ...company,
-      zaposleni: updatedZaposleni,
+      zaposleni: updatedZaposleni || [], // Ensure zaposleni is always an array
     };
     updateCompany(company?.id!, updatedCompany);
     setSelectedRow(row);
@@ -45,9 +66,10 @@ export default function Firma() {
   };
 
   const handleDelete = (row: MRT_Row<Zaposleni>) => {
-    const updatedCompany = {
+    const updatedCompany: Company = {
+      ...defaultCompanyData,
       ...company,
-      zaposleni: company?.zaposleni.filter((zaposleni) => zaposleni.id !== row.original.id),
+      zaposleni: company?.zaposleni.filter((zaposleni) => zaposleni.id !== row.original.id) || [],
     };
     updateCompany(company?.id!, updatedCompany);
   };
@@ -59,12 +81,13 @@ export default function Firma() {
 
   const handleZaposleniSubmit = (zaposleniData: Zaposleni) => {
     console.log("this is zaposleni data", zaposleniData);
-    const updatedZaposleni = company?.zaposleni.map((zaposleni) =>
+    const updatedZaposleni = company?.zaposleni.map((zaposleni: Zaposleni) =>
       zaposleni.id === zaposleniData.id ? zaposleniData : zaposleni
     );
-    const updatedCompany = {
+    const updatedCompany: Company = {
+      ...defaultCompanyData,
       ...company,
-      zaposleni: updatedZaposleni,
+      zaposleni: updatedZaposleni || [],
     };
     updateCompany(company?.id!, updatedCompany);
     setOpen(false);
@@ -98,7 +121,11 @@ export default function Firma() {
   }
 
   function handlePrijavaChange(event: React.ChangeEvent<HTMLInputElement>) {
-    setCompany((prevState) => ({ ...prevState, zeleMarketingMaterijal: event.target.checked }));
+    // TODO: fix any
+    setCompany((prevState: any) => ({
+      ...prevState,
+      zeleMarketingMaterijal: event.target.checked,
+    }));
   }
 
   return (
