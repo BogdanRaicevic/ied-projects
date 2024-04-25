@@ -34,16 +34,18 @@ const defaultCompanyData: Company = {
   seminari: [],
 };
 
+type TODO_ANY_TYPE = any;
+
 export default function Firma() {
   const location = useLocation();
   const { companiesData, updateCompany } = useCompanyStore();
 
   const [company, setCompany] = useState(
-    companiesData.find((item) => item.id === location.state.id)
+    companiesData.find((item: TODO_ANY_TYPE) => item.id === location.state.id)
   );
 
   useEffect(() => {
-    const company = companiesData.find((item) => item.id === location.state.id);
+    const company = companiesData.find((item: TODO_ANY_TYPE) => item.id === location.state.id);
     if (company) {
       setCompany(company);
     }
@@ -53,7 +55,7 @@ export default function Firma() {
 
   const handleEdit = (row: MRT_Row<Zaposleni>) => {
     console.log("edit row", row.original);
-    const updatedZaposleni = company?.zaposleni.map((zaposleni) =>
+    const updatedZaposleni = company?.zaposleni.map((zaposleni: TODO_ANY_TYPE) =>
       zaposleni.id === row.original.id ? row.original : zaposleni
     );
     const updatedCompany: Company = {
@@ -70,7 +72,9 @@ export default function Firma() {
     const updatedCompany: Company = {
       ...defaultCompanyData,
       ...company,
-      zaposleni: company?.zaposleni.filter((zaposleni) => zaposleni.id !== row.original.id) || [],
+      zaposleni:
+        company?.zaposleni.filter((zaposleni: TODO_ANY_TYPE) => zaposleni.id !== row.original.id) ||
+        [],
     };
     updateCompany(company?.id!, updatedCompany);
   };
@@ -138,8 +142,7 @@ export default function Firma() {
   }
 
   function handlePrijavaChange(event: React.ChangeEvent<HTMLInputElement>) {
-    // TODO: fix any
-    setCompany((prevState: any) => ({
+    setCompany((prevState: TODO_ANY_TYPE) => ({
       ...prevState,
       zeleMarketingMaterijal: event.target.checked,
     }));
@@ -173,7 +176,7 @@ export default function Firma() {
         onClose={handleClose}
         onSubmit={handleZaposleniSubmit}
       />
-      <AttendedSeminarsAccordion firma={company as any}></AttendedSeminarsAccordion>
+      <AttendedSeminarsAccordion firma={company as TODO_ANY_TYPE}></AttendedSeminarsAccordion>
     </>
   );
 }
