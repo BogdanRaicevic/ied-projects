@@ -9,11 +9,8 @@ const header: jwt.Header = { alg: 'HS256', typ: 'JWT' };
 
 export const authRoutes = (router: oak.Router) => {
   router.post('/login', async (ctx) => {
-    console.log('ovde sam nekim cudom');
-
     const body = await ctx.request.body.json();
-    const user = await findUserByName(body.username);
-
+    const user = await findUserByName(body.email);
     if (!user) {
       ctx.response.status = 404;
       ctx.response.body = 'Not Found';
@@ -21,15 +18,15 @@ export const authRoutes = (router: oak.Router) => {
     }
 
     if (
-      body.username === user.name &&
+      body.email === user.email &&
       //TODO: the compare is temporary untill i make hashing work from FE
       (await compare(body.password, user.password))
     ) {
       const payload: jwt.Payload = {
-        iss: user.name,
+        iss: user.email,
         exp: jwt.getNumericDate(60 * 60), // Token will expire in 1 hour,
       };
-
+      console.log(payload);
       const encryptedKey = await encodePassword(env.AUTH_KEY);
       if (typeof env.AUTH_KEY !== 'string') {
         throw new Error('AUTH_KEY must be a string');

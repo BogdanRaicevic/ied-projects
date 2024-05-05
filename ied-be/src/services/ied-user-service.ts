@@ -1,5 +1,8 @@
 import { mongo } from '../../deps.ts';
 import { db } from '../database/db.ts';
+import { config } from '../../deps.ts';
+
+const env = config();
 
 type User = {
   _id: { $oid: string };
@@ -8,11 +11,13 @@ type User = {
   password: string;
 };
 
-export const findUserByName = async (name: string) => {
+export const findUserByName = async (email: string) => {
   try {
-    const collection: mongo.Collection<User> = db.collection('users'); // Replace with your collection name
+    const collection: mongo.Collection<User> = db.collection(
+      env.MONGO_DB_USER_COLLECTION
+    );
 
-    const user = await collection.findOne({ name });
+    const user = await collection.findOne({ email });
 
     return user;
   } catch (error) {
