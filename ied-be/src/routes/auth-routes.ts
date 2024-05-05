@@ -9,6 +9,8 @@ const header: jwt.Header = { alg: 'HS256', typ: 'JWT' };
 
 export const authRoutes = (router: oak.Router) => {
   router.post('/login', async (ctx) => {
+    console.log('ovde sam nekim cudom');
+
     const body = await ctx.request.body.json();
     const user = await findUserByName(body.username);
 

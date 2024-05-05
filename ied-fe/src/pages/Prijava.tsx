@@ -4,15 +4,23 @@ import { Copyright } from "@mui/icons-material";
 import { CssBaseline, Avatar, Typography, FormControlLabel, Checkbox } from "@mui/material";
 import { Container, Box } from "@mui/system";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
+import { useMutation } from "react-query";
+import { login } from "../api/login";
 
 export default function Prijava() {
+  const mutation = useMutation(login);
+
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get("email"),
-      password: data.get("password"),
+    const email = data.get("email") as string; // Ensure email is of type string
+    const password = data.get("password") as string; // Ensure password is of type string
+    console.log("ovo je sa FE", {
+      email,
+      password,
     });
+
+    mutation.mutate({ email, password });
   };
 
   return (
