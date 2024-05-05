@@ -1,9 +1,10 @@
 import { config, jwt } from '../../deps.ts';
+import { TODO_ANY } from '../../utils.ts';
 import { encodePassword } from '../services/auth-service.ts';
 const env = config();
 
 // JWT validation middleware
-export const validateJwt = async (ctx: any, next: any) => {
+export const validateJwt = async (ctx: TODO_ANY, next: TODO_ANY) => {
   const authHeader = ctx.request.headers.get('Authorization');
 
   if (!authHeader || !authHeader.startsWith('Bearer ')) {

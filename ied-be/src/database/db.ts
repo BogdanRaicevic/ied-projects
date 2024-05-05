@@ -4,8 +4,6 @@ const env = config();
 const uri = env.MONGO_URI;
 
 // Create a MongoClient with a MongoClientOptions object to set the Stable API version
-
-// Create a MongoClient with a MongoClientOptions object to set the Stable API version
 const client = new mongo.MongoClient(uri, {
   serverApi: {
     version: mongo.ServerApiVersion.v1,
