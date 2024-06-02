@@ -1,9 +1,8 @@
-import { compare, config, jwt, oak } from '../../deps.ts';
+import { compare, jwt, oak } from '../../deps.ts';
+import { ENV } from '../../envVariables.ts';
 import { validateJwt } from '../middleware/auth-middleware.ts';
 import { encodePassword } from '../services/auth-service.ts';
 import { findUserByName } from '../services/ied-user-service.ts';
-
-const env = config();
 
 const header: jwt.Header = { alg: 'HS256', typ: 'JWT' };
 
@@ -27,8 +26,8 @@ export const authRoutes = (router: oak.Router) => {
         exp: jwt.getNumericDate(60 * 60), // Token will expire in 1 hour,
       };
       console.log(payload);
-      const encryptedKey = await encodePassword(env.AUTH_KEY);
-      if (typeof env.AUTH_KEY !== 'string') {
+      const encryptedKey = await encodePassword(ENV.authKey);
+      if (typeof ENV.authKey !== 'string') {
         throw new Error('AUTH_KEY must be a string');
       }
       const token = await jwt.create(header, payload, encryptedKey);

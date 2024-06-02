@@ -1,7 +1,7 @@
-import { config, mongo } from '../../deps.ts';
-const env = config();
+import { mongo } from '../../deps.ts';
+import { ENV } from '../../envVariables.ts';
 
-const uri = env.MONGO_URI;
+const uri = ENV.mongoUri;
 
 // Create a MongoClient with a MongoClientOptions object to set the Stable API version
 const client = new mongo.MongoClient(uri, {
@@ -14,4 +14,4 @@ const client = new mongo.MongoClient(uri, {
 
 await client.connect();
 
-export const db = client.db(env.MONGO_DB_NAME);
+export const db = client.db(ENV.mongoDbName);

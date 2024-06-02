@@ -1,8 +1,6 @@
 import { mongo } from '../../deps.ts';
+import { ENV } from '../../envVariables.ts';
 import { db } from '../database/db.ts';
-import { config } from '../../deps.ts';
-
-const env = config();
 
 type User = {
   _id: { $oid: string };
@@ -15,7 +13,7 @@ type User = {
 export const findUserByName = async (email: string) => {
   try {
     const collection: mongo.Collection<User> = db.collection(
-      env.MONGO_DB_USER_COLLECTION
+      ENV.dbUserCollection
     );
 
     const user = await collection.findOne({ email });
@@ -30,7 +28,7 @@ export const findUserByName = async (email: string) => {
 export const createUser = async (user: User) => {
   try {
     const collection: mongo.Collection<User> = db.collection(
-      env.MONGO_DB_USER_COLLECTION
+      ENV.dbUserCollection
     );
 
     const salt = crypto.getRandomValues(new Uint8Array(16)).toString();
