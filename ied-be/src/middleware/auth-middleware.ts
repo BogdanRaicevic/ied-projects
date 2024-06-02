@@ -1,7 +1,7 @@
-import { config, jwt } from '../../deps.ts';
+import { jwt } from '../../deps.ts';
+import { ENV } from '../../envVariables.ts';
 import { TODO_ANY } from '../../utils.ts';
 import { encodePassword } from '../services/auth-service.ts';
-const env = config();
 
 // JWT validation middleware
 export const validateJwt = async (ctx: TODO_ANY, next: TODO_ANY) => {
@@ -22,7 +22,7 @@ export const validateJwt = async (ctx: TODO_ANY, next: TODO_ANY) => {
   }
 
   try {
-    const encryptedKey = await encodePassword(env.AUTH_KEY);
+    const encryptedKey = await encodePassword(ENV.authKey);
     const payload = (await jwt.verify(token, encryptedKey)) as jwt.Payload;
 
     if (!payload || !payload.iss) {
