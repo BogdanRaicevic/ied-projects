@@ -13,7 +13,7 @@ type User = {
 export const findUserByName = async (name: string) => {
   try {
     const collection: mongo.Collection<User> = db.collection(
-      ENV.dbUserCollection
+      ENV.mongo.collections.users
     );
 
     const user = await collection.findOne({ name });
@@ -28,7 +28,7 @@ export const findUserByName = async (name: string) => {
 export const createUser = async (user: User) => {
   try {
     const collection: mongo.Collection<User> = db.collection(
-      ENV.dbUserCollection
+      ENV.mongo.collections.users
     );
 
     const salt = crypto.getRandomValues(new Uint8Array(16)).toString();
