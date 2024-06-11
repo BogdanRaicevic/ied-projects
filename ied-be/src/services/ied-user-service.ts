@@ -1,6 +1,4 @@
-import { mongo } from '../../deps.ts';
-import { ENV } from '../../envVariables.ts';
-import { db } from '../database/db.ts';
+import mongoose from 'mongoose';
 
 type User = {
   _id: { $oid: string };
@@ -10,13 +8,17 @@ type User = {
   salt: string;
 };
 
+const UserSchema = new mongoose.Schema({
+  name: { type: String, default: '' },
+  email: { type: String },
+  password: { type: String },
+  salt: { type: String },
+});
+const UserModel = mongoose.model('User', UserSchema);
+
 export const findUserByName = async (email: string) => {
   try {
-    const collection: mongo.Collection<User> = db.collection(
-      ENV.dbUserCollection
-    );
-
-    const user = await collection.findOne({ email });
+    const user = await UserModel.findOne({ email });
 
     return user;
   } catch (error) {
@@ -25,25 +27,21 @@ export const findUserByName = async (email: string) => {
   }
 };
 
-export const createUser = async (user: User) => {
+export const createUser = async (userInput: User) => {
   try {
-    const collection: mongo.Collection<User> = db.collection(
-      ENV.dbUserCollection
-    );
-
     const salt = crypto.getRandomValues(new Uint8Array(16)).toString();
-    user.salt = salt;
+    userInput.salt = salt;
 
     const encoder = new TextEncoder();
-    const passwordData = encoder.encode(user.password + salt);
+    const passwordData = encoder.encode(userInput.password + salt);
 
-    user.password = (
+    userInput.password = (
       await crypto.subtle.digest('SHA-256', passwordData)
     ).toString();
 
-    const result = await collection.insertOne(user);
+    const createdUser = UserModel.create(userInput);
 
-    return result;
+    return createdUser;
   } catch (error) {
     console.error('Error creating user:', error);
     throw new Error('Error creating user');

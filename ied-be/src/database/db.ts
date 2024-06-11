@@ -1,17 +1,23 @@
-import { mongo } from '../../deps.ts';
-import { ENV } from '../../envVariables.ts';
+import { env } from '../utils/envVariables';
+import mongoose from 'mongoose';
 
-const uri = ENV.mongoUri;
+const uri = env.mongo.uri ?? '';
+let dbConnection: any;
 
-// Create a MongoClient with a MongoClientOptions object to set the Stable API version
-const client = new mongo.MongoClient(uri, {
-  serverApi: {
-    version: mongo.ServerApiVersion.v1,
-    strict: true,
-    deprecationErrors: true,
-  },
-});
-
-await client.connect();
-
-export const db = client.db(ENV.mongoDbName);
+export async function connectDB() {
+  if (!dbConnection) {
+    try {
+      await mongoose.connect(uri, {});
+      console.log('Database connected');
+    } catch (error) {
+      console.error('Error connecting to the database', error);
+      throw new Error('Error connecting to the database');
+    }
+    dbConnection = mongoose.connection;
+    dbConnection.on('error', console.error.bind(console, 'connection error:'));
+    dbConnection.once('open', () => {
+      console.log('Database connected!');
+    });
+  }
+  return dbConnection; // Return the connection instance
+}
