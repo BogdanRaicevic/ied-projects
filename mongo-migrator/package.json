@@ -1,0 +1,20 @@
+{
+  "name": "mongo-migrator",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc && ts-node src/mains.ts"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@types/node": "^20.14.2",
+    "mongodb": "^6.7.0",
+    "mysql2": "^3.10.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.4.5"
+  }
+}
