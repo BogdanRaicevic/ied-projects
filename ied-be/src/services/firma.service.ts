@@ -41,5 +41,5 @@ export const search = async (
     query.naziv_firme = { $regex: query.naziv_firme, $options: "i" }; // 'i' for case-insensitive
   }
 
-  return Firma.find(query).skip(skip).limit(pageSize);
+  return Firma.find(query).skip(skip).limit(pageSize).cursor();
 };

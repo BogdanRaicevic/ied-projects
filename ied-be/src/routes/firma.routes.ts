@@ -64,8 +64,21 @@ router.put("/:id", async (req: Request, res: Response, next: NextFunction) => {
 router.post("/search", async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { page = 1, pageSize = 100, ...query } = req.body;
-    const firmas = await search(query as FilterQuery<FirmaType>, Number(page), Number(pageSize));
-    res.json(firmas);
+    const cursor = await search(query as FilterQuery<FirmaType>, Number(page), Number(pageSize));
+
+    const results: FirmaType[] = [];
+    cursor.on("data", (doc) => {
+      results.push(doc);
+    });
+
+    cursor.on("end", () => {
+      res.json(results);
+    });
+
+    cursor.on("error", (error) => {
+      console.error(error);
+      res.status(500).json({ message: "Internal server error" });
+    });
   } catch (error) {
     next(error);
   }
