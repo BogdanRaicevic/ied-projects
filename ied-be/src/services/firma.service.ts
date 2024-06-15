@@ -35,7 +35,11 @@ export const search = async (
   page: number = 1,
   pageSize: number = 100
 ) => {
-  console.log("ovde je SEARCH");
   const skip = (page - 1) * pageSize;
-  return Firma.find(query).skip(skip).limit(pageSize).cursor();
+
+  if (query.naziv_firme) {
+    query.naziv_firme = { $regex: query.naziv_firme, $options: "i" }; // 'i' for case-insensitive
+  }
+
+  return Firma.find(query).skip(skip).limit(pageSize);
 };

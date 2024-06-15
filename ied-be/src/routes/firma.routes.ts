@@ -61,9 +61,9 @@ router.put("/:id", async (req: Request, res: Response, next: NextFunction) => {
   }
 });
 
-router.get("/search", async (req: Request, res: Response, next: NextFunction) => {
+router.post("/search", async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const { page = 1, pageSize = 100, ...query } = req.query;
+    const { page = 1, pageSize = 100, ...query } = req.body;
     const firmas = await search(query as FilterQuery<FirmaType>, Number(page), Number(pageSize));
     res.json(firmas);
   } catch (error) {
