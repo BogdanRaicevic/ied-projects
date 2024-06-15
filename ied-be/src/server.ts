@@ -2,8 +2,16 @@ import { env } from "./utils/envVariables";
 import { connectDB } from "./database/db";
 import express from "express";
 import cors from "cors";
+import firmaRoutes from "./routes/firma";
+import userRoutes from "./routes/user";
+import { errorWrapper } from "./middleware/errorWrapper";
 
 const app = express();
+app.use(express.json());
+
+app.use("/api/user", userRoutes);
+app.use("/api/firma", firmaRoutes);
+app.use(errorWrapper);
 
 if (process.env.NODE_ENV === "development") {
   app.use(

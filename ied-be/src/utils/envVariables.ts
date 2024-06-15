@@ -17,6 +17,7 @@ export const env = {
     dbName: config.MONGO_DB_NAME,
     collections: {
       users: config.MONGO_DB_USER_COLLECTION,
+      firme: config.MONGO_DB_FIRME_COLLECTION,
     },
   },
   auth: {
