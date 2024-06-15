@@ -10,7 +10,6 @@ router.get("/:email", async (req: Request<UserRequestParams>, res: Response) => 
   const { email } = req.params;
 
   try {
-    console.log("heleleoeeo");
     const user = await findUserByEmail(email);
     if (!user) {
       return res.status(404).json({ message: "User nije pronadjen" });
