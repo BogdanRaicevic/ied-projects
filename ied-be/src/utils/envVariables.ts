@@ -1,4 +1,4 @@
-import 'dotenv/config';
+import "dotenv/config";
 
 // Load environment variables
 const config = process.env;
