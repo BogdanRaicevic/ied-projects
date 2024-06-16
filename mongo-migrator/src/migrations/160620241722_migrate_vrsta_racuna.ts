@@ -4,7 +4,7 @@ import { mongoDbConnection, mysqlConnection } from '../config';
 export const up = async () => {
   const monogDb = await mongoDbConnection();
   const mysqlDb = await mysqlConnection();
-  const mongoCollectionName = 'firmas';
+  const mongoCollectionName = 'vrste_racuna';
 
   try {
     // Check if the collection exists
@@ -20,7 +20,7 @@ export const up = async () => {
 
     // // Fetch data from MySQL
     const [rows] = await mysqlDb.execute<RowDataPacket[]>(
-      'SELECT * FROM firma'
+      'SELECT * FROM racun'
     );
     console.log(`Fetched ${rows.length} rows from MySQL`);
 
