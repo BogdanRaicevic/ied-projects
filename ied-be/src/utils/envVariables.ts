@@ -14,7 +14,6 @@ export const env = {
   },
   mongo: {
     uri: config.MONGO_URI,
-    dbName: config.MONGO_DB_NAME,
   },
   auth: {
     domain: config.AUTH0_ISSUER_BASE_URL,
