@@ -1,5 +1,6 @@
 import { FilterQuery } from "mongoose";
 import { FirmaType, Firma } from "../models/firma.model";
+import { createFirmaQuery } from "../utils/firmaQueryBuilder";
 
 export const findByFirmaId = async (ID_firma: number) => {
   try {
@@ -31,15 +32,13 @@ export const updateById = async (
 };
 
 export const search = async (
-  query: FilterQuery<FirmaType>,
+  queryParameters: FilterQuery<FirmaType>,
   page: number = 1,
   pageSize: number = 100
 ) => {
+  console.log(queryParameters);
   const skip = (page - 1) * pageSize;
+  const mongoQuery = createFirmaQuery(queryParameters);
 
-  if (query.naziv_firme) {
-    query.naziv_firme = { $regex: query.naziv_firme, $options: "i" }; // 'i' for case-insensitive
-  }
-
-  return Firma.find(query).skip(skip).limit(pageSize).cursor();
+  return Firma.find(mongoQuery, { zaposleni: 0 }).skip(skip).limit(pageSize).cursor();
 };
