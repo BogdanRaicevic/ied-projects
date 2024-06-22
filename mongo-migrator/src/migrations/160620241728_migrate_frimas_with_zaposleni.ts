@@ -21,7 +21,7 @@ export const up = async () => {
     // Fetch data from MySQL
     const [rows] = await mysqlDb.execute<RowDataPacket[]>(
       `
-      SELECT f.*,  
+      SELECT f.*,
       ko.ID_kontakt_osoba AS ko_ID_kontakt_osoba,
       ko.ime AS ko_ime,
       ko.prezime AS ko_prezime,
@@ -35,10 +35,17 @@ export const up = async () => {
       ko.created_at AS ko_created_at,
       ko.updated_at AS ko_updated_at,
       ko.created_by AS ko_created_by,
-      ko.updated_by AS ko_updated_by
-      FROM firma f
-      JOIN radi_u ru ON f.ID_firma = ru.FK_FIRMA_ID_firma
-      JOIN kontakt_osoba ko ON ru.FK_KONTAKT_OSOBA_ID_kontakt_osoba = ko.ID_kontakt_osoba;
+      ko.updated_by AS ko_updated_by,
+      m.naziv_mesto as mesto,
+      m.postanski_broj as postanski_broj
+    FROM 
+      firma f
+    JOIN 
+      radi_u ru ON f.ID_firma = ru.FK_FIRMA_ID_firma
+    JOIN 
+      kontakt_osoba ko ON ru.FK_KONTAKT_OSOBA_ID_kontakt_osoba = ko.ID_kontakt_osoba
+    JOIN 
+      mesto m ON f.FK_MESTO_ID_mesto = m.ID_mesto;
       `
     );
     console.log(`Fetched ${rows.length} rows from MySQL`);
