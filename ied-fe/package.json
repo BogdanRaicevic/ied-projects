@@ -21,6 +21,7 @@
     "@mui/styled-engine-sc": "^5.11.0",
     "@mui/system": "^5.14.18",
     "@mui/x-date-pickers": "^6.18.2",
+    "axios": "^1.7.2",
     "date-fns": "^2.29.3",
     "material-react-table": "^2.0.4",
     "pdfmake": "^0.2.7",

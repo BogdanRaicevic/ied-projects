@@ -7,31 +7,38 @@ import userRoutes from "./routes/user.routes";
 import { errorWrapper } from "./middleware/errorWrapper";
 
 const app = express();
+
+app.use(
+  cors({
+    origin: "http://localhost:5173", // Replace with your frontend URL
+  })
+);
+
+// if (process.env.NODE_ENV === "development") {
+//   app.use(
+//     cors({
+//       origin: "*", // Allow all origins in development
+//       credentials: true, // Reflect CORS headers in responses
+//     })
+//   );
+// } else {
+//   // Production environment CORS policy
+//   // Replace '*' with your specific allowed origins
+//   app.use(
+//     cors({
+//       origin: ["http://localhost:8000", "https://localhost:5173"],
+//       credentials: true,
+//     })
+//   );
+// }
 app.use(express.json());
+
+// Wrap the initialization logic in an async function
 
 app.use("/api/user", userRoutes);
 app.use("/api/firma", firmaRoutes);
 app.use(errorWrapper);
 
-if (process.env.NODE_ENV === "development") {
-  app.use(
-    cors({
-      origin: "*", // Allow all origins in development
-      credentials: true, // Reflect CORS headers in responses
-    })
-  );
-} else {
-  // Production environment CORS policy
-  // Replace '*' with your specific allowed origins
-  app.use(
-    cors({
-      origin: ["http://localhost:8000", "https://localhost:5173"],
-      credentials: true,
-    })
-  );
-}
-
-// Wrap the initialization logic in an async function
 async function initServer() {
   try {
     await connectDB();

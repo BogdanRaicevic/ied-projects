@@ -6,9 +6,30 @@ import Grid from "@mui/material/Unstable_Grid2";
 import { Button, TextField } from "@mui/material";
 import { Box } from "@mui/system";
 import { useCompanyStore } from "../store";
+import { fetchFirmaData } from "../api/firma.api";
+import { useEffect, useState } from "react";
 
 export default function Pretrage() {
   const { companiesData } = useCompanyStore();
+
+  const [firmasData, setFirmasData] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const loadFirmasData = async () => {
+      try {
+        const data = await fetchFirmaData();
+        setFirmasData(data);
+      } catch (error) {
+        setError("Failed to fetch companies data");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadFirmasData();
+  }, []);
 
   const gradovi = [
     { parent: "SVI Gradovi" },
