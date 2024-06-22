@@ -37,7 +37,8 @@ export const up = async () => {
       ko.created_by AS ko_created_by,
       ko.updated_by AS ko_updated_by,
       m.naziv_mesto as mesto,
-      m.postanski_broj as postanski_broj
+      m.postanski_broj as postanski_broj,
+      vf.velicina
     FROM 
       firma f
     JOIN 
@@ -45,7 +46,9 @@ export const up = async () => {
     JOIN 
       kontakt_osoba ko ON ru.FK_KONTAKT_OSOBA_ID_kontakt_osoba = ko.ID_kontakt_osoba
     JOIN 
-      mesto m ON f.FK_MESTO_ID_mesto = m.ID_mesto;
+      mesto m ON f.FK_MESTO_ID_mesto = m.ID_mesto
+    JOIN 
+      velicina_firme vf ON f.FK_VELICINA_FIRME_ID_velicina_firme = vf.ID_velicina_firme;
       `
     );
     console.log(`Fetched ${rows.length} rows from MySQL`);
@@ -54,6 +57,9 @@ export const up = async () => {
     let groupedFirmas = new Map<Number, any>();
 
     for (const row of rows) {
+      delete row.FK_MESTO_ID_mesto;
+      delete row.FK_VELICINA_FIRME_ID_velicina_firme;
+
       if (processedFirmaIds.has(row.ID_firma)) {
         const zaposleniData = extractZaposleniData(row);
         let b = groupedFirmas.get(row.ID_firma);
