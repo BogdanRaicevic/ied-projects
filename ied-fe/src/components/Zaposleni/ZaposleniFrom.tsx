@@ -1,11 +1,10 @@
-import { TextField, Autocomplete, Checkbox, Button } from "@mui/material";
+import { TextField, Button } from "@mui/material";
 import { Box } from "@mui/system";
-import { normalizedRadnaMesta } from "../../fakeData/companyData";
-import CheckBoxOutlineBlankIcon from "@mui/icons-material/CheckBoxOutlineBlank";
-import CheckBoxIcon from "@mui/icons-material/CheckBox";
+// import CheckBoxOutlineBlankIcon from "@mui/icons-material/CheckBoxOutlineBlank";
+// import CheckBoxIcon from "@mui/icons-material/CheckBox";
 import { Zaposleni, ZaposleniSchema } from "../../schemas/companySchemas";
 import { useEffect } from "react";
-import { Controller, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 type ZaposleniFormProps = {
@@ -14,13 +13,13 @@ type ZaposleniFormProps = {
 };
 
 export function ZaposleniForm({ zaposleni, onSubmit }: ZaposleniFormProps) {
-  const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
-  const checkedIcon = <CheckBoxIcon fontSize="small" />;
+  // const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
+  // const checkedIcon = <CheckBoxIcon fontSize="small" />;
 
   const {
     register,
     handleSubmit,
-    control,
+    // control,
     setValue,
     formState: { errors },
   } = useForm<Zaposleni>({
@@ -47,7 +46,7 @@ export function ZaposleniForm({ zaposleni, onSubmit }: ZaposleniFormProps) {
       setValue("prezime", "");
       setValue("e_mail", "");
       setValue("telefon", "");
-      setValue("radno_mesto", []);
+      setValue("radno_mesto", "");
       setValue("komentar", "");
     }
   }, [zaposleni, setValue]);
@@ -91,12 +90,12 @@ export function ZaposleniForm({ zaposleni, onSubmit }: ZaposleniFormProps) {
         helperText={errors.telefon?.message}
       />
 
-      <Controller
+      {/* <Controller
         name="radno_mesto"
         control={control}
         render={({ field, fieldState: { error } }) => (
           <Autocomplete
-            value={field.value || []}
+            value={Array.isArray(field.value) ? field.value : [field.value]} // Ensure field.value is always an array
             sx={{ m: 1, width: "98%" }}
             multiple
             limitTags={2}
@@ -126,7 +125,7 @@ export function ZaposleniForm({ zaposleni, onSubmit }: ZaposleniFormProps) {
             )}
           />
         )}
-      ></Controller>
+      ></Controller> */}
 
       <TextField
         {...register("komentar")}

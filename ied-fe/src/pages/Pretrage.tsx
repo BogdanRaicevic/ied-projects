@@ -11,8 +11,8 @@ import { useEffect, useState } from "react";
 
 export default function Pretrage() {
   const [firmasData, setFirmasData] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const [_loading, setLoading] = useState(true);
+  const [_error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const loadFirmasData = async () => {

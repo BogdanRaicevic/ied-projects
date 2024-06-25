@@ -1,14 +1,7 @@
-import {
-  FormControl,
-  TextField,
-  InputAdornment,
-  Button,
-  Autocomplete,
-  Divider,
-} from "@mui/material";
+import { FormControl, TextField, InputAdornment, Button, Divider } from "@mui/material";
 import { Box } from "@mui/system";
-import { useForm, Controller } from "react-hook-form";
-import { stanjaFirme, tipoviFirme, velicineFirme } from "../../../fakeData/companyData";
+import { useForm } from "react-hook-form";
+// import { stanjaFirme, tipoviFirme, velicineFirme } from "../../../fakeData/companyData";
 import { zodResolver } from "@hookform/resolvers/zod";
 import React, { useEffect, useState } from "react";
 import Grid2 from "@mui/material/Unstable_Grid2/Grid2";
@@ -20,19 +13,19 @@ import {
 } from "../../../schemas/companySchemas";
 import { z } from "zod";
 import {
-  Warning,
+  // Warning,
   Business,
-  TravelExplore,
+  // TravelExplore,
   Home,
   LocationCity,
-  DonutSmall,
+  // DonutSmall,
   ConfirmationNumber,
   Phone,
   Email,
   Approval,
   SwitchAccount,
   Height,
-  MonitorHeart,
+  // MonitorHeart,
   Comment,
 } from "@mui/icons-material";
 
