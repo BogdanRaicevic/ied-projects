@@ -42,6 +42,10 @@ export const myCompanyColumns: MRT_ColumnDef<Company>[] = [
     accessorKey: "mesto",
   },
   {
+    header: "Postanski broj",
+    accessorKey: "postanski_broj",
+  },
+  {
     header: "Telefon",
     accessorKey: "telefon",
   },
