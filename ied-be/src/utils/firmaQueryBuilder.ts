@@ -5,13 +5,12 @@ type FirmaQueryParams = {
   naziv_firme?: string;
   pib?: string;
   email?: string;
-  grad?: string[];
-  opstina?: string;
+  mesto?: string[];
   postanski_broj?: string;
   delatnost?: string[];
   tip_firme?: string[];
   radno_mesto?: string[];
-  velicina_firme?: string[];
+  velicina?: string[];
 };
 
 export function createFirmaQuery(params: FirmaQueryParams): FilterQuery<FirmaType> {
@@ -24,19 +23,13 @@ export function createFirmaQuery(params: FirmaQueryParams): FilterQuery<FirmaTyp
     query.PIB = { $regex: params.pib, $options: "i" }; // Case-insensitive partial match
   }
   if (params.email) {
-    query.email = { $regex: params.email, $options: "i" }; // Case-insensitive partial match
+    query.e_mail = { $regex: params.email, $options: "i" }; // Case-insensitive partial match
   }
-  if (params.opstina) {
-    query.opstina = { $regex: params.opstina, $options: "i" }; // Case-insensitive partial match
-  }
-  if (params.postanski_broj) {
-    query.postanski_broj = params.postanski_broj;
-  }
-  if (params.delatnost && Array.isArray(params.grad)) {
+  if (params.delatnost && Array.isArray(params.mesto)) {
     query.delatnost = { $in: params.delatnost };
   }
-  if (params.grad && Array.isArray(params.grad)) {
-    query.grad = { $in: params.grad }; // Case-insensitive partial match
+  if (params.mesto && Array.isArray(params.mesto)) {
+    query.grad = { $in: params.mesto }; // Case-insensitive partial match
   }
   if (params.tip_firme && Array.isArray(params.tip_firme)) {
     query.tip_firme = { $in: params.tip_firme };
@@ -44,8 +37,8 @@ export function createFirmaQuery(params: FirmaQueryParams): FilterQuery<FirmaTyp
   if (params.radno_mesto && Array.isArray(params.radno_mesto)) {
     query.radno_mesto = { $in: params.radno_mesto };
   }
-  if (params.velicina_firme && Array.isArray(params.velicina_firme)) {
-    query.velicina_firme = { $in: params.velicina_firme };
+  if (params.velicina && Array.isArray(params.velicina)) {
+    query.velicina = { $in: params.velicina };
   }
 
   return query;

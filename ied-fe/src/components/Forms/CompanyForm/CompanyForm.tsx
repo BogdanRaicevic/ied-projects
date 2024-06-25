@@ -10,7 +10,7 @@ import { Box } from "@mui/system";
 import { useForm, Controller } from "react-hook-form";
 import { stanjaFirme, tipoviFirme, velicineFirme } from "../../../fakeData/companyData";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Grid2 from "@mui/material/Unstable_Grid2/Grid2";
 import {
   Metadata,
@@ -38,21 +38,9 @@ import {
 
 export const companyFormMetadata: Metadata[] = [
   {
-    key: "odjava",
-    label: "Odjava",
-    inputAdornment: <Warning />,
-    inputType: InputTypesSchema.enum.Switch,
-  },
-  {
-    key: "naziv",
-    label: "Naziv kompanije",
+    key: "naziv_firme",
+    label: "Naziv Firme",
     inputAdornment: <Business />,
-    inputType: InputTypesSchema.enum.Text,
-  },
-  {
-    key: "sajt",
-    label: "Sajt",
-    inputAdornment: <TravelExplore />,
     inputType: InputTypesSchema.enum.Text,
   },
   {
@@ -62,19 +50,13 @@ export const companyFormMetadata: Metadata[] = [
     inputType: InputTypesSchema.enum.Text,
   },
   {
-    key: "grad",
-    label: "Grad",
+    key: "mesto",
+    label: "Mesto",
     inputAdornment: <LocationCity />,
     inputType: InputTypesSchema.enum.Text,
   },
   {
-    key: "opstina",
-    label: "Opstina",
-    inputAdornment: <DonutSmall />,
-    inputType: InputTypesSchema.enum.Text,
-  },
-  {
-    key: "pib",
+    key: "PIB",
     label: "PIB",
     inputAdornment: <ConfirmationNumber />,
     inputType: InputTypesSchema.enum.Text,
@@ -86,19 +68,19 @@ export const companyFormMetadata: Metadata[] = [
     inputType: InputTypesSchema.enum.Text,
   },
   {
-    key: "email",
+    key: "e_mail",
     label: "Email",
     inputAdornment: <Email />,
     inputType: InputTypesSchema.enum.Text,
   },
   {
-    key: "ptt",
+    key: "postanski_broj",
     label: "Postanski broj",
     inputAdornment: <Approval />,
     inputType: InputTypesSchema.enum.Text,
   },
   {
-    key: "tip",
+    key: "tip_firme",
     label: "Tip firme",
     inputAdornment: <SwitchAccount />,
     inputType: InputTypesSchema.enum.Select,
@@ -110,32 +92,36 @@ export const companyFormMetadata: Metadata[] = [
     inputType: InputTypesSchema.enum.Select,
   },
   {
-    key: "stanje",
-    label: "Stanje firme",
-    inputAdornment: <MonitorHeart />,
-    inputType: InputTypesSchema.enum.Select,
-  },
-  {
-    key: "komentari",
+    key: "komentar",
     label: "Komentari",
     inputAdornment: <Comment />,
     inputType: InputTypesSchema.enum.TextMultiline,
   },
 ];
 
-export default function CompanyForm(props: any) {
+type CompanyFormProps = {
+  inputCompany: Company;
+};
+
+export const CompanyForm: React.FC<CompanyFormProps> = ({ inputCompany }) => {
   const {
     register,
     formState: { errors },
     handleSubmit,
-    control,
+    // control,
+    reset,
   } = useForm<Company>({
     resolver: zodResolver(CompanySchema),
+    defaultValues: inputCompany || {},
   });
 
   // TODO: add types
-  const [company, _setCompany] = useState(props);
-  console.log(company);
+  const [company, setCompany] = useState(inputCompany);
+
+  useEffect(() => {
+    setCompany(inputCompany);
+    reset(inputCompany);
+  }, [inputCompany, reset]);
 
   const onSubmit = (data: Company) => {
     console.log("hi");
@@ -154,7 +140,7 @@ export default function CompanyForm(props: any) {
             startAdornment: <InputAdornment position="start">{item.inputAdornment}</InputAdornment>,
           }}
           name={item.key}
-          defaultValue={company.data[item.key as keyof Company]}
+          defaultValue={company[item.key as keyof Company]}
           error={Boolean(errors[item.key])}
           helperText={errors[item.key]?.message}
         />
@@ -177,69 +163,69 @@ export default function CompanyForm(props: any) {
           name={item.key}
           multiline
           rows={10}
-          defaultValue={company.data[item.key as keyof Company]}
+          defaultValue={company[item.key as keyof Company]}
           error={errors[item.key]}
           helperText={errors[item.key]?.message}
         />
       );
     }
 
-    if (item.inputType === InputTypesSchema.enum.Select) {
-      let optionsData: string[] = [];
-      switch (item.key) {
-        case "tip":
-          optionsData = tipoviFirme;
-          break;
-        case "velicina":
-          optionsData = velicineFirme;
-          break;
-        case "stanje":
-          optionsData = stanjaFirme;
-          break;
-        default:
-          break;
-      }
+    // if (item.inputType === InputTypesSchema.enum.Select) {
+    //   let optionsData: string[] = [];
+    //   switch (item.key) {
+    //     case "tip_firme":
+    //       optionsData = tipoviFirme;
+    //       break;
+    //     case "velicina":
+    //       optionsData = velicineFirme;
+    //       break;
+    //     // case "stanje":
+    //     //   optionsData = stanjaFirme;
+    //     //   break;
+    //     default:
+    //       break;
+    //   }
 
-      return (
-        <Controller
-          name={item.key as "tip" | "velicina" | "stanje"}
-          control={control}
-          render={({ field }) => {
-            const { onChange } = field;
-            return (
-              <Autocomplete
-                {...register(item.key as keyof Company)} // TODO: fix this
-                options={optionsData}
-                defaultValue={company.data[item.key as keyof Company]}
-                renderInput={(params) => {
-                  return (
-                    <TextField
-                      {...params}
-                      label={item.label}
-                      variant="outlined"
-                      InputProps={{
-                        ...params.InputProps,
-                        startAdornment: (
-                          <>
-                            <InputAdornment position="end" sx={{ m: 1 }}>
-                              {item.inputAdornment}
-                            </InputAdornment>
-                            {params.InputProps.startAdornment}
-                          </>
-                        ),
-                      }}
-                    />
-                  );
-                }}
-                onChange={(_event, newValue) => {
-                  onChange(newValue);
-                }}
-              />
-            );
-          }}
-        ></Controller>
-      );
-    }
+    //   // return (
+    //   //   <Controller
+    //   //     name={item.key as "tip_firme" | "velicina"} // | stanje
+    //   //     control={control}
+    //   //     render={({ field }) => {
+    //   //       const { onChange } = field;
+    //   //       return (
+    //   //         <Autocomplete
+    //   //           {...register(item.key as keyof Company)} // TODO: fix this
+    //   //           options={optionsData}
+    //   //           defaultValue={company[item.key as keyof Company]}
+    //   //           renderInput={(params) => {
+    //   //             return (
+    //   //               <TextField
+    //   //                 {...params}
+    //   //                 label={item.label}
+    //   //                 variant="outlined"
+    //   //                 InputProps={{
+    //   //                   ...params.InputProps,
+    //   //                   startAdornment: (
+    //   //                     <>
+    //   //                       <InputAdornment position="end" sx={{ m: 1 }}>
+    //   //                         {item.inputAdornment}
+    //   //                       </InputAdornment>
+    //   //                       {params.InputProps.startAdornment}
+    //   //                     </>
+    //   //                   ),
+    //   //                 }}
+    //   //               />
+    //   //             );
+    //   //           }}
+    //   //           onChange={(_event, newValue) => {
+    //   //             onChange(newValue);
+    //   //           }}
+    //   //         />
+    //   //       );
+    //   //     }}
+    //   //   ></Controller>
+    //   // );
+    // }
   }
 
   const inputItems = (inputType: z.infer<typeof InputTypesSchema>) => {
@@ -287,4 +273,4 @@ export default function CompanyForm(props: any) {
       </Grid2>
     </Box>
   );
-}
+};

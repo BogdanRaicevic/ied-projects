@@ -1,16 +1,13 @@
 import * as z from "zod";
 
 export const ZaposleniSchema = z.object({
-  id: z.string().optional(),
-  firmaId: z.string().optional(),
+  ID_kontakt_osoba: z.optional(z.string()),
   ime: z.string().min(3, "Ime mora da ima bar 3 karaktera"),
   prezime: z.string().min(3, "Prezime mora da ima bar 3 karaktera"),
-  email: z.string(),
+  e_mail: z.string(),
   telefon: z.string(),
-  zeleMarketingMaterijal: z.boolean().default(true),
-  brojSertifikata: z.string().optional(),
-  komentari: z.string().max(10000),
-  radnaMesta: z.array(z.string()),
+  komentar: z.string().max(10000),
+  radno_mesto: z.string(),
 });
 export type Zaposleni = z.infer<typeof ZaposleniSchema>;
 
@@ -24,24 +21,28 @@ export type PoseceniSeminar = z.infer<typeof PoseceniSeminarSchema>;
 
 export const CompanySchema = z.object({
   id: z.optional(z.string()),
-  zeleMarketingMaterijal: z.boolean().default(false),
-  sajt: z.string().max(50, "link za web sajt je predugacak"),
-  naziv: z.string().max(100),
+  ID_firma: z.number(),
+  zeleMarketingMaterijal: z.optional(z.boolean().default(false)),
+  naziv_firme: z.string().max(100),
   adresa: z.string().max(150),
-  grad: z.string().max(50),
-  opstina: z.string().max(100),
-  pib: z.string().regex(new RegExp("^\\d{9}$"), "PIB moze da se sastoji samo od brojeva 9 brojeva"),
-  ptt: z.string().regex(new RegExp("^\\d{5}$"), "PTT moze da se sastoji samo od 5 brojeva"),
+  PIB: z.optional(z.string()),
   telefon: z.string(),
-  email: z.string().email("Ne ispravna email adresa").max(100, "Predugacka email adresa"),
-  tip: z.string(),
+  e_mail: z.string().email("Ne ispravna email adresa").max(100, "Predugacka email adresa"),
+  tip_firme: z.string(),
+  delatnost: z.optional(z.string()),
+  ucesce_na_seminarima: z.optional(z.string()),
+  komentar: z.string().max(1000),
+  stecaj: z.boolean(),
+  likvidacija: z.boolean(),
+  blokada: z.boolean(),
+  mesto: z.string().max(50),
+  postanski_broj: z
+    .string()
+    .regex(new RegExp("^\\d{5}$"), "PTT moze da se sastoji samo od 5 brojeva"),
   velicina: z.string(),
-  stanje: z.string(),
-  odjava: z.boolean(),
-  komentari: z.string().max(1000),
   lastTouched: z.optional(z.string()),
-  zaposleni: z.array(ZaposleniSchema),
-  seminari: z.array(PoseceniSeminarSchema),
+  zaposleni: z.array(ZaposleniSchema).default([]),
+  seminari: z.optional(z.array(PoseceniSeminarSchema)).default([]),
 });
 export type Company = z.infer<typeof CompanySchema>;
 

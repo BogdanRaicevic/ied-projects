@@ -5,13 +5,11 @@ import { fakeRadnaMesta } from "../fakeData/companyData";
 import Grid from "@mui/material/Unstable_Grid2";
 import { Button, TextField } from "@mui/material";
 import { Box } from "@mui/system";
-import { useCompanyStore } from "../store";
-import { fetchFirmaData } from "../api/firma.api";
+// import { useCompanyStore } from "../store";
+import { fetchFirmaPretrageData } from "../api/firma.api";
 import { useEffect, useState } from "react";
 
 export default function Pretrage() {
-  const { companiesData } = useCompanyStore();
-
   const [firmasData, setFirmasData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -19,7 +17,7 @@ export default function Pretrage() {
   useEffect(() => {
     const loadFirmasData = async () => {
       try {
-        const data = await fetchFirmaData();
+        const data = await fetchFirmaPretrageData();
         setFirmasData(data);
       } catch (error) {
         setError("Failed to fetch companies data");
@@ -127,14 +125,13 @@ export default function Pretrage() {
           <TextField label="PIB" />
           <TextField label="Domen/email" />
           <TextField label="Grad" />
-          <TextField label="Opstina" />
           <TextField label="Postanski broj" />
         </Grid>
         <Button variant="contained" sx={{ m: 1, mb: 4 }} size="large" color="info">
           Pretrazi
         </Button>
       </Box>
-      <MyTable data={companiesData}></MyTable>
+      <MyTable data={firmasData}></MyTable>
     </>
   );
 }

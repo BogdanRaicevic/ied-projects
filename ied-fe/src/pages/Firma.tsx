@@ -1,8 +1,8 @@
 import { MRT_Row, MaterialReactTable } from "material-react-table";
-import { useLocation } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { myZaposleniColumns } from "../components/MyTable/myCompanyColumns";
 import CompanyForm from "../components/Forms/CompanyForm";
-import AttendedSeminarsAccordion from "../components/Accordion";
+// import AttendedSeminarsAccordion from "../components/Accordion";
 import { Company, Zaposleni } from "../schemas/companySchemas";
 import PrijavaOdjava from "../components/PrijavaOdjava";
 import { useEffect, useState } from "react";
@@ -11,59 +11,70 @@ import { Box } from "@mui/system";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import ZaposleniDialog from "../components/Dialogs/ZaposleniDialog";
-import { useCompanyStore } from "../store";
+// import { useCompanyStore } from "../store";
 import { v4 } from "uuid";
+import { fetchSingleFirmaData } from "../api/firma.api";
 
 const defaultCompanyData: Company = {
-  zaposleni: [],
-  zeleMarketingMaterijal: true,
-  sajt: "",
-  naziv: "",
+  id: "",
+  ID_firma: 0,
+  naziv_firme: "",
   adresa: "",
-  grad: "",
-  opstina: "",
-  pib: "",
-  ptt: "",
   telefon: "",
-  email: "",
-  tip: "",
+  e_mail: "",
+  tip_firme: "",
+  komentar: "",
+  stecaj: false,
+  likvidacija: false,
+  blokada: false,
+  mesto: "",
+  PIB: "",
+  postanski_broj: "",
+  zeleMarketingMaterijal: false,
+  lastTouched: "",
   velicina: "",
-  stanje: "",
-  odjava: false,
-  komentari: "",
+  zaposleni: [],
   seminari: [],
 };
 
 type TODO_ANY_TYPE = any;
 
 export default function Firma() {
-  const location = useLocation();
-  const { companiesData, updateCompany } = useCompanyStore();
-
-  const [company, setCompany] = useState(
-    companiesData.find((item: TODO_ANY_TYPE) => item.id === location.state.id)
-  );
+  // const location = useLocation();
+  // const { companiesData, updateCompany } = useCompanyStore();
+  const { id } = useParams();
+  const [company, setCompany] = useState(defaultCompanyData);
 
   useEffect(() => {
-    const company = companiesData.find((item: TODO_ANY_TYPE) => item.id === location.state.id);
-    if (company) {
-      setCompany(company);
-    }
-  }, [companiesData, location.state.id]);
+    const fetchData = async () => {
+      if (id) {
+        try {
+          const data = await fetchSingleFirmaData(Number(id));
+          if (data) {
+            setCompany(data);
+          }
+        } catch (error) {
+          console.error("Error fetching company data:", error);
+        }
+      }
+    };
+
+    fetchData();
+  }, [id]);
 
   const [selectedRow, setSelectedRow] = useState<MRT_Row<Zaposleni> | null>(null);
 
   const handleEdit = (row: MRT_Row<Zaposleni>) => {
     console.log("edit row", row.original);
     const updatedZaposleni = company?.zaposleni.map((zaposleni: TODO_ANY_TYPE) =>
-      zaposleni.id === row.original.id ? row.original : zaposleni
+      zaposleni.ID_kontakt_osoba === row.original.ID_kontakt_osoba ? row.original : zaposleni
     );
     const updatedCompany: Company = {
       ...defaultCompanyData,
       ...company,
       zaposleni: updatedZaposleni || [], // Ensure zaposleni is always an array
     };
-    updateCompany(company?.id!, updatedCompany);
+    setCompany(updatedCompany);
     setSelectedRow(row);
     setOpen(true);
   };
@@ -73,10 +84,11 @@ export default function Firma() {
       ...defaultCompanyData,
       ...company,
       zaposleni:
-        company?.zaposleni.filter((zaposleni: TODO_ANY_TYPE) => zaposleni.id !== row.original.id) ||
-        [],
+        company?.zaposleni.filter(
+          (zaposleni: TODO_ANY_TYPE) => zaposleni.ID_kontakt_osoba !== row.original.ID_kontakt_osoba
+        ) || [],
     };
-    updateCompany(company?.id!, updatedCompany);
+    setCompany(updatedCompany);
   };
 
   const [open, setOpen] = useState(false);
@@ -86,14 +98,14 @@ export default function Firma() {
 
   const handleZaposleniSubmit = (zaposleniData: Zaposleni) => {
     const existingZaposleni = company?.zaposleni.find(
-      (zaposleni: Zaposleni) => zaposleni.id === zaposleniData.id
+      (zaposleni: Zaposleni) => zaposleni.ID_kontakt_osoba === zaposleniData.ID_kontakt_osoba
     );
     let updatedZaposleni;
 
     if (existingZaposleni) {
       // If the zaposleni exists, update it
       updatedZaposleni = company?.zaposleni.map((zaposleni: Zaposleni) => {
-        if (zaposleni.id === zaposleniData.id) {
+        if (zaposleni.ID_kontakt_osoba === zaposleniData.ID_kontakt_osoba) {
           return zaposleniData;
         }
         return zaposleni;
@@ -110,12 +122,14 @@ export default function Firma() {
       ...company,
       zaposleni: updatedZaposleni || [],
     };
-    updateCompany(company?.id!, updatedCompany);
+
+    setCompany(updatedCompany);
     setOpen(false);
   };
 
   // TODO: fix this to be like company table
   function renderZaposleniTable(): React.ReactNode {
+    console.log("company in firma zaposleni table ,", company);
     return (
       <MaterialReactTable
         columns={myZaposleniColumns}
@@ -150,12 +164,12 @@ export default function Firma() {
 
   return (
     <>
-      <h1>Firma: {company?.naziv}</h1>
+      <h1>Firma: {company?.naziv_firme}</h1>
       <PrijavaOdjava
         prijavljeniValue={company?.zeleMarketingMaterijal || true}
         prijavaChange={handlePrijavaChange}
       ></PrijavaOdjava>
-      <CompanyForm data={company}></CompanyForm>
+      <CompanyForm inputCompany={company}></CompanyForm>
       <Button
         sx={{ my: 2 }}
         size="large"
@@ -176,7 +190,7 @@ export default function Firma() {
         onClose={handleClose}
         onSubmit={handleZaposleniSubmit}
       />
-      <AttendedSeminarsAccordion firma={company as TODO_ANY_TYPE}></AttendedSeminarsAccordion>
+      {/* <AttendedSeminarsAccordion firma={company satisfies Company}></AttendedSeminarsAccordion> */}
     </>
   );
 }

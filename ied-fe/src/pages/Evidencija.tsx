@@ -1,7 +1,7 @@
 import { Add } from "@mui/icons-material";
 import { Fab } from "@mui/material";
 import { useState } from "react";
-import CompanyForm from "../components/Forms/CompanyForm";
+// import CompanyForm from "../components/Forms/CompanyForm";
 import MyDialog from "../components/MyDialog/MyDialog";
 import PageTitle from "../components/PageTitle";
 
@@ -17,7 +17,7 @@ export default function Evidencija() {
         <Add />
       </Fab>
       <MyDialog open={open} handleClose={handleClose}>
-        <CompanyForm></CompanyForm>
+        {/* <CompanyForm></CompanyForm> */}
       </MyDialog>
     </>
   );

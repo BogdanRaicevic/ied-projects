@@ -1,3 +1,3 @@
-import CompanyForm from "./CompanyForm";
+import { CompanyForm } from "./CompanyForm";
 
 export default CompanyForm;

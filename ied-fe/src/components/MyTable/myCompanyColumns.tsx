@@ -4,35 +4,27 @@ import { Company, Zaposleni } from "../../schemas/companySchemas";
 import { Link } from "react-router-dom";
 
 export const myCompanyColumns: MRT_ColumnDef<Company>[] = [
-  {
-    header: "Prijavljeni",
-    accessorKey: "zeleMarketingMaterijal",
-    muiTableBodyCellProps: ({ cell }) => ({
-      sx: {
-        backgroundColor: cell.getValue() === true ? "#47e147" : "salmon",
-      },
-    }),
-    Cell: ({ cell }) => <span>{cell.getValue<boolean>() ? "DA" : "Ne"}</span>,
-  },
+  // {
+  //   header: "Prijavljeni",
+  //   accessorKey: "zeleMarketingMaterijal",
+  //   muiTableBodyCellProps: ({ cell }) => ({
+  //     sx: {
+  //       backgroundColor: cell.getValue() === true ? "#47e147" : "salmon",
+  //     },
+  //   }),
+  //   Cell: ({ cell }) => <span>{cell.getValue<boolean>() ? "DA" : "Ne"}</span>,
+  // },
   {
     header: "Naziv kompanije",
-    accessorKey: "naziv",
-    Cell: ({ row }) => {
+    accessorKey: "naziv_firme",
+    Cell: ({ row }: { row: { original: Company } }) => {
       const firma = row.original;
-      return (
-        <Link to={`/Firma`} state={firma}>
-          {firma.naziv}
-        </Link>
-      );
+      return <Link to={`/Firma/${firma.ID_firma}`}>{firma.naziv_firme}</Link>;
     },
   },
   {
-    header: "Sajt",
-    accessorKey: "sajt",
-  },
-  {
     header: "Email",
-    accessorKey: "email",
+    accessorKey: "e_mail",
     enableClickToCopy: true,
     muiCopyButtonProps: {
       fullWidth: true,
@@ -46,16 +38,12 @@ export const myCompanyColumns: MRT_ColumnDef<Company>[] = [
     accessorKey: "adresa",
   },
   {
-    header: "Grad",
-    accessorKey: "grad",
-  },
-  {
-    header: "Opstina",
-    accessorKey: "opstina",
+    header: "Mesto",
+    accessorKey: "mesto",
   },
   {
     header: "Postanski broj",
-    accessorKey: "ptt",
+    accessorKey: "postanski_broj",
   },
   {
     header: "Telefon",
@@ -63,23 +51,15 @@ export const myCompanyColumns: MRT_ColumnDef<Company>[] = [
   },
   {
     header: "Tip firme",
-    accessorKey: "tip",
+    accessorKey: "tip_firme",
   },
   {
     header: "Velicina",
     accessorKey: "velicina",
   },
   {
-    header: "Stanje",
-    accessorKey: "stanje",
-  },
-  {
-    header: "Odjava",
-    id: "odjava",
-  },
-  {
     header: "Komentari",
-    accessorKey: "komentari",
+    accessorKey: "komentar",
   },
 ];
 
@@ -90,7 +70,7 @@ export const myZaposleniColumns: MRT_ColumnDef<Zaposleni>[] = [
   },
   {
     header: "Email",
-    accessorKey: "email",
+    accessorKey: "e_mail",
     enableClickToCopy: true,
     muiCopyButtonProps: {
       fullWidth: true,
@@ -102,20 +82,15 @@ export const myZaposleniColumns: MRT_ColumnDef<Zaposleni>[] = [
     header: "Telefon",
     accessorKey: "telefon",
   },
-  // TODO: there are multiple sertificate numbers
-  // {
-  //   header: "Broj sertifikata",
-  //   accessorKey: "brojSertifikata",
-  // },
   {
     header: "Radna mesta",
-    accessorKey: "radnaMesta",
-    accessorFn: (row) => row.radnaMesta.join(", "),
+    accessorKey: "radno_mesto",
+    accessorFn: (row) => row.radno_mesto,
   },
   {
     header: "Komentari",
-    accessorKey: "komentari",
-    accessorFn: (row) =>
-      row.komentari.substring(0, 100) + (row.komentari.length > 100 ? "..." : ""),
+    accessorKey: "komentar",
+    // accessorFn: (row) =>
+    //   row.komentari.substring(0, 100) + (row.komentari.length > 100 ? "..." : ""),
   },
 ];

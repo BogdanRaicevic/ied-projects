@@ -45,10 +45,10 @@ export function ZaposleniForm({ zaposleni, onSubmit }: ZaposleniFormProps) {
       // Reset form values when zaposleni is undefined
       setValue("ime", "");
       setValue("prezime", "");
-      setValue("email", "");
+      setValue("e_mail", "");
       setValue("telefon", "");
-      setValue("radnaMesta", []);
-      setValue("komentari", "");
+      setValue("radno_mesto", []);
+      setValue("komentar", "");
     }
   }, [zaposleni, setValue]);
 
@@ -73,22 +73,14 @@ export function ZaposleniForm({ zaposleni, onSubmit }: ZaposleniFormProps) {
         helperText={errors.prezime?.message}
       />
       <TextField
-        {...register("email")}
+        {...register("e_mail")}
         sx={{ m: 1 }}
         id="email"
         label="Email"
         variant="outlined"
-        error={Boolean(errors.email)}
-        helperText={errors.email?.message}
+        error={Boolean(errors.e_mail)}
+        helperText={errors.e_mail?.message}
       />
-      {/* <TextField
-        {...register("broj-sertifikata")}
-        sx={{ m: 1 }}
-        id="broj-sertifikata"
-        label="Broj sertifikata"
-        variant="outlined"
-        onChange={handleChange}
-      /> */}
       <TextField
         {...register("telefon")}
         sx={{ m: 1 }}
@@ -100,7 +92,7 @@ export function ZaposleniForm({ zaposleni, onSubmit }: ZaposleniFormProps) {
       />
 
       <Controller
-        name="radnaMesta"
+        name="radno_mesto"
         control={control}
         render={({ field, fieldState: { error } }) => (
           <Autocomplete
@@ -137,14 +129,14 @@ export function ZaposleniForm({ zaposleni, onSubmit }: ZaposleniFormProps) {
       ></Controller>
 
       <TextField
-        {...register("komentari")}
+        {...register("komentar")}
         sx={{ m: 1, width: "98%" }}
         id="outlined-multiline-static"
         label="Komentari"
         multiline
         rows={4}
-        error={Boolean(errors.komentari)}
-        helperText={errors.komentari?.message}
+        error={Boolean(errors.komentar)}
+        helperText={errors.komentar?.message}
       ></TextField>
       <Button sx={{ m: 1 }} variant="contained" type="submit">
         Sacuvaj zaposlenog
