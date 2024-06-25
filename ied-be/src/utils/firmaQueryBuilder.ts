@@ -6,7 +6,6 @@ type FirmaQueryParams = {
   pib?: string;
   email?: string;
   mesto?: string[];
-  postanski_broj?: string;
   delatnost?: string[];
   tip_firme?: string[];
   radno_mesto?: string[];

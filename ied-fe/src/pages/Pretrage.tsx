@@ -122,10 +122,9 @@ export default function Pretrage() {
       >
         <Grid mt={4} maxWidth="lg">
           <TextField label="Ime Firme" />
-          <TextField label="PIB" />
-          <TextField label="Domen/email" />
-          <TextField label="Grad" />
-          <TextField label="Postanski broj" />
+          <TextField label="PIB / Matični broj" />
+          <TextField label="Domen / email" />
+          <TextField label="Mesto" />
         </Grid>
         <Button variant="contained" sx={{ m: 1, mb: 4 }} size="large" color="info">
           Pretrazi

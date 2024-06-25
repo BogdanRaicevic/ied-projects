@@ -74,12 +74,6 @@ export const companyFormMetadata: Metadata[] = [
     inputType: InputTypesSchema.enum.Text,
   },
   {
-    key: "postanski_broj",
-    label: "Postanski broj",
-    inputAdornment: <Approval />,
-    inputType: InputTypesSchema.enum.Text,
-  },
-  {
     key: "tip_firme",
     label: "Tip firme",
     inputAdornment: <SwitchAccount />,
