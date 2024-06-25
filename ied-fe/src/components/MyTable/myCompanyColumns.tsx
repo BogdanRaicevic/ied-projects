@@ -56,6 +56,16 @@ export const myCompanyColumns: MRT_ColumnDef<Company>[] = [
   {
     header: "Komentari",
     accessorKey: "komentar",
+    muiTableHeadCellProps: {
+      sx: {
+        minWidth: "400px",
+      },
+    },
+    muiTableBodyCellProps: {
+      sx: {
+        whiteSpace: "pre-wrap", // Preserve line breaks and whitespace
+      },
+    },
   },
 ];
 
@@ -86,6 +96,16 @@ export const myZaposleniColumns: MRT_ColumnDef<Zaposleni>[] = [
   {
     header: "Komentari",
     accessorKey: "komentar",
+    muiTableHeadCellProps: {
+      sx: {
+        minWidth: "400px",
+      },
+    },
+    muiTableBodyCellProps: {
+      sx: {
+        whiteSpace: "pre-wrap", // Preserve line breaks and whitespace
+      },
+    },
     // accessorFn: (row) =>
     //   row.komentari.substring(0, 100) + (row.komentari.length > 100 ? "..." : ""),
   },
