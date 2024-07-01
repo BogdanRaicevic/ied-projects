@@ -33,12 +33,18 @@ export const updateById = async (
 
 export const search = async (
   queryParameters: FilterQuery<FirmaType>,
-  page: number = 1,
-  pageSize: number = 100
+  pageIndex: number = 1,
+  pageSize: number = 10
 ) => {
   console.log(queryParameters);
-  const skip = (page - 1) * pageSize;
+  const skip = (pageIndex - 1) * pageSize;
   const mongoQuery = createFirmaQuery(queryParameters);
 
-  return Firma.find(mongoQuery, { zaposleni: 0 }).skip(skip).limit(pageSize).cursor();
+  const totalDocuments = await Firma.countDocuments();
+
+  return {
+    courser: Firma.find(mongoQuery, { zaposleni: 0 }).skip(skip).limit(pageSize).cursor(),
+    totalDocuments,
+    totalPages: Math.ceil(totalDocuments / pageSize),
+  };
 };

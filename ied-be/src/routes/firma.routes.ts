@@ -1,33 +1,35 @@
 import { Router, Request, Response, NextFunction } from "express";
 import { FilterQuery } from "mongoose";
 
-import {
-  findById,
-  deleteById,
-  create,
-  updateById,
-  search,
-  findByFirmaId,
-} from "../services/firma.service";
+import { deleteById, create, updateById, search, findByFirmaId } from "../services/firma.service";
 import { FirmaType } from "../models/firma.model";
 
 const router = Router();
 
 router.post("/search", async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const { page = 1, pageSize = 100, ...query } = req.body;
-    const cursor = await search(query as FilterQuery<FirmaType>, Number(page), Number(pageSize));
+    console.log("req body", req.body);
+    const { pageIndex = 1, pageSize = 10, ...query } = req.body;
+    const paginationResult = await search(
+      query as FilterQuery<FirmaType>,
+      Number(pageIndex),
+      Number(pageSize)
+    );
 
     const results: FirmaType[] = [];
-    cursor.on("data", (doc) => {
+    paginationResult.courser.on("data", (doc) => {
       results.push(doc);
     });
 
-    cursor.on("end", () => {
-      res.json(results);
+    paginationResult.courser.on("end", () => {
+      res.json({
+        firmas: results,
+        totalPages: paginationResult.totalPages,
+        totalDocuments: paginationResult.totalDocuments,
+      });
     });
 
-    cursor.on("error", (error) => {
+    paginationResult.courser.on("error", (error) => {
       console.error(error);
       res.status(500).json({ message: "Internal server error" });
     });

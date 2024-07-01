@@ -5,30 +5,8 @@ import { fakeRadnaMesta } from "../fakeData/companyData";
 import Grid from "@mui/material/Unstable_Grid2";
 import { Button, TextField } from "@mui/material";
 import { Box } from "@mui/system";
-// import { useCompanyStore } from "../store";
-import { fetchFirmaPretrageData } from "../api/firma.api";
-import { useEffect, useState } from "react";
 
 export default function Pretrage() {
-  const [firmasData, setFirmasData] = useState([]);
-  const [_loading, setLoading] = useState(true);
-  const [_error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    const loadFirmasData = async () => {
-      try {
-        const data = await fetchFirmaPretrageData();
-        setFirmasData(data);
-      } catch (error) {
-        setError("Failed to fetch companies data");
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    loadFirmasData();
-  }, []);
-
   const gradovi = [
     { parent: "SVI Gradovi" },
     {
@@ -130,7 +108,7 @@ export default function Pretrage() {
           Pretrazi
         </Button>
       </Box>
-      <MyTable data={firmasData}></MyTable>
+      <MyTable></MyTable>
     </>
   );
 }
