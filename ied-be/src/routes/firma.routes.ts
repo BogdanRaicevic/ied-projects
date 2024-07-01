@@ -1,8 +1,16 @@
 import { Router, Request, Response, NextFunction } from "express";
 import { FilterQuery } from "mongoose";
 
-import { deleteById, create, updateById, search, findByFirmaId } from "../services/firma.service";
+import {
+  deleteById,
+  create,
+  updateById,
+  search,
+  findByFirmaId,
+  exportSearchedFirmaData,
+} from "../services/firma.service";
 import { FirmaType } from "../models/firma.model";
+import path from "path";
 
 const router = Router();
 
@@ -35,6 +43,28 @@ router.post("/search", async (req: Request, res: Response, next: NextFunction) =
     });
   } catch (error) {
     next(error);
+  }
+});
+
+router.post("/export-firma-data", async (req, res) => {
+  const { queryParameters, filePath } = req.body;
+
+  if (!filePath) {
+    return res.status(400).send("File path is required");
+  }
+  try {
+    await exportSearchedFirmaData(queryParameters, filePath);
+    res.download(filePath, "firma_data.csv", (err) => {
+      if (err) {
+        console.error("Error downloading the file:", err);
+        res.status(500).send("Error downloading the file");
+      } else {
+        console.log("File downloaded successfully");
+      }
+    });
+  } catch (error) {
+    console.error("Error exporting firma data:", error);
+    res.status(500).send("Error exporting firma data");
   }
 });
 

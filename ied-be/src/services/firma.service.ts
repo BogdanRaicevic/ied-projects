@@ -1,6 +1,7 @@
 import { FilterQuery } from "mongoose";
 import { FirmaType, Firma } from "../models/firma.model";
 import { createFirmaQuery } from "../utils/firmaQueryBuilder";
+import { createWriteStream } from "fs";
 
 export const findByFirmaId = async (ID_firma: number) => {
   try {
@@ -47,4 +48,50 @@ export const search = async (
     totalDocuments,
     totalPages: Math.ceil(totalDocuments / pageSize),
   };
+};
+
+export const exportSearchedFirmaData = async (
+  queryParameters: FilterQuery<FirmaType>,
+  filePath: string
+) => {
+  const mongoQuery = {
+    ...createFirmaQuery(queryParameters),
+    // e_mail: { $ne: "nema" }, // Exclude documents where e_mail is "nema"
+  };
+
+  console.log("mongo query: ", mongoQuery);
+
+  // Create a readable stream from the database with only "naziv_firme" and "e_mail" properties
+  const cursor = Firma.find(mongoQuery, { naziv_firme: 1, e_mail: 1, _id: 0 }).cursor();
+
+  // Create a writable stream to a file
+  const writableStream = createWriteStream(filePath);
+
+  // Write CSV header
+  writableStream.write("naziv_firme,e_mail\n");
+
+  // Write the data to the writable stream
+  cursor.on("data", (doc) => {
+    const plainObject = doc.toObject();
+    const csvRow = `${plainObject.naziv_firme},${plainObject.e_mail}\n`;
+    writableStream.write(csvRow);
+  });
+
+  return new Promise<void>((resolve, reject) => {
+    cursor.on("end", () => {
+      writableStream.end();
+      console.log("Data has been written to the file successfully.");
+      resolve();
+    });
+
+    cursor.on("error", (err) => {
+      console.error("Error reading data from the database:", err);
+      reject(err);
+    });
+
+    writableStream.on("error", (err) => {
+      console.error("Error writing data to the file:", err);
+      reject(err);
+    });
+  });
 };
