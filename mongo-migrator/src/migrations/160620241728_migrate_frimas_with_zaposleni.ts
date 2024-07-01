@@ -1,10 +1,10 @@
-import { RowDataPacket } from "mysql2/promise";
-import { mongoDbConnection, mysqlConnection } from "../config";
+import { RowDataPacket } from 'mysql2/promise';
+import { mongoDbConnection, mysqlConnection } from '../config';
 
 export const up = async () => {
   const monogDb = await mongoDbConnection();
   const mysqlDb = await mysqlConnection();
-  const mongoCollectionName = "firmas";
+  const mongoCollectionName = 'firmas';
 
   try {
     // Check if the collection exists
@@ -77,7 +77,7 @@ export const up = async () => {
 
     await mongoCollection.insertMany(dataToSave);
   } catch (error) {
-    console.error("Error during migration:", error);
+    console.error('Error during migration:', error);
   }
 };
 
@@ -120,8 +120,8 @@ function moveZaposleniToArray(firma: RowDataPacket) {
   firma.zaposleni = [];
 
   Object.keys(firma).forEach((key) => {
-    if (key.startsWith("ko_")) {
-      const keyNameWithout_ko_ = key.slice(2);
+    if (key.startsWith('ko_')) {
+      const keyNameWithout_ko_ = key.slice(3);
       kontanktOsoba[keyNameWithout_ko_] = firma[key];
 
       delete firma[key];
