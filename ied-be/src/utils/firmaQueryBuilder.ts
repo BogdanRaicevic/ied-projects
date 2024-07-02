@@ -24,19 +24,19 @@ export function createFirmaQuery(params: FirmaQueryParams): FilterQuery<FirmaTyp
   if (params.email) {
     query.e_mail = { $regex: params.email, $options: "i" }; // Case-insensitive partial match
   }
-  if (params.delatnost && Array.isArray(params.mesto)) {
-    query.delatnost = { $in: params.delatnost };
+  if (params.delatnost) {
+    query.delatnost = { $regex: params.delatnost, $options: "i" };
   }
-  if (params.mesto && Array.isArray(params.mesto)) {
-    query.grad = { $in: params.mesto }; // Case-insensitive partial match
+  if (params.mesto) {
+    query.mesto = { $in: params.mesto }; // Case-insensitive partial match
   }
-  if (params.tip_firme && Array.isArray(params.tip_firme)) {
+  if (params.tip_firme) {
     query.tip_firme = { $in: params.tip_firme };
   }
-  if (params.radno_mesto && Array.isArray(params.radno_mesto)) {
+  if (params.radno_mesto) {
     query.radno_mesto = { $in: params.radno_mesto };
   }
-  if (params.velicina && Array.isArray(params.velicina)) {
+  if (params.velicina) {
     query.velicina = { $in: params.velicina };
   }
 

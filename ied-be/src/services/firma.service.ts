@@ -56,7 +56,7 @@ export const exportSearchedFirmaData = async (
 ) => {
   const mongoQuery = {
     ...createFirmaQuery(queryParameters),
-    // e_mail: { $ne: "nema" }, // Exclude documents where e_mail is "nema"
+    e_mail: { $ne: "nema" }, // Exclude documents where e_mail is "nema"
   };
 
   console.log("mongo query: ", mongoQuery);
