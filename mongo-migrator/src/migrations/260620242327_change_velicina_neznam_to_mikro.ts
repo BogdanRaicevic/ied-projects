@@ -7,10 +7,10 @@ export const up = async () => {
   try {
     const mongoCollection = mongoDb.collection(mongoCollectionName);
 
-    // Update documents where velicina is "neznam" to "mikro"
+    // Update documents where velicina is "neznam" to "Mikro"
     const updateResult = await mongoCollection.updateMany(
       { velicina: 'neznam' },
-      { $set: { velicina: 'mikro' } }
+      { $set: { velicina: 'Mikro' } }
     );
 
     console.log(

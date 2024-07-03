@@ -1,7 +1,7 @@
 import { Schema, model } from "mongoose";
 
 const velicina = {
-  mikro: "mikro",
+  Mikro: "Mikro",
   mala: "Mala",
   srednja: "Srednja",
   velika: "Velika",
