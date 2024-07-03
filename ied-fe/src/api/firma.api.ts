@@ -30,3 +30,17 @@ export const fetchSingleFirmaData = async (ID_firma: number): Promise<Company | 
     throw error;
   }
 };
+
+export const exportData = async (queryParameters: any, exportSubject: "firma" | "zaposleni") => {
+  try {
+    const body = {
+      queryParameters,
+    };
+
+    const response = await axios.post(`${API_URL}/api/firma/export-${exportSubject}-data`, body);
+    return response.data;
+  } catch (error) {
+    console.error("Error exporting firma data:", error);
+    throw error;
+  }
+};

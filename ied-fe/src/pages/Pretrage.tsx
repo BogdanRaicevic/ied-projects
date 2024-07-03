@@ -5,6 +5,7 @@ import { fakeRadnaMesta } from "../fakeData/companyData";
 import Grid from "@mui/material/Unstable_Grid2";
 import { Button, TextField } from "@mui/material";
 import { Box } from "@mui/system";
+import SaveDataButton from "../components/SaveDataButton/SaveDataButton";
 
 export default function Pretrage() {
   const gradovi = [
@@ -90,6 +91,19 @@ export default function Pretrage() {
       <Grid container spacing={2}>
         {components}
       </Grid>
+
+      <SaveDataButton
+        exportSubject="firma"
+        fileName="pretrage_firma"
+        // TODO: fix hardcoded query params
+        queryParameters={{ pib: "101", delatnost: "Prehrambena industrija" }}
+      ></SaveDataButton>
+      <SaveDataButton
+        exportSubject="zaposleni"
+        fileName="pretrage_zaposleni"
+        // TODO: fix hardcoded query params
+        queryParameters={{ pib: "101", delatnost: "Prehrambena industrija" }}
+      ></SaveDataButton>
       <Box
         component="form"
         sx={{

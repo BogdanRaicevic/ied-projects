@@ -8,9 +8,9 @@ import {
   search,
   findByFirmaId,
   exportSearchedFirmaData,
+  exportSearchedZaposleniData,
 } from "../services/firma.service";
 import { FirmaType } from "../models/firma.model";
-import path from "path";
 
 const router = Router();
 
@@ -47,24 +47,27 @@ router.post("/search", async (req: Request, res: Response, next: NextFunction) =
 });
 
 router.post("/export-firma-data", async (req, res) => {
-  const { queryParameters, filePath } = req.body;
+  const { queryParameters } = req.body;
 
-  if (!filePath) {
-    return res.status(400).send("File path is required");
-  }
   try {
-    await exportSearchedFirmaData(queryParameters, filePath);
-    res.download(filePath, "firma_data.csv", (err) => {
-      if (err) {
-        console.error("Error downloading the file:", err);
-        res.status(500).send("Error downloading the file");
-      } else {
-        console.log("File downloaded successfully");
-      }
-    });
+    const data = await exportSearchedFirmaData(queryParameters);
+
+    res.send(data);
   } catch (error) {
     console.error("Error exporting firma data:", error);
     res.status(500).send("Error exporting firma data");
+  }
+});
+
+router.post("/export-zaposleni-data", async (req, res) => {
+  const { queryParameters } = req.body;
+  try {
+    const data = await exportSearchedZaposleniData(queryParameters);
+
+    res.send(data);
+  } catch (error) {
+    console.error("Error exporting zaposleni data:", error);
+    res.status(500).send("Error exporting zaposleni data");
   }
 });
 

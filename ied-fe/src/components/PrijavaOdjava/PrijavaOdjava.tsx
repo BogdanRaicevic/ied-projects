@@ -1,7 +1,7 @@
 import { Stack } from "@mui/system";
 import { Switch, Typography } from "@mui/material";
 
-export default function ({
+export default function PrijavaOdjava({
   prijavljeniValue,
   prijavaChange,
 }: {
