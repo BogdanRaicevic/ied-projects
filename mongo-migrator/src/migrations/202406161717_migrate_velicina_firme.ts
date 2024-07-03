@@ -24,8 +24,15 @@ export const up = async () => {
     );
     console.log(`Fetched ${rows.length} rows from MySQL`);
 
-    // // Insert data into MongoDB
-    const result = await mongoCollection.insertMany(rows);
+    const transformedRows = rows.map((row) => {
+      if (row.velicina === 'neznam') {
+        row.velicina = 'Mikro';
+      }
+      return row;
+    });
+
+    // Insert data into MongoDB
+    const result = await mongoCollection.insertMany(transformedRows);
     console.log(`Inserted ${result.insertedCount} documents into MongoDB`);
   } catch (error) {
     console.error('Error during migration:', error);
