@@ -5,11 +5,11 @@ const router = Router();
 
 router.get("/", async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const radnaMesta = await getAllRadnaMesta();
-    if (!radnaMesta) {
+    const result = await getAllRadnaMesta();
+    if (!result) {
       return res.status(404).send("Radna mesta not found");
     }
-    res.json(radnaMesta);
+    res.json(result);
   } catch (error) {
     next(error);
   }
