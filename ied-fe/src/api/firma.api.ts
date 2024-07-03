@@ -1,8 +1,6 @@
 import axios from "axios";
 import { Company } from "../schemas/companySchemas";
-
-// TODO: move to env file
-const API_URL = "http://localhost:8000"; // Replace with your backend URL
+import { env } from "../utils/envVariables";
 
 export const fetchFirmaPretrageData = async (pageSize: number, pageIndex: number) => {
   try {
@@ -13,7 +11,7 @@ export const fetchFirmaPretrageData = async (pageSize: number, pageIndex: number
 
     const response: {
       data: { firmas: any[]; totalPages: number; totalDocuments: number };
-    } = await axios.post(`${API_URL}/api/firma/search`, body);
+    } = await axios.post(`${env.beURL}/api/firma/search`, body);
     return response.data;
   } catch (error) {
     console.error("Error fetching firma data:", error);
@@ -23,7 +21,7 @@ export const fetchFirmaPretrageData = async (pageSize: number, pageIndex: number
 
 export const fetchSingleFirmaData = async (ID_firma: number): Promise<Company | null> => {
   try {
-    const response = await axios.get(`${API_URL}/api/firma/${ID_firma}`);
+    const response = await axios.get(`${env.beURL}/api/firma/${ID_firma}`);
     return response.data;
   } catch (error) {
     console.error("Error fetching firma data:", error);
@@ -37,7 +35,7 @@ export const exportData = async (queryParameters: any, exportSubject: "firma" | 
       queryParameters,
     };
 
-    const response = await axios.post(`${API_URL}/api/firma/export-${exportSubject}-data`, body);
+    const response = await axios.post(`${env.beURL}/api/firma/export-${exportSubject}-data`, body);
     return response.data;
   } catch (error) {
     console.error("Error exporting firma data:", error);
