@@ -4,6 +4,7 @@ import express from "express";
 import cors from "cors";
 import firmaRoutes from "./routes/firma.routes";
 import userRoutes from "./routes/user.routes";
+import velicineFirmiRoutes from "./routes/velicina_firme.routes";
 import { errorWrapper } from "./middleware/errorWrapper";
 
 const app = express();
@@ -37,6 +38,7 @@ app.use(express.json());
 
 app.use("/api/user", userRoutes);
 app.use("/api/firma", firmaRoutes);
+app.use("/api/velicine-firmi", velicineFirmiRoutes);
 app.use(errorWrapper);
 
 async function initServer() {

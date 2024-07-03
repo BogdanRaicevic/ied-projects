@@ -1,7 +1,6 @@
 import { FilterQuery } from "mongoose";
 import { FirmaType, Firma } from "../models/firma.model";
 import { createFirmaQuery } from "../utils/firmaQueryBuilder";
-import { createWriteStream } from "fs";
 
 export const findByFirmaId = async (ID_firma: number) => {
   try {
