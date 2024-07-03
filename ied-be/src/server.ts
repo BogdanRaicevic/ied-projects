@@ -5,6 +5,7 @@ import cors from "cors";
 import firmaRoutes from "./routes/firma.routes";
 import userRoutes from "./routes/user.routes";
 import velicineFirmiRoutes from "./routes/velicina_firme.routes";
+import radnaMestaRoutes from "./routes/radna_mesta.routes";
 import { errorWrapper } from "./middleware/errorWrapper";
 
 const app = express();
@@ -39,6 +40,7 @@ app.use(express.json());
 app.use("/api/user", userRoutes);
 app.use("/api/firma", firmaRoutes);
 app.use("/api/velicine-firmi", velicineFirmiRoutes);
+app.use("/api/radna-mesta", radnaMestaRoutes);
 app.use(errorWrapper);
 
 async function initServer() {
