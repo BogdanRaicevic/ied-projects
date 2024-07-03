@@ -3,7 +3,6 @@ import { connectDB } from "./database/db";
 import express from "express";
 import cors from "cors";
 import firmaRoutes from "./routes/firma.routes";
-import userRoutes from "./routes/user.routes";
 import velicineFirmiRoutes from "./routes/velicina_firme.routes";
 import radnaMestaRoutes from "./routes/radna_mesta.routes";
 import { errorWrapper } from "./middleware/errorWrapper";
@@ -37,7 +36,6 @@ app.use(express.json());
 
 // Wrap the initialization logic in an async function
 
-app.use("/api/user", userRoutes);
 app.use("/api/firma", firmaRoutes);
 app.use("/api/velicine-firmi", velicineFirmiRoutes);
 app.use("/api/radna-mesta", radnaMestaRoutes);
