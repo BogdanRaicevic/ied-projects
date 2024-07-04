@@ -7,7 +7,7 @@ type FirmaQueryParams = {
   email?: string;
   mesto?: string[];
   delatnost?: string[];
-  tip_firme?: string[];
+  tipoviFirme?: string[];
   radnaMesta?: string[];
   velicineFirmi?: string[];
 };
@@ -31,8 +31,8 @@ export function createFirmaQuery(params: FirmaQueryParams): FilterQuery<FirmaTyp
   if (params.mesto) {
     query.mesto = { $in: params.mesto }; // Case-insensitive partial match
   }
-  if (params.tip_firme) {
-    query.tip_firme = { $in: params.tip_firme };
+  if (Array.isArray(params.tipoviFirme) && params.tipoviFirme.length > 0) {
+    query.tip_firme = { $in: params.tipoviFirme };
   }
 
   // NOTE: This affects both firma and zaposleni search

@@ -9,13 +9,16 @@ import CheckboxList from "../components/CheckboxList/CheckboxList";
 import { useEffect, useState } from "react";
 import { fetchAllVelicineFirme } from "../api/velicina_firme.api";
 import { fetchAllRadnaMesta } from "../api/radna_mesto.api";
+import { fetchAllTipoviFirme } from "../api/tip_firme.api";
 
 export default function Pretrage() {
   const [velicineFirmi, setVelicineFirmi] = useState<string[]>([]);
   const [radnaMesta, setRadnaMesta] = useState<string[]>([]);
+  const [tipoviFirme, setTipoviFirme] = useState<string[]>([]);
 
   const [checkedVelicineFirmi, setCheckedVelicineFirmi] = useState<string[]>([]);
   const [checkedRadnaMesta, setCheckedRadnaMesta] = useState<string[]>([]);
+  const [checkedTipFirme, setCheckedTipFirme] = useState<string[]>([]);
 
   const gradovi = [
     { parent: "SVI Gradovi" },
@@ -64,16 +67,9 @@ export default function Pretrage() {
     },
   ];
 
-  const tipoviFirmi = [
-    {
-      parent: "Tip firme",
-      children: ["Doo", "Ado", "jkp", "inostranstvo", "jp", "Nvo", "Ad", "Ostalo"],
-    },
-  ];
-
   // merge this into one array
-  const arrayNames = ["gradovi", "delatnosti", "tipoviFirmi"];
-  const arrays = [gradovi, delatnosti, tipoviFirmi];
+  const arrayNames = ["gradovi", "delatnosti"];
+  const arrays = [gradovi, delatnosti];
 
   const components = arrays.map((array, index) => {
     return (
@@ -94,6 +90,9 @@ export default function Pretrage() {
 
       const radnaMesta = await fetchAllRadnaMesta();
       setRadnaMesta(radnaMesta);
+
+      const tipoviFirme = await fetchAllTipoviFirme();
+      setTipoviFirme(tipoviFirme);
     };
 
     fetchData();
@@ -102,9 +101,9 @@ export default function Pretrage() {
   return (
     <>
       <PageTitle title={"Pretrage"} />
-      {/* <Grid container spacing={2}>
+      <Grid container spacing={2}>
         {components}
-      </Grid> */}
+      </Grid>
 
       <CheckboxList
         data={velicineFirmi}
@@ -116,6 +115,11 @@ export default function Pretrage() {
         subheader="Radna Mesta"
         onCheckedChange={setCheckedRadnaMesta}
       ></CheckboxList>
+      <CheckboxList
+        data={tipoviFirme}
+        subheader="Tip Firme"
+        onCheckedChange={setCheckedTipFirme}
+      ></CheckboxList>
 
       <SaveDataButton
         exportSubject="firma"
@@ -126,6 +130,7 @@ export default function Pretrage() {
           delatnost: "Prehrambena industrija",
           velicineFirmi: checkedVelicineFirmi,
           radnaMesta: checkedRadnaMesta,
+          tipoviFirme: checkedTipFirme,
         }}
       ></SaveDataButton>
       <SaveDataButton
