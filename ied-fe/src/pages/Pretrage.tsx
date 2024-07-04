@@ -27,37 +27,37 @@ export default function Pretrage() {
   const [checkedTipFirme, setCheckedTipFirme] = useState<string[]>([]);
   const [checkedDelatnost, setCheckedDelatnost] = useState<string[]>([]);
 
-  const gradovi = [
-    { parent: "SVI Gradovi" },
-    {
-      parent: "Aleksinac",
-      children: ["Aleksinacki rudnik", "Loćika", "Subotinac", "Trnjane"],
-    },
-    {
-      parent: "Aleksandrovac",
-      children: ["Gornji Stupanj", "Tranavci", "Sljivovo"],
-    },
-    {
-      parent: "Beograd",
-      children: [
-        "Novi Beograd",
-        "Zemun",
-        "Borca",
-        "Palilula",
-        "Vozdovac",
-        "Rakovica",
-        "Zvezdara",
-        "Savski venac",
-        "Stari grad",
-        "Cukarica",
-        "Vracar",
-      ],
-    },
-  ];
+  // const gradovi = [
+  //   { parent: "SVI Gradovi" },
+  //   {
+  //     parent: "Aleksinac",
+  //     children: ["Aleksinacki rudnik", "Loćika", "Subotinac", "Trnjane"],
+  //   },
+  //   {
+  //     parent: "Aleksandrovac",
+  //     children: ["Gornji Stupanj", "Tranavci", "Sljivovo"],
+  //   },
+  //   {
+  //     parent: "Beograd",
+  //     children: [
+  //       "Novi Beograd",
+  //       "Zemun",
+  //       "Borca",
+  //       "Palilula",
+  //       "Vozdovac",
+  //       "Rakovica",
+  //       "Zvezdara",
+  //       "Savski venac",
+  //       "Stari grad",
+  //       "Cukarica",
+  //       "Vracar",
+  //     ],
+  //   },
+  // ];
 
   // merge this into one array
-  const arrayNames = ["gradovi"];
-  const arrays = [gradovi];
+  // const arrayNames = ["gradovi"];
+  // const arrays = [gradovi];
 
   // const components = arrays.map((array, index) => {
   //   return (
@@ -173,7 +173,7 @@ export default function Pretrage() {
         Pretrazi
       </Button>
 
-      <MyTable></MyTable>
+      {/* <MyTable></MyTable> */}
     </>
   );
 }

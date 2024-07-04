@@ -1,6 +1,5 @@
 import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
-import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import Checkbox from "@mui/material/Checkbox";
 import { useEffect, useState } from "react";
@@ -36,20 +35,17 @@ export default function CheckboxList({ data, subheader, onCheckedChange }: Check
 
   const renderRow = ({ index, style }: ListChildComponentProps) => {
     const value = data[index];
-    const labelId = `checkbox-list-label-${value}`;
+    const labelId = `checkbox-${subheader}-${value}`;
 
     return (
       <ListItem key={value} style={style} disablePadding>
         <ListItemButton onClick={handleToggle(index)} dense>
-          <ListItemIcon>
-            <Checkbox
-              edge="start"
-              checked={checked.indexOf(index) !== -1}
-              tabIndex={-1}
-              disableRipple
-              inputProps={{ "aria-labelledby": labelId }}
-            />
-          </ListItemIcon>
+          <Checkbox
+            edge="start"
+            checked={checked.indexOf(index) !== -1}
+            disableRipple
+            id={labelId}
+          />
           <ListItemText id={labelId} primary={`${value}`} />
         </ListItemButton>
       </ListItem>
