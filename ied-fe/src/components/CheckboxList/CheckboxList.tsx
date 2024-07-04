@@ -5,8 +5,9 @@ import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import Checkbox from "@mui/material/Checkbox";
 import { useState } from "react";
+import { ListSubheader } from "@mui/material";
 
-export default function CheckboxList({ data }: { data: string[] }) {
+export default function CheckboxList({ data, subheader }: { data: string[]; subheader: string }) {
   const [checked, setChecked] = useState<number[]>([]);
 
   const handleToggle = (value: number) => () => {
@@ -23,7 +24,10 @@ export default function CheckboxList({ data }: { data: string[] }) {
   };
 
   return (
-    <List sx={{ width: "100%", maxWidth: 360 }}>
+    <List
+      sx={{ width: "100%", maxWidth: 360, maxHeight: 400, overflow: "auto" }}
+      subheader={<ListSubheader>{subheader}</ListSubheader>}
+    >
       {data.map((value, index) => {
         const labelId = `checkbox-list-label-${value}`;
 

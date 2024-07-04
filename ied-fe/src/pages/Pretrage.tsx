@@ -1,7 +1,6 @@
 import MyTable from "../components/MyTable";
 import PageTitle from "../components/PageTitle";
 import IndeterminateCheckbox from "../components/IndeterminateCheckbox";
-import { fakeRadnaMesta } from "../fakeData/companyData";
 import Grid from "@mui/material/Unstable_Grid2";
 import { Button, TextField } from "@mui/material";
 import { Box } from "@mui/system";
@@ -9,9 +8,11 @@ import SaveDataButton from "../components/SaveDataButton/SaveDataButton";
 import CheckboxList from "../components/CheckboxList/CheckboxList";
 import { useEffect, useState } from "react";
 import { fetchAllVelicineFirme } from "../api/velicina_firme.api";
+import { fetchAllRadnaMesta } from "../api/radna_mesto.api";
 
 export default function Pretrage() {
   const [velicineFirmi, setVelicineFirmi] = useState<string[]>([]);
+  const [radnaMesta, setRadnaMesta] = useState<string[]>([]);
 
   const gradovi = [
     { parent: "SVI Gradovi" },
@@ -67,11 +68,9 @@ export default function Pretrage() {
     },
   ];
 
-  const velicineFirmi2 = ["Mikro", "Mala", "Srednja", "Velika", "Korporacija"];
-
   // merge this into one array
-  const arrayNames = ["gradovi", "delatnosti", "tipoviFirmi", "radnaMesta"];
-  const arrays = [gradovi, delatnosti, tipoviFirmi, fakeRadnaMesta];
+  const arrayNames = ["gradovi", "delatnosti", "tipoviFirmi"];
+  const arrays = [gradovi, delatnosti, tipoviFirmi];
 
   const components = arrays.map((array, index) => {
     return (
@@ -87,8 +86,11 @@ export default function Pretrage() {
 
   useEffect(() => {
     const fetchData = async () => {
-      const data = await fetchAllVelicineFirme();
-      setVelicineFirmi(data);
+      const velicineFirme = await fetchAllVelicineFirme();
+      setVelicineFirmi(velicineFirme);
+
+      const radnaMesta = await fetchAllRadnaMesta();
+      setRadnaMesta(radnaMesta);
     };
 
     fetchData();
@@ -101,7 +103,8 @@ export default function Pretrage() {
         {components}
       </Grid>
 
-      <CheckboxList data={velicineFirmi}></CheckboxList>
+      <CheckboxList data={velicineFirmi} subheader="Veličine Firmi"></CheckboxList>
+      <CheckboxList data={radnaMesta} subheader="Radna Mesta"></CheckboxList>
 
       <SaveDataButton
         exportSubject="firma"
