@@ -1,6 +1,6 @@
 import MyTable from "../components/MyTable";
 import PageTitle from "../components/PageTitle";
-import IndeterminateCheckbox from "../components/IndeterminateCheckbox";
+// import IndeterminateCheckbox from "../components/IndeterminateCheckbox";
 import Grid from "@mui/material/Unstable_Grid2";
 import { Button, TextField } from "@mui/material";
 import { Box } from "@mui/system";
@@ -59,17 +59,17 @@ export default function Pretrage() {
   const arrayNames = ["gradovi"];
   const arrays = [gradovi];
 
-  const components = arrays.map((array, index) => {
-    return (
-      <Grid key={arrayNames[index]} xs={12} sm={2}>
-        <div style={{ maxHeight: "300px", overflow: "auto" }}>
-          {array.map((item, index) => (
-            <IndeterminateCheckbox key={arrayNames[index]} options={item} />
-          ))}
-        </div>
-      </Grid>
-    );
-  });
+  // const components = arrays.map((array, index) => {
+  //   return (
+  //     <Grid key={arrayNames[index]} xs={12} sm={2}>
+  //       <div style={{ maxHeight: "300px", overflow: "auto" }}>
+  //         {array.map((item, index) => (
+  //           <IndeterminateCheckbox key={arrayNames[index]} options={item} />
+  //         ))}
+  //       </div>
+  //     </Grid>
+  //   );
+  // });
 
   useEffect(() => {
     const fetchData = async () => {
@@ -92,9 +92,9 @@ export default function Pretrage() {
   return (
     <>
       <PageTitle title={"Pretrage"} />
-      <Grid container spacing={2}>
+      {/* <Grid container spacing={2}>
         {components}
-      </Grid>
+      </Grid> */}
 
       <CheckboxList
         data={velicineFirmi}
