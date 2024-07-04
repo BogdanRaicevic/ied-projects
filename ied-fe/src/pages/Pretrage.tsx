@@ -10,15 +10,18 @@ import { useEffect, useState } from "react";
 import { fetchAllVelicineFirme } from "../api/velicina_firme.api";
 import { fetchAllRadnaMesta } from "../api/radna_mesto.api";
 import { fetchAllTipoviFirme } from "../api/tip_firme.api";
+import { fetchAllDelatnosti } from "../api/delatnosti.api";
 
 export default function Pretrage() {
   const [velicineFirmi, setVelicineFirmi] = useState<string[]>([]);
   const [radnaMesta, setRadnaMesta] = useState<string[]>([]);
   const [tipoviFirme, setTipoviFirme] = useState<string[]>([]);
+  const [delatnosti, setDelatnosti] = useState<string[]>([]);
 
   const [checkedVelicineFirmi, setCheckedVelicineFirmi] = useState<string[]>([]);
   const [checkedRadnaMesta, setCheckedRadnaMesta] = useState<string[]>([]);
   const [checkedTipFirme, setCheckedTipFirme] = useState<string[]>([]);
+  const [checkedDelatnost, setCheckedDelatnost] = useState<string[]>([]);
 
   const gradovi = [
     { parent: "SVI Gradovi" },
@@ -48,28 +51,9 @@ export default function Pretrage() {
     },
   ];
 
-  const delatnosti = [
-    {
-      parent: "Delatnost",
-      children: [
-        "Advokati",
-        "Arhiv",
-        "Banke",
-        "Proizvodnja",
-        "Trgovina",
-        "Usluge",
-        "Saobracaj",
-        "Poljoprivreda",
-        "Građevinarstvo",
-        "Turizam",
-        "IT",
-      ],
-    },
-  ];
-
   // merge this into one array
-  const arrayNames = ["gradovi", "delatnosti"];
-  const arrays = [gradovi, delatnosti];
+  const arrayNames = ["gradovi"];
+  const arrays = [gradovi];
 
   const components = arrays.map((array, index) => {
     return (
@@ -93,6 +77,9 @@ export default function Pretrage() {
 
       const tipoviFirme = await fetchAllTipoviFirme();
       setTipoviFirme(tipoviFirme);
+
+      const delatnosti = await fetchAllDelatnosti();
+      setDelatnosti(delatnosti);
     };
 
     fetchData();
@@ -120,6 +107,11 @@ export default function Pretrage() {
         subheader="Tip Firme"
         onCheckedChange={setCheckedTipFirme}
       ></CheckboxList>
+      <CheckboxList
+        data={delatnosti}
+        subheader="Delatnost"
+        onCheckedChange={setCheckedDelatnost}
+      ></CheckboxList>
 
       <SaveDataButton
         exportSubject="firma"
@@ -127,10 +119,10 @@ export default function Pretrage() {
         // TODO: fix hardcoded query params
         queryParameters={{
           pib: "101",
-          delatnost: "Prehrambena industrija",
           velicineFirmi: checkedVelicineFirmi,
           radnaMesta: checkedRadnaMesta,
           tipoviFirme: checkedTipFirme,
+          delatnosti: checkedDelatnost,
         }}
       ></SaveDataButton>
       <SaveDataButton
