@@ -65,7 +65,6 @@ export const exportSearchedFirmaData = async (queryParameters: FilterQuery<Firma
   let res = "naziv_firme, e_mail\n";
   cursor.on("data", (doc) => {
     const plainObject = doc.toObject();
-    console.log("plain object", plainObject);
     if (plainObject.e_mail !== "nema" && plainObject.e_mail !== "") {
       res += `${plainObject.naziv_firme},${plainObject.e_mail}\n`;
     }

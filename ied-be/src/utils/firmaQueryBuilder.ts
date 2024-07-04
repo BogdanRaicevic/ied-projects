@@ -8,13 +8,14 @@ type FirmaQueryParams = {
   mesto?: string[];
   delatnost?: string[];
   tip_firme?: string[];
-  radno_mesto?: string[];
-  velicina?: string[];
+  radnaMesta?: string[];
+  velicineFirmi?: string[];
 };
 
 export function createFirmaQuery(params: FirmaQueryParams): FilterQuery<FirmaType> {
   const query: FilterQuery<FirmaType> = {};
 
+  console.log("ovo su params: ", params);
   if (params.naziv_firme) {
     query.naziv_firme = { $regex: params.naziv_firme, $options: "i" }; // Case-insensitive partial match
   }
@@ -33,11 +34,15 @@ export function createFirmaQuery(params: FirmaQueryParams): FilterQuery<FirmaTyp
   if (params.tip_firme) {
     query.tip_firme = { $in: params.tip_firme };
   }
-  if (params.radno_mesto) {
-    query.radno_mesto = { $in: params.radno_mesto };
+
+  // NOTE: This affects both firma and zaposleni search
+  // consult with Branka
+  if (Array.isArray(params.radnaMesta) && params.radnaMesta.length > 0) {
+    query.zaposleni = { $elemMatch: { radno_mesto: { $in: params.radnaMesta } } };
   }
-  if (params.velicina) {
-    query.velicina = { $in: params.velicina };
+
+  if (Array.isArray(params.velicineFirmi) && params.velicineFirmi.length > 0) {
+    query.velicina = { $in: params.velicineFirmi };
   }
 
   return query;

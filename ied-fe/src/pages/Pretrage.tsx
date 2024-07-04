@@ -14,6 +14,9 @@ export default function Pretrage() {
   const [velicineFirmi, setVelicineFirmi] = useState<string[]>([]);
   const [radnaMesta, setRadnaMesta] = useState<string[]>([]);
 
+  const [checkedVelicineFirmi, setCheckedVelicineFirmi] = useState<string[]>([]);
+  const [checkedRadnaMesta, setCheckedRadnaMesta] = useState<string[]>([]);
+
   const gradovi = [
     { parent: "SVI Gradovi" },
     {
@@ -99,18 +102,31 @@ export default function Pretrage() {
   return (
     <>
       <PageTitle title={"Pretrage"} />
-      <Grid container spacing={2}>
+      {/* <Grid container spacing={2}>
         {components}
-      </Grid>
+      </Grid> */}
 
-      <CheckboxList data={velicineFirmi} subheader="Veličine Firmi"></CheckboxList>
-      <CheckboxList data={radnaMesta} subheader="Radna Mesta"></CheckboxList>
+      <CheckboxList
+        data={velicineFirmi}
+        subheader="Veličine Firmi"
+        onCheckedChange={setCheckedVelicineFirmi}
+      ></CheckboxList>
+      <CheckboxList
+        data={radnaMesta}
+        subheader="Radna Mesta"
+        onCheckedChange={setCheckedRadnaMesta}
+      ></CheckboxList>
 
       <SaveDataButton
         exportSubject="firma"
         fileName="pretrage_firma"
         // TODO: fix hardcoded query params
-        queryParameters={{ pib: "101", delatnost: "Prehrambena industrija" }}
+        queryParameters={{
+          pib: "101",
+          delatnost: "Prehrambena industrija",
+          velicineFirmi: checkedVelicineFirmi,
+          radnaMesta: checkedRadnaMesta,
+        }}
       ></SaveDataButton>
       <SaveDataButton
         exportSubject="zaposleni"

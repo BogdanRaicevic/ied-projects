@@ -4,10 +4,16 @@ import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import Checkbox from "@mui/material/Checkbox";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ListSubheader } from "@mui/material";
 
-export default function CheckboxList({ data, subheader }: { data: string[]; subheader: string }) {
+interface CheckboxListProps {
+  data: string[];
+  subheader: string;
+  onCheckedChange: (checkedValues: string[]) => void;
+}
+
+export default function CheckboxList({ data, subheader, onCheckedChange }: CheckboxListProps) {
   const [checked, setChecked] = useState<number[]>([]);
 
   const handleToggle = (value: number) => () => {
@@ -22,6 +28,11 @@ export default function CheckboxList({ data, subheader }: { data: string[]; subh
 
     setChecked(newChecked);
   };
+
+  useEffect(() => {
+    const checkedValues = checked.map((index) => data[index]);
+    onCheckedChange(checkedValues);
+  }, [checked, data, onCheckedChange]);
 
   return (
     <List

@@ -10,6 +10,7 @@ type SaveButton = {
 export default function SaveDataButton({ queryParameters, fileName, exportSubject }: SaveButton) {
   const handleExport = async () => {
     try {
+      console.log(queryParameters, "ogdan");
       const data = await exportData(queryParameters, exportSubject);
       const blob = new Blob([data], { type: "text/csv" });
       const url = URL.createObjectURL(blob);
