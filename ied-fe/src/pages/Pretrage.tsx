@@ -18,6 +18,10 @@ export default function Pretrage() {
   const [tipoviFirme, setTipoviFirme] = useState<string[]>([]);
   const [delatnosti, setDelatnosti] = useState<string[]>([]);
 
+  const [imeFirme, setImeFirme] = useState<string>("");
+  const [pib, setPib] = useState<string>("");
+  const [email, setEmail] = useState<string>("");
+
   const [checkedVelicineFirmi, setCheckedVelicineFirmi] = useState<string[]>([]);
   const [checkedRadnaMesta, setCheckedRadnaMesta] = useState<string[]>([]);
   const [checkedTipFirme, setCheckedTipFirme] = useState<string[]>([]);
@@ -113,12 +117,37 @@ export default function Pretrage() {
         onCheckedChange={setCheckedDelatnost}
       ></CheckboxList>
 
+      <Box
+        component="form"
+        sx={{
+          "& .MuiTextField-root": { m: 1, width: "25ch" },
+        }}
+        noValidate
+        autoComplete="off"
+      >
+        <Grid mt={4} maxWidth="lg">
+          <TextField
+            label="Ime Firme"
+            value={imeFirme}
+            onChange={(e) => setImeFirme(e.target.value)}
+          />
+          <TextField
+            label="PIB / Matični broj"
+            value={pib}
+            onChange={(e) => setPib(e.target.value)}
+          />
+          <TextField label="E-mail" value={email} onChange={(e) => setEmail(e.target.value)} />
+        </Grid>
+      </Box>
+
       <SaveDataButton
         exportSubject="firma"
         fileName="pretrage_firma"
         // TODO: fix hardcoded query params
         queryParameters={{
-          pib: "101",
+          imeFirme: imeFirme,
+          pib: pib,
+          email: email,
           velicineFirmi: checkedVelicineFirmi,
           radnaMesta: checkedRadnaMesta,
           tipoviFirme: checkedTipFirme,
@@ -129,26 +158,21 @@ export default function Pretrage() {
         exportSubject="zaposleni"
         fileName="pretrage_zaposleni"
         // TODO: fix hardcoded query params
-        queryParameters={{ pib: "101", delatnost: "Prehrambena industrija" }}
-      ></SaveDataButton>
-      <Box
-        component="form"
-        sx={{
-          "& .MuiTextField-root": { m: 1, width: "25ch" },
+        queryParameters={{
+          imeFirme: imeFirme,
+          pib: pib,
+          email: email,
+          velicineFirmi: checkedVelicineFirmi,
+          radnaMesta: checkedRadnaMesta,
+          tipoviFirme: checkedTipFirme,
+          delatnosti: checkedDelatnost,
         }}
-        noValidate
-        autoComplete="off"
-      >
-        <Grid mt={4} maxWidth="lg">
-          <TextField label="Ime Firme" />
-          <TextField label="PIB / Matični broj" />
-          <TextField label="Domen / email" />
-          <TextField label="Mesto" />
-        </Grid>
-        <Button variant="contained" sx={{ m: 1, mb: 4 }} size="large" color="info">
-          Pretrazi
-        </Button>
-      </Box>
+      ></SaveDataButton>
+
+      <Button variant="contained" sx={{ m: 1, mb: 4 }} size="large" color="info">
+        Pretrazi
+      </Button>
+
       <MyTable></MyTable>
     </>
   );

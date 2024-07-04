@@ -1,8 +1,8 @@
 import { FilterQuery } from "mongoose";
 import { FirmaType } from "../models/firma.model";
 
-type FirmaQueryParams = {
-  naziv_firme?: string;
+export type FirmaQueryParams = {
+  imeFirme?: string;
   pib?: string;
   email?: string;
   mesto?: string[];
@@ -16,20 +16,20 @@ export function createFirmaQuery(params: FirmaQueryParams): FilterQuery<FirmaTyp
   const query: FilterQuery<FirmaType> = {};
 
   console.log("ovo su params: ", params);
-  if (params.naziv_firme) {
-    query.naziv_firme = { $regex: params.naziv_firme, $options: "i" }; // Case-insensitive partial match
+  if (params.imeFirme && params.imeFirme.length > 0) {
+    query.naziv_firme = { $regex: params.imeFirme, $options: "i" }; // Case-insensitive partial match
   }
-  if (params.pib) {
+  if (params.pib && params.pib.length > 0) {
     query.PIB = { $regex: params.pib, $options: "i" }; // Case-insensitive partial match
   }
-  if (params.email) {
+  if (params.email && params.email.length > 0) {
     query.e_mail = { $regex: params.email, $options: "i" }; // Case-insensitive partial match
   }
   if (Array.isArray(params.delatnosti) && params.delatnosti.length > 0) {
     query.delatnost = { $in: params.delatnosti };
   }
-  if (params.mesto) {
-    query.mesto = { $in: params.mesto }; // Case-insensitive partial match
+  if (Array.isArray(params.mesto) && params.mesto.length > 0) {
+    query.mesto = { $in: params.mesto };
   }
   if (Array.isArray(params.tipoviFirme) && params.tipoviFirme.length > 0) {
     query.tip_firme = { $in: params.tipoviFirme };

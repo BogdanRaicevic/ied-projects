@@ -1,6 +1,6 @@
 import { FilterQuery } from "mongoose";
 import { FirmaType, Firma } from "../models/firma.model";
-import { createFirmaQuery } from "../utils/firmaQueryBuilder";
+import { createFirmaQuery, FirmaQueryParams } from "../utils/firmaQueryBuilder";
 
 export const findByFirmaId = async (ID_firma: number) => {
   try {
@@ -32,7 +32,7 @@ export const updateById = async (
 };
 
 export const search = async (
-  queryParameters: FilterQuery<FirmaType>,
+  queryParameters: FilterQuery<FirmaQueryParams>,
   pageIndex: number = 1,
   pageSize: number = 10
 ) => {
@@ -49,7 +49,7 @@ export const search = async (
   };
 };
 
-export const exportSearchedFirmaData = async (queryParameters: FilterQuery<FirmaType>) => {
+export const exportSearchedFirmaData = async (queryParameters: FilterQuery<FirmaQueryParams>) => {
   const mongoQuery = {
     ...createFirmaQuery(queryParameters),
   };
@@ -83,7 +83,9 @@ export const exportSearchedFirmaData = async (queryParameters: FilterQuery<Firma
   });
 };
 
-export const exportSearchedZaposleniData = async (queryParameters: FilterQuery<FirmaType>) => {
+export const exportSearchedZaposleniData = async (
+  queryParameters: FilterQuery<FirmaQueryParams>
+) => {
   const mongoQuery = {
     ...createFirmaQuery(queryParameters),
   };
