@@ -1,4 +1,3 @@
-import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
@@ -6,6 +5,7 @@ import ListItemText from "@mui/material/ListItemText";
 import Checkbox from "@mui/material/Checkbox";
 import { useEffect, useState } from "react";
 import { ListSubheader } from "@mui/material";
+import { FixedSizeList, ListChildComponentProps } from "react-window";
 
 interface CheckboxListProps {
   data: string[];
@@ -34,31 +34,34 @@ export default function CheckboxList({ data, subheader, onCheckedChange }: Check
     onCheckedChange(checkedValues);
   }, [checked, data, onCheckedChange]);
 
-  return (
-    <List
-      sx={{ width: "100%", maxWidth: 360, maxHeight: 400, overflow: "auto" }}
-      subheader={<ListSubheader>{subheader}</ListSubheader>}
-    >
-      {data.map((value, index) => {
-        const labelId = `checkbox-list-label-${value}`;
+  const renderRow = ({ index, style }: ListChildComponentProps) => {
+    const value = data[index];
+    const labelId = `checkbox-list-label-${value}`;
 
-        return (
-          <ListItem key={value} disablePadding>
-            <ListItemButton onClick={handleToggle(index)} dense>
-              <ListItemIcon>
-                <Checkbox
-                  edge="start"
-                  checked={checked.indexOf(index) !== -1}
-                  tabIndex={-1}
-                  disableRipple
-                  inputProps={{ "aria-labelledby": labelId }}
-                />
-              </ListItemIcon>
-              <ListItemText id={labelId} primary={`${value}`} />
-            </ListItemButton>
-          </ListItem>
-        );
-      })}
-    </List>
+    return (
+      <ListItem key={value} style={style} disablePadding>
+        <ListItemButton onClick={handleToggle(index)} dense>
+          <ListItemIcon>
+            <Checkbox
+              edge="start"
+              checked={checked.indexOf(index) !== -1}
+              tabIndex={-1}
+              disableRipple
+              inputProps={{ "aria-labelledby": labelId }}
+            />
+          </ListItemIcon>
+          <ListItemText id={labelId} primary={`${value}`} />
+        </ListItemButton>
+      </ListItem>
+    );
+  };
+
+  return (
+    <div>
+      <ListSubheader>{subheader}</ListSubheader>
+      <FixedSizeList height={360} width={360} itemSize={46} itemCount={data.length}>
+        {renderRow}
+      </FixedSizeList>
+    </div>
   );
 }
