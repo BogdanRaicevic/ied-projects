@@ -1,4 +1,4 @@
-import MyTable from "../components/MyTable";
+// import MyTable from "../components/MyTable";
 import PageTitle from "../components/PageTitle";
 // import IndeterminateCheckbox from "../components/IndeterminateCheckbox";
 import Grid from "@mui/material/Unstable_Grid2";
@@ -6,6 +6,7 @@ import { Button, TextField } from "@mui/material";
 import { Box } from "@mui/system";
 import SaveDataButton from "../components/SaveDataButton/SaveDataButton";
 import CheckboxList from "../components/CheckboxList/CheckboxList";
+import AutocompleteCheckbox from "../components/AutocompleteCheckbox";
 import { useEffect, useState } from "react";
 import { fetchAllVelicineFirme } from "../api/velicina_firme.api";
 import { fetchAllRadnaMesta } from "../api/radna_mesto.api";
@@ -101,21 +102,26 @@ export default function Pretrage() {
         subheader="Veličine Firmi"
         onCheckedChange={setCheckedVelicineFirmi}
       ></CheckboxList>
-      <CheckboxList
+      <AutocompleteCheckbox
         data={radnaMesta}
-        subheader="Radna Mesta"
         onCheckedChange={setCheckedRadnaMesta}
-      ></CheckboxList>
-      <CheckboxList
+        placeholder="Radno Mesto"
+        id="radno-messto"
+      ></AutocompleteCheckbox>
+      <br></br>
+      <AutocompleteCheckbox
         data={tipoviFirme}
-        subheader="Tip Firme"
         onCheckedChange={setCheckedTipFirme}
-      ></CheckboxList>
-      <CheckboxList
+        placeholder="Tip Firme"
+        id="tip-firme"
+      ></AutocompleteCheckbox>
+      <br></br>
+      <AutocompleteCheckbox
         data={delatnosti}
-        subheader="Delatnost"
         onCheckedChange={setCheckedDelatnost}
-      ></CheckboxList>
+        placeholder="Delatnost"
+        id="delatnost"
+      ></AutocompleteCheckbox>
 
       <Box
         component="form"
@@ -143,7 +149,6 @@ export default function Pretrage() {
       <SaveDataButton
         exportSubject="firma"
         fileName="pretrage_firma"
-        // TODO: fix hardcoded query params
         queryParameters={{
           imeFirme: imeFirme,
           pib: pib,
@@ -157,7 +162,6 @@ export default function Pretrage() {
       <SaveDataButton
         exportSubject="zaposleni"
         fileName="pretrage_zaposleni"
-        // TODO: fix hardcoded query params
         queryParameters={{
           imeFirme: imeFirme,
           pib: pib,
