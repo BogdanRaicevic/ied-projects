@@ -1,16 +1,16 @@
-import mongoose from 'mongoose';
-import mysql from 'mysql2/promise';
+import mongoose from "mongoose";
+import mysql from "mysql2/promise";
 
 // MySQL connection configuration
 const mysqlConfig = {
-  host: 'localhost',
-  user: 'root',
-  password: 'root',
-  database: 'ied2',
+  host: "localhost",
+  user: "root",
+  password: "root",
+  database: "ied2",
 };
 
 // MongoDB connection configuration
-const mongoUrl = 'mongodb://localhost:27017/ied';
+const mongoUrl = "mongodb://localhost:27017/ied";
 
 const mysqlConnection = async () => {
   return await mysql.createConnection(mysqlConfig);
