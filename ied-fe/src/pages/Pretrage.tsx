@@ -1,4 +1,4 @@
-// import MyTable from "../components/MyTable";
+import MyTable from "../components/MyTable";
 import PageTitle from "../components/PageTitle";
 // import IndeterminateCheckbox from "../components/IndeterminateCheckbox";
 import Grid from "@mui/material/Unstable_Grid2";
@@ -12,12 +12,14 @@ import { fetchAllVelicineFirme } from "../api/velicina_firme.api";
 import { fetchAllRadnaMesta } from "../api/radna_mesto.api";
 import { fetchAllTipoviFirme } from "../api/tip_firme.api";
 import { fetchAllDelatnosti } from "../api/delatnosti.api";
+import { fetchAllMesta } from "../api/mesta.api";
 
 export default function Pretrage() {
   const [velicineFirmi, setVelicineFirmi] = useState<string[]>([]);
   const [radnaMesta, setRadnaMesta] = useState<string[]>([]);
   const [tipoviFirme, setTipoviFirme] = useState<string[]>([]);
   const [delatnosti, setDelatnosti] = useState<string[]>([]);
+  const [mesta, setMesta] = useState<string[]>([]);
 
   const [imeFirme, setImeFirme] = useState<string>("");
   const [pib, setPib] = useState<string>("");
@@ -27,50 +29,7 @@ export default function Pretrage() {
   const [checkedRadnaMesta, setCheckedRadnaMesta] = useState<string[]>([]);
   const [checkedTipFirme, setCheckedTipFirme] = useState<string[]>([]);
   const [checkedDelatnost, setCheckedDelatnost] = useState<string[]>([]);
-
-  // const gradovi = [
-  //   { parent: "SVI Gradovi" },
-  //   {
-  //     parent: "Aleksinac",
-  //     children: ["Aleksinacki rudnik", "Loćika", "Subotinac", "Trnjane"],
-  //   },
-  //   {
-  //     parent: "Aleksandrovac",
-  //     children: ["Gornji Stupanj", "Tranavci", "Sljivovo"],
-  //   },
-  //   {
-  //     parent: "Beograd",
-  //     children: [
-  //       "Novi Beograd",
-  //       "Zemun",
-  //       "Borca",
-  //       "Palilula",
-  //       "Vozdovac",
-  //       "Rakovica",
-  //       "Zvezdara",
-  //       "Savski venac",
-  //       "Stari grad",
-  //       "Cukarica",
-  //       "Vracar",
-  //     ],
-  //   },
-  // ];
-
-  // merge this into one array
-  // const arrayNames = ["gradovi"];
-  // const arrays = [gradovi];
-
-  // const components = arrays.map((array, index) => {
-  //   return (
-  //     <Grid key={arrayNames[index]} xs={12} sm={2}>
-  //       <div style={{ maxHeight: "300px", overflow: "auto" }}>
-  //         {array.map((item, index) => (
-  //           <IndeterminateCheckbox key={arrayNames[index]} options={item} />
-  //         ))}
-  //       </div>
-  //     </Grid>
-  //   );
-  // });
+  const [checkedMesta, setCheckedMesta] = useState<string[]>([]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -85,6 +44,9 @@ export default function Pretrage() {
 
       const delatnosti = await fetchAllDelatnosti();
       setDelatnosti(delatnosti);
+
+      const mesta = await fetchAllMesta();
+      setMesta(mesta);
     };
 
     fetchData();
@@ -93,9 +55,6 @@ export default function Pretrage() {
   return (
     <>
       <PageTitle title={"Pretrage"} />
-      {/* <Grid container spacing={2}>
-        {components}
-      </Grid> */}
 
       <CheckboxList
         data={velicineFirmi}
@@ -121,6 +80,13 @@ export default function Pretrage() {
         onCheckedChange={setCheckedDelatnost}
         placeholder="Delatnost"
         id="delatnost"
+      ></AutocompleteCheckbox>
+      <br></br>
+      <AutocompleteCheckbox
+        data={mesta}
+        onCheckedChange={setCheckedMesta}
+        placeholder="Mesta"
+        id="mesta"
       ></AutocompleteCheckbox>
 
       <Box
@@ -157,6 +123,7 @@ export default function Pretrage() {
           radnaMesta: checkedRadnaMesta,
           tipoviFirme: checkedTipFirme,
           delatnosti: checkedDelatnost,
+          mesta: checkedMesta,
         }}
       ></SaveDataButton>
       <SaveDataButton
@@ -170,6 +137,7 @@ export default function Pretrage() {
           radnaMesta: checkedRadnaMesta,
           tipoviFirme: checkedTipFirme,
           delatnosti: checkedDelatnost,
+          mesta: checkedMesta,
         }}
       ></SaveDataButton>
 
@@ -177,7 +145,7 @@ export default function Pretrage() {
         Pretrazi
       </Button>
 
-      {/* <MyTable></MyTable> */}
+      <MyTable></MyTable>
     </>
   );
 }

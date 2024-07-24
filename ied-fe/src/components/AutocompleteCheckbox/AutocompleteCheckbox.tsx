@@ -27,7 +27,6 @@ export default function AutocompleteCheckbox({
   return (
     <Autocomplete
       multiple
-      limitTags={2}
       id={"autocomplete-" + id}
       disableCloseOnSelect
       getOptionLabel={(option) => option}

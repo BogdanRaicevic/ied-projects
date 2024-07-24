@@ -5,7 +5,7 @@ export type FirmaQueryParams = {
   imeFirme?: string;
   pib?: string;
   email?: string;
-  mesto?: string[];
+  mesta?: string[];
   delatnosti?: string[];
   tipoviFirme?: string[];
   radnaMesta?: string[];
@@ -28,8 +28,8 @@ export function createFirmaQuery(params: FirmaQueryParams): FilterQuery<FirmaTyp
   if (Array.isArray(params.delatnosti) && params.delatnosti.length > 0) {
     query.delatnost = { $in: params.delatnosti };
   }
-  if (Array.isArray(params.mesto) && params.mesto.length > 0) {
-    query.mesto = { $in: params.mesto };
+  if (Array.isArray(params.mesta) && params.mesta.length > 0) {
+    query.mesto = { $in: params.mesta };
   }
   if (Array.isArray(params.tipoviFirme) && params.tipoviFirme.length > 0) {
     query.tip_firme = { $in: params.tipoviFirme };
