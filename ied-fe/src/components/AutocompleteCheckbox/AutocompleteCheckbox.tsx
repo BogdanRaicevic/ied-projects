@@ -19,7 +19,7 @@ export default function AutocompleteCheckbox({
 }) {
   const [selectedOptions, setSelectedOptions] = useState<string[]>([]);
 
-  const handleChange = (event: any, value: string[]) => {
+  const handleChange = (_event: any, value: string[]) => {
     setSelectedOptions(value);
     onCheckedChange(value);
   };
