@@ -62,6 +62,18 @@ export default function Pretrage() {
     fetchData();
   }, []);
 
+  const queryParameters = {
+    imeFirme: imeFirme,
+    pib: pib,
+    email: email,
+    velicineFirmi: checkedVelicineFirmi,
+    radnaMesta: checkedRadnaMesta,
+    tipoviFirme: checkedTipFirme,
+    delatnosti: checkedDelatnost,
+    mesta: checkedMesta,
+    negacije: checkedNegations,
+  };
+
   return (
     <>
       <PageTitle title={"Pretrage"} />
@@ -179,39 +191,19 @@ export default function Pretrage() {
       <SaveDataButton
         exportSubject="firma"
         fileName="pretrage_firma"
-        queryParameters={{
-          imeFirme: imeFirme,
-          pib: pib,
-          email: email,
-          velicineFirmi: checkedVelicineFirmi,
-          radnaMesta: checkedRadnaMesta,
-          tipoviFirme: checkedTipFirme,
-          delatnosti: checkedDelatnost,
-          mesta: checkedMesta,
-          negacije: checkedNegations,
-        }}
+        queryParameters={queryParameters}
       ></SaveDataButton>
       <SaveDataButton
         exportSubject="zaposleni"
         fileName="pretrage_zaposleni"
-        queryParameters={{
-          imeFirme: imeFirme,
-          pib: pib,
-          email: email,
-          velicineFirmi: checkedVelicineFirmi,
-          radnaMesta: checkedRadnaMesta,
-          tipoviFirme: checkedTipFirme,
-          delatnosti: checkedDelatnost,
-          mesta: checkedMesta,
-          negacije: checkedNegations,
-        }}
+        queryParameters={queryParameters}
       ></SaveDataButton>
 
       <Button variant="contained" sx={{ m: 1, mb: 4 }} size="large" color="info">
         Pretrazi
       </Button>
 
-      <MyTable></MyTable>
+      <MyTable />
     </>
   );
 }

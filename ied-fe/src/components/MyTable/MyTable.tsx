@@ -8,8 +8,23 @@ import {
   MRT_PaginationState,
 } from "material-react-table";
 import { fetchFirmaPretrageData } from "../../api/firma.api";
+import React from "react";
 
-export default function MyTable() {
+interface MyTableProps {
+  queryParameters?: {
+    imeFirme: string;
+    pib: string;
+    email: string;
+    velicineFirmi: string[];
+    radnaMesta: string[];
+    tipoviFirme: string[];
+    delatnosti: string[];
+    mesta: string[];
+    negacije: string[];
+  };
+}
+
+export default React.memo(function MyTable(queryParameters: MyTableProps) {
   const [data, setData] = useState<Company[]>([]);
   const [documents, setDocuments] = useState(1000);
 
@@ -18,6 +33,7 @@ export default function MyTable() {
     pageSize: 10,
   });
 
+  console.log("bodfasdfasdfad", queryParameters);
   useEffect(() => {
     const loadData = async () => {
       const { pageIndex, pageSize } = table.getState().pagination;
@@ -45,4 +61,4 @@ export default function MyTable() {
     rowCount: documents,
   });
   return <MaterialReactTable table={table} />;
-}
+});
