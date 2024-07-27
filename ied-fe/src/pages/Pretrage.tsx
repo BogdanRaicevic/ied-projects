@@ -66,85 +66,90 @@ export default function Pretrage() {
     <>
       <PageTitle title={"Pretrage"} />
 
-      <CheckboxList
-        data={velicineFirmi}
-        subheader="Veličine Firmi"
-        onCheckedChange={setCheckedVelicineFirmi}
-      ></CheckboxList>
+      <Grid container spacing={2}>
+        <Grid xs={9}>
+          <Grid container direction="column">
+            <Grid container alignItems="center">
+              <Grid xs={10} sx={{ width: "75%" }}>
+                <AutocompleteCheckbox
+                  data={radnaMesta}
+                  onCheckedChange={setCheckedRadnaMesta}
+                  placeholder="Radno Mesto"
+                  id="radno-messto"
+                ></AutocompleteCheckbox>
+              </Grid>
+              <Grid px={2} xs={2}>
+                <NegationCheckbox
+                  key="negate-radna-mesta"
+                  value="negate-radna-mesta"
+                  negationChecked={checkedNegations.includes("negate-radna-mesta")}
+                  onNegationChange={handleNegationChange}
+                ></NegationCheckbox>
+              </Grid>
+            </Grid>
+            <Grid container alignItems="center">
+              <Grid xs={10} sx={{ width: "75%" }}>
+                <AutocompleteCheckbox
+                  data={tipoviFirme}
+                  onCheckedChange={setCheckedTipFirme}
+                  placeholder="Tip Firme"
+                  id="tip-firme"
+                ></AutocompleteCheckbox>
+              </Grid>
+              <Grid px={2} xs={2}>
+                <NegationCheckbox
+                  key="negate-tip-firme"
+                  value="negate-tip-firme"
+                  negationChecked={checkedNegations.includes("negate-tip-firme")}
+                  onNegationChange={handleNegationChange}
+                ></NegationCheckbox>
+              </Grid>
+            </Grid>
+            <Grid container alignItems="center">
+              <Grid xs={10} sx={{ width: "75%" }}>
+                <AutocompleteCheckbox
+                  data={delatnosti}
+                  onCheckedChange={setCheckedDelatnost}
+                  placeholder="Delatnost"
+                  id="delatnost"
+                ></AutocompleteCheckbox>
+              </Grid>
+              <Grid px={2} xs={2}>
+                <NegationCheckbox
+                  key="negate-delatnost"
+                  value="negate-delatnost"
+                  negationChecked={checkedNegations.includes("negate-delatnost")}
+                  onNegationChange={handleNegationChange}
+                ></NegationCheckbox>
+              </Grid>
+            </Grid>
+            <Grid container alignItems="center">
+              <Grid xs={10} sx={{ width: "75%" }}>
+                <AutocompleteCheckbox
+                  data={mesta}
+                  onCheckedChange={setCheckedMesta}
+                  placeholder="Mesta"
+                  id="mesta"
+                ></AutocompleteCheckbox>
+              </Grid>
 
-      <Grid container spacing={2} alignItems="center">
-        <Grid xs={8}>
-          <AutocompleteCheckbox
-            data={radnaMesta}
-            onCheckedChange={setCheckedRadnaMesta}
-            placeholder="Radno Mesto"
-            id="radno-messto"
-          ></AutocompleteCheckbox>
+              <Grid px={2} xs={2}>
+                <NegationCheckbox
+                  key="negate-mesta"
+                  value="negate-mesta"
+                  negationChecked={checkedNegations.includes("negate-mesta")}
+                  onNegationChange={handleNegationChange}
+                ></NegationCheckbox>
+              </Grid>
+            </Grid>
+          </Grid>
         </Grid>
-        <Grid xs={4}>
-          <NegationCheckbox
-            key="negate-radna-mesta"
-            value="negate-radna-mesta"
-            negationChecked={checkedNegations.includes("negate-radna-mesta")}
-            onNegationChange={handleNegationChange}
-          ></NegationCheckbox>
-        </Grid>
-      </Grid>
-
-      <Grid container spacing={2} alignItems="center">
-        <Grid xs={8}>
-          <AutocompleteCheckbox
-            data={tipoviFirme}
-            onCheckedChange={setCheckedTipFirme}
-            placeholder="Tip Firme"
-            id="tip-firme"
-          ></AutocompleteCheckbox>
-        </Grid>
-        <Grid xs={4}>
-          <NegationCheckbox
-            key="negate-tip-firme"
-            value="negate-tip-firme"
-            negationChecked={checkedNegations.includes("negate-tip-firme")}
-            onNegationChange={handleNegationChange}
-          ></NegationCheckbox>
-        </Grid>
-      </Grid>
-
-      <Grid container spacing={2} alignItems="center">
-        <Grid xs={8}>
-          <AutocompleteCheckbox
-            data={delatnosti}
-            onCheckedChange={setCheckedDelatnost}
-            placeholder="Delatnost"
-            id="delatnost"
-          ></AutocompleteCheckbox>
-        </Grid>
-        <Grid xs={4}>
-          <NegationCheckbox
-            key="negate-delatnost"
-            value="negate-delatnost"
-            negationChecked={checkedNegations.includes("negate-delatnost")}
-            onNegationChange={handleNegationChange}
-          ></NegationCheckbox>
-        </Grid>
-      </Grid>
-
-      <Grid container spacing={2} alignItems="center">
-        <Grid xs={8}>
-          <AutocompleteCheckbox
-            data={mesta}
-            onCheckedChange={setCheckedMesta}
-            placeholder="Mesta"
-            id="mesta"
-          ></AutocompleteCheckbox>
-        </Grid>
-        <Grid xs={4}>
-          <NegationCheckbox
-            key="negate-mesta"
-            value="negate-mesta"
-            negationChecked={checkedNegations.includes("negate-mesta")}
-            onNegationChange={handleNegationChange}
-          ></NegationCheckbox>
+        <Grid xs={3}>
+          <CheckboxList
+            data={velicineFirmi}
+            subheader="Veličine Firmi"
+            onCheckedChange={setCheckedVelicineFirmi}
+          ></CheckboxList>
         </Grid>
       </Grid>
 

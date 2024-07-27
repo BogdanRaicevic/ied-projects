@@ -55,7 +55,7 @@ export default function CheckboxList({ data, subheader, onCheckedChange }: Check
   return (
     <div>
       <ListSubheader>{subheader}</ListSubheader>
-      <FixedSizeList height={360} width={360} itemSize={46} itemCount={data.length}>
+      <FixedSizeList height={200} width={"100%"} itemSize={46} itemCount={data.length}>
         {renderRow}
       </FixedSizeList>
     </div>
