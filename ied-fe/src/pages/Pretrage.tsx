@@ -75,14 +75,14 @@ export default function Pretrage() {
                   data={radnaMesta}
                   onCheckedChange={setCheckedRadnaMesta}
                   placeholder="Radno Mesto"
-                  id="radno-messto"
+                  id="radno-mesto"
                 ></AutocompleteCheckbox>
               </Grid>
               <Grid px={2} xs={2}>
                 <NegationCheckbox
-                  key="negate-radna-mesta"
-                  value="negate-radna-mesta"
-                  negationChecked={checkedNegations.includes("negate-radna-mesta")}
+                  key="negate-radno-mesto"
+                  value="negate-radno-mesto"
+                  negationChecked={checkedNegations.includes("negate-radno-mesto")}
                   onNegationChange={handleNegationChange}
                 ></NegationCheckbox>
               </Grid>
@@ -135,9 +135,9 @@ export default function Pretrage() {
 
               <Grid px={2} xs={2}>
                 <NegationCheckbox
-                  key="negate-mesta"
-                  value="negate-mesta"
-                  negationChecked={checkedNegations.includes("negate-mesta")}
+                  key="negate-mesto"
+                  value="negate-mesto"
+                  negationChecked={checkedNegations.includes("negate-mesto")}
                   onNegationChange={handleNegationChange}
                 ></NegationCheckbox>
               </Grid>
@@ -188,6 +188,7 @@ export default function Pretrage() {
           tipoviFirme: checkedTipFirme,
           delatnosti: checkedDelatnost,
           mesta: checkedMesta,
+          negacije: checkedNegations,
         }}
       ></SaveDataButton>
       <SaveDataButton
@@ -202,6 +203,7 @@ export default function Pretrage() {
           tipoviFirme: checkedTipFirme,
           delatnosti: checkedDelatnost,
           mesta: checkedMesta,
+          negacije: checkedNegations,
         }}
       ></SaveDataButton>
 
