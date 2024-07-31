@@ -88,6 +88,7 @@ export default function Pretrage() {
                   onCheckedChange={setCheckedRadnaMesta}
                   placeholder="Radno Mesto"
                   id="radno-mesto"
+                  key="autocomplete-radno-mesto"
                 ></AutocompleteCheckbox>
               </Grid>
               <Grid px={2} xs={2}>
@@ -106,6 +107,7 @@ export default function Pretrage() {
                   onCheckedChange={setCheckedTipFirme}
                   placeholder="Tip Firme"
                   id="tip-firme"
+                  key="autocomplete-tip-firme"
                 ></AutocompleteCheckbox>
               </Grid>
               <Grid px={2} xs={2}>
@@ -124,6 +126,7 @@ export default function Pretrage() {
                   onCheckedChange={setCheckedDelatnost}
                   placeholder="Delatnost"
                   id="delatnost"
+                  key="autocomplete-delatnost"
                 ></AutocompleteCheckbox>
               </Grid>
               <Grid px={2} xs={2}>
@@ -141,7 +144,8 @@ export default function Pretrage() {
                   data={mesta}
                   onCheckedChange={setCheckedMesta}
                   placeholder="Mesta"
-                  id="mesta"
+                  id="mesto"
+                  key="autocomplete-mesto"
                 ></AutocompleteCheckbox>
               </Grid>
 

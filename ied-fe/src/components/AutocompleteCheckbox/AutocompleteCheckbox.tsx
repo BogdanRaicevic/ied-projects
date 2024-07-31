@@ -1,12 +1,12 @@
 import { Autocomplete, Checkbox, Chip, TextField } from "@mui/material";
 import CheckBoxOutlineBlankIcon from "@mui/icons-material/CheckBoxOutlineBlank";
 import CheckBoxIcon from "@mui/icons-material/CheckBox";
-import { useState } from "react";
+import { useState, memo } from "react";
 
 const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
 const checkedIcon = <CheckBoxIcon fontSize="small" />;
 
-export default function AutocompleteCheckbox({
+export default memo(function AutocompleteCheckbox({
   data,
   onCheckedChange,
   placeholder,
@@ -58,4 +58,4 @@ export default function AutocompleteCheckbox({
       value={selectedOptions}
     />
   );
-}
+});
