@@ -2,11 +2,16 @@ import axios from "axios";
 import { Company } from "../schemas/companySchemas";
 import { env } from "../utils/envVariables";
 
-export const fetchFirmaPretrageData = async (pageSize: number, pageIndex: number) => {
+export const fetchFirmaPretrageData = async (
+  pageSize: number,
+  pageIndex: number,
+  queryParameters: any
+) => {
   try {
     const body = {
       pageSize: pageSize || 10,
       pageIndex: pageIndex + 1, // becuase MRT is zero based
+      queryParameters,
     };
 
     const response: {

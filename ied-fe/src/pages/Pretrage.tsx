@@ -62,6 +62,42 @@ export default function Pretrage() {
     fetchData();
   }, []);
 
+  const [pretraziQueryParameters, setPretraziQueryParameters] = useState<{
+    imeFirme: string;
+    pib: string;
+    email: string;
+    velicineFirmi: string[];
+    radnaMesta: string[];
+    tipoviFirme: string[];
+    delatnosti: string[];
+    mesta: string[];
+    negacije: string[];
+  }>({
+    imeFirme: "",
+    pib: "",
+    email: "",
+    velicineFirmi: [],
+    radnaMesta: [],
+    tipoviFirme: [],
+    delatnosti: [],
+    mesta: [],
+    negacije: [],
+  });
+
+  const handlePretraziClick = () => {
+    setPretraziQueryParameters({
+      imeFirme,
+      pib,
+      email,
+      velicineFirmi: checkedVelicineFirmi,
+      radnaMesta: checkedRadnaMesta,
+      tipoviFirme: checkedTipFirme,
+      delatnosti: checkedDelatnost,
+      mesta: checkedMesta,
+      negacije: checkedNegations,
+    });
+  };
+
   const queryParameters = {
     imeFirme: imeFirme,
     pib: pib,
@@ -203,11 +239,17 @@ export default function Pretrage() {
         queryParameters={queryParameters}
       ></SaveDataButton>
 
-      <Button variant="contained" sx={{ m: 1, mb: 4 }} size="large" color="info">
+      <Button
+        variant="contained"
+        sx={{ m: 1, mb: 4 }}
+        size="large"
+        color="info"
+        onClick={handlePretraziClick}
+      >
         Pretrazi
       </Button>
 
-      <MyTable />
+      <MyTable {...pretraziQueryParameters} />
     </>
   );
 }

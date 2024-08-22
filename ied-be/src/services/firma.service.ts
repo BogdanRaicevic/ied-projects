@@ -36,11 +36,10 @@ export const search = async (
   pageIndex: number = 1,
   pageSize: number = 10
 ) => {
-  console.log(queryParameters);
   const skip = (pageIndex - 1) * pageSize;
-  const mongoQuery = createFirmaQuery(queryParameters);
+  const mongoQuery = createFirmaQuery(queryParameters.queryParameters);
 
-  const totalDocuments = await Firma.countDocuments();
+  const totalDocuments = await Firma.countDocuments(mongoQuery);
 
   return {
     courser: Firma.find(mongoQuery, { zaposleni: 0 })

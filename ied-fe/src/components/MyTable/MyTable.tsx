@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, memo } from "react";
 import { Company } from "../../schemas/companySchemas";
 import { myCompanyColumns } from "./myCompanyColumns";
 import {
@@ -8,23 +8,20 @@ import {
   MRT_PaginationState,
 } from "material-react-table";
 import { fetchFirmaPretrageData } from "../../api/firma.api";
-import React from "react";
 
-interface MyTableProps {
-  queryParameters?: {
-    imeFirme: string;
-    pib: string;
-    email: string;
-    velicineFirmi: string[];
-    radnaMesta: string[];
-    tipoviFirme: string[];
-    delatnosti: string[];
-    mesta: string[];
-    negacije: string[];
-  };
+interface QueryParameter {
+  imeFirme: string;
+  pib: string;
+  email: string;
+  velicineFirmi: string[];
+  radnaMesta: string[];
+  tipoviFirme: string[];
+  delatnosti: string[];
+  mesta: string[];
+  negacije: string[];
 }
 
-export default React.memo(function MyTable(queryParameters: MyTableProps) {
+export default memo(function MyTable(queryParameters: QueryParameter) {
   const [data, setData] = useState<Company[]>([]);
   const [documents, setDocuments] = useState(1000);
 
@@ -33,16 +30,15 @@ export default React.memo(function MyTable(queryParameters: MyTableProps) {
     pageSize: 10,
   });
 
-  console.log("bodfasdfasdfad", queryParameters);
   useEffect(() => {
     const loadData = async () => {
       const { pageIndex, pageSize } = table.getState().pagination;
-      const res = await fetchFirmaPretrageData(pageSize, pageIndex);
+      const res = await fetchFirmaPretrageData(pageSize, pageIndex, queryParameters);
       setData(res.firmas);
       setDocuments(res.totalDocuments);
     };
     loadData();
-  }, [pagination, documents]);
+  }, [pagination, documents, queryParameters]);
 
   const table = useMaterialReactTable({
     columns: useMemo<MRT_ColumnDef<Company>[]>(() => myCompanyColumns, []),
