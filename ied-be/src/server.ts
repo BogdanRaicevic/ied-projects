@@ -8,6 +8,7 @@ import radnaMestaRoutes from "./routes/radna_mesta.routes";
 import tipFirmeRoutes from "./routes/tip_firme.routes";
 import delatnostiRoutes from "./routes/delatnost.routes";
 import mestoRoutes from "./routes/mesto.routes";
+import pretrageRoutes from "./routes/pretrage.routes";
 import { errorWrapper } from "./middleware/errorWrapper";
 
 const app = express();
@@ -45,6 +46,8 @@ app.use("/api/radna-mesta", radnaMestaRoutes);
 app.use("/api/tip-firme", tipFirmeRoutes);
 app.use("/api/delatnost", delatnostiRoutes);
 app.use("/api/mesto", mestoRoutes);
+app.use("/api/pretrage", pretrageRoutes);
+
 app.use(errorWrapper);
 
 async function initServer() {
