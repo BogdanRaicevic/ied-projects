@@ -10,12 +10,18 @@ interface CheckboxListProps {
   data: string[];
   subheader: string;
   onCheckedChange: (checkedValues: string[]) => void;
+  checkedValues: string[];
 }
 
-export default function CheckboxList({ data, subheader, onCheckedChange }: CheckboxListProps) {
-  const [checked, setChecked] = useState<number[]>([]);
+export default function CheckboxList({
+  data,
+  subheader,
+  onCheckedChange,
+  checkedValues,
+}: CheckboxListProps) {
+  const [checked, setChecked] = useState<string[]>(checkedValues);
 
-  const handleToggle = (value: number) => () => {
+  const handleToggle = (value: string) => () => {
     const currentIndex = checked.indexOf(value);
     const newChecked = [...checked];
 
@@ -26,23 +32,26 @@ export default function CheckboxList({ data, subheader, onCheckedChange }: Check
     }
 
     setChecked(newChecked);
+    onCheckedChange(newChecked);
   };
 
   useEffect(() => {
-    const checkedValues = checked.map((index) => data[index]);
+    setChecked(checkedValues);
+  }, [checkedValues]);
+
+  useEffect(() => {
     onCheckedChange(checkedValues);
-  }, [checked, data, onCheckedChange]);
+  }, [checked, onCheckedChange]);
 
   const renderRow = ({ index, style }: ListChildComponentProps) => {
     const value = data[index];
     const labelId = `checkbox-${subheader}-${value}`;
-
     return (
       <ListItem key={value} style={style} disablePadding>
-        <ListItemButton onClick={handleToggle(index)} dense>
+        <ListItemButton onClick={handleToggle(value)} dense>
           <Checkbox
             edge="start"
-            checked={checked.indexOf(index) !== -1}
+            checked={checked.indexOf(value) !== -1}
             disableRipple
             id={labelId}
           />

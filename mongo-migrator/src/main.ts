@@ -1,9 +1,9 @@
-import fs from 'fs';
-import path from 'path';
-import { Migration } from './models/Migration';
-import { mongoDbConnection, mysqlConnection } from './config';
+import fs from "fs";
+import path from "path";
+import { Migration } from "./models/Migration";
+import { mongoDbConnection, mysqlConnection } from "./config";
 
-const migrationsDir = path.join(__dirname, 'migrations');
+const migrationsDir = path.join(__dirname, "migrations");
 
 interface MigrationFile {
   timestamp: number;
@@ -23,10 +23,10 @@ const executeMigration = async (migration: MigrationFile) => {
 const loadMigrations = (): MigrationFile[] => {
   const files = fs.readdirSync(migrationsDir);
   return files
-    .filter((file) => file.endsWith('.ts'))
+    .filter((file) => file.endsWith(".ts"))
     .map((file) => {
-      const [timestamp, ...nameParts] = file.split('_');
-      const name = nameParts.join('_').replace('.ts', '');
+      const [timestamp, ...nameParts] = file.split("_");
+      const name = nameParts.join("_").replace(".ts", "");
       return {
         timestamp: parseInt(timestamp, 10),
         name,
@@ -51,9 +51,9 @@ const runMigrations = async () => {
       }
     }
 
-    console.log('All migrations executed successfully.');
+    console.log("All migrations executed successfully.");
   } catch (error) {
-    console.error('Error running migrations:', error);
+    console.error("Error running migrations:", error);
   } finally {
     mongoConnection.close();
     await mysqlDb.end();

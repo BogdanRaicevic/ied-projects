@@ -15,6 +15,8 @@ import { fetchAllMesta } from "../api/mesta.api";
 import NegationCheckbox from "../components/NegationCheckbox";
 import Divider from "@mui/material/Divider";
 import VirtualizedAutocomplete from "../components/VritualizedAutocomplete/VirtualizedAutocomplete";
+import { fetchAllPretrage, savePretraga } from "../api/pretrage.api";
+import { TODO_ANY } from "../../../ied-be/src/utils/utils";
 
 export default function Pretrage() {
   const [velicineFirmi, setVelicineFirmi] = useState<string[]>([]);
@@ -26,6 +28,8 @@ export default function Pretrage() {
   const [imeFirme, setImeFirme] = useState<string>("");
   const [pib, setPib] = useState<string>("");
   const [email, setEmail] = useState<string>("");
+
+  const [pretrage, setPretrage] = useState();
 
   const [checkedVelicineFirmi, setCheckedVelicineFirmi] = useState<string[]>([]);
   const [checkedRadnaMesta, setCheckedRadnaMesta] = useState<string[]>([]);
@@ -59,6 +63,9 @@ export default function Pretrage() {
 
       const mesta = await fetchAllMesta();
       setMesta(mesta);
+
+      const predefinedPretrage = await fetchAllPretrage();
+      setPretrage(predefinedPretrage);
     };
 
     fetchData();
@@ -112,11 +119,65 @@ export default function Pretrage() {
     negacije: checkedNegations,
   };
 
+  const handleSaveQueryParameters = async () => {
+    console.log("ppp", pretrage);
+
+    await savePretraga(queryParameters);
+  };
+
+  const handleOptionSelect = (option: TODO_ANY) => {
+    console.log("option is", option);
+    // // queryParameters.delatnosti = option.delatnosti;
+    setCheckedDelatnost(option.delatnosti);
+
+    // // queryParameters.mesta = option.mesta;
+    setCheckedMesta(option.mesta);
+
+    // // queryParameters.negacije = option.negacije;
+    setCheckedNegations(option.negacije);
+
+    // // queryParameters.radnaMesta = option.radna_mesta;
+    setCheckedRadnaMesta(option.radna_mesta);
+
+    // // queryParameters.tipoviFirme = option.tipovi_firme;
+    setCheckedTipFirme(option.tipovi_firme);
+
+    // queryParameters.velicineFirmi = option.velicine_firme;
+    setCheckedVelicineFirmi(option.velicine_firme);
+
+    // queryParameters.pib = option.pib;
+    setPib(option.pib);
+
+    // queryParameters.email = option.email;
+    setEmail(option.email);
+
+    // queryParameters.imeFirme = option.ime_firme;
+    setImeFirme(option.ime_firme);
+  };
+
   return (
     <>
       <PageTitle title={"Pretrage"} />
 
-      <VirtualizedAutocomplete />
+      <Grid container spacing={2} mb={2}>
+        <Grid xs={8}>
+          <VirtualizedAutocomplete data={pretrage || []} onOptionSelect={handleOptionSelect} />
+        </Grid>
+        <Grid xs={4} spacing={50}>
+          <Button
+            variant="contained"
+            size="large"
+            color="success"
+            onClick={handleSaveQueryParameters}
+          >
+            Zapamti pretragu
+          </Button>
+          <Button variant="contained" size="large" color="error">
+            Obrisi pretragu
+          </Button>
+        </Grid>
+      </Grid>
+
       <Divider />
       <Grid container spacing={2}>
         <Grid xs={9}>
@@ -129,6 +190,7 @@ export default function Pretrage() {
                   placeholder="Radno Mesto"
                   id="radno-mesto"
                   key="autocomplete-radno-mesto"
+                  checkedValues={checkedRadnaMesta}
                 ></AutocompleteCheckbox>
               </Grid>
               <Grid px={2} xs={2}>
@@ -148,6 +210,7 @@ export default function Pretrage() {
                   placeholder="Tip Firme"
                   id="tip-firme"
                   key="autocomplete-tip-firme"
+                  checkedValues={checkedTipFirme}
                 ></AutocompleteCheckbox>
               </Grid>
               <Grid px={2} xs={2}>
@@ -167,6 +230,7 @@ export default function Pretrage() {
                   placeholder="Delatnost"
                   id="delatnost"
                   key="autocomplete-delatnost"
+                  checkedValues={checkedDelatnost}
                 ></AutocompleteCheckbox>
               </Grid>
               <Grid px={2} xs={2}>
@@ -186,6 +250,7 @@ export default function Pretrage() {
                   placeholder="Mesta"
                   id="mesto"
                   key="autocomplete-mesto"
+                  checkedValues={checkedMesta}
                 ></AutocompleteCheckbox>
               </Grid>
 
@@ -205,6 +270,7 @@ export default function Pretrage() {
             data={velicineFirmi}
             subheader="Veličine Firmi"
             onCheckedChange={setCheckedVelicineFirmi}
+            checkedValues={checkedVelicineFirmi}
           ></CheckboxList>
         </Grid>
       </Grid>

@@ -6,6 +6,7 @@ import ListSubheader from "@mui/material/ListSubheader";
 import { useTheme } from "@mui/material/styles";
 import { VariableSizeList, ListChildComponentProps } from "react-window";
 import Typography from "@mui/material/Typography";
+import { TODO_ANY } from "../../../../ied-be/src/utils/utils";
 
 const LISTBOX_PADDING = 8; // px
 
@@ -110,33 +111,28 @@ const ListboxComponent = React.forwardRef<HTMLDivElement, React.HTMLAttributes<H
   }
 );
 
-function random(length: number) {
-  const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-  let result = "";
-
-  for (let i = 0; i < length; i += 1) {
-    result += characters.charAt(Math.floor(Math.random() * characters.length));
-  }
-
-  return result;
+interface VirtualizeProps {
+  data: TODO_ANY[];
+  onOptionSelect: (option: string) => void;
 }
 
-const OPTIONS = Array.from(new Array(10000))
-  .map(() => random(10 + Math.ceil(Math.random() * 20)))
-  .sort((a: string, b: string) => a.toUpperCase().localeCompare(b.toUpperCase()));
-
-export default function Virtualize() {
+export default function Virtualize({ data, onOptionSelect }: VirtualizeProps) {
+  console.log("virtualize ", data);
   return (
     <Autocomplete
       id="virtualize-demo"
-      sx={{ width: 300 }}
+      sx={{ width: "full" }}
       disableListWrap
       ListboxComponent={ListboxComponent}
-      options={OPTIONS}
-      groupBy={(option) => option[0].toUpperCase()}
-      renderInput={(params) => <TextField {...params} label="10,000 options" />}
-      renderOption={(props, option, state) => [props, option, state.index] as React.ReactNode}
+      options={data}
+      getOptionLabel={(option) => option.naziv_pretrage}
+      groupBy={(option) => option.naziv_pretrage[0].toUpperCase()}
+      renderInput={(params) => <TextField {...params} label="Predefinisane pretrage" />}
+      renderOption={(props, option, state) =>
+        [props, option.naziv_pretrage, state.index] as React.ReactNode
+      }
       renderGroup={(params) => params as any}
+      onChange={(event, value) => onOptionSelect(value)}
     />
   );
 }
