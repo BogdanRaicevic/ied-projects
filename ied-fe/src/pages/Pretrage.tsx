@@ -13,6 +13,8 @@ import { fetchAllTipoviFirme } from "../api/tip_firme.api";
 import { fetchAllDelatnosti } from "../api/delatnosti.api";
 import { fetchAllMesta } from "../api/mesta.api";
 import NegationCheckbox from "../components/NegationCheckbox";
+import Divider from "@mui/material/Divider";
+import VirtualizedAutocomplete from "../components/VritualizedAutocomplete/VirtualizedAutocomplete";
 
 export default function Pretrage() {
   const [velicineFirmi, setVelicineFirmi] = useState<string[]>([]);
@@ -114,6 +116,8 @@ export default function Pretrage() {
     <>
       <PageTitle title={"Pretrage"} />
 
+      <VirtualizedAutocomplete />
+      <Divider />
       <Grid container spacing={2}>
         <Grid xs={9}>
           <Grid container direction="column">
