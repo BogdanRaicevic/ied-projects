@@ -14,10 +14,9 @@ import { fetchAllDelatnosti } from "../api/delatnosti.api";
 import { fetchAllMesta } from "../api/mesta.api";
 import NegationCheckbox from "../components/NegationCheckbox";
 import Divider from "@mui/material/Divider";
-import VirtualizedAutocomplete from "../components/VritualizedAutocomplete/VirtualizedAutocomplete";
-import { deletePretraga, fetchAllPretrage, savePretraga } from "../api/pretrage.api";
+import { fetchAllPretrage } from "../api/pretrage.api";
 import { TODO_ANY } from "../../../ied-be/src/utils/utils";
-import PretragaSaveDialog from "../components/Dialogs/PretragaSaveDialog";
+import PredefinedPretrage from "../components/PredefinedPretrage/PredefinedPretrage";
 
 export default function Pretrage() {
   const [velicineFirmi, setVelicineFirmi] = useState<string[]>([]);
@@ -120,33 +119,6 @@ export default function Pretrage() {
     negacije: checkedNegations,
   };
 
-  const handleSaveQueryParameters = async () => {
-    setOpenPretrageSaveDialog(true);
-  };
-
-  const handleSavePretraga = async (nazivPretrage: string) => {
-    const pretragaName = nazivPretrage || selectedPretraga.naziv;
-    if (pretragaName) {
-      try {
-        await savePretraga(queryParameters, {
-          id: nazivPretrage !== selectedPretraga.naziv ? "" : selectedPretraga.id,
-          naziv: pretragaName,
-        });
-        setOpenPretrageSaveDialog(false);
-        // Optionally, you can update the state or UI to reflect the save
-      } catch (error) {
-        console.error("Failed to save pretraga:", error);
-      }
-    } else {
-      console.error("No option selected for saving");
-    }
-  };
-
-  const [selectedPretraga, setSelectedPretraga] = useState<{ id: string; naziv: string }>({
-    id: "",
-    naziv: "",
-  });
-
   const handleOptionSelect = (option: TODO_ANY) => {
     setCheckedDelatnost(option.delatnosti);
     setCheckedMesta(option.mesta);
@@ -157,53 +129,17 @@ export default function Pretrage() {
     setPib(option.pib);
     setEmail(option.email);
     setImeFirme(option.ime_firme);
-
-    setSelectedPretraga({ id: option._id, naziv: option.naziv_pretrage });
-  };
-
-  const [openPretrageSaveDialog, setOpenPretrageSaveDialog] = useState(false);
-  const handlePretrageSaveClose = () => setOpenPretrageSaveDialog(false);
-
-  const handleDeletePretraga = async () => {
-    if (window.confirm("Da li ste sigurni da zelite da obriste pretragu?") && selectedPretraga) {
-      try {
-        await deletePretraga({ id: selectedPretraga.id });
-        // Optionally, you can update the state or UI to reflect the deletion
-      } catch (error) {
-        console.error("Failed to delete pretraga:", error);
-      }
-    } else {
-      console.error("No option selected for deletion");
-    }
   };
 
   return (
     <>
       <PageTitle title={"Pretrage"} />
 
-      <Grid container spacing={2} mb={2}>
-        <Grid xs={8}>
-          <VirtualizedAutocomplete data={pretrage || []} onOptionSelect={handleOptionSelect} />
-        </Grid>
-        <Grid xs={4} spacing={50}>
-          <Button
-            variant="contained"
-            size="large"
-            color="success"
-            onClick={handleSaveQueryParameters}
-          >
-            Zapamti pretragu
-          </Button>
-          <PretragaSaveDialog
-            open={openPretrageSaveDialog}
-            handleClose={handlePretrageSaveClose}
-            handleSave={handleSavePretraga}
-          ></PretragaSaveDialog>
-          <Button variant="contained" size="large" color="error" onClick={handleDeletePretraga}>
-            Obrisi pretragu
-          </Button>
-        </Grid>
-      </Grid>
+      <PredefinedPretrage
+        pretrage={pretrage}
+        onOptionSelect={handleOptionSelect}
+        queryParameters={queryParameters}
+      ></PredefinedPretrage>
 
       <Divider />
       <Grid container spacing={2}>
