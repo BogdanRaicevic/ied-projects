@@ -132,7 +132,7 @@ export default function Virtualize({ data, onOptionSelect }: VirtualizeProps) {
         [props, option.naziv_pretrage, state.index] as React.ReactNode
       }
       renderGroup={(params) => params as any}
-      onChange={(event, value) => onOptionSelect(value)}
+      onChange={(_event, value) => onOptionSelect(value)}
     />
   );
 }
