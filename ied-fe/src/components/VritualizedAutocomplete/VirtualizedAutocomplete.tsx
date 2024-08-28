@@ -2,7 +2,6 @@ import * as React from "react";
 import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
 import useMediaQuery from "@mui/material/useMediaQuery";
-import ListSubheader from "@mui/material/ListSubheader";
 import { useTheme } from "@mui/material/styles";
 import { VariableSizeList, ListChildComponentProps } from "react-window";
 import Typography from "@mui/material/Typography";
@@ -18,19 +17,11 @@ function renderRow(props: ListChildComponentProps) {
     top: (style.top as number) + LISTBOX_PADDING,
   };
 
-  if (dataSet.hasOwnProperty("group")) {
-    return (
-      <ListSubheader key={dataSet.key} component="div" style={inlineStyle}>
-        {dataSet.group}
-      </ListSubheader>
-    );
-  }
-
   const { key, ...optionProps } = dataSet[0];
 
   return (
     <Typography key={key} component="li" {...optionProps} noWrap style={inlineStyle}>
-      {`#${dataSet[2] + 1} - ${dataSet[1]}`}
+      {`${dataSet[1]}`}
     </Typography>
   );
 }
@@ -126,7 +117,6 @@ export default function Virtualize({ data, onOptionSelect }: VirtualizeProps) {
       ListboxComponent={ListboxComponent}
       options={data}
       getOptionLabel={(option) => option.naziv_pretrage}
-      groupBy={(option) => option.naziv_pretrage[0].toUpperCase()}
       renderInput={(params) => <TextField {...params} label="Predefinisane pretrage" />}
       renderOption={(props, option, state) =>
         [props, option.naziv_pretrage, state.index] as React.ReactNode
