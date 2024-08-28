@@ -15,8 +15,9 @@ import { fetchAllMesta } from "../api/mesta.api";
 import NegationCheckbox from "../components/NegationCheckbox";
 import Divider from "@mui/material/Divider";
 import VirtualizedAutocomplete from "../components/VritualizedAutocomplete/VirtualizedAutocomplete";
-import { fetchAllPretrage, savePretraga } from "../api/pretrage.api";
+import { deletePretraga, fetchAllPretrage, savePretraga } from "../api/pretrage.api";
 import { TODO_ANY } from "../../../ied-be/src/utils/utils";
+import PretragaSaveDialog from "../components/Dialogs/PretragaSaveDialog";
 
 export default function Pretrage() {
   const [velicineFirmi, setVelicineFirmi] = useState<string[]>([]);
@@ -120,39 +121,60 @@ export default function Pretrage() {
   };
 
   const handleSaveQueryParameters = async () => {
-    console.log("ppp", pretrage);
-
-    await savePretraga(queryParameters);
+    setOpenPretrageSaveDialog(true);
   };
 
+  const handleSavePretraga = async (nazivPretrage: string) => {
+    const pretragaName = nazivPretrage || selectedPretraga.naziv;
+    if (pretragaName) {
+      try {
+        await savePretraga(queryParameters, {
+          id: nazivPretrage !== selectedPretraga.naziv ? "" : selectedPretraga.id,
+          naziv: pretragaName,
+        });
+        setOpenPretrageSaveDialog(false);
+        // Optionally, you can update the state or UI to reflect the save
+      } catch (error) {
+        console.error("Failed to save pretraga:", error);
+      }
+    } else {
+      console.error("No option selected for saving");
+    }
+  };
+
+  const [selectedPretraga, setSelectedPretraga] = useState<{ id: string; naziv: string }>({
+    id: "",
+    naziv: "",
+  });
+
   const handleOptionSelect = (option: TODO_ANY) => {
-    console.log("option is", option);
-    // // queryParameters.delatnosti = option.delatnosti;
     setCheckedDelatnost(option.delatnosti);
-
-    // // queryParameters.mesta = option.mesta;
     setCheckedMesta(option.mesta);
-
-    // // queryParameters.negacije = option.negacije;
     setCheckedNegations(option.negacije);
-
-    // // queryParameters.radnaMesta = option.radna_mesta;
     setCheckedRadnaMesta(option.radna_mesta);
-
-    // // queryParameters.tipoviFirme = option.tipovi_firme;
     setCheckedTipFirme(option.tipovi_firme);
-
-    // queryParameters.velicineFirmi = option.velicine_firme;
     setCheckedVelicineFirmi(option.velicine_firme);
-
-    // queryParameters.pib = option.pib;
     setPib(option.pib);
-
-    // queryParameters.email = option.email;
     setEmail(option.email);
-
-    // queryParameters.imeFirme = option.ime_firme;
     setImeFirme(option.ime_firme);
+
+    setSelectedPretraga({ id: option._id, naziv: option.naziv_pretrage });
+  };
+
+  const [openPretrageSaveDialog, setOpenPretrageSaveDialog] = useState(false);
+  const handlePretrageSaveClose = () => setOpenPretrageSaveDialog(false);
+
+  const handleDeletePretraga = async () => {
+    if (window.confirm("Da li ste sigurni da zelite da obriste pretragu?") && selectedPretraga) {
+      try {
+        await deletePretraga({ id: selectedPretraga.id });
+        // Optionally, you can update the state or UI to reflect the deletion
+      } catch (error) {
+        console.error("Failed to delete pretraga:", error);
+      }
+    } else {
+      console.error("No option selected for deletion");
+    }
   };
 
   return (
@@ -172,7 +194,12 @@ export default function Pretrage() {
           >
             Zapamti pretragu
           </Button>
-          <Button variant="contained" size="large" color="error">
+          <PretragaSaveDialog
+            open={openPretrageSaveDialog}
+            handleClose={handlePretrageSaveClose}
+            handleSave={handleSavePretraga}
+          ></PretragaSaveDialog>
+          <Button variant="contained" size="large" color="error" onClick={handleDeletePretraga}>
             Obrisi pretragu
           </Button>
         </Grid>

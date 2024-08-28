@@ -2,16 +2,20 @@ import { TODO_ANY } from "./../../../ied-be/src/utils/utils";
 import axios from "axios";
 import { env } from "../utils/envVariables";
 
-export const savePretraga = async (queryParameters: TODO_ANY) => {
+export const savePretraga = async (
+  queryParameters: TODO_ANY,
+  pretraga: { id?: string; naziv: string }
+) => {
   try {
     const body = {
       queryParameters,
+      pretraga,
     };
 
     const response = await axios.post(`${env.beURL}/api/pretrage/save`, body);
     return response.data;
   } catch (error) {
-    console.error("Error saving pretrage:", error);
+    console.error("Error saving pretraga:", error);
     throw error;
   }
 };
@@ -22,6 +26,22 @@ export const fetchAllPretrage = async () => {
     return r.data;
   } catch (error) {
     console.log("Error fetching pregrage", error);
+    throw error;
+  }
+};
+
+export const deletePretraga = async ({ id }: { id: string }) => {
+  try {
+    const body = {
+      id,
+    };
+
+    console.log("the body", body);
+
+    const response = await axios.post(`${env.beURL}/api/pretrage/delete`, body);
+    return response.data;
+  } catch (error) {
+    console.error("Error deleting pretraga:", error);
     throw error;
   }
 };
