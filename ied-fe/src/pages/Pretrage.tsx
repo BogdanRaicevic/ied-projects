@@ -14,7 +14,6 @@ import { fetchAllDelatnosti } from "../api/delatnosti.api";
 import { fetchAllMesta } from "../api/mesta.api";
 import NegationCheckbox from "../components/NegationCheckbox";
 import Divider from "@mui/material/Divider";
-import { fetchAllPretrage } from "../api/pretrage.api";
 import { TODO_ANY } from "../../../ied-be/src/utils/utils";
 import PredefinedPretrage from "../components/PredefinedPretrage/PredefinedPretrage";
 
@@ -28,8 +27,6 @@ export default function Pretrage() {
   const [imeFirme, setImeFirme] = useState<string>("");
   const [pib, setPib] = useState<string>("");
   const [email, setEmail] = useState<string>("");
-
-  const [pretrage, setPretrage] = useState();
 
   const [checkedVelicineFirmi, setCheckedVelicineFirmi] = useState<string[]>([]);
   const [checkedRadnaMesta, setCheckedRadnaMesta] = useState<string[]>([]);
@@ -63,9 +60,6 @@ export default function Pretrage() {
 
       const mesta = await fetchAllMesta();
       setMesta(mesta);
-
-      const predefinedPretrage = await fetchAllPretrage();
-      setPretrage(predefinedPretrage);
     };
 
     fetchData();
@@ -136,7 +130,6 @@ export default function Pretrage() {
       <PageTitle title={"Pretrage"} />
 
       <PredefinedPretrage
-        pretrage={pretrage}
         onOptionSelect={handleOptionSelect}
         queryParameters={queryParameters}
       ></PredefinedPretrage>

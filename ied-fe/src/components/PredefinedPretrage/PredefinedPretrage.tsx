@@ -2,16 +2,14 @@ import Grid from "@mui/system/Unstable_Grid";
 import VirtualizedAutocomplete from "../VritualizedAutocomplete/VirtualizedAutocomplete";
 import { Button } from "@mui/material";
 import PretragaSaveDialog from "../Dialogs/PretragaSaveDialog";
-import { useState } from "react";
-import { deletePretraga, savePretraga } from "../../api/pretrage.api";
+import { useEffect, useState } from "react";
+import { deletePretraga, fetchAllPretrage, savePretraga } from "../../api/pretrage.api";
 import { TODO_ANY } from "../../../../ied-be/src/utils/utils";
 
 export default function PredefinedPretrage({
-  pretrage,
   onOptionSelect,
   queryParameters,
 }: {
-  pretrage: TODO_ANY;
   onOptionSelect: (option: TODO_ANY) => void;
   queryParameters: {
     imeFirme: string;
@@ -25,6 +23,22 @@ export default function PredefinedPretrage({
     negacije: string[];
   };
 }) {
+  const [pretrage, setPretrage] = useState<TODO_ANY[]>([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const predefinedPretrage = await fetchAllPretrage();
+      setPretrage(predefinedPretrage);
+    };
+
+    fetchData();
+  }, []);
+
+  const fetchUpdatedPretrage = async () => {
+    const updatedPretrage = await fetchAllPretrage();
+    setPretrage(updatedPretrage);
+  };
+
   const [openPretrageSaveDialog, setOpenPretrageSaveDialog] = useState(false);
   const [selectedPretraga, setSelectedPretraga] = useState<{ id: string; naziv: string }>({
     id: "",
@@ -45,6 +59,7 @@ export default function PredefinedPretrage({
         });
         setOpenPretrageSaveDialog(false);
         // Optionally, you can update the state or UI to reflect the save
+        await fetchUpdatedPretrage(); // Fetch updated pretrage data
       } catch (error) {
         console.error("Failed to save pretraga:", error);
       }
@@ -60,6 +75,7 @@ export default function PredefinedPretrage({
       try {
         await deletePretraga({ id: selectedPretraga.id });
         // Optionally, you can update the state or UI to reflect the deletion
+        await fetchUpdatedPretrage(); // Fetch updated pretrage data
       } catch (error) {
         console.error("Failed to delete pretraga:", error);
       }
