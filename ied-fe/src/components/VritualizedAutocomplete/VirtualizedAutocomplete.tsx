@@ -108,7 +108,6 @@ interface VirtualizeProps {
 }
 
 export default function Virtualize({ data, onOptionSelect }: VirtualizeProps) {
-  console.log("virtualize ", data);
   return (
     <Autocomplete
       id="virtualize-demo"

@@ -8,20 +8,9 @@ import {
   MRT_PaginationState,
 } from "material-react-table";
 import { fetchFirmaPretrageData } from "../../api/firma.api";
+import { PretragaParametersType } from "../../store/pretragaParameters.store";
 
-interface QueryParameter {
-  imeFirme: string;
-  pib: string;
-  email: string;
-  velicineFirmi: string[];
-  radnaMesta: string[];
-  tipoviFirme: string[];
-  delatnosti: string[];
-  mesta: string[];
-  negacije: string[];
-}
-
-export default memo(function MyTable(queryParameters: QueryParameter) {
+export default memo(function MyTable(queryParameters: PretragaParametersType) {
   const [data, setData] = useState<Company[]>([]);
   const [documents, setDocuments] = useState(1000);
 

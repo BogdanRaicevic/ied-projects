@@ -1,268 +1,41 @@
 import MyTable from "../components/MyTable";
 import PageTitle from "../components/PageTitle";
-import Grid from "@mui/material/Unstable_Grid2";
-import { Button, TextField } from "@mui/material";
-import { Box } from "@mui/system";
-import SaveDataButton from "../components/SaveDataButton/SaveDataButton";
-import CheckboxList from "../components/CheckboxList/CheckboxList";
-import AutocompleteCheckbox from "../components/AutocompleteCheckbox";
-import { useEffect, useState } from "react";
-import { fetchAllVelicineFirme } from "../api/velicina_firme.api";
-import { fetchAllRadnaMesta } from "../api/radna_mesto.api";
-import { fetchAllTipoviFirme } from "../api/tip_firme.api";
-import { fetchAllDelatnosti } from "../api/delatnosti.api";
-import { fetchAllMesta } from "../api/mesta.api";
-import NegationCheckbox from "../components/NegationCheckbox";
 import Divider from "@mui/material/Divider";
-import { TODO_ANY } from "../../../ied-be/src/utils/utils";
 import PredefinedPretrage from "../components/PredefinedPretrage/PredefinedPretrage";
+import PretragaParameters from "../components/PretragaParameters/PretragaParameters";
+import SaveDataButton from "../components/SaveDataButton";
+import { useState } from "react";
+import { usePretragaStore } from "../store/pretragaParameters.store";
+import { Button } from "@mui/material";
 
 export default function Pretrage() {
-  const [velicineFirmi, setVelicineFirmi] = useState<string[]>([]);
-  const [radnaMesta, setRadnaMesta] = useState<string[]>([]);
-  const [tipoviFirme, setTipoviFirme] = useState<string[]>([]);
-  const [delatnosti, setDelatnosti] = useState<string[]>([]);
-  const [mesta, setMesta] = useState<string[]>([]);
+  const { pretragaParameters } = usePretragaStore();
 
-  const [imeFirme, setImeFirme] = useState<string>("");
-  const [pib, setPib] = useState<string>("");
-  const [email, setEmail] = useState<string>("");
-
-  const [checkedVelicineFirmi, setCheckedVelicineFirmi] = useState<string[]>([]);
-  const [checkedRadnaMesta, setCheckedRadnaMesta] = useState<string[]>([]);
-  const [checkedTipFirme, setCheckedTipFirme] = useState<string[]>([]);
-  const [checkedDelatnost, setCheckedDelatnost] = useState<string[]>([]);
-  const [checkedMesta, setCheckedMesta] = useState<string[]>([]);
-
-  const [checkedNegations, setCheckedNegations] = useState<string[]>([]); // Array to hold values of checked checkboxes
-  const handleNegationChange = (value: string) => {
-    setCheckedNegations(
-      (prevValues) =>
-        prevValues.includes(value)
-          ? prevValues.filter((v) => v !== value) // Remove if already checked
-          : [...prevValues, value] // Add if not checked
-    );
-  };
-
-  useEffect(() => {
-    const fetchData = async () => {
-      const velicineFirme = await fetchAllVelicineFirme();
-      setVelicineFirmi(velicineFirme);
-
-      const radnaMesta = await fetchAllRadnaMesta();
-      setRadnaMesta(radnaMesta);
-
-      const tipoviFirme = await fetchAllTipoviFirme();
-      setTipoviFirme(tipoviFirme);
-
-      const delatnosti = await fetchAllDelatnosti();
-      setDelatnosti(delatnosti);
-
-      const mesta = await fetchAllMesta();
-      setMesta(mesta);
-    };
-
-    fetchData();
-  }, []);
-
-  const [pretraziQueryParameters, setPretraziQueryParameters] = useState<{
-    imeFirme: string;
-    pib: string;
-    email: string;
-    velicineFirmi: string[];
-    radnaMesta: string[];
-    tipoviFirme: string[];
-    delatnosti: string[];
-    mesta: string[];
-    negacije: string[];
-  }>({
-    imeFirme: "",
-    pib: "",
-    email: "",
-    velicineFirmi: [],
-    radnaMesta: [],
-    tipoviFirme: [],
-    delatnosti: [],
-    mesta: [],
-    negacije: [],
-  });
+  const [appliedParameters, setAppliedParameters] = useState(pretragaParameters);
 
   const handlePretraziClick = () => {
-    setPretraziQueryParameters({
-      imeFirme,
-      pib,
-      email,
-      velicineFirmi: checkedVelicineFirmi,
-      radnaMesta: checkedRadnaMesta,
-      tipoviFirme: checkedTipFirme,
-      delatnosti: checkedDelatnost,
-      mesta: checkedMesta,
-      negacije: checkedNegations,
-    });
-  };
-
-  const queryParameters = {
-    imeFirme: imeFirme,
-    pib: pib,
-    email: email,
-    velicineFirmi: checkedVelicineFirmi,
-    radnaMesta: checkedRadnaMesta,
-    tipoviFirme: checkedTipFirme,
-    delatnosti: checkedDelatnost,
-    mesta: checkedMesta,
-    negacije: checkedNegations,
-  };
-
-  const handleOptionSelect = (option: TODO_ANY) => {
-    setCheckedDelatnost(option.delatnosti);
-    setCheckedMesta(option.mesta);
-    setCheckedNegations(option.negacije);
-    setCheckedRadnaMesta(option.radna_mesta);
-    setCheckedTipFirme(option.tipovi_firme);
-    setCheckedVelicineFirmi(option.velicine_firme);
-    setPib(option.pib);
-    setEmail(option.email);
-    setImeFirme(option.ime_firme);
+    setAppliedParameters(pretragaParameters);
   };
 
   return (
     <>
       <PageTitle title={"Pretrage"} />
 
-      <PredefinedPretrage
-        onOptionSelect={handleOptionSelect}
-        queryParameters={queryParameters}
-      ></PredefinedPretrage>
+      <PredefinedPretrage />
 
       <Divider />
-      <Grid container spacing={2}>
-        <Grid xs={9}>
-          <Grid container direction="column">
-            <Grid container alignItems="center">
-              <Grid xs={10} sx={{ width: "75%" }}>
-                <AutocompleteCheckbox
-                  data={radnaMesta}
-                  onCheckedChange={setCheckedRadnaMesta}
-                  placeholder="Radno Mesto"
-                  id="radno-mesto"
-                  key="autocomplete-radno-mesto"
-                  checkedValues={checkedRadnaMesta}
-                ></AutocompleteCheckbox>
-              </Grid>
-              <Grid px={2} xs={2}>
-                <NegationCheckbox
-                  key="negate-radno-mesto"
-                  value="negate-radno-mesto"
-                  negationChecked={checkedNegations.includes("negate-radno-mesto")}
-                  onNegationChange={handleNegationChange}
-                ></NegationCheckbox>
-              </Grid>
-            </Grid>
-            <Grid container alignItems="center">
-              <Grid xs={10} sx={{ width: "75%" }}>
-                <AutocompleteCheckbox
-                  data={tipoviFirme}
-                  onCheckedChange={setCheckedTipFirme}
-                  placeholder="Tip Firme"
-                  id="tip-firme"
-                  key="autocomplete-tip-firme"
-                  checkedValues={checkedTipFirme}
-                ></AutocompleteCheckbox>
-              </Grid>
-              <Grid px={2} xs={2}>
-                <NegationCheckbox
-                  key="negate-tip-firme"
-                  value="negate-tip-firme"
-                  negationChecked={checkedNegations.includes("negate-tip-firme")}
-                  onNegationChange={handleNegationChange}
-                ></NegationCheckbox>
-              </Grid>
-            </Grid>
-            <Grid container alignItems="center">
-              <Grid xs={10} sx={{ width: "75%" }}>
-                <AutocompleteCheckbox
-                  data={delatnosti}
-                  onCheckedChange={setCheckedDelatnost}
-                  placeholder="Delatnost"
-                  id="delatnost"
-                  key="autocomplete-delatnost"
-                  checkedValues={checkedDelatnost}
-                ></AutocompleteCheckbox>
-              </Grid>
-              <Grid px={2} xs={2}>
-                <NegationCheckbox
-                  key="negate-delatnost"
-                  value="negate-delatnost"
-                  negationChecked={checkedNegations.includes("negate-delatnost")}
-                  onNegationChange={handleNegationChange}
-                ></NegationCheckbox>
-              </Grid>
-            </Grid>
-            <Grid container alignItems="center">
-              <Grid xs={10} sx={{ width: "75%" }}>
-                <AutocompleteCheckbox
-                  data={mesta}
-                  onCheckedChange={setCheckedMesta}
-                  placeholder="Mesta"
-                  id="mesto"
-                  key="autocomplete-mesto"
-                  checkedValues={checkedMesta}
-                ></AutocompleteCheckbox>
-              </Grid>
 
-              <Grid px={2} xs={2}>
-                <NegationCheckbox
-                  key="negate-mesto"
-                  value="negate-mesto"
-                  negationChecked={checkedNegations.includes("negate-mesto")}
-                  onNegationChange={handleNegationChange}
-                ></NegationCheckbox>
-              </Grid>
-            </Grid>
-          </Grid>
-        </Grid>
-        <Grid xs={3}>
-          <CheckboxList
-            data={velicineFirmi}
-            subheader="Veličine Firmi"
-            onCheckedChange={setCheckedVelicineFirmi}
-            checkedValues={checkedVelicineFirmi}
-          ></CheckboxList>
-        </Grid>
-      </Grid>
-
-      <Box
-        component="form"
-        sx={{
-          "& .MuiTextField-root": { m: 1, width: "25ch" },
-        }}
-        noValidate
-        autoComplete="off"
-      >
-        <Grid mt={4} maxWidth="lg">
-          <TextField
-            label="Ime Firme"
-            value={imeFirme}
-            onChange={(e) => setImeFirme(e.target.value)}
-          />
-          <TextField
-            label="PIB / Matični broj"
-            value={pib}
-            onChange={(e) => setPib(e.target.value)}
-          />
-          <TextField label="E-mail" value={email} onChange={(e) => setEmail(e.target.value)} />
-        </Grid>
-      </Box>
+      <PretragaParameters />
 
       <SaveDataButton
         exportSubject="firma"
         fileName="pretrage_firma"
-        queryParameters={queryParameters}
+        queryParameters={pretragaParameters}
       ></SaveDataButton>
       <SaveDataButton
         exportSubject="zaposleni"
         fileName="pretrage_zaposleni"
-        queryParameters={queryParameters}
+        queryParameters={pretragaParameters}
       ></SaveDataButton>
 
       <Button
@@ -275,7 +48,7 @@ export default function Pretrage() {
         Pretrazi
       </Button>
 
-      <MyTable {...pretraziQueryParameters} />
+      <MyTable {...appliedParameters} />
     </>
   );
 }

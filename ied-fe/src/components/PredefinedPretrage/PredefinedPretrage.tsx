@@ -5,39 +5,19 @@ import PretragaSaveDialog from "../Dialogs/PretragaSaveDialog";
 import { useEffect, useState } from "react";
 import { deletePretraga, fetchAllPretrage, savePretraga } from "../../api/pretrage.api";
 import { TODO_ANY } from "../../../../ied-be/src/utils/utils";
+import { usePretragaStore } from "../../store/pretragaParameters.store";
 
-export default function PredefinedPretrage({
-  onOptionSelect,
-  queryParameters,
-}: {
-  onOptionSelect: (option: TODO_ANY) => void;
-  queryParameters: {
-    imeFirme: string;
-    pib: string;
-    email: string;
-    velicineFirmi: string[];
-    radnaMesta: string[];
-    tipoviFirme: string[];
-    delatnosti: string[];
-    mesta: string[];
-    negacije: string[];
-  };
-}) {
+export default function PredefinedPretrage() {
   const [pretrage, setPretrage] = useState<TODO_ANY[]>([]);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const predefinedPretrage = await fetchAllPretrage();
-      setPretrage(predefinedPretrage);
-    };
-
-    fetchData();
-  }, []);
-
-  const fetchUpdatedPretrage = async () => {
-    const updatedPretrage = await fetchAllPretrage();
-    setPretrage(updatedPretrage);
+  const fetchPretrage = async () => {
+    const pretrage = await fetchAllPretrage();
+    setPretrage(pretrage);
   };
+
+  useEffect(() => {
+    fetchPretrage();
+  }, []);
 
   const [openPretrageSaveDialog, setOpenPretrageSaveDialog] = useState(false);
   const [selectedPretraga, setSelectedPretraga] = useState<{ id: string; naziv: string }>({
@@ -49,17 +29,19 @@ export default function PredefinedPretrage({
     setOpenPretrageSaveDialog(true);
   };
 
+  const { pretragaParameters, setPretragaParameters } = usePretragaStore();
+
   const handleSavePretraga = async (nazivPretrage: string) => {
     const pretragaName = nazivPretrage || selectedPretraga.naziv;
     if (pretragaName) {
       try {
-        await savePretraga(queryParameters, {
+        await savePretraga(pretragaParameters, {
           id: nazivPretrage !== selectedPretraga.naziv ? "" : selectedPretraga.id,
           naziv: pretragaName,
         });
         setOpenPretrageSaveDialog(false);
         // Optionally, you can update the state or UI to reflect the save
-        await fetchUpdatedPretrage(); // Fetch updated pretrage data
+        await fetchPretrage(); // Fetch updated pretrage data
       } catch (error) {
         console.error("Failed to save pretraga:", error);
       }
@@ -75,7 +57,7 @@ export default function PredefinedPretrage({
       try {
         await deletePretraga({ id: selectedPretraga.id });
         // Optionally, you can update the state or UI to reflect the deletion
-        await fetchUpdatedPretrage(); // Fetch updated pretrage data
+        await fetchPretrage(); // Fetch updated pretrage data
       } catch (error) {
         console.error("Failed to delete pretraga:", error);
       }
@@ -86,7 +68,19 @@ export default function PredefinedPretrage({
 
   const handleOptionSelect = (option: TODO_ANY) => {
     setSelectedPretraga({ id: option._id, naziv: option.naziv_pretrage });
-    onOptionSelect(option);
+    console.log("option", option);
+    const mappedPregrage = {
+      imeFirme: option.ime_firme,
+      pib: option.pib,
+      email: option.emali,
+      mesta: option.mesta,
+      delatnosti: option.delatnosti,
+      tipoviFirme: option.tipovi_firme,
+      radnaMesta: option.radna_mesta,
+      velicineFirmi: option.velicine_firme,
+      negacije: option.negacije,
+    };
+    setPretragaParameters(mappedPregrage);
   };
 
   return (
