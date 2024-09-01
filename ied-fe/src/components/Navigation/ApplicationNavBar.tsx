@@ -10,8 +10,8 @@ export default function ApplicationNavBar() {
     // { text: "Evidencija", linkPath: "/evidencija" },
     { text: "Pretrage", linkPath: "/pretrage" },
     // { text: "Računi", linkPath: "/racuni" },
-    { text: "Zaposleni", linkPath: "/zaposleni" },
-    { text: "Seminari", linkPath: "/seminari" },
+    // { text: "Zaposleni", linkPath: "/zaposleni" },
+    // { text: "Seminari", linkPath: "/seminari" },
   ];
 
   return (
@@ -30,9 +30,9 @@ export default function ApplicationNavBar() {
               </Link>
             ))}
           </Box>
-          <Link component={RouteLink} to={"/prijava"} sx={{ color: "white" }}>
+          {/* <Link component={RouteLink} to={"/prijava"} sx={{ color: "white" }}>
             <Button sx={{ color: "#fff" }}>Prijava/Odjava</Button>
-          </Link>
+          </Link> */}
         </Toolbar>
       </AppBar>
     </Box>
