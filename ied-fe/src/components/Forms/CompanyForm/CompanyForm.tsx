@@ -1,7 +1,6 @@
 import { FormControl, TextField, InputAdornment, Button, Divider } from "@mui/material";
 import { Box } from "@mui/system";
 import { useForm } from "react-hook-form";
-// import { stanjaFirme, tipoviFirme, velicineFirme } from "../../../fakeData/companyData";
 import { zodResolver } from "@hookform/resolvers/zod";
 import React, { useEffect, useState } from "react";
 import Grid2 from "@mui/material/Unstable_Grid2/Grid2";
@@ -28,6 +27,10 @@ import {
   // MonitorHeart,
   Comment,
 } from "@mui/icons-material";
+import { fetchAllTipoviFirme } from "../../../api/tip_firme.api";
+import { fetchAllVelicineFirme } from "../../../api/velicina_firme.api";
+import { fetchAllStanjaFirme } from "../../../api/stanja_firme.api";
+import AutocompleteCheckbox from "../../AutocompleteCheckbox";
 
 export const companyFormMetadata: Metadata[] = [
   {
@@ -111,6 +114,26 @@ export const CompanyForm: React.FC<CompanyFormProps> = ({ inputCompany }) => {
   // TODO: add types
   const [company, setCompany] = useState(inputCompany);
 
+  const [tipoviFirme, setTipoviFirme] = useState([]);
+  const [stanjaFirme, setStanjaFirme] = useState([]);
+  const [velicinieFirme, setVelicineFirme] = useState([]);
+
+  useEffect(() => {
+    async function loadData() {
+      const [tipovi, velicine, stanja] = await Promise.all([
+        fetchAllTipoviFirme(),
+        fetchAllVelicineFirme(),
+        fetchAllStanjaFirme(),
+      ]);
+
+      setTipoviFirme(tipovi);
+      setVelicineFirme(velicine);
+      setStanjaFirme(stanja);
+    }
+    console.log("stanja", stanjaFirme);
+    loadData();
+  }, []);
+
   useEffect(() => {
     setCompany(inputCompany);
     reset(inputCompany);
@@ -124,6 +147,7 @@ export const CompanyForm: React.FC<CompanyFormProps> = ({ inputCompany }) => {
   const onError = (errors: any, e: any) => console.log("Company form errors: ", errors, e);
 
   function renderFiled(item: Metadata, errors: any) {
+    console.log("render file", item);
     if (item.inputType === InputTypesSchema.enum.Text) {
       return (
         <TextField
@@ -163,62 +187,34 @@ export const CompanyForm: React.FC<CompanyFormProps> = ({ inputCompany }) => {
       );
     }
 
-    // if (item.inputType === InputTypesSchema.enum.Select) {
-    //   let optionsData: string[] = [];
-    //   switch (item.key) {
-    //     case "tip_firme":
-    //       optionsData = tipoviFirme;
-    //       break;
-    //     case "velicina":
-    //       optionsData = velicineFirme;
-    //       break;
-    //     // case "stanje":
-    //     //   optionsData = stanjaFirme;
-    //     //   break;
-    //     default:
-    //       break;
-    //   }
+    console.log("item", item);
 
-    //   // return (
-    //   //   <Controller
-    //   //     name={item.key as "tip_firme" | "velicina"} // | stanje
-    //   //     control={control}
-    //   //     render={({ field }) => {
-    //   //       const { onChange } = field;
-    //   //       return (
-    //   //         <Autocomplete
-    //   //           {...register(item.key as keyof Company)} // TODO: fix this
-    //   //           options={optionsData}
-    //   //           defaultValue={company[item.key as keyof Company]}
-    //   //           renderInput={(params) => {
-    //   //             return (
-    //   //               <TextField
-    //   //                 {...params}
-    //   //                 label={item.label}
-    //   //                 variant="outlined"
-    //   //                 InputProps={{
-    //   //                   ...params.InputProps,
-    //   //                   startAdornment: (
-    //   //                     <>
-    //   //                       <InputAdornment position="end" sx={{ m: 1 }}>
-    //   //                         {item.inputAdornment}
-    //   //                       </InputAdornment>
-    //   //                       {params.InputProps.startAdornment}
-    //   //                     </>
-    //   //                   ),
-    //   //                 }}
-    //   //               />
-    //   //             );
-    //   //           }}
-    //   //           onChange={(_event, newValue) => {
-    //   //             onChange(newValue);
-    //   //           }}
-    //   //         />
-    //   //       );
-    //   //     }}
-    //   //   ></Controller>
-    //   // );
-    // }
+    if (item.inputType === InputTypesSchema.enum.Select) {
+      let optionsData: string[] = [];
+      switch (item.key) {
+        case "tip_firme":
+          optionsData = tipoviFirme;
+          break;
+        case "velicina":
+          optionsData = velicinieFirme;
+          break;
+        case "stanje":
+          optionsData = stanjaFirme;
+          break;
+        default:
+          break;
+      }
+
+      return (
+        <AutocompleteCheckbox
+          data={optionsData}
+          id={item.key}
+          placeholder={item.label}
+          onCheckedChange={() => console.log("test")}
+          checkedValues={[]}
+        ></AutocompleteCheckbox>
+      );
+    }
   }
 
   const inputItems = (inputType: z.infer<typeof InputTypesSchema>) => {
@@ -262,7 +258,7 @@ export const CompanyForm: React.FC<CompanyFormProps> = ({ inputCompany }) => {
         <Button sx={{ my: 2 }} size="large" variant="contained" color="success" type="submit">
           Sačuvaj
         </Button>
-        <Divider sx={{ width: "100%", my: 2 }} />{" "}
+        <Divider sx={{ width: "100%", my: 2 }} />
       </Grid2>
     </Box>
   );

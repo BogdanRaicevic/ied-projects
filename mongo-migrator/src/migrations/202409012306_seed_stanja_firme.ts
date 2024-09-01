@@ -2,9 +2,10 @@ import { mongoDbConnection } from '../config';
 
 const stanja = [
   { stanje_firme: 'Ne znam' },
-  { stanje_firme: 'Likvidna' },
+  { stanje_firme: 'Likvidacija' },
   { stanje_firme: 'Bankrot' },
-  { stanje_firme: 'U blokadi' },
+  { stanje_firme: 'Blokada' },
+  { stanje_firme: 'Stečaj' },
 ];
 
 export const up = async () => {

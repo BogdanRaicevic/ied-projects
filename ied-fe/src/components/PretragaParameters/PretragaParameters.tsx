@@ -34,20 +34,23 @@ export default function PretragaParameters() {
 
   useEffect(() => {
     const fetchData = async () => {
-      const velicineFirme = await fetchAllVelicineFirme();
-      setVelicineFirmi(velicineFirme);
+      try {
+        const [velicineFirme, radnaMesta, tipoviFirme, delatnosti, mesta] = await Promise.all([
+          fetchAllVelicineFirme(),
+          fetchAllRadnaMesta(),
+          fetchAllTipoviFirme(),
+          fetchAllDelatnosti(),
+          fetchAllMesta(),
+        ]);
 
-      const radnaMesta = await fetchAllRadnaMesta();
-      setRadnaMesta(radnaMesta);
-
-      const tipoviFirme = await fetchAllTipoviFirme();
-      setTipoviFirme(tipoviFirme);
-
-      const delatnosti = await fetchAllDelatnosti();
-      setDelatnosti(delatnosti);
-
-      const mesta = await fetchAllMesta();
-      setMesta(mesta);
+        setVelicineFirmi(velicineFirme);
+        setRadnaMesta(radnaMesta);
+        setTipoviFirme(tipoviFirme);
+        setDelatnosti(delatnosti);
+        setMesta(mesta);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
     };
 
     fetchData();
