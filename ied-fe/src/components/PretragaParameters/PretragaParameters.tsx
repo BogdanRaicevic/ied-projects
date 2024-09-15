@@ -1,7 +1,7 @@
 import { TextField } from "@mui/material";
 import Grid from "@mui/system/Unstable_Grid";
 import { Box } from "@mui/system";
-import AutocompleteMultiple from "../AutocompleteMultiple";
+import AutocompleteMultiple from "../Autocomplete/Multiple";
 import CheckboxList from "../CheckboxList";
 import NegationCheckbox from "../NegationCheckbox";
 import { useEffect, useState } from "react";

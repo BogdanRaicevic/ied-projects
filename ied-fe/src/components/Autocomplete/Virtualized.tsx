@@ -107,7 +107,7 @@ interface VirtualizeProps {
   onOptionSelect: (option: string) => void;
 }
 
-export default function Virtualize({ data, onOptionSelect }: VirtualizeProps) {
+export default function VirtualizedAutocomplete({ data, onOptionSelect }: VirtualizeProps) {
   return (
     <Autocomplete
       id="virtualize-demo"
