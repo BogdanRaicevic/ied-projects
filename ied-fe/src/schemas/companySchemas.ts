@@ -32,9 +32,7 @@ export const CompanySchema = z.object({
   delatnost: z.optional(z.string()),
   ucesce_na_seminarima: z.optional(z.string()),
   komentar: z.string().max(1000),
-  stecaj: z.boolean(),
-  likvidacija: z.boolean(),
-  blokada: z.boolean(),
+  stanje_firme: z.string().max(50),
   mesto: z.string().max(50),
   postanski_broj: z
     .string()

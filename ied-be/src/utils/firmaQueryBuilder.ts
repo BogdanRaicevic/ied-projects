@@ -29,7 +29,8 @@ export function createFirmaQuery(params: FirmaQueryParams): FilterQuery<FirmaTyp
   const negateDelatnost = negations.includes(Negations.Delatnost);
   const negateMesto = negations.includes(Negations.Mesto);
 
-  console.log("ovo su params: ", params);
+  // console.log("ovo su params: ", params);
+  // add stanja firme to search
   if (params.imeFirme && params.imeFirme.length > 0) {
     query.naziv_firme = { $regex: params.imeFirme, $options: "i" }; // Case-insensitive partial match
   }

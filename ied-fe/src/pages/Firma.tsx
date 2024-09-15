@@ -4,7 +4,7 @@ import { myZaposleniColumns } from "../components/MyTable/myCompanyColumns";
 import CompanyForm from "../components/Forms/CompanyForm";
 // import AttendedSeminarsAccordion from "../components/Accordion";
 import { Company, Zaposleni } from "../schemas/companySchemas";
-import PrijavaOdjava from "../components/PrijavaOdjava";
+// import PrijavaOdjava from "../components/PrijavaOdjava";
 import { useEffect, useState } from "react";
 import { Tooltip, IconButton, Button } from "@mui/material";
 import { Box } from "@mui/system";
@@ -155,20 +155,20 @@ export default function Firma() {
     );
   }
 
-  function handlePrijavaChange(event: React.ChangeEvent<HTMLInputElement>) {
-    setCompany((prevState: TODO_ANY_TYPE) => ({
-      ...prevState,
-      zeleMarketingMaterijal: event.target.checked,
-    }));
-  }
+  // function handlePrijavaChange(event: React.ChangeEvent<HTMLInputElement>) {
+  //   setCompany((prevState: TODO_ANY_TYPE) => ({
+  //     ...prevState,
+  //     zeleMarketingMaterijal: event.target.checked,
+  //   }));
+  // }
 
   return (
     <>
       <h1>Firma: {company?.naziv_firme}</h1>
-      <PrijavaOdjava
+      {/* <PrijavaOdjava
         prijavljeniValue={company?.zeleMarketingMaterijal || true}
         prijavaChange={handlePrijavaChange}
-      ></PrijavaOdjava>
+      ></PrijavaOdjava> */}
       <CompanyForm inputCompany={company}></CompanyForm>
       <Button
         sx={{ my: 2 }}

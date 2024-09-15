@@ -11,89 +11,10 @@ import {
   Company,
 } from "../../../schemas/companySchemas";
 import { z } from "zod";
-import {
-  // Warning,
-  Business,
-  // TravelExplore,
-  Home,
-  LocationCity,
-  // DonutSmall,
-  ConfirmationNumber,
-  Phone,
-  Email,
-  Approval,
-  SwitchAccount,
-  Height,
-  // MonitorHeart,
-  Comment,
-} from "@mui/icons-material";
-import { fetchAllTipoviFirme } from "../../../api/tip_firme.api";
-import { fetchAllVelicineFirme } from "../../../api/velicina_firme.api";
-import { fetchAllStanjaFirme } from "../../../api/stanja_firme.api";
-import AutocompleteMultiple from "../../AutocompleteMultiple";
 
-export const companyFormMetadata: Metadata[] = [
-  {
-    key: "naziv_firme",
-    label: "Naziv Firme",
-    inputAdornment: <Business />,
-    inputType: InputTypesSchema.enum.Text,
-  },
-  {
-    key: "adresa",
-    label: "Adresa",
-    inputAdornment: <Home />,
-    inputType: InputTypesSchema.enum.Text,
-  },
-  {
-    key: "mesto",
-    label: "Mesto",
-    inputAdornment: <LocationCity />,
-    inputType: InputTypesSchema.enum.Text,
-  },
-  {
-    key: "PIB",
-    label: "PIB",
-    inputAdornment: <ConfirmationNumber />,
-    inputType: InputTypesSchema.enum.Text,
-  },
-  {
-    key: "telefon",
-    label: "Telefon",
-    inputAdornment: <Phone />,
-    inputType: InputTypesSchema.enum.Text,
-  },
-  {
-    key: "e_mail",
-    label: "Email",
-    inputAdornment: <Email />,
-    inputType: InputTypesSchema.enum.Text,
-  },
-  {
-    key: "postanski_broj",
-    label: "Postanski broj",
-    inputAdornment: <Approval />,
-    inputType: InputTypesSchema.enum.Text,
-  },
-  {
-    key: "tip_firme",
-    label: "Tip firme",
-    inputAdornment: <SwitchAccount />,
-    inputType: InputTypesSchema.enum.Select,
-  },
-  {
-    key: "velicina",
-    label: "Velicina firme",
-    inputAdornment: <Height />,
-    inputType: InputTypesSchema.enum.Select,
-  },
-  {
-    key: "komentar",
-    label: "Komentari",
-    inputAdornment: <Comment />,
-    inputType: InputTypesSchema.enum.TextMultiline,
-  },
-];
+import AutocompleteSingle from "../../Autocomplete/Single";
+import { useFetchData } from "../../../hooks/useFetchData";
+import { companyFormMetadata } from "./metadata";
 
 type CompanyFormProps = {
   inputCompany: Company;
@@ -114,25 +35,28 @@ export const CompanyForm: React.FC<CompanyFormProps> = ({ inputCompany }) => {
   // TODO: add types
   const [company, setCompany] = useState(inputCompany);
 
+  const {
+    tipoviFirme: fetchedTipoviFirme,
+    velicineFirme: fetchedVelicineFirme,
+    stanjaFirme: fetchedStanjaFirme,
+    mesta: fetchedMesta,
+  } = useFetchData();
+
   const [tipoviFirme, setTipoviFirme] = useState([]);
   const [stanjaFirme, setStanjaFirme] = useState([]);
   const [velicinieFirme, setVelicineFirme] = useState([]);
+  const [mesta, setMesta] = useState([]);
 
   useEffect(() => {
-    async function loadData() {
-      const [tipovi, velicine, stanja] = await Promise.all([
-        fetchAllTipoviFirme(),
-        fetchAllVelicineFirme(),
-        fetchAllStanjaFirme(),
-      ]);
+    const fetchData = () => {
+      setTipoviFirme(fetchedTipoviFirme || []);
+      setStanjaFirme(fetchedStanjaFirme || []);
+      setVelicineFirme(fetchedVelicineFirme || []);
+      setMesta(fetchedMesta || []);
+    };
 
-      setTipoviFirme(tipovi);
-      setVelicineFirme(velicine);
-      setStanjaFirme(stanja);
-    }
-    console.log("stanja", stanjaFirme);
-    loadData();
-  }, []);
+    fetchData();
+  }, [fetchedStanjaFirme, fetchedTipoviFirme, fetchedVelicineFirme, fetchedMesta]);
 
   useEffect(() => {
     setCompany(inputCompany);
@@ -147,7 +71,7 @@ export const CompanyForm: React.FC<CompanyFormProps> = ({ inputCompany }) => {
   const onError = (errors: any, e: any) => console.log("Company form errors: ", errors, e);
 
   function renderFiled(item: Metadata, errors: any) {
-    console.log("render file", item);
+    // console.log("render file", item);
     if (item.inputType === InputTypesSchema.enum.Text) {
       return (
         <TextField
@@ -187,7 +111,7 @@ export const CompanyForm: React.FC<CompanyFormProps> = ({ inputCompany }) => {
       );
     }
 
-    console.log("item", item);
+    // console.log("item", item);
 
     if (item.inputType === InputTypesSchema.enum.Select) {
       let optionsData: string[] = [];
@@ -198,23 +122,24 @@ export const CompanyForm: React.FC<CompanyFormProps> = ({ inputCompany }) => {
         case "velicina":
           optionsData = velicinieFirme;
           break;
-        case "stanje":
+        case "stanje_firme":
           optionsData = stanjaFirme;
+          break;
+        case "mesto":
+          optionsData = mesta;
           break;
         default:
           break;
       }
 
-    //   return (
-    //     <AutocompleteMultiple
-    //       data={optionsData}
-    //       id={item.key}
-    //       placeholder={item.label}
-    //       onCheckedChange={() => console.log("test")}
-    //       checkedValues={[]}
-    //     ></AutocompleteMultiple>
-    //   );
-    // }
+      return (
+        <AutocompleteSingle
+          data={optionsData}
+          id={item.key}
+          placeholder={item.label}
+        ></AutocompleteSingle>
+      );
+    }
   }
 
   const inputItems = (inputType: z.infer<typeof InputTypesSchema>) => {
