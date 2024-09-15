@@ -23,17 +23,24 @@ export const up = async () => {
       if (!firma) {
         continue;
       }
-      const stanjeFirme: string[] = [];
+      const current: string[] = [];
 
       stanja.forEach((item) => {
         if (firma[item] === 1) {
-          stanjeFirme.push(propertyMap[item]);
+          current.push(propertyMap[item]);
         }
       });
 
-      if (stanjeFirme.length === 0) {
-        stanjeFirme.push(propertyMap.neZnam);
+      if (current.length === 0) {
+        current.push(propertyMap.neZnam);
       }
+
+      let finalResult =
+        current.length >= 2
+          ? current.includes('Odjava')
+            ? propertyMap.odjava
+            : current[0]
+          : current[0];
 
       const unsetFields = {
         stecaj: '',
@@ -44,7 +51,7 @@ export const up = async () => {
 
       await firmasCollection.updateOne(
         { _id: firma?._id },
-        { $set: { stanje_firme: stanjeFirme }, $unset: unsetFields }
+        { $set: { stanje_firme: finalResult }, $unset: unsetFields }
       );
     }
   } catch (error) {
