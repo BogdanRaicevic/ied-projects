@@ -1,12 +1,7 @@
-import { Autocomplete, Checkbox, Chip, TextField } from "@mui/material";
-import CheckBoxOutlineBlankIcon from "@mui/icons-material/CheckBoxOutlineBlank";
-import CheckBoxIcon from "@mui/icons-material/CheckBox";
+import { Autocomplete, Chip, TextField } from "@mui/material";
 import { useState, memo, useEffect } from "react";
 
-const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
-const checkedIcon = <CheckBoxIcon fontSize="small" />;
-
-interface AutocompleteCheckboxProps {
+interface AutocompleteMultipleProps {
   data: string[];
   onCheckedChange: (checked: string[]) => void;
   placeholder: string;
@@ -20,7 +15,7 @@ export default memo(function AutocompleteCheckbox({
   placeholder,
   id,
   checkedValues,
-}: AutocompleteCheckboxProps) {
+}: AutocompleteMultipleProps) {
   const [selectedOptions, setSelectedOptions] = useState<string[]>(checkedValues);
 
   useEffect(() => {
@@ -45,22 +40,6 @@ export default memo(function AutocompleteCheckbox({
           return <Chip variant="outlined" label={option} key={key} {...tagProps} />;
         })
       }
-      renderOption={(props, option, { selected }) => {
-        // eslint-disable-next-line react/prop-types
-        const { key, ...theRest } = props as any;
-        return (
-          <li key={id + key} {...theRest}>
-            <Checkbox
-              id={id + option}
-              icon={icon}
-              checkedIcon={checkedIcon}
-              style={{ marginRight: 8 }}
-              checked={selected}
-            />
-            {option}
-          </li>
-        );
-      }}
       renderInput={(params) => <TextField {...params} placeholder={placeholder} />}
       onChange={handleChange}
       value={selectedOptions}

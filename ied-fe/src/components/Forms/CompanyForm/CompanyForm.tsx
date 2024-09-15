@@ -30,7 +30,7 @@ import {
 import { fetchAllTipoviFirme } from "../../../api/tip_firme.api";
 import { fetchAllVelicineFirme } from "../../../api/velicina_firme.api";
 import { fetchAllStanjaFirme } from "../../../api/stanja_firme.api";
-import AutocompleteCheckbox from "../../AutocompleteCheckbox";
+import AutocompleteMultiple from "../../AutocompleteMultiple";
 
 export const companyFormMetadata: Metadata[] = [
   {
@@ -205,16 +205,16 @@ export const CompanyForm: React.FC<CompanyFormProps> = ({ inputCompany }) => {
           break;
       }
 
-      return (
-        <AutocompleteCheckbox
-          data={optionsData}
-          id={item.key}
-          placeholder={item.label}
-          onCheckedChange={() => console.log("test")}
-          checkedValues={[]}
-        ></AutocompleteCheckbox>
-      );
-    }
+    //   return (
+    //     <AutocompleteMultiple
+    //       data={optionsData}
+    //       id={item.key}
+    //       placeholder={item.label}
+    //       onCheckedChange={() => console.log("test")}
+    //       checkedValues={[]}
+    //     ></AutocompleteMultiple>
+    //   );
+    // }
   }
 
   const inputItems = (inputType: z.infer<typeof InputTypesSchema>) => {

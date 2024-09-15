@@ -1,7 +1,7 @@
 import { TextField } from "@mui/material";
 import Grid from "@mui/system/Unstable_Grid";
 import { Box } from "@mui/system";
-import AutocompleteCheckbox from "../AutocompleteCheckbox";
+import AutocompleteMultiple from "../AutocompleteMultiple";
 import CheckboxList from "../CheckboxList";
 import NegationCheckbox from "../NegationCheckbox";
 import { useEffect, useState } from "react";
@@ -73,14 +73,14 @@ export default function PretragaParameters() {
           <Grid container direction="column">
             <Grid container alignItems="center">
               <Grid xs={10} sx={{ width: "75%" }}>
-                <AutocompleteCheckbox
+                <AutocompleteMultiple
                   data={radnaMesta}
                   onCheckedChange={(value) => handleInputChange("radnaMesta", value)}
                   placeholder="Radno Mesto"
                   id="radno-mesto"
                   key="autocomplete-radno-mesto"
                   checkedValues={pretragaParameters.radnaMesta}
-                ></AutocompleteCheckbox>
+                ></AutocompleteMultiple>
               </Grid>
               <Grid px={2} xs={2}>
                 <NegationCheckbox
@@ -93,14 +93,14 @@ export default function PretragaParameters() {
             </Grid>
             <Grid container alignItems="center">
               <Grid xs={10} sx={{ width: "75%" }}>
-                <AutocompleteCheckbox
+                <AutocompleteMultiple
                   data={tipoviFirme}
                   onCheckedChange={(value) => handleInputChange("tipoviFirme", value)}
                   placeholder="Tip Firme"
                   id="tip-firme"
                   key="autocomplete-tip-firme"
                   checkedValues={pretragaParameters.tipoviFirme}
-                ></AutocompleteCheckbox>
+                ></AutocompleteMultiple>
               </Grid>
               <Grid px={2} xs={2}>
                 <NegationCheckbox
@@ -113,14 +113,14 @@ export default function PretragaParameters() {
             </Grid>
             <Grid container alignItems="center">
               <Grid xs={10} sx={{ width: "75%" }}>
-                <AutocompleteCheckbox
+                <AutocompleteMultiple
                   data={delatnosti}
                   onCheckedChange={(value) => handleInputChange("delatnosti", value)}
                   placeholder="Delatnost"
                   id="delatnost"
                   key="autocomplete-delatnost"
                   checkedValues={pretragaParameters.delatnosti}
-                ></AutocompleteCheckbox>
+                ></AutocompleteMultiple>
               </Grid>
               <Grid px={2} xs={2}>
                 <NegationCheckbox
@@ -133,14 +133,14 @@ export default function PretragaParameters() {
             </Grid>
             <Grid container alignItems="center">
               <Grid xs={10} sx={{ width: "75%" }}>
-                <AutocompleteCheckbox
+                <AutocompleteMultiple
                   data={mesta}
                   onCheckedChange={(value) => handleInputChange("mesta", value)}
                   placeholder="Mesta"
                   id="mesto"
                   key="autocomplete-mesto"
                   checkedValues={pretragaParameters.mesta}
-                ></AutocompleteCheckbox>
+                ></AutocompleteMultiple>
               </Grid>
 
               <Grid px={2} xs={2}>
