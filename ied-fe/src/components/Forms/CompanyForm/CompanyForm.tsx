@@ -3,7 +3,7 @@ import { Box } from "@mui/system";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import React, { useEffect, useState } from "react";
-import Grid2 from "@mui/material/Unstable_Grid2/Grid2";
+import Grid from "@mui/material/Grid2";
 import {
   Metadata,
   CompanySchema,
@@ -156,35 +156,35 @@ export const CompanyForm: React.FC<CompanyFormProps> = ({ inputCompany }) => {
 
   return (
     <Box onSubmit={handleSubmit(onSubmit, onError)} component="form" sx={{ mt: 4 }}>
-      <Grid2 container m={0} spacing={2}>
+      <Grid container m={0} spacing={2}>
         {inputItems(InputTypesSchema.enum.Text).map((item) => {
           return (
-            <Grid2 key={item.key} xs={12} md={6} lg={4}>
+            <Grid key={item.key} size={{ xs: 12, md: 6, lg: 4 }}>
               {item}
-            </Grid2>
+            </Grid>
           );
         })}
         <Divider sx={{ width: "100%", my: 4 }} />
         {inputItems(InputTypesSchema.enum.Select).map((item) => {
           return (
-            <Grid2 key={item.key} xs={12} md={6} lg={4}>
+            <Grid key={item.key} size={{ xs: 12, md: 6, lg: 4 }}>
               {item}
-            </Grid2>
+            </Grid>
           );
         })}
         <Divider sx={{ width: "100%", my: 4 }} />
         {inputItems(InputTypesSchema.enum.TextMultiline).map((item) => {
           return (
-            <Grid2 key={item.key} xs={12}>
+            <Grid key={item.key} size={{ xs: 12 }}>
               {item}
-            </Grid2>
+            </Grid>
           );
         })}
         <Button sx={{ my: 2 }} size="large" variant="contained" color="success" type="submit">
           Sačuvaj
         </Button>
         <Divider sx={{ width: "100%", my: 2 }} />
-      </Grid2>
+      </Grid>
     </Box>
   );
 };

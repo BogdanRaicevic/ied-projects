@@ -5,7 +5,7 @@ import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { Seminar, SeminarSchema } from "../../../schemas/companySchemas";
 import { zodResolver } from "@hookform/resolvers/zod";
-import Grid2 from "@mui/material/Unstable_Grid2/Grid2";
+import Grid from "@mui/material/Grid2";
 import {
   ArchiveSeminarButton,
   CancelSeminarButton,
@@ -72,8 +72,8 @@ export default function SeminarForm({
       onSubmit={handleSubmit(handleSaveSeminar, onError)}
       component="form"
     >
-      <Grid2 container spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 12 }}>
-        <Grid2 xs={4}>
+      <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 12 }}>
+        <Grid size={4}>
           <Controller
             name="naziv"
             control={control}
@@ -91,8 +91,8 @@ export default function SeminarForm({
               />
             )}
           ></Controller>
-        </Grid2>
-        <Grid2 xs={4}>
+        </Grid>
+        <Grid size={4}>
           <Controller
             name="predavac"
             control={control}
@@ -110,8 +110,8 @@ export default function SeminarForm({
               />
             )}
           ></Controller>
-        </Grid2>
-        <Grid2 xs={4}>
+        </Grid>
+        <Grid size={4}>
           <Controller
             name="mesto"
             control={control}
@@ -129,8 +129,8 @@ export default function SeminarForm({
               />
             )}
           ></Controller>
-        </Grid2>
-        <Grid2 xs={4}>
+        </Grid>
+        <Grid size={4}>
           <Controller
             name="osnovnaCena"
             control={control}
@@ -152,8 +152,8 @@ export default function SeminarForm({
               />
             )}
           ></Controller>
-        </Grid2>
-        <Grid2 xs={4}>
+        </Grid>
+        <Grid size={4}>
           <Controller
             name="tipSeminara"
             control={control}
@@ -181,8 +181,8 @@ export default function SeminarForm({
               );
             }}
           ></Controller>
-        </Grid2>
-        <Grid2 xs={4}>
+        </Grid>
+        <Grid size={4}>
           <Controller
             control={control}
             name="datum"
@@ -212,7 +212,7 @@ export default function SeminarForm({
               </FormControl>
             )}
           ></Controller>
-        </Grid2>
+        </Grid>
 
         <Box ml={2} display="flex" justifyContent="space-between" width="100%">
           <Box display="flex">
@@ -230,7 +230,7 @@ export default function SeminarForm({
             </Box>
           )}
         </Box>
-      </Grid2>
+      </Grid>
     </Box>
   );
 }

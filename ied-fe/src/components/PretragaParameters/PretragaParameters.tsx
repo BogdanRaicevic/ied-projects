@@ -1,5 +1,5 @@
 import { TextField } from "@mui/material";
-import Grid from "@mui/system/Unstable_Grid";
+import Grid from "@mui/material/Grid2";
 import { Box } from "@mui/system";
 import AutocompleteMultiple from "../Autocomplete/Multiple";
 import CheckboxList from "../CheckboxList";
@@ -71,10 +71,10 @@ export default function PretragaParameters() {
   return (
     <>
       <Grid container spacing={2}>
-        <Grid xs={9}>
+        <Grid size={9}>
           <Grid container direction="column">
             <Grid container alignItems="center">
-              <Grid xs={10} sx={{ width: "75%" }}>
+              <Grid size={10} sx={{ width: "75%" }}>
                 <AutocompleteMultiple
                   data={radnaMesta}
                   onCheckedChange={(value) => handleInputChange("radnaMesta", value)}
@@ -84,7 +84,7 @@ export default function PretragaParameters() {
                   checkedValues={pretragaParameters.radnaMesta}
                 ></AutocompleteMultiple>
               </Grid>
-              <Grid px={2} xs={2}>
+              <Grid px={2} size={2}>
                 <NegationCheckbox
                   key="negate-radno-mesto"
                   value="negate-radno-mesto"
@@ -94,7 +94,7 @@ export default function PretragaParameters() {
               </Grid>
             </Grid>
             <Grid container alignItems="center">
-              <Grid xs={10} sx={{ width: "75%" }}>
+              <Grid size={10} sx={{ width: "75%" }}>
                 <AutocompleteMultiple
                   data={tipoviFirme}
                   onCheckedChange={(value) => handleInputChange("tipoviFirme", value)}
@@ -104,7 +104,7 @@ export default function PretragaParameters() {
                   checkedValues={pretragaParameters.tipoviFirme}
                 ></AutocompleteMultiple>
               </Grid>
-              <Grid px={2} xs={2}>
+              <Grid px={2} size={2}>
                 <NegationCheckbox
                   key="negate-tip-firme"
                   value="negate-tip-firme"
@@ -114,7 +114,7 @@ export default function PretragaParameters() {
               </Grid>
             </Grid>
             <Grid container alignItems="center">
-              <Grid xs={10} sx={{ width: "75%" }}>
+              <Grid size={10} sx={{ width: "75%" }}>
                 <AutocompleteMultiple
                   data={delatnosti}
                   onCheckedChange={(value) => handleInputChange("delatnosti", value)}
@@ -124,7 +124,7 @@ export default function PretragaParameters() {
                   checkedValues={pretragaParameters.delatnosti}
                 ></AutocompleteMultiple>
               </Grid>
-              <Grid px={2} xs={2}>
+              <Grid px={2} size={2}>
                 <NegationCheckbox
                   key="negate-delatnost"
                   value="negate-delatnost"
@@ -134,7 +134,7 @@ export default function PretragaParameters() {
               </Grid>
             </Grid>
             <Grid container alignItems="center">
-              <Grid xs={10} sx={{ width: "75%" }}>
+              <Grid size={10} sx={{ width: "75%" }}>
                 <AutocompleteMultiple
                   data={mesta}
                   onCheckedChange={(value) => handleInputChange("mesta", value)}
@@ -145,7 +145,7 @@ export default function PretragaParameters() {
                 ></AutocompleteMultiple>
               </Grid>
 
-              <Grid px={2} xs={2}>
+              <Grid px={2} size={2}>
                 <NegationCheckbox
                   key="negate-mesto"
                   value="negate-mesto"
@@ -156,7 +156,7 @@ export default function PretragaParameters() {
             </Grid>
           </Grid>
         </Grid>
-        <Grid xs={3}>
+        <Grid size={3}>
           <CheckboxList
             data={velicineFirmi}
             subheader="Veličine Firmi"

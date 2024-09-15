@@ -1,4 +1,4 @@
-import Grid from "@mui/system/Unstable_Grid";
+import Grid from "@mui/material/Grid2";
 import VirtualizedAutocomplete from "../Autocomplete/Virtualized";
 import { Button } from "@mui/material";
 import PretragaSaveDialog from "../Dialogs/PretragaSaveDialog";
@@ -85,10 +85,10 @@ export default function PredefinedPretrage() {
 
   return (
     <Grid container spacing={2} mb={2}>
-      <Grid xs={8}>
+      <Grid size={8}>
         <VirtualizedAutocomplete data={pretrage || []} onOptionSelect={handleOptionSelect} />
       </Grid>
-      <Grid xs={4} spacing={50}>
+      <Grid size={4} spacing={50}>
         <Button
           variant="contained"
           size="large"

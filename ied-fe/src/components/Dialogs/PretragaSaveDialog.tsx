@@ -3,9 +3,10 @@ import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
-import Grid from "@mui/system/Unstable_Grid/Grid";
+import Grid from "@mui/material/Grid2";
 import { TextField } from "@mui/material";
 import { useState } from "react";
+import { TODO_ANY } from "../../../../ied-be/src/utils/utils";
 
 interface PretrageSaveDialogProps {
   open: boolean;
@@ -36,17 +37,17 @@ export default function PretrageSaveDialog({
       </DialogTitle>
       <DialogContent>
         <Grid container spacing={2} alignItems="center">
-          <Grid xs={6}>
+          <Grid size={6}>
             <Button variant="outlined" color="warning" onClick={handleSaveClick}>
               Sačuvaj preko postojeće
             </Button>
           </Grid>
 
-          <Grid xs={6}>
+          <Grid size={6}>
             <TextField
               sx={{ m: 2 }}
               placeholder="Naziv pretrage"
-              onChange={(e) => setNazivPretrage(e.target.value)}
+              onChange={(e: TODO_ANY) => setNazivPretrage(e.target.value)}
             ></TextField>
             <Button variant="contained" color="success" onClick={handleSaveClick}>
               Sačuvaj kao novu pretragu
