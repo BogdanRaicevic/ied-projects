@@ -5,13 +5,9 @@ import AutocompleteMultiple from "../AutocompleteMultiple";
 import CheckboxList from "../CheckboxList";
 import NegationCheckbox from "../NegationCheckbox";
 import { useEffect, useState } from "react";
-import { fetchAllDelatnosti } from "../../api/delatnosti.api";
-import { fetchAllMesta } from "../../api/mesta.api";
-import { fetchAllRadnaMesta } from "../../api/radna_mesto.api";
-import { fetchAllTipoviFirme } from "../../api/tip_firme.api";
-import { fetchAllVelicineFirme } from "../../api/velicina_firme.api";
 
 import { usePretragaStore } from "../../store/pretragaParameters.store";
+import { useFetchData } from "../../hooks/useFetchData";
 
 export type PretragaParametersType = {
   imeFirme: string;
@@ -32,29 +28,35 @@ export default function PretragaParameters() {
   const [delatnosti, setDelatnosti] = useState<string[]>([]);
   const [mesta, setMesta] = useState<string[]>([]);
 
+  const {
+    delatnosti: fetchedDelatnosti,
+    mesta: fetchedMesta,
+    radnaMesta: fetchedRadnaMesta,
+    tipoviFirme: fetchedTipoviFirme,
+    velicineFirme: fetchedVelicineFirme,
+  } = useFetchData();
+
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [velicineFirme, radnaMesta, tipoviFirme, delatnosti, mesta] = await Promise.all([
-          fetchAllVelicineFirme(),
-          fetchAllRadnaMesta(),
-          fetchAllTipoviFirme(),
-          fetchAllDelatnosti(),
-          fetchAllMesta(),
-        ]);
-
-        setVelicineFirmi(velicineFirme);
-        setRadnaMesta(radnaMesta);
-        setTipoviFirme(tipoviFirme);
-        setDelatnosti(delatnosti);
-        setMesta(mesta);
+        setVelicineFirmi(fetchedVelicineFirme || []);
+        setRadnaMesta(fetchedRadnaMesta || []);
+        setTipoviFirme(fetchedTipoviFirme || []);
+        setDelatnosti(fetchedDelatnosti || []);
+        setMesta(fetchedMesta || []);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
     };
 
     fetchData();
-  }, []);
+  }, [
+    fetchedDelatnosti,
+    fetchedMesta,
+    fetchedRadnaMesta,
+    fetchedTipoviFirme,
+    fetchedVelicineFirme,
+  ]);
 
   const { pretragaParameters, setPretragaParameters, toggleNegation } = usePretragaStore();
 
