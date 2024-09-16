@@ -137,6 +137,7 @@ export const CompanyForm: React.FC<CompanyFormProps> = ({ inputCompany }) => {
           data={optionsData}
           id={item.key}
           placeholder={item.label}
+          preselected={company[item.key as keyof Company] as string}
         ></AutocompleteSingle>
       );
     }
