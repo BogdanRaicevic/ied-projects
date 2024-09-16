@@ -25,7 +25,9 @@ export default memo(function SingleAutocomplete({
       id={"single-autocomplete-" + id}
       disablePortal
       options={data}
-      renderInput={(params) => <TextField {...params} placeholder={placeholder} />}
+      renderInput={(params) => (
+        <TextField {...params} placeholder={placeholder} label={placeholder} />
+      )}
       onChange={(event: any, newValue: any) => setSelected(newValue)}
       value={selected}
     />
