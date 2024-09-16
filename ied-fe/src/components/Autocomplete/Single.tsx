@@ -28,7 +28,7 @@ export default memo(function SingleAutocomplete({
       renderInput={(params) => (
         <TextField {...params} placeholder={placeholder} label={placeholder} />
       )}
-      onChange={(event: any, newValue: any) => setSelected(newValue)}
+      onChange={(_event: any, newValue: any) => setSelected(newValue)}
       value={selected}
     />
   );

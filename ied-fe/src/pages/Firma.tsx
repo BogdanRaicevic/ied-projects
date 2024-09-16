@@ -24,9 +24,6 @@ const defaultCompanyData: Company = {
   e_mail: "",
   tip_firme: "",
   komentar: "",
-  stecaj: false,
-  likvidacija: false,
-  blokada: false,
   mesto: "",
   PIB: "",
   postanski_broj: "",
@@ -35,6 +32,7 @@ const defaultCompanyData: Company = {
   velicina: "",
   zaposleni: [],
   seminari: [],
+  stanje_firme: "",
 };
 
 type TODO_ANY_TYPE = any;
