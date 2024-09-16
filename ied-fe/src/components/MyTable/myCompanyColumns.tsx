@@ -19,7 +19,7 @@ export const myCompanyColumns: MRT_ColumnDef<Company>[] = [
     accessorKey: "naziv_firme",
     Cell: ({ row }: { row: { original: Company } }) => {
       const firma = row.original;
-      return <Link to={`/Firma/${firma.ID_firma}`}>{firma.naziv_firme}</Link>;
+      return <Link to={`/Firma/${firma._id}`}>{firma.naziv_firme}</Link>;
     },
   },
   {

@@ -6,9 +6,9 @@ import {
   create,
   updateById,
   search,
-  findByFirmaId,
   exportSearchedFirmaData,
   exportSearchedZaposleniData,
+  findById,
 } from "../services/firma.service";
 import { FirmaType } from "../models/firma.model";
 
@@ -74,7 +74,7 @@ router.post("/export-zaposleni-data", async (req, res) => {
 router.get("/:id", async (req: Request, res: Response, next: NextFunction) => {
   const { id } = req.params;
   try {
-    const firma = await findByFirmaId(Number(id));
+    const firma = await findById(String(id));
     if (!firma) {
       return res.status(404).send("Firma not found");
     }

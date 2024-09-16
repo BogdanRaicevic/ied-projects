@@ -24,9 +24,9 @@ export const fetchFirmaPretrageData = async (
   }
 };
 
-export const fetchSingleFirmaData = async (ID_firma: number): Promise<Company | null> => {
+export const fetchSingleFirmaData = async (id: string): Promise<Company | null> => {
   try {
-    const response = await axios.get(`${env.beURL}/api/firma/${ID_firma}`);
+    const response = await axios.get(`${env.beURL}/api/firma/${id}`);
     return response.data;
   } catch (error) {
     console.error("Error fetching firma data:", error);

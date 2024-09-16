@@ -2,17 +2,13 @@ import { FilterQuery } from "mongoose";
 import { FirmaType, Firma } from "../models/firma.model";
 import { createFirmaQuery, FirmaQueryParams } from "../utils/firmaQueryBuilder";
 
-export const findByFirmaId = async (ID_firma: number) => {
+export const findById = async (id: string): Promise<FirmaType | null> => {
   try {
-    return Firma.findOne({ ID_firma });
+    return await Firma.findById(id);
   } catch (error) {
     console.log("Error finding firma by od firma id:", error);
     throw new Error("Error finding firma by od firma id");
   }
-};
-
-export const findById = async (ID_firma: string): Promise<FirmaType | null> => {
-  return await Firma.findOne({ ID_firma });
 };
 
 export const deleteById = async (id: string): Promise<FirmaType | null> => {

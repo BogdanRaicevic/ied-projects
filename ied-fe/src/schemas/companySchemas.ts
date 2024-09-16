@@ -20,7 +20,7 @@ export const PoseceniSeminarSchema = z.object({
 export type PoseceniSeminar = z.infer<typeof PoseceniSeminarSchema>;
 
 export const CompanySchema = z.object({
-  id: z.optional(z.string()),
+  _id: z.string(),
   ID_firma: z.number(),
   zeleMarketingMaterijal: z.optional(z.boolean().default(false)),
   naziv_firme: z.string().max(100),

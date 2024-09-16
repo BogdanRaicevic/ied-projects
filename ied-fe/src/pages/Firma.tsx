@@ -16,7 +16,7 @@ import { v4 } from "uuid";
 import { fetchSingleFirmaData } from "../api/firma.api";
 
 const defaultCompanyData: Company = {
-  id: "",
+  _id: "",
   ID_firma: 0,
   naziv_firme: "",
   adresa: "",
@@ -45,15 +45,13 @@ export default function Firma() {
 
   useEffect(() => {
     const fetchData = async () => {
-      if (id) {
-        try {
-          const data = await fetchSingleFirmaData(Number(id));
-          if (data) {
-            setCompany(data);
-          }
-        } catch (error) {
-          console.error("Error fetching company data:", error);
+      try {
+        const data = await fetchSingleFirmaData(String(id));
+        if (data) {
+          setCompany(data);
         }
+      } catch (error) {
+        console.error("Error fetching company data:", error);
       }
     };
 
