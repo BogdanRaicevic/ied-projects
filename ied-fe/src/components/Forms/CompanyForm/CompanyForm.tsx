@@ -77,8 +77,12 @@ export const CompanyForm: React.FC<CompanyFormProps> = ({ inputCompany }) => {
         <TextField
           {...register(item.key as keyof Company)}
           label={item.label}
-          InputProps={{
-            startAdornment: <InputAdornment position="start">{item.inputAdornment}</InputAdornment>,
+          slotProps={{
+            input: {
+              startAdornment: (
+                <InputAdornment position="start">{item.inputAdornment}</InputAdornment>
+              ),
+            },
           }}
           name={item.key}
           defaultValue={company[item.key as keyof Company]}
@@ -93,13 +97,15 @@ export const CompanyForm: React.FC<CompanyFormProps> = ({ inputCompany }) => {
         <TextField
           {...register(item.key as keyof Company)}
           label={item.label}
-          InputProps={{
-            startAdornment: (
-              <InputAdornment position="start" sx={{ pt: 1.5 }}>
-                {item.inputAdornment}
-              </InputAdornment>
-            ),
-            sx: { alignItems: "flex-start" },
+          slotProps={{
+            input: {
+              startAdornment: (
+                <InputAdornment position="start" sx={{ pt: 1.5 }}>
+                  {item.inputAdornment}
+                </InputAdornment>
+              ),
+              sx: { alignItems: "flex-start" },
+            },
           }}
           name={item.key}
           multiline
@@ -112,7 +118,6 @@ export const CompanyForm: React.FC<CompanyFormProps> = ({ inputCompany }) => {
     }
 
     // console.log("item", item);
-
     if (item.inputType === InputTypesSchema.enum.Select) {
       let optionsData: string[] = [];
       switch (item.key) {
