@@ -51,12 +51,23 @@ export const exportData = async (queryParameters: any, exportSubject: "firma" | 
 export const saveFirma = async (company: Partial<Company>) => {
   try {
     if (company._id) {
-      await axios.post(`${env.beURL}/api/firma/${company._id}`, company);
+      const response = await axios.post(`${env.beURL}/api/firma/${company._id}`, company);
+      return {
+        data: response.data,
+        status: response.status,
+      };
     } else {
-      await axios.post(`${env.beURL}/api/firma`, company);
+      const response = await axios.post(`${env.beURL}/api/firma`, company);
+      return {
+        data: response.data,
+        status: response.status,
+      };
     }
   } catch (error) {
     console.error("Error saving firma: ", error);
-    throw error;
+    if (axios.isAxiosError(error) && error.response) {
+      return { success: false, status: 500, message: error.response.data.message };
+    }
+    return { success: false, status: 500, message: "An unexpected error occurred" };
   }
 };

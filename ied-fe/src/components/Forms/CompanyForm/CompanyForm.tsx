@@ -1,4 +1,4 @@
-import { FormControl, TextField, InputAdornment, Button, Divider } from "@mui/material";
+import { FormControl, TextField, InputAdornment, Button, Divider, Alert } from "@mui/material";
 import { Box } from "@mui/system";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -35,6 +35,7 @@ export const CompanyForm: React.FC<CompanyFormProps> = ({ inputCompany }) => {
 
   // TODO: add types
   const [company, setCompany] = useState(inputCompany);
+  const [alert, setAlert] = useState<{ type: "success" | "error"; message: string } | null>(null);
 
   const {
     tipoviFirme: fetchedTipoviFirme,
@@ -64,8 +65,20 @@ export const CompanyForm: React.FC<CompanyFormProps> = ({ inputCompany }) => {
     reset(inputCompany);
   }, [inputCompany, reset]);
 
-  const onSubmit = (data: Company) => {
-    saveFirma(data);
+  const onSubmit = async (data: Company) => {
+    const response = await saveFirma(data);
+    if (response.status.toString().startsWith("2")) {
+      setAlert({ type: "success", message: "Firma uspešno sačuvana!" });
+    } else {
+      setAlert({ type: "error", message: `Firma nije sačuvana. Došlo je do greške!` });
+    }
+
+    const alertTimeout = setTimeout(() => {
+      setAlert(null);
+    }, 3000);
+
+    // Clear the timeout if the component unmounts
+    return () => clearTimeout(alertTimeout);
   };
 
   const onError = (errors: any, e: any) => console.log("Company form errors: ", errors, e);
@@ -186,9 +199,15 @@ export const CompanyForm: React.FC<CompanyFormProps> = ({ inputCompany }) => {
             </Grid>
           );
         })}
+
         <Button sx={{ my: 2 }} size="large" variant="contained" color="success" type="submit">
           Sačuvaj
         </Button>
+        {alert && (
+          <Alert severity={alert.type} onClose={() => setAlert(null)}>
+            {alert.message}
+          </Alert>
+        )}
         <Divider sx={{ width: "100%", my: 2 }} />
       </Grid>
     </Box>
