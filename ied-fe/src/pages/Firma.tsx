@@ -37,8 +37,6 @@ const defaultCompanyData: Company = {
 type TODO_ANY_TYPE = any;
 
 export default function Firma() {
-  // const location = useLocation();
-  // const { companiesData, updateCompany } = useCompanyStore();
   const { id } = useParams();
   const [company, setCompany] = useState(defaultCompanyData);
 

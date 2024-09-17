@@ -47,3 +47,16 @@ export const exportData = async (queryParameters: any, exportSubject: "firma" | 
     throw error;
   }
 };
+
+export const saveFirma = async (company: Partial<Company>) => {
+  try {
+    if (company._id) {
+      await axios.post(`${env.beURL}/api/firma/${company._id}`, company);
+    } else {
+      await axios.post(`${env.beURL}/api/firma`, company);
+    }
+  } catch (error) {
+    console.error("Error saving firma: ", error);
+    throw error;
+  }
+};

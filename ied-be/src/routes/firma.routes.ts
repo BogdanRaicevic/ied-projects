@@ -106,7 +106,7 @@ router.post("/", async (req: Request, res: Response, next: NextFunction) => {
   }
 });
 
-router.put("/:id", async (req: Request, res: Response, next: NextFunction) => {
+router.post("/:id", async (req: Request, res: Response, next: NextFunction) => {
   try {
     const firma = await updateById(req.params.id, req.body);
     if (firma) {

@@ -15,6 +15,7 @@ import { z } from "zod";
 import AutocompleteSingle from "../../Autocomplete/Single";
 import { useFetchData } from "../../../hooks/useFetchData";
 import { companyFormMetadata } from "./metadata";
+import { saveFirma } from "../../../api/firma.api";
 
 type CompanyFormProps = {
   inputCompany: Company;
@@ -64,8 +65,7 @@ export const CompanyForm: React.FC<CompanyFormProps> = ({ inputCompany }) => {
   }, [inputCompany, reset]);
 
   const onSubmit = (data: Company) => {
-    console.log("hi");
-    console.log(data);
+    saveFirma(data);
   };
 
   const onError = (errors: any, e: any) => console.log("Company form errors: ", errors, e);
