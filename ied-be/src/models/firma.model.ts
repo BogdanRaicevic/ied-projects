@@ -1,4 +1,5 @@
 import { Schema, model } from "mongoose";
+import { Zaposleni, zaposleniSchema } from "./zaposleni.model";
 
 type FirmaType = Document & {
   ID_firma: number;
@@ -21,6 +22,7 @@ type FirmaType = Document & {
   created_by: number | null;
   updated_by: number;
   stanje_firme: string;
+  zaposleni: Zaposleni[];
 };
 
 const firmaSchema = new Schema<FirmaType>({
@@ -44,6 +46,7 @@ const firmaSchema = new Schema<FirmaType>({
   updated_at: { type: Date, default: Date.now },
   created_by: { type: Number, default: null },
   updated_by: Number,
+  zaposleni: [zaposleniSchema],
 });
 
 const Firma = model<FirmaType>("Firma", firmaSchema);

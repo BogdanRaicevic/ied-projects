@@ -1,7 +1,8 @@
 import * as z from "zod";
 
 export const ZaposleniSchema = z.object({
-  ID_kontakt_osoba: z.optional(z.string()),
+  _id: z.string(),
+  ID_kontakt_osoba: z.optional(z.number()),
   ime: z.string().min(3, "Ime mora da ima bar 3 karaktera"),
   prezime: z.string().min(3, "Prezime mora da ima bar 3 karaktera"),
   e_mail: z.string(),
@@ -30,7 +31,7 @@ export const CompanySchema = z.object({
   e_mail: z.string().email("Ne ispravna email adresa").max(100, "Predugacka email adresa"),
   tip_firme: z.string(),
   delatnost: z.optional(z.string()),
-  ucesce_na_seminarima: z.optional(z.string()),
+  // ucesce_na_seminarima: z.optional(z.number()),
   komentar: z.string().max(1000),
   stanje_firme: z.string().max(50),
   mesto: z.string().max(50),

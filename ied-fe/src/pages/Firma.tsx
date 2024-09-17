@@ -11,7 +11,6 @@ import { Box } from "@mui/system";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import ZaposleniDialog from "../components/Dialogs/ZaposleniDialog";
-// import { useCompanyStore } from "../store";
 import { v4 } from "uuid";
 import { fetchSingleFirmaData } from "../api/firma.api";
 
@@ -63,7 +62,7 @@ export default function Firma() {
   const handleEdit = (row: MRT_Row<Zaposleni>) => {
     console.log("edit row", row.original);
     const updatedZaposleni = company?.zaposleni.map((zaposleni: TODO_ANY_TYPE) =>
-      zaposleni.ID_kontakt_osoba === row.original.ID_kontakt_osoba ? row.original : zaposleni
+      zaposleni._id === row.original._id ? row.original : zaposleni
     );
     const updatedCompany: Company = {
       ...defaultCompanyData,
@@ -81,7 +80,7 @@ export default function Firma() {
       ...company,
       zaposleni:
         company?.zaposleni.filter(
-          (zaposleni: TODO_ANY_TYPE) => zaposleni.ID_kontakt_osoba !== row.original.ID_kontakt_osoba
+          (zaposleni: TODO_ANY_TYPE) => zaposleni._id !== row.original._id
         ) || [],
     };
     setCompany(updatedCompany);
@@ -94,14 +93,14 @@ export default function Firma() {
 
   const handleZaposleniSubmit = (zaposleniData: Zaposleni) => {
     const existingZaposleni = company?.zaposleni.find(
-      (zaposleni: Zaposleni) => zaposleni.ID_kontakt_osoba === zaposleniData.ID_kontakt_osoba
+      (zaposleni: Zaposleni) => zaposleni._id === zaposleniData._id
     );
     let updatedZaposleni;
 
     if (existingZaposleni) {
       // If the zaposleni exists, update it
       updatedZaposleni = company?.zaposleni.map((zaposleni: Zaposleni) => {
-        if (zaposleni.ID_kontakt_osoba === zaposleniData.ID_kontakt_osoba) {
+        if (zaposleni._id === zaposleniData._id) {
           return zaposleniData;
         }
         return zaposleni;
