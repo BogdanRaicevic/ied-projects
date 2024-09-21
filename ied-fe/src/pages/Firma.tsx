@@ -11,8 +11,7 @@ import { Box } from "@mui/system";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import ZaposleniDialog from "../components/Dialogs/ZaposleniDialog";
-import { v4 } from "uuid";
-import { fetchSingleFirmaData } from "../api/firma.api";
+import { fetchSingleFirmaData, saveFirma } from "../api/firma.api";
 
 const defaultCompanyData: Company = {
   _id: "",
@@ -82,6 +81,7 @@ export default function Firma() {
         ) || [],
     };
     setCompany(updatedCompany);
+    saveFirma(updatedCompany);
   };
 
   const [open, setOpen] = useState(false);
@@ -91,7 +91,8 @@ export default function Firma() {
 
   const handleZaposleniSubmit = (zaposleniData: Zaposleni) => {
     const existingZaposleni = company?.zaposleni.find(
-      (zaposleni: Zaposleni) => zaposleni._id === zaposleniData._id
+      (zaposleni: Zaposleni) =>
+        zaposleniData._id !== undefined && zaposleni._id === zaposleniData._id
     );
     let updatedZaposleni;
 
@@ -104,10 +105,7 @@ export default function Firma() {
         return zaposleni;
       });
     } else {
-      // If the zaposleni doesn't exist, add it to the array
-      const newZaposleni = { ...zaposleniData, id: v4() };
-      console.log(" ja sam nov ------->", newZaposleni);
-      updatedZaposleni = [...(company?.zaposleni || []), newZaposleni];
+      updatedZaposleni = [...(company?.zaposleni || []), zaposleniData];
     }
 
     const updatedCompany: Company = {
@@ -117,6 +115,7 @@ export default function Firma() {
     };
 
     setCompany(updatedCompany);
+    saveFirma(updatedCompany);
     setOpen(false);
   };
 
