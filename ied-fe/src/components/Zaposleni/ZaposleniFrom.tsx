@@ -97,7 +97,7 @@ export function ZaposleniForm({ zaposleni, onSubmit }: ZaposleniFormProps) {
 
       <TextField
         {...register("komentar")}
-        sx={{ m: 1, width: "98%" }}
+        sx={{ m: 1, width: "100%" }}
         id="outlined-multiline-static"
         label="Komentari"
         multiline
@@ -106,16 +106,17 @@ export function ZaposleniForm({ zaposleni, onSubmit }: ZaposleniFormProps) {
         helperText={errors.komentar?.message}
       ></TextField>
 
-      <Single
-        data={radnaMesta}
-        id="radna_mesta_zaposleni"
-        placeholder="Radno mesto"
-        preselected={zaposleni?.radno_mesto || ""}
-        onChange={(newValue) => {
-          setSelectedRadnoMesto(newValue);
-        }}
-      ></Single>
-
+      <Box sx={{ m: 1, width: "100%" }}>
+        <Single
+          data={radnaMesta}
+          id="radna_mesta_zaposleni"
+          placeholder="Radno mesto"
+          preselected={zaposleni?.radno_mesto || ""}
+          onChange={(newValue) => {
+            setSelectedRadnoMesto(newValue);
+          }}
+        ></Single>
+      </Box>
       <Button sx={{ m: 1 }} variant="contained" type="submit">
         Sacuvaj zaposlenog
       </Button>
