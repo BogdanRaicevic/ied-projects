@@ -1,12 +1,11 @@
 import { mongoDbConnection } from '../config';
 
-const stanja = ['stecaj', 'likvidacija', 'blokada', 'odjava'] as const;
+const stanja = ['stecaj', 'likvidacija', 'blokada'] as const;
 
 const propertyMap = {
   stecaj: 'Stečaj',
   likvidacija: 'Likvidacija',
   blokada: 'Blokada',
-  odjava: 'Odjava',
   neZnam: 'Ne znam',
 };
 
@@ -37,8 +36,8 @@ export const up = async () => {
 
       let finalResult =
         current.length >= 2
-          ? current.includes('Odjava')
-            ? propertyMap.odjava
+          ? current.includes(propertyMap.stecaj)
+            ? propertyMap.stecaj
             : current[0]
           : current[0];
 
@@ -46,7 +45,6 @@ export const up = async () => {
         stecaj: '',
         likvidacija: '',
         blokada: '',
-        odjava: '',
       };
 
       await firmasCollection.updateOne(
