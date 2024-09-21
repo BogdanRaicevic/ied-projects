@@ -1,4 +1,9 @@
-import { Autocomplete, TextField } from "@mui/material";
+import {
+  Autocomplete,
+  AutocompleteChangeDetails,
+  AutocompleteChangeReason,
+  TextField,
+} from "@mui/material";
 import { memo, useEffect, useState } from "react";
 
 interface AutocompleteSingleProps {
@@ -6,6 +11,7 @@ interface AutocompleteSingleProps {
   placeholder: string;
   id: string;
   preselected: string;
+  onChange: (newValue: string) => void;
 }
 
 export default memo(function SingleAutocomplete({
@@ -13,12 +19,23 @@ export default memo(function SingleAutocomplete({
   placeholder,
   id,
   preselected,
+  onChange,
 }: AutocompleteSingleProps) {
   const [selected, setSelected] = useState<string>(preselected || "");
 
   useEffect(() => {
     setSelected(preselected || "");
   }, [preselected]);
+
+  const handleChange = (
+    event: React.SyntheticEvent<Element, Event>,
+    newValue: string | null,
+    reason: AutocompleteChangeReason,
+    details?: AutocompleteChangeDetails<string>
+  ) => {
+    setSelected(newValue ?? "");
+    onChange(newValue ?? "");
+  };
 
   return (
     <Autocomplete
@@ -28,7 +45,7 @@ export default memo(function SingleAutocomplete({
       renderInput={(params) => (
         <TextField {...params} placeholder={placeholder} label={placeholder} />
       )}
-      onChange={(_event: any, newValue: any) => setSelected(newValue)}
+      onChange={handleChange}
       value={selected}
     />
   );

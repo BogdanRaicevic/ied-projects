@@ -65,7 +65,14 @@ export const CompanyForm: React.FC<CompanyFormProps> = ({ inputCompany }) => {
     reset(inputCompany);
   }, [inputCompany, reset]);
 
+  let autocompletes: any;
+
   const onSubmit = async (data: Company) => {
+    data = {
+      ...data,
+      ...autocompletes,
+    };
+
     const response = await saveFirma(data);
     if (response.status.toString().startsWith("2")) {
       setAlert({ type: "success", message: "Firma uspešno sačuvana!" });
@@ -156,10 +163,20 @@ export const CompanyForm: React.FC<CompanyFormProps> = ({ inputCompany }) => {
           id={item.key}
           placeholder={item.label}
           preselected={company[item.key as keyof Company] as string}
+          onChange={(newValue) => {
+            handleAutocomplete(item.key, newValue);
+          }}
         ></AutocompleteSingle>
       );
     }
   }
+
+  const handleAutocomplete = (key: string, newValue: any) => {
+    autocompletes = {
+      ...autocompletes,
+      [key]: newValue,
+    };
+  };
 
   const inputItems = (inputType: z.infer<typeof InputTypesSchema>) => {
     return companyFormMetadata

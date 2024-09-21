@@ -1,11 +1,11 @@
 import { TextField, Button } from "@mui/material";
 import { Box } from "@mui/system";
-// import CheckBoxOutlineBlankIcon from "@mui/icons-material/CheckBoxOutlineBlank";
-// import CheckBoxIcon from "@mui/icons-material/CheckBox";
 import { Zaposleni, ZaposleniSchema } from "../../schemas/companySchemas";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import Single from "../Autocomplete/Single";
+import { useFetchData } from "../../hooks/useFetchData";
 
 type ZaposleniFormProps = {
   zaposleni?: Zaposleni;
@@ -13,9 +13,6 @@ type ZaposleniFormProps = {
 };
 
 export function ZaposleniForm({ zaposleni, onSubmit }: ZaposleniFormProps) {
-  // const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
-  // const checkedIcon = <CheckBoxIcon fontSize="small" />;
-
   const {
     register,
     handleSubmit,
@@ -26,9 +23,16 @@ export function ZaposleniForm({ zaposleni, onSubmit }: ZaposleniFormProps) {
     resolver: zodResolver(ZaposleniSchema),
   });
 
+  const [selectedRadnoMesto, setSelectedRadnoMesto] = useState(zaposleni?.radno_mesto || "");
+  let zaposleniData: Zaposleni;
+
   const handleDodajZaposlenog = (data: Zaposleni) => {
-    console.log("Zaposleni form data: ", data);
-    onSubmit(data);
+    zaposleniData = {
+      ...data,
+      radno_mesto: selectedRadnoMesto || "",
+    };
+
+    onSubmit(zaposleniData);
   };
 
   const onError = (errors: any, e: any) => {
@@ -51,8 +55,9 @@ export function ZaposleniForm({ zaposleni, onSubmit }: ZaposleniFormProps) {
     }
   }, [zaposleni, setValue]);
 
+  const { radnaMesta } = useFetchData();
   return (
-    <Box paddingBottom={5} component="form" onSubmit={handleSubmit(handleDodajZaposlenog, onError)}>
+    <Box component="form" onSubmit={handleSubmit(handleDodajZaposlenog, onError)}>
       <TextField
         {...register("ime")}
         sx={{ m: 1 }}
@@ -90,43 +95,6 @@ export function ZaposleniForm({ zaposleni, onSubmit }: ZaposleniFormProps) {
         helperText={errors.telefon?.message}
       />
 
-      {/* <Controller
-        name="radno_mesto"
-        control={control}
-        render={({ field, fieldState: { error } }) => (
-          <Autocomplete
-            value={Array.isArray(field.value) ? field.value : [field.value]} // Ensure field.value is always an array
-            sx={{ m: 1, width: "98%" }}
-            multiple
-            limitTags={2}
-            id="multiple-radna-mesta"
-            options={normalizedRadnaMesta}
-            getOptionLabel={(option) => option}
-            onChange={(_event, newValue) => field.onChange(newValue)}
-            renderOption={(props, option, { selected }) => (
-              <li {...props}>
-                <Checkbox
-                  icon={icon}
-                  checkedIcon={checkedIcon}
-                  style={{ marginRight: 8 }}
-                  checked={selected}
-                />
-                {option}
-              </li>
-            )}
-            renderInput={(params) => (
-              <TextField
-                {...params}
-                label="Radna mesta"
-                placeholder="Radna mesta"
-                error={!!error}
-                helperText={error?.message}
-              />
-            )}
-          />
-        )}
-      ></Controller> */}
-
       <TextField
         {...register("komentar")}
         sx={{ m: 1, width: "98%" }}
@@ -137,6 +105,17 @@ export function ZaposleniForm({ zaposleni, onSubmit }: ZaposleniFormProps) {
         error={Boolean(errors.komentar)}
         helperText={errors.komentar?.message}
       ></TextField>
+
+      <Single
+        data={radnaMesta}
+        id="radna_mesta_zaposleni"
+        placeholder="Radno mesto"
+        preselected={zaposleni?.radno_mesto || ""}
+        onChange={(newValue) => {
+          setSelectedRadnoMesto(newValue);
+        }}
+      ></Single>
+
       <Button sx={{ m: 1 }} variant="contained" type="submit">
         Sacuvaj zaposlenog
       </Button>

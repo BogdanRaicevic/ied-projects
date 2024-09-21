@@ -23,6 +23,9 @@ type FirmaType = Document & {
   updated_by: number;
   stanje_firme: string;
   zaposleni: Zaposleni[];
+  postanski_broj: string;
+  mesto: string;
+  velicina_firme: string;
 };
 
 const firmaSchema = new Schema<FirmaType>({
@@ -32,6 +35,9 @@ const firmaSchema = new Schema<FirmaType>({
   PIB: String,
   telefon: String,
   e_mail: String,
+  mesto: String,
+  velicina_firme: String,
+  postanski_broj: String,
   faks: String,
   tip_firme: String,
   delatnost: String,
