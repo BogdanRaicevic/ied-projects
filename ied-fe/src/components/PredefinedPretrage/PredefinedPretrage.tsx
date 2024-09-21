@@ -6,6 +6,8 @@ import { useEffect, useState } from "react";
 import { deletePretraga, fetchAllPretrage, savePretraga } from "../../api/pretrage.api";
 import { TODO_ANY } from "../../../../ied-be/src/utils/utils";
 import { usePretragaStore } from "../../store/pretragaParameters.store";
+import ZoomInIcon from "@mui/icons-material/ZoomIn";
+import ZoomOutIcon from "@mui/icons-material/ZoomOut";
 
 export default function PredefinedPretrage() {
   const [pretrage, setPretrage] = useState<TODO_ANY[]>([]);
@@ -85,15 +87,16 @@ export default function PredefinedPretrage() {
 
   return (
     <Grid container spacing={2} mb={2}>
-      <Grid size={8}>
+      <Grid size={7}>
         <VirtualizedAutocomplete data={pretrage || []} onOptionSelect={handleOptionSelect} />
       </Grid>
-      <Grid size={4} spacing={50}>
+      <Grid size={5} display="flex" justifyContent="flex-end" gap={2}>
         <Button
           variant="contained"
           size="large"
-          color="success"
+          color="secondary"
           onClick={handleSaveQueryParameters}
+          startIcon={<ZoomInIcon />}
         >
           Zapamti pretragu
         </Button>
@@ -102,7 +105,13 @@ export default function PredefinedPretrage() {
           handleClose={handlePretrageSaveClose}
           handleSave={handleSavePretraga}
         ></PretragaSaveDialog>
-        <Button variant="contained" size="large" color="error" onClick={handleDeletePretraga}>
+        <Button
+          startIcon={<ZoomOutIcon />}
+          variant="contained"
+          size="large"
+          color="error"
+          onClick={handleDeletePretraga}
+        >
           Obrisi pretragu
         </Button>
       </Grid>

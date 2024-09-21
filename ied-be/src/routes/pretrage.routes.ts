@@ -20,7 +20,7 @@ router.post("/save", async (req, res, next: NextFunction) => {
 
   try {
     await savePretraga(queryParameters, pretraga);
-    res.send(200);
+    res.sendStatus(200);
   } catch (error) {
     next(error);
   }
@@ -30,7 +30,7 @@ router.post("/delete", async (req, res, next: NextFunction) => {
   const { id } = req.body;
   try {
     await deletePretraga(id);
-    res.send(200);
+    res.sendStatus(200);
   } catch (error) {
     next(error);
   }

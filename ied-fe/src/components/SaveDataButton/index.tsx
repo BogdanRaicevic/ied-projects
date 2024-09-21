@@ -1,2 +1,2 @@
-import SaveDataButton from "./SaveDataButton";
-export default SaveDataButton;
+import ExportDataButton from "./SaveDataButton";
+export default ExportDataButton;

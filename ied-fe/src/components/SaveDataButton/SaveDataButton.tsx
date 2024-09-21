@@ -1,5 +1,6 @@
 import Button from "@mui/material/Button";
 import { exportData } from "../../api/firma.api";
+import DownloadIcon from "@mui/icons-material/Download";
 
 type SaveButton = {
   queryParameters: any;
@@ -7,7 +8,7 @@ type SaveButton = {
   exportSubject: "firma" | "zaposleni";
 };
 
-export default function SaveDataButton({ queryParameters, fileName, exportSubject }: SaveButton) {
+export default function ExportDataButton({ queryParameters, fileName, exportSubject }: SaveButton) {
   const handleExport = async () => {
     try {
       console.log(queryParameters, "ogdan");
@@ -29,7 +30,14 @@ export default function SaveDataButton({ queryParameters, fileName, exportSubjec
   };
 
   return (
-    <Button onClick={handleExport} variant="contained" sx={{ m: 1 }} size="large" color="info">
+    <Button
+      startIcon={<DownloadIcon />}
+      onClick={handleExport}
+      variant="contained"
+      sx={{ m: 1 }}
+      size="large"
+      color="info"
+    >
       Export {exportSubject}
     </Button>
   );

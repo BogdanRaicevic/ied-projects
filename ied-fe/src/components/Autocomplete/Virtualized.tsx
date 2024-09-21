@@ -111,7 +111,6 @@ export default function VirtualizedAutocomplete({ data, onOptionSelect }: Virtua
   return (
     <Autocomplete
       id="virtualize-demo"
-      sx={{ width: "full" }}
       disableListWrap
       ListboxComponent={ListboxComponent}
       options={data}

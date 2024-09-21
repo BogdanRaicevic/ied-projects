@@ -3,11 +3,13 @@ import PageTitle from "../components/PageTitle";
 import Divider from "@mui/material/Divider";
 import PredefinedPretrage from "../components/PredefinedPretrage/PredefinedPretrage";
 import PretragaParameters from "../components/PretragaParameters/PretragaParameters";
-import SaveDataButton from "../components/SaveDataButton";
+import ExportDataButton from "../components/SaveDataButton";
 import { useState } from "react";
 import { usePretragaStore } from "../store/pretragaParameters.store";
 import { Box, Button } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import AddBoxIcon from "@mui/icons-material/AddBox";
+import SearchIcon from "@mui/icons-material/Search";
 
 export default function Pretrage() {
   const { pretragaParameters } = usePretragaStore();
@@ -35,22 +37,23 @@ export default function Pretrage() {
 
       <Box display="flex" justifyContent="space-between" alignItems="center" marginBottom={4}>
         <Box>
-          <SaveDataButton
+          <ExportDataButton
             exportSubject="firma"
             fileName="pretrage_firma"
             queryParameters={pretragaParameters}
-          ></SaveDataButton>
-          <SaveDataButton
+          ></ExportDataButton>
+          <ExportDataButton
             exportSubject="zaposleni"
             fileName="pretrage_zaposleni"
             queryParameters={pretragaParameters}
-          ></SaveDataButton>
+          ></ExportDataButton>
           <Button
             sx={{ m: 1 }}
             variant="contained"
             size="large"
             color="info"
             onClick={handlePretraziClick}
+            startIcon={<SearchIcon />}
           >
             Pretrazi
           </Button>
@@ -58,6 +61,7 @@ export default function Pretrage() {
 
         <Box>
           <Button
+            startIcon={<AddBoxIcon />}
             onClick={handleDodajFirmu}
             sx={{ m: 1 }}
             variant="contained"
