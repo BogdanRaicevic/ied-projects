@@ -20,6 +20,7 @@ function App() {
           <Route path="/pretrage" element={<Pretrage />}></Route>
           <Route path="/racuni" element={<Racuni />}></Route>
           <Route path="/prijava" element={<Prijava />}></Route>
+          <Route path="/firma" element={<Firma />}></Route>
           <Route path="/firma/:id" element={<Firma />}></Route>
           <Route path="/zaposleni" element={<Zaposleni />}></Route>
           <Route path="/seminari" element={<Seminari />}></Route>

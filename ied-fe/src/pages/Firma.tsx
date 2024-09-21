@@ -14,7 +14,6 @@ import ZaposleniDialog from "../components/Dialogs/ZaposleniDialog";
 import { fetchSingleFirmaData, saveFirma } from "../api/firma.api";
 
 const defaultCompanyData: Company = {
-  _id: "",
   ID_firma: 0,
   naziv_firme: "",
   adresa: "",
@@ -51,7 +50,9 @@ export default function Firma() {
       }
     };
 
-    fetchData();
+    if (id) {
+      fetchData();
+    }
   }, [id]);
 
   const [selectedRow, setSelectedRow] = useState<MRT_Row<Zaposleni> | null>(null);

@@ -26,7 +26,7 @@ export const PoseceniSeminarSchema = z.object({
 export type PoseceniSeminar = z.infer<typeof PoseceniSeminarSchema>;
 
 export const CompanySchema = z.object({
-  _id: z.string(),
+  _id: z.string().optional(),
   ID_firma: z.number(),
   zeleMarketingMaterijal: z.optional(z.boolean().default(false)),
   naziv_firme: z.string().max(100),
@@ -47,7 +47,8 @@ export const CompanySchema = z.object({
   mesto: z.string().max(50),
   postanski_broj: z
     .string()
-    .regex(new RegExp("^\\d{5}$"), "PTT moze da se sastoji samo od 5 brojeva"),
+    .regex(new RegExp("^\\d{5}$"), "PTT moze da se sastoji samo od 5 brojeva")
+    .optional(),
   velicina: z.string(),
   lastTouched: z.optional(z.string()),
   zaposleni: z.array(ZaposleniSchema).default([]),
