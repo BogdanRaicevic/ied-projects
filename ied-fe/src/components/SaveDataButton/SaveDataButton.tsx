@@ -29,13 +29,7 @@ export default function SaveDataButton({ queryParameters, fileName, exportSubjec
   };
 
   return (
-    <Button
-      onClick={handleExport}
-      variant="contained"
-      sx={{ m: 1, mb: 4 }}
-      size="large"
-      color="info"
-    >
+    <Button onClick={handleExport} variant="contained" sx={{ m: 1 }} size="large" color="info">
       Export {exportSubject}
     </Button>
   );

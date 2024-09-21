@@ -6,7 +6,8 @@ import PretragaParameters from "../components/PretragaParameters/PretragaParamet
 import SaveDataButton from "../components/SaveDataButton";
 import { useState } from "react";
 import { usePretragaStore } from "../store/pretragaParameters.store";
-import { Button } from "@mui/material";
+import { Box, Button } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 
 export default function Pretrage() {
   const { pretragaParameters } = usePretragaStore();
@@ -15,6 +16,11 @@ export default function Pretrage() {
 
   const handlePretraziClick = () => {
     setAppliedParameters(pretragaParameters);
+  };
+
+  const navigate = useNavigate();
+  const handleDodajFirmu = () => {
+    navigate("/Firma");
   };
 
   return (
@@ -27,27 +33,41 @@ export default function Pretrage() {
 
       <PretragaParameters />
 
-      <SaveDataButton
-        exportSubject="firma"
-        fileName="pretrage_firma"
-        queryParameters={pretragaParameters}
-      ></SaveDataButton>
-      <SaveDataButton
-        exportSubject="zaposleni"
-        fileName="pretrage_zaposleni"
-        queryParameters={pretragaParameters}
-      ></SaveDataButton>
+      <Box display="flex" justifyContent="space-between" alignItems="center" marginBottom={4}>
+        <Box>
+          <SaveDataButton
+            exportSubject="firma"
+            fileName="pretrage_firma"
+            queryParameters={pretragaParameters}
+          ></SaveDataButton>
+          <SaveDataButton
+            exportSubject="zaposleni"
+            fileName="pretrage_zaposleni"
+            queryParameters={pretragaParameters}
+          ></SaveDataButton>
+          <Button
+            sx={{ m: 1 }}
+            variant="contained"
+            size="large"
+            color="info"
+            onClick={handlePretraziClick}
+          >
+            Pretrazi
+          </Button>
+        </Box>
 
-      <Button
-        variant="contained"
-        sx={{ m: 1, mb: 4 }}
-        size="large"
-        color="info"
-        onClick={handlePretraziClick}
-      >
-        Pretrazi
-      </Button>
-
+        <Box>
+          <Button
+            onClick={handleDodajFirmu}
+            sx={{ m: 1 }}
+            variant="contained"
+            size="large"
+            color="secondary"
+          >
+            Dodaj Firmu
+          </Button>
+        </Box>
+      </Box>
       <MyTable {...appliedParameters} />
     </>
   );
