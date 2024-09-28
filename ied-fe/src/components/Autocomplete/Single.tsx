@@ -28,10 +28,10 @@ export default memo(function SingleAutocomplete({
   }, [preselected]);
 
   const handleChange = (
-    event: React.SyntheticEvent<Element, Event>,
+    _event: React.SyntheticEvent<Element, Event>,
     newValue: string | null,
-    reason: AutocompleteChangeReason,
-    details?: AutocompleteChangeDetails<string>
+    _reason: AutocompleteChangeReason,
+    _details?: AutocompleteChangeDetails<string>
   ) => {
     setSelected(newValue ?? "");
     onChange(newValue ?? "");
