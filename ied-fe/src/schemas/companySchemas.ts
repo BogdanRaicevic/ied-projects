@@ -48,6 +48,7 @@ export const CompanySchema = z.object({
   postanski_broj: z
     .string()
     .regex(new RegExp("^\\d{5}$"), "PTT moze da se sastoji samo od 5 brojeva")
+    .or(z.literal(""))
     .optional(),
   velicina: z.string(),
   lastTouched: z.optional(z.string()),
