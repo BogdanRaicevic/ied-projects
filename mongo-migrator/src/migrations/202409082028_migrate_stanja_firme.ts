@@ -7,6 +7,7 @@ const propertyMap = {
   likvidacija: 'Likvidacija',
   blokada: 'Blokada',
   neZnam: 'Ne znam',
+  aktivna: 'Aktivna',
 };
 
 export const up = async () => {
@@ -22,34 +23,22 @@ export const up = async () => {
       if (!firma) {
         continue;
       }
-      const current: string[] = [];
 
-      stanja.forEach((item) => {
+      let finalResult = propertyMap.neZnam;
+
+      for (const item of stanja) {
         if (firma[item] === 1) {
-          current.push(propertyMap[item]);
+          finalResult = propertyMap[item];
+          break;
         }
-      });
-
-      if (current.length === 0) {
-        current.push(propertyMap.neZnam);
       }
 
-      let finalResult =
-        current.length >= 2
-          ? current.includes(propertyMap.stecaj)
-            ? propertyMap.stecaj
-            : current[0]
-          : current[0];
-
-      const unsetFields = {
-        stecaj: '',
-        likvidacija: '',
-        blokada: '',
-      };
-
       await firmasCollection.updateOne(
-        { _id: firma?._id },
-        { $set: { stanje_firme: finalResult }, $unset: unsetFields }
+        { _id: firma._id },
+        {
+          $set: { stanje_firme: finalResult },
+          $unset: { likvidacija: 0, blokada: 0, stecaj: 0 },
+        }
       );
     }
   } catch (error) {
