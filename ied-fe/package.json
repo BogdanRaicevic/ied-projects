@@ -7,7 +7,6 @@
     "dev": "vite",
     "build": "tsc && vite build",
     "preview": "vite preview",
-    "predeploy": "pnpm run build",
     "format": "prettier --write ."
   },
   "homepage": "http://BogdanRaicevic.github.io/ied-fe",
