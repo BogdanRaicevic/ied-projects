@@ -19,6 +19,7 @@ export type PretragaParametersType = {
   delatnosti: string[];
   mesta: string[];
   negacije: string[];
+  stanjaFirme: string[];
 };
 
 export default function PretragaParameters() {
@@ -27,6 +28,7 @@ export default function PretragaParameters() {
   const [tipoviFirme, setTipoviFirme] = useState<string[]>([]);
   const [delatnosti, setDelatnosti] = useState<string[]>([]);
   const [mesta, setMesta] = useState<string[]>([]);
+  const [stanjaFirme, setStanjaFirme] = useState<string[]>([]);
 
   const {
     delatnosti: fetchedDelatnosti,
@@ -34,6 +36,7 @@ export default function PretragaParameters() {
     radnaMesta: fetchedRadnaMesta,
     tipoviFirme: fetchedTipoviFirme,
     velicineFirme: fetchedVelicineFirme,
+    stanjaFirme: fetchedStanjaFirme,
   } = useFetchData();
 
   useEffect(() => {
@@ -44,6 +47,7 @@ export default function PretragaParameters() {
         setTipoviFirme(fetchedTipoviFirme || []);
         setDelatnosti(fetchedDelatnosti || []);
         setMesta(fetchedMesta || []);
+        setStanjaFirme(fetchedStanjaFirme || []);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -56,6 +60,7 @@ export default function PretragaParameters() {
     fetchedRadnaMesta,
     fetchedTipoviFirme,
     fetchedVelicineFirme,
+    fetchedStanjaFirme,
   ]);
 
   const { pretragaParameters, setPretragaParameters, toggleNegation } = usePretragaStore();
@@ -71,7 +76,7 @@ export default function PretragaParameters() {
   return (
     <>
       <Grid container spacing={2}>
-        <Grid size={9}>
+        <Grid size={8}>
           <Grid container direction="column">
             <Grid container alignItems="center">
               <Grid size={10} sx={{ width: "75%" }}>
@@ -156,12 +161,20 @@ export default function PretragaParameters() {
             </Grid>
           </Grid>
         </Grid>
-        <Grid size={3}>
+        <Grid size={2}>
           <CheckboxList
             data={velicineFirmi}
             subheader="Veličine Firmi"
             onCheckedChange={(value) => handleInputChange("velicineFirmi", value)}
             checkedValues={pretragaParameters.velicineFirmi}
+          ></CheckboxList>
+        </Grid>
+        <Grid size={2}>
+          <CheckboxList
+            data={stanjaFirme}
+            subheader="Stanja Firmi"
+            onCheckedChange={(value) => handleInputChange("stanjaFirme", value)}
+            checkedValues={pretragaParameters.stanjaFirme}
           ></CheckboxList>
         </Grid>
       </Grid>

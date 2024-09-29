@@ -18,6 +18,7 @@ export type FirmaQueryParams = {
   radnaMesta?: string[];
   velicineFirmi?: string[];
   negacije?: string[];
+  stanjaFirme?: string[];
 };
 
 export function createFirmaQuery(params: FirmaQueryParams): FilterQuery<FirmaType> {
@@ -78,6 +79,12 @@ export function createFirmaQuery(params: FirmaQueryParams): FilterQuery<FirmaTyp
   if (Array.isArray(params.velicineFirmi) && params.velicineFirmi.length > 0) {
     query.velicina = { $in: params.velicineFirmi };
   }
+
+  if (Array.isArray(params.stanjaFirme) && params.stanjaFirme.length > 0) {
+    query.stanje_firme = { $in: params.stanjaFirme };
+  }
+
+  console.log("query", query);
 
   return query;
 }

@@ -10,6 +10,7 @@ export type PretragaParametersType = {
   delatnosti: string[];
   mesta: string[];
   negacije: string[];
+  stanjaFirme: string[];
 };
 
 type PretragaStore = {
@@ -29,6 +30,7 @@ export const usePretragaStore = create<PretragaStore>((set) => ({
     delatnosti: [],
     mesta: [],
     negacije: [],
+    stanjaFirme: [],
   },
   setPretragaParameters: (params) =>
     set((state) => {

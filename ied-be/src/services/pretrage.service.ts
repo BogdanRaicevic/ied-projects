@@ -30,6 +30,7 @@ export const savePretraga = async (
     pretragaData.pib = queryParameters.pib;
 
     pretragaData.negacije = queryParameters.negacije;
+    pretragaData.stanja_firme = queryParameters.stanjaFirme;
 
     if (pretraga.id) {
       await Pretrage.findByIdAndUpdate(pretraga.id, pretragaData);

@@ -1,10 +1,11 @@
+import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
+import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import Checkbox from "@mui/material/Checkbox";
 import { useEffect, useState } from "react";
 import { ListSubheader } from "@mui/material";
-import { FixedSizeList, ListChildComponentProps } from "react-window";
 
 interface CheckboxListProps {
   data: string[];
@@ -43,30 +44,27 @@ export default function CheckboxList({
     onCheckedChange(checkedValues);
   }, [checked, onCheckedChange]);
 
-  const renderRow = ({ index, style }: ListChildComponentProps) => {
-    const value = data[index];
-    const labelId = `checkbox-${subheader}-${value}`;
-    return (
-      <ListItem key={value} style={style} disablePadding>
-        <ListItemButton onClick={handleToggle(value)} dense>
-          <Checkbox
-            edge="start"
-            checked={checked.indexOf(value) !== -1}
-            disableRipple
-            id={labelId}
-          />
-          <ListItemText id={labelId} primary={`${value}`} />
-        </ListItemButton>
-      </ListItem>
-    );
-  };
-
   return (
-    <div>
-      <ListSubheader>{subheader}</ListSubheader>
-      <FixedSizeList height={200} width={"100%"} itemSize={46} itemCount={data.length}>
-        {renderRow}
-      </FixedSizeList>
-    </div>
+    <List subheader={<ListSubheader>{subheader}</ListSubheader>}>
+      {data.map((value) => {
+        const labelId = `checkbox-${subheader}-${value}`;
+        return (
+          <ListItem key={value} disablePadding>
+            <ListItemButton onClick={handleToggle(value)} dense>
+              <ListItemIcon>
+                <Checkbox
+                  edge="start"
+                  checked={checked.indexOf(value) !== -1}
+                  disableRipple
+                  inputProps={{ "aria-labelledby": labelId }}
+                  id={labelId}
+                />
+              </ListItemIcon>
+              <ListItemText id={labelId} primary={`${value}`} />
+            </ListItemButton>
+          </ListItem>
+        );
+      })}
+    </List>
   );
 }
