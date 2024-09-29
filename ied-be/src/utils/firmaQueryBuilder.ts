@@ -19,6 +19,7 @@ export type FirmaQueryParams = {
   velicineFirmi?: string[];
   negacije?: string[];
   stanjaFirme?: string[];
+  jbkjs?: string;
 };
 
 export function createFirmaQuery(params: FirmaQueryParams): FilterQuery<FirmaType> {
@@ -82,6 +83,10 @@ export function createFirmaQuery(params: FirmaQueryParams): FilterQuery<FirmaTyp
 
   if (Array.isArray(params.stanjaFirme) && params.stanjaFirme.length > 0) {
     query.stanje_firme = { $in: params.stanjaFirme };
+  }
+
+  if (params.jbkjs && params.jbkjs.length > 0) {
+    query.jbkjs = { $regex: params.jbkjs, $options: "i" }; // Case-insensitive partial match
   }
 
   console.log("query", query);

@@ -41,7 +41,6 @@ export const CompanySchema = z.object({
     .optional(),
   tip_firme: z.string(),
   delatnost: z.optional(z.string()),
-  // ucesce_na_seminarima: z.optional(z.number()),
   komentar: z.string().max(1000),
   stanje_firme: z.string().max(50),
   mesto: z.string().max(50),
@@ -54,6 +53,11 @@ export const CompanySchema = z.object({
   lastTouched: z.optional(z.string()),
   zaposleni: z.array(ZaposleniSchema).default([]),
   seminari: z.optional(z.array(PoseceniSeminarSchema)).default([]),
+  jbkjs: z
+    .string()
+    .regex(new RegExp("^\\d{5}$"), "JBKJS moze da se sastoji samo od 5 brojeva")
+    .or(z.literal(""))
+    .optional(),
 });
 export type Company = z.infer<typeof CompanySchema>;
 

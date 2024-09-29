@@ -20,6 +20,7 @@ export type PretragaParametersType = {
   mesta: string[];
   negacije: string[];
   stanjaFirme: string[];
+  jbkjs: string;
 };
 
 export default function PretragaParameters() {
@@ -202,6 +203,11 @@ export default function PretragaParameters() {
             label="E-mail"
             value={pretragaParameters.email}
             onChange={(e) => handleInputChange("email", e.target.value)}
+          />
+          <TextField
+            label="JBKJS"
+            value={pretragaParameters.jbkjs}
+            onChange={(e) => handleInputChange("jbkjs", e.target.value)}
           />
         </Grid>
       </Box>

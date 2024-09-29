@@ -9,6 +9,7 @@ import {
   SwitchAccount,
   Height,
   Comment,
+  Filter1,
 } from "@mui/icons-material";
 import { Metadata, InputTypesSchema } from "../../../schemas/companySchemas";
 
@@ -53,6 +54,12 @@ export const companyFormMetadata: Metadata[] = [
     key: "postanski_broj",
     label: "Postanski broj",
     inputAdornment: <Approval />,
+    inputType: InputTypesSchema.enum.Text,
+  },
+  {
+    key: "jbkjs",
+    label: "JBKJS",
+    inputAdornment: <Filter1 />,
     inputType: InputTypesSchema.enum.Text,
   },
   {

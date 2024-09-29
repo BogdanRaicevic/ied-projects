@@ -12,6 +12,7 @@ export type PretrageType = Document & {
   email: string;
   pib: string;
   stanja_firme: string[];
+  jbkjs: string;
 };
 
 const pretrageSchema = new Schema<PretrageType>(
@@ -27,6 +28,7 @@ const pretrageSchema = new Schema<PretrageType>(
     email: { type: String },
     pib: { type: String },
     stanja_firme: [{ type: String, ref: "StanjeFirme" }],
+    jbkjs: { type: String },
   },
   { collection: "pretrage" }
 );

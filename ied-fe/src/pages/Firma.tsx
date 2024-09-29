@@ -30,6 +30,7 @@ const defaultCompanyData: Company = {
   zaposleni: [],
   seminari: [],
   stanje_firme: "",
+  jbkjs: "",
 };
 
 type TODO_ANY_TYPE = any;

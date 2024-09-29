@@ -137,7 +137,6 @@ export const CompanyForm: React.FC<CompanyFormProps> = ({ inputCompany }) => {
       );
     }
 
-    // console.log("item", item);
     if (item.inputType === InputTypesSchema.enum.Select) {
       let optionsData: string[] = [];
       switch (item.key) {

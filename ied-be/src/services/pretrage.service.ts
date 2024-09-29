@@ -31,6 +31,7 @@ export const savePretraga = async (
 
     pretragaData.negacije = queryParameters.negacije;
     pretragaData.stanja_firme = queryParameters.stanjaFirme;
+    pretragaData.jbkjs = queryParameters.jbkjs;
 
     if (pretraga.id) {
       await Pretrage.findByIdAndUpdate(pretraga.id, pretragaData);
