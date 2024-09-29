@@ -21,6 +21,7 @@ export type PretragaParametersType = {
   negacije: string[];
   stanjaFirme: string[];
   jbkjs: string;
+  maticniBroj: string;
 };
 
 export default function PretragaParameters() {
@@ -65,6 +66,8 @@ export default function PretragaParameters() {
   ]);
 
   const { pretragaParameters, setPretragaParameters, toggleNegation } = usePretragaStore();
+
+  console.info("asdfasdf", pretragaParameters);
 
   const handleNegationChange = (value: string) => {
     toggleNegation(value);
@@ -195,9 +198,14 @@ export default function PretragaParameters() {
             onChange={(e) => handleInputChange("imeFirme", e.target.value)}
           />
           <TextField
-            label="PIB / Matični broj"
+            label="PIB"
             value={pretragaParameters.pib}
             onChange={(e) => handleInputChange("pib", e.target.value)}
+          />
+          <TextField
+            label="Matični broj"
+            value={pretragaParameters.maticniBroj}
+            onChange={(e) => handleInputChange("maticniBroj", e.target.value)}
           />
           <TextField
             label="E-mail"

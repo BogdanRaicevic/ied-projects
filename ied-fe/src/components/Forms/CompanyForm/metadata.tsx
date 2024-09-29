@@ -10,6 +10,7 @@ import {
   Height,
   Comment,
   Filter1,
+  LocalPolice,
 } from "@mui/icons-material";
 import { Metadata, InputTypesSchema } from "../../../schemas/companySchemas";
 
@@ -60,6 +61,12 @@ export const companyFormMetadata: Metadata[] = [
     key: "jbkjs",
     label: "JBKJS",
     inputAdornment: <Filter1 />,
+    inputType: InputTypesSchema.enum.Text,
+  },
+  {
+    key: "maticni_broj",
+    label: "Maticni Broj",
+    inputAdornment: <LocalPolice />,
     inputType: InputTypesSchema.enum.Text,
   },
   {

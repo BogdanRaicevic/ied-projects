@@ -58,6 +58,7 @@ export const CompanySchema = z.object({
     .regex(new RegExp("^\\d{5}$"), "JBKJS moze da se sastoji samo od 5 brojeva")
     .or(z.literal(""))
     .optional(),
+  maticni_broj: z.string().optional(),
 });
 export type Company = z.infer<typeof CompanySchema>;
 

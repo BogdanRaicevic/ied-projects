@@ -13,6 +13,7 @@ export type PretrageType = Document & {
   pib: string;
   stanja_firme: string[];
   jbkjs: string;
+  maticni_broj: string;
 };
 
 const pretrageSchema = new Schema<PretrageType>(
@@ -29,6 +30,7 @@ const pretrageSchema = new Schema<PretrageType>(
     pib: { type: String },
     stanja_firme: [{ type: String, ref: "StanjeFirme" }],
     jbkjs: { type: String },
+    maticni_broj: { type: String },
   },
   { collection: "pretrage" }
 );

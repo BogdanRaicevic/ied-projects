@@ -20,6 +20,7 @@ export type FirmaQueryParams = {
   negacije?: string[];
   stanjaFirme?: string[];
   jbkjs?: string;
+  maticniBroj?: string;
 };
 
 export function createFirmaQuery(params: FirmaQueryParams): FilterQuery<FirmaType> {
@@ -87,6 +88,10 @@ export function createFirmaQuery(params: FirmaQueryParams): FilterQuery<FirmaTyp
 
   if (params.jbkjs && params.jbkjs.length > 0) {
     query.jbkjs = { $regex: params.jbkjs, $options: "i" }; // Case-insensitive partial match
+  }
+
+  if (params.maticniBroj && params.maticniBroj.length > 0) {
+    query.maticni_broj = { $regex: params.maticniBroj, $options: "i" }; // Case-insensitive partial match
   }
 
   console.log("query", query);

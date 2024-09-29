@@ -27,6 +27,7 @@ type FirmaType = Document & {
   mesto: string;
   velicina_firme: string;
   jbkjs: string;
+  maticni_broj: string;
 };
 
 const firmaSchema = new Schema<FirmaType>({
@@ -55,6 +56,7 @@ const firmaSchema = new Schema<FirmaType>({
   updated_by: Number,
   zaposleni: [zaposleniSchema],
   jbkjs: String,
+  maticni_broj: String,
 });
 
 const Firma = model<FirmaType>("Firma", firmaSchema);

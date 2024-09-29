@@ -82,6 +82,8 @@ export default function PredefinedPretrage() {
       velicineFirmi: option.velicine_firme,
       negacije: option.negacije,
       stanjaFirme: option.stanja_firme,
+      jbkjs: option.jbkjs,
+      maticniBroj: option.maticni_broj,
     };
     setPretragaParameters(mappedPregrage);
   };
