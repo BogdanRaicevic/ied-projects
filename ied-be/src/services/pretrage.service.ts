@@ -33,6 +33,7 @@ export const savePretraga = async (
     pretragaData.stanja_firme = queryParameters.stanjaFirme;
     pretragaData.jbkjs = queryParameters.jbkjs;
     pretragaData.maticni_broj = queryParameters.maticniBroj;
+    pretragaData.komentar = queryParameters.komentar;
 
     if (pretraga.id) {
       await Pretrage.findByIdAndUpdate(pretraga.id, pretragaData);

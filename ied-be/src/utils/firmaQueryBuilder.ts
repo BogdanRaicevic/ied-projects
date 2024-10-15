@@ -21,6 +21,7 @@ export type FirmaQueryParams = {
   stanjaFirme?: string[];
   jbkjs?: string;
   maticniBroj?: string;
+  komentar?: string;
 };
 
 export function createFirmaQuery(params: FirmaQueryParams): FilterQuery<FirmaType> {
@@ -92,6 +93,10 @@ export function createFirmaQuery(params: FirmaQueryParams): FilterQuery<FirmaTyp
 
   if (params.maticniBroj && params.maticniBroj.length > 0) {
     query.maticni_broj = { $regex: params.maticniBroj, $options: "i" }; // Case-insensitive partial match
+  }
+
+  if (params.komentar && params.komentar.length > 0) {
+    query.komentar = { $regex: params.komentar.replace(/\s+/g, "\\s*"), $options: "is" };
   }
 
   console.log("query", query);

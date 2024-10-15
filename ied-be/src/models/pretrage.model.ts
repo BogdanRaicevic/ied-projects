@@ -1,4 +1,4 @@
-import { Schema, Types, model } from "mongoose";
+import { Schema, model } from "mongoose";
 
 export type PretrageType = Document & {
   naziv_pretrage: string;
@@ -14,6 +14,7 @@ export type PretrageType = Document & {
   stanja_firme: string[];
   jbkjs: string;
   maticni_broj: string;
+  komentar: string;
 };
 
 const pretrageSchema = new Schema<PretrageType>(
@@ -31,6 +32,7 @@ const pretrageSchema = new Schema<PretrageType>(
     stanja_firme: [{ type: String, ref: "StanjeFirme" }],
     jbkjs: { type: String },
     maticni_broj: { type: String },
+    komentar: { type: String },
   },
   { collection: "pretrage" }
 );
