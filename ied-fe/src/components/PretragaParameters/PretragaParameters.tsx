@@ -80,9 +80,9 @@ export default function PretragaParameters() {
 
   return (
     <>
-      <Grid container spacing={2}>
+      <Grid container spacing={2} marginTop={2}>
         <Grid size={8}>
-          <Grid container direction="column">
+          <Grid container direction="column" gap={2}>
             <Grid container alignItems="center">
               <Grid size={10} sx={{ width: "75%" }}>
                 <AutocompleteMultiple
