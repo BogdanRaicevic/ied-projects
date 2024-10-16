@@ -1,8 +1,8 @@
-import { TextField, Autocomplete, FormControl, Box } from "@mui/material";
+import { TextField, Autocomplete, Box } from "@mui/material";
 import { tipoviSeminara } from "../../../fakeData/seminarsData";
 import { Controller, useForm } from "react-hook-form";
-import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
-import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
+// import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
+// import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { Seminar, SeminarSchema } from "../../../schemas/companySchemas";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Grid from "@mui/material/Grid2";
@@ -182,7 +182,7 @@ export default function SeminarForm({
             }}
           ></Controller>
         </Grid>
-        <Grid size={4}>
+        {/* <Grid size={4}>
           <Controller
             control={control}
             name="datum"
@@ -212,7 +212,7 @@ export default function SeminarForm({
               </FormControl>
             )}
           ></Controller>
-        </Grid>
+        </Grid> */}
 
         <Box ml={2} display="flex" justifyContent="space-between" width="100%">
           <Box display="flex">
