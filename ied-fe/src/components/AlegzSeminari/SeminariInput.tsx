@@ -3,6 +3,7 @@ import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 // import { SaveSeminarButton } from "../Forms/SeminarFormButton";
 import Button from "@mui/material/Button";
+import { saveSeminar } from "../../api/seminari.api";
 
 export default function AddSeminarForm() {
   const [seminariData, setSeminarData] = React.useState({
@@ -19,9 +20,18 @@ export default function AddSeminarForm() {
     }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log(seminariData);
+    try {
+      const response = await saveSeminar(
+        seminariData.naziv,
+        seminariData.predavac,
+        seminariData.lokacija
+      );
+      console.log("Response from API:", response);
+    } catch (error) {
+      console.error("Failed to save seminar:", error);
+    }
   };
 
   return (
