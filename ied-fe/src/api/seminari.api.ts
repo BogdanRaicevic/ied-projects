@@ -1,18 +1,17 @@
 import axios from "axios";
-// import { env } from "../utils/envVariables";
+import { env } from "../utils/envVariables";
 
 export const saveSeminar = async (name: string, lecturer: string, location: string) => {
+  console.log("API URL:", `${env.beURL}/api/seminari/save`);
+
   try {
-    const response = await axios.post("/api/seminari", { name, lecturer, location });
-    return console.log(
-      "Input:",
-      "ime seminara:",
-      response.data.name,
-      "predavac",
-      response.data.lecturer,
-      "lokacija",
-      response.data.location
-    );
+    const response = await axios.post(`${env.beURL}/api/seminari/save`, {
+      name,
+      lecturer,
+      location,
+    });
+    console.log("hello 3");
+    return console.log("Input:", response.data);
   } catch (error) {
     console.error("Error saving seminar: ", error);
     if (axios.isAxiosError(error) && error.response) {
