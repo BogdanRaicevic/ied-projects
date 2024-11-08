@@ -11,7 +11,7 @@ export default function ApplicationNavBar() {
     { text: "Pretrage", linkPath: "/pretrage" },
     // { text: "Računi", linkPath: "/racuni" },
     // { text: "Zaposleni", linkPath: "/zaposleni" },
-    // { text: "Seminari", linkPath: "/seminari" },
+    { text: "Seminari", linkPath: "/seminari" },
   ];
 
   return (

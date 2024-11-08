@@ -26,6 +26,7 @@ import { UcesniciSeminara } from "../components/Seminari/UcesniciSeminara";
 import SeminarForm from "../components/Forms/SeminarForm";
 import { format } from "date-fns";
 import { Seminar } from "../schemas/companySchemas";
+import AddSeminarForm from "../components/AlegzSeminari/SeminariInput";
 
 export default function Seminari() {
   const parametriPretrage = () => (
@@ -170,6 +171,8 @@ export default function Seminari() {
       <h2>Seminari</h2>
 
       {seminariLista()}
+
+      <AddSeminarForm />
     </>
   );
 }
