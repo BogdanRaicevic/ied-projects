@@ -62,8 +62,8 @@ export default function AddSeminarForm() {
           onChange={handleChange}
         />
       </div>
-      <Button type="submit" variant="contained" color="primary">
-        Submit
+      <Button sx={{ m: 1 }} size="large" variant="contained" color="primary" type="submit">
+        Kreiraj seminar
       </Button>
     </Box>
   );
