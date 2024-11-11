@@ -1,12 +1,12 @@
 import axios from "axios";
 import { env } from "../utils/envVariables";
 
-export const saveSeminar = async (name: string, lecturer: string, location: string) => {
+export const saveSeminar = async (naziv: string, predavac: string, lokacija: string) => {
   try {
     const response = await axios.post(`${env.beURL}/api/seminari/save`, {
-      name,
-      lecturer,
-      location,
+      naziv,
+      predavac,
+      lokacija,
     });
 
     return response.data;

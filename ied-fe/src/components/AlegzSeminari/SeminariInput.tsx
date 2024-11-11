@@ -5,7 +5,7 @@ import Button from "@mui/material/Button";
 import { saveSeminar } from "../../api/seminari.api";
 
 export default function AddSeminarForm() {
-  const [seminariData, setSeminarData] = React.useState({
+  const [seminarData, setSeminarData] = React.useState({
     naziv: "",
     predavac: "",
     lokacija: "",
@@ -22,7 +22,7 @@ export default function AddSeminarForm() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      await saveSeminar(seminariData.naziv, seminariData.predavac, seminariData.lokacija);
+      await saveSeminar(seminarData.naziv, seminarData.predavac, seminarData.lokacija);
     } catch (error) {
       console.error("Failed to save seminar:", error);
       throw new Error("Failed to save seminar");
@@ -35,8 +35,8 @@ export default function AddSeminarForm() {
         sx={{ m: 1 }}
         id="seminar-name"
         label="Naziv seminara"
-        name="seminarName"
-        defaultValue={seminariData.naziv}
+        name="naziv"
+        defaultValue={seminarData.naziv}
         onChange={handleChange}
       />
       <TextField
@@ -44,8 +44,8 @@ export default function AddSeminarForm() {
         id="predavac-name"
         label="Predavac"
         placeholder="Predavac"
-        name="lecturer"
-        defaultValue={seminariData.predavac}
+        name="predavac"
+        defaultValue={seminarData.predavac}
         onChange={handleChange}
       />
       <TextField
@@ -53,8 +53,8 @@ export default function AddSeminarForm() {
         id="seminar-location"
         label="Lokacija"
         placeholder="Mesto odrzavanja"
-        name="location"
-        defaultValue={seminariData.lokacija}
+        name="lokacija"
+        defaultValue={seminarData.lokacija}
         onChange={handleChange}
       />
 
