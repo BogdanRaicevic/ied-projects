@@ -1,7 +1,6 @@
 import * as React from "react";
 import Box from "@mui/material/Box";
-import TextField from "@mui/material/TextField";
-// import { SaveSeminarButton } from "../Forms/SeminarFormButton";
+import TextField from "@mui/material/TextField"; // import { SaveSeminarButton } from "../Forms/SeminarFormButton";
 import Button from "@mui/material/Button";
 import { saveSeminar } from "../../api/seminari.api";
 
@@ -28,46 +27,36 @@ export default function AddSeminarForm() {
         seminariData.predavac,
         seminariData.lokacija
       );
-      console.log("Response from API:", response);
     } catch (error) {
       console.error("Failed to save seminar:", error);
+      throw new Error("Failed to save seminar");
     }
   };
 
   return (
-    <Box
-      component="form"
-      sx={{ "& .MuiTextField-root": { m: 1, width: "25ch" } }}
-      noValidate
-      autoComplete="off"
-      onSubmit={handleSubmit}
-    >
+    <Box component="form" sx={{ m: 1, width: "25ch" }} onSubmit={handleSubmit}>
       <h2>Jos jedan seminar input</h2>
       <div>
         <TextField
-          id="outlined-multiline-flexible"
+          id="seminar-name"
           label="Naziv seminara"
-          multiline
-          maxRows={4}
-          name="naziv"
+          name="seminarName"
           value={seminariData.naziv}
           onChange={handleChange}
         />
         <TextField
-          id="outlined-textarea"
+          id="predavac-name"
           label="Predavac"
           placeholder="Predavac"
-          multiline
-          name="predavac"
+          name="lecturer"
           value={seminariData.predavac}
           onChange={handleChange}
         />
         <TextField
-          id="outlined-textarea-two"
+          id="seminar-location"
           label="Lokacija"
           placeholder="Mesto odrzavanja"
-          multiline
-          name="lokacija"
+          name="location"
           value={seminariData.lokacija}
           onChange={handleChange}
         />
