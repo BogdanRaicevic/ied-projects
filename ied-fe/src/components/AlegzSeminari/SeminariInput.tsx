@@ -8,7 +8,7 @@ export default function AddSeminarForm() {
   const [seminariData, setSeminarData] = React.useState({
     naziv: "",
     predavac: "",
-    lokacija: "npr Hotel X, Beograd",
+    lokacija: "",
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -22,11 +22,7 @@ export default function AddSeminarForm() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const response = await saveSeminar(
-        seminariData.naziv,
-        seminariData.predavac,
-        seminariData.lokacija
-      );
+      await saveSeminar(seminariData.naziv, seminariData.predavac, seminariData.lokacija);
     } catch (error) {
       console.error("Failed to save seminar:", error);
       throw new Error("Failed to save seminar");
@@ -34,33 +30,34 @@ export default function AddSeminarForm() {
   };
 
   return (
-    <Box component="form" sx={{ m: 1, width: "25ch" }} onSubmit={handleSubmit}>
-      <h2>Jos jedan seminar input</h2>
-      <div>
-        <TextField
-          id="seminar-name"
-          label="Naziv seminara"
-          name="seminarName"
-          value={seminariData.naziv}
-          onChange={handleChange}
-        />
-        <TextField
-          id="predavac-name"
-          label="Predavac"
-          placeholder="Predavac"
-          name="lecturer"
-          value={seminariData.predavac}
-          onChange={handleChange}
-        />
-        <TextField
-          id="seminar-location"
-          label="Lokacija"
-          placeholder="Mesto odrzavanja"
-          name="location"
-          value={seminariData.lokacija}
-          onChange={handleChange}
-        />
-      </div>
+    <Box component="form" onSubmit={handleSubmit}>
+      <TextField
+        sx={{ m: 1 }}
+        id="seminar-name"
+        label="Naziv seminara"
+        name="seminarName"
+        defaultValue={seminariData.naziv}
+        onChange={handleChange}
+      />
+      <TextField
+        sx={{ m: 1 }}
+        id="predavac-name"
+        label="Predavac"
+        placeholder="Predavac"
+        name="lecturer"
+        defaultValue={seminariData.predavac}
+        onChange={handleChange}
+      />
+      <TextField
+        sx={{ m: 1 }}
+        id="seminar-location"
+        label="Lokacija"
+        placeholder="Mesto odrzavanja"
+        name="location"
+        defaultValue={seminariData.lokacija}
+        onChange={handleChange}
+      />
+
       <Button sx={{ m: 1 }} size="large" variant="contained" color="primary" type="submit">
         Kreiraj seminar
       </Button>
