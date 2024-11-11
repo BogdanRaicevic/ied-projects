@@ -68,8 +68,6 @@ export default function PretragaParameters() {
 
   const { pretragaParameters, setPretragaParameters, toggleNegation } = usePretragaStore();
 
-  console.info("asdfasdf", pretragaParameters);
-
   const handleNegationChange = (value: string) => {
     toggleNegation(value);
   };
