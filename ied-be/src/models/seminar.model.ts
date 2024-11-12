@@ -9,8 +9,8 @@ export type SeminarType = Document & {
 const seminarSchema = new Schema<SeminarType>(
   {
     naziv: { type: String, required: true },
-    predavac: { type: String, required: true },
-    lokacija: { type: String, required: true },
+    predavac: { type: String, required: false },
+    lokacija: { type: String, required: false },
   },
   { collection: "seminari" }
 );
