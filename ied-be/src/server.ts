@@ -11,6 +11,7 @@ import mestoRoutes from "./routes/mesto.routes";
 import pretrageRoutes from "./routes/pretrage.routes";
 import stanjaFirmeRoutes from "./routes/stanje_firme.routes";
 import seminarRoutes from "./routes/seminari.routes";
+import testRoutes from "./routes/test.routes";
 import { errorWrapper } from "./middleware/errorWrapper";
 
 const app = express();
@@ -57,6 +58,7 @@ app.use("/api/mesto", mestoRoutes);
 app.use("/api/pretrage", pretrageRoutes);
 app.use("/api/stanja-firmi", stanjaFirmeRoutes);
 app.use("/api/seminari", seminarRoutes);
+app.use("/api/test", testRoutes);
 
 app.use(errorWrapper);
 
