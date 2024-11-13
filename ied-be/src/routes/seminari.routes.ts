@@ -4,9 +4,9 @@ import { saveSeminar, searchSeminari } from "../services/seminar.service";
 const router = Router();
 
 router.post("/save", async (req: Request, res: Response, next: NextFunction) => {
-  const { naziv, predavac, lokacija } = req.body;
+  const { naziv, predavac, lokacija, cena, datum } = req.body;
   try {
-    saveSeminar({ naziv, predavac, lokacija });
+    saveSeminar({ naziv, predavac, lokacija, cena, datum });
     res.send({ success: true, message: "Seminar created" });
   } catch (error) {
     next(error);

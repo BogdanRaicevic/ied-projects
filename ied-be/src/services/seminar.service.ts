@@ -5,13 +5,18 @@ export const saveSeminar = async ({
   naziv,
   predavac,
   lokacija,
+  cena,
+  datum,
 }: {
   naziv: string;
   predavac?: string;
   lokacija?: string;
+  cena?: String;
+  datum?: string;
 }) => {
   try {
-    await Seminar.create({ naziv, predavac, lokacija });
+    await Seminar.create({ naziv, predavac, lokacija, cena, datum });
+    console.log("Created seminar:", naziv, predavac, lokacija, cena, datum);
   } catch (error) {
     console.log("Error saving seminar", error);
     throw new Error("Error saving seminar");

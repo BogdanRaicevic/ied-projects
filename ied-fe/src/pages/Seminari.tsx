@@ -17,8 +17,8 @@ import {
   Typography,
 } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-// import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
-// import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
+import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
+import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFnsV3";
 import { fakeSeminarsOnSeminar } from "../fakeData/seminarsData";
 import { SetStateAction, useState } from "react";
 import { EssentialSeminarData } from "../components/Seminari/EssentialSeminarData";
@@ -27,6 +27,7 @@ import SeminarForm from "../components/Forms/SeminarForm";
 import { format } from "date-fns";
 import { Seminar } from "../schemas/companySchemas";
 import AddSeminarForm from "../components/AlegzSeminari/SeminariInput";
+import { UnfoldLess } from "@mui/icons-material";
 
 export default function Seminari() {
   const parametriPretrage = () => (
@@ -38,13 +39,13 @@ export default function Seminari() {
         <TextField sx={{ m: 1 }} id="tip" label="Tip Seminara" variant="outlined" />
         <TextField sx={{ m: 1 }} id="broj-ucesnika" label="Broj ucesnika" variant="outlined" />
         <FormControl sx={{ m: 1 }}>
-          {/* <LocalizationProvider dateAdapter={AdapterDateFns}>
+          <LocalizationProvider dateAdapter={AdapterDateFns}>
             <DatePicker format="yyyy/MM/dd" label="Pocetni datum" />
             <Box display="flex" alignItems="center" justifyContent="center">
               <UnfoldLess />
             </Box>
             <DatePicker format="yyyy/MM/dd" label="Kranji datum" />
-          </LocalizationProvider> */}
+          </LocalizationProvider>
         </FormControl>
       </Box>
     </>
