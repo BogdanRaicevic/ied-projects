@@ -34,8 +34,11 @@ export default function AddSeminarForm() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    console.log("seminarData", seminarData);
     try {
-      const formattedCena = parseFloat(seminarData.cena).toFixed(2);
+      const formattedCena = isNaN(Number(seminarData.cena))
+        ? "0"
+        : Number(seminarData.cena).toFixed(2);
       const formattedDate = selectedDate ? format(selectedDate, "yyyy-MM-dd") : "";
       await saveSeminar(
         seminarData.naziv,
@@ -81,7 +84,8 @@ export default function AddSeminarForm() {
 
       <TextField
         label="Cena seminara"
-        id="cenaSeminara"
+        id="cena"
+        name="cena"
         sx={{ m: 1 }}
         slotProps={{
           input: {
@@ -89,11 +93,13 @@ export default function AddSeminarForm() {
           },
         }}
         defaultValue={seminarData.cena}
+        onChange={handleChange}
       />
 
       <LocalizationProvider dateAdapter={AdapterDateFns}>
         <DatePicker
           label="Select Date"
+          name="datum"
           value={selectedDate}
           onChange={handleDateChange}
           defaultValue={seminarData.datum}
