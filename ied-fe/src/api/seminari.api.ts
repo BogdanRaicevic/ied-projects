@@ -27,3 +27,17 @@ export const saveSeminar = async (
     return { success: false, status: 500, message: "An unexpected error occurred" };
   }
 };
+
+export const searchSeminar = async (naziv: string, predavac: string, lokacija: string) => {
+  try {
+    const response = await axios.post(`${env.beURL}/api/seminari/search`, {
+      naziv,
+      predavac,
+      lokacija,
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error finding seminar: ", error);
+    return { success: false, status: 500, message: "An unexpected error occurred" };
+  }
+};

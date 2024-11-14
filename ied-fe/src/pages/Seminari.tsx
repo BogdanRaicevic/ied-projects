@@ -24,6 +24,7 @@ import { SetStateAction, useState } from "react";
 import { EssentialSeminarData } from "../components/Seminari/EssentialSeminarData";
 import { UcesniciSeminara } from "../components/Seminari/UcesniciSeminara";
 import SeminarForm from "../components/Forms/SeminarForm";
+import { searchSeminar } from "../api/seminari.api";
 import { format } from "date-fns";
 import { Seminar } from "../schemas/companySchemas";
 import AddSeminarForm from "../components/AlegzSeminari/SeminariInput";
@@ -34,10 +35,31 @@ export default function Seminari() {
     <>
       <h1>Parametri Pretrage</h1>
       <Box>
-        <TextField sx={{ m: 1 }} id="predavac" label="Predavac" variant="outlined" />
-        <TextField sx={{ m: 1 }} id="naziv" label="Naziv seminara" variant="outlined" />
-        <TextField sx={{ m: 1 }} id="tip" label="Tip Seminara" variant="outlined" />
-        <TextField sx={{ m: 1 }} id="broj-ucesnika" label="Broj ucesnika" variant="outlined" />
+        <TextField
+          sx={{ m: 1 }}
+          id="predavac"
+          label="Predavac"
+          variant="outlined"
+          defaultValue={predavac}
+          onChange={(e) => setPredavac(e.target.value)}
+        />
+        <TextField
+          sx={{ m: 1 }}
+          id="naziv"
+          label="Naziv seminara"
+          variant="outlined"
+          defaultValue={naziv}
+          onChange={(e) => setNaziv(e.target.value)}
+        />
+        <TextField
+          sx={{ m: 1 }}
+          id="lokacija"
+          label="Lokacija"
+          variant="outlined"
+          defaultValue={lokacija}
+          onChange={(e) => setLokacija(e.target.value)}
+        />
+        {/* <TextField sx={{ m: 1 }} id="broj-ucesnika" label="Broj ucesnika" variant="outlined" /> */}
         <FormControl sx={{ m: 1 }}>
           <LocalizationProvider dateAdapter={AdapterDateFns}>
             <DatePicker format="yyyy/MM/dd" label="Pocetni datum" />
@@ -52,6 +74,9 @@ export default function Seminari() {
   );
 
   const [page, setPage] = useState(1);
+  const [naziv, setNaziv] = useState("");
+  const [predavac, setPredavac] = useState("");
+  const [lokacija, setLokacija] = useState("");
 
   const handleChange = (_event: any, value: SetStateAction<number>) => {
     setPage(value);
@@ -65,6 +90,17 @@ export default function Seminari() {
     setSeminars((prevSeminars): any => {
       return [...prevSeminars, newSeminar];
     });
+  };
+
+  const handleSearch = async () => {
+    try {
+      const searchResults = await searchSeminar(naziv, predavac, lokacija);
+      if (searchResults.success) {
+        setSeminars(searchResults.data);
+      }
+    } catch (error) {
+      console.error("Error executing search:", error);
+    }
   };
 
   const [showArchived, setShowArchived] = useState(false);
@@ -131,15 +167,13 @@ export default function Seminari() {
 
   const [open, setOpen] = useState(false);
 
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
+  // const handleClickOpen = () => {
+  //   setOpen(true);
+  // };
 
   const handleClose = () => {
     setOpen(false);
   };
-
-  const handleSearch = () => {};
 
   return (
     <>
@@ -154,7 +188,7 @@ export default function Seminari() {
       >
         Pretrazi
       </Button>
-      <Button
+      {/* <Button
         sx={{ m: 1 }}
         size="large"
         variant="contained"
@@ -162,7 +196,7 @@ export default function Seminari() {
         onClick={handleClickOpen}
       >
         Kreiraj seimnar
-      </Button>
+      </Button> */}
       <Dialog open={open} onClose={handleClose} maxWidth="lg">
         <DialogTitle>Seminar</DialogTitle>
         <DialogContent>
