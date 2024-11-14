@@ -9,6 +9,10 @@ export const saveSeminar = async (
   datum: string
 ) => {
   try {
+    if (!naziv) {
+      console.log("Seminar must contain a name");
+      return;
+    }
     const response = await axios.post(`${env.beURL}/api/seminari/save`, {
       naziv,
       predavac,

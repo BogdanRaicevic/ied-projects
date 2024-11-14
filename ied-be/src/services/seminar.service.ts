@@ -15,6 +15,10 @@ export const saveSeminar = async ({
   datum?: string;
 }) => {
   try {
+    if (!naziv) {
+      console.log("Seminar must contain a have name");
+      return;
+    }
     await Seminar.create({ naziv, predavac, lokacija, cena, datum });
     console.log("Created seminar:", naziv, predavac, lokacija, cena, datum);
   } catch (error) {
