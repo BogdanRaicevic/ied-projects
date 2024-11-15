@@ -28,12 +28,20 @@ export const saveSeminar = async (
   }
 };
 
-export const searchSeminar = async (naziv: string, predavac: string, lokacija: string) => {
+export const searchSeminar = async (
+  naziv: string,
+  predavac: string,
+  lokacija: string,
+  datumPrvi: string | null,
+  datumDrugi: string | null
+) => {
   try {
     const response = await axios.post(`${env.beURL}/api/seminari/search`, {
       naziv,
       predavac,
       lokacija,
+      datumPrvi,
+      datumDrugi,
     });
     return response.data;
   } catch (error) {

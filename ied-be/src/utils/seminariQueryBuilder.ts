@@ -5,6 +5,9 @@ export type FirmaQueryParams = {
   naziv?: string;
   lokacija?: string;
   predavac?: string;
+  datumPrvi?: string;
+  datumDrugi?: string;
+  datum?: string;
 };
 
 export function createSeminarQuery(params: FirmaQueryParams): FilterQuery<SeminarType> {
@@ -22,5 +25,22 @@ export function createSeminarQuery(params: FirmaQueryParams): FilterQuery<Semina
     query.predavac = { $regex: params.predavac, $options: "i" }; // Case-insensitive partial match
   }
 
+  if (
+    params?.datumPrvi &&
+    params.datumPrvi.length > 0 &&
+    params?.datumDrugi &&
+    params.datumDrugi.length > 0
+  ) {
+    query.datum = {
+      $gte: new Date(params?.datumPrvi),
+      $lte: new Date(params?.datumDrugi),
+    };
+  } else if (params?.datumPrvi) {
+    query.datum = { $gte: new Date(params?.datumPrvi) };
+  } else if (params?.datumDrugi) {
+    query.datum = { $lte: new Date(params?.datumDrugi) };
+  }
+
+  console.log("Generated MongoDB query:", query);
   return query;
 }

@@ -1,28 +1,28 @@
 // import { UnfoldLess } from "@mui/icons-material";
 import {
-  Accordion,
-  AccordionDetails,
-  AccordionSummary,
+  // Accordion,
+  // AccordionDetails,
+  // AccordionSummary,
   Box,
   Button,
-  Card,
-  CardContent,
+  // Card,
+  // CardContent,
   Dialog,
   DialogContent,
   DialogTitle,
   FormControl,
-  List,
-  Pagination,
+  // List,
+  // Pagination,
   TextField,
-  Typography,
+  // Typography,
 } from "@mui/material";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+// import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFnsV3";
 import { fakeSeminarsOnSeminar } from "../fakeData/seminarsData";
 import { SetStateAction, useState } from "react";
-import { EssentialSeminarData } from "../components/Seminari/EssentialSeminarData";
-import { UcesniciSeminara } from "../components/Seminari/UcesniciSeminara";
+// import { EssentialSeminarData } from "../components/Seminari/EssentialSeminarData";
+// import { UcesniciSeminara } from "../components/Seminari/UcesniciSeminara";
 import SeminarForm from "../components/Forms/SeminarForm";
 import { searchSeminar } from "../api/seminari.api";
 import { format } from "date-fns";
@@ -62,27 +62,41 @@ export default function Seminari() {
         {/* <TextField sx={{ m: 1 }} id="broj-ucesnika" label="Broj ucesnika" variant="outlined" /> */}
         <FormControl sx={{ m: 1 }}>
           <LocalizationProvider dateAdapter={AdapterDateFns}>
-            <DatePicker format="yyyy/MM/dd" label="Pocetni datum" />
+            <DatePicker
+              format="yyyy/MM/dd"
+              label="Pocetni datum"
+              name="datumPrvi"
+              defaultValue={datumPrvi}
+              onChange={(date) => setDatumPrvi(date)}
+            />
             <Box display="flex" alignItems="center" justifyContent="center">
               <UnfoldLess />
             </Box>
-            <DatePicker format="yyyy/MM/dd" label="Kranji datum" />
+            <DatePicker
+              format="yyyy/MM/dd"
+              label="Kranji datum"
+              name="datumDrugi"
+              defaultValue={datumDrugi}
+              onChange={(date) => setDatumDrugi(date)}
+            />
           </LocalizationProvider>
         </FormControl>
       </Box>
     </>
   );
 
-  const [page, setPage] = useState(1);
+  // const [page, setPage] = useState(1);
   const [naziv, setNaziv] = useState("");
   const [predavac, setPredavac] = useState("");
   const [lokacija, setLokacija] = useState("");
+  const [datumPrvi, setDatumPrvi] = useState<Date | null>(null);
+  const [datumDrugi, setDatumDrugi] = useState<Date | null>(null);
 
-  const handleChange = (_event: any, value: SetStateAction<number>) => {
-    setPage(value);
-  };
+  // const handleChange = (_event: any, value: SetStateAction<number>) => {
+  //   setPage(value);
+  // };
 
-  const itemsPerPage = 5;
+  // const itemsPerPage = 5;
 
   const [seminars, setSeminars] = useState([...fakeSeminarsOnSeminar]);
   const addSeminar = (newSeminar: Seminar) => {
@@ -94,76 +108,81 @@ export default function Seminari() {
 
   const handleSearch = async () => {
     try {
-      const searchResults = await searchSeminar(naziv, predavac, lokacija);
-      if (searchResults.success) {
-        setSeminars(searchResults.data);
-      }
+      const searchResults = await searchSeminar(
+        naziv,
+        predavac,
+        lokacija,
+        datumPrvi ? format(datumPrvi, "yyyy-MM-dd") : null,
+        datumDrugi ? format(datumDrugi, "yyyy-MM-dd") : null
+      );
+      console.log(searchResults.data);
+      setSeminars(searchResults.data);
     } catch (error) {
       console.error("Error executing search:", error);
     }
   };
 
-  const [showArchived, setShowArchived] = useState(false);
+  // const [showArchived, setShowArchived] = useState(false);
 
-  const handleArchivedSeminars = () => {
-    setShowArchived(!showArchived);
-  };
+  // const handleArchivedSeminars = () => {
+  //   setShowArchived(!showArchived);
+  // };
 
-  const seminariLista = () => (
-    <div>
-      <Button
-        sx={{ m: 1 }}
-        size="large"
-        variant="contained"
-        color="info"
-        onClick={handleArchivedSeminars}
-      >
-        Prikazi/Sakriji Arhivirane seminare
-      </Button>
+  // const seminariLista = () => (
+  //   <div>
+  //     <Button
+  //       sx={{ m: 1 }}
+  //       size="large"
+  //       variant="contained"
+  //       color="info"
+  //       onClick={handleArchivedSeminars}
+  //     >
+  //       Prikazi/Sakriji Arhivirane seminare
+  //     </Button>
 
-      <List>
-        {seminars.slice((page - 1) * itemsPerPage, page * itemsPerPage).map((seminar, index) => {
-          if (showArchived && seminar?.arhiviran) {
-            return null;
-          }
+  //     <List>
+  //       {seminars.slice((page - 1) * itemsPerPage, page * itemsPerPage).map((seminar, index) => {
+  //         if (showArchived && seminar?.arhiviran) {
+  //           return null;
+  //         }
 
-          return (
-            <Card key={index} sx={{ mb: 1 }}>
-              <CardContent sx={{ backgroundColor: "#ead5d3" }}>
-                <Typography variant="h6" component="div">
-                  {"Seminar: " + seminar.naziv} {/* Replace with your company name variable */}
-                </Typography>
-                <Typography variant="body2" color="text.secondary">
-                  {"Datum: " + format(seminar.datum, "dd.MM.yyyy")}
-                  {/* Replace with your company id variable */}
-                </Typography>
+  //         return (
+  //           <Card key={index} sx={{ mb: 1 }}>
+  //             <CardContent sx={{ backgroundColor: "#ead5d3" }}>
+  //               <Typography variant="h6" component="div">
+  //                 {"Seminar: " + seminar.naziv} {/* Replace with your company name variable */}
+  //               </Typography>
+  //               <Typography variant="body2" color="text.secondary">
+  //                 {"Datum: " + format(seminar.datum, "dd.MM.yyyy")}
+  //                 {/* Replace with your company id variable */}
+  //               </Typography>
 
-                <Accordion>
-                  <AccordionSummary
-                    expandIcon={<ExpandMoreIcon />}
-                    aria-controls="panel1a-content"
-                    id="panel1a-header"
-                  >
-                    <Typography>Detalji seminara</Typography>
-                  </AccordionSummary>
-                  <AccordionDetails>
-                    <EssentialSeminarData {...seminar} />
-                    <UcesniciSeminara {...seminar} />
-                  </AccordionDetails>
-                </Accordion>
-              </CardContent>
-            </Card>
-          );
-        })}
-      </List>
-      <Pagination
-        sx={{ mb: 5 }}
-        count={Math.ceil(seminars.length / itemsPerPage)}
-        page={page}
-        onChange={handleChange}
-      />
-    </div>
-  );
+  //               <Accordion>
+  //                 <AccordionSummary
+  //                   expandIcon={<ExpandMoreIcon />}
+  //                   aria-controls="panel1a-content"
+  //                   id="panel1a-header"
+  //                 >
+  //                   <Typography>Detalji seminara</Typography>
+  //                 </AccordionSummary>
+  //                 <AccordionDetails>
+  //                   <EssentialSeminarData {...seminar} />
+  //                   <UcesniciSeminara {...seminar} />
+  //                 </AccordionDetails>
+  //               </Accordion>
+  //             </CardContent>
+  //           </Card>
+  //         );
+  //       })}
+  //     </List>
+  //     <Pagination
+  //       sx={{ mb: 5 }}
+  //       count={Math.ceil(seminars.length / itemsPerPage)}
+  //       page={page}
+  //       onChange={handleChange}
+  //     />
+  //   </div>
+  // );
 
   const [open, setOpen] = useState(false);
 
@@ -205,7 +224,7 @@ export default function Seminari() {
       </Dialog>
       <h2>Seminari</h2>
 
-      {seminariLista()}
+      {/* {seminariLista()} */}
 
       <AddSeminarForm />
     </>

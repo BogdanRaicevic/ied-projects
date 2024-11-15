@@ -14,10 +14,16 @@ router.post("/save", async (req: Request, res: Response, next: NextFunction) => 
 });
 
 router.post("/search", async (req: Request, res: Response, next: NextFunction) => {
-  const { naziv, predavac, lokacija } = req.body;
+  const { naziv, predavac, lokacija, datumPrvi, datumDrugi } = req.body;
 
   try {
-    const result = await searchSeminari({ naziv, predavac, lokacija });
+    const result = await searchSeminari({
+      naziv,
+      predavac,
+      lokacija,
+      datumPrvi,
+      datumDrugi,
+    });
     res.send(result);
   } catch (error) {
     next(error);
