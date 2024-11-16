@@ -92,6 +92,7 @@ export default function Firma() {
     setOpen(false);
   };
 
+  // TODO: Fix this to interact with saving company
   const handleZaposleniSubmit = (zaposleniData: Zaposleni) => {
     const existingZaposleni = company?.zaposleni.find(
       (zaposleni: Zaposleni) =>
@@ -118,7 +119,11 @@ export default function Firma() {
     };
 
     setCompany(updatedCompany);
-    saveFirma(updatedCompany);
+
+    if (Boolean(id)) {
+      saveFirma(updatedCompany);
+    }
+
     setOpen(false);
   };
 
@@ -164,6 +169,10 @@ export default function Firma() {
         prijavljeniValue={company?.zeleMarketingMaterijal || true}
         prijavaChange={handlePrijavaChange}
       ></PrijavaOdjava> */}
+      {/* TODO: Fix this to interact with saving company 
+        Pobably handle submit here and interact with saving
+        of zaposelni and company
+      */}
       <CompanyForm inputCompany={company}></CompanyForm>
       <Button
         sx={{ my: 2 }}
@@ -180,6 +189,7 @@ export default function Firma() {
       </Button>
       {renderZaposleniTable()}
       <ZaposleniDialog
+        isCompanyBeingUpdated={Boolean(id)}
         zaposleni={selectedRow?.original}
         open={open}
         onClose={handleClose}

@@ -1,4 +1,4 @@
-import { TextField, Button } from "@mui/material";
+import { TextField, Button, Alert } from "@mui/material";
 import { Box } from "@mui/system";
 import { Zaposleni, ZaposleniSchema } from "../../schemas/companySchemas";
 import { useEffect, useState } from "react";
@@ -8,15 +8,19 @@ import Single from "../Autocomplete/Single";
 import { useFetchData } from "../../hooks/useFetchData";
 
 type ZaposleniFormProps = {
+  isCompanyBeingUpdated: boolean;
   zaposleni?: Zaposleni;
   onSubmit: (zaposleniData: Zaposleni) => void;
 };
 
-export function ZaposleniForm({ zaposleni, onSubmit }: ZaposleniFormProps) {
+export function ZaposleniForm({
+  isCompanyBeingUpdated = false,
+  zaposleni,
+  onSubmit,
+}: ZaposleniFormProps) {
   const {
     register,
     handleSubmit,
-    // control,
     setValue,
     formState: { errors },
   } = useForm<Zaposleni>({
@@ -57,7 +61,7 @@ export function ZaposleniForm({ zaposleni, onSubmit }: ZaposleniFormProps) {
 
   const { radnaMesta } = useFetchData();
   return (
-    <Box component="form" onSubmit={handleSubmit(handleDodajZaposlenog, onError)}>
+    <Box component="form">
       <TextField
         {...register("ime")}
         sx={{ m: 1 }}
@@ -117,9 +121,21 @@ export function ZaposleniForm({ zaposleni, onSubmit }: ZaposleniFormProps) {
           }}
         ></Single>
       </Box>
-      <Button sx={{ m: 1 }} variant="contained" type="submit">
-        Sacuvaj zaposlenog
-      </Button>
+      <>
+        <Button
+          onClick={handleSubmit(handleDodajZaposlenog, onError)}
+          sx={{ m: 1 }}
+          variant="contained"
+          type="submit"
+        >
+          {isCompanyBeingUpdated ? "Sacuvaj zaposlenog" : "Dodaj u tabelu"}
+        </Button>
+        {isCompanyBeingUpdated ? null : (
+          <Alert severity="warning">
+            Ne zaboravite da kliknete na dugme <b>Sačuvaj</b>
+          </Alert>
+        )}
+      </>
     </Box>
   );
 }

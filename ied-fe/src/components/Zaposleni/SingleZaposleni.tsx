@@ -50,7 +50,11 @@ export function SingleZaposleni(zaposleni: Zaposleni) {
       {
         // TODO: Fix zaposleni form missing on submit
       }
-      <ZaposleniForm onSubmit={() => {}} zaposleni={zaposleni as any}></ZaposleniForm>
+      <ZaposleniForm
+        isCompanyBeingUpdated
+        onSubmit={() => {}}
+        zaposleni={zaposleni as any}
+      ></ZaposleniForm>
 
       <Card>
         <CardContent>
