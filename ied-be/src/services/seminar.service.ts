@@ -11,7 +11,7 @@ export const saveSeminar = async ({
   naziv: string;
   predavac?: string;
   lokacija?: string;
-  cena?: String;
+  cena?: string;
   datum?: string;
 }) => {
   try {
