@@ -3,26 +3,24 @@ import { saveSeminar, searchSeminari } from "../services/seminar.service";
 
 const router = Router();
 
-router.post("/save", async (req: Request, res: Response) => {
+router.post("/save", async (req: Request, res: Response, next: NextFunction) => {
   const { naziv, predavac, lokacija } = req.body;
   try {
     saveSeminar({ naziv, predavac, lokacija });
     res.send({ success: true, message: "Seminar created" });
   } catch (error) {
-    console.error("Error creating seminar:", error);
-    res.status(500).send("Error creating seminar");
+    next(error);
   }
 });
 
-router.post("/search", async (req, res) => {
+router.post("/search", async (req: Request, res: Response, next: NextFunction) => {
   const { naziv, predavac, lokacija } = req.body;
 
   try {
     const result = await searchSeminari({ naziv, predavac, lokacija });
     res.send(result);
   } catch (error) {
-    console.error("Error finding seminar", error);
-    res.status(500).send("Error finding seminar");
+    next(error);
   }
 });
 
