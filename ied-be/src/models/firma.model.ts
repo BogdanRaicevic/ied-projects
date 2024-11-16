@@ -32,7 +32,7 @@ type FirmaType = Document & {
 
 const firmaSchema = new Schema<FirmaType>({
   ID_firma: Number,
-  naziv_firme: String,
+  naziv_firme: { type: String, required: true },
   adresa: String,
   PIB: String,
   telefon: String,
