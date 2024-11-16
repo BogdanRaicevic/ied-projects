@@ -54,8 +54,6 @@ export const searchSeminari = async ({
       predavac: 1,
       lokacija: 1,
       cena: 1,
-      datumPrvi: 1,
-      datumDrugi: 1,
       datum: 1,
       _id: 0,
     }).exec();
