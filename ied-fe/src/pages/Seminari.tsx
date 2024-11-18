@@ -65,9 +65,9 @@ export default function Seminari() {
             <DatePicker
               format="yyyy/MM/dd"
               label="Pocetni datum"
-              name="datumPrvi"
-              defaultValue={datumPrvi}
-              onChange={(date) => setDatumPrvi(date)}
+              name="datumOd"
+              defaultValue={datumOd}
+              onChange={(date) => setdatumOd(date)}
             />
             <Box display="flex" alignItems="center" justifyContent="center">
               <UnfoldLess />
@@ -75,9 +75,9 @@ export default function Seminari() {
             <DatePicker
               format="yyyy/MM/dd"
               label="Kranji datum"
-              name="datumDrugi"
-              defaultValue={datumDrugi}
-              onChange={(date) => setDatumDrugi(date)}
+              name="datumDo"
+              defaultValue={datumDo}
+              onChange={(date) => setdatumDo(date)}
             />
           </LocalizationProvider>
         </FormControl>
@@ -89,8 +89,8 @@ export default function Seminari() {
   const [naziv, setNaziv] = useState("");
   const [predavac, setPredavac] = useState("");
   const [lokacija, setLokacija] = useState("");
-  const [datumPrvi, setDatumPrvi] = useState<Date | null>(null);
-  const [datumDrugi, setDatumDrugi] = useState<Date | null>(null);
+  const [datumOd, setdatumOd] = useState<Date | null>(null);
+  const [datumDo, setdatumDo] = useState<Date | null>(null);
 
   // const handleChange = (_event: any, value: SetStateAction<number>) => {
   //   setPage(value);
@@ -112,10 +112,11 @@ export default function Seminari() {
         naziv,
         predavac,
         lokacija,
-        datumPrvi ? format(datumPrvi, "yyyy-MM-dd") : null,
-        datumDrugi ? format(datumDrugi, "yyyy-MM-dd") : null
+        datumOd ? format(datumOd, "yyyy-MM-dd") : null,
+        datumDo ? format(datumDo, "yyyy-MM-dd") : null
       );
-      console.log(searchResults.data);
+      console.log("Formatted datumOd:", datumOd ? format(datumOd, "yyyy-MM-dd") : null);
+      console.log("Formatted datumDo:", datumDo ? format(datumDo, "yyyy-MM-dd") : null);
       setSeminars(searchResults.data);
     } catch (error) {
       console.error("Error executing search:", error);

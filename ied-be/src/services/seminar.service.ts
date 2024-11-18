@@ -31,22 +31,22 @@ export const searchSeminari = async ({
   naziv,
   predavac,
   lokacija,
-  datumPrvi,
-  datumDrugi,
+  datumOd,
+  datumDo,
 }: {
   naziv: string;
   predavac: string;
   lokacija: string;
-  datumPrvi: string;
-  datumDrugi: string;
+  datumOd: string;
+  datumDo: string;
 }) => {
   try {
     const mongoQuery = createSeminarQuery({
       naziv,
       predavac,
       lokacija,
-      datumPrvi,
-      datumDrugi,
+      datumOd,
+      datumDo,
     });
 
     const result = Seminar.find(mongoQuery, {
@@ -55,7 +55,7 @@ export const searchSeminari = async ({
       lokacija: 1,
       cena: 1,
       datum: 1,
-      _id: 0,
+      _id: 1,
     }).exec();
 
     return result;
