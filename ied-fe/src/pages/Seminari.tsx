@@ -20,7 +20,7 @@ import {
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFnsV3";
 import { fakeSeminarsOnSeminar } from "../fakeData/seminarsData";
-import { SetStateAction, useState } from "react";
+import { useState } from "react";
 // import { EssentialSeminarData } from "../components/Seminari/EssentialSeminarData";
 // import { UcesniciSeminara } from "../components/Seminari/UcesniciSeminara";
 import SeminarForm from "../components/Forms/SeminarForm";
@@ -81,6 +81,16 @@ export default function Seminari() {
             />
           </LocalizationProvider>
         </FormControl>
+        <Button
+          sx={{ m: 1 }}
+          size="large"
+          variant="contained"
+          color="info"
+          type="submit"
+          onClick={handleSearch}
+        >
+          Pretrazi
+        </Button>
       </Box>
     </>
   );
@@ -198,16 +208,7 @@ export default function Seminari() {
   return (
     <>
       {parametriPretrage()}
-      <Button
-        sx={{ m: 1 }}
-        size="large"
-        variant="contained"
-        color="info"
-        type="submit"
-        onClick={handleSearch}
-      >
-        Pretrazi
-      </Button>
+
       {/* <Button
         sx={{ m: 1 }}
         size="large"
@@ -223,7 +224,6 @@ export default function Seminari() {
           <SeminarForm saveOrUpdateSeminar={addSeminar} closeDialog={handleClose}></SeminarForm>
         </DialogContent>
       </Dialog>
-      <h2>Seminari</h2>
 
       {/* {seminariLista()} */}
 
