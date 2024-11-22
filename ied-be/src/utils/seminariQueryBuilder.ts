@@ -1,13 +1,16 @@
 import { FilterQuery } from "mongoose";
 import { SeminarType } from "../models/seminar.model";
 
-export type FirmaQueryParams = {
+export type SeminarQueryParams = {
   naziv?: string;
   lokacija?: string;
   predavac?: string;
+  datumOd?: string;
+  datumDo?: string;
+  datum?: string;
 };
 
-export function createSeminarQuery(params: FirmaQueryParams): FilterQuery<SeminarType> {
+export function createSeminarQuery(params: SeminarQueryParams): FilterQuery<SeminarType> {
   const query: FilterQuery<SeminarType> = {};
 
   if (params?.naziv && params.naziv.length > 0) {
@@ -22,5 +25,16 @@ export function createSeminarQuery(params: FirmaQueryParams): FilterQuery<Semina
     query.predavac = { $regex: params.predavac, $options: "i" }; // Case-insensitive partial match
   }
 
+  if (params?.datumOd && params?.datumDo) {
+    query.datum = {
+      $gte: params.datumOd, // String comparison works for `yyyy-MM-dd`
+      $lte: params.datumDo,
+    };
+  } else if (params?.datumOd) {
+    query.datum = { $gte: params.datumOd };
+  } else if (params?.datumDo) {
+    query.datum = { $lte: params.datumDo };
+  }
+  console.log("Generated MongoDB query date:", query);
   return query;
 }
