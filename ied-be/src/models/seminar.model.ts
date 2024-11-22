@@ -2,10 +2,10 @@ import { Schema, model } from "mongoose";
 
 export type SeminarType = Document & {
   naziv: string;
-  predavac: string;
-  lokacija: string;
-  cena: string;
-  datum: string;
+  predavac?: string;
+  lokacija?: string;
+  cena?: string;
+  datum?: string;
 };
 
 const seminarSchema = new Schema<SeminarType>(
