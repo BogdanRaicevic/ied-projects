@@ -6,20 +6,29 @@ export const saveSeminar = async (
   predavac: string,
   lokacija: string,
   cena: string,
-  datum: string
+  datum: string,
+  token: string | null
 ) => {
   try {
     if (!naziv) {
       console.log("Seminar must contain a name");
       return;
     }
-    const response = await axios.post(`${env.beURL}/api/seminari/save`, {
-      naziv,
-      predavac,
-      lokacija,
-      cena,
-      datum,
-    });
+    const response = await axios.post(
+      `${env.beURL}/api/seminari/save`,
+      {
+        naziv,
+        predavac,
+        lokacija,
+        cena,
+        datum,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
 
     return response.data;
   } catch (error) {
@@ -33,16 +42,25 @@ export const searchSeminar = async (
   predavac: string,
   lokacija: string,
   datumOd: string | null,
-  datumDo: string | null
+  datumDo: string | null,
+  token: string | null
 ) => {
   try {
-    const response = await axios.post(`${env.beURL}/api/seminari/search`, {
-      naziv,
-      predavac,
-      lokacija,
-      datumOd,
-      datumDo,
-    });
+    const response = await axios.post(
+      `${env.beURL}/api/seminari/search`,
+      {
+        naziv,
+        predavac,
+        lokacija,
+        datumOd,
+        datumDo,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
     return response.data;
   } catch (error) {
     console.error("Error finding seminar: ", error);

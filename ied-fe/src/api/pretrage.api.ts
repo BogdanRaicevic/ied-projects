@@ -4,7 +4,8 @@ import { env } from "../utils/envVariables";
 
 export const savePretraga = async (
   queryParameters: TODO_ANY,
-  pretraga: { id?: string; naziv: string }
+  pretraga: { id?: string; naziv: string },
+  token: string | null
 ) => {
   try {
     const body = {
@@ -12,7 +13,11 @@ export const savePretraga = async (
       pretraga,
     };
 
-    const response = await axios.post(`${env.beURL}/api/pretrage/save`, body);
+    const response = await axios.post(`${env.beURL}/api/pretrage/save`, body, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
     return response.data;
   } catch (error) {
     console.error("Error saving pretraga:", error);

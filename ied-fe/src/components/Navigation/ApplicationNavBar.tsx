@@ -4,6 +4,7 @@ import Toolbar from "@mui/material/Toolbar";
 import Button from "@mui/material/Button";
 import { Link as RouteLink } from "react-router-dom";
 import Link from "@mui/material/Link";
+import { SignedOut, SignInButton, SignedIn, UserButton } from "@clerk/clerk-react";
 
 export default function ApplicationNavBar() {
   const navItems = [
@@ -30,9 +31,14 @@ export default function ApplicationNavBar() {
               </Link>
             ))}
           </Box>
-          {/* <Link component={RouteLink} to={"/prijava"} sx={{ color: "white" }}>
-            <Button sx={{ color: "#fff" }}>Prijava/Odjava</Button>
-          </Link> */}
+          <Link component={RouteLink} to={"/prijava"} sx={{ color: "white" }}>
+            <SignedOut>
+              <SignInButton />
+            </SignedOut>
+            <SignedIn>
+              <UserButton />
+            </SignedIn>
+          </Link>
         </Toolbar>
       </AppBar>
     </Box>

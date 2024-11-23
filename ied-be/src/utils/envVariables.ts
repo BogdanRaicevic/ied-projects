@@ -23,4 +23,8 @@ export const env = {
     secret: config.AUTH0_SECRET,
     key: config.AUTH_KEY,
   },
+  clerk: {
+    publishableKey: config.CLERK_PUBLISHABLE_KEY,
+    secretKey: config.CLERK_SECRET_KEY,
+  },
 };

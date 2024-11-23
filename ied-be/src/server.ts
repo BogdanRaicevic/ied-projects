@@ -1,6 +1,6 @@
 import { env } from "./utils/envVariables";
 import { connectDB } from "./database/db";
-import express from "express";
+import express, { NextFunction, Request, Response } from "express";
 import cors from "cors";
 import firmaRoutes from "./routes/firma.routes";
 import velicineFirmiRoutes from "./routes/velicina_firme.routes";
@@ -13,6 +13,7 @@ import stanjaFirmeRoutes from "./routes/stanje_firme.routes";
 import seminarRoutes from "./routes/seminari.routes";
 import testRoutes from "./routes/test.routes";
 import { errorWrapper } from "./middleware/errorWrapper";
+import { clerkMiddleware, getAuth } from "@clerk/express";
 
 const app = express();
 
@@ -20,6 +21,13 @@ app.use(
   cors({
     origin: true,
     credentials: true,
+  })
+);
+
+app.use(
+  clerkMiddleware({
+    publishableKey: env.clerk.publishableKey,
+    secretKey: env.clerk.secretKey,
   })
 );
 
@@ -42,17 +50,23 @@ app.use(
 // }
 app.use(express.json());
 
-// Wrap the initialization logic in an async function
+const customRequireAuth = (req: Request, res: Response, next: NextFunction) => {
+  const auth = getAuth(req);
+  if (!auth.userId) {
+    return res.status(403).send("Forbidden");
+  }
+  next();
+};
 
-app.use("/api/firma", firmaRoutes);
-app.use("/api/velicine-firmi", velicineFirmiRoutes);
-app.use("/api/radna-mesta", radnaMestaRoutes);
-app.use("/api/tip-firme", tipFirmeRoutes);
-app.use("/api/delatnost", delatnostiRoutes);
-app.use("/api/mesto", mestoRoutes);
-app.use("/api/pretrage", pretrageRoutes);
-app.use("/api/stanja-firmi", stanjaFirmeRoutes);
-app.use("/api/seminari", seminarRoutes);
+app.use("/api/firma", customRequireAuth, firmaRoutes);
+app.use("/api/velicine-firmi", customRequireAuth, velicineFirmiRoutes);
+app.use("/api/radna-mesta", customRequireAuth, radnaMestaRoutes);
+app.use("/api/tip-firme", customRequireAuth, tipFirmeRoutes);
+app.use("/api/delatnost", customRequireAuth, delatnostiRoutes);
+app.use("/api/mesto", customRequireAuth, mestoRoutes);
+app.use("/api/pretrage", customRequireAuth, pretrageRoutes);
+app.use("/api/stanja-firmi", customRequireAuth, stanjaFirmeRoutes);
+app.use("/api/seminari", customRequireAuth, seminarRoutes);
 app.use("/api/test", testRoutes);
 
 app.use(errorWrapper);
@@ -60,7 +74,7 @@ app.use(errorWrapper);
 async function initServer() {
   try {
     await connectDB();
-    await app.listen({ port: Number(env.be.appPort) });
+    app.listen({ port: Number(env.be.appPort) });
   } catch (error) {
     console.error("Error starting server:", error);
   }

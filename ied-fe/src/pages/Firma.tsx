@@ -12,6 +12,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import ZaposleniDialog from "../components/Dialogs/ZaposleniDialog";
 import { fetchSingleFirmaData, saveFirma } from "../api/firma.api";
+import { useAuth } from "@clerk/clerk-react";
 
 const defaultCompanyData: Company = {
   ID_firma: 0,
@@ -39,11 +40,13 @@ type TODO_ANY_TYPE = any;
 export default function Firma() {
   const { id } = useParams();
   const [company, setCompany] = useState(defaultCompanyData);
+  const { getToken } = useAuth();
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const data = await fetchSingleFirmaData(String(id));
+        const token = await getToken();
+        const data = await fetchSingleFirmaData(String(id), token);
         if (data) {
           setCompany(data);
         }
@@ -74,7 +77,9 @@ export default function Firma() {
     setOpen(true);
   };
 
-  const handleDelete = (row: MRT_Row<Zaposleni>) => {
+  const handleDelete = async (row: MRT_Row<Zaposleni>) => {
+    const token = await getToken();
+
     const updatedCompany: Company = {
       ...defaultCompanyData,
       ...company,
@@ -84,7 +89,7 @@ export default function Firma() {
         ) || [],
     };
     setCompany(updatedCompany);
-    saveFirma(updatedCompany);
+    saveFirma(updatedCompany, token);
   };
 
   const [open, setOpen] = useState(false);
@@ -93,7 +98,7 @@ export default function Firma() {
   };
 
   // TODO: Fix this to interact with saving company
-  const handleZaposleniSubmit = (zaposleniData: Zaposleni) => {
+  const handleZaposleniSubmit = async (zaposleniData: Zaposleni) => {
     const existingZaposleni = company?.zaposleni.find(
       (zaposleni: Zaposleni) =>
         zaposleniData._id !== undefined && zaposleni._id === zaposleniData._id
@@ -121,7 +126,8 @@ export default function Firma() {
     setCompany(updatedCompany);
 
     if (Boolean(id)) {
-      saveFirma(updatedCompany);
+      const token = await getToken();
+      saveFirma(updatedCompany, token);
     }
 
     setOpen(false);
