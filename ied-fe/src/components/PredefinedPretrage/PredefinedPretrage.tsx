@@ -15,7 +15,8 @@ export default function PredefinedPretrage() {
   const { getToken } = useAuth();
 
   const fetchPretrage = async () => {
-    const pretrage = await fetchAllPretrage();
+    const token = await getToken();
+    const pretrage = await fetchAllPretrage(token);
     setPretrage(pretrage);
   };
 
@@ -64,7 +65,7 @@ export default function PredefinedPretrage() {
   const handleDeletePretraga = async () => {
     if (window.confirm("Da li ste sigurni da zelite da obriste pretragu?") && selectedPretraga) {
       try {
-        await deletePretraga({ id: selectedPretraga.id });
+        await deletePretraga({ id: selectedPretraga.id, token: await getToken() });
         // Optionally, you can update the state or UI to reflect the deletion
         await fetchPretrage(); // Fetch updated pretrage data
       } catch (error) {
