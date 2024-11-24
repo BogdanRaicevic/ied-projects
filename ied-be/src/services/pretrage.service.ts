@@ -16,7 +16,7 @@ export const savePretraga = async (
   pretraga: { id?: string; naziv: string }
 ) => {
   try {
-    let pretragaData: Partial<PretrageType> = {};
+    const pretragaData: Partial<PretrageType> = {};
     pretragaData.naziv_pretrage = pretraga.naziv || "pretraga bez imena";
 
     pretragaData.mesta = queryParameters.mesta;
@@ -47,7 +47,7 @@ export const savePretraga = async (
   }
 };
 
-export const deletePretraga = async (id: any) => {
+export const deletePretraga = async (id: string) => {
   try {
     console.log("obrisi id: ", id);
     await Pretrage.findByIdAndDelete({ _id: id });
