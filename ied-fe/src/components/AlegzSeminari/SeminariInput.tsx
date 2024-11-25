@@ -6,6 +6,7 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFnsV3";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { saveSeminar } from "../../api/seminari.api";
+import { useAuth } from "@clerk/clerk-react";
 
 export default function AddSeminarForm() {
   const [seminarData, setSeminarData] = React.useState({
@@ -15,6 +16,7 @@ export default function AddSeminarForm() {
     cena: "",
     datum: new Date(),
   });
+  const { getToken } = useAuth();
 
   const [selectedDate, setSelectedDate] = React.useState<Date | null>(new Date());
 
@@ -38,12 +40,14 @@ export default function AddSeminarForm() {
         ? "0"
         : Number(seminarData.cena).toFixed(2);
       const formattedDate = selectedDate ? format(selectedDate, "yyyy-MM-dd") : "";
+      const token = await getToken();
       await saveSeminar(
         seminarData.naziv,
         seminarData.predavac,
         seminarData.lokacija,
         formattedCena,
-        formattedDate
+        formattedDate,
+        token
       );
     } catch (error) {
       console.error("Failed to save seminar:", error);

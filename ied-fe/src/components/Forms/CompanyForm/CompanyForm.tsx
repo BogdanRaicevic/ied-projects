@@ -16,6 +16,7 @@ import AutocompleteSingle from "../../Autocomplete/Single";
 import { useFetchData } from "../../../hooks/useFetchData";
 import { companyFormMetadata } from "./metadata";
 import { saveFirma } from "../../../api/firma.api";
+import { useAuth } from "@clerk/clerk-react";
 
 type CompanyFormProps = {
   inputCompany: Company;
@@ -65,6 +66,8 @@ export const CompanyForm: React.FC<CompanyFormProps> = ({ inputCompany }) => {
     reset(inputCompany);
   }, [inputCompany, reset]);
 
+  const { getToken } = useAuth();
+
   let autocompletes: any;
 
   const onSubmit = async (data: Company) => {
@@ -73,7 +76,8 @@ export const CompanyForm: React.FC<CompanyFormProps> = ({ inputCompany }) => {
       ...autocompletes,
     };
 
-    const response = await saveFirma(data);
+    const token = await getToken();
+    const response = await saveFirma(data, token);
     if (response.status.toString().startsWith("2")) {
       setAlert({ type: "success", message: "Firma uspešno sačuvana!" });
     } else {

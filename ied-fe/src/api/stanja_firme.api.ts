@@ -1,9 +1,13 @@
 import axios from "axios";
 import { env } from "../utils/envVariables";
 
-export const fetchAllStanjaFirme = async () => {
+export const fetchAllStanjaFirme = async (token: string | null) => {
   try {
-    const response = await axios.get(`${env.beURL}/api/stanja-firmi`);
+    const response = await axios.get(`${env.beURL}/api/stanja-firmi`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
     return response.data;
   } catch (error) {
     console.error("Error fetching stamja firme:", error);

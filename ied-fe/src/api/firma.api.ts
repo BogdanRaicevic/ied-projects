@@ -5,7 +5,8 @@ import { env } from "../utils/envVariables";
 export const fetchFirmaPretrageData = async (
   pageSize: number,
   pageIndex: number,
-  queryParameters: any
+  queryParameters: any,
+  token: string | null
 ) => {
   try {
     const body = {
@@ -16,7 +17,11 @@ export const fetchFirmaPretrageData = async (
 
     const response: {
       data: { firmas: any[]; totalPages: number; totalDocuments: number };
-    } = await axios.post(`${env.beURL}/api/firma/search`, body);
+    } = await axios.post(`${env.beURL}/api/firma/search`, body, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
     return response.data;
   } catch (error) {
     console.error("Error fetching firma data:", error);
@@ -24,9 +29,16 @@ export const fetchFirmaPretrageData = async (
   }
 };
 
-export const fetchSingleFirmaData = async (id: string): Promise<Company | null> => {
+export const fetchSingleFirmaData = async (
+  id: string,
+  token: string | null
+): Promise<Company | null> => {
   try {
-    const response = await axios.get(`${env.beURL}/api/firma/${id}`);
+    const response = await axios.get(`${env.beURL}/api/firma/${id}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
     return response.data;
   } catch (error) {
     console.error("Error fetching firma data:", error);
@@ -34,13 +46,21 @@ export const fetchSingleFirmaData = async (id: string): Promise<Company | null> 
   }
 };
 
-export const exportData = async (queryParameters: any, exportSubject: "firma" | "zaposleni") => {
+export const exportData = async (
+  queryParameters: any,
+  exportSubject: "firma" | "zaposleni",
+  token: string | null
+) => {
   try {
     const body = {
       queryParameters,
     };
 
-    const response = await axios.post(`${env.beURL}/api/firma/export-${exportSubject}-data`, body);
+    const response = await axios.post(`${env.beURL}/api/firma/export-${exportSubject}-data`, body, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
     return response.data;
   } catch (error) {
     console.error("Error exporting firma data:", error);
@@ -48,16 +68,24 @@ export const exportData = async (queryParameters: any, exportSubject: "firma" | 
   }
 };
 
-export const saveFirma = async (company: Partial<Company>) => {
+export const saveFirma = async (company: Partial<Company>, token: string | null) => {
   try {
     if (company._id) {
-      const response = await axios.post(`${env.beURL}/api/firma/${company._id}`, company);
+      const response = await axios.post(`${env.beURL}/api/firma/${company._id}`, company, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
       return {
         data: response.data,
         status: response.status,
       };
     } else {
-      const response = await axios.post(`${env.beURL}/api/firma`, company);
+      const response = await axios.post(`${env.beURL}/api/firma`, company, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
       return {
         data: response.data,
         status: response.status,

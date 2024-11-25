@@ -16,7 +16,6 @@ const router = Router();
 
 router.post("/search", async (req: Request, res: Response, next: NextFunction) => {
   try {
-    console.log("req body", req.body);
     const { pageIndex = 1, pageSize = 10, ...query } = req.body;
     const paginationResult = await search(
       query as FilterQuery<FirmaType>,
