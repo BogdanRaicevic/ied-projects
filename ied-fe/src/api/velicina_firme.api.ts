@@ -1,13 +1,9 @@
-import axios from "axios";
 import { env } from "../utils/envVariables";
+import axiosInstanceWithAuth from "./interceptors/auth";
 
-export const fetchAllVelicineFirme = async (token: string | null) => {
+export const fetchAllVelicineFirme = async () => {
   try {
-    const response = await axios.get(`${env.beURL}/api/velicine-firmi`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
+    const response = await axiosInstanceWithAuth.get(`${env.beURL}/api/velicine-firmi`);
     return response.data;
   } catch (error) {
     console.error("Error fetching velicine firme:", error);

@@ -1,13 +1,9 @@
-import axios from "axios";
 import { env } from "../utils/envVariables";
+import axiosInstanceWithAuth from "./interceptors/auth";
 
-export const fetchAllMesta = async (token: string | null) => {
+export const fetchAllMesta = async () => {
   try {
-    const response = await axios.get(`${env.beURL}/api/mesto/all-names`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
+    const response = await axiosInstanceWithAuth.get(`${env.beURL}/api/mesto/all-names`);
     return response.data;
   } catch (error) {
     console.error("Error fetching mesta:", error);

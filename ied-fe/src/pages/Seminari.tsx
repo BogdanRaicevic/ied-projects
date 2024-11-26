@@ -29,11 +29,8 @@ import { format } from "date-fns";
 import { Seminar } from "../schemas/companySchemas";
 import AddSeminarForm from "../components/AlegzSeminari/SeminariInput";
 import { UnfoldLess } from "@mui/icons-material";
-import { useAuth } from "@clerk/clerk-react";
 
 export default function Seminari() {
-  const { getToken } = useAuth();
-
   const parametriPretrage = () => (
     <>
       <h1>Parametri Pretrage</h1>
@@ -121,14 +118,12 @@ export default function Seminari() {
 
   const handleSearch = async () => {
     try {
-      const token = await getToken();
       const searchResults = await searchSeminar(
         naziv,
         predavac,
         lokacija,
         datumOd ? format(datumOd, "yyyy-MM-dd") : null,
-        datumDo ? format(datumDo, "yyyy-MM-dd") : null,
-        token
+        datumDo ? format(datumDo, "yyyy-MM-dd") : null
       );
       console.log("Formatted datumOd:", datumOd ? format(datumOd, "yyyy-MM-dd") : null);
       console.log("Formatted datumDo:", datumDo ? format(datumDo, "yyyy-MM-dd") : null);

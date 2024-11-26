@@ -4,7 +4,9 @@ import Toolbar from "@mui/material/Toolbar";
 import Button from "@mui/material/Button";
 import { Link as RouteLink } from "react-router-dom";
 import Link from "@mui/material/Link";
-import { SignedOut, SignInButton, SignedIn, UserButton } from "@clerk/clerk-react";
+import { SignedOut, SignInButton, SignedIn, UserButton, useAuth } from "@clerk/clerk-react";
+import { useEffect } from "react";
+import { useAuthStore } from "../../store/auth.store";
 
 export default function ApplicationNavBar() {
   const navItems = [
@@ -14,6 +16,27 @@ export default function ApplicationNavBar() {
     // { text: "Zaposleni", linkPath: "/zaposleni" },
     { text: "Seminari", linkPath: "/seminari" },
   ];
+
+  const { setToken, clearToken } = useAuthStore();
+  const { getToken } = useAuth();
+
+  useEffect(() => {
+    const fetchToken = async () => {
+      try {
+        const token = await getToken();
+        if (token) {
+          setToken(token);
+        } else {
+          clearToken();
+        }
+      } catch (error) {
+        console.error("Error fetching token:", error);
+        clearToken();
+      }
+    };
+
+    fetchToken();
+  }, [getToken, setToken, clearToken]);
 
   return (
     <Box sx={{ flexGrow: 1 }}>

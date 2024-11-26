@@ -8,15 +8,12 @@ import { TODO_ANY } from "../../../../ied-be/src/utils/utils";
 import { usePretragaStore } from "../../store/pretragaParameters.store";
 import ZoomInIcon from "@mui/icons-material/ZoomIn";
 import ZoomOutIcon from "@mui/icons-material/ZoomOut";
-import { useAuth } from "@clerk/clerk-react";
 
 export default function PredefinedPretrage() {
   const [pretrage, setPretrage] = useState<TODO_ANY[]>([]);
-  const { getToken } = useAuth();
 
   const fetchPretrage = async () => {
-    const token = await getToken();
-    const pretrage = await fetchAllPretrage(token);
+    const pretrage = await fetchAllPretrage();
     setPretrage(pretrage);
   };
 
@@ -38,17 +35,12 @@ export default function PredefinedPretrage() {
 
   const handleSavePretraga = async (nazivPretrage: string) => {
     const pretragaName = nazivPretrage || selectedPretraga.naziv;
-    const token = await getToken();
     if (pretragaName) {
       try {
-        await savePretraga(
-          pretragaParameters,
-          {
-            id: nazivPretrage !== selectedPretraga.naziv ? "" : selectedPretraga.id,
-            naziv: pretragaName,
-          },
-          token
-        );
+        await savePretraga(pretragaParameters, {
+          id: nazivPretrage !== selectedPretraga.naziv ? "" : selectedPretraga.id,
+          naziv: pretragaName,
+        });
         setOpenPretrageSaveDialog(false);
         // Optionally, you can update the state or UI to reflect the save
         await fetchPretrage(); // Fetch updated pretrage data
@@ -65,7 +57,7 @@ export default function PredefinedPretrage() {
   const handleDeletePretraga = async () => {
     if (window.confirm("Da li ste sigurni da zelite da obriste pretragu?") && selectedPretraga) {
       try {
-        await deletePretraga({ id: selectedPretraga.id, token: await getToken() });
+        await deletePretraga({ id: selectedPretraga.id });
         // Optionally, you can update the state or UI to reflect the deletion
         await fetchPretrage(); // Fetch updated pretrage data
       } catch (error) {

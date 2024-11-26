@@ -1,12 +1,11 @@
-import axios from "axios";
 import { Company } from "../schemas/companySchemas";
 import { env } from "../utils/envVariables";
+import axiosInstanceWithAuth from "./interceptors/auth";
 
 export const fetchFirmaPretrageData = async (
   pageSize: number,
   pageIndex: number,
-  queryParameters: any,
-  token: string | null
+  queryParameters: any
 ) => {
   try {
     const body = {
@@ -17,11 +16,7 @@ export const fetchFirmaPretrageData = async (
 
     const response: {
       data: { firmas: any[]; totalPages: number; totalDocuments: number };
-    } = await axios.post(`${env.beURL}/api/firma/search`, body, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
+    } = await axiosInstanceWithAuth.post(`${env.beURL}/api/firma/search`, body);
     return response.data;
   } catch (error) {
     console.error("Error fetching firma data:", error);
@@ -29,16 +24,9 @@ export const fetchFirmaPretrageData = async (
   }
 };
 
-export const fetchSingleFirmaData = async (
-  id: string,
-  token: string | null
-): Promise<Company | null> => {
+export const fetchSingleFirmaData = async (id: string): Promise<Company | null> => {
   try {
-    const response = await axios.get(`${env.beURL}/api/firma/${id}`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
+    const response = await axiosInstanceWithAuth.get(`${env.beURL}/api/firma/${id}`);
     return response.data;
   } catch (error) {
     console.error("Error fetching firma data:", error);
@@ -46,21 +34,16 @@ export const fetchSingleFirmaData = async (
   }
 };
 
-export const exportData = async (
-  queryParameters: any,
-  exportSubject: "firma" | "zaposleni",
-  token: string | null
-) => {
+export const exportData = async (queryParameters: any, exportSubject: "firma" | "zaposleni") => {
   try {
     const body = {
       queryParameters,
     };
 
-    const response = await axios.post(`${env.beURL}/api/firma/export-${exportSubject}-data`, body, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
+    const response = await axiosInstanceWithAuth.post(
+      `${env.beURL}/api/firma/export-${exportSubject}-data`,
+      body
+    );
     return response.data;
   } catch (error) {
     console.error("Error exporting firma data:", error);
@@ -68,24 +51,19 @@ export const exportData = async (
   }
 };
 
-export const saveFirma = async (company: Partial<Company>, token: string | null) => {
+export const saveFirma = async (company: Partial<Company>) => {
   try {
     if (company._id) {
-      const response = await axios.post(`${env.beURL}/api/firma/${company._id}`, company, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const response = await axiosInstanceWithAuth.post(
+        `${env.beURL}/api/firma/${company._id}`,
+        company
+      );
       return {
         data: response.data,
         status: response.status,
       };
     } else {
-      const response = await axios.post(`${env.beURL}/api/firma`, company, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const response = await axiosInstanceWithAuth.post(`${env.beURL}/api/firma`, company);
       return {
         data: response.data,
         status: response.status,
@@ -93,9 +71,9 @@ export const saveFirma = async (company: Partial<Company>, token: string | null)
     }
   } catch (error) {
     console.error("Error saving firma: ", error);
-    if (axios.isAxiosError(error) && error.response) {
-      return { success: false, status: 500, message: error.response.data.message };
-    }
+    // if (axiosInstanceWithAuth.isAxiosError(error) && error.response) {
+    //   return { success: false, status: 500, message: error.response.data.message };
+    // }
     return { success: false, status: 500, message: "An unexpected error occurred" };
   }
 };

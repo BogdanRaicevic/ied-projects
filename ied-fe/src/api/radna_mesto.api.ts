@@ -1,13 +1,9 @@
-import axios from "axios";
 import { env } from "../utils/envVariables";
+import axiosInstanceWithAuth from "./interceptors/auth";
 
-export const fetchAllRadnaMesta = async (token: string | null) => {
+export const fetchAllRadnaMesta = async () => {
   try {
-    const response = await axios.get(`${env.beURL}/api/radna-mesta`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
+    const response = await axiosInstanceWithAuth.get(`${env.beURL}/api/radna-mesta`);
     return response.data;
   } catch (error) {
     console.error("Error fetching radna mesta:", error);

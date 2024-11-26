@@ -1,13 +1,9 @@
-import axios from "axios";
+import axiosInstanceWithAuth from "./interceptors/auth";
 import { env } from "../utils/envVariables";
 
-export const fetchAllDelatnosti = async (token: string | null) => {
+export const fetchAllDelatnosti = async () => {
   try {
-    const response = await axios.get(`${env.beURL}/api/delatnost`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
+    const response = await axiosInstanceWithAuth.get(`${env.beURL}/api/delatnost`);
     return response.data;
   } catch (error) {
     console.error("Error fetching delatnosti:", error);

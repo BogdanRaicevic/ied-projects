@@ -12,7 +12,6 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import ZaposleniDialog from "../components/Dialogs/ZaposleniDialog";
 import { fetchSingleFirmaData, saveFirma } from "../api/firma.api";
-import { useAuth } from "@clerk/clerk-react";
 
 const defaultCompanyData: Company = {
   ID_firma: 0,
@@ -40,13 +39,11 @@ type TODO_ANY_TYPE = any;
 export default function Firma() {
   const { id } = useParams();
   const [company, setCompany] = useState(defaultCompanyData);
-  const { getToken } = useAuth();
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const token = await getToken();
-        const data = await fetchSingleFirmaData(String(id), token);
+        const data = await fetchSingleFirmaData(String(id));
         if (data) {
           setCompany(data);
         }
@@ -78,8 +75,6 @@ export default function Firma() {
   };
 
   const handleDelete = async (row: MRT_Row<Zaposleni>) => {
-    const token = await getToken();
-
     const updatedCompany: Company = {
       ...defaultCompanyData,
       ...company,
@@ -89,7 +84,7 @@ export default function Firma() {
         ) || [],
     };
     setCompany(updatedCompany);
-    saveFirma(updatedCompany, token);
+    saveFirma(updatedCompany);
   };
 
   const [open, setOpen] = useState(false);
@@ -126,8 +121,7 @@ export default function Firma() {
     setCompany(updatedCompany);
 
     if (Boolean(id)) {
-      const token = await getToken();
-      saveFirma(updatedCompany, token);
+      saveFirma(updatedCompany);
     }
 
     setOpen(false);

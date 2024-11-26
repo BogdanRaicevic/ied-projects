@@ -9,7 +9,6 @@ import {
 } from "material-react-table";
 import { fetchFirmaPretrageData } from "../../api/firma.api";
 import { PretragaParametersType } from "../../store/pretragaParameters.store";
-import { useAuth } from "@clerk/clerk-react";
 
 export default memo(function MyTable(queryParameters: PretragaParametersType) {
   const [data, setData] = useState<Company[]>([]);
@@ -19,13 +18,11 @@ export default memo(function MyTable(queryParameters: PretragaParametersType) {
     pageIndex: 0,
     pageSize: 10,
   });
-  const { getToken } = useAuth();
 
   useEffect(() => {
     const loadData = async () => {
       const { pageIndex, pageSize } = table.getState().pagination;
-      const token = await getToken();
-      const res = await fetchFirmaPretrageData(pageSize, pageIndex, queryParameters, token);
+      const res = await fetchFirmaPretrageData(pageSize, pageIndex, queryParameters);
       setData(res.firmas);
       setDocuments(res.totalDocuments);
     };

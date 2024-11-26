@@ -66,8 +66,6 @@ export const CompanyForm: React.FC<CompanyFormProps> = ({ inputCompany }) => {
     reset(inputCompany);
   }, [inputCompany, reset]);
 
-  const { getToken } = useAuth();
-
   let autocompletes: any;
 
   const onSubmit = async (data: Company) => {
@@ -76,8 +74,7 @@ export const CompanyForm: React.FC<CompanyFormProps> = ({ inputCompany }) => {
       ...autocompletes,
     };
 
-    const token = await getToken();
-    const response = await saveFirma(data, token);
+    const response = await saveFirma(data);
     if (response.status.toString().startsWith("2")) {
       setAlert({ type: "success", message: "Firma uspešno sačuvana!" });
     } else {
