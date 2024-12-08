@@ -24,12 +24,14 @@ app.use(
   })
 );
 
-app.use(
-  clerkMiddleware({
-    publishableKey: env.clerk.publishableKey,
-    secretKey: env.clerk.secretKey,
-  })
-);
+if (process.env.NODE_ENV !== "development") {
+  app.use(
+    clerkMiddleware({
+      publishableKey: env.clerk.publishableKey,
+      secretKey: env.clerk.secretKey,
+    })
+  );
+}
 
 // if (process.env.NODE_ENV === "development") {
 //   app.use(
@@ -50,7 +52,12 @@ app.use(
 // }
 app.use(express.json());
 
+console.log("NODE_ENV", process.env.NODE_ENV);
 const customRequireAuth = (req: Request, res: Response, next: NextFunction) => {
+  if (process.env.NODE_ENV === "development") {
+    return next();
+  }
+
   const auth = getAuth(req);
   if (!auth.userId) {
     return res.status(403).send("Forbidden");
