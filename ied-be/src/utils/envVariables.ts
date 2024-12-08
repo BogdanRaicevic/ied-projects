@@ -15,14 +15,6 @@ export const env = {
   mongo: {
     uri: config.MONGO_URI,
   },
-  auth: {
-    domain: config.AUTH0_ISSUER_BASE_URL,
-    clientId: config.AUTH0_CLIENT_ID,
-    clientSecret: config.AUTH0_CLIENT_SECRET,
-    baseURL: config.AUTH0_BASE_URL,
-    secret: config.AUTH0_SECRET,
-    key: config.AUTH_KEY,
-  },
   clerk: {
     publishableKey: config.CLERK_PUBLISHABLE_KEY,
     secretKey: config.CLERK_SECRET_KEY,
