@@ -24,14 +24,12 @@ app.use(
   })
 );
 
-if (process.env.NODE_ENV !== "development") {
-  app.use(
-    clerkMiddleware({
-      publishableKey: env.clerk.publishableKey,
-      secretKey: env.clerk.secretKey,
-    })
-  );
-}
+app.use(
+  clerkMiddleware({
+    publishableKey: env.clerk.publishableKey,
+    secretKey: env.clerk.secretKey,
+  })
+);
 
 // if (process.env.NODE_ENV === "development") {
 //   app.use(
@@ -52,7 +50,6 @@ if (process.env.NODE_ENV !== "development") {
 // }
 app.use(express.json());
 
-console.log("NODE_ENV", process.env.NODE_ENV);
 const customRequireAuth = (req: Request, res: Response, next: NextFunction) => {
   if (process.env.NODE_ENV === "development") {
     return next();

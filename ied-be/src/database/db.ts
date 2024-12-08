@@ -8,7 +8,7 @@ let dbConnection: TODO_ANY;
 export async function connectDB() {
   if (!dbConnection) {
     try {
-      await mongoose.connect(uri, {});
+      await mongoose.connect(uri);
       console.log("Database connected");
     } catch (error) {
       console.error("Error connecting to the database", error);
