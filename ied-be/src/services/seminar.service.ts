@@ -1,4 +1,5 @@
-import { createSeminarQuery } from "../utils/seminariQueryBuilder";
+import { FilterQuery } from "mongoose";
+import { createSeminarQuery, SeminarQueryParams } from "../utils/seminariQueryBuilder";
 import { Seminar } from "./../models/seminar.model";
 
 export const saveSeminar = async ({
@@ -27,40 +28,23 @@ export const saveSeminar = async ({
   }
 };
 
-export const searchSeminari = async ({
-  naziv,
-  predavac,
-  lokacija,
-  datumOd,
-  datumDo,
-}: {
-  naziv: string;
-  predavac: string;
-  lokacija: string;
-  datumOd: string;
-  datumDo: string;
-}) => {
-  try {
-    const mongoQuery = createSeminarQuery({
-      naziv,
-      predavac,
-      lokacija,
-      datumOd,
-      datumDo,
-    });
+export const search = async (
+  queryParameters: FilterQuery<SeminarQueryParams>,
+  pageIndex: number = 1,
+  pageSize: number = 10
+) => {
+  const skip = (pageIndex - 1) * pageSize;
+  const mongoQuery = createSeminarQuery(queryParameters.queryParameters);
 
-    const result = Seminar.find(mongoQuery, {
-      naziv: 1,
-      predavac: 1,
-      lokacija: 1,
-      cena: 1,
-      datum: 1,
-      _id: 1,
-    }).exec();
+  const totalDocuments = await Seminar.countDocuments(mongoQuery);
 
-    return result;
-  } catch (error) {
-    console.log("Error saving seminari", error);
-    throw new Error("Error saving seminari");
-  }
+  return {
+    courser: Seminar.find(mongoQuery, { zaposleni: 0 })
+      .sort({ naziv_firme: 1 })
+      .skip(skip)
+      .limit(pageSize)
+      .cursor(),
+    totalDocuments,
+    totalPages: Math.ceil(totalDocuments / pageSize),
+  };
 };

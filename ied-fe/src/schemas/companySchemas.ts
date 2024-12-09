@@ -83,30 +83,18 @@ export const SeminarSchema = z.object({
   predavac: z
     .string()
     .min(3, "Predavac mora da ima bar 3 karaktera")
-    .max(100, "Predavac ne sme da ima vise od 100 karaktera"),
-  osnovnaCena: z.number().min(0, "Cena ne moze da bude negativna"),
-  mesto: z
+    .max(100, "Predavac ne sme da ima vise od 100 karaktera")
+    .or(z.literal("")),
+  cena: z.number().min(0, "Cena ne moze da bude negativna").optional(),
+  cenaOd: z.number().optional(),
+  cenaDo: z.number().optional(),
+  lokacija: z
     .string()
-    .min(3, "Mesto mora da ima bar 3 karaktera")
-    .max(100, "Mesto ne sme da ima vise od 100 karaktera"),
-  tipSeminara: z.string(),
-  datum: z.date(),
-  arhiviran: z.boolean().default(false).optional(),
-  ucesnici: z
-    .array(
-      z.object({
-        naziv: z.string(),
-        id: z.string(),
-        zaposleni: z.array(
-          z.object({
-            id: z.string(),
-            ime: z.string(),
-            prezime: z.string(),
-            email: z.string(),
-          })
-        ),
-      })
-    )
-    .optional(),
+    .min(3, "Lokacija mora da ima bar 3 karaktera")
+    .max(100, "Lokacija ne sme da ima vise od 100 karaktera")
+    .or(z.literal("")),
+  datum: z.date().optional(),
+  datumOd: z.date().optional(),
+  datumDo: z.date().optional(),
 });
 export type Seminar = z.infer<typeof SeminarSchema>;

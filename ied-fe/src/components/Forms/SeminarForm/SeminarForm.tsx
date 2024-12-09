@@ -124,8 +124,8 @@ export default function SeminarForm({
                 label="Mesto odrazavanja"
                 variant="outlined"
                 {...field}
-                error={Boolean(errors.mesto)}
-                helperText={errors.mesto?.message}
+                error={Boolean(errors.lokacija)}
+                helperText={errors.lokacija?.message}
               />
             )}
           ></Controller>

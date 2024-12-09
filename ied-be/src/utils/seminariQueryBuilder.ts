@@ -8,6 +8,12 @@ export type SeminarQueryParams = {
   datumOd?: string;
   datumDo?: string;
   datum?: string;
+  cena?: string;
+  cenaOd?: string;
+  cenaDo?: string;
+  brojUcesnika?: string;
+  brojUcesnikaOd?: string;
+  brojUcesnikaDo?: string;
 };
 
 export function createSeminarQuery(params: SeminarQueryParams): FilterQuery<SeminarType> {
@@ -35,6 +41,7 @@ export function createSeminarQuery(params: SeminarQueryParams): FilterQuery<Semi
   } else if (params?.datumDo) {
     query.datum = { $lte: params.datumDo };
   }
+
   console.log("Generated MongoDB query date:", query);
   return query;
 }

@@ -1,6 +1,8 @@
 import { Router, Request, Response, NextFunction } from "express";
 import { parse, format } from "date-fns";
-import { saveSeminar, searchSeminari } from "../services/seminar.service";
+import { saveSeminar, search } from "../services/seminar.service";
+import { FilterQuery } from "mongoose";
+import { SeminarType } from "../models/seminar.model";
 
 const router = Router();
 
@@ -15,8 +17,8 @@ router.post("/save", async (req: Request, res: Response, next: NextFunction) => 
 });
 
 router.post("/search", async (req: Request, res: Response, next: NextFunction) => {
-  const { naziv, predavac, lokacija, datumOd, datumDo } = req.body;
-
+  const { pageIndex = 1, pageSize = 10, ...query } = req.body;
+  const { datumOd, datumDo, ...rest } = query;
   let formattedDatumOd: string = "";
   let formattedDatumDo: string = "";
 
@@ -30,16 +32,33 @@ router.post("/search", async (req: Request, res: Response, next: NextFunction) =
   }
 
   try {
-    const result = await searchSeminari({
-      naziv,
-      predavac,
-      lokacija,
-      datumOd: formattedDatumOd,
-      datumDo: formattedDatumDo,
+    const paginationResult = await search(
+      {
+        ...rest,
+        datumOd: formattedDatumOd,
+        datumDo: formattedDatumDo,
+      } as FilterQuery<SeminarType>,
+      Number(pageIndex),
+      Number(pageSize)
+    );
+
+    const results: SeminarType[] = [];
+    paginationResult.courser.on("data", (doc) => {
+      results.push(doc);
     });
-    console.log("Request Body:", req.body);
-    console.log("Query Results:", result);
-    res.send(result);
+
+    paginationResult.courser.on("end", () => {
+      res.json({
+        seminari: results,
+        totalPages: paginationResult.totalPages,
+        totalDocuments: paginationResult.totalDocuments,
+      });
+    });
+
+    paginationResult.courser.on("error", (error) => {
+      console.error(error);
+      res.status(500).json({ message: "Internal server error" });
+    });
   } catch (error) {
     next(error);
   }
