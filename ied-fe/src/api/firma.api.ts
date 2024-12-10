@@ -1,11 +1,12 @@
 import { Company } from "../schemas/companySchemas";
 import { env } from "../utils/envVariables";
 import axiosInstanceWithAuth from "./interceptors/auth";
+import { FirmaQueryParams } from "ied-shared/types/firmaQueryParams";
 
 export const fetchFirmaPretrageData = async (
   pageSize: number,
   pageIndex: number,
-  queryParameters: any
+  queryParameters: FirmaQueryParams
 ) => {
   try {
     const body = {

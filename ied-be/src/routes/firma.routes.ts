@@ -1,6 +1,4 @@
 import { Router, Request, Response, NextFunction } from "express";
-import { FilterQuery } from "mongoose";
-
 import {
   deleteById,
   create,
@@ -11,17 +9,23 @@ import {
   findById,
 } from "../services/firma.service";
 import { FirmaType } from "../models/firma.model";
+import { FirmaQueryParams } from "ied-shared/types/firmaQueryParams";
 
 const router = Router();
 
-router.post("/search", async (req: Request, res: Response, next: NextFunction) => {
+interface SearchRequest extends Request {
+  body: {
+    pageIndex?: number;
+    pageSize?: number;
+    queryParameters: FirmaQueryParams;
+  };
+}
+
+router.post("/search", async (req: SearchRequest, res: Response, next: NextFunction) => {
   try {
     const { pageIndex = 1, pageSize = 10, ...query } = req.body;
-    const paginationResult = await search(
-      query as FilterQuery<FirmaType>,
-      Number(pageIndex),
-      Number(pageSize)
-    );
+    const { queryParameters } = query;
+    const paginationResult = await search(queryParameters, Number(pageIndex), Number(pageSize));
 
     const results: FirmaType[] = [];
     paginationResult.courser.on("data", (doc) => {
