@@ -1,6 +1,7 @@
 import { Seminar } from "../schemas/companySchemas";
 import { env } from "../utils/envVariables";
 import axiosInstanceWithAuth from "./interceptors/auth";
+import { SeminarQueryParams } from "ied-shared/types/seminarQueryParams";
 
 export const saveSeminar = async (
   naziv: string,
@@ -32,14 +33,16 @@ export const saveSeminar = async (
 export const fetchSeminari = async (
   pageSize: number,
   pageIndex: number,
-  queryParameters: Seminar[]
+  queryParameters: SeminarQueryParams
 ) => {
   try {
     const body = {
       pageSize: pageSize || 10,
       pageIndex: pageIndex + 1, // becuase MRT is zero based
-      queryParameters,
+      ...queryParameters,
     };
+
+    console.log("fetchSeminari body: ", body);
 
     const response: {
       data: { seminari: Seminar[]; totalPages: number; totalDocuments: number };

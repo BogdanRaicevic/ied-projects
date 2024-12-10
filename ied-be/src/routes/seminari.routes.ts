@@ -3,6 +3,7 @@ import { parse, format } from "date-fns";
 import { saveSeminar, search } from "../services/seminar.service";
 import { FilterQuery } from "mongoose";
 import { SeminarType } from "../models/seminar.model";
+import { SeminarQueryParams } from "ied-shared/types/seminarQueryParams";
 
 const router = Router();
 
@@ -18,7 +19,7 @@ router.post("/save", async (req: Request, res: Response, next: NextFunction) => 
 
 router.post("/search", async (req: Request, res: Response, next: NextFunction) => {
   const { pageIndex = 1, pageSize = 10, ...query } = req.body;
-  const { datumOd, datumDo, ...rest } = query;
+  const { datumOd, datumDo, ...rest } = query as SeminarQueryParams;
   let formattedDatumOd: string = "";
   let formattedDatumDo: string = "";
 
