@@ -1,5 +1,6 @@
 import { FilterQuery } from "mongoose";
 import { FirmaType } from "../models/firma.model";
+import { FirmaQueryParams } from "ied-shared/types/firmaQueryParams";
 
 enum Negations {
   RadnoMesto = "negate-radno-mesto",
@@ -7,22 +8,6 @@ enum Negations {
   Delatnost = "negate-delatnost",
   Mesto = "negate-mesto",
 }
-
-export type FirmaQueryParams = {
-  imeFirme?: string;
-  pib?: string;
-  email?: string;
-  mesta?: string[];
-  delatnosti?: string[];
-  tipoviFirme?: string[];
-  radnaMesta?: string[];
-  velicineFirmi?: string[];
-  negacije?: string[];
-  stanjaFirme?: string[];
-  jbkjs?: string;
-  maticniBroj?: string;
-  komentar?: string;
-};
 
 export function createFirmaQuery(params: FirmaQueryParams): FilterQuery<FirmaType> {
   const query: FilterQuery<FirmaType> = {};

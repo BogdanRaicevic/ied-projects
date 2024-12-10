@@ -1,4 +1,4 @@
-import { FirmaQueryParams } from "../utils/firmaQueryBuilder";
+import { FirmaQueryParams } from "ied-shared/types/firmaQueryParams";
 import { Pretrage, PretrageType } from "../models/pretrage.model";
 
 export const getAllPretrage = async () => {

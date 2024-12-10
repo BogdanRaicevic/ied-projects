@@ -1,6 +1,7 @@
 import { FilterQuery } from "mongoose";
 import { FirmaType, Firma } from "../models/firma.model";
-import { createFirmaQuery, FirmaQueryParams } from "../utils/firmaQueryBuilder";
+import { createFirmaQuery } from "../utils/firmaQueryBuilder";
+import { FirmaQueryParams } from "ied-shared/types/firmaQueryParams";
 
 export const findById = async (id: string): Promise<FirmaType | null> => {
   try {
