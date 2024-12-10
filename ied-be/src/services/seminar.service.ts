@@ -1,6 +1,7 @@
 import { FilterQuery } from "mongoose";
-import { createSeminarQuery, SeminarQueryParams } from "../utils/seminariQueryBuilder";
+import { createSeminarQuery } from "../utils/seminariQueryBuilder";
 import { Seminar } from "./../models/seminar.model";
+import { SeminarQueryParams } from "ied-shared/types/seminarQueryParams";
 
 export const saveSeminar = async ({
   naziv,
