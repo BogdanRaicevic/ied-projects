@@ -16,7 +16,6 @@ import AutocompleteSingle from "../../Autocomplete/Single";
 import { useFetchData } from "../../../hooks/useFetchData";
 import { companyFormMetadata } from "./metadata";
 import { saveFirma } from "../../../api/firma.api";
-import { useAuth } from "@clerk/clerk-react";
 
 type CompanyFormProps = {
   inputCompany: Company;

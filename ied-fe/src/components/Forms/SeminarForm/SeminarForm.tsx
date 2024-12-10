@@ -1,5 +1,4 @@
-import { TextField, Autocomplete, Box } from "@mui/material";
-import { tipoviSeminara } from "../../../fakeData/seminarsData";
+import { TextField, Box } from "@mui/material";
 import { Controller, useForm } from "react-hook-form";
 // import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 // import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
@@ -113,15 +112,15 @@ export default function SeminarForm({
         </Grid>
         <Grid size={4}>
           <Controller
-            name="mesto"
+            name="lokacija"
             control={control}
             defaultValue=""
             render={({ field }) => (
               <TextField
                 fullWidth
                 sx={{ m: 1 }}
-                id="mesto"
-                label="Mesto odrazavanja"
+                id="lokacija"
+                label="Lokacija odrazavanja"
                 variant="outlined"
                 {...field}
                 error={Boolean(errors.lokacija)}
@@ -132,14 +131,14 @@ export default function SeminarForm({
         </Grid>
         <Grid size={4}>
           <Controller
-            name="osnovnaCena"
+            name="cena"
             control={control}
             defaultValue={0}
             render={({ field }) => (
               <TextField
                 fullWidth
                 sx={{ m: 1 }}
-                id="osnovna-cena"
+                id="cena"
                 label="Osnovna cena"
                 variant="outlined"
                 type="number"
@@ -147,39 +146,10 @@ export default function SeminarForm({
                 onChange={(e) => {
                   field.onChange(Number(e.target.value));
                 }}
-                error={Boolean(errors.osnovnaCena)}
-                helperText={errors.osnovnaCena?.message}
+                error={Boolean(errors.cena)}
+                helperText={errors.cena?.message}
               />
             )}
-          ></Controller>
-        </Grid>
-        <Grid size={4}>
-          <Controller
-            name="tipSeminara"
-            control={control}
-            render={({ field, fieldState: { error } }) => {
-              const { onChange } = field;
-              return (
-                <Autocomplete
-                  fullWidth
-                  sx={{ m: 1 }}
-                  id="tip-seminara"
-                  options={tipoviSeminara}
-                  value={field.value || ""}
-                  renderInput={(params) => (
-                    <TextField
-                      {...params}
-                      label="Tip Seminara"
-                      error={!!error}
-                      helperText={error?.message}
-                    />
-                  )}
-                  onChange={(_event: any, newValue) => {
-                    onChange(newValue);
-                  }}
-                />
-              );
-            }}
           ></Controller>
         </Grid>
         {/* <Grid size={4}>

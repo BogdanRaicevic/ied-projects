@@ -1,7 +1,7 @@
 import Container from "@mui/material/Container";
 import { Navigate, Route, Routes } from "react-router-dom";
 import Navigation from "./components/Navigation";
-import { Evidencija, Pretrage, Racuni, Zaposleni, Seminari } from "./pages";
+import { Pretrage, Zaposleni, Seminari } from "./pages";
 import Firma from "./pages/Firma";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { RedirectToSignIn, SignedIn, SignedOut } from "@clerk/clerk-react";
