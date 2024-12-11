@@ -39,10 +39,8 @@ export const fetchSeminari = async (
     const body = {
       pageSize: pageSize || 10,
       pageIndex: pageIndex + 1, // becuase MRT is zero based
-      ...queryParameters,
+      queryParameters,
     };
-
-    console.log("fetchSeminari body: ", body);
 
     const response: {
       data: { seminari: Seminar[]; totalPages: number; totalDocuments: number };

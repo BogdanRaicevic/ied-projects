@@ -1,5 +1,5 @@
 import { Router, Request, Response, NextFunction } from "express";
-import { parse, format } from "date-fns";
+import { format } from "date-fns";
 import { saveSeminar, search } from "../services/seminar.service";
 import { FilterQuery } from "mongoose";
 import { SeminarType } from "../models/seminar.model";
@@ -24,12 +24,10 @@ router.post("/search", async (req: Request, res: Response, next: NextFunction) =
   let formattedDatumDo: string = "";
 
   if (datumOd) {
-    const parsedDatumOd = parse(datumOd, "yyyy-MM-dd", new Date());
-    formattedDatumOd = format(parsedDatumOd, "yyyy-MM-dd");
+    formattedDatumOd = format(datumOd, "yyyy-MM-dd");
   }
   if (datumDo) {
-    const parsedDatumDo = parse(datumDo, "yyyy-MM-dd", new Date());
-    formattedDatumDo = format(parsedDatumDo, "yyyy-MM-dd");
+    formattedDatumDo = format(datumDo, "yyyy-MM-dd");
   }
 
   try {

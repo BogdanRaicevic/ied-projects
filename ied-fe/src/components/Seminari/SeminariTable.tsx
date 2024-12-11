@@ -9,7 +9,7 @@ import {
 import { fetchSeminari } from "../../api/seminari.api";
 import { SeminarQueryParams } from "ied-shared/types/seminarQueryParams";
 
-export default memo(function SeminariTable(queryParameters: SeminarQueryParams) {
+export default memo(function SeminariTable(props: { queryParameters: SeminarQueryParams }) {
   const [data, setData] = useState<Seminar[]>([]);
   const [documents, setDocuments] = useState(1000);
 
@@ -21,13 +21,12 @@ export default memo(function SeminariTable(queryParameters: SeminarQueryParams) 
   useEffect(() => {
     const loadData = async () => {
       const { pageIndex, pageSize } = table.getState().pagination;
-      const res = await fetchSeminari(pageSize, pageIndex, queryParameters);
-      console.log("ovo su seminari", res);
+      const res = await fetchSeminari(pageSize, pageIndex, props.queryParameters);
       setData(res.seminari);
       setDocuments(res.totalDocuments);
     };
     loadData();
-  }, [pagination, documents, queryParameters]);
+  }, [pagination, documents, props]);
 
   const seminariTableColumns: MRT_ColumnDef<Seminar>[] = [
     {

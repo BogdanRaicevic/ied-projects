@@ -33,6 +33,6 @@
     "express": "^4.21.2",
     "mongoose": "^8.8.4",
     "prettier": "^3.4.2",
-    "ied-shared": "^1.1.0"
+    "ied-shared": "^1.2.0"
   }
 }
