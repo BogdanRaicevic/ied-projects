@@ -1,7 +1,6 @@
 import IndeterminateCheckbox from "../components/IndeterminateCheckbox";
 import SelectSeminar from "../components/SelectSeminar";
 import { Box, Button, TextField } from "@mui/material";
-import { fakeRadnaMesta } from "../fakeData/companyData";
 import Grid from "@mui/material/Grid2";
 import PaginatedList from "../components/PaginatedList/PaginatedList";
 export default function Zaposleni() {
@@ -35,11 +34,11 @@ export default function Zaposleni() {
             <TextField fullWidth sx={{ m: 1 }} id="ime" label="Ime" variant="outlined" />
             <TextField fullWidth sx={{ m: 1 }} id="prezime" label="Prezime" variant="outlined" />
           </Grid>
-          <Grid size={4}>
+          {/* <Grid size={4}>
             {fakeRadnaMesta.map((item, index) => (
               <IndeterminateCheckbox key={index} options={item} />
             ))}
-          </Grid>
+          </Grid> */}
 
           <Grid size={4}>
             <SelectSeminar onSeminarSelect={handleSeminarSelect}></SelectSeminar>

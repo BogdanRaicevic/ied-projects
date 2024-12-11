@@ -28,6 +28,5 @@ export function createSeminarQuery(params: SeminarQueryParams): FilterQuery<Semi
     query.datum = { $lte: params.datumDo };
   }
 
-  console.log("Generated MongoDB query date:", query);
   return query;
 }
