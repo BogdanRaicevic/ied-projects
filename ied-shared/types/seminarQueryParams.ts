@@ -2,9 +2,9 @@ export type SeminarQueryParams = {
   naziv?: string;
   lokacija?: string;
   predavac?: string;
-  datumOd?: string;
-  datumDo?: string;
-  datum?: string;
+  datumOd?: Date | string;
+  datumDo?: Date | string;
+  datum?: Date | string;
   cena?: string;
   cenaOd?: string;
   cenaDo?: string;
