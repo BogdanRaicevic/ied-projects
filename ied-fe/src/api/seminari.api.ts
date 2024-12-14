@@ -47,6 +47,7 @@ export const fetchSeminari = async (
     const response: {
       data: { seminari: Seminar[]; totalPages: number; totalDocuments: number };
     } = await axiosInstanceWithAuth.post(`${env.beURL}/api/seminari/search`, body);
+
     return response.data;
   } catch (error) {
     console.error("Error fetching firma data:", error);

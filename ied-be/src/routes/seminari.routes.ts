@@ -13,8 +13,8 @@ interface SaveSeminar extends Request {
 
 router.post("/save", async (req: SaveSeminar, res: Response, next: NextFunction) => {
   try {
-    saveSeminar(req.body);
-    res.send({ success: true, message: "Seminar created" });
+    const seminar = await saveSeminar(req.body);
+    res.status(201).json(seminar);
   } catch (error) {
     next(error);
   }
