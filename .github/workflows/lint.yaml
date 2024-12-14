@@ -1,22 +1,17 @@
-name: Lint
+name: Lint Code
 
 on:
-  push:
+  pull_request:
     branches:
       - main
-      - actions
-  pull_request:
+  push:
     branches:
       - main
       - actions
 
 jobs:
-  lint:
+  lint-ied-fe:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        project: [ied-be, ied-fe]
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -32,9 +27,33 @@ jobs:
           version: 8
 
       - name: Install dependencies
+        working-directory: ied-fe
         run: pnpm install
-        working-directory: ${{ matrix.project }}
 
-      - name: Run linter
+      - name: Run ESLint
+        working-directory: ied-fe
         run: pnpm run lint
-        working-directory: ${{ matrix.project }}
+
+  lint-ied-be:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v3
+        with:
+          version: 8
+
+      - name: Install dependencies
+        working-directory: ied-be
+        run: pnpm install
+
+      - name: Run ESLint
+        working-directory: ied-be
+        run: pnpm run lint
