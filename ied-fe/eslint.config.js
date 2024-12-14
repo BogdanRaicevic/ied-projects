@@ -1,11 +1,18 @@
 import globals from "globals";
 import pluginJs from "@eslint/js";
+import tseslint from "typescript-eslint";
 import pluginReact from "eslint-plugin-react";
 
 /** @type {import('eslint').Linter.Config[]} */
 export default [
   {
-    files: ["src/**/*.{ts,tsx}"],
+    files: ["**/*.{js,mjs,cjs,ts,jsx,tsx}"],
+  },
+  { languageOptions: { globals: { ...globals.browser, ...globals.node } } },
+  pluginJs.configs.recommended,
+  ...tseslint.configs.recommended,
+  pluginReact.configs.flat["jsx-runtime"],
+  {
     rules: {
       "react/react-in-jsx-scope": "off",
       "require-jsdoc": "off",
@@ -20,9 +27,8 @@ export default [
       camelcase: "off",
       "@typescript-eslint/no-explicit-any": "warn",
     },
-    ignores: ["node_modules", "dist", "build", "coverage"],
   },
-  { languageOptions: { globals: globals.browser } },
-  pluginJs.configs.recommended,
-  pluginReact.configs.flat["jsx-runtime"],
+  {
+    ignores: ["**/*.d.ts", "node_modules", "dist", "build", "coverage"],
+  },
 ];
