@@ -1,0 +1,58 @@
+name: Lint Code
+
+on:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main
+
+jobs:
+  lint-ied-fe:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v3
+        with:
+          version: 8
+
+      - name: Install dependencies
+        working-directory: ied-fe
+        run: pnpm install
+
+      - name: Run ESLint
+        working-directory: ied-fe
+        run: pnpm run lint
+
+  lint-ied-be:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v3
+        with:
+          version: 8
+
+      - name: Install dependencies
+        working-directory: ied-be
+        run: pnpm install
+
+      - name: Run ESLint
+        working-directory: ied-be
+        run: pnpm run lint

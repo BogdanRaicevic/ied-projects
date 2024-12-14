@@ -1,12 +1,11 @@
-import IndeterminateCheckbox from "../components/IndeterminateCheckbox";
-import SelectSeminar from "../components/SelectSeminar";
+// import SelectSeminar from "../components/SelectSeminar";
 import { Box, Button, TextField } from "@mui/material";
 import Grid from "@mui/material/Grid2";
 import PaginatedList from "../components/PaginatedList/PaginatedList";
 export default function Zaposleni() {
-  const handleSeminarSelect = (seminarId: string) => {
-    console.log("zaposleni seminarId: ", seminarId);
-  };
+  // const handleSeminarSelect = (seminarId: string) => {
+  //   console.log("zaposleni seminarId: ", seminarId);
+  // };
 
   return (
     <div>
@@ -40,9 +39,9 @@ export default function Zaposleni() {
             ))}
           </Grid> */}
 
-          <Grid size={4}>
+          {/* <Grid size={4}>
             <SelectSeminar onSeminarSelect={handleSeminarSelect}></SelectSeminar>
-          </Grid>
+          </Grid> */}
         </Grid>
         <Button variant="contained">Pretrazi</Button>
       </Box>

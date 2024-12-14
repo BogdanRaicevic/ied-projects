@@ -8,8 +8,6 @@ import { compareDesc, parse } from "date-fns";
 import { useState, useEffect } from "react";
 import { Button, Container } from "@mui/material";
 import { Company } from "../../schemas/companySchemas";
-import SelectSeminar from "../SelectSeminar";
-import { fakeSeminarsOnFirma } from "../../fakeData/seminarsData";
 
 type Seminar = {
   naziv: string;
@@ -38,23 +36,23 @@ export default function AttendedSeminarsAccordion({ firma }: { firma: Company })
     return parsedDate;
   };
 
-  const handleAddSeminar = (seminarId: string) => {
-    const selectedSEminar = fakeSeminarsOnFirma.find((seminar) => seminar.id === seminarId);
+  // const handleAddSeminar = (seminarId: string) => {
+  //   const selectedSEminar = { naziv: "test", datum: "2022-01-01" };
 
-    if (firma.seminari.find((seminar) => seminar.naziv === selectedSEminar?.naziv)) {
-      alert("Seminar je vec dodat!");
-      return;
-    }
-    if (selectedSEminar) {
-      firma.seminari.push({
-        naziv: selectedSEminar.naziv,
-        datum: selectedSEminar.datum,
-        ucesnici: [],
-      });
+  //   if (firma.seminari.find((seminar) => seminar.naziv === selectedSEminar?.naziv)) {
+  //     alert("Seminar je vec dodat!");
+  //     return;
+  //   }
+  //   if (selectedSEminar) {
+  //     firma.seminari.push({
+  //       naziv: selectedSEminar.naziv,
+  //       datum: selectedSEminar.datum,
+  //       ucesnici: [],
+  //     });
 
-      setExpanded(selectedSEminar.naziv);
-    }
-  };
+  //     setExpanded(selectedSEminar.naziv);
+  //   }
+  // };
 
   const handleRemoveSeminar = (seminar: Seminar) => {
     const index = firma.seminari.indexOf(seminar);
@@ -115,7 +113,7 @@ export default function AttendedSeminarsAccordion({ firma }: { firma: Company })
 
   return (
     <div style={{ marginTop: "2em", marginBottom: "4em" }}>
-      <SelectSeminar onSeminarSelect={handleAddSeminar}></SelectSeminar>
+      {/* <SelectSeminar onSeminarSelect={handleAddSeminar}></SelectSeminar> */}
       <h2>Posećeni Seminari: </h2>
       {attendedSeminars}
     </div>
