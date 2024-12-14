@@ -12,3 +12,12 @@ export type SeminarQueryParams = {
   brojUcesnikaOd?: string;
   brojUcesnikaDo?: string;
 };
+
+export type SaveSeminarParams = {
+  naziv: string;
+  predavac?: string;
+  lokacija?: string;
+  onlineCena?: string;
+  offlineCena?: string;
+  datum?: string;
+};

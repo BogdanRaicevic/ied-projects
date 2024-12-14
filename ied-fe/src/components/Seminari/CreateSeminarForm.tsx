@@ -12,7 +12,8 @@ export default function AddSeminarForm() {
     naziv: "",
     predavac: "",
     lokacija: "",
-    cena: "",
+    offlineCena: "",
+    onlineCena: "",
     datum: new Date(),
   });
   const [selectedDate, setSelectedDate] = React.useState<Date | null>(new Date());
@@ -31,17 +32,20 @@ export default function AddSeminarForm() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("seminarData", seminarData);
     try {
-      const formattedCena = isNaN(Number(seminarData.cena))
+      const formattedOfflineCena = isNaN(Number(seminarData.offlineCena))
         ? "0"
-        : Number(seminarData.cena).toFixed(2);
+        : Number(seminarData.offlineCena).toFixed(2);
+      const formattedOnlineCena = isNaN(Number(seminarData.onlineCena))
+        ? "0"
+        : Number(seminarData.onlineCena).toFixed(2);
       const formattedDate = selectedDate ? format(selectedDate, "yyyy-MM-dd") : "";
       await saveSeminar(
         seminarData.naziv,
         seminarData.predavac,
         seminarData.lokacija,
-        formattedCena,
+        formattedOfflineCena,
+        formattedOnlineCena,
         formattedDate
       );
     } catch (error) {
@@ -82,16 +86,30 @@ export default function AddSeminarForm() {
         />
 
         <TextField
-          label="Cena seminara"
-          id="cena"
-          name="cena"
+          label="Offline cena"
+          id="offlineCena"
+          name="offlineCena"
           sx={{ m: 1 }}
           slotProps={{
             input: {
               startAdornment: <InputAdornment position="start">RSD</InputAdornment>,
             },
           }}
-          defaultValue={seminarData.cena}
+          defaultValue={seminarData.offlineCena}
+          onChange={handleChange}
+        />
+
+        <TextField
+          label="Online seminara"
+          id="onlineCena"
+          name="onlineCena"
+          sx={{ m: 1 }}
+          slotProps={{
+            input: {
+              startAdornment: <InputAdornment position="start">RSD</InputAdornment>,
+            },
+          }}
+          defaultValue={seminarData.onlineCena}
           onChange={handleChange}
         />
 
@@ -104,6 +122,7 @@ export default function AddSeminarForm() {
               value={selectedDate}
               onChange={handleDateChange}
               defaultValue={seminarData.datum}
+              disablePast
             />
           </LocalizationProvider>
         </FormControl>

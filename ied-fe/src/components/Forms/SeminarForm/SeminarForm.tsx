@@ -131,23 +131,46 @@ export default function SeminarForm({
         </Grid>
         <Grid size={4}>
           <Controller
-            name="cena"
+            name="offlineCena"
             control={control}
             defaultValue={0}
             render={({ field }) => (
               <TextField
                 fullWidth
                 sx={{ m: 1 }}
-                id="cena"
-                label="Osnovna cena"
+                id="offlineCena"
+                label="Offline cena"
                 variant="outlined"
                 type="number"
                 value={field.value}
                 onChange={(e) => {
                   field.onChange(Number(e.target.value));
                 }}
-                error={Boolean(errors.cena)}
-                helperText={errors.cena?.message}
+                error={Boolean(errors.offlineCena)}
+                helperText={errors.offlineCena?.message}
+              />
+            )}
+          ></Controller>
+        </Grid>
+        <Grid size={4}>
+          <Controller
+            name="onlineCena"
+            control={control}
+            defaultValue={0}
+            render={({ field }) => (
+              <TextField
+                fullWidth
+                sx={{ m: 1 }}
+                id="onlineCena"
+                label="Online cena"
+                variant="outlined"
+                type="number"
+                value={field.value}
+                onChange={(e) => {
+                  field.onChange(Number(e.target.value));
+                }}
+                error={Boolean(errors.onlineCena)}
+                helperText={errors.onlineCena?.message}
               />
             )}
           ></Controller>

@@ -1,19 +1,9 @@
-import {
-  Box,
-  Button,
-  Dialog,
-  DialogContent,
-  DialogTitle,
-  FormControl,
-  TextField,
-} from "@mui/material";
+import { Box, Button, FormControl, TextField } from "@mui/material";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFnsV3";
 import { useState } from "react";
-import SeminarForm from "../components/Forms/SeminarForm";
 import { addMonths, subMonths } from "date-fns";
-import { Seminar } from "../schemas/companySchemas";
-import AddSeminarForm from "../components/AlegzSeminari/SeminariInput";
+import AddSeminarForm from "../components/Seminari/CreateSeminarForm";
 import { UnfoldLess } from "@mui/icons-material";
 import SeminariTable from "../components/Seminari/SeminariTable";
 
@@ -35,11 +25,6 @@ export default function Seminari() {
 
   const handlePretraziSeminare = () => {
     setTableInputParameters(queryParameters);
-  };
-
-  const addSeminar = (newSeminar: Seminar) => {
-    // TODO: fix any
-    console.log("newSeminar", newSeminar);
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -121,22 +106,9 @@ export default function Seminari() {
     </>
   );
 
-  const [open, setOpen] = useState(false);
-
-  const handleClose = () => {
-    setOpen(false);
-  };
-
   return (
     <>
       {parametriPretrage()}
-
-      <Dialog open={open} onClose={handleClose} maxWidth="lg">
-        <DialogTitle>Seminar</DialogTitle>
-        <DialogContent>
-          <SeminarForm saveOrUpdateSeminar={addSeminar} closeDialog={handleClose}></SeminarForm>
-        </DialogContent>
-      </Dialog>
 
       <SeminariTable queryParameters={tableInputParameters}></SeminariTable>
 

@@ -1,13 +1,14 @@
 import { Seminar } from "../schemas/companySchemas";
 import { env } from "../utils/envVariables";
 import axiosInstanceWithAuth from "./interceptors/auth";
-import { SeminarQueryParams } from "ied-shared/types/seminarQueryParams";
+import { SeminarQueryParams } from "ied-shared/types/seminar";
 
 export const saveSeminar = async (
   naziv: string,
   predavac: string,
   lokacija: string,
-  cena: string,
+  onlineCena: string,
+  offlineCena: string,
   datum: string
 ) => {
   try {
@@ -19,7 +20,8 @@ export const saveSeminar = async (
       naziv,
       predavac,
       lokacija,
-      cena,
+      onlineCena,
+      offlineCena,
       datum,
     });
 

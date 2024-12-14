@@ -3,14 +3,17 @@ import { format } from "date-fns";
 import { saveSeminar, search } from "../services/seminar.service";
 import { FilterQuery } from "mongoose";
 import { SeminarType } from "../models/seminar.model";
-import { SeminarQueryParams } from "ied-shared/types/seminarQueryParams";
+import { SeminarQueryParams, SaveSeminarParams } from "ied-shared/types/seminar";
 
 const router = Router();
 
-router.post("/save", async (req: Request, res: Response, next: NextFunction) => {
-  const { naziv, predavac, lokacija, cena, datum } = req.body;
+interface SaveSeminar extends Request {
+  body: SaveSeminarParams;
+}
+
+router.post("/save", async (req: SaveSeminar, res: Response, next: NextFunction) => {
   try {
-    saveSeminar({ naziv, predavac, lokacija, cena, datum });
+    saveSeminar(req.body);
     res.send({ success: true, message: "Seminar created" });
   } catch (error) {
     next(error);

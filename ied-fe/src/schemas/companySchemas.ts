@@ -85,7 +85,8 @@ export const SeminarSchema = z.object({
     .min(3, "Predavac mora da ima bar 3 karaktera")
     .max(100, "Predavac ne sme da ima vise od 100 karaktera")
     .or(z.literal("")),
-  cena: z.number().min(0, "Cena ne moze da bude negativna").optional(),
+  onlineCena: z.number().min(0, "Online cena ne moze da bude negativna").optional(),
+  offlineCena: z.number().min(0, "Offline ena ne moze da bude negativna").optional(),
   cenaOd: z.number().optional(),
   cenaDo: z.number().optional(),
   lokacija: z

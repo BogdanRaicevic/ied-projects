@@ -7,7 +7,7 @@ import {
   MRT_PaginationState,
 } from "material-react-table";
 import { fetchSeminari } from "../../api/seminari.api";
-import { SeminarQueryParams } from "ied-shared/types/seminarQueryParams";
+import { SeminarQueryParams } from "ied-shared/types/seminar";
 
 export default memo(function SeminariTable(props: { queryParameters: SeminarQueryParams }) {
   const [data, setData] = useState<Seminar[]>([]);

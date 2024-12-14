@@ -26,8 +26,7 @@ export const updateById = async (
   firmaData: Partial<FirmaType>
 ): Promise<FirmaType | null> => {
   try {
-    const updatedFirma = await Firma.findByIdAndUpdate(id, firmaData, { new: true }).exec();
-    return updatedFirma;
+    return await Firma.findByIdAndUpdate(id, firmaData, { new: true }).exec();
   } catch (error) {
     console.error("Error updating firma:", error);
     throw error;
