@@ -22,9 +22,20 @@ export default function Seminari() {
     naziv: "",
     predavac: "",
     lokacija: "",
-    datumOd: subMonths(new Date(), 1),
-    datumDo: addMonths(new Date(), 1),
+    datumOd: subMonths(new Date(), 3),
+    datumDo: addMonths(new Date(), 3),
   });
+  const [tableInputParameters, setTableInputParameters] = useState({
+    naziv: "",
+    predavac: "",
+    lokacija: "",
+    datumOd: subMonths(new Date(), 3),
+    datumDo: addMonths(new Date(), 3),
+  });
+
+  const handlePretraziSeminare = () => {
+    setTableInputParameters(queryParameters);
+  };
 
   const addSeminar = (newSeminar: Seminar) => {
     // TODO: fix any
@@ -96,7 +107,14 @@ export default function Seminari() {
             />
           </LocalizationProvider>
         </FormControl>
-        <Button sx={{ m: 1 }} size="large" variant="contained" color="info" type="submit">
+        <Button
+          onClick={handlePretraziSeminare}
+          sx={{ m: 1 }}
+          size="large"
+          variant="contained"
+          color="info"
+          type="submit"
+        >
           Pretrazi
         </Button>
       </Box>
@@ -109,8 +127,6 @@ export default function Seminari() {
     setOpen(false);
   };
 
-  console.log("queryParameters", queryParameters);
-
   return (
     <>
       {parametriPretrage()}
@@ -122,7 +138,7 @@ export default function Seminari() {
         </DialogContent>
       </Dialog>
 
-      <SeminariTable queryParameters={queryParameters}></SeminariTable>
+      <SeminariTable queryParameters={tableInputParameters}></SeminariTable>
 
       <AddSeminarForm />
     </>
