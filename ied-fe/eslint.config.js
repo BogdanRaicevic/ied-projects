@@ -16,7 +16,20 @@ export default [
     rules: {
       "react/react-in-jsx-scope": "off",
       "require-jsdoc": "off",
-      "no-unused-vars": ["warn"],
+      "no-unused-vars": [
+        "warn",
+        {
+          varsIgnorePattern: "^_", // Ignore variables starting with _
+          argsIgnorePattern: "^_", // Ignore function arguments starting with _
+        },
+      ],
+      "@typescript-eslint/no-unused-vars": [
+        "warn",
+        {
+          varsIgnorePattern: "^_", // Ignore variables starting with _
+          argsIgnorePattern: "^_", // Ignore function arguments starting with _
+        },
+      ],
       "linebreak-style": "off",
       "object-curly-spacing": ["error", "always"],
       "new-cap": ["error", { newIsCap: false }],
