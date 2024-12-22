@@ -52,7 +52,7 @@ importers:
         version: 3.0.1(fqj7s6x76viibplwx4naymbzya)
       pdfmake:
         specifier: ^0.2.15
-        version: 0.2.15
+        version: 0.2.16
       react:
         specifier: ^18.3.1
         version: 18.3.1
@@ -467,8 +467,8 @@ packages:
   '@foliojs-fork/linebreak@1.1.2':
     resolution: {integrity: sha512-ZPohpxxbuKNE0l/5iBJnOAfUaMACwvUIKCvqtWGKIMv1lPYoNjYXRfhi9FeeV9McBkBLxsMFWTVVhHJA8cyzvg==}
 
-  '@foliojs-fork/pdfkit@0.15.1':
-    resolution: {integrity: sha512-4Cq2onHZAhThIfzv3/AFTPALqHzbmV8uNvgRELULWNbsZATgVeqEL4zHOzCyblLfX6tMXVO2BVaPcXboIxGjiw==}
+  '@foliojs-fork/pdfkit@0.15.2':
+    resolution: {integrity: sha512-Wpj6BH4DGn+zAWmCk9agdbAw3Zxt+MpemjssLfYdnretWpZ014uR6Zo51E4ftVP75UA8a7mtt4TiCu09lIKsBw==}
 
   '@foliojs-fork/restructure@2.0.2':
     resolution: {integrity: sha512-59SgoZ3EXbkfSX7b63tsou/SDGzwUEK6MuB5sKqgVK1/XE0fxmpsOb9DQI8LXW3KfGnAjImCGhhEb7uPPAUVNA==}
@@ -1114,8 +1114,16 @@ packages:
     resolution: {integrity: sha512-CCKAP2tkPau7D3GE8+V8R6sQubA9R5foIzGp+85EXCVSCivuxBNAWqcpn72PKYiIcqoViv/kcUDpaEIMBVi1lQ==}
     engines: {node: '>= 0.4'}
 
+  call-bind-apply-helpers@1.0.1:
+    resolution: {integrity: sha512-BhYE+WDaywFg2TBWYNXAE+8B1ATnThNBqXHP5nQu0jWJdVvY2hvkpyB3qOmtmDePiS5/BDQ8wASEWGMWRG148g==}
+    engines: {node: '>= 0.4'}
+
   call-bind@1.0.8:
     resolution: {integrity: sha512-oKlSFMcMwpUg2ednkhQ454wfWiU/ul3CkJe/PEHcTKuiX6RpbehUiFMXu13HalGZxfUwCQzZG747YXBn1im9ww==}
+    engines: {node: '>= 0.4'}
+
+  call-bound@1.0.3:
+    resolution: {integrity: sha512-YTd+6wGlNlPxSuri7Y6X8tY2dmm12UMH66RpKMhiX6rsk5wXXnYgbUcOt8kiS31/AjfoTOvCsE+w8nZQLQnzHA==}
     engines: {node: '>= 0.4'}
 
   callsites@3.1.0:
@@ -1240,6 +1248,10 @@ packages:
 
   dunder-proto@1.0.0:
     resolution: {integrity: sha512-9+Sj30DIu+4KvHqMfLUGLFYL2PkURSYMVXJyXe92nFRvlYq5hBjLEhblKB+vkd/WVlUYMWigiY07T91Fkk0+4A==}
+    engines: {node: '>= 0.4'}
+
+  dunder-proto@1.0.1:
+    resolution: {integrity: sha512-KIN/nDJBQRcXw0MLVhZE9iQHmG68qAVIBg9CqmUYjmQIhgij9U5MFvrqkUL5FbtyyzZuOeOt0zdeRe4UY7ct+A==}
     engines: {node: '>= 0.4'}
 
   error-ex@1.3.2:
@@ -1435,6 +1447,10 @@ packages:
     resolution: {integrity: sha512-Y4+pKa7XeRUPWFNvOOYHkRYrfzW07oraURSvjDmRVOJ748OrVmeXtpE4+GCEHncjCjkTxPNRt8kEbxDhsn6VTg==}
     engines: {node: '>= 0.4'}
 
+  get-intrinsic@1.2.6:
+    resolution: {integrity: sha512-qxsEs+9A+u85HhllWJJFicJfPDhRmjzoYdl64aMWW9yRIJmSyxdn8IEkuIM530/7T+lv0TIHd8L6Q/ra0tEoeA==}
+    engines: {node: '>= 0.4'}
+
   get-symbol-description@1.0.2:
     resolution: {integrity: sha512-g0QYk1dZBxGwk+Ngc+ltRH2IBp2f7zBkBMBJZCDerh6EhlhSR6+9irMCuT/09zD6qkarHUSn529sK/yL4S27mg==}
     engines: {node: '>= 0.4'}
@@ -1529,8 +1545,8 @@ packages:
     resolution: {integrity: sha512-NGnrKwXzSms2qUUih/ILZ5JBqNTSa1+ZmP6flaIp6KmSElgE9qdndzS3cqjrDovwFdmwsGsLdeFgB6suw+1e9g==}
     engines: {node: '>= 0.4'}
 
-  is-arguments@1.1.1:
-    resolution: {integrity: sha512-8Q7EARjzEnKpt/PCD7e1cgUS0a6X8u5tdSiMqXhojOdoV9TsMsiO+9VLC5vAmO8N7/GmXn7yjR8qnA6bVAEzfA==}
+  is-arguments@1.2.0:
+    resolution: {integrity: sha512-7bVbi0huj/wrIAOzb8U1aszg9kdi3KN/CyU19CTI7tAoZYEZoL9yCDXpbXN+uPsuWnP02cyug1gleqq+TU+YCA==}
     engines: {node: '>= 0.4'}
 
   is-array-buffer@3.0.4:
@@ -1568,6 +1584,10 @@ packages:
     resolution: {integrity: sha512-9YQaSxsAiSwcvS33MBk3wTCVnWK+HhF8VZR2jRxehM16QcVOdHqPn4VPHmRK4lSr38n9JriurInLcP90xsYNfQ==}
     engines: {node: '>= 0.4'}
 
+  is-date-object@1.1.0:
+    resolution: {integrity: sha512-PwwhEakHVKTdRNVOw+/Gyh0+MzlCl4R6qKvkhuvLtPMggI1WAHt9sOwZxQLSGpUaDnrdyDsomoRgNnCfKNSXXg==}
+    engines: {node: '>= 0.4'}
+
   is-extglob@2.1.1:
     resolution: {integrity: sha512-SbKbANkN603Vi4jEZv49LeVJMn4yGwsbzZworEoyEiutsN3nJYdbO36zfhGJ6QEDpOZIFkDtnq5JRxmvl3jsoQ==}
     engines: {node: '>=0.10.0'}
@@ -1602,6 +1622,10 @@ packages:
 
   is-regex@1.2.0:
     resolution: {integrity: sha512-B6ohK4ZmoftlUe+uvenXSbPJFo6U37BH7oO1B3nQH8f/7h27N56s85MhUtbFJAziz5dcmuR3i8ovUl35zp8pFA==}
+    engines: {node: '>= 0.4'}
+
+  is-regex@1.2.1:
+    resolution: {integrity: sha512-MjYsKHO5O7mCsmRGxWcLWheFqN9DJ/2TmngvjKXihe6efViPqc274+Fx/4fYj/r03+ESvBdTXK0V6tA3rgez1g==}
     engines: {node: '>= 0.4'}
 
   is-set@2.0.3:
@@ -1713,6 +1737,10 @@ packages:
       react: '>=18.0'
       react-dom: '>=18.0'
 
+  math-intrinsics@1.1.0:
+    resolution: {integrity: sha512-/IXtbwEk5HTPyEwyKX6hGkYXxM9nbj64B+ilVJnC/R6B0pH5G4V3b0pVbL7DBj4tkhBAppbQUlf6F6Xl9LHu1g==}
+    engines: {node: '>= 0.4'}
+
   memoize-one@5.2.1:
     resolution: {integrity: sha512-zYiwtZUcYyXKo/np96AGZAckk+FWWsUdJ3cHGGmld7+AhvcWmQyGCYUh1hc4Q/pkOhb65dQR/pqCyK0cOaHz4Q==}
 
@@ -1820,8 +1848,8 @@ packages:
     resolution: {integrity: sha512-gDKb8aZMDeD/tZWs9P6+q0J9Mwkdl6xMV8TjnGP3qJVJ06bdMgkbBlLU8IdfOsIsFz2BW1rNVT3XuNEl8zPAvw==}
     engines: {node: '>=8'}
 
-  pdfmake@0.2.15:
-    resolution: {integrity: sha512-Ryef9mjxo6q8dthhbssAK0zwCsPZ6Pl7kCHnIEXOvQdd79LUGZD6SHGi21YryFXczPjvw6V009uxQwp5iritcA==}
+  pdfmake@0.2.16:
+    resolution: {integrity: sha512-oCHFIAVybjCkeU1ZCY5fB6BxOZ7ofeinN/sYfgPBny7Frx+8GbxNkEuuvZGj70Xn8/9kUhKZ84Q9S6qxj5eq5Q==}
     engines: {node: '>=18'}
 
   picocolors@1.1.1:
@@ -2554,7 +2582,7 @@ snapshots:
       base64-js: 1.3.1
       unicode-trie: 2.0.0
 
-  '@foliojs-fork/pdfkit@0.15.1':
+  '@foliojs-fork/pdfkit@0.15.2':
     dependencies:
       '@foliojs-fork/fontkit': 1.9.2
       '@foliojs-fork/linebreak': 1.1.2
@@ -3194,12 +3222,22 @@ snapshots:
       es-errors: 1.3.0
       function-bind: 1.1.2
 
+  call-bind-apply-helpers@1.0.1:
+    dependencies:
+      es-errors: 1.3.0
+      function-bind: 1.1.2
+
   call-bind@1.0.8:
     dependencies:
       call-bind-apply-helpers: 1.0.0
       es-define-property: 1.0.1
       get-intrinsic: 1.2.5
       set-function-length: 1.2.2
+
+  call-bound@1.0.3:
+    dependencies:
+      call-bind-apply-helpers: 1.0.1
+      get-intrinsic: 1.2.6
 
   callsites@3.1.0: {}
 
@@ -3284,9 +3322,9 @@ snapshots:
 
   deep-equal@1.1.2:
     dependencies:
-      is-arguments: 1.1.1
-      is-date-object: 1.0.5
-      is-regex: 1.2.0
+      is-arguments: 1.2.0
+      is-date-object: 1.1.0
+      is-regex: 1.2.1
       object-is: 1.1.6
       object-keys: 1.1.1
       regexp.prototype.flags: 1.5.3
@@ -3323,6 +3361,12 @@ snapshots:
   dunder-proto@1.0.0:
     dependencies:
       call-bind-apply-helpers: 1.0.0
+      es-errors: 1.3.0
+      gopd: 1.2.0
+
+  dunder-proto@1.0.1:
+    dependencies:
+      call-bind-apply-helpers: 1.0.1
       es-errors: 1.3.0
       gopd: 1.2.0
 
@@ -3634,6 +3678,19 @@ snapshots:
       has-symbols: 1.1.0
       hasown: 2.0.2
 
+  get-intrinsic@1.2.6:
+    dependencies:
+      call-bind-apply-helpers: 1.0.1
+      dunder-proto: 1.0.1
+      es-define-property: 1.0.1
+      es-errors: 1.3.0
+      es-object-atoms: 1.0.0
+      function-bind: 1.1.2
+      gopd: 1.2.0
+      has-symbols: 1.1.0
+      hasown: 2.0.2
+      math-intrinsics: 1.1.0
+
   get-symbol-description@1.0.2:
     dependencies:
       call-bind: 1.0.8
@@ -3714,9 +3771,9 @@ snapshots:
       hasown: 2.0.2
       side-channel: 1.0.6
 
-  is-arguments@1.1.1:
+  is-arguments@1.2.0:
     dependencies:
-      call-bind: 1.0.8
+      call-bound: 1.0.3
       has-tostringtag: 1.0.2
 
   is-array-buffer@3.0.4:
@@ -3753,6 +3810,11 @@ snapshots:
     dependencies:
       has-tostringtag: 1.0.2
 
+  is-date-object@1.1.0:
+    dependencies:
+      call-bound: 1.0.3
+      has-tostringtag: 1.0.2
+
   is-extglob@2.1.1: {}
 
   is-finalizationregistry@1.1.0:
@@ -3781,6 +3843,13 @@ snapshots:
   is-regex@1.2.0:
     dependencies:
       call-bind: 1.0.8
+      gopd: 1.2.0
+      has-tostringtag: 1.0.2
+      hasown: 2.0.2
+
+  is-regex@1.2.1:
+    dependencies:
+      call-bound: 1.0.3
       gopd: 1.2.0
       has-tostringtag: 1.0.2
       hasown: 2.0.2
@@ -3891,6 +3960,8 @@ snapshots:
       react: 18.3.1
       react-dom: 18.3.1(react@18.3.1)
 
+  math-intrinsics@1.1.0: {}
+
   memoize-one@5.2.1: {}
 
   merge2@1.4.1: {}
@@ -3995,10 +4066,10 @@ snapshots:
 
   path-type@4.0.0: {}
 
-  pdfmake@0.2.15:
+  pdfmake@0.2.16:
     dependencies:
       '@foliojs-fork/linebreak': 1.1.2
-      '@foliojs-fork/pdfkit': 0.15.1
+      '@foliojs-fork/pdfkit': 0.15.2
       iconv-lite: 0.6.3
       xmldoc: 1.3.0
 
@@ -4416,10 +4487,10 @@ snapshots:
       function.prototype.name: 1.1.6
       has-tostringtag: 1.0.2
       is-async-function: 2.0.0
-      is-date-object: 1.0.5
+      is-date-object: 1.1.0
       is-finalizationregistry: 1.1.0
       is-generator-function: 1.0.10
-      is-regex: 1.2.0
+      is-regex: 1.2.1
       is-weakref: 1.0.2
       isarray: 2.0.5
       which-boxed-primitive: 1.1.0
