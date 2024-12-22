@@ -39,6 +39,8 @@ export default [
       "guard-for-in": "warn",
       camelcase: "off",
       "@typescript-eslint/no-explicit-any": "warn",
+      "no-extra-boolean-cast": "off",
+      "no-prototype-builtins": "off",
     },
   },
   {

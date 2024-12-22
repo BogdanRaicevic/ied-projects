@@ -120,7 +120,7 @@ export default function Firma() {
 
     setCompany(updatedCompany);
 
-    if (Boolean(id)) {
+    if (!!id) {
       saveFirma(updatedCompany);
     }
 

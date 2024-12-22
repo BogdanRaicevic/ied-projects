@@ -3,7 +3,7 @@ import { Navigate, Route, Routes } from "react-router-dom";
 import Navigation from "./components/Navigation";
 import { Pretrage, Zaposleni, Seminari } from "./pages";
 import Firma from "./pages/Firma";
-import { QueryClient, QueryClientProvider } from "react-query";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { RedirectToSignIn, SignedIn, SignedOut } from "@clerk/clerk-react";
 
 const queryClient = new QueryClient();
