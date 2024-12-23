@@ -1,7 +1,7 @@
 import { ContentCopy } from "@mui/icons-material";
 import { MRT_ColumnDef } from "material-react-table";
 import { Company, Zaposleni } from "../../schemas/companySchemas";
-import { Link } from "react-router-dom";
+import { Link } from "@mui/material";
 
 export const myCompanyColumns: MRT_ColumnDef<Company>[] = [
   // {
@@ -19,7 +19,11 @@ export const myCompanyColumns: MRT_ColumnDef<Company>[] = [
     accessorKey: "naziv_firme",
     Cell: ({ row }: { row: { original: Company } }) => {
       const firma = row.original;
-      return <Link to={`/Firma/${firma._id}`}>{firma.naziv_firme}</Link>;
+      return (
+        <Link href={`/Firma/${firma._id}`} target="_blank" rel="noopener noreferrer">
+          {firma.naziv_firme}
+        </Link>
+      );
     },
   },
   {

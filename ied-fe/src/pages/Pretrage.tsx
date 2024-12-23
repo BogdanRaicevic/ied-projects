@@ -7,7 +7,6 @@ import ExportDataButton from "../components/SaveDataButton";
 import { useState } from "react";
 import { usePretragaStore } from "../store/pretragaParameters.store";
 import { Box, Button } from "@mui/material";
-import { useNavigate } from "react-router-dom";
 import AddBoxIcon from "@mui/icons-material/AddBox";
 import SearchIcon from "@mui/icons-material/Search";
 import { SignedIn, SignedOut } from "@clerk/clerk-react";
@@ -25,11 +24,6 @@ export default function Pretrage() {
 
   const handlePretraziClick = () => {
     setAppliedParameters(pretragaParameters);
-  };
-
-  const navigate = useNavigate();
-  const handleDodajFirmu = () => {
-    navigate("/Firma");
   };
 
   return (
@@ -70,7 +64,8 @@ export default function Pretrage() {
           <Box>
             <Button
               startIcon={<AddBoxIcon />}
-              onClick={handleDodajFirmu}
+              href="/Firma"
+              target="_blank"
               sx={{ m: 1 }}
               variant="contained"
               size="large"
