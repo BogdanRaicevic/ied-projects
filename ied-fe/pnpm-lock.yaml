@@ -52,7 +52,7 @@ importers:
         version: 3.0.3(fqj7s6x76viibplwx4naymbzya)
       pdfmake:
         specifier: ^0.2.15
-        version: 0.2.16
+        version: 0.2.17
       react:
         specifier: ^18.3.1
         version: 18.3.1
@@ -1848,8 +1848,8 @@ packages:
     resolution: {integrity: sha512-gDKb8aZMDeD/tZWs9P6+q0J9Mwkdl6xMV8TjnGP3qJVJ06bdMgkbBlLU8IdfOsIsFz2BW1rNVT3XuNEl8zPAvw==}
     engines: {node: '>=8'}
 
-  pdfmake@0.2.16:
-    resolution: {integrity: sha512-oCHFIAVybjCkeU1ZCY5fB6BxOZ7ofeinN/sYfgPBny7Frx+8GbxNkEuuvZGj70Xn8/9kUhKZ84Q9S6qxj5eq5Q==}
+  pdfmake@0.2.17:
+    resolution: {integrity: sha512-ODOp1T232yr/HGjdYCq888paBE7RDCflCOSRDUtR9CyfXneOmnMPZJl8dxP9zEXbKiv9vfk9Z/3eK2V2B/Wx/Q==}
     engines: {node: '>=18'}
 
   picocolors@1.1.1:
@@ -4066,7 +4066,7 @@ snapshots:
 
   path-type@4.0.0: {}
 
-  pdfmake@0.2.16:
+  pdfmake@0.2.17:
     dependencies:
       '@foliojs-fork/linebreak': 1.1.2
       '@foliojs-fork/pdfkit': 0.15.2
