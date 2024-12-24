@@ -84,6 +84,10 @@ export const up = async () => {
 
         b.zaposleni.push(zaposleniData);
 
+        if (Boolean(b.naziv_firme) === false || b.naziv_firme?.trim() === "") {
+          b.naziv_firme = "Bez Naziva";
+        }
+
         groupedFirmas.set(row.ID_firma, b);
       } else {
         processedFirmaIds.add(row.ID_firma);
