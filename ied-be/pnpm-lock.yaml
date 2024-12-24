@@ -25,7 +25,7 @@ importers:
         version: 4.21.2
       ied-shared:
         specifier: ^1.3.0
-        version: 1.3.0
+        version: 1.4.0
       mongoose:
         specifier: ^8.8.4
         version: 8.9.2
@@ -665,8 +665,8 @@ packages:
     resolution: {integrity: sha512-v3MXnZAcvnywkTUEZomIActle7RXXeedOR31wwl7VlyoXO4Qi9arvSenNQWne1TcRwhCL1HwLI21bEqdpj8/rA==}
     engines: {node: '>=0.10.0'}
 
-  ied-shared@1.3.0:
-    resolution: {integrity: sha512-szJRBPzG2uESkSGmWubJNa0OwyyXr9yoQEv2OrbCMLo3zh6/XXni5FioH+bIiR72HXCrWUFP/C3BBW+RApmozQ==}
+  ied-shared@1.4.0:
+    resolution: {integrity: sha512-QK9hDl4vJAJiOvPHsDDQIfYdm+XK/cVdXV1vuT+dtXJZ4md+UxjdXnxUZsyna31VnIxnzx5l7NlEbvWrEALkLA==}
 
   ignore-by-default@1.0.1:
     resolution: {integrity: sha512-Ius2VYcGNk7T90CppJqcIkS5ooHUZyIQK+ClZfMfMNFEF9VSE73Fq+906u/CWu92x4gzZMWOwfFYckPObzdEbA==}
@@ -1854,7 +1854,7 @@ snapshots:
     dependencies:
       safer-buffer: 2.1.2
 
-  ied-shared@1.3.0: {}
+  ied-shared@1.4.0: {}
 
   ignore-by-default@1.0.1: {}
 
