@@ -11,5 +11,7 @@ export type FirmaQueryParams = {
   stanjaFirme?: string[];
   jbkjs?: string;
   maticniBroj?: string;
-  komentar?: string;
+  komentarFirme?: string;
+  komentarZaposlenog?: string;
+  imePrezimeZaposlenog?: string;
 };
