@@ -1,10 +1,10 @@
-import { RowDataPacket } from 'mysql2/promise';
-import { mongoDbConnection, mysqlConnection } from '../config';
+import { RowDataPacket } from "mysql2/promise";
+import { mongoDbConnection, mysqlConnection } from "../config";
 
 export const up = async () => {
   const monogDb = await mongoDbConnection();
   const mysqlDb = await mysqlConnection();
-  const mongoCollectionName = 'firmas';
+  const mongoCollectionName = "firmas";
 
   try {
     // Check if the collection exists
@@ -19,9 +19,9 @@ export const up = async () => {
     const mongoCollection = monogDb.collection(mongoCollectionName);
 
     // Fetch data from MySQL
-    const [rows] = await mysqlDb.execute<RowDataPacket[]>(
-      `
-      SELECT f.*,
+    const d1 = `
+    SELECT 
+      f.*,
       ko.ID_kontakt_osoba AS ko_ID_kontakt_osoba,
       ko.ime AS ko_ime,
       ko.prezime AS ko_prezime,
@@ -41,17 +41,35 @@ export const up = async () => {
       vf.velicina
     FROM 
       firma f
-    JOIN 
+    LEFT JOIN 
       radi_u ru ON f.ID_firma = ru.FK_FIRMA_ID_firma
-    JOIN 
+    LEFT JOIN 
       kontakt_osoba ko ON ru.FK_KONTAKT_OSOBA_ID_kontakt_osoba = ko.ID_kontakt_osoba
-    JOIN 
+    LEFT JOIN 
       mesto m ON f.FK_MESTO_ID_mesto = m.ID_mesto
-    JOIN 
-      velicina_firme vf ON f.FK_VELICINA_FIRME_ID_velicina_firme = vf.ID_velicina_firme;
-      `
-    );
-    console.log(`Fetched ${rows.length} rows from MySQL`);
+    LEFT JOIN 
+      velicina_firme vf ON f.FK_VELICINA_FIRME_ID_velicina_firme = vf.ID_velicina_firme
+    
+    UNION
+    SELECT 
+      f.*,
+      ko.*,
+      m.naziv_mesto as mesto,
+      m.postanski_broj as postanski_broj,
+      vf.velicina
+    FROM 
+      firma f
+    RIGHT JOIN 
+      radi_u ru ON f.ID_firma = ru.FK_FIRMA_ID_firma
+    RIGHT JOIN 
+      kontakt_osoba ko ON ru.FK_KONTAKT_OSOBA_ID_kontakt_osoba = ko.ID_kontakt_osoba
+    LEFT JOIN 
+      mesto m ON f.FK_MESTO_ID_mesto = m.ID_mesto
+    LEFT JOIN 
+      velicina_firme vf ON f.FK_VELICINA_FIRME_ID_velicina_firme = vf.ID_velicina_firme
+    `;
+
+    const [rows] = await mysqlDb.execute<RowDataPacket[]>(d1);
 
     const processedFirmaIds = new Set<Number>();
     let groupedFirmas = new Map<Number, any>();
@@ -77,7 +95,7 @@ export const up = async () => {
 
     await mongoCollection.insertMany(dataToSave);
   } catch (error) {
-    console.error('Error during migration:', error);
+    console.error("Error during migration:", error);
   }
 };
 
@@ -120,7 +138,7 @@ function moveZaposleniToArray(firma: RowDataPacket) {
   firma.zaposleni = [];
 
   Object.keys(firma).forEach((key) => {
-    if (key.startsWith('ko_')) {
+    if (key.startsWith("ko_")) {
       const keyNameWithout_ko_ = key.slice(3);
       kontanktOsoba[keyNameWithout_ko_] = firma[key];
 
