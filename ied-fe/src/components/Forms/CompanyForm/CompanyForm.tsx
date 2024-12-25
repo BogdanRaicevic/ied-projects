@@ -1,4 +1,4 @@
-import { FormControl, TextField, InputAdornment, Button, Divider, Alert } from "@mui/material";
+import { FormControl, TextField, InputAdornment, Button, Divider, Alert, Typography } from "@mui/material";
 import { Box } from "@mui/system";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -16,6 +16,7 @@ import AutocompleteSingle from "../../Autocomplete/Single";
 import { useFetchData } from "../../../hooks/useFetchData";
 import { companyFormMetadata } from "./metadata";
 import { saveFirma } from "../../../api/firma.api";
+import { extractErrorMessages } from "../../../utils/zodErrorHelper";
 
 type CompanyFormProps = {
   inputCompany: Company;
@@ -26,7 +27,6 @@ export const CompanyForm: React.FC<CompanyFormProps> = ({ inputCompany }) => {
     register,
     formState: { errors },
     handleSubmit,
-    // control,
     reset,
   } = useForm<Company>({
     resolver: zodResolver(CompanySchema),
@@ -35,7 +35,8 @@ export const CompanyForm: React.FC<CompanyFormProps> = ({ inputCompany }) => {
 
   // TODO: add types
   const [company, setCompany] = useState(inputCompany);
-  const [alert, setAlert] = useState<{ type: "success" | "error"; message: string } | null>(null);
+  const [alert, setAlert] =
+    useState<{ type: "success" | "error"; message: string; errors: string[] | null } | null>(null);
 
   const {
     tipoviFirme: fetchedTipoviFirme,
@@ -73,11 +74,12 @@ export const CompanyForm: React.FC<CompanyFormProps> = ({ inputCompany }) => {
       ...autocompletes,
     };
 
+
     const response = await saveFirma(data);
     if (response.status.toString().startsWith("2")) {
-      setAlert({ type: "success", message: "Firma uspešno sačuvana!" });
+      setAlert({ type: "success", message: "Firma uspešno sačuvana!", errors: null });
     } else {
-      setAlert({ type: "error", message: `Firma nije sačuvana. Došlo je do greške!` });
+      setAlert({ type: "error", message: `Firma nije sačuvana. Došlo je do greške!`, errors: null });
     }
 
     const alertTimeout = setTimeout(() => {
@@ -88,7 +90,11 @@ export const CompanyForm: React.FC<CompanyFormProps> = ({ inputCompany }) => {
     return () => clearTimeout(alertTimeout);
   };
 
-  const onError = (errors: any, e: any) => console.log("Company form errors: ", errors, e);
+  const onError = (errors: any, e: any) => {
+    const errorMessages = extractErrorMessages(errors);
+    setAlert({ type: "error", message: "Firma nije sačuvana. Došlo je do greške!", errors: errorMessages });
+
+  };
 
   function renderFiled(item: Metadata, errors: any) {
     // console.log("render file", item);
@@ -190,6 +196,7 @@ export const CompanyForm: React.FC<CompanyFormProps> = ({ inputCompany }) => {
   };
 
   return (
+
     <Box onSubmit={handleSubmit(onSubmit, onError)} component="form" sx={{ mt: 4 }}>
       <Grid container m={0} spacing={2}>
         {inputItems(InputTypesSchema.enum.Text).map((item) => {
@@ -219,9 +226,21 @@ export const CompanyForm: React.FC<CompanyFormProps> = ({ inputCompany }) => {
         <Button sx={{ my: 2 }} size="large" variant="contained" color="success" type="submit">
           Sačuvaj
         </Button>
+
+
         {alert && (
           <Alert severity={alert.type} onClose={() => setAlert(null)}>
             {alert.message}
+            {alert.errors && (
+              <Box sx={{ mt: 2 }}>
+                <Typography variant="h6">Greške:</Typography>
+                <ul>
+                  {alert.errors.map((error) => (
+                    <li key={error}>{error}</li>
+                  ))}
+                </ul>
+              </Box>
+            )}
           </Alert>
         )}
         <Divider sx={{ width: "100%", my: 2 }} />
