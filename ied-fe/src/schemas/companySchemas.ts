@@ -3,17 +3,17 @@ import * as z from "zod";
 export const ZaposleniSchema = z.object({
   _id: z.string().optional(),
   ID_kontakt_osoba: z.optional(z.number()),
-  ime: z.string().min(3, "Ime mora da ima bar 3 karaktera"),
-  prezime: z.string().min(3, "Prezime mora da ima bar 3 karaktera"),
+  ime: z.string().min(3, "Ime mora da ima bar 3 karaktera").or(z.literal("")),
+  prezime: z.string().min(3, "Prezime mora da ima bar 3 karaktera").or(z.literal("")),
   e_mail: z
     .string()
     .email("Ne ispravna email adresa")
     .max(100, "Predugacka email adresa")
     .or(z.literal(""))
     .optional(),
-  telefon: z.string(),
-  komentar: z.string().max(10000),
-  radno_mesto: z.string(),
+  telefon: z.string().optional(),
+  komentar: z.string().max(10000).optional(),
+  radno_mesto: z.string().optional(),
 });
 export type Zaposleni = z.infer<typeof ZaposleniSchema>;
 
