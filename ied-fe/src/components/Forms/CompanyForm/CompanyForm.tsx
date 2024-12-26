@@ -16,7 +16,7 @@ import AutocompleteSingle from "../../Autocomplete/Single";
 import { useFetchData } from "../../../hooks/useFetchData";
 import { companyFormMetadata } from "./metadata";
 import { saveFirma } from "../../../api/firma.api";
-import { extractErrorMessages } from "../../../utils/zodErrorHelper";
+import { extractErrorMessages, ValidationError } from "../../../utils/zodErrorHelper";
 
 type CompanyFormProps = {
   inputCompany: Company;
@@ -35,8 +35,22 @@ export const CompanyForm: React.FC<CompanyFormProps> = ({ inputCompany }) => {
 
   // TODO: add types
   const [company, setCompany] = useState(inputCompany);
+
+  type SuccessAlert = {
+    type: "success";
+    message: string;
+    errors: null;
+  }
+
+  type ErrorAlert = {
+    type: "error";
+    message: string;
+    errors: ValidationError[];
+  }
+
+
   const [alert, setAlert] =
-    useState<{ type: "success" | "error"; message: string; errors: string[] | null } | null>(null);
+    useState<SuccessAlert | ErrorAlert | null>(null);
 
   const {
     tipoviFirme: fetchedTipoviFirme,
@@ -79,7 +93,7 @@ export const CompanyForm: React.FC<CompanyFormProps> = ({ inputCompany }) => {
     if (response.status.toString().startsWith("2")) {
       setAlert({ type: "success", message: "Firma uspešno sačuvana!", errors: null });
     } else {
-      setAlert({ type: "error", message: `Firma nije sačuvana. Došlo je do greške!`, errors: null });
+      setAlert({ type: "error", message: `Firma nije sačuvana. Došlo je do greške!`, errors: [] });
     }
 
     const alertTimeout = setTimeout(() => {
@@ -236,7 +250,8 @@ export const CompanyForm: React.FC<CompanyFormProps> = ({ inputCompany }) => {
                 <Typography variant="h6">Greške:</Typography>
                 <ul>
                   {alert.errors.map((error) => (
-                    <li key={error}>{error}</li>
+                    <li key={error.message}>{error.message};
+                      Polje: `{error.field}`; Trenutna vrednost: `{error.value || <b>Nema podatka</b>}`</li>
                   ))}
                 </ul>
               </Box>

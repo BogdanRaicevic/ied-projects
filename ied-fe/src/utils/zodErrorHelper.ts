@@ -1,20 +1,30 @@
-export const extractErrorMessages = (errors: any): string[] => {
-  const messages: string[] = [];
+export type ValidationError = {
+  message: string;
+  field?: string;
+  value?: any;
+}
 
-  const processError = (error: any) => {
+export const extractErrorMessages = (errors: any): ValidationError[] => {
+  const validationErrors: ValidationError[] = [];
+
+  const processError = (error: any, parentField?: string) => {
     if (Array.isArray(error)) {
-      error.forEach(processError);
+      error.forEach(e => processError(e, parentField));
     } else if (typeof error === 'object' && error !== null) {
-      Object.values(error).forEach((value: any) => {
+      Object.entries(error).forEach(([key, value]: [string, any]) => {
         if (value?.message) {
-          messages.push(value.message);
+          validationErrors.push({
+            message: value.message,
+            field: parentField ? `${parentField}.${key}` : key,
+            value: value.input || value.received,
+          });
         } else {
-          processError(value);
+          processError(value, key);
         }
       });
     }
   };
 
   processError(errors);
-  return messages;
+  return validationErrors;
 };
