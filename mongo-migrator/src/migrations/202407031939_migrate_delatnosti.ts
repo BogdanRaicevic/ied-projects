@@ -29,5 +29,6 @@ export const up = async () => {
     console.log(`Inserted ${result.insertedCount} documents into MongoDB`);
   } catch (error) {
     console.error('Error during migration:', error);
+    throw error;
   }
 };

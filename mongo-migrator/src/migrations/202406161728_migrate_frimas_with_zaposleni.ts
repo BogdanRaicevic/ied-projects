@@ -100,6 +100,7 @@ export const up = async () => {
     await mongoCollection.insertMany(dataToSave);
   } catch (error) {
     console.error("Error during migration:", error);
+    throw error;
   }
 };
 

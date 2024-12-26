@@ -17,5 +17,6 @@ export const up = async () => {
     (await mongoCollection).insertMany(stanja);
   } catch (error) {
     console.error('Error during migration:', error);
+    throw error;
   }
 };

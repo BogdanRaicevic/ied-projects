@@ -23,7 +23,8 @@ export const up = async () => {
       );
     }
   } catch (error) {
-    console.error("Error during migration of maticni broj:", error);
+    console.error("Error during migration of remove word __nema__ from firmas:", error);
+    throw error;
   }
 };
 

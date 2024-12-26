@@ -18,5 +18,6 @@ export const up = async () => {
     );
   } catch (error) {
     console.error('Error during migration:', error);
+    throw error;
   }
 };

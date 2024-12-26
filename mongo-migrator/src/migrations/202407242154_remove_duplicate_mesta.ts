@@ -12,6 +12,7 @@ export const up = async () => {
     await removeDuplicates(mongoCollection);
   } catch (error) {
     console.error('Error during migration:', error);
+    throw error;
   }
 };
 

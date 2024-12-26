@@ -42,5 +42,6 @@ export const up = async () => {
     }
   } catch (error) {
     console.error("Error during migration of maticni broj:", error);
+    throw error;
   }
 };

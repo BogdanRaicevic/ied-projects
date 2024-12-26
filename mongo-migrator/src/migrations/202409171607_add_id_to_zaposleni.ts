@@ -36,5 +36,6 @@ export const up = async () => {
     }
   } catch (error) {
     console.error('Error during migration add id to zaposleni:', error);
+    throw error;
   }
 };
