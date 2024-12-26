@@ -90,7 +90,7 @@ export const CompanyForm: React.FC<CompanyFormProps> = ({ inputCompany }) => {
     return () => clearTimeout(alertTimeout);
   };
 
-  const onError = (errors: any, e: any) => {
+  const onError = (errors: any) => {
     const errorMessages = extractErrorMessages(errors);
     setAlert({ type: "error", message: "Firma nije sačuvana. Došlo je do greške!", errors: errorMessages });
 

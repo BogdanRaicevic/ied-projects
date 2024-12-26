@@ -13,11 +13,16 @@ interface MigrationFile {
 
 const executeMigration = async (migration: MigrationFile) => {
   console.log(`Executing migration: ${migration.name}`);
-  await migration.up();
-  await Migration.create({
-    timestamp: migration.timestamp,
-    name: migration.name,
-  });
+  try {
+    await migration.up();
+    await Migration.create({
+      timestamp: migration.timestamp,
+      name: migration.name,
+    });
+  } catch (error) {
+    console.error(`Failed to execute migration ${migration.name}:`, error);
+    throw error;
+  }
 };
 
 const loadMigrations = (): MigrationFile[] => {
