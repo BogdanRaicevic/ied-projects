@@ -3,8 +3,8 @@ import * as z from "zod";
 export const ZaposleniSchema = z.object({
   _id: z.string().optional(),
   ID_kontakt_osoba: z.optional(z.number()),
-  ime: z.string().min(3, "Ime mora da ima bar 3 karaktera").or(z.literal("")),
-  prezime: z.string().min(3, "Prezime mora da ima bar 3 karaktera").or(z.literal("")),
+  ime: z.string().optional(),
+  prezime: z.string().optional(),
   e_mail: z
     .string()
     .email("Ne ispravna email adresa")
