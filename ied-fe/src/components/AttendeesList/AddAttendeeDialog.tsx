@@ -36,7 +36,7 @@ export default function AddAttendeeDialog({ open, onClose, onChecked, zaposleni 
       <DialogContent>
         {zaposleni.map((osoba: Zaposleni) => (
           <FormControlLabel
-            key={osoba.ime + osoba.prezime}
+            key={osoba._id}
             control={
               <Checkbox
                 checked={checked.indexOf(`${osoba.ime} ${osoba.prezime}`) !== -1}
