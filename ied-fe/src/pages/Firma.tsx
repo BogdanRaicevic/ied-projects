@@ -129,7 +129,6 @@ export default function Firma() {
     if (isExistingCompany) {
       const savedCompany = await saveFirma(updatedCompany);
       setCompany(savedCompany.data);
-
     }
 
     setOpen(false);
