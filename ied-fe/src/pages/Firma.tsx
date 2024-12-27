@@ -152,7 +152,14 @@ export default function Firma() {
               </IconButton>
             </Tooltip>
             <Tooltip title="Delete">
-              <IconButton color="error" onClick={() => handleDelete(row)}>
+              <IconButton
+                color="error"
+                onClick={() => {
+                  if (window.confirm('Da li ste sigurni da želite da obrišete zaposlenog?')) {
+                    handleDelete(row);
+                  }
+                }}
+              >
                 <DeleteIcon />
               </IconButton>
             </Tooltip>
