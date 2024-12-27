@@ -5,25 +5,29 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
 import Grid from "@mui/material/Grid2";
 import { TextField } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { TODO_ANY } from "../../../../ied-be/src/utils/utils";
 
 interface PretrageSaveDialogProps {
   open: boolean;
   handleClose: () => void;
-  handleSave: (nazivPretrage: string) => void;
+  handleSave: (nazivPretrage: string, isNew: boolean) => void;
+  selectedPretraga: { id: string; naziv: string };
 }
 
 export default function PretrageSaveDialog({
   open,
   handleClose,
   handleSave,
+  selectedPretraga
 }: PretrageSaveDialogProps) {
   const [nazivPretrage, setNazivPretrage] = useState("");
 
-  const handleSaveClick = () => {
-    handleSave(nazivPretrage);
-  };
+  useEffect(() => {
+    if (!open) {
+      setNazivPretrage("");
+    }
+  }, [open]);
 
   return (
     <Dialog
@@ -38,7 +42,14 @@ export default function PretrageSaveDialog({
       <DialogContent>
         <Grid container spacing={2} alignItems="center">
           <Grid size={6}>
-            <Button variant="outlined" color="warning" onClick={handleSaveClick}>
+            <Button
+              variant="outlined"
+              color="warning"
+              onClick={() => {
+                handleSave(selectedPretraga.naziv, false)
+              }}
+              disabled={!selectedPretraga.naziv}
+            >
               Sačuvaj preko postojeće
             </Button>
           </Grid>
@@ -49,7 +60,14 @@ export default function PretrageSaveDialog({
               placeholder="Naziv pretrage"
               onChange={(e: TODO_ANY) => setNazivPretrage(e.target.value)}
             ></TextField>
-            <Button variant="contained" color="success" onClick={handleSaveClick}>
+            <Button
+              variant="contained"
+              color="success"
+              onClick={() => {
+                handleSave(nazivPretrage, true)
+              }}
+              disabled={!nazivPretrage}
+            >
               Sačuvaj kao novu pretragu
             </Button>
           </Grid>

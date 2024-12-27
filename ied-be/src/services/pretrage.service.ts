@@ -35,9 +35,10 @@ export const savePretraga = async (
     pretragaData.maticni_broj = queryParameters.maticniBroj;
     pretragaData.komentar = queryParameters.komentar;
 
-    if (pretraga.id) {
-      await Pretrage.findByIdAndUpdate(pretraga.id, pretragaData);
-    } else {
+
+    const p = await Pretrage.findOneAndUpdate({ _id: pretraga.id }, pretragaData);
+
+    if (!p) {
       await Pretrage.create(pretragaData);
     }
     console.log("Pretraga saved successfully");

@@ -33,23 +33,18 @@ export default function PredefinedPretrage() {
 
   const { pretragaParameters, setPretragaParameters } = usePretragaStore();
 
-  const handleSavePretraga = async (nazivPretrage: string) => {
-    const pretragaName = nazivPretrage || selectedPretraga.naziv;
-    if (pretragaName) {
-      try {
-        await savePretraga(pretragaParameters, {
-          id: nazivPretrage !== selectedPretraga.naziv ? "" : selectedPretraga.id,
-          naziv: pretragaName,
-        });
-        setOpenPretrageSaveDialog(false);
-        // Optionally, you can update the state or UI to reflect the save
-        await fetchPretrage(); // Fetch updated pretrage data
-      } catch (error) {
-        console.error("Failed to save pretraga:", error);
-      }
-    } else {
-      console.error("No option selected for saving");
+  const handleSavePretraga = async (nazivPretrage: string, isNew: boolean) => {
+    try {
+      await savePretraga(pretragaParameters, {
+        naziv: isNew ? nazivPretrage : selectedPretraga.naziv,
+        id: isNew ? undefined : selectedPretraga.id
+      });
+      setOpenPretrageSaveDialog(false);
+      await fetchPretrage();
+    } catch (error) {
+      console.error("Failed to save pretraga:", error);
     }
+
   };
 
   const handlePretrageSaveClose = () => setOpenPretrageSaveDialog(false);
@@ -70,7 +65,6 @@ export default function PredefinedPretrage() {
 
   const handleOptionSelect = (option: TODO_ANY) => {
     setSelectedPretraga({ id: option._id, naziv: option.naziv_pretrage });
-    console.log("option", option);
     const mappedPregrage = {
       imeFirme: option.ime_firme,
       pib: option.pib,
@@ -108,6 +102,7 @@ export default function PredefinedPretrage() {
           open={openPretrageSaveDialog}
           handleClose={handlePretrageSaveClose}
           handleSave={handleSavePretraga}
+          selectedPretraga={selectedPretraga}
         ></PretragaSaveDialog>
         <Button
           startIcon={<ZoomOutIcon />}
