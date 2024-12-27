@@ -78,3 +78,16 @@ export const saveFirma = async (company: Partial<Company>) => {
     return { success: false, status: 500, message: "An unexpected error occurred" };
   }
 };
+
+export const deleteFirma = async (id: string) => {
+  try {
+    const response = await axiosInstanceWithAuth.delete(`${env.beURL}/api/firma/${id}`);
+    return {
+      data: response.data,
+      status: response.status,
+    };
+  } catch (error) {
+    console.error("Error deleting firma: ", error);
+    throw error
+  }
+};

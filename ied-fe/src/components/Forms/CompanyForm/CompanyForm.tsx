@@ -15,7 +15,7 @@ import { z } from "zod";
 import AutocompleteSingle from "../../Autocomplete/Single";
 import { useFetchData } from "../../../hooks/useFetchData";
 import { companyFormMetadata } from "./metadata";
-import { saveFirma } from "../../../api/firma.api";
+import { deleteFirma, saveFirma } from "../../../api/firma.api";
 import { extractErrorMessages, ValidationError } from "../../../utils/zodErrorHelper";
 
 type CompanyFormProps = {
@@ -109,6 +109,25 @@ export const CompanyForm: React.FC<CompanyFormProps> = ({ inputCompany }) => {
     setAlert({ type: "error", message: "Firma nije sačuvana. Došlo je do greške!", errors: errorMessages });
     console.error("Validation errors", errors);
   };
+
+  const handleDelete = async (id: string) => {
+    try {
+      const confirmed = window.confirm("Da li ste sigurni da želite da obrišete firmu?");
+      if (confirmed) {
+        await deleteFirma(id);
+        setAlert({ type: "success", message: "Firma uspešno obrisana!", errors: null });
+        window.close();
+      }
+
+    } catch (error) {
+      console.error("Error deleting company", error);
+      setAlert({
+        type: "error",
+        message: "Greška prilikom brisanja firme",
+        errors: []
+      });
+    }
+  }
 
   function renderFiled(item: Metadata, errors: any) {
     // console.log("render file", item);
@@ -210,7 +229,6 @@ export const CompanyForm: React.FC<CompanyFormProps> = ({ inputCompany }) => {
   };
 
   return (
-
     <Box onSubmit={handleSubmit(onSubmit, onError)} component="form" sx={{ mt: 4 }}>
       <Grid container m={0} spacing={2}>
         {inputItems(InputTypesSchema.enum.Text).map((item) => {
@@ -237,10 +255,16 @@ export const CompanyForm: React.FC<CompanyFormProps> = ({ inputCompany }) => {
           );
         })}
 
-        <Button sx={{ my: 2 }} size="large" variant="contained" color="success" type="submit">
-          Sačuvaj
-        </Button>
-
+        <Grid size={{ xs: 12 }} display="flex" justifyContent="space-between" alignItems="center">
+          <Button sx={{ my: 2 }} size="large" variant="contained" color="success" type="submit">
+            Sačuvaj
+          </Button>
+          {company?._id && (<Button sx={{ my: 2 }} size="large" variant="contained" color="error" onClick={
+            () => handleDelete(company._id || '')}
+          >
+            Obriši firmu
+          </Button>)}
+        </Grid>
 
         {alert && (
           <Alert severity={alert.type} onClose={() => setAlert(null)}>
