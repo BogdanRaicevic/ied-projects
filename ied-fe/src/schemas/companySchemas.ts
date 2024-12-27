@@ -49,7 +49,7 @@ export const CompanySchema = z.object({
     .regex(new RegExp("^\\d{5}$"), "PTT moze da se sastoji samo od 5 brojeva")
     .or(z.literal(""))
     .optional(),
-  velicina: z.string().optional(),
+  velicina_firme: z.string().optional(),
   lastTouched: z.optional(z.string()),
   zaposleni: z.array(ZaposleniSchema).default([]),
   seminari: z.optional(z.array(PoseceniSeminarSchema)).default([]),

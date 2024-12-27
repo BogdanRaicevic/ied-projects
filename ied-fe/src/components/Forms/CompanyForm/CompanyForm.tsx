@@ -72,6 +72,7 @@ export const CompanyForm: React.FC<CompanyFormProps> = ({ inputCompany }) => {
   const [velicinieFirme, setVelicineFirme] = useState([]);
   const [mesta, setMesta] = useState([]);
   const [delatnosti, setDelatnosti] = useState([]);
+  const [autocompletes, setAutocompletes] = useState<Record<string, string>>({});
 
   useEffect(() => {
     const fetchData = () => {
@@ -95,8 +96,6 @@ export const CompanyForm: React.FC<CompanyFormProps> = ({ inputCompany }) => {
     setCompany(inputCompany);
     reset(inputCompany);
   }, [inputCompany, reset]);
-
-  let autocompletes: any;
 
   const onSubmit = async (data: Company) => {
     data = {
@@ -200,7 +199,7 @@ export const CompanyForm: React.FC<CompanyFormProps> = ({ inputCompany }) => {
         case "tip_firme":
           optionsData = tipoviFirme;
           break;
-        case "velicina":
+        case "velicina_firme":
           optionsData = velicinieFirme;
           break;
         case "stanje_firme":
@@ -209,7 +208,7 @@ export const CompanyForm: React.FC<CompanyFormProps> = ({ inputCompany }) => {
         case "mesto":
           optionsData = mesta;
           break;
-        case "delatnosti":
+        case "delatnost":
           optionsData = delatnosti;
           break;
         default:
@@ -229,12 +228,11 @@ export const CompanyForm: React.FC<CompanyFormProps> = ({ inputCompany }) => {
       );
     }
   }
-
   const handleAutocomplete = (key: string, newValue: any) => {
-    autocompletes = {
-      ...autocompletes,
+    setAutocompletes((prevState) => ({
+      ...prevState,
       [key]: newValue,
-    };
+    }));
   };
 
   const inputItems = (inputType: z.infer<typeof InputTypesSchema>) => {

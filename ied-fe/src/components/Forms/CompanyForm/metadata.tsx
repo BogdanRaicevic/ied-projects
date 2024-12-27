@@ -77,7 +77,7 @@ export const companyFormMetadata: Metadata[] = [
     inputType: InputTypesSchema.enum.Select,
   },
   {
-    key: "velicina",
+    key: "velicina_firme",
     label: "Velicina firme",
     inputAdornment: <Height />,
     inputType: InputTypesSchema.enum.Select,
@@ -95,7 +95,7 @@ export const companyFormMetadata: Metadata[] = [
     inputType: InputTypesSchema.enum.TextMultiline,
   },
   {
-    key: "delatnosti",
+    key: "delatnost",
     label: "Delatnosti",
     inputAdornment: <BuildCircle />,
     inputType: InputTypesSchema.enum.Select,

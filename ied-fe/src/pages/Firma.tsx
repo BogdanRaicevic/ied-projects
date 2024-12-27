@@ -26,12 +26,13 @@ const defaultCompanyData: Company = {
   postanski_broj: "",
   zeleMarketingMaterijal: false,
   lastTouched: "",
-  velicina: "",
+  velicina_firme: "",
   zaposleni: [],
   seminari: [],
   stanje_firme: "",
   jbkjs: "",
   maticni_broj: "",
+  delatnost: "",
 };
 
 type TODO_ANY_TYPE = any;
@@ -60,7 +61,6 @@ export default function Firma() {
   const [selectedRow, setSelectedRow] = useState<MRT_Row<Zaposleni> | null>(null);
 
   const handleEdit = (row: MRT_Row<Zaposleni>) => {
-    console.log("edit row", row.original);
     const updatedZaposleni = company?.zaposleni.map((zaposleni: TODO_ANY_TYPE) =>
       zaposleni._id === row.original._id ? row.original : zaposleni
     );
@@ -135,7 +135,6 @@ export default function Firma() {
   };
 
   function renderZaposleniTable(): React.ReactNode {
-    console.log("zaposleni tabela", company.zaposleni);
     return (
       <MaterialReactTable
         columns={myZaposleniColumns}
