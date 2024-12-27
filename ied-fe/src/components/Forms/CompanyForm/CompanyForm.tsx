@@ -36,6 +36,7 @@ export const CompanyForm: React.FC<CompanyFormProps> = ({ inputCompany }) => {
     formState: { errors },
     handleSubmit,
     reset,
+    watch
   } = useForm<Company>({
     resolver: zodResolver(CompanySchema),
     defaultValues: inputCompany || {},
@@ -276,9 +277,23 @@ export const CompanyForm: React.FC<CompanyFormProps> = ({ inputCompany }) => {
         })}
 
         <Grid size={{ xs: 12 }} display="flex" justifyContent="space-between" alignItems="center">
-          <Button sx={{ my: 2 }} size="large" variant="contained" color="success" type="submit">
-            Sačuvaj
-          </Button>
+          <Box>
+            <Button
+              sx={{ my: 2 }}
+              size="large"
+              variant="contained"
+              color="success"
+              type="submit"
+              disabled={!watch('naziv_firme')}
+            >
+              Sačuvaj
+            </Button>
+            {!watch('naziv_firme') && (
+              <Typography color="error" sx={{ mt: 1 }}>
+                Polje "Naziv firme" mora biti popunjeno
+              </Typography>
+            )}
+          </Box>
           {company?._id && (
             <Button
               sx={{ my: 2 }}

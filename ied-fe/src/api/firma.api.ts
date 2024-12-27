@@ -53,6 +53,11 @@ export const exportData = async (queryParameters: any, exportSubject: "firma" | 
 };
 
 export const saveFirma = async (company: Partial<Company>) => {
+
+  company.zaposleni?.map((z) => {
+    if (z._id?.startsWith('temp')) { delete z._id }
+  })
+
   try {
     if (company._id) {
       const response = await axiosInstanceWithAuth.post(

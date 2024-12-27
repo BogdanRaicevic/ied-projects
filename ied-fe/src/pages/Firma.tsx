@@ -92,24 +92,28 @@ export default function Firma() {
     setOpen(false);
   };
 
-  // TODO: Fix this to interact with saving company
   const handleZaposleniSubmit = async (zaposleniData: Zaposleni) => {
+    const isExistingCompany = !!company?._id;
+
+    // Generate temporary ID for new employees
+    const employeeToAdd = zaposleniData._id
+      ? zaposleniData
+      : { ...zaposleniData, _id: `temp_${Date.now()}_${Math.random()}` };
+
     const existingZaposleni = company?.zaposleni.find(
-      (zaposleni: Zaposleni) =>
-        zaposleniData._id !== undefined && zaposleni._id === zaposleniData._id
+      (zaposleni: Zaposleni) => zaposleni._id === employeeToAdd._id
     );
+
     let updatedZaposleni;
 
     if (existingZaposleni) {
-      // If the zaposleni exists, update it
-      updatedZaposleni = company?.zaposleni.map((zaposleni: Zaposleni) => {
-        if (zaposleni._id === zaposleniData._id) {
-          return zaposleniData;
-        }
-        return zaposleni;
-      });
+      // Scenario 1: Editing existing zaposleni
+      updatedZaposleni = company?.zaposleni.map((zaposleni: TODO_ANY_TYPE) =>
+        zaposleni._id === employeeToAdd._id ? employeeToAdd : zaposleni
+      );
     } else {
-      updatedZaposleni = [...(company?.zaposleni || []), zaposleniData];
+      // Scenario 2 & 3: Adding new zaposleni
+      updatedZaposleni = [...(company?.zaposleni || []), employeeToAdd];
     }
 
     const updatedCompany: Company = {
@@ -118,10 +122,12 @@ export default function Firma() {
       zaposleni: updatedZaposleni || [],
     };
 
+    // Update local state
     setCompany(updatedCompany);
 
-    if (!!id) {
-      saveFirma(updatedCompany);
+    // Only save to backend if company already exists
+    if (isExistingCompany) {
+      await saveFirma(updatedCompany);
     }
 
     setOpen(false);
@@ -129,7 +135,7 @@ export default function Firma() {
 
   // TODO: fix this to be like company table
   function renderZaposleniTable(): React.ReactNode {
-    console.log("company in firma zaposleni table ,", company);
+    console.log("zaposleni tabela", company.zaposleni);
     return (
       <MaterialReactTable
         columns={myZaposleniColumns}
