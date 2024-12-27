@@ -127,13 +127,14 @@ export default function Firma() {
 
     // Only save to backend if company already exists
     if (isExistingCompany) {
-      await saveFirma(updatedCompany);
+      const savedCompany = await saveFirma(updatedCompany);
+      setCompany(savedCompany.data);
+
     }
 
     setOpen(false);
   };
 
-  // TODO: fix this to be like company table
   function renderZaposleniTable(): React.ReactNode {
     console.log("zaposleni tabela", company.zaposleni);
     return (
