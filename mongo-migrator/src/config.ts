@@ -16,6 +16,7 @@ const mongoUrl = 'mongodb://0.0.0.0:27017/ied';
 const mysqlConnection = async () => {
   return await mysql.createConnection(mysqlConfig);
 };
+
 // Connect to MongoDB
 const mongoDbConnection = async () => {
   await mongoose.connect(mongoUrl, {});

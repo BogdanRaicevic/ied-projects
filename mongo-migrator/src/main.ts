@@ -43,7 +43,6 @@ const loadMigrations = (): MigrationFile[] => {
 
 const runMigrations = async () => {
   const mongoConnection = await mongoDbConnection();
-  const mysqlDb = await mysqlConnection();
 
   try {
     const migrations = loadMigrations();
@@ -61,7 +60,6 @@ const runMigrations = async () => {
     console.error("Error running migrations:", error);
   } finally {
     mongoConnection.close();
-    await mysqlDb.end();
   }
 };
 
