@@ -1,7 +1,8 @@
 import { ContentCopy } from "@mui/icons-material";
 import { MRT_ColumnDef } from "material-react-table";
 import { Company, Zaposleni } from "../../schemas/companySchemas";
-import { Link } from "@mui/material";
+import { Icon, Link } from "@mui/material";
+import BusinessIcon from '@mui/icons-material/Business';
 
 export const myCompanyColumns: MRT_ColumnDef<Company>[] = [
   // {
@@ -20,7 +21,9 @@ export const myCompanyColumns: MRT_ColumnDef<Company>[] = [
     Cell: ({ row }: { row: { original: Company } }) => {
       const firma = row.original;
       return (
-        <Link href={`/Firma/${firma._id}`} target="_blank" rel="noopener noreferrer">
+        <Link href={`/Firma/${firma._id}`} target="_blank" rel="noopener noreferrer"
+          sx={{ display: 'inline-flex', alignItems: 'center' }}>
+          <Icon component={BusinessIcon} sx={{ fontSize: 20, marginRight: 0.5 }} />
           {firma.naziv_firme}
         </Link>
       );
