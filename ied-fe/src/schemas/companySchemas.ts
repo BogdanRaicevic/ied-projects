@@ -27,10 +27,10 @@ export type PoseceniSeminar = z.infer<typeof PoseceniSeminarSchema>;
 
 export const CompanySchema = z.object({
   _id: z.string().optional(),
-  ID_firma: z.number(),
+  ID_firma: z.number().optional(),
   zeleMarketingMaterijal: z.optional(z.boolean().default(false)),
   naziv_firme: z.string().max(100),
-  adresa: z.string().max(150),
+  adresa: z.string().max(150).optional(),
   PIB: z.optional(z.string()),
   telefon: z.string(),
   e_mail: z
@@ -39,17 +39,17 @@ export const CompanySchema = z.object({
     .max(100, "Predugacka email adresa")
     .or(z.literal(""))
     .optional(),
-  tip_firme: z.string(),
+  tip_firme: z.string().optional(),
   delatnost: z.optional(z.string()),
-  komentar: z.string().max(1000),
-  stanje_firme: z.string().max(50),
-  mesto: z.string().max(50),
+  komentar: z.string().max(1000).optional(),
+  stanje_firme: z.string().max(50).optional(),
+  mesto: z.string().max(50).optional(),
   postanski_broj: z
     .string()
     .regex(new RegExp("^\\d{5}$"), "PTT moze da se sastoji samo od 5 brojeva")
     .or(z.literal(""))
     .optional(),
-  velicina: z.string(),
+  velicina: z.string().optional(),
   lastTouched: z.optional(z.string()),
   zaposleni: z.array(ZaposleniSchema).default([]),
   seminari: z.optional(z.array(PoseceniSeminarSchema)).default([]),

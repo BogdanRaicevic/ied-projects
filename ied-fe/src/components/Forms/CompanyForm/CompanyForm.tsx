@@ -107,7 +107,7 @@ export const CompanyForm: React.FC<CompanyFormProps> = ({ inputCompany }) => {
   const onError = (errors: any) => {
     const errorMessages = extractErrorMessages(errors);
     setAlert({ type: "error", message: "Firma nije sačuvana. Došlo je do greške!", errors: errorMessages });
-
+    console.error("Validation errors", errors);
   };
 
   function renderFiled(item: Metadata, errors: any) {
