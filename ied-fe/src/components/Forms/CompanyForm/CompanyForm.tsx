@@ -57,12 +57,14 @@ export const CompanyForm: React.FC<CompanyFormProps> = ({ inputCompany }) => {
     velicineFirme: fetchedVelicineFirme,
     stanjaFirme: fetchedStanjaFirme,
     mesta: fetchedMesta,
+    delatnosti: fetchedDelatnosti,
   } = useFetchData();
 
   const [tipoviFirme, setTipoviFirme] = useState([]);
   const [stanjaFirme, setStanjaFirme] = useState([]);
   const [velicinieFirme, setVelicineFirme] = useState([]);
   const [mesta, setMesta] = useState([]);
+  const [delatnosti, setDelatnosti] = useState([]);
 
   useEffect(() => {
     const fetchData = () => {
@@ -70,10 +72,11 @@ export const CompanyForm: React.FC<CompanyFormProps> = ({ inputCompany }) => {
       setStanjaFirme(fetchedStanjaFirme || []);
       setVelicineFirme(fetchedVelicineFirme || []);
       setMesta(fetchedMesta || []);
+      setDelatnosti(fetchedDelatnosti || []);
     };
 
     fetchData();
-  }, [fetchedStanjaFirme, fetchedTipoviFirme, fetchedVelicineFirme, fetchedMesta]);
+  }, [fetchedStanjaFirme, fetchedTipoviFirme, fetchedVelicineFirme, fetchedMesta, fetchedDelatnosti]);
 
   useEffect(() => {
     setCompany(inputCompany);
@@ -190,6 +193,9 @@ export const CompanyForm: React.FC<CompanyFormProps> = ({ inputCompany }) => {
           break;
         case "mesto":
           optionsData = mesta;
+          break;
+        case "delatnosti":
+          optionsData = delatnosti;
           break;
         default:
           break;
