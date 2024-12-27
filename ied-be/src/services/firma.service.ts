@@ -36,7 +36,7 @@ export const updateById = async (
 export const search = async (
   queryParameters: FirmaQueryParams,
   pageIndex: number = 1,
-  pageSize: number = 10
+  pageSize: number = 50
 ) => {
   const skip = (pageIndex - 1) * pageSize;
   const mongoQuery = createFirmaQuery(queryParameters);

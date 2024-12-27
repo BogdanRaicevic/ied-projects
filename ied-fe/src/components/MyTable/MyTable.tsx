@@ -16,7 +16,7 @@ export default memo(function MyTable(queryParameters: PretragaParametersType) {
 
   const [pagination, setPagination] = useState<MRT_PaginationState>({
     pageIndex: 0,
-    pageSize: 10,
+    pageSize: 50,
   });
 
   useEffect(() => {

@@ -114,7 +114,5 @@ export const myZaposleniColumns: MRT_ColumnDef<Zaposleni>[] = [
         whiteSpace: "pre-wrap", // Preserve line breaks and whitespace
       },
     },
-    // accessorFn: (row) =>
-    //   row.komentari.substring(0, 100) + (row.komentari.length > 100 ? "..." : ""),
   },
 ];

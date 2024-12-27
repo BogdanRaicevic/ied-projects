@@ -10,7 +10,7 @@ export const fetchFirmaPretrageData = async (
 ) => {
   try {
     const body = {
-      pageSize: pageSize || 10,
+      pageSize: pageSize || 50,
       pageIndex: pageIndex + 1, // becuase MRT is zero based
       queryParameters,
     };

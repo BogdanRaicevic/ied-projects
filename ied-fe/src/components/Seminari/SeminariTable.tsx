@@ -15,7 +15,7 @@ export default memo(function SeminariTable(props: { queryParameters: SeminarQuer
 
   const [pagination, setPagination] = useState<MRT_PaginationState>({
     pageIndex: 0,
-    pageSize: 10,
+    pageSize: 50,
   });
 
   useEffect(() => {

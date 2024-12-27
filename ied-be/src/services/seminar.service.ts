@@ -11,7 +11,7 @@ export const saveSeminar = async (seminarData: Partial<SeminarType>): Promise<Se
 export const search = async (
   queryParameters: FilterQuery<SeminarQueryParams>,
   pageIndex: number = 1,
-  pageSize: number = 10
+  pageSize: number = 50
 ) => {
   const skip = (pageIndex - 1) * pageSize;
   const mongoQuery = createSeminarQuery(queryParameters.queryParameters);

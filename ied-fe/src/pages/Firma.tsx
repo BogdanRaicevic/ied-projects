@@ -67,7 +67,7 @@ export default function Firma() {
     const updatedCompany: Company = {
       ...defaultCompanyData,
       ...company,
-      zaposleni: updatedZaposleni || [], // Ensure zaposleni is always an array
+      zaposleni: updatedZaposleni || [],
     };
     setCompany(updatedCompany);
     setSelectedRow(row);
@@ -137,6 +137,7 @@ export default function Firma() {
         enableColumnOrdering
         enableGlobalFilter={true}
         enableEditing={true}
+        state={{ pagination: { pageSize: 50, pageIndex: 0 } }}
         renderRowActions={({ row }) => (
           <Box sx={{ display: "flex", gap: "1rem" }}>
             <Tooltip title="Edit">
