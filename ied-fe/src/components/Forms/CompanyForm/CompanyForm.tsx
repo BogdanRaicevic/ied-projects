@@ -1,4 +1,12 @@
-import { FormControl, TextField, InputAdornment, Button, Divider, Alert, Typography } from "@mui/material";
+import {
+  FormControl,
+  TextField,
+  InputAdornment,
+  Button,
+  Divider,
+  Alert,
+  Typography,
+} from "@mui/material";
 import { Box } from "@mui/system";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -40,17 +48,15 @@ export const CompanyForm: React.FC<CompanyFormProps> = ({ inputCompany }) => {
     type: "success";
     message: string;
     errors: null;
-  }
+  };
 
   type ErrorAlert = {
     type: "error";
     message: string;
     errors: ValidationError[];
-  }
+  };
 
-
-  const [alert, setAlert] =
-    useState<SuccessAlert | ErrorAlert | null>(null);
+  const [alert, setAlert] = useState<SuccessAlert | ErrorAlert | null>(null);
 
   const {
     tipoviFirme: fetchedTipoviFirme,
@@ -76,7 +82,13 @@ export const CompanyForm: React.FC<CompanyFormProps> = ({ inputCompany }) => {
     };
 
     fetchData();
-  }, [fetchedStanjaFirme, fetchedTipoviFirme, fetchedVelicineFirme, fetchedMesta, fetchedDelatnosti]);
+  }, [
+    fetchedStanjaFirme,
+    fetchedTipoviFirme,
+    fetchedVelicineFirme,
+    fetchedMesta,
+    fetchedDelatnosti,
+  ]);
 
   useEffect(() => {
     setCompany(inputCompany);
@@ -90,7 +102,6 @@ export const CompanyForm: React.FC<CompanyFormProps> = ({ inputCompany }) => {
       ...data,
       ...autocompletes,
     };
-
 
     const response = await saveFirma(data);
     if (response.status.toString().startsWith("2")) {
@@ -109,7 +120,11 @@ export const CompanyForm: React.FC<CompanyFormProps> = ({ inputCompany }) => {
 
   const onError = (errors: any) => {
     const errorMessages = extractErrorMessages(errors);
-    setAlert({ type: "error", message: "Firma nije sačuvana. Došlo je do greške!", errors: errorMessages });
+    setAlert({
+      type: "error",
+      message: "Firma nije sačuvana. Došlo je do greške!",
+      errors: errorMessages,
+    });
     console.error("Validation errors", errors);
   };
 
@@ -121,16 +136,15 @@ export const CompanyForm: React.FC<CompanyFormProps> = ({ inputCompany }) => {
         setAlert({ type: "success", message: "Firma uspešno obrisana!", errors: null });
         window.close();
       }
-
     } catch (error) {
       console.error("Error deleting company", error);
       setAlert({
         type: "error",
         message: "Greška prilikom brisanja firme",
-        errors: []
+        errors: [],
       });
     }
-  }
+  };
 
   function renderFiled(item: Metadata, errors: any) {
     // console.log("render file", item);
@@ -265,11 +279,17 @@ export const CompanyForm: React.FC<CompanyFormProps> = ({ inputCompany }) => {
           <Button sx={{ my: 2 }} size="large" variant="contained" color="success" type="submit">
             Sačuvaj
           </Button>
-          {company?._id && (<Button sx={{ my: 2 }} size="large" variant="contained" color="error" onClick={
-            () => handleDelete(company._id || '')}
-          >
-            Obriši firmu
-          </Button>)}
+          {company?._id && (
+            <Button
+              sx={{ my: 2 }}
+              size="large"
+              variant="contained"
+              color="error"
+              onClick={() => handleDelete(company._id || "")}
+            >
+              Obriši firmu
+            </Button>
+          )}
         </Grid>
 
         {alert && (
@@ -280,8 +300,10 @@ export const CompanyForm: React.FC<CompanyFormProps> = ({ inputCompany }) => {
                 <Typography variant="h6">Greške:</Typography>
                 <ul>
                   {alert.errors.map((error) => (
-                    <li key={error.message}>{error.message};
-                      Polje: `{error.field}`; Trenutna vrednost: `{error.value || <b>Nema podatka</b>}`</li>
+                    <li key={error.message}>
+                      {error.message}; Polje: `{error.field}`; Trenutna vrednost: `
+                      {error.value || <b>Nema podatka</b>}`
+                    </li>
                   ))}
                 </ul>
               </Box>

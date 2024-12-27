@@ -88,6 +88,6 @@ export const deleteFirma = async (id: string) => {
     };
   } catch (error) {
     console.error("Error deleting firma: ", error);
-    throw error
+    throw error;
   }
 };

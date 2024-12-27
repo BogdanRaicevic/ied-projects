@@ -37,14 +37,13 @@ export default function PredefinedPretrage() {
     try {
       await savePretraga(pretragaParameters, {
         naziv: isNew ? nazivPretrage : selectedPretraga.naziv,
-        id: isNew ? undefined : selectedPretraga.id
+        id: isNew ? undefined : selectedPretraga.id,
       });
       setOpenPretrageSaveDialog(false);
       await fetchPretrage();
     } catch (error) {
       console.error("Failed to save pretraga:", error);
     }
-
   };
 
   const handlePretrageSaveClose = () => setOpenPretrageSaveDialog(false);

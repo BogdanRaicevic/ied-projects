@@ -11,7 +11,7 @@ import {
   Comment,
   Filter1,
   LocalPolice,
-  BuildCircle
+  BuildCircle,
 } from "@mui/icons-material";
 import { Metadata, InputTypesSchema } from "../../../schemas/companySchemas";
 
@@ -99,5 +99,5 @@ export const companyFormMetadata: Metadata[] = [
     label: "Delatnosti",
     inputAdornment: <BuildCircle />,
     inputType: InputTypesSchema.enum.Select,
-  }
+  },
 ];

@@ -7,7 +7,7 @@
     "dev": "vite",
     "build": "tsc && vite build",
     "preview": "vite preview",
-    "format": "prettier --write .",
+    "format": "prettier --write \"./src/**/*.{ts,tsx}\"",
     "lint": "npx eslint src"
   },
   "homepage": "http://BogdanRaicevic.github.io/ied-fe",

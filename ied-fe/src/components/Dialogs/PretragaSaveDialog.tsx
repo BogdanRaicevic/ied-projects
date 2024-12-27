@@ -19,7 +19,7 @@ export default function PretrageSaveDialog({
   open,
   handleClose,
   handleSave,
-  selectedPretraga
+  selectedPretraga,
 }: PretrageSaveDialogProps) {
   const [nazivPretrage, setNazivPretrage] = useState("");
 
@@ -46,7 +46,7 @@ export default function PretrageSaveDialog({
               variant="outlined"
               color="warning"
               onClick={() => {
-                handleSave(selectedPretraga.naziv, false)
+                handleSave(selectedPretraga.naziv, false);
               }}
               disabled={!selectedPretraga.naziv}
             >
@@ -64,7 +64,7 @@ export default function PretrageSaveDialog({
               variant="contained"
               color="success"
               onClick={() => {
-                handleSave(nazivPretrage, true)
+                handleSave(nazivPretrage, true);
               }}
               disabled={!nazivPretrage}
             >
