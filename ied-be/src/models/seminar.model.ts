@@ -7,7 +7,7 @@ export type SeminarType = Document & {
   offlineCena?: string;
   onlineCena?: string;
   datum?: string;
-  prijave: PrijaveType[]
+  prijave: PrijaveType[];
 };
 
 type PrijaveType = {
@@ -20,8 +20,8 @@ type PrijaveType = {
   prezime_zaposlenog: string;
   email_zaposlenog: string;
   telefon_zaposlenog: string;
-  prisustvo: 'online' | 'offline';
-}
+  prisustvo: "online" | "offline";
+};
 
 const prijaveSchema = new Schema<PrijaveType>({
   id_firme: { type: String, required: true },
@@ -33,7 +33,7 @@ const prijaveSchema = new Schema<PrijaveType>({
   prezime_zaposlenog: String,
   email_zaposlenog: String,
   telefon_zaposlenog: String,
-  prisustvo: { type: String, enum: ['online', 'offline'] },
+  prisustvo: { type: String, enum: ["online", "offline"] },
 });
 
 const seminarSchema = new Schema<SeminarType>(
@@ -44,7 +44,7 @@ const seminarSchema = new Schema<SeminarType>(
     offlineCena: { type: String, required: false },
     onlineCena: { type: String, required: false },
     datum: { type: String, required: false },
-    prijave: [prijaveSchema]
+    prijave: [prijaveSchema],
   },
   { collection: "seminari" }
 );
