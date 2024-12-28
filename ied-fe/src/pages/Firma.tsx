@@ -137,6 +137,7 @@ export default function Firma() {
   };
 
   const handlePrijaviNaSeminar = (row: MRT_Row<Zaposleni>) => {
+    console.log('row', row)
     setOpenPrijavaNaSeminarDialog(true);
   };
 

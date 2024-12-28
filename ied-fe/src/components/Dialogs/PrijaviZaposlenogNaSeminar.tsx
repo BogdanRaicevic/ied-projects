@@ -22,9 +22,9 @@ export default function PrijavaNaSeminarDialog({
   open: boolean;
   onClose: () => void;
 }) {
-  const handleSeminarChange = () => {
-    console.log("1");
-  };
+  // const handleSeminarChange = () => {
+  //   console.log("1");
+  // };
 
   const { fetchedSeminars } = useFetchSeminari();
 
