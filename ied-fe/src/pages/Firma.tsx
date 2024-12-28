@@ -10,8 +10,10 @@ import { Tooltip, IconButton, Button } from "@mui/material";
 import { Box } from "@mui/system";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
+import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import ZaposleniDialog from "../components/Dialogs/ZaposleniDialog";
 import { fetchSingleFirmaData, saveFirma } from "../api/firma.api";
+import PrijavaNaSeminarDialog from "../components/Dialogs/PrijaviZaposlenogNaSeminar";
 
 const defaultCompanyData: Company = {
   ID_firma: 0,
@@ -71,7 +73,7 @@ export default function Firma() {
     };
     setCompany(updatedCompany);
     setSelectedRow(row);
-    setOpen(true);
+    setOpenZaposelniDialog(true);
   };
 
   const handleDelete = async (row: MRT_Row<Zaposleni>) => {
@@ -87,10 +89,10 @@ export default function Firma() {
     saveFirma(updatedCompany);
   };
 
-  const [open, setOpen] = useState(false);
-  const handleClose = () => {
-    setOpen(false);
-  };
+  const [openZaposleniDialog, setOpenZaposelniDialog] = useState(false);
+  const [openPrijavaNaSeminarDialog, setOpenPrijavaNaSeminarDialog] = useState(false);
+  const handleClosePrijavaDialog = () => setOpenPrijavaNaSeminarDialog(false);
+  const handleClose = () => setOpenZaposelniDialog(false);
 
   const handleZaposleniSubmit = async (zaposleniData: Zaposleni) => {
     const isExistingCompany = !!company?._id;
@@ -131,7 +133,11 @@ export default function Firma() {
       setCompany(savedCompany.data);
     }
 
-    setOpen(false);
+    setOpenZaposelniDialog(false);
+  };
+
+  const handlePrijaviNaSeminar = (row: MRT_Row<Zaposleni>) => {
+    setOpenPrijavaNaSeminarDialog(true);
   };
 
   function renderZaposleniTable(): React.ReactNode {
@@ -145,6 +151,15 @@ export default function Firma() {
         state={{ pagination: { pageSize: 50, pageIndex: 0 } }}
         renderRowActions={({ row }) => (
           <Box sx={{ display: "flex", gap: "1rem" }}>
+            <Tooltip title="Prijavi na seminar" color="success">
+              <IconButton
+                onClick={() => {
+                  handlePrijaviNaSeminar(row);
+                }}
+              >
+                <PersonAddIcon />
+              </IconButton>
+            </Tooltip>
             <Tooltip title="Edit">
               <IconButton onClick={() => handleEdit(row)}>
                 <EditIcon />
@@ -154,7 +169,7 @@ export default function Firma() {
               <IconButton
                 color="error"
                 onClick={() => {
-                  if (window.confirm('Da li ste sigurni da želite da obrišete zaposlenog?')) {
+                  if (window.confirm("Da li ste sigurni da želite da obrišete zaposlenog?")) {
                     handleDelete(row);
                   }
                 }}
@@ -195,7 +210,7 @@ export default function Firma() {
         type="button"
         onClick={() => {
           setSelectedRow(null);
-          setOpen(true);
+          setOpenZaposelniDialog(true);
         }}
       >
         Dodaj zaposlenog
@@ -204,10 +219,15 @@ export default function Firma() {
       <ZaposleniDialog
         isCompanyBeingUpdated={Boolean(id)}
         zaposleni={selectedRow?.original}
-        open={open}
+        open={openZaposleniDialog}
         onClose={handleClose}
         onSubmit={handleZaposleniSubmit}
       />
+      <PrijavaNaSeminarDialog
+        open={openPrijavaNaSeminarDialog}
+        onClose={handleClosePrijavaDialog}
+      />
+
       {/* <AttendedSeminarsAccordion firma={company satisfies Company}></AttendedSeminarsAccordion> */}
     </>
   );

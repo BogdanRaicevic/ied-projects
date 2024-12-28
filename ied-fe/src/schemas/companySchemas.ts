@@ -75,7 +75,7 @@ export const MetadataSchema = z.object({
 export type Metadata = z.infer<typeof MetadataSchema>;
 
 export const SeminarSchema = z.object({
-  id: z.string().optional(),
+  _id: z.string().optional(),
   naziv: z
     .string()
     .min(3, "Naziv mora da ima bar 3 karaktera")
