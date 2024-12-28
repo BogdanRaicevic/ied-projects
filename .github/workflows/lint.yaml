@@ -29,9 +29,9 @@ jobs:
         working-directory: ied-fe
         run: pnpm install
 
-      - name: Run ESLint
+      - name: Run Biome
         working-directory: ied-fe
-        run: pnpm run lint
+        run: pnpm run lint:error
 
   lint-ied-be:
     runs-on: ubuntu-latest
@@ -53,6 +53,6 @@ jobs:
         working-directory: ied-be
         run: pnpm install
 
-      - name: Run ESLint
+      - name: Run Biome
         working-directory: ied-be
-        run: pnpm run lint
+        run: pnpm run lint:error

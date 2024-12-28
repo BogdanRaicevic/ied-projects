@@ -28,15 +28,14 @@ export default function PrijavaNaSeminarDialog({
 
   const { fetchedSeminars } = useFetchSeminari();
 
-  const ooo = fetchedSeminars?.seminari.map(item => {
+  const ooo = fetchedSeminars?.seminari.map((item) => {
     const d = {
       label: `${item.datum} ___ ${item.naziv} `,
-      id: item._id
-    }
+      id: item._id,
+    };
 
     return d;
-  })
-
+  });
 
   return (
     <Dialog open={open} onClose={onClose} maxWidth="lg">
@@ -114,16 +113,12 @@ export default function PrijavaNaSeminarDialog({
               disablePortal
               options={ooo || []}
               renderInput={(params) => <TextField {...params} label="Seminar" />}
-            >
-
-            </Autocomplete>
-
+            ></Autocomplete>
           </Grid>
         </Grid>
       </DialogContent>
       <DialogActions>
         <Button variant="contained" color="success">
-          {" "}
           Sačuvaj prijavu
         </Button>
         <Button onClick={onClose} variant="outlined" color="error">

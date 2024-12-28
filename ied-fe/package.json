@@ -7,8 +7,9 @@
     "dev": "vite",
     "build": "tsc && vite build",
     "preview": "vite preview",
-    "format": "prettier --write \"./src/**/*.{ts,tsx}\"",
-    "lint": "npx eslint src"
+    "format": "biome format --write ./src",
+    "lint:all": "npx biome lint",
+    "lint:error": "npx biome lint --diagnostic-level error"
   },
   "homepage": "http://BogdanRaicevic.github.io/ied-fe",
   "dependencies": {
@@ -39,8 +40,7 @@
     "zustand": "^5.0.0"
   },
   "devDependencies": {
-    "@eslint/js": "^9.16.0",
-    "@tanstack/eslint-plugin-query": "^5.62.1",
+    "@biomejs/biome": "^1.9.4",
     "@types/pdfmake": "^0.2.10",
     "@types/react": "^18.3.14",
     "@types/react-dom": "^18.3.2",
@@ -48,19 +48,10 @@
     "@types/react-table": "^7.7.20",
     "@types/react-window": "^1.8.8",
     "@types/uuid": "^10.0.0",
-    "@typescript-eslint/eslint-plugin": "^8.17.0",
-    "@typescript-eslint/parser": "^8.17.0",
     "@vitejs/plugin-react-swc": "^3.7.2",
-    "eslint": "^9.16.0",
-    "eslint-config-google": "^0.14.0",
-    "eslint-config-prettier": "^9.1.0",
-    "eslint-plugin-prettier": "^5.2.1",
-    "eslint-plugin-react": "^7.37.2",
     "globals": "^15.13.0",
-    "prettier": "^3.4.2",
+    "ied-shared": "^1.3.0",
     "typescript": "^5.7.2",
-    "typescript-eslint": "^8.17.0",
-    "vite": "^6.0.0",
-    "ied-shared": "^1.3.0"
+    "vite": "^6.0.0"
   }
 }
