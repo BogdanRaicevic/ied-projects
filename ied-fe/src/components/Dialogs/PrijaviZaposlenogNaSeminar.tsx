@@ -13,11 +13,13 @@ import {
 	Autocomplete,
 	Typography,
 	Box,
+	Alert,
 } from "@mui/material";
 import { Grid } from "@mui/system";
 import { useFetchSeminari } from "../../hooks/useFetchData";
 import type { Company, Zaposleni } from "../../schemas/companySchemas";
 import { type PrijavaNaSeminar, savePrijava } from "../../api/seminari.api";
+import { useState } from "react";
 
 export default function PrijavaNaSeminarDialog({
 	open,
@@ -30,7 +32,9 @@ export default function PrijavaNaSeminarDialog({
 	companyData: Company;
 	zaposleniData: Zaposleni;
 }) {
-	const handleSavePrijava = () => {
+	const [prijavaFailed, setPrijavaFailed] = useState(false);
+
+	const handleSavePrijava = async () => {
 		const prijava: PrijavaNaSeminar = {
 			seminar_id: "67705211997933047a255d14", // TODO: get from autocomplete
 			firma_id: companyData?._id ?? "",
@@ -44,7 +48,13 @@ export default function PrijavaNaSeminarDialog({
 			zaposleni_telefon: zaposleniData?.telefon ?? "",
 			prisustvo: "online", // TODO: get from radiobutton
 		};
-		savePrijava(prijava);
+		try {
+			await savePrijava(prijava);
+			onClose();
+		} catch (error: any) {
+			console.error("Error saving prijava: ", error);
+			setPrijavaFailed(true);
+		}
 	};
 
 	const { fetchedSeminars } = useFetchSeminari();
@@ -162,6 +172,11 @@ export default function PrijavaNaSeminarDialog({
 					</Grid>
 				</Grid>
 			</DialogContent>
+			{prijavaFailed && (
+				<Alert severity="error" sx={{ m: 2 }}>
+					Neuspešno čuvanje prijave na seminar
+				</Alert>
+			)}
 			<DialogActions>
 				<Button variant="contained" color="success" onClick={handleSavePrijava}>
 					Sačuvaj prijavu

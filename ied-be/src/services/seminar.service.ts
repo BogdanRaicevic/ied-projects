@@ -10,20 +10,6 @@ import type { PrijavaNaSeminar } from "../routes/seminari.routes";
 export const saveSeminar = async (
 	seminarData: SaveSeminarParams,
 ): Promise<SeminarType> => {
-	if (seminarData.prijava) {
-		// If prijava exists, update existing seminar
-		const existingSeminar = await Seminar.findByIdAndUpdate(
-			seminarData.prijava.seminar_id,
-			{ $push: { prijave: seminarData.prijava } },
-			{ new: true },
-		);
-		if (!existingSeminar) {
-			throw new Error("Seminar not found");
-		}
-		return existingSeminar;
-	}
-
-	// If no prijava, create new seminar
 	const seminar = new Seminar(seminarData);
 	return await seminar.save();
 };

@@ -45,11 +45,7 @@ export const saveSeminar = async (
 		return response.data;
 	} catch (error) {
 		console.error("Error saving seminar: ", error);
-		return {
-			success: false,
-			status: 500,
-			message: "An unexpected error occurred while saving seminar",
-		};
+		throw error;
 	}
 };
 
@@ -89,10 +85,6 @@ export const savePrijava = async (prijava: PrijavaNaSeminar) => {
 		return response.data;
 	} catch (error) {
 		console.error("Error saving prijava: ", error);
-		return {
-			success: false,
-			status: 500,
-			message: "An unexpected error occurred while saving prijava",
-		};
+		throw error;
 	}
 };
