@@ -16,18 +16,24 @@ import {
 } from "@mui/material";
 import { Grid } from "@mui/system";
 import { useFetchSeminari } from "../../hooks/useFetchData";
-import { fetchSeminari } from "../../api/seminari.api";
+import type { Company, Zaposleni } from "../../schemas/companySchemas";
 
 export default function PrijavaNaSeminarDialog({
 	open,
 	onClose,
+	companyData,
+	zaposleniData,
 }: {
 	open: boolean;
 	onClose: () => void;
+	companyData: Company;
+	zaposleniData: Zaposleni;
 }) {
 	// const handleSeminarChange = () => {
 	//   console.log("1");
 	// };
+
+	console.log("zaposleni data", zaposleniData);
 
 	const { fetchedSeminars } = useFetchSeminari();
 
@@ -44,21 +50,21 @@ export default function PrijavaNaSeminarDialog({
 						<TextField
 							sx={{ m: 2 }}
 							key={"prijava-naziv-firme"}
-							value={"naziv virme ovde"}
+							value={companyData?.naziv_firme || "/"}
 							label="Naziv Firme"
 							disabled
 						/>
 						<TextField
 							sx={{ m: 2 }}
 							key={"prijava-email-firme"}
-							value={"email fierme"}
+							value={companyData?.e_mail || "/"}
 							label="Email Firme"
 							disabled
 						/>
 						<TextField
 							sx={{ m: 2 }}
 							key={"prijava-telefon-firme"}
-							value={"ntelefon firme"}
+							value={companyData?.telefon || "/"}
 							label="Telefon Firme"
 							disabled
 						/>
@@ -67,28 +73,28 @@ export default function PrijavaNaSeminarDialog({
 						<TextField
 							sx={{ m: 2 }}
 							key={"prijava-ime-zaposlenog"}
-							value={"ime ovde"}
+							value={zaposleniData?.ime || "/"}
 							label="Ime zaposlenog"
 							disabled
 						/>
 						<TextField
 							sx={{ m: 2 }}
 							key={"prijava-prezime-zaposlenog"}
-							value={"prezime ovde"}
+							value={zaposleniData?.prezime || "/"}
 							label="Prezime zaposlenog"
 							disabled
 						/>
 						<TextField
 							sx={{ m: 2 }}
 							key={"prijava-telefon-zaposlenog"}
-							value={"telefon ovde"}
+							value={zaposleniData?.telefon || "/"}
 							label="Telefon zaposlenog"
 							disabled
 						/>
 						<TextField
 							sx={{ m: 2 }}
 							key={"prijava-email-zaposlenog"}
-							value={"email ovde"}
+							value={zaposleniData?.e_mail || "/"}
 							label="Email zaposlenog"
 							disabled
 						/>
@@ -126,7 +132,7 @@ export default function PrijavaNaSeminarDialog({
 							options={bbb || []}
 							getOptionLabel={(option) => `${option.datum} - ${option.naziv}`}
 							renderOption={(params, option) => (
-								<Box component="li" {...params}>
+								<Box component="li" {...params} key={option._id}>
 									<Box>
 										<Typography variant="caption" display="block">
 											{option.datum}

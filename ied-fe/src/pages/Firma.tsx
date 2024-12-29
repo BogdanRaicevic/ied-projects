@@ -1,9 +1,9 @@
-import { MRT_Row, MaterialReactTable } from "material-react-table";
+import { type MRT_Row, MaterialReactTable } from "material-react-table";
 import { useParams } from "react-router-dom";
 import { myZaposleniColumns } from "../components/MyTable/myCompanyColumns";
 import CompanyForm from "../components/Forms/CompanyForm";
 // import AttendedSeminarsAccordion from "../components/Accordion";
-import { Company, Zaposleni } from "../schemas/companySchemas";
+import type { Company, Zaposleni } from "../schemas/companySchemas";
 // import PrijavaOdjava from "../components/PrijavaOdjava";
 import { useEffect, useState } from "react";
 import { Tooltip, IconButton, Button } from "@mui/material";
@@ -159,6 +159,7 @@ export default function Firma() {
 						<Tooltip title="Prijavi na seminar" color="success">
 							<IconButton
 								onClick={() => {
+									setSelectedRow(row);
 									handlePrijaviNaSeminar(row);
 								}}
 							>
@@ -210,7 +211,7 @@ export default function Firma() {
         Pobably handle submit here and interact with saving
         of zaposelni and company
       */}
-			<CompanyForm inputCompany={company}></CompanyForm>
+			<CompanyForm inputCompany={company} />
 			<Button
 				sx={{ my: 2 }}
 				size="large"
@@ -235,6 +236,8 @@ export default function Firma() {
 			<PrijavaNaSeminarDialog
 				open={openPrijavaNaSeminarDialog}
 				onClose={handleClosePrijavaDialog}
+				companyData={company}
+				zaposleniData={selectedRow?.original}
 			/>
 
 			{/* <AttendedSeminarsAccordion firma={company satisfies Company}></AttendedSeminarsAccordion> */}
