@@ -17,6 +17,7 @@ import {
 import { Grid } from "@mui/system";
 import { useFetchSeminari } from "../../hooks/useFetchData";
 import type { Company, Zaposleni } from "../../schemas/companySchemas";
+import { type PrijavaNaSeminar, savePrijava } from "../../api/seminari.api";
 
 export default function PrijavaNaSeminarDialog({
 	open,
@@ -29,15 +30,26 @@ export default function PrijavaNaSeminarDialog({
 	companyData: Company;
 	zaposleniData: Zaposleni;
 }) {
-	// const handleSeminarChange = () => {
-	//   console.log("1");
-	// };
-
-	console.log("zaposleni data", zaposleniData);
+	const handleSavePrijava = () => {
+		const prijava: PrijavaNaSeminar = {
+			seminar_id: "67705211997933047a255d14", // TODO: get from autocomplete
+			firma_id: companyData?._id ?? "",
+			firma_naziv: companyData?.naziv_firme ?? "",
+			firma_email: companyData?.e_mail ?? "",
+			firma_telefon: companyData?.telefon ?? "",
+			zaposleni_id: zaposleniData?._id ?? "",
+			zaposleni_ime: zaposleniData?.ime ?? "",
+			zaposleni_prezime: zaposleniData?.prezime ?? "",
+			zaposleni_email: zaposleniData?.e_mail ?? "",
+			zaposleni_telefon: zaposleniData?.telefon ?? "",
+			prisustvo: "online", // TODO: get from radiobutton
+		};
+		savePrijava(prijava);
+	};
 
 	const { fetchedSeminars } = useFetchSeminari();
 
-	const bbb = fetchedSeminars?.seminari;
+	const seminari = fetchedSeminars?.seminari;
 
 	return (
 		<Dialog open={open} onClose={onClose} maxWidth="lg">
@@ -129,7 +141,7 @@ export default function PrijavaNaSeminarDialog({
 						</FormControl>
 						<Autocomplete
 							disablePortal
-							options={bbb || []}
+							options={seminari || []}
 							getOptionLabel={(option) => `${option.datum} - ${option.naziv}`}
 							renderOption={(params, option) => (
 								<Box component="li" {...params} key={option._id}>
@@ -151,7 +163,7 @@ export default function PrijavaNaSeminarDialog({
 				</Grid>
 			</DialogContent>
 			<DialogActions>
-				<Button variant="contained" color="success">
+				<Button variant="contained" color="success" onClick={handleSavePrijava}>
 					Sačuvaj prijavu
 				</Button>
 				<Button onClick={onClose} variant="outlined" color="error">
