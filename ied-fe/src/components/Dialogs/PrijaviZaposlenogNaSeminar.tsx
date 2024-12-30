@@ -17,8 +17,12 @@ import {
 } from "@mui/material";
 import { Grid } from "@mui/system";
 import { useFetchSeminari } from "../../hooks/useFetchData";
-import type { Company, Zaposleni } from "../../schemas/companySchemas";
-import { type PrijavaNaSeminar, savePrijava } from "../../api/seminari.api";
+import type {
+	Company,
+	PrijavaNaSeminar,
+	Zaposleni,
+} from "../../schemas/companySchemas";
+import { savePrijava } from "../../api/seminari.api";
 import { useState } from "react";
 
 export default function PrijavaNaSeminarDialog({
