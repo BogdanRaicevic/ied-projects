@@ -1,4 +1,4 @@
-import type { FilterQuery } from "mongoose";
+import { sanitizeFilter, type FilterQuery } from "mongoose";
 import { type FirmaType, Firma } from "../models/firma.model";
 import { createFirmaQuery } from "../utils/firmaQueryBuilder";
 import type { FirmaQueryParams } from "ied-shared/types/firmaQueryParams";
@@ -28,12 +28,13 @@ export const updateById = async (
 	firmaData: Partial<FirmaType>,
 ): Promise<FirmaType | null> => {
 	try {
-		if (!id || typeof firmaData !== "object" || firmaData === null) {
+		const sanitizedData = sanitizeFilter(firmaData);
+		if (!id || typeof sanitizedData !== "object" || sanitizedData === null) {
 			throw new Error("Invalid firma input data");
 		}
 		return await Firma.findByIdAndUpdate(
 			id,
-			{ $set: firmaData },
+			{ $set: sanitizedData },
 			{ new: true },
 		).exec();
 	} catch (error) {
