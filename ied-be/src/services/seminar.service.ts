@@ -43,6 +43,12 @@ export const savePrijava = async (prijava: PrijavaNaSeminar) => {
 		throw new Error("Seminar not found");
 	}
 
+	if (
+		seminar.prijave.some((p) => p.zaposleni_email === prijava.zaposleni_email)
+	) {
+		throw new Error("Zaposleni je već prijavljen na seminar");
+	}
+
 	seminar.prijave.push(prijavaWithoutId);
 	return await seminar.save();
 };
