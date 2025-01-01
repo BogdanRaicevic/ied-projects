@@ -64,7 +64,7 @@ export default memo(function SeminariTable(props: {
 		},
 		{
 			header: "Broj Učesnika",
-			accessorKey: "broj_ucesnika",
+			accessorFn: (row) => row.prijave?.length || 0,
 		},
 	];
 
@@ -111,26 +111,33 @@ export default memo(function SeminariTable(props: {
 				{} as Record<string, typeof participants>,
 			);
 			return (
-				<TableContainer component={Paper}>
-					<Table size="small">
-						<TableHead>
-							<TableRow sx={{ "& > *": { borderBottom: "unset" } }}>
-								<TableCell />
-								<TableCell>Naziv Firme</TableCell>
-								<TableCell>Email</TableCell>
-								<TableCell>Telefon</TableCell>
-								<TableCell>Broj Prijavljenih</TableCell>
-							</TableRow>
-						</TableHead>
-						<TableBody>
-							{Object.entries(groupedParticipants).map(
-								([naziv_firme, prijave]) => (
-									<PrijaveSeminarTable key={naziv_firme} prijave={prijave} />
-								),
-							)}
-						</TableBody>
-					</Table>
-				</TableContainer>
+				participants.length > 0 && (
+					<TableContainer component={Paper}>
+						<Table size="small">
+							<TableHead>
+								<TableRow
+									sx={{
+										"& > *": { borderBottom: "unset" },
+										backgroundColor: "#95bb9f",
+									}}
+								>
+									<TableCell />
+									<TableCell>Naziv Firme</TableCell>
+									<TableCell>Email</TableCell>
+									<TableCell>Telefon</TableCell>
+									<TableCell>Broj Prijavljenih</TableCell>
+								</TableRow>
+							</TableHead>
+							<TableBody>
+								{Object.entries(groupedParticipants).map(
+									([naziv_firme, prijave]) => (
+										<PrijaveSeminarTable key={naziv_firme} prijave={prijave} />
+									),
+								)}
+							</TableBody>
+						</Table>
+					</TableContainer>
+				)
 			);
 		},
 	});

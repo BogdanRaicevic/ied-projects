@@ -17,12 +17,13 @@ export default function PrijaveSeminarTable({ prijave }: { prijave: any[] }) {
 	const [open, setOpen] = useState(false);
 	return (
 		<>
-			<TableRow>
+			<TableRow sx={{ backgroundColor: "#95bb9f" }}>
 				<TableCell>
 					<IconButton
 						aria-label="expand row"
 						size="small"
 						onClick={() => setOpen(!open)}
+						disabled={prijave.length === 0}
 					>
 						{open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
 					</IconButton>
@@ -32,7 +33,7 @@ export default function PrijaveSeminarTable({ prijave }: { prijave: any[] }) {
 				<TableCell>{prijave[0].telefon_firme}</TableCell>
 				<TableCell>{prijave.length}</TableCell>
 			</TableRow>
-			<TableRow key={prijave[0].id_firme}>
+			<TableRow key={prijave[0].id_firme} sx={{ backgroundColor: "#c8d3c8" }}>
 				<TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
 					<Collapse in={open} timeout="auto" unmountOnExit>
 						<Box sx={{ margin: 1 }}>
