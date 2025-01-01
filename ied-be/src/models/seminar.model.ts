@@ -1,24 +1,55 @@
-import { Schema, model } from "mongoose";
+import { type ObjectId, Schema, Types, model } from "mongoose";
 
 export type SeminarType = Document & {
-  naziv: string;
-  predavac?: string;
-  lokacija?: string;
-  offlineCena?: string;
-  onlineCena?: string;
-  datum?: string;
+	naziv: string;
+	predavac?: string;
+	lokacija?: string;
+	offlineCena?: string;
+	onlineCena?: string;
+	datum?: string;
+	prijave: PrijaveType[];
 };
 
+type PrijaveType = {
+	_id?: ObjectId;
+	firma_id: string;
+	firma_naziv: string;
+	firma_email: string;
+	firma_telefon: string;
+
+	zaposleni_id: string;
+	zaposleni_ime: string;
+	zaposleni_prezime: string;
+	zaposleni_email: string;
+	zaposleni_telefon: string;
+	prisustvo: "online" | "offline" | "ne znam";
+};
+
+const prijaveSchema = new Schema<PrijaveType>({
+	_id: { type: Types.ObjectId, default: () => new Types.ObjectId() },
+	firma_id: { type: String, required: true },
+	zaposleni_id: { type: String, required: true },
+	firma_naziv: { type: String, required: true },
+	firma_email: String,
+	firma_telefon: String,
+	zaposleni_ime: String,
+	zaposleni_prezime: String,
+	zaposleni_email: String,
+	zaposleni_telefon: String,
+	prisustvo: { type: String, enum: ["online", "offline", "ne znam"] },
+});
+
 const seminarSchema = new Schema<SeminarType>(
-  {
-    naziv: { type: String, required: true },
-    predavac: { type: String, required: false },
-    lokacija: { type: String, required: false },
-    offlineCena: { type: String, required: false },
-    onlineCena: { type: String, required: false },
-    datum: { type: String, required: false },
-  },
-  { collection: "seminari" }
+	{
+		naziv: { type: String, required: true },
+		predavac: { type: String, required: false },
+		lokacija: { type: String, required: false },
+		offlineCena: { type: String, required: false },
+		onlineCena: { type: String, required: false },
+		datum: { type: String, required: false },
+		prijave: [prijaveSchema],
+	},
+	{ collection: "seminari" },
 );
 
 export const Seminar = model<SeminarType>("Seminar", seminarSchema);
