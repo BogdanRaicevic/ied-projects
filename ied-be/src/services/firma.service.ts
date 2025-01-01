@@ -28,7 +28,14 @@ export const updateById = async (
 	firmaData: Partial<FirmaType>,
 ): Promise<FirmaType | null> => {
 	try {
-		return await Firma.findByIdAndUpdate(id, firmaData, { new: true }).exec();
+		if (!id || typeof firmaData !== "object" || firmaData === null) {
+			throw new Error("Invalid firma input data");
+		}
+		return await Firma.findByIdAndUpdate(
+			id,
+			{ $set: firmaData },
+			{ new: true },
+		).exec();
 	} catch (error) {
 		console.error("Error updating firma:", error);
 		throw error;
