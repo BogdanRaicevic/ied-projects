@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState, memo } from "react";
-import type { Seminar } from "../../schemas/companySchemas";
+import type { PrijavaNaSeminar, Seminar } from "../../schemas/companySchemas";
 import {
 	MaterialReactTable,
 	type MRT_ColumnDef,
@@ -68,19 +68,6 @@ export default memo(function SeminariTable(props: {
 		},
 	];
 
-	type ZapravoPrijava = {
-		email_firme: string;
-		email_zaposlenog: string;
-		id_firme: string;
-		id_zaposlenog: string;
-		ime_zaposlenog: string;
-		naziv_firme: string;
-		prezime_zaposlenog: string;
-		prisustvo: string;
-		telefon_firme: string;
-		telefon_zaposlenog: string;
-	};
-
 	const table = useMaterialReactTable({
 		columns: useMemo<MRT_ColumnDef<Seminar>[]>(() => seminariTableColumns, []),
 		data: useMemo<Seminar[]>(() => data, [data]),
@@ -98,10 +85,14 @@ export default memo(function SeminariTable(props: {
 		rowCount: documents,
 		enableExpanding: true,
 		renderDetailPanel: (row) => {
-			const participants = row.row.original.prijave as ZapravoPrijava[];
+			const participants = row.row.original.prijave as PrijavaNaSeminar[];
 			const groupedParticipants = participants.reduce(
 				(acc, curr) => {
-					const key = curr.naziv_firme;
+					const key = curr.firma_naziv;
+					if (!key) {
+						return acc;
+					}
+
 					if (!acc[key]) {
 						acc[key] = [];
 					}

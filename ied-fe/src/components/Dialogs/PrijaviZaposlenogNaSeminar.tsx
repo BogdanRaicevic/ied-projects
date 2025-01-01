@@ -37,21 +37,31 @@ export default function PrijavaNaSeminarDialog({
 	zaposleniData: Zaposleni;
 }) {
 	const [prijavaFailed, setPrijavaFailed] = useState(false);
+	const [selectedSeminar, setSelectedSeminar] = useState<string>("");
+	const [prisustvo, setPrisustvo] = useState<"online" | "offline" | "ne znam">(
+		"online",
+	);
 
 	const handleSavePrijava = async () => {
+		if (!companyData?._id || !zaposleniData?._id || !selectedSeminar) {
+			throw new Error("Nedostaju podaci o firmi, zaposlenom ili seminaru");
+		}
+
 		const prijava: PrijavaNaSeminar = {
-			seminar_id: "67705211997933047a255d14", // TODO: get from autocomplete
-			firma_id: companyData?._id ?? "",
-			firma_naziv: companyData?.naziv_firme ?? "",
-			firma_email: companyData?.e_mail ?? "",
-			firma_telefon: companyData?.telefon ?? "",
-			zaposleni_id: zaposleniData?._id ?? "",
-			zaposleni_ime: zaposleniData?.ime ?? "",
-			zaposleni_prezime: zaposleniData?.prezime ?? "",
-			zaposleni_email: zaposleniData?.e_mail ?? "",
-			zaposleni_telefon: zaposleniData?.telefon ?? "",
-			prisustvo: "online", // TODO: get from radiobutton
+			firma_id: companyData._id,
+			zaposleni_id: zaposleniData._id,
+			prisustvo,
+			seminar_id: selectedSeminar,
+			firma_naziv: companyData.naziv_firme,
+			firma_email: companyData.e_mail,
+			firma_telefon: companyData.telefon,
+			zaposleni_ime: zaposleniData.ime,
+			zaposleni_prezime: zaposleniData.prezime,
+			zaposleni_email: zaposleniData.e_mail,
+			zaposleni_telefon: zaposleniData.telefon,
 		};
+
+		console.log("Saving prijava", prijava);
 		try {
 			await savePrijava(prijava);
 			onClose();
@@ -135,6 +145,11 @@ export default function PrijavaNaSeminarDialog({
 								aria-labelledby="demo-radio-buttons-group-label"
 								defaultValue="online"
 								name="radio-buttons-group"
+								onChange={(e) =>
+									setPrisustvo(
+										e.target.value as "online" | "offline" | "ne znam",
+									)
+								}
 							>
 								<FormControlLabel
 									value="online"
@@ -161,7 +176,7 @@ export default function PrijavaNaSeminarDialog({
 								<Box component="li" {...params} key={option._id}>
 									<Box>
 										<Typography variant="caption" display="block">
-											{option.datum}
+											{option.datum?.toString()}
 										</Typography>
 										<Typography variant="body1" sx={{ pl: 3 }}>
 											{option.naziv}
@@ -172,6 +187,7 @@ export default function PrijavaNaSeminarDialog({
 							renderInput={(params) => (
 								<TextField {...params} label="Seminar" />
 							)}
+							onChange={(_, value) => setSelectedSeminar(value?._id || "")}
 						/>
 					</Grid>
 				</Grid>

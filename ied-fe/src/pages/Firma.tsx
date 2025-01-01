@@ -237,7 +237,7 @@ export default function Firma() {
 				open={openPrijavaNaSeminarDialog}
 				onClose={handleClosePrijavaDialog}
 				companyData={company}
-				zaposleniData={selectedRow?.original}
+				zaposleniData={selectedRow?.original ?? {}}
 			/>
 
 			{/* <AttendedSeminarsAccordion firma={company satisfies Company}></AttendedSeminarsAccordion> */}

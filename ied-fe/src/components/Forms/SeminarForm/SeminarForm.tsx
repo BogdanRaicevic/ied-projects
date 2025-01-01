@@ -2,7 +2,7 @@ import { TextField, Box } from "@mui/material";
 import { Controller, useForm } from "react-hook-form";
 // import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 // import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
-import type { Seminar, SeminarSchema } from "../../../schemas/companySchemas";
+import { type Seminar, SeminarSchema } from "../../../schemas/companySchemas";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Grid from "@mui/material/Grid2";
 import {
@@ -93,7 +93,7 @@ export default function SeminarForm({
 								helperText={errors.naziv?.message}
 							/>
 						)}
-					></Controller>
+					/>
 				</Grid>
 				<Grid size={4}>
 					<Controller
@@ -112,7 +112,7 @@ export default function SeminarForm({
 								helperText={errors.predavac?.message}
 							/>
 						)}
-					></Controller>
+					/>
 				</Grid>
 				<Grid size={4}>
 					<Controller
@@ -131,7 +131,7 @@ export default function SeminarForm({
 								helperText={errors.lokacija?.message}
 							/>
 						)}
-					></Controller>
+					/>
 				</Grid>
 				<Grid size={4}>
 					<Controller
@@ -154,7 +154,7 @@ export default function SeminarForm({
 								helperText={errors.offlineCena?.message}
 							/>
 						)}
-					></Controller>
+					/>
 				</Grid>
 				<Grid size={4}>
 					<Controller
@@ -177,7 +177,7 @@ export default function SeminarForm({
 								helperText={errors.onlineCena?.message}
 							/>
 						)}
-					></Controller>
+					/>
 				</Grid>
 				{/* <Grid size={4}>
           <Controller

@@ -12,29 +12,30 @@ export type SeminarType = Document & {
 
 type PrijaveType = {
 	_id?: ObjectId;
-	id_firme: string;
-	id_zaposlenog: string;
-	naziv_firme: string;
-	email_firme: string;
-	telefon_firme: string;
-	ime_zaposlenog: string;
-	prezime_zaposlenog: string;
-	email_zaposlenog: string;
-	telefon_zaposlenog: string;
+	firma_id: string;
+	firma_naziv: string;
+	firma_email: string;
+	firma_telefon: string;
+
+	zaposleni_id: string;
+	zaposleni_ime: string;
+	zaposleni_prezime: string;
+	zaposleni_email: string;
+	zaposleni_telefon: string;
 	prisustvo: "online" | "offline" | "ne znam";
 };
 
 const prijaveSchema = new Schema<PrijaveType>({
 	_id: { type: Types.ObjectId, default: () => new Types.ObjectId() },
-	id_firme: { type: String, required: true },
-	id_zaposlenog: { type: String, required: true },
-	naziv_firme: { type: String, required: true },
-	email_firme: String,
-	telefon_firme: String,
-	ime_zaposlenog: String,
-	prezime_zaposlenog: String,
-	email_zaposlenog: String,
-	telefon_zaposlenog: String,
+	firma_id: { type: String, required: true },
+	zaposleni_id: { type: String, required: true },
+	firma_naziv: { type: String, required: true },
+	firma_email: String,
+	firma_telefon: String,
+	zaposleni_ime: String,
+	zaposleni_prezime: String,
+	zaposleni_email: String,
+	zaposleni_telefon: String,
 	prisustvo: { type: String, enum: ["online", "offline", "ne znam"] },
 });
 

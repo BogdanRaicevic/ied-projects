@@ -12,8 +12,11 @@ import { Box } from "@mui/system";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import { useState } from "react";
+import type { PrijavaNaSeminar } from "../../schemas/companySchemas";
 
-export default function PrijaveSeminarTable({ prijave }: { prijave: any[] }) {
+export default function PrijaveSeminarTable({
+	prijave,
+}: { prijave: Omit<PrijavaNaSeminar, "seminar_id">[] }) {
 	const [open, setOpen] = useState(false);
 	return (
 		<>
@@ -28,12 +31,12 @@ export default function PrijaveSeminarTable({ prijave }: { prijave: any[] }) {
 						{open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
 					</IconButton>
 				</TableCell>
-				<TableCell>{prijave[0].naziv_firme}</TableCell>
-				<TableCell>{prijave[0].email_firme}</TableCell>
-				<TableCell>{prijave[0].telefon_firme}</TableCell>
+				<TableCell>{prijave[0].firma_naziv}</TableCell>
+				<TableCell>{prijave[0].firma_email}</TableCell>
+				<TableCell>{prijave[0].firma_telefon}</TableCell>
 				<TableCell>{prijave.length}</TableCell>
 			</TableRow>
-			<TableRow key={prijave[0].id_firme} sx={{ backgroundColor: "#c8d3c8" }}>
+			<TableRow key={prijave[0].firma_id} sx={{ backgroundColor: "#c8d3c8" }}>
 				<TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
 					<Collapse in={open} timeout="auto" unmountOnExit>
 						<Box sx={{ margin: 1 }}>
@@ -51,13 +54,13 @@ export default function PrijaveSeminarTable({ prijave }: { prijave: any[] }) {
 									</TableRow>
 								</TableHead>
 								<TableBody>
-									{prijave.map((entry) => (
-										<TableRow key={entry.id_zaposlenog}>
-											<TableCell>{entry.ime_zaposlenog}</TableCell>
-											<TableCell>{entry.prezime_zaposlenog}</TableCell>
-											<TableCell>{entry.email_zaposlenog}</TableCell>
-											<TableCell>{entry.telefon_zaposlenog}</TableCell>
-											<TableCell>{entry.prisustvo}</TableCell>
+									{prijave.map((prijava) => (
+										<TableRow key={prijava.zaposleni_id}>
+											<TableCell>{prijava.zaposleni_ime}</TableCell>
+											<TableCell>{prijava.zaposleni_prezime}</TableCell>
+											<TableCell>{prijava.zaposleni_email}</TableCell>
+											<TableCell>{prijava.zaposleni_telefon}</TableCell>
+											<TableCell>{prijava.prisustvo}</TableCell>
 										</TableRow>
 									))}
 								</TableBody>

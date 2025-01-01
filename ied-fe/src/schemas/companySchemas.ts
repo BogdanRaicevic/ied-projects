@@ -74,17 +74,17 @@ export const MetadataSchema = z.object({
 
 export type Metadata = z.infer<typeof MetadataSchema>;
 export const ZodPrijavaNaSeminar = z.object({
-	seminar_id: z.string(),
+	seminar_id: z.string().optional(),
 	firma_id: z.string(),
-	firma_naziv: z.string(),
-	firma_email: z.string(),
-	firma_telefon: z.string(),
+	firma_naziv: z.string().optional(),
+	firma_email: z.string().optional(),
+	firma_telefon: z.string().optional(),
 	zaposleni_id: z.string(),
-	zaposleni_ime: z.string(),
-	zaposleni_prezime: z.string(),
-	zaposleni_email: z.string(),
-	zaposleni_telefon: z.string(),
-	prisustvo: z.enum(["online", "offline", "ne znam"]),
+	zaposleni_ime: z.string().optional(),
+	zaposleni_prezime: z.string().optional(),
+	zaposleni_email: z.string().optional(),
+	zaposleni_telefon: z.string().optional(),
+	prisustvo: z.enum(["online", "offline", "ne znam"]).optional(),
 });
 
 export const SeminarSchema = z.object({

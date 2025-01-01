@@ -36,21 +36,13 @@ export const search = async (
 };
 
 export const savePrijava = async (prijava: PrijavaNaSeminar) => {
-	const seminar = await Seminar.findById(prijava.seminar_id);
+	const { seminar_id, ...prijavaWithoutId } = prijava;
+
+	const seminar = await Seminar.findById(seminar_id);
 	if (!seminar) {
 		throw new Error("Seminar not found");
 	}
-	seminar.prijave.push({
-		id_firme: prijava.firma_id,
-		id_zaposlenog: prijava.zaposleni_id,
-		naziv_firme: prijava.firma_naziv,
-		email_firme: prijava.firma_email,
-		telefon_firme: prijava.firma_telefon,
-		ime_zaposlenog: prijava.zaposleni_ime,
-		prezime_zaposlenog: prijava.zaposleni_prezime,
-		email_zaposlenog: prijava.zaposleni_email,
-		telefon_zaposlenog: prijava.zaposleni_telefon,
-		prisustvo: prijava.prisustvo,
-	});
+
+	seminar.prijave.push(prijavaWithoutId);
 	return await seminar.save();
 };
