@@ -38,7 +38,7 @@ export const search = async (
 export const savePrijava = async (prijava: PrijavaNaSeminar) => {
 	const { seminar_id, ...prijavaWithoutId } = prijava;
 
-	const seminar = await Seminar.findById(seminar_id);
+	const seminar = await Seminar.findById({ _id: { $eq: seminar_id } });
 	if (!seminar) {
 		throw new Error("Seminar not found");
 	}
