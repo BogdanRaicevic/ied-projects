@@ -7,10 +7,10 @@ export type SeminarType = Document & {
 	offlineCena?: string;
 	onlineCena?: string;
 	datum?: string;
-	prijave: PrijaveType[];
+	prijave: PrijavaType[];
 };
 
-type PrijaveType = {
+type PrijavaType = {
 	_id?: ObjectId;
 	firma_id: string;
 	firma_naziv: string;
@@ -25,7 +25,7 @@ type PrijaveType = {
 	prisustvo: "online" | "offline" | "ne znam";
 };
 
-const prijaveSchema = new Schema<PrijaveType>({
+const prijavaSchema = new Schema<PrijavaType>({
 	_id: { type: Types.ObjectId, default: () => new Types.ObjectId() },
 	firma_id: { type: String, required: true },
 	zaposleni_id: { type: String, required: true },
@@ -47,7 +47,7 @@ const seminarSchema = new Schema<SeminarType>(
 		offlineCena: { type: String, required: false },
 		onlineCena: { type: String, required: false },
 		datum: { type: String, required: false },
-		prijave: [prijaveSchema],
+		prijave: [prijavaSchema],
 	},
 	{ collection: "seminari" },
 );

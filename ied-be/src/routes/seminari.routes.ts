@@ -5,7 +5,12 @@ import {
 	type NextFunction,
 } from "express";
 import { format } from "date-fns";
-import { savePrijava, saveSeminar, search } from "../services/seminar.service";
+import {
+	deletePrijava,
+	savePrijava,
+	saveSeminar,
+	search,
+} from "../services/seminar.service";
 import type { FilterQuery, ObjectId } from "mongoose";
 import type { SeminarType } from "../models/seminar.model";
 import type {
@@ -80,8 +85,9 @@ router.post(
 	},
 );
 
+// TODO: move to ied-shared
 export interface PrijavaNaSeminar {
-	seminar_id: ObjectId;
+	seminar_id: string;
 	firma_id: string;
 	firma_naziv: string;
 	firma_email: string;
@@ -104,6 +110,22 @@ router.post(
 		try {
 			const seminar = await savePrijava(req.body);
 			res.status(201).json(seminar);
+		} catch (error) {
+			next(error);
+		}
+	},
+);
+
+router.delete(
+	"/delete-prijava",
+	async (req: Request, res: Response, next: NextFunction) => {
+		const { zaposleni_id, seminar_id } = req.query;
+		try {
+			const seminar = await deletePrijava(
+				zaposleni_id as string,
+				seminar_id as string,
+			);
+			res.status(200).json(seminar);
 		} catch (error) {
 			next(error);
 		}

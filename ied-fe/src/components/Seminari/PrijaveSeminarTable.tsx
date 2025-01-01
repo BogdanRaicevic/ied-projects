@@ -13,11 +13,28 @@ import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import { useState } from "react";
 import type { PrijavaNaSeminar } from "../../schemas/companySchemas";
+import DeleteIcon from "@mui/icons-material/Delete";
+import { deletePrijava } from "../../api/seminari.api";
 
 export default function PrijaveSeminarTable({
 	prijave,
-}: { prijave: Omit<PrijavaNaSeminar, "seminar_id">[] }) {
+	onDelete,
+}: {
+	prijave: PrijavaNaSeminar[];
+	onDelete?: () => void;
+}) {
 	const [open, setOpen] = useState(false);
+
+	const onePrijavaDelete = async (zaposleni_id: string, seminar_id: string) => {
+		const confirmed = window.confirm(
+			"Da li ste sigurni da želite da obrišete prijavu?",
+		);
+		if (confirmed) {
+			await deletePrijava(zaposleni_id, seminar_id);
+			onDelete?.();
+		}
+	};
+
 	return (
 		<>
 			<TableRow sx={{ backgroundColor: "#95bb9f" }}>
@@ -46,6 +63,7 @@ export default function PrijaveSeminarTable({
 							<Table size="small" aria-label="prijave">
 								<TableHead>
 									<TableRow>
+										<TableCell>Akcije</TableCell>
 										<TableCell>Ime</TableCell>
 										<TableCell>Prezime</TableCell>
 										<TableCell>Email</TableCell>
@@ -56,6 +74,19 @@ export default function PrijaveSeminarTable({
 								<TableBody>
 									{prijave.map((prijava) => (
 										<TableRow key={prijava.zaposleni_id}>
+											<TableCell>
+												<IconButton
+													color="error"
+													onClick={() =>
+														onePrijavaDelete(
+															prijava.zaposleni_id,
+															prijava.seminar_id,
+														)
+													}
+												>
+													<DeleteIcon />
+												</IconButton>
+											</TableCell>
 											<TableCell>{prijava.zaposleni_ime}</TableCell>
 											<TableCell>{prijava.zaposleni_prezime}</TableCell>
 											<TableCell>{prijava.zaposleni_email}</TableCell>

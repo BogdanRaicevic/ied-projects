@@ -74,3 +74,19 @@ export const savePrijava = async (prijava: PrijavaNaSeminar) => {
 		throw error;
 	}
 };
+
+export const deletePrijava = async (
+	zaposleni_id: string,
+	seminar_id: string,
+) => {
+	try {
+		const response = await axiosInstanceWithAuth.delete(
+			`${env.beURL}/api/seminari/delete-prijava/?zaposleni_id=${zaposleni_id}&seminar_id=${seminar_id}`,
+		);
+
+		return response.data;
+	} catch (error) {
+		console.error("Error deleting prijava: ", error);
+		throw error;
+	}
+};

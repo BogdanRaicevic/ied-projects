@@ -1,4 +1,4 @@
-import { Types, type FilterQuery } from "mongoose";
+import { isValidObjectId, Types, type FilterQuery } from "mongoose";
 import { createSeminarQuery } from "../utils/seminariQueryBuilder";
 import { Seminar, type SeminarType } from "./../models/seminar.model";
 import type {
@@ -35,10 +35,11 @@ export const search = async (
 	};
 };
 
+// TODO: use PrijavaType instead of PrijavaNaSeminar
 export const savePrijava = async (prijava: PrijavaNaSeminar) => {
 	const { seminar_id, ...prijavaWithoutId } = prijava;
 
-	const seminar = await Seminar.findById({ _id: { $eq: seminar_id } });
+	const seminar = await Seminar.findById(seminar_id);
 	if (!seminar) {
 		throw new Error("Seminar not found");
 	}
@@ -50,5 +51,20 @@ export const savePrijava = async (prijava: PrijavaNaSeminar) => {
 	}
 
 	seminar.prijave.push(prijavaWithoutId);
+	return await seminar.save();
+};
+
+export const deletePrijava = async (
+	zaposleni_id: string,
+	seminar_id: string,
+) => {
+	const seminar = await Seminar.findById(seminar_id);
+	if (!seminar) {
+		throw new Error("Seminar not found");
+	}
+
+	seminar.prijave = seminar.prijave.filter(
+		(p) => p.zaposleni_id.toString() !== zaposleni_id,
+	);
 	return await seminar.save();
 };

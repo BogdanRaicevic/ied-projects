@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState, memo } from "react";
-import type { PrijavaNaSeminar, Seminar } from "../../schemas/companySchemas";
+import type { Seminar } from "../../schemas/companySchemas";
 import {
 	MaterialReactTable,
 	type MRT_ColumnDef,
@@ -25,6 +25,7 @@ export default memo(function SeminariTable(props: {
 }) {
 	const [data, setData] = useState<Seminar[]>([]);
 	const [documents, setDocuments] = useState(1000);
+	const [deleteCounter, setDeleteCounter] = useState(0);
 
 	const [pagination, setPagination] = useState<MRT_PaginationState>({
 		pageIndex: 0,
@@ -43,7 +44,7 @@ export default memo(function SeminariTable(props: {
 			setDocuments(res.totalDocuments);
 		};
 		loadData();
-	}, [pagination, documents, props]);
+	}, [pagination, documents, props, deleteCounter]);
 
 	const seminariTableColumns: MRT_ColumnDef<Seminar>[] = [
 		{
@@ -85,7 +86,13 @@ export default memo(function SeminariTable(props: {
 		rowCount: documents,
 		enableExpanding: true,
 		renderDetailPanel: (row) => {
-			const participants = row.row.original.prijave as PrijavaNaSeminar[];
+			const participants = row.row.original.prijave;
+			const seminarId = row.row.original._id;
+
+			for (const p of participants) {
+				p.seminar_id = seminarId;
+			}
+
 			const groupedParticipants = participants.reduce(
 				(acc, curr) => {
 					const key = curr.firma_naziv;
@@ -101,6 +108,7 @@ export default memo(function SeminariTable(props: {
 				},
 				{} as Record<string, typeof participants>,
 			);
+
 			return (
 				participants.length > 0 && (
 					<TableContainer component={Paper}>
@@ -122,7 +130,13 @@ export default memo(function SeminariTable(props: {
 							<TableBody>
 								{Object.entries(groupedParticipants).map(
 									([naziv_firme, prijave]) => (
-										<PrijaveSeminarTable key={naziv_firme} prijave={prijave} />
+										<PrijaveSeminarTable
+											key={naziv_firme}
+											prijave={prijave}
+											onDelete={() => {
+												setDeleteCounter((prev) => prev + 1);
+											}}
+										/>
 									),
 								)}
 							</TableBody>
