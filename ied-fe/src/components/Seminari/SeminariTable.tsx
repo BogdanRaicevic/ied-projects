@@ -10,7 +10,6 @@ import { deleteSeminar, fetchSeminari } from "../../api/seminari.api";
 import type { SeminarQueryParams } from "ied-shared/types/seminar";
 import {
 	Box,
-	Button,
 	IconButton,
 	Paper,
 	Table,
@@ -30,7 +29,8 @@ export default memo(function SeminariTable(props: {
 }) {
 	const [data, setData] = useState<Seminar[]>([]);
 	const [documents, setDocuments] = useState(1000);
-	const [deleteCounter, setDeleteCounter] = useState(0);
+	const [deletePrijavaCounter, setDeletePrijavaCounter] = useState(0);
+	const [deleteSeminarCounter, setDeleteSeminarCounter] = useState(0);
 
 	const [pagination, setPagination] = useState<MRT_PaginationState>({
 		pageIndex: 0,
@@ -49,7 +49,13 @@ export default memo(function SeminariTable(props: {
 			setDocuments(res.totalDocuments);
 		};
 		loadData();
-	}, [pagination, documents, props, deleteCounter]);
+	}, [
+		pagination,
+		documents,
+		props,
+		deletePrijavaCounter,
+		deleteSeminarCounter,
+	]);
 
 	const handleDelete = async (id: string) => {
 		const response = await deleteSeminar(id);
@@ -75,6 +81,7 @@ export default memo(function SeminariTable(props: {
 										)
 									) {
 										handleDelete(row.original._id);
+										setDeleteSeminarCounter((prev) => prev + 1);
 									}
 								}}
 							>
@@ -172,7 +179,7 @@ export default memo(function SeminariTable(props: {
 											key={naziv_firme}
 											prijave={prijave}
 											onDelete={() => {
-												setDeleteCounter((prev) => prev + 1);
+												setDeletePrijavaCounter((prev) => prev + 1);
 											}}
 										/>
 									),
