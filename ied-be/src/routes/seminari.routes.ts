@@ -7,6 +7,7 @@ import {
 import { format } from "date-fns";
 import {
 	deletePrijava,
+	deleteSeminar,
 	savePrijava,
 	saveSeminar,
 	search,
@@ -110,7 +111,10 @@ router.post(
 		try {
 			const seminar = await savePrijava(req.body);
 			res.status(201).json(seminar);
-		} catch (error) {
+		} catch (error: any) {
+			if (error.cause === "duplicate") {
+				res.status(409).json({ message: error.message });
+			}
 			next(error);
 		}
 	},
@@ -126,6 +130,18 @@ router.delete(
 				seminar_id as string,
 			);
 			res.status(200).json(seminar);
+		} catch (error) {
+			next(error);
+		}
+	},
+);
+
+router.delete(
+	"/delete/:id",
+	async (req: Request, res: Response, next: NextFunction) => {
+		try {
+			const deletedSeminar = await deleteSeminar(req.params.id);
+			res.status(201).json(deletedSeminar);
 		} catch (error) {
 			next(error);
 		}

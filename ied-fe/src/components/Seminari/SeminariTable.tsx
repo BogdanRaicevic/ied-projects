@@ -6,9 +6,11 @@ import {
 	useMaterialReactTable,
 	type MRT_PaginationState,
 } from "material-react-table";
-import { fetchSeminari } from "../../api/seminari.api";
+import { deleteSeminar, fetchSeminari } from "../../api/seminari.api";
 import type { SeminarQueryParams } from "ied-shared/types/seminar";
 import {
+	Box,
+	IconButton,
 	Paper,
 	Table,
 	TableBody,
@@ -16,7 +18,9 @@ import {
 	TableContainer,
 	TableHead,
 	TableRow,
+	Tooltip,
 } from "@mui/material";
+import DeleteIcon from "@mui/icons-material/Delete";
 
 import PrijaveSeminarTable from "./PrijaveSeminarTable";
 
@@ -25,7 +29,8 @@ export default memo(function SeminariTable(props: {
 }) {
 	const [data, setData] = useState<Seminar[]>([]);
 	const [documents, setDocuments] = useState(1000);
-	const [deleteCounter, setDeleteCounter] = useState(0);
+	const [deletePrijavaCounter, setDeletePrijavaCounter] = useState(0);
+	const [deleteSeminarCounter, setDeleteSeminarCounter] = useState(0);
 
 	const [pagination, setPagination] = useState<MRT_PaginationState>({
 		pageIndex: 0,
@@ -44,9 +49,52 @@ export default memo(function SeminariTable(props: {
 			setDocuments(res.totalDocuments);
 		};
 		loadData();
-	}, [pagination, documents, props, deleteCounter]);
+	}, [
+		pagination,
+		documents,
+		props,
+		deletePrijavaCounter,
+		deleteSeminarCounter,
+	]);
+
+	const handleDelete = async (id: string) => {
+		const response = await deleteSeminar(id);
+
+		console.log(response);
+	};
 
 	const seminariTableColumns: MRT_ColumnDef<Seminar>[] = [
+		{
+			id: "actions",
+			header: "Akcije",
+			size: 100,
+			Cell: ({ row }) => {
+				const seminar: Partial<Seminar> = row.original;
+				return (
+					<Box sx={{ display: "flex", gap: "1rem" }}>
+						<Tooltip title="Delete">
+							<IconButton
+								color="error"
+								onClick={() => {
+									if (
+										window.confirm(
+											"Da li ste sigurni da želite da obrišete seminar?",
+										)
+									) {
+										if (seminar._id) {
+											handleDelete(seminar._id);
+											setDeleteSeminarCounter((prev) => prev + 1);
+										}
+									}
+								}}
+							>
+								<DeleteIcon />
+							</IconButton>
+						</Tooltip>
+					</Box>
+				);
+			},
+		},
 		{
 			header: "Naziv Seminara",
 			accessorKey: "naziv",
@@ -89,8 +137,10 @@ export default memo(function SeminariTable(props: {
 			const participants = row.row.original.prijave;
 			const seminarId = row.row.original._id;
 
-			for (const p of participants) {
-				p.seminar_id = seminarId;
+			if (seminarId) {
+				for (const p of participants) {
+					p.seminar_id = seminarId;
+				}
 			}
 
 			const groupedParticipants = participants.reduce(
@@ -134,7 +184,7 @@ export default memo(function SeminariTable(props: {
 											key={naziv_firme}
 											prijave={prijave}
 											onDelete={() => {
-												setDeleteCounter((prev) => prev + 1);
+												setDeletePrijavaCounter((prev) => prev + 1);
 											}}
 										/>
 									),

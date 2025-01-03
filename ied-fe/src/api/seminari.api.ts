@@ -69,8 +69,12 @@ export const savePrijava = async (prijava: PrijavaNaSeminar) => {
 		);
 
 		return response.data;
-	} catch (error) {
-		console.error("Error saving prijava: ", error);
+	} catch (error: any) {
+		if (error.response.status === 409) {
+			throw new Error("Zaposleni je već prijavljen na seminar", {
+				cause: "duplicate",
+			});
+		}
 		throw error;
 	}
 };
@@ -87,6 +91,19 @@ export const deletePrijava = async (
 		return response.data;
 	} catch (error) {
 		console.error("Error deleting prijava: ", error);
+		throw error;
+	}
+};
+
+export const deleteSeminar = async (id: string) => {
+	try {
+		const response = await axiosInstanceWithAuth.delete(
+			`${env.beURL}/api/seminari/delete/${id}`,
+		);
+
+		return response.data;
+	} catch (error) {
+		console.error("Error deleting seminar: ", error);
 		throw error;
 	}
 };

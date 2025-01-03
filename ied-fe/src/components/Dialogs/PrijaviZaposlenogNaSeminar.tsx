@@ -23,7 +23,7 @@ import type {
 	Zaposleni,
 } from "../../schemas/companySchemas";
 import { savePrijava } from "../../api/seminari.api";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function PrijavaNaSeminarDialog({
 	open,
@@ -36,11 +36,21 @@ export default function PrijavaNaSeminarDialog({
 	companyData: Company;
 	zaposleniData: Zaposleni;
 }) {
-	const [prijavaFailed, setPrijavaFailed] = useState(false);
+	const [prijavaState, setPrijavaState] = useState<
+		"succeess" | "warning" | "error" | ""
+	>("");
 	const [selectedSeminar, setSelectedSeminar] = useState<string>("");
 	const [prisustvo, setPrisustvo] = useState<"online" | "offline" | "ne znam">(
 		"online",
 	);
+
+	useEffect(() => {
+		if (open) {
+			setPrijavaState("");
+			setSelectedSeminar("");
+			setPrisustvo("online");
+		}
+	}, [open]);
 
 	const handleSavePrijava = async () => {
 		if (!companyData?._id || !zaposleniData?._id || !selectedSeminar) {
@@ -61,13 +71,15 @@ export default function PrijavaNaSeminarDialog({
 			zaposleni_telefon: zaposleniData.telefon,
 		};
 
-		console.log("Saving prijava", prijava);
 		try {
 			await savePrijava(prijava);
 			onClose();
 		} catch (error: any) {
-			console.error("Error saving prijava: ", error);
-			setPrijavaFailed(true);
+			if (error.cause === "duplicate") {
+				setPrijavaState("warning");
+			} else {
+				setPrijavaState("error");
+			}
 		}
 	};
 
@@ -192,13 +204,23 @@ export default function PrijavaNaSeminarDialog({
 					</Grid>
 				</Grid>
 			</DialogContent>
-			{prijavaFailed && (
+			{prijavaState === "error" && (
 				<Alert severity="error" sx={{ m: 2 }}>
 					Neuspešno čuvanje prijave na seminar
 				</Alert>
 			)}
+			{prijavaState === "warning" && (
+				<Alert severity="warning" sx={{ m: 2 }}>
+					Zaposleni je već prijavljen na seminar
+				</Alert>
+			)}
 			<DialogActions>
-				<Button variant="contained" color="success" onClick={handleSavePrijava}>
+				<Button
+					disabled={!selectedSeminar}
+					variant="contained"
+					color="success"
+					onClick={handleSavePrijava}
+				>
 					Sačuvaj prijavu
 				</Button>
 				<Button onClick={onClose} variant="outlined" color="error">

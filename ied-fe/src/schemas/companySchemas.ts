@@ -74,7 +74,7 @@ export const MetadataSchema = z.object({
 
 export type Metadata = z.infer<typeof MetadataSchema>;
 export const ZodPrijavaNaSeminar = z.object({
-	seminar_id: z.string().optional(),
+	seminar_id: z.string(),
 	firma_id: z.string(),
 	firma_naziv: z.string().optional(),
 	firma_email: z.string().optional(),
