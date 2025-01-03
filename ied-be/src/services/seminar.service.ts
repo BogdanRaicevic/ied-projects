@@ -47,7 +47,9 @@ export const savePrijava = async (prijava: PrijavaNaSeminar) => {
 	if (
 		seminar.prijave.some((p) => p.zaposleni_email === prijava.zaposleni_email)
 	) {
-		throw new Error("Zaposleni je već prijavljen na seminar");
+		throw new Error("Zaposleni je već prijavljen na seminar", {
+			cause: "duplicate",
+		});
 	}
 
 	seminar.prijave.push(prijavaWithoutId);

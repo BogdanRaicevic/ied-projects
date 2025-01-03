@@ -110,7 +110,10 @@ router.post(
 		try {
 			const seminar = await savePrijava(req.body);
 			res.status(201).json(seminar);
-		} catch (error) {
+		} catch (error: any) {
+			if (error.cause === "duplicate") {
+				res.status(409).json({ message: error.message });
+			}
 			next(error);
 		}
 	},

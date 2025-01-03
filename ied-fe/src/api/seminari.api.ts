@@ -70,7 +70,11 @@ export const savePrijava = async (prijava: PrijavaNaSeminar) => {
 
 		return response.data;
 	} catch (error) {
-		console.error("Error saving prijava: ", error);
+		if (error.response.status === 409) {
+			throw new Error("Zaposleni je već prijavljen na seminar", {
+				cause: "duplicate",
+			});
+		}
 		throw error;
 	}
 };
