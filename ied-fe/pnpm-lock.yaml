@@ -116,7 +116,7 @@ importers:
         version: 15.14.0
       ied-shared:
         specifier: ^1.3.0
-        version: 1.3.0
+        version: 1.5.4
       typescript:
         specifier: ^5.6.3
         version: 5.7.2
@@ -1117,8 +1117,8 @@ packages:
     resolution: {integrity: sha512-4fCk79wshMdzMp2rH06qWrJE4iolqLhCUH+OiuIgU++RB0+94NlDL81atO7GX55uUKueo0txHNtvEyI6D7WdMw==}
     engines: {node: '>=0.10.0'}
 
-  ied-shared@1.3.0:
-    resolution: {integrity: sha512-szJRBPzG2uESkSGmWubJNa0OwyyXr9yoQEv2OrbCMLo3zh6/XXni5FioH+bIiR72HXCrWUFP/C3BBW+RApmozQ==}
+  ied-shared@1.5.4:
+    resolution: {integrity: sha512-XvnEKYKuAFvhj0etfW7SCRw4MFc7N6qQ1ro+/XlFS38yREEXWRoO2jHmarw3qdQoLpxSNflHI0fEjT7IebqNtg==}
 
   import-fresh@3.3.0:
     resolution: {integrity: sha512-veYYhQa+D1QBKznvhUHxb8faxlrwUnxseDAbAp457E0wLNio2bOSKnjYDhMj+YiAq61xrMGhQk9iXVk5FzgQMw==}
@@ -2379,7 +2379,7 @@ snapshots:
     dependencies:
       safer-buffer: 2.1.2
 
-  ied-shared@1.3.0: {}
+  ied-shared@1.5.4: {}
 
   import-fresh@3.3.0:
     dependencies:
