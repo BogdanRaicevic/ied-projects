@@ -69,6 +69,7 @@ export default memo(function SeminariTable(props: {
 			header: "Akcije",
 			size: 100,
 			Cell: ({ row }) => {
+				const seminar: Partial<Seminar> = row.original;
 				return (
 					<Box sx={{ display: "flex", gap: "1rem" }}>
 						<Tooltip title="Delete">
@@ -80,8 +81,10 @@ export default memo(function SeminariTable(props: {
 											"Da li ste sigurni da želite da obrišete seminar?",
 										)
 									) {
-										handleDelete(row.original._id);
-										setDeleteSeminarCounter((prev) => prev + 1);
+										if (seminar._id) {
+											handleDelete(seminar._id);
+											setDeleteSeminarCounter((prev) => prev + 1);
+										}
 									}
 								}}
 							>
@@ -134,8 +137,10 @@ export default memo(function SeminariTable(props: {
 			const participants = row.row.original.prijave;
 			const seminarId = row.row.original._id;
 
-			for (const p of participants) {
-				p.seminar_id = seminarId;
+			if (seminarId) {
+				for (const p of participants) {
+					p.seminar_id = seminarId;
+				}
 			}
 
 			const groupedParticipants = participants.reduce(

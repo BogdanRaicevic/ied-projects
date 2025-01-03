@@ -59,7 +59,7 @@ export default function AddSeminarForm() {
 				: "";
 
 			try {
-				const response = await saveSeminar(
+				await saveSeminar(
 					seminarData.naziv,
 					seminarData.predavac,
 					seminarData.lokacija,
