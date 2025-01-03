@@ -6,9 +6,12 @@ import {
 	useMaterialReactTable,
 	type MRT_PaginationState,
 } from "material-react-table";
-import { fetchSeminari } from "../../api/seminari.api";
+import { deleteSeminar, fetchSeminari } from "../../api/seminari.api";
 import type { SeminarQueryParams } from "ied-shared/types/seminar";
 import {
+	Box,
+	Button,
+	IconButton,
 	Paper,
 	Table,
 	TableBody,
@@ -16,7 +19,9 @@ import {
 	TableContainer,
 	TableHead,
 	TableRow,
+	Tooltip,
 } from "@mui/material";
+import DeleteIcon from "@mui/icons-material/Delete";
 
 import PrijaveSeminarTable from "./PrijaveSeminarTable";
 
@@ -46,7 +51,40 @@ export default memo(function SeminariTable(props: {
 		loadData();
 	}, [pagination, documents, props, deleteCounter]);
 
+	const handleDelete = async (id: string) => {
+		const response = await deleteSeminar(id);
+
+		console.log(response);
+	};
+
 	const seminariTableColumns: MRT_ColumnDef<Seminar>[] = [
+		{
+			id: "actions",
+			header: "Akcije",
+			size: 100,
+			Cell: ({ row }) => {
+				return (
+					<Box sx={{ display: "flex", gap: "1rem" }}>
+						<Tooltip title="Delete">
+							<IconButton
+								color="error"
+								onClick={() => {
+									if (
+										window.confirm(
+											"Da li ste sigurni da želite da obrišete seminar?",
+										)
+									) {
+										handleDelete(row.original._id);
+									}
+								}}
+							>
+								<DeleteIcon />
+							</IconButton>
+						</Tooltip>
+					</Box>
+				);
+			},
+		},
 		{
 			header: "Naziv Seminara",
 			accessorKey: "naziv",

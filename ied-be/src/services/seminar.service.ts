@@ -45,7 +45,14 @@ export const savePrijava = async (prijava: PrijavaNaSeminar) => {
 	}
 
 	if (
-		seminar.prijave.some((p) => p.zaposleni_email === prijava.zaposleni_email)
+		seminar.prijave.some(
+			(p) =>
+				(p.zaposleni_email !== "" &&
+					p.zaposleni_email === prijava.zaposleni_email) ||
+				p.zaposleni_id === prijava.zaposleni_id ||
+				(p.zaposleni_ime === prijava.zaposleni_ime &&
+					p.zaposleni_prezime === prijava.zaposleni_prezime),
+		)
 	) {
 		throw new Error("Zaposleni je već prijavljen na seminar", {
 			cause: "duplicate",
@@ -69,4 +76,14 @@ export const deletePrijava = async (
 		(p) => p.zaposleni_id.toString() !== zaposleni_id,
 	);
 	return await seminar.save();
+};
+
+export const deleteSeminar = async (id: string) => {
+	const seminar = await Seminar.findOneAndDelete({ _id: id });
+
+	if (!seminar) {
+		throw new Error("Seminar not found");
+	}
+
+	return seminar;
 };

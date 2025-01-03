@@ -94,3 +94,16 @@ export const deletePrijava = async (
 		throw error;
 	}
 };
+
+export const deleteSeminar = async (id: string) => {
+	try {
+		const response = await axiosInstanceWithAuth.delete(
+			`${env.beURL}/api/seminari/delete/${id}`,
+		);
+
+		return response.data;
+	} catch (error) {
+		console.error("Error deleting seminar: ", error);
+		throw error;
+	}
+};
