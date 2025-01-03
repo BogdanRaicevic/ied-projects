@@ -23,7 +23,7 @@ import type {
 	Zaposleni,
 } from "../../schemas/companySchemas";
 import { savePrijava } from "../../api/seminari.api";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function PrijavaNaSeminarDialog({
 	open,
@@ -37,12 +37,20 @@ export default function PrijavaNaSeminarDialog({
 	zaposleniData: Zaposleni;
 }) {
 	const [prijavaState, setPrijavaState] = useState<
-		"succeess" | "warning" | "error"
-	>();
+		"succeess" | "warning" | "error" | ""
+	>("");
 	const [selectedSeminar, setSelectedSeminar] = useState<string>("");
 	const [prisustvo, setPrisustvo] = useState<"online" | "offline" | "ne znam">(
 		"online",
 	);
+
+	useEffect(() => {
+		if (open) {
+			setPrijavaState("");
+			setSelectedSeminar("");
+			setPrisustvo("online");
+		}
+	}, [open]);
 
 	const handleSavePrijava = async () => {
 		if (!companyData?._id || !zaposleniData?._id || !selectedSeminar) {
@@ -207,7 +215,12 @@ export default function PrijavaNaSeminarDialog({
 				</Alert>
 			)}
 			<DialogActions>
-				<Button variant="contained" color="success" onClick={handleSavePrijava}>
+				<Button
+					disabled={!selectedSeminar}
+					variant="contained"
+					color="success"
+					onClick={handleSavePrijava}
+				>
 					Sačuvaj prijavu
 				</Button>
 				<Button onClick={onClose} variant="outlined" color="error">
