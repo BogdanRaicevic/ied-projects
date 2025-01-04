@@ -1,6 +1,10 @@
 import { env } from "./utils/envVariables";
 import { connectDB } from "./database/db";
-import express, { NextFunction, Request, Response } from "express";
+import express, {
+	type NextFunction,
+	type Request,
+	type Response,
+} from "express";
 import cors from "cors";
 import firmaRoutes from "./routes/firma.routes";
 import velicineFirmiRoutes from "./routes/velicina_firme.routes";
@@ -11,6 +15,7 @@ import mestoRoutes from "./routes/mesto.routes";
 import pretrageRoutes from "./routes/pretrage.routes";
 import stanjaFirmeRoutes from "./routes/stanje_firme.routes";
 import seminarRoutes from "./routes/seminari.routes";
+import docxRoutes from "./routes/docx.routes";
 import testRoutes from "./routes/test.routes";
 import { errorWrapper } from "./middleware/errorWrapper";
 import { clerkMiddleware, getAuth } from "@clerk/express";
@@ -18,17 +23,17 @@ import { clerkMiddleware, getAuth } from "@clerk/express";
 const app = express();
 
 app.use(
-  cors({
-    origin: true,
-    credentials: true,
-  })
+	cors({
+		origin: true,
+		credentials: true,
+	}),
 );
 
 app.use(
-  clerkMiddleware({
-    publishableKey: env.clerk.publishableKey,
-    secretKey: env.clerk.secretKey,
-  })
+	clerkMiddleware({
+		publishableKey: env.clerk.publishableKey,
+		secretKey: env.clerk.secretKey,
+	}),
 );
 
 // if (process.env.NODE_ENV === "development") {
@@ -51,15 +56,15 @@ app.use(
 app.use(express.json());
 
 const customRequireAuth = (req: Request, res: Response, next: NextFunction) => {
-  if (process.env.NODE_ENV === "development") {
-    return next();
-  }
+	if (process.env.NODE_ENV === "development") {
+		return next();
+	}
 
-  const auth = getAuth(req);
-  if (!auth.userId) {
-    return res.status(403).send("Forbidden");
-  }
-  next();
+	const auth = getAuth(req);
+	if (!auth.userId) {
+		return res.status(403).send("Forbidden");
+	}
+	next();
 };
 
 app.use("/api/firma", customRequireAuth, firmaRoutes);
@@ -71,19 +76,21 @@ app.use("/api/mesto", customRequireAuth, mestoRoutes);
 app.use("/api/pretrage", customRequireAuth, pretrageRoutes);
 app.use("/api/stanja-firmi", customRequireAuth, stanjaFirmeRoutes);
 app.use("/api/seminari", customRequireAuth, seminarRoutes);
+app.use("/api/docx", customRequireAuth, docxRoutes);
+
 app.use("/api/test", testRoutes);
 
 app.use(errorWrapper);
 
 async function initServer() {
-  try {
-    await connectDB();
-    app.listen({ port: Number(env.be.appPort) });
-  } catch (error) {
-    console.error("Error starting server:", error);
-  }
+	try {
+		await connectDB();
+		app.listen({ port: Number(env.be.appPort) });
+	} catch (error) {
+		console.error("Error starting server:", error);
+	}
 }
 
 initServer()
-  .then(() => console.log("Server is up"))
-  .catch(console.error);
+	.then(() => console.log("Server is up"))
+	.catch(console.error);
