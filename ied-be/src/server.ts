@@ -11,6 +11,7 @@ import mestoRoutes from "./routes/mesto.routes";
 import pretrageRoutes from "./routes/pretrage.routes";
 import stanjaFirmeRoutes from "./routes/stanje_firme.routes";
 import seminarRoutes from "./routes/seminari.routes";
+import docxRoutes from "./routes/docx.routes";
 import testRoutes from "./routes/test.routes";
 import { errorWrapper } from "./middleware/errorWrapper";
 import { clerkMiddleware, requireAuth } from "@clerk/express";
