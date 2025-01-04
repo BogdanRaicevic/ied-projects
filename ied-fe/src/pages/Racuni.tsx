@@ -20,32 +20,41 @@ export default function Racuni() {
 			<PageTitle title={"Racuni"} />
 
 			<Grid2 container>
-				<Grid2 size={4}>
-					<Box
-						display="flex"
-						justifyContent="center"
-						alignItems="center"
-						height="100%"
-					>
-						<img src={iedLogo} alt="institut za ekonomsku diplomatiju" />
-					</Box>
-				</Grid2>
-				<Grid2 size={8}>
-					<Box component={Paper} sx={{ padding: "1rem" }}>
-						<Typography>
-							Institut za ekonomsku diplomatiju d.o.o, 11080 Zemun, Pregrevica
-							168,
-						</Typography>
-						<Typography>Kontakt telefoni: 011/3077612, 3077612</Typography>
-						<Typography>PIB:SR103159254; Matični broj: 17518313;</Typography>
-						<Typography>
-							Broj rešenja o evidenciji za PDV kod Ministarstva finansija
-							Republike Srbije: 134107598;
-						</Typography>
-						<Typography>
-							Tekući račun: 170-0030035229000-87 (UniCredit Banka)
-						</Typography>
-					</Box>
+				<Grid2 component={Paper} size={12} container>
+					<Grid2 size={7}>
+						<Box sx={{ padding: "1rem" }}>
+							<Typography>
+								Institut za ekonomsku diplomatiju d.o.o, 11080 Zemun, Pregrevica
+								168,
+							</Typography>
+							<Typography>Kontakt telefoni: 011/3077612, 3077612</Typography>
+							<Typography>PIB:SR103159254; Matični broj: 17518313;</Typography>
+							<Typography>
+								Broj rešenja o evidenciji za PDV kod Ministarstva finansija
+								Republike Srbije: 134107598;
+							</Typography>
+							<Typography>
+								Tekući račun: 170-0030035229000-87 (UniCredit Banka)
+							</Typography>
+						</Box>
+					</Grid2>
+					<Grid2 size={5}>
+						<Box
+							sx={{
+								display: "flex",
+								justifyContent: "center",
+								alignItems: "center",
+								height: "100%",
+								p: 1,
+							}}
+						>
+							<img
+								src={iedLogo}
+								alt="institut za ekonomsku diplomatiju"
+								style={{ maxWidth: "100%", maxHeight: "100%" }}
+							/>
+						</Box>
+					</Grid2>
 				</Grid2>
 				<Grid2 size={12}>
 					<Divider sx={{ mt: 3, mb: 3 }} />
@@ -78,18 +87,20 @@ export default function Racuni() {
 					</Typography>
 					<Box sx={{ mb: 3 }}>
 						<TableContainer component={Paper}>
-							<Table sx={{ minWidth: 650 }} aria-label="simple table">
+							<Table
+								sx={{
+									border: 0,
+									borderBottom: 1,
+									borderStyle: "dashed",
+									mb: 3,
+								}}
+								aria-label="simple table"
+							>
 								<TableHead>
 									<TableRow>
 										<TableCell>Vrsta usluge</TableCell>
 										<TableCell>Jedinica mere</TableCell>
 										<TableCell>Količina</TableCell>
-										<TableCell>Cena po jedinici</TableCell>
-										<TableCell>Popust</TableCell>
-										<TableCell>Poreska osnovica</TableCell>
-										<TableCell>Stopa PDV</TableCell>
-										<TableCell>PDV</TableCell>
-										<TableCell>Ukupna naknada</TableCell>
 									</TableRow>
 								</TableHead>
 								<TableBody>
@@ -106,6 +117,25 @@ export default function Racuni() {
 										<TableCell align="left">
 											<Typography>1</Typography>
 										</TableCell>
+									</TableRow>
+								</TableBody>
+							</Table>
+							<Table sx={{ minWidth: 650 }} aria-label="simple table">
+								<TableHead>
+									<TableRow>
+										<TableCell>Cena po jedinici</TableCell>
+										<TableCell>Popust</TableCell>
+										<TableCell>Poreska osnovica</TableCell>
+										<TableCell>Stopa PDV</TableCell>
+										<TableCell>PDV</TableCell>
+										<TableCell>Ukupna naknada</TableCell>
+									</TableRow>
+								</TableHead>
+								<TableBody>
+									<TableRow
+										key="naziv-firme"
+										sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+									>
 										<TableCell align="left">
 											<Typography>15.000</Typography>
 										</TableCell>
@@ -144,9 +174,10 @@ export default function Racuni() {
 					<Divider sx={{ mt: 3 }} />
 					<Typography align="center" variant="h6" sx={{ mb: 3 }}>
 						PREDRAČUN JE URAĐEN U ELEKTRONSKOJ FORMI I VAŽI BEZ PEČATA I
+						POTPISA.
 					</Typography>
 					<Typography align="center" variant="h6" sx={{ mb: 3 }}>
-						POTPISA. Mesto i datum izdavanja predračuna: Beograd,31/10/2023
+						Mesto i datum izdavanja predračuna: Beograd, 31/10/2023
 					</Typography>
 				</Grid2>
 			</Grid2>
