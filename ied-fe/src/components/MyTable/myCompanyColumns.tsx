@@ -1,10 +1,10 @@
 import { ContentCopy } from "@mui/icons-material";
-import { MRT_ColumnDef } from "material-react-table";
-import { Firma, Zaposleni } from "../../schemas/companySchemas";
+import type { MRT_ColumnDef } from "material-react-table";
+import type { FirmaType, Zaposleni } from "../../schemas/companySchemas";
 import { Icon, Link } from "@mui/material";
 import BusinessIcon from "@mui/icons-material/Business";
 
-export const myCompanyColumns: MRT_ColumnDef<Firma>[] = [
+export const myCompanyColumns: MRT_ColumnDef<FirmaType>[] = [
 	// {
 	//   header: "Prijavljeni",
 	//   accessorKey: "zeleMarketingMaterijal",
@@ -18,7 +18,7 @@ export const myCompanyColumns: MRT_ColumnDef<Firma>[] = [
 	{
 		header: "Naziv kompanije",
 		accessorKey: "naziv_firme",
-		Cell: ({ row }: { row: { original: Firma } }) => {
+		Cell: ({ row }: { row: { original: FirmaType } }) => {
 			const firma = row.original;
 			return (
 				<Link

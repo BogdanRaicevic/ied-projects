@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 import { myZaposleniColumns } from "../components/MyTable/myCompanyColumns";
 import FirmaForm from "../components/Forms/FirmaForm";
 // import AttendedSeminarsAccordion from "../components/Accordion";
-import type { Firma, Zaposleni } from "../schemas/companySchemas";
+import type { FirmaType, Zaposleni } from "../schemas/companySchemas";
 // import PrijavaOdjava from "../components/PrijavaOdjava";
 import { useEffect, useState } from "react";
 import { Tooltip, IconButton, Button } from "@mui/material";
@@ -15,7 +15,7 @@ import ZaposleniDialog from "../components/Dialogs/ZaposleniDialog";
 import { fetchSingleFirmaData, saveFirma } from "../api/firma.api";
 import PrijavaNaSeminarDialog from "../components/Dialogs/PrijaviZaposlenogNaSeminar";
 
-const defaultCompanyData: Firma = {
+const defaultCompanyData: FirmaType = {
 	ID_firma: 0,
 	naziv_firme: "",
 	adresa: "",
@@ -26,11 +26,8 @@ const defaultCompanyData: Firma = {
 	mesto: "",
 	PIB: "",
 	postanski_broj: "",
-	zeleMarketingMaterijal: false,
-	lastTouched: "",
 	velicina_firme: "",
 	zaposleni: [],
-	seminari: [],
 	stanje_firme: "",
 	jbkjs: "",
 	maticni_broj: "",
@@ -69,7 +66,7 @@ export default function Firma() {
 			(zaposleni: TODO_ANY_TYPE) =>
 				zaposleni._id === row.original._id ? row.original : zaposleni,
 		);
-		const updatedCompany: Firma = {
+		const updatedCompany: FirmaType = {
 			...defaultCompanyData,
 			...company,
 			zaposleni: updatedZaposleni || [],
@@ -80,7 +77,7 @@ export default function Firma() {
 	};
 
 	const handleDelete = async (row: MRT_Row<Zaposleni>) => {
-		const updatedCompany: Firma = {
+		const updatedCompany: FirmaType = {
 			...defaultCompanyData,
 			...company,
 			zaposleni:
@@ -122,7 +119,7 @@ export default function Firma() {
 			updatedZaposleni = [...(company?.zaposleni || []), employeeToAdd];
 		}
 
-		const updatedCompany: Firma = {
+		const updatedCompany: FirmaType = {
 			...defaultCompanyData,
 			...company,
 			zaposleni: updatedZaposleni || [],

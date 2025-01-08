@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState, memo } from "react";
-import type { Firma } from "../../schemas/companySchemas";
+import type { FirmaType } from "../../schemas/companySchemas";
 import { myCompanyColumns } from "./myCompanyColumns";
 import {
 	MaterialReactTable,
@@ -11,7 +11,7 @@ import { fetchFirmaPretrageData } from "../../api/firma.api";
 import type { PretragaParametersType } from "../../store/pretragaParameters.store";
 
 export default memo(function MyTable(queryParameters: PretragaParametersType) {
-	const [data, setData] = useState<Firma[]>([]);
+	const [data, setData] = useState<FirmaType[]>([]);
 	const [documents, setDocuments] = useState(1000);
 
 	const [pagination, setPagination] = useState<MRT_PaginationState>({
@@ -34,8 +34,8 @@ export default memo(function MyTable(queryParameters: PretragaParametersType) {
 	}, [pagination, documents, queryParameters]);
 
 	const table = useMaterialReactTable({
-		columns: useMemo<MRT_ColumnDef<Firma>[]>(() => myCompanyColumns, []),
-		data: useMemo<Firma[]>(() => data, [data]),
+		columns: useMemo<MRT_ColumnDef<FirmaType>[]>(() => myCompanyColumns, []),
+		data: useMemo<FirmaType[]>(() => data, [data]),
 		enableColumnFilterModes: true,
 		enableColumnOrdering: true,
 		enableColumnPinning: true,

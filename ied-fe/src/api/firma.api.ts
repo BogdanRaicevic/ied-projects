@@ -1,4 +1,4 @@
-import type { Firma } from "../schemas/companySchemas";
+import type { FirmaType } from "../schemas/companySchemas";
 import { env } from "../utils/envVariables";
 import axiosInstanceWithAuth from "./interceptors/auth";
 import type { FirmaQueryParams } from "ied-shared/types/firmaQueryParams";
@@ -27,7 +27,7 @@ export const fetchFirmaPretrageData = async (
 
 export const fetchSingleFirmaData = async (
 	id: string,
-): Promise<Firma | null> => {
+): Promise<FirmaType | null> => {
 	try {
 		const response = await axiosInstanceWithAuth.get(
 			`${env.beURL}/api/firma/${id}`,
@@ -59,7 +59,7 @@ export const exportData = async (
 	}
 };
 
-export const saveFirma = async (company: Partial<Firma>) => {
+export const saveFirma = async (company: Partial<FirmaType>) => {
 	company.zaposleni?.map((z) => {
 		if (z._id?.startsWith("temp")) {
 			delete z._id;

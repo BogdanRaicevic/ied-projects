@@ -54,7 +54,7 @@ export const FirmaSchema = z.object({
 		.default(""),
 	maticni_broj: z.string().optional().or(z.literal("")).nullable().default(""),
 });
-export type Firma = z.infer<typeof FirmaSchema>;
+export type FirmaType = z.infer<typeof FirmaSchema>;
 
 const inputTypes = ["Text", "Switch", "Select", "TextMultiline"] as const;
 export const InputTypesSchema = z.enum(inputTypes);
@@ -70,9 +70,9 @@ export type Metadata = z.infer<typeof MetadataSchema>;
 export const ZodPrijavaNaSeminar = z.object({
 	seminar_id: z.string(),
 	firma_id: z.string(),
-	firma_naziv: z.string().optional(),
-	firma_email: z.string().optional(),
-	firma_telefon: z.string().optional(),
+	firma_naziv: z.string().nullable().default(""),
+	firma_email: z.string().nullable().default(""),
+	firma_telefon: z.string().nullable().default(""),
 	zaposleni_id: z.string(),
 	zaposleni_ime: z.string().optional(),
 	zaposleni_prezime: z.string().optional(),
