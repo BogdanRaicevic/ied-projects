@@ -2,7 +2,7 @@ import * as z from "zod";
 
 export const ZaposleniSchema = z.object({
 	_id: z.string().optional(),
-	ID_kontakt_osoba: z.optional(z.number()),
+	ID_kontakt_osoba: z.number().optional(),
 	ime: z.string().optional(),
 	prezime: z.string().optional(),
 	e_mail: z
@@ -17,21 +17,13 @@ export const ZaposleniSchema = z.object({
 });
 export type Zaposleni = z.infer<typeof ZaposleniSchema>;
 
-export const PoseceniSeminarSchema = z.object({
-	naziv: z.string(),
-	datum: z.string(),
-	ucesnici: z.array(z.string()),
-});
-
-export type PoseceniSeminar = z.infer<typeof PoseceniSeminarSchema>;
-
 export const FirmaSchema = z.object({
 	_id: z.string().optional(),
 	ID_firma: z.number().optional(),
-	zeleMarketingMaterijal: z.optional(z.boolean().default(false)),
+	zeleMarketingMaterijal: z.boolean().default(false).optional(),
 	naziv_firme: z.string().max(100),
 	adresa: z.string().max(150).optional(),
-	PIB: z.optional(z.string()),
+	PIB: z.string().or(z.literal("")).optional(),
 	telefon: z.string(),
 	e_mail: z
 		.string()
@@ -40,25 +32,23 @@ export const FirmaSchema = z.object({
 		.or(z.literal(""))
 		.optional(),
 	tip_firme: z.string().optional(),
-	delatnost: z.optional(z.string()),
+	delatnost: z.string().optional(),
 	komentar: z.string().max(1000).optional(),
 	stanje_firme: z.string().max(50).optional(),
-	mesto: z.string().max(50).optional(),
+	mesto: z.string().optional(),
 	postanski_broj: z
 		.string()
 		.regex(/^\d{5}$/, "PTT moze da se sastoji samo od 5 brojeva")
 		.or(z.literal(""))
 		.optional(),
 	velicina_firme: z.string().optional(),
-	lastTouched: z.optional(z.string()),
 	zaposleni: z.array(ZaposleniSchema).default([]),
-	seminari: z.optional(z.array(PoseceniSeminarSchema)).default([]),
 	jbkjs: z
 		.string()
 		.regex(/^\d{5}$/, "JBKJS moze da se sastoji samo od 5 brojeva")
 		.or(z.literal(""))
 		.optional(),
-	maticni_broj: z.string().optional(),
+	maticni_broj: z.string().optional().or(z.literal("")),
 });
 export type Firma = z.infer<typeof FirmaSchema>;
 
