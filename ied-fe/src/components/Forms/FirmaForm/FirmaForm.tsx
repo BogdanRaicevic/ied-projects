@@ -18,7 +18,7 @@ import {
 	FirmaSchema,
 	InputTypesSchema,
 	type FirmaType,
-} from "../../../schemas/companySchemas";
+} from "../../../schemas/firmaSchemas";
 import { z } from "zod";
 
 import AutocompleteSingle from "../../Autocomplete/Single";
@@ -133,7 +133,11 @@ export const FirmaForm: React.FC<FirmaFormProps> = ({ inputCompany }) => {
 	};
 
 	const onError = (errors: any) => {
-		const errorMessages = extractErrorMessages(errors);
+		const data = {
+			...watch(),
+			...autocompletes,
+		};
+		const errorMessages = extractErrorMessages(errors, data);
 		setAlert({
 			type: "error",
 			message: "Firma nije sačuvana. Došlo je do greške!",
@@ -343,12 +347,14 @@ export const FirmaForm: React.FC<FirmaFormProps> = ({ inputCompany }) => {
 							<Box sx={{ mt: 2 }}>
 								<Typography variant="h6">Greške:</Typography>
 								<ul>
-									{alert.errors.map((error) => (
-										<li key={error.message}>
-											{error.message}; Polje: `{error.field}`; Trenutna
-											vrednost: `{error.value || <b>Nema podatka</b>}`
-										</li>
-									))}
+									{alert.errors.map((error) => {
+										return (
+											<li key={error.message}>
+												{error.message}; Polje: `{error.field}`; Problematična
+												vrednost: `{<b>{error.value}</b>}`
+											</li>
+										);
+									})}
 								</ul>
 							</Box>
 						)}

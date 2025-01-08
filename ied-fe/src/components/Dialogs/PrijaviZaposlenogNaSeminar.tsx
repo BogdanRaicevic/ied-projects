@@ -21,7 +21,7 @@ import type {
 	FirmaType,
 	PrijavaNaSeminar,
 	Zaposleni,
-} from "../../schemas/companySchemas";
+} from "../../schemas/firmaSchemas";
 import { savePrijava } from "../../api/seminari.api";
 import { useEffect, useState } from "react";
 

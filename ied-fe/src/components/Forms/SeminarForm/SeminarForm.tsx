@@ -2,7 +2,7 @@ import { TextField, Box } from "@mui/material";
 import { Controller, useForm } from "react-hook-form";
 // import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 // import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
-import { type Seminar, SeminarSchema } from "../../../schemas/companySchemas";
+import { type Seminar, SeminarSchema } from "../../../schemas/firmaSchemas";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Grid from "@mui/material/Grid2";
 import {

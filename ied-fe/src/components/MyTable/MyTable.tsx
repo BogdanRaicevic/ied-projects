@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState, memo } from "react";
-import type { FirmaType } from "../../schemas/companySchemas";
+import type { FirmaType } from "../../schemas/firmaSchemas";
 import { myCompanyColumns } from "./myCompanyColumns";
 import {
 	MaterialReactTable,

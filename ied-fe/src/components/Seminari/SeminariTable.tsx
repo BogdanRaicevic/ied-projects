@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState, memo } from "react";
-import type { Seminar } from "../../schemas/companySchemas";
+import type { Seminar } from "../../schemas/firmaSchemas";
 import {
 	MaterialReactTable,
 	type MRT_ColumnDef,

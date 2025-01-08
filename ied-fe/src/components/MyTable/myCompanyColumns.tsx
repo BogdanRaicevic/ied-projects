@@ -1,6 +1,6 @@
 import { ContentCopy } from "@mui/icons-material";
 import type { MRT_ColumnDef } from "material-react-table";
-import type { FirmaType, Zaposleni } from "../../schemas/companySchemas";
+import type { FirmaType, Zaposleni } from "../../schemas/firmaSchemas";
 import { Icon, Link } from "@mui/material";
 import BusinessIcon from "@mui/icons-material/Business";
 

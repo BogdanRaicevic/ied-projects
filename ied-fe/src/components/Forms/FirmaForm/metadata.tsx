@@ -13,10 +13,7 @@ import {
 	LocalPolice,
 	BuildCircle,
 } from "@mui/icons-material";
-import {
-	type Metadata,
-	InputTypesSchema,
-} from "../../../schemas/companySchemas";
+import { type Metadata, InputTypesSchema } from "../../../schemas/firmaSchemas";
 
 export const firmaFormMetadata: Metadata[] = [
 	{

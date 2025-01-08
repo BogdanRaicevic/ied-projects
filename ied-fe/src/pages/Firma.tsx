@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 import { myZaposleniColumns } from "../components/MyTable/myCompanyColumns";
 import FirmaForm from "../components/Forms/FirmaForm";
 // import AttendedSeminarsAccordion from "../components/Accordion";
-import type { FirmaType, Zaposleni } from "../schemas/companySchemas";
+import type { FirmaType, Zaposleni } from "../schemas/firmaSchemas";
 // import PrijavaOdjava from "../components/PrijavaOdjava";
 import { useEffect, useState } from "react";
 import { Tooltip, IconButton, Button } from "@mui/material";

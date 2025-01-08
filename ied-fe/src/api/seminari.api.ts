@@ -1,4 +1,4 @@
-import type { PrijavaNaSeminar, Seminar } from "../schemas/companySchemas";
+import type { PrijavaNaSeminar, Seminar } from "../schemas/firmaSchemas";
 import { env } from "../utils/envVariables";
 import axiosInstanceWithAuth from "./interceptors/auth";
 import type { SeminarQueryParams } from "ied-shared/types/seminar";

@@ -12,7 +12,7 @@ import { Box } from "@mui/system";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import { useState } from "react";
-import type { PrijavaNaSeminar } from "../../schemas/companySchemas";
+import type { PrijavaNaSeminar } from "../../schemas/firmaSchemas";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { deletePrijava } from "../../api/seminari.api";
 
