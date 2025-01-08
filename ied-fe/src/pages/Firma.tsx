@@ -1,7 +1,7 @@
 import { type MRT_Row, MaterialReactTable } from "material-react-table";
 import { useParams } from "react-router-dom";
 import { myZaposleniColumns } from "../components/MyTable/myCompanyColumns";
-import CompanyForm from "../components/Forms/CompanyForm";
+import FirmaForm from "../components/Forms/FirmaForm";
 // import AttendedSeminarsAccordion from "../components/Accordion";
 import type { Company, Zaposleni } from "../schemas/companySchemas";
 // import PrijavaOdjava from "../components/PrijavaOdjava";
@@ -211,7 +211,7 @@ export default function Firma() {
         Pobably handle submit here and interact with saving
         of zaposelni and company
       */}
-			<CompanyForm inputCompany={company} />
+			<FirmaForm inputCompany={company} />
 			<Button
 				sx={{ my: 2 }}
 				size="large"
