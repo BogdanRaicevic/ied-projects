@@ -15,9 +15,9 @@ import { useEffect, useState } from "react";
 import Grid from "@mui/material/Grid2";
 import {
 	type Metadata,
-	CompanySchema,
+	FirmaSchema,
 	InputTypesSchema,
-	type Company,
+	type Firma,
 } from "../../../schemas/companySchemas";
 import { z } from "zod";
 
@@ -31,7 +31,7 @@ import {
 } from "../../../utils/zodErrorHelper";
 
 type FirmaFormProps = {
-	inputCompany: Company;
+	inputCompany: Firma;
 };
 
 export const FirmaForm: React.FC<FirmaFormProps> = ({ inputCompany }) => {
@@ -41,8 +41,8 @@ export const FirmaForm: React.FC<FirmaFormProps> = ({ inputCompany }) => {
 		handleSubmit,
 		reset,
 		watch,
-	} = useForm<Company>({
-		resolver: zodResolver(CompanySchema),
+	} = useForm<Firma>({
+		resolver: zodResolver(FirmaSchema),
 		defaultValues: inputCompany || {},
 	});
 
@@ -103,7 +103,7 @@ export const FirmaForm: React.FC<FirmaFormProps> = ({ inputCompany }) => {
 		reset(inputCompany);
 	}, [inputCompany, reset]);
 
-	const onSubmit = async (data: Company) => {
+	const onSubmit = async (data: Firma) => {
 		data = {
 			...data,
 			...autocompletes,
@@ -171,7 +171,7 @@ export const FirmaForm: React.FC<FirmaFormProps> = ({ inputCompany }) => {
 		if (item.inputType === InputTypesSchema.enum.Text) {
 			return (
 				<TextField
-					{...register(item.key as keyof Company)}
+					{...register(item.key as keyof Firma)}
 					label={item.label}
 					slotProps={{
 						input: {
@@ -183,7 +183,7 @@ export const FirmaForm: React.FC<FirmaFormProps> = ({ inputCompany }) => {
 						},
 					}}
 					name={item.key}
-					defaultValue={company[item.key as keyof Company]}
+					defaultValue={company[item.key as keyof Firma]}
 					error={Boolean(errors[item.key])}
 					helperText={errors[item.key]?.message}
 				/>
@@ -193,7 +193,7 @@ export const FirmaForm: React.FC<FirmaFormProps> = ({ inputCompany }) => {
 		if (item.inputType === InputTypesSchema.enum.TextMultiline) {
 			return (
 				<TextField
-					{...register(item.key as keyof Company)}
+					{...register(item.key as keyof Firma)}
 					label={item.label}
 					slotProps={{
 						input: {
@@ -208,7 +208,7 @@ export const FirmaForm: React.FC<FirmaFormProps> = ({ inputCompany }) => {
 					name={item.key}
 					multiline
 					rows={10}
-					defaultValue={company[item.key as keyof Company]}
+					defaultValue={company[item.key as keyof Firma]}
 					error={errors[item.key]}
 					helperText={errors[item.key]?.message}
 				/>
@@ -242,7 +242,7 @@ export const FirmaForm: React.FC<FirmaFormProps> = ({ inputCompany }) => {
 					data={optionsData}
 					id={item.key}
 					placeholder={item.label}
-					preselected={company[item.key as keyof Company] as string}
+					preselected={company[item.key as keyof Firma] as string}
 					onChange={(newValue) => {
 						handleAutocomplete(item.key, newValue);
 					}}

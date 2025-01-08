@@ -18,7 +18,7 @@ import {
 import { Grid } from "@mui/system";
 import { useFetchSeminari } from "../../hooks/useFetchData";
 import type {
-	Company,
+	Firma,
 	PrijavaNaSeminar,
 	Zaposleni,
 } from "../../schemas/companySchemas";
@@ -33,7 +33,7 @@ export default function PrijavaNaSeminarDialog({
 }: {
 	open: boolean;
 	onClose: () => void;
-	companyData: Company;
+	companyData: Firma;
 	zaposleniData: Zaposleni;
 }) {
 	const [prijavaState, setPrijavaState] = useState<

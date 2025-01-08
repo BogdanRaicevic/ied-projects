@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 import { myZaposleniColumns } from "../components/MyTable/myCompanyColumns";
 import FirmaForm from "../components/Forms/FirmaForm";
 // import AttendedSeminarsAccordion from "../components/Accordion";
-import type { Company, Zaposleni } from "../schemas/companySchemas";
+import type { Firma, Zaposleni } from "../schemas/companySchemas";
 // import PrijavaOdjava from "../components/PrijavaOdjava";
 import { useEffect, useState } from "react";
 import { Tooltip, IconButton, Button } from "@mui/material";
@@ -15,7 +15,7 @@ import ZaposleniDialog from "../components/Dialogs/ZaposleniDialog";
 import { fetchSingleFirmaData, saveFirma } from "../api/firma.api";
 import PrijavaNaSeminarDialog from "../components/Dialogs/PrijaviZaposlenogNaSeminar";
 
-const defaultCompanyData: Company = {
+const defaultCompanyData: Firma = {
 	ID_firma: 0,
 	naziv_firme: "",
 	adresa: "",
@@ -69,7 +69,7 @@ export default function Firma() {
 			(zaposleni: TODO_ANY_TYPE) =>
 				zaposleni._id === row.original._id ? row.original : zaposleni,
 		);
-		const updatedCompany: Company = {
+		const updatedCompany: Firma = {
 			...defaultCompanyData,
 			...company,
 			zaposleni: updatedZaposleni || [],
@@ -80,7 +80,7 @@ export default function Firma() {
 	};
 
 	const handleDelete = async (row: MRT_Row<Zaposleni>) => {
-		const updatedCompany: Company = {
+		const updatedCompany: Firma = {
 			...defaultCompanyData,
 			...company,
 			zaposleni:
@@ -122,7 +122,7 @@ export default function Firma() {
 			updatedZaposleni = [...(company?.zaposleni || []), employeeToAdd];
 		}
 
-		const updatedCompany: Company = {
+		const updatedCompany: Firma = {
 			...defaultCompanyData,
 			...company,
 			zaposleni: updatedZaposleni || [],

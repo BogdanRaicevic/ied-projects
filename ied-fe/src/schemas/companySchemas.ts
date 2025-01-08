@@ -25,7 +25,7 @@ export const PoseceniSeminarSchema = z.object({
 
 export type PoseceniSeminar = z.infer<typeof PoseceniSeminarSchema>;
 
-export const CompanySchema = z.object({
+export const FirmaSchema = z.object({
 	_id: z.string().optional(),
 	ID_firma: z.number().optional(),
 	zeleMarketingMaterijal: z.optional(z.boolean().default(false)),
@@ -60,7 +60,7 @@ export const CompanySchema = z.object({
 		.optional(),
 	maticni_broj: z.string().optional(),
 });
-export type Company = z.infer<typeof CompanySchema>;
+export type Firma = z.infer<typeof FirmaSchema>;
 
 const inputTypes = ["Text", "Switch", "Select", "TextMultiline"] as const;
 export const InputTypesSchema = z.enum(inputTypes);
