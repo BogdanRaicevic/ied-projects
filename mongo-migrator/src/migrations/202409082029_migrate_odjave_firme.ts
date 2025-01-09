@@ -1,33 +1,33 @@
-import { mongoDbConnection } from '../config';
+import { mongoDbConnection } from "../config";
 
-const odjava = 'odjava';
+const odjava = "odjava";
 
 export const up = async () => {
-  const mongoDb = await mongoDbConnection();
-  const firmasCollection = mongoDb.collection('firmas');
+	const mongoDb = await mongoDbConnection();
+	const firmasCollection = mongoDb.collection("firmas");
 
-  try {
-    const firmasCursor = firmasCollection.find({});
+	try {
+		const firmasCursor = firmasCollection.find({});
 
-    while (await firmasCursor.hasNext()) {
-      const firma = await firmasCursor.next();
+		while (await firmasCursor.hasNext()) {
+			const firma = await firmasCursor.next();
 
-      if (!firma) {
-        continue;
-      }
+			if (!firma) {
+				continue;
+			}
 
-      let result: boolean = false;
-      if (firma[odjava] === 1) {
-        result = true;
-      }
+			let result = false;
+			if (firma[odjava] === 1) {
+				result = true;
+			}
 
-      await firmasCollection.updateOne(
-        { _id: firma?._id },
-        { $set: { odjava: result } }
-      );
-    }
-  } catch (error) {
-    console.error('Error during migration:', error);
-    throw error;
-  }
+			await firmasCollection.updateOne(
+				{ _id: firma?._id },
+				{ $set: { odjava: result } },
+			);
+		}
+	} catch (error) {
+		console.error("Error during migration:", error);
+		throw error;
+	}
 };

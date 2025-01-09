@@ -12,7 +12,10 @@ export const up = async () => {
 		while (await cursor.hasNext()) {
 			const document = await cursor.next();
 
-			const zaposleni: any[] = document?.zaposleni || [];
+			const zaposleni: {
+				[key: string]: number | string | Date;
+				e_mail: string;
+			}[] = document?.zaposleni || [];
 
 			// Update emails in place
 			for (const z of zaposleni) {
