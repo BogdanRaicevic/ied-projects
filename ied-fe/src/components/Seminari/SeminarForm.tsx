@@ -15,7 +15,7 @@ import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { saveSeminar } from "../../api/seminari.api";
 import type { Seminar } from "../../schemas/firmaSchemas";
 
-export default function AddSeminarForm({
+export default function SeminarForm({
 	seminar,
 }: {
 	seminar?: Omit<

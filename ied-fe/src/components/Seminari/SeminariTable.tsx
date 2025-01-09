@@ -27,7 +27,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 
 import PrijaveSeminarTable from "./PrijaveSeminarTable";
-import AddSeminarForm from "./CreateSeminarForm";
+import SeminarForm from "./SeminarForm";
 
 export default memo(function SeminariTable(props: {
 	queryParameters: SeminarQueryParams;
@@ -234,7 +234,7 @@ export default memo(function SeminariTable(props: {
 			>
 				<DialogContent>
 					<Box sx={{ p: 2 }}>
-						<AddSeminarForm seminar={selectedSeminar} />
+						<SeminarForm seminar={selectedSeminar} />
 					</Box>
 				</DialogContent>
 			</Dialog>
