@@ -124,7 +124,11 @@ export const exportSearchedZaposleniData = async (
 
 		if (plainObject.zaposleni) {
 			for (const z of plainObject.zaposleni) {
-				if (z.e_mail !== "nema" && z.e_mail !== "") {
+				if (
+					z.e_mail !== "" &&
+					(queryParameters.radnaMesta.length === 0 ||
+						queryParameters.radnaMesta.includes(z.radno_mesto))
+				) {
 					res += `${z.ime} ${z.prezime},${z.e_mail}\n`;
 				}
 			}
