@@ -37,6 +37,10 @@ export default memo(function SeminariTable(props: {
 	const [deletePrijavaCounter, setDeletePrijavaCounter] = useState(0);
 	const [deleteSeminarCounter, setDeleteSeminarCounter] = useState(0);
 	const [editSeminar, setEditSeminar] = useState(false);
+	const [selectedSeminar, setSelectedSeminar] = useState<Omit<
+		Seminar,
+		"prijave" | "datumOd" | "datumDo" | "cenaOd" | "cenaDo"
+	> | null>(null);
 
 	const [pagination, setPagination] = useState<MRT_PaginationState>({
 		pageIndex: 0,
@@ -68,9 +72,11 @@ export default memo(function SeminariTable(props: {
 	};
 
 	const handleEditSeminar = (id: string) => {
-		console.log("ovo je edit", id);
+		console.log("data", data);
+		const seminar = data.find((s) => s._id === id);
+		console.log("seminar", seminar);
+		setSelectedSeminar(seminar);
 		setEditSeminar(true);
-		console.log("editSeminar", editSeminar);
 	};
 
 	const seminariTableColumns: MRT_ColumnDef<Seminar>[] = [
@@ -226,10 +232,9 @@ export default memo(function SeminariTable(props: {
 				onClose={() => setEditSeminar(false)}
 				maxWidth="lg"
 			>
-				<DialogTitle>Zaposleni</DialogTitle>
 				<DialogContent>
 					<Box sx={{ p: 2 }}>
-						<AddSeminarForm />
+						<AddSeminarForm seminar={selectedSeminar} />
 					</Box>
 				</DialogContent>
 			</Dialog>
