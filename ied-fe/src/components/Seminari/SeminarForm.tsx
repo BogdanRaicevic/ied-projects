@@ -27,8 +27,10 @@ import { saveSeminar } from "../../api/seminari.api";
 // 		| "datum"
 // 	>;
 // }
-export default function SeminarForm({ seminar }: any) {
-	console.log("props seminar", seminar);
+export default function SeminarForm({
+	seminar,
+	onDialogClose,
+}: { seminar?: any; onDialogClose: () => void }) {
 	const defaultSeminarData: any = {
 		naziv: "",
 		predavac: "",
@@ -87,6 +89,7 @@ export default function SeminarForm({ seminar }: any) {
 				setAlertSeverity("error");
 				setAlertMessage("Naziv seminara je obavezan");
 				setAlertOpen(true);
+				onDialogClose();
 				return;
 			}
 
@@ -104,6 +107,7 @@ export default function SeminarForm({ seminar }: any) {
 				setAlertSeverity("success");
 				setAlertMessage("Uspešno kreiran seminar");
 				setAlertOpen(true);
+				onDialogClose(); // Close dialog and refresh parent
 			} catch (error) {
 				setAlertSeverity("error");
 				setAlertMessage("Greška prilikom kreiranja seminara");

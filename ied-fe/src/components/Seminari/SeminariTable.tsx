@@ -34,7 +34,7 @@ export default memo(function SeminariTable(props: {
 	const [data, setData] = useState<Seminar[]>([]);
 	const [documents, setDocuments] = useState(1000);
 	const [deletePrijavaCounter, setDeletePrijavaCounter] = useState(0);
-	const [deleteSeminarCounter, setDeleteSeminarCounter] = useState(0);
+	const [seminarChangesCounter, setSeminarChangesCount] = useState(0);
 	const [editSeminar, setEditSeminar] = useState(false);
 	const [selectedSeminar, setSelectedSeminar] =
 		useState<Partial<Seminar | null>>(null);
@@ -61,7 +61,7 @@ export default memo(function SeminariTable(props: {
 		documents,
 		props,
 		deletePrijavaCounter,
-		deleteSeminarCounter,
+		seminarChangesCounter,
 	]);
 
 	const handleDelete = async (id: string) => {
@@ -105,7 +105,7 @@ export default memo(function SeminariTable(props: {
 									) {
 										if (seminar._id) {
 											handleDelete(seminar._id);
-											setDeleteSeminarCounter((prev) => prev + 1);
+											setSeminarChangesCount((prev) => prev + 1);
 										}
 									}
 								}}
@@ -218,6 +218,12 @@ export default memo(function SeminariTable(props: {
 			);
 		},
 	});
+
+	const handleSubmitSuccess = () => {
+		setEditSeminar(false);
+		setSeminarChangesCount((prev) => prev + 1); // Triggers table refresh
+	};
+
 	return (
 		<>
 			<MaterialReactTable table={table} />
@@ -228,7 +234,10 @@ export default memo(function SeminariTable(props: {
 			>
 				<DialogContent>
 					<Box sx={{ p: 2 }}>
-						<SeminarForm seminar={selectedSeminar} />
+						<SeminarForm
+							onDialogClose={handleSubmitSuccess}
+							seminar={selectedSeminar}
+						/>
 					</Box>
 				</DialogContent>
 			</Dialog>
