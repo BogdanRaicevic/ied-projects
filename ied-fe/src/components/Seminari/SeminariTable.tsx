@@ -12,7 +12,6 @@ import {
 	Box,
 	Dialog,
 	DialogContent,
-	DialogTitle,
 	IconButton,
 	Paper,
 	Table,
@@ -37,10 +36,8 @@ export default memo(function SeminariTable(props: {
 	const [deletePrijavaCounter, setDeletePrijavaCounter] = useState(0);
 	const [deleteSeminarCounter, setDeleteSeminarCounter] = useState(0);
 	const [editSeminar, setEditSeminar] = useState(false);
-	const [selectedSeminar, setSelectedSeminar] = useState<Omit<
-		Seminar,
-		"prijave" | "datumOd" | "datumDo" | "cenaOd" | "cenaDo"
-	> | null>(null);
+	const [selectedSeminar, setSelectedSeminar] =
+		useState<Partial<Seminar | null>>(null);
 
 	const [pagination, setPagination] = useState<MRT_PaginationState>({
 		pageIndex: 0,
@@ -71,10 +68,7 @@ export default memo(function SeminariTable(props: {
 		await deleteSeminar(id);
 	};
 
-	const handleEditSeminar = (id: string) => {
-		console.log("data", data);
-		const seminar = data.find((s) => s._id === id);
-		console.log("seminar", seminar);
+	const handleEditSeminar = (seminar: any) => {
 		setSelectedSeminar(seminar);
 		setEditSeminar(true);
 	};
@@ -93,7 +87,7 @@ export default memo(function SeminariTable(props: {
 								color="info"
 								onClick={() => {
 									if (seminar._id) {
-										handleEditSeminar(seminar._id);
+										handleEditSeminar(seminar);
 									}
 								}}
 							>

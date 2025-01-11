@@ -8,23 +8,28 @@ import {
 	Snackbar,
 } from "@mui/material";
 import InputAdornment from "@mui/material/InputAdornment";
-import { format } from "date-fns";
+import { format, parse } from "date-fns";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFnsV3";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { saveSeminar } from "../../api/seminari.api";
-import type { Seminar } from "../../schemas/firmaSchemas";
+// import type { Seminar } from "../../schemas/firmaSchemas";
 
-export default function SeminarForm({
-	seminar,
-}: {
-	seminar?: Omit<
-		Seminar,
-		"prijave" | "datumOd" | "datumDo" | "cenaOd" | "cenaDo"
-	>;
-}) {
+// type Seminar = {
+// 	seminar?: Pick<
+// 		Seminar,
+// 		| "_id"
+// 		| "naziv"
+// 		| "predavac"
+// 		| "lokacija"
+// 		| "offlineCena"
+// 		| "onlineCena"
+// 		| "datum"
+// 	>;
+// }
+export default function SeminarForm({ seminar }: any) {
 	console.log("props seminar", seminar);
-	const defaultSeminarData = {
+	const defaultSeminarData: any = {
 		naziv: "",
 		predavac: "",
 		lokacija: "",
@@ -35,8 +40,16 @@ export default function SeminarForm({
 	const [seminarData, setSeminarData] = React.useState(
 		seminar || defaultSeminarData,
 	);
+
+	const parseDateString = (dateString?: string | null | undefined): Date => {
+		if (!dateString) {
+			return parse(new Date().toISOString(), "yyyy-MM-dd", new Date());
+		}
+		return parse(dateString, "yyyy-MM-dd", new Date());
+	};
+
 	const [selectedDate, setSelectedDate] = React.useState<Date | null>(
-		new Date(),
+		parseDateString(seminar?.datum), // create date-fns date object from string format yyyy-MM-dd, or today
 	);
 
 	const handleDateChange = (newDate: Date | null) => {
@@ -60,24 +73,32 @@ export default function SeminarForm({
 	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
 		try {
-			const formattedOfflineCena = isNaN(Number(seminarData.offlineCena))
+			const formattedOfflineCena = Number.isNaN(Number(seminarData.offlineCena))
 				? "0"
 				: Number(seminarData.offlineCena).toFixed(2);
-			const formattedOnlineCena = isNaN(Number(seminarData.onlineCena))
+			const formattedOnlineCena = Number.isNaN(Number(seminarData.onlineCena))
 				? "0"
 				: Number(seminarData.onlineCena).toFixed(2);
 			const formattedDate = selectedDate
 				? format(selectedDate, "yyyy-MM-dd")
 				: "";
 
+			if (!seminarData.naziv) {
+				setAlertSeverity("error");
+				setAlertMessage("Naziv seminara je obavezan");
+				setAlertOpen(true);
+				return;
+			}
+
 			try {
 				await saveSeminar(
 					seminarData.naziv,
-					seminarData.predavac,
-					seminarData.lokacija,
+					seminarData.predavac || "",
+					seminarData.lokacija || "",
 					formattedOfflineCena,
 					formattedOnlineCena,
 					formattedDate,
+					seminarData?._id,
 				);
 
 				setAlertSeverity("success");
@@ -96,7 +117,7 @@ export default function SeminarForm({
 
 	return (
 		<>
-			<h1>Kreiraj seminar</h1>
+			<h1>{seminar?._id ? "Izmeni" : "Kreiraj"} seminar</h1>
 			<Box component="form" onSubmit={handleSubmit}>
 				<TextField
 					sx={{ m: 1 }}
@@ -157,12 +178,11 @@ export default function SeminarForm({
 				<FormControl sx={{ m: 1 }}>
 					<LocalizationProvider dateAdapter={AdapterDateFns}>
 						<DatePicker
-							format="yyyy/MM/dd"
+							format="yyyy-MM-dd"
 							label="Datum održavanja"
 							name="datum"
 							value={selectedDate}
 							onChange={handleDateChange}
-							defaultValue={seminarData.datum}
 							disablePast
 						/>
 					</LocalizationProvider>
@@ -174,7 +194,7 @@ export default function SeminarForm({
 					color="primary"
 					type="submit"
 				>
-					Kreiraj seminar
+					{seminar?._id ? "Izmeni" : "Kreiraj"} seminar
 				</Button>
 				<Snackbar
 					open={alertOpen}
