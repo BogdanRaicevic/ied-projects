@@ -36,4 +36,5 @@ type PrijavaNaSeminar = {
 	zaposleni_email: string;
 	zaposleni_telefon: string;
 	prisustvo: "online" | "offline" | "ne znam";
+	_id?: string;
 };
