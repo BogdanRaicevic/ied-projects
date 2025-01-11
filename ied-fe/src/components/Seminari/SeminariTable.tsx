@@ -37,8 +37,7 @@ export default memo(function SeminariTable(props: {
 	const [deletePrijavaCounter, setDeletePrijavaCounter] = useState(0);
 	const [seminarChangesCounter, setSeminarChangesCount] = useState(0);
 	const [editSeminar, setEditSeminar] = useState(false);
-	const [selectedSeminar, setSelectedSeminar] =
-		useState<Partial<Seminar | null>>(null);
+	const [selectedSeminar, setSelectedSeminar] = useState<Partial<Seminar>>({});
 
 	const [pagination, setPagination] = useState<MRT_PaginationState>({
 		pageIndex: 0,

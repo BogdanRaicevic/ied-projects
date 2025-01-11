@@ -20,16 +20,7 @@ export default function SeminarForm({
 	onDialogClose,
 	onSuccess,
 }: {
-	seminar?: Pick<
-		Seminar,
-		| "_id"
-		| "naziv"
-		| "predavac"
-		| "lokacija"
-		| "offlineCena"
-		| "onlineCena"
-		| "datum"
-	>;
+	seminar?: Partial<Seminar>;
 	onDialogClose?: () => void;
 	onSuccess?: () => void;
 }) {
