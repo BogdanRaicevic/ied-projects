@@ -23,6 +23,10 @@ export default function Seminari() {
 		datumDo: addMonths(new Date(), 3),
 	});
 
+	const [seminariUpdateCounter, setSeminarUpdateCounter] = useState(0);
+	const handleSeminarUpdate = () => {
+		setSeminarUpdateCounter((prev) => prev + 1);
+	};
 	const handlePretraziSeminare = () => {
 		setTableInputParameters(queryParameters);
 	};
@@ -109,9 +113,12 @@ export default function Seminari() {
 		<>
 			{parametriPretrage()}
 
-			<SeminariTable queryParameters={tableInputParameters} />
+			<SeminariTable
+				queryParameters={tableInputParameters}
+				updateCounter={seminariUpdateCounter}
+			/>
 
-			<SeminarForm />
+			<SeminarForm onSuccess={handleSeminarUpdate} />
 		</>
 	);
 }

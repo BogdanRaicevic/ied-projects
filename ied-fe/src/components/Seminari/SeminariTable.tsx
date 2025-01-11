@@ -30,6 +30,7 @@ import SeminarForm from "./SeminarForm";
 
 export default memo(function SeminariTable(props: {
 	queryParameters: SeminarQueryParams;
+	updateCounter: number;
 }) {
 	const [data, setData] = useState<Seminar[]>([]);
 	const [documents, setDocuments] = useState(1000);
@@ -62,6 +63,7 @@ export default memo(function SeminariTable(props: {
 		props,
 		deletePrijavaCounter,
 		seminarChangesCounter,
+		props.updateCounter,
 	]);
 
 	const handleDelete = async (id: string) => {

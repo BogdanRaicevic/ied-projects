@@ -18,6 +18,7 @@ import type { Seminar } from "../../schemas/firmaSchemas";
 export default function SeminarForm({
 	seminar,
 	onDialogClose,
+	onSuccess,
 }: {
 	seminar?: Pick<
 		Seminar,
@@ -29,7 +30,8 @@ export default function SeminarForm({
 		| "onlineCena"
 		| "datum"
 	>;
-	onDialogClose: () => void;
+	onDialogClose?: () => void;
+	onSuccess?: () => void;
 }) {
 	const defaultSeminarData: Partial<Seminar> = {
 		naziv: "",
@@ -89,7 +91,7 @@ export default function SeminarForm({
 				setAlertSeverity("error");
 				setAlertMessage("Naziv seminara je obavezan");
 				setAlertOpen(true);
-				onDialogClose();
+				onDialogClose?.();
 				return;
 			}
 
@@ -107,7 +109,8 @@ export default function SeminarForm({
 				setAlertSeverity("success");
 				setAlertMessage("Uspešno kreiran seminar");
 				setAlertOpen(true);
-				onDialogClose(); // Close dialog and refresh parent
+				onDialogClose?.(); // Close dialog and refresh parent
+				onSuccess?.(); // Refresh parent
 			} catch (error) {
 				setAlertSeverity("error");
 				setAlertMessage("Greška prilikom kreiranja seminara");
