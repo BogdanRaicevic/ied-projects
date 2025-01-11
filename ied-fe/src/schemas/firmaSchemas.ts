@@ -114,9 +114,15 @@ export const SeminarSchema = z.object({
 		.max(100, "Lokacija ne sme da ima vise od 100 karaktera")
 		.or(z.literal(""))
 		.default(""),
-	datum: z.date().optional().default(new Date()),
-	datumOd: z.date().optional().default(subMonths(new Date(), 3)),
-	datumDo: z.date().optional().default(addMonths(new Date(), 3)),
+	datum: z.string().optional().default(new Date().toISOString()),
+	datumOd: z
+		.string()
+		.optional()
+		.default(subMonths(new Date(), 3).toISOString()),
+	datumDo: z
+		.string()
+		.optional()
+		.default(addMonths(new Date(), 3).toISOString()),
 	prijave: z.array(ZodPrijavaNaSeminar),
 });
 

@@ -13,31 +13,31 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFnsV3";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { saveSeminar } from "../../api/seminari.api";
-// import type { Seminar } from "../../schemas/firmaSchemas";
+import type { Seminar } from "../../schemas/firmaSchemas";
 
-// type Seminar = {
-// 	seminar?: Pick<
-// 		Seminar,
-// 		| "_id"
-// 		| "naziv"
-// 		| "predavac"
-// 		| "lokacija"
-// 		| "offlineCena"
-// 		| "onlineCena"
-// 		| "datum"
-// 	>;
-// }
 export default function SeminarForm({
 	seminar,
 	onDialogClose,
-}: { seminar?: any; onDialogClose: () => void }) {
-	const defaultSeminarData: any = {
+}: {
+	seminar?: Pick<
+		Seminar,
+		| "_id"
+		| "naziv"
+		| "predavac"
+		| "lokacija"
+		| "offlineCena"
+		| "onlineCena"
+		| "datum"
+	>;
+	onDialogClose: () => void;
+}) {
+	const defaultSeminarData: Partial<Seminar> = {
 		naziv: "",
 		predavac: "",
 		lokacija: "",
 		offlineCena: "",
 		onlineCena: "",
-		datum: new Date(),
+		datum: format(new Date(), "yyyy-MM-dd"),
 	};
 	const [seminarData, setSeminarData] = React.useState(
 		seminar || defaultSeminarData,
