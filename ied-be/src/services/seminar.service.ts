@@ -10,6 +10,19 @@ import type { PrijavaNaSeminar } from "../routes/seminari.routes";
 export const saveSeminar = async (
 	seminarData: SaveSeminarParams,
 ): Promise<SeminarType> => {
+	if (seminarData._id) {
+		const updatedSeminar = await Seminar.findByIdAndUpdate(
+			seminarData._id,
+			seminarData,
+			{ new: true },
+		);
+
+		if (!updatedSeminar) {
+			throw new Error("Seminar not found");
+		}
+		return updatedSeminar;
+	}
+
 	const seminar = new Seminar(seminarData);
 	return await seminar.save();
 };
