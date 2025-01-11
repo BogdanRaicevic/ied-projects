@@ -1,3 +1,3 @@
-export * from './firmaQueryParams';
-export * from './seminar';
+export * from "./firmaQueryParams";
+export * from "./seminar";
 // Add other exports as needed
