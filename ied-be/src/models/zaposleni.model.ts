@@ -23,7 +23,7 @@ export const zaposleniSchema = new Schema<Zaposleni>({
 	ID_kontakt_osoba: Number,
 	ime: String,
 	prezime: String,
-	radno_mesto: String,
+	radno_mesto: { type: String, default: "nema" },
 	telefon: String,
 	e_mail: String,
 	komentar: String,

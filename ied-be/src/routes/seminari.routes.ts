@@ -12,7 +12,7 @@ import {
 	saveSeminar,
 	search,
 } from "../services/seminar.service";
-import type { FilterQuery, ObjectId } from "mongoose";
+import type { FilterQuery } from "mongoose";
 import type { SeminarType } from "../models/seminar.model";
 import type {
 	SeminarQueryParams,
