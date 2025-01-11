@@ -66,6 +66,7 @@ export default memo(function SeminariTable(props: {
 
 	const handleDelete = async (id: string) => {
 		await deleteSeminar(id);
+		setSeminarChangesCount((prev) => prev + 1);
 	};
 
 	const handleEditSeminar = (seminar: any) => {
