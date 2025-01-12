@@ -4,7 +4,7 @@ export type SeminarQueryParams = {
 	predavac?: string;
 	datumOd?: Date | string;
 	datumDo?: Date | string;
-	datum?: Date | string;
+	datum?: Date | string | string[];
 	cena?: string;
 	cenaOd?: string;
 	cenaDo?: string;
@@ -19,12 +19,12 @@ export type SaveSeminarParams = {
 	lokacija?: string;
 	onlineCena?: string;
 	offlineCena?: string;
-	datum?: string;
+	datum?: string | string[];
 	prijava?: PrijavaNaSeminar;
 	_id?: string;
 };
 
-type PrijavaNaSeminar = {
+export type PrijavaNaSeminar = {
 	seminar_id: string;
 	firma_id: string;
 	firma_naziv: string;
