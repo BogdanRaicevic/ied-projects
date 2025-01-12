@@ -77,16 +77,17 @@ export default function Firma() {
 	};
 
 	const handleDelete = async (row: MRT_Row<Zaposleni>) => {
+		const filteredZaposleni =
+			company?.zaposleni.filter(
+				(zaposleni: TODO_ANY_TYPE) => zaposleni._id !== row.original._id,
+			) || [];
 		const updatedCompany: FirmaType = {
 			...defaultCompanyData,
 			...company,
-			zaposleni:
-				company?.zaposleni.filter(
-					(zaposleni: TODO_ANY_TYPE) => zaposleni._id !== row.original._id,
-				) || [],
+			zaposleni: filteredZaposleni,
 		};
 		setCompany(updatedCompany);
-		saveFirma(updatedCompany);
+		saveFirma({ _id: company?._id, zaposleni: filteredZaposleni });
 	};
 
 	const [openZaposleniDialog, setOpenZaposelniDialog] = useState(false);
@@ -125,7 +126,10 @@ export default function Firma() {
 		setCompany(updatedCompany);
 
 		if (isExistingCompany) {
-			const savedCompany = await saveFirma(updatedCompany);
+			const savedCompany = await saveFirma({
+				_id: company?._id,
+				zaposleni: updatedZaposleni,
+			});
 			setCompany(savedCompany.data);
 		}
 
