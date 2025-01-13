@@ -72,8 +72,6 @@ export const exportSearchedFirmaData = async (
 		...createFirmaQuery(queryParameters),
 	};
 
-	console.log("mongo query: ", mongoQuery);
-
 	const cursor = Firma.find(mongoQuery, {
 		naziv_firme: 1,
 		e_mail: 1,
@@ -90,7 +88,6 @@ export const exportSearchedFirmaData = async (
 
 	return new Promise<string>((resolve, reject) => {
 		cursor.on("end", () => {
-			console.log("Data has been written to the file successfully.");
 			resolve(res);
 		});
 
@@ -108,7 +105,11 @@ export const exportSearchedZaposleniData = async (
 		...createFirmaQuery(queryParameters),
 	};
 
-	console.log("mongo query: ", mongoQuery);
+	if (queryParameters.negacije?.includes("negate-radno-mesto")) {
+		mongoQuery.zaposleni = {
+			$elemMatch: { radno_mesto: { $nin: queryParameters.radnaMesta } },
+		};
+	}
 
 	// Create a readable stream from the database with only "naziv_firme" and "e_mail" properties
 	const cursor = Firma.find(mongoQuery, {
@@ -149,7 +150,6 @@ export const exportSearchedZaposleniData = async (
 
 	return new Promise<string>((resolve, reject) => {
 		cursor.on("end", () => {
-			console.log("Data has been written to the file successfully.");
 			resolve(res);
 		});
 

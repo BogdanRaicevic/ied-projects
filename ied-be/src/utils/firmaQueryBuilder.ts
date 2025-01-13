@@ -59,7 +59,9 @@ export function createFirmaQuery(
 	if (Array.isArray(params?.radnaMesta) && params.radnaMesta.length > 0) {
 		if (negateRadnoMesto) {
 			query.zaposleni = {
-				$elemMatch: { radno_mesto: { $nin: params.radnaMesta } },
+				$not: {
+					$elemMatch: { radno_mesto: { $in: params.radnaMesta } },
+				},
 			};
 		} else {
 			query.zaposleni = {
@@ -90,8 +92,6 @@ export function createFirmaQuery(
 			$options: "is",
 		};
 	}
-
-	console.log("query", query);
 
 	return query;
 }
