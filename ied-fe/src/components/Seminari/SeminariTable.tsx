@@ -24,7 +24,6 @@ import {
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
-
 import PrijaveSeminarTable from "./PrijaveSeminarTable";
 import SeminarForm from "./SeminarForm";
 
@@ -195,6 +194,7 @@ export default memo(function SeminariTable(props: {
 									}}
 								>
 									<TableCell />
+									<TableCell>Akcije</TableCell>
 									<TableCell>Naziv Firme</TableCell>
 									<TableCell>Email</TableCell>
 									<TableCell>Telefon</TableCell>
