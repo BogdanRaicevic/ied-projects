@@ -78,6 +78,7 @@ export default function Firma() {
 
 	const handleDelete = async (row: MRT_Row<Zaposleni>) => {
 		const latestData = await fetchSingleFirmaData(String(id));
+		if (!latestData) return;
 
 		const filteredZaposleni = latestData.zaposleni.filter(
 			(zaposleni: Zaposleni) => zaposleni._id !== row.original._id,
