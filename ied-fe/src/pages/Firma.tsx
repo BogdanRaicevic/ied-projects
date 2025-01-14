@@ -77,13 +77,13 @@ export default function Firma() {
 	};
 
 	const handleDelete = async (row: MRT_Row<Zaposleni>) => {
-		const filteredZaposleni =
-			company?.zaposleni.filter(
-				(zaposleni: TODO_ANY_TYPE) => zaposleni._id !== row.original._id,
-			) || [];
+		const latestData = await fetchSingleFirmaData(String(id));
+
+		const filteredZaposleni = latestData.zaposleni.filter(
+			(zaposleni: Zaposleni) => zaposleni._id !== row.original._id,
+		);
 		const updatedCompany: FirmaType = {
-			...defaultCompanyData,
-			...company,
+			...latestData,
 			zaposleni: filteredZaposleni,
 		};
 		setCompany(updatedCompany);
