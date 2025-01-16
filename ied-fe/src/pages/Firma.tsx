@@ -1,10 +1,13 @@
-import { type MRT_Row, MaterialReactTable } from "material-react-table";
+import {
+	type MRT_ColumnDef,
+	type MRT_Row,
+	MaterialReactTable,
+	useMaterialReactTable,
+} from "material-react-table";
 import { useParams } from "react-router-dom";
 import { myZaposleniColumns } from "../components/MyTable/myCompanyColumns";
 import FirmaForm from "../components/Forms/FirmaForm";
-// import AttendedSeminarsAccordion from "../components/Accordion";
 import type { FirmaType, Zaposleni } from "../schemas/firmaSchemas";
-// import PrijavaOdjava from "../components/PrijavaOdjava";
 import { useEffect, useState } from "react";
 import { Tooltip, IconButton, Button } from "@mui/material";
 import { Box } from "@mui/system";
@@ -14,6 +17,7 @@ import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import ZaposleniDialog from "../components/Dialogs/ZaposleniDialog";
 import { fetchSingleFirmaData, saveFirma } from "../api/firma.api";
 import PrijavaNaSeminarDialog from "../components/Dialogs/PrijaviZaposlenogNaSeminar";
+import { useMemo } from "react";
 
 const defaultCompanyData: FirmaType = {
 	ID_firma: 0,
@@ -142,61 +146,60 @@ export default function Firma() {
 		setOpenPrijavaNaSeminarDialog(true);
 	};
 
-	function renderZaposleniTable(): React.ReactNode {
-		return (
-			<MaterialReactTable
-				columns={myZaposleniColumns}
-				data={company?.zaposleni || []}
-				enableColumnOrdering
-				enableGlobalFilter={true}
-				enableEditing={true}
-				state={{ pagination: { pageSize: 50, pageIndex: 0 } }}
-				renderRowActions={({ row }) => (
-					<Box sx={{ display: "flex", gap: "1rem" }}>
-						<Tooltip title="Prijavi na seminar" color="success">
-							<IconButton
-								onClick={() => {
-									setSelectedRow(row);
-									handlePrijaviNaSeminar(row);
-								}}
-							>
-								<PersonAddIcon />
-							</IconButton>
-						</Tooltip>
-						<Tooltip title="Edit">
-							<IconButton onClick={() => handleEdit(row)}>
-								<EditIcon />
-							</IconButton>
-						</Tooltip>
-						<Tooltip title="Delete">
-							<IconButton
-								color="error"
-								onClick={() => {
-									if (
-										window.confirm(
-											"Da li ste sigurni da želite da obrišete zaposlenog?",
-										)
-									) {
-										handleDelete(row);
-									}
-								}}
-							>
-								<DeleteIcon />
-							</IconButton>
-						</Tooltip>
-					</Box>
-				)}
-			/>
-		);
-	}
+	const zapTable = useMaterialReactTable({
+		columns: useMemo<MRT_ColumnDef<Zaposleni>[]>(() => myZaposleniColumns, []),
+		data: company?.zaposleni || [],
+		enableColumnOrdering: true,
+		enableGlobalFilter: true,
+		enableEditing: true,
+		renderRowActions: ({ row }) => {
+			return (
+				<Box sx={{ display: "flex", gap: "1rem" }}>
+					<Tooltip title="Prijavi na seminar" color="success">
+						<IconButton
+							onClick={() => {
+								setSelectedRow(row);
+								handlePrijaviNaSeminar(row);
+							}}
+						>
+							<PersonAddIcon />
+						</IconButton>
+					</Tooltip>
+					<Tooltip title="Edit">
+						<IconButton onClick={() => handleEdit(row)}>
+							<EditIcon />
+						</IconButton>
+					</Tooltip>
+					<Tooltip title="Delete">
+						<IconButton
+							color="error"
+							onClick={() => {
+								if (
+									window.confirm(
+										"Da li ste sigurni da želite da obrišete zaposlenog?",
+									)
+								) {
+									handleDelete(row);
+								}
+							}}
+						>
+							<DeleteIcon />
+						</IconButton>
+					</Tooltip>
+				</Box>
+			);
+		},
+		initialState: {
+			pagination: {
+				pageIndex: 0,
+				pageSize: 50,
+			},
+		},
+	});
 
 	return (
 		<>
 			<h1>Firma: {company?.naziv_firme}</h1>
-			{/* <PrijavaOdjava
-        prijavljeniValue={company?.zeleMarketingMaterijal || true}
-        prijavaChange={handlePrijavaChange}
-      ></PrijavaOdjava> */}
 			<FirmaForm inputCompany={company} />
 			<Button
 				sx={{ my: 2 }}
@@ -211,7 +214,8 @@ export default function Firma() {
 			>
 				Dodaj zaposlenog
 			</Button>
-			{renderZaposleniTable()}
+			{/* {renderZaposleniTable()} */}
+			<MaterialReactTable table={zapTable} />
 			<ZaposleniDialog
 				isCompanyBeingUpdated={Boolean(id)}
 				zaposleni={selectedRow?.original}
@@ -225,8 +229,6 @@ export default function Firma() {
 				companyData={company}
 				zaposleniData={selectedRow?.original ?? {}}
 			/>
-
-			{/* <AttendedSeminarsAccordion firma={company satisfies Company}></AttendedSeminarsAccordion> */}
 		</>
 	);
 }
