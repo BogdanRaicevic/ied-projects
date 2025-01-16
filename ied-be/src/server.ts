@@ -18,17 +18,17 @@ import { clerkMiddleware, getAuth } from "@clerk/express";
 const app = express();
 
 app.use(
-  cors({
-    origin: true,
-    credentials: true,
-  })
+	cors({
+		origin: true,
+		credentials: true,
+	}),
 );
 
 app.use(
-  clerkMiddleware({
-    publishableKey: env.clerk.publishableKey,
-    secretKey: env.clerk.secretKey,
-  })
+	clerkMiddleware({
+		publishableKey: env.clerk.publishableKey,
+		secretKey: env.clerk.secretKey,
+	}),
 );
 
 // if (process.env.NODE_ENV === "development") {
@@ -51,15 +51,15 @@ app.use(
 app.use(express.json());
 
 const customRequireAuth = (req: Request, res: Response, next: NextFunction) => {
-  if (process.env.NODE_ENV === "development") {
-    return next();
-  }
+	if (process.env.NODE_ENV === "development") {
+		return next();
+	}
 
-  const auth = getAuth(req);
-  if (!auth.userId) {
-    return res.status(403).send("Forbidden");
-  }
-  next();
+	const auth = getAuth(req);
+	if (!auth.userId) {
+		return res.status(403).send("Forbidden");
+	}
+	next();
 };
 
 app.use("/api/firma", customRequireAuth, firmaRoutes);
@@ -76,14 +76,14 @@ app.use("/api/test", testRoutes);
 app.use(errorWrapper);
 
 async function initServer() {
-  try {
-    await connectDB();
-    app.listen({ port: Number(env.be.appPort) });
-  } catch (error) {
-    console.error("Error starting server:", error);
-  }
+	try {
+		await connectDB();
+		app.listen({ port: Number(env.be.appPort) });
+	} catch (error) {
+		console.error("Error starting server:", error);
+	}
 }
 
 initServer()
-  .then(() => console.log("Server is up"))
-  .catch(console.error);
+	.then(() => console.log("Server is up"))
+	.catch(console.error);
