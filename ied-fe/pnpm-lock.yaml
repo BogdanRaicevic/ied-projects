@@ -76,7 +76,7 @@ importers:
         version: 6.1.14(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       uuid:
         specifier: ^11.0.0
-        version: 11.0.4
+        version: 11.0.5
       zod:
         specifier: ^3.23.8
         version: 3.24.1
@@ -1414,8 +1414,8 @@ packages:
     peerDependencies:
       react: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
 
-  uuid@11.0.4:
-    resolution: {integrity: sha512-IzL6VtTTYcAhA/oghbFJ1Dkmqev+FpQWnCBaKq/gUluLxliWvO8DPFWfIviRmYbtaavtSQe4WBL++rFjdcGWEg==}
+  uuid@11.0.5:
+    resolution: {integrity: sha512-508e6IcKLrhxKdBbcA2b4KQZlLVp2+J5UwQ6F7Drckkc5N9ZJwFa4TgWtsww9UG8fGHbm6gbV19TdM5pQ4GaIA==}
     hasBin: true
 
   vite@6.0.7:
@@ -2683,7 +2683,7 @@ snapshots:
     dependencies:
       react: 18.3.1
 
-  uuid@11.0.4: {}
+  uuid@11.0.5: {}
 
   vite@6.0.7(@types/node@22.10.1):
     dependencies:
