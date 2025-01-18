@@ -15,7 +15,7 @@ import {
 import iedLogo from "../../../public/ied-logo-2.png";
 import { useState } from "react";
 
-type ASDF = {
+type PrimalacRacuna = {
 	naziv: string;
 	adresa: string;
 	pib: number | string;
@@ -25,9 +25,21 @@ type ASDF = {
 	brojUcesnikaOnline: number | string;
 	brojUcesnikaOffline: number | string;
 	ukupanBrojUcesnika: number | string;
+	nazivSeminara?: string;
 };
-export default function RacunForm({ primalacRacuna }) {
-	const [racun, setRacuna] = useState<ASDF>({
+
+type Racun = PrimalacRacuna & {
+	popust: number | string;
+	poreskaOsnovica: number | string;
+	stopaPdv: number | string;
+	pdv: number | string;
+	ukupnaNaknada: number | string;
+};
+
+export default function RacunForm({
+	primalacRacuna,
+}: { primalacRacuna: PrimalacRacuna }) {
+	const [racun, setRacuna] = useState<Partial<Racun>>({
 		naziv: primalacRacuna.naziv || "",
 		adresa: primalacRacuna.adresa || "",
 		pib: primalacRacuna.pib || "",
@@ -37,9 +49,12 @@ export default function RacunForm({ primalacRacuna }) {
 		brojUcesnikaOnline: primalacRacuna.brojUcesnikaOnline || "",
 		brojUcesnikaOffline: primalacRacuna.brojUcesnikaOffline || "",
 		ukupanBrojUcesnika: primalacRacuna.ukupanBrojUcesnika || "",
+		nazivSeminara: primalacRacuna.nazivSeminara || "",
 	});
 
-	const handlePrimalacChange = (
+	console.log("racun", racun);
+
+	const handleRacunChange = (
 		e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
 	) => {
 		setRacuna((prev) => {
@@ -140,7 +155,7 @@ export default function RacunForm({ primalacRacuna }) {
 											label="Naziv"
 											value={racun.naziv}
 											sx={{ mb: 2 }}
-											onChange={handlePrimalacChange}
+											onChange={handleRacunChange}
 										/>
 										<TextField
 											name="adresa"
@@ -149,7 +164,7 @@ export default function RacunForm({ primalacRacuna }) {
 											label="Adresa"
 											value={racun.adresa}
 											sx={{ mb: 2 }}
-											onChange={handlePrimalacChange}
+											onChange={handleRacunChange}
 										/>
 										<TextField
 											name="pib"
@@ -158,7 +173,7 @@ export default function RacunForm({ primalacRacuna }) {
 											label="PIB"
 											value={racun.pib}
 											sx={{ mb: 2 }}
-											onChange={handlePrimalacChange}
+											onChange={handleRacunChange}
 										/>
 										<TextField
 											name="maticniBroj"
@@ -167,7 +182,7 @@ export default function RacunForm({ primalacRacuna }) {
 											label="Matični broj"
 											value={racun.maticniBroj}
 											sx={{ mb: 2 }}
-											onChange={handlePrimalacChange}
+											onChange={handleRacunChange}
 										/>
 									</TableCell>
 								</TableRow>
@@ -177,7 +192,7 @@ export default function RacunForm({ primalacRacuna }) {
 				</Box>
 				<Divider sx={{ mt: 3, mb: 3 }} />
 				<Typography align="center" variant="h4" sx={{ mb: 3 }}>
-					PREDRAČUN BROJ:
+					PREDRAČUN BROJ: TBD
 				</Typography>
 				<Box sx={{ mb: 3 }}>
 					<TableContainer component={Paper}>
@@ -194,6 +209,7 @@ export default function RacunForm({ primalacRacuna }) {
 								<TableRow>
 									<TableCell>Vrsta usluge</TableCell>
 									<TableCell>Jedinica mere</TableCell>
+									<TableCell>Vrsta prisustva</TableCell>
 									<TableCell>Količina</TableCell>
 								</TableRow>
 							</TableHead>
@@ -203,13 +219,24 @@ export default function RacunForm({ primalacRacuna }) {
 									sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
 								>
 									<TableCell align="left">
-										<Typography>Naziv seminara: </Typography>
+										<TextField
+											variant="filled"
+											name="nazivSeminara"
+											value={racun.nazivSeminara}
+										/>
 									</TableCell>
 									<TableCell align="left">
 										<Typography>Broj učesnika</Typography>
 									</TableCell>
 									<TableCell align="left">
-										<Typography>1</Typography>
+										<Typography>Online</Typography>
+									</TableCell>
+									<TableCell align="left">
+										<TextField
+											variant="filled"
+											name="onlineBrojUcesnika"
+											value={racun.brojUcesnikaOnline}
+										/>
 									</TableCell>
 								</TableRow>
 							</TableBody>
@@ -231,22 +258,58 @@ export default function RacunForm({ primalacRacuna }) {
 									sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
 								>
 									<TableCell align="left">
-										<Typography>15.000</Typography>
+										<TextField
+											sx={{ maxWidth: 100 }}
+											name="onlineCena"
+											variant="filled"
+											value={racun.onlineCena}
+											onChange={handleRacunChange}
+										/>
 									</TableCell>
 									<TableCell align="left">
-										<Typography>15%</Typography>
+										<TextField
+											sx={{ maxWidth: 70 }}
+											name="popust"
+											variant="filled"
+											value={racun.popust}
+											onChange={handleRacunChange}
+										/>
 									</TableCell>
 									<TableCell align="left">
-										<Typography>25.000</Typography>
+										<TextField
+											sx={{ maxWidth: 100 }}
+											name="poreskaOsnovica"
+											variant="filled"
+											value={racun.poreskaOsnovica}
+											onChange={handleRacunChange}
+										/>
 									</TableCell>
 									<TableCell align="left">
-										<Typography>20%</Typography>
+										<TextField
+											sx={{ maxWidth: 70 }}
+											name="stopaPdv"
+											variant="filled"
+											value="20%"
+											onChange={handleRacunChange}
+										/>
 									</TableCell>
 									<TableCell align="left">
-										<Typography>5000</Typography>
+										<TextField
+											sx={{ maxWidth: 70 }}
+											name="pdv"
+											variant="filled"
+											value={racun.pdv}
+											onChange={handleRacunChange}
+										/>
 									</TableCell>
 									<TableCell align="left">
-										<Typography>31000</Typography>
+										<TextField
+											sx={{ maxWidth: 120 }}
+											name="ukupnaNaknada"
+											variant="filled"
+											value={racun.ukupnaNaknada}
+											onChange={handleRacunChange}
+										/>
 									</TableCell>
 								</TableRow>
 							</TableBody>

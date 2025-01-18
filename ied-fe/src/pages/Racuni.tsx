@@ -53,6 +53,7 @@ export default function Racuni() {
 		brojUcesnikaOffline:
 			prijave.filter((p) => p.prisustvo === "offline").length || "",
 		ukupanBrojUcesnika: prijave.length || "",
+		nazivSeminara: seminar?.naziv || "",
 	};
 	return (
 		<>
