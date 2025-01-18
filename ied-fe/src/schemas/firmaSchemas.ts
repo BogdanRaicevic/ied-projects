@@ -126,5 +126,5 @@ export const SeminarSchema = z.object({
 	prijave: z.array(ZodPrijavaNaSeminar),
 });
 
-export type Seminar = z.infer<typeof SeminarSchema>;
+export type SeminarType = z.infer<typeof SeminarSchema>;
 export type PrijavaNaSeminar = z.infer<typeof ZodPrijavaNaSeminar>;

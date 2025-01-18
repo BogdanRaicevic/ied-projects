@@ -8,6 +8,7 @@ import { format } from "date-fns";
 import {
 	deletePrijava,
 	deleteSeminar,
+	getSeminarById,
 	savePrijava,
 	saveSeminar,
 	search,
@@ -17,6 +18,7 @@ import type { SeminarType } from "../models/seminar.model";
 import type {
 	SeminarQueryParams,
 	SaveSeminarParams,
+	PrijavaNaSeminar,
 } from "ied-shared/types/seminar";
 import { ErrorWithCause } from "../utils/customErrors";
 
@@ -87,20 +89,14 @@ router.post(
 	},
 );
 
-// TODO: move to ied-shared
-export interface PrijavaNaSeminar {
-	seminar_id: string;
-	firma_id: string;
-	firma_naziv: string;
-	firma_email: string;
-	firma_telefon: string;
-	zaposleni_id: string;
-	zaposleni_ime: string;
-	zaposleni_prezime: string;
-	zaposleni_email: string;
-	zaposleni_telefon: string;
-	prisustvo: "online" | "offline" | "ne znam";
-}
+router.get("/:id", async (req: Request, res: Response, next: NextFunction) => {
+	try {
+		const seminar = await getSeminarById(req.params.id);
+		res.status(200).json(seminar);
+	} catch (error) {
+		next(error);
+	}
+});
 
 interface SavePrijava extends Request {
 	body: PrijavaNaSeminar;

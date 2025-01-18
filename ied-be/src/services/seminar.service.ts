@@ -2,10 +2,10 @@ import type { FilterQuery } from "mongoose";
 import { createSeminarQuery } from "../utils/seminariQueryBuilder";
 import { Seminar, type SeminarType } from "./../models/seminar.model";
 import type {
+	PrijavaNaSeminar,
 	SaveSeminarParams,
 	SeminarQueryParams,
 } from "ied-shared/types/seminar";
-import type { PrijavaNaSeminar } from "../routes/seminari.routes";
 import { ErrorWithCause } from "../utils/customErrors";
 
 export const saveSeminar = async (
@@ -49,9 +49,17 @@ export const search = async (
 	};
 };
 
-// TODO: use PrijavaType instead of PrijavaNaSeminar
+export const getSeminarById = async (id: string) => {
+	const seminar = await Seminar.findById(id);
+	if (!seminar) {
+		throw new Error("Seminar not found");
+	}
+
+	return seminar;
+};
+
 export const savePrijava = async (prijava: PrijavaNaSeminar) => {
-	const { seminar_id, ...prijavaWithoutId } = prijava;
+	const { seminar_id, _id, ...prijavaWithoutId } = prijava;
 
 	const seminar = await Seminar.findById(seminar_id);
 	if (!seminar) {

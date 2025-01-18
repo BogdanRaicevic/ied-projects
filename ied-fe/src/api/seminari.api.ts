@@ -1,4 +1,4 @@
-import type { PrijavaNaSeminar, Seminar } from "../schemas/firmaSchemas";
+import type { PrijavaNaSeminar, SeminarType } from "../schemas/firmaSchemas";
 import { env } from "../utils/envVariables";
 import axiosInstanceWithAuth from "./interceptors/auth";
 import type { SeminarQueryParams } from "ied-shared/types/seminar";
@@ -50,7 +50,11 @@ export const fetchSeminari = async (
 		};
 
 		const response: {
-			data: { seminari: Seminar[]; totalPages: number; totalDocuments: number };
+			data: {
+				seminari: SeminarType[];
+				totalPages: number;
+				totalDocuments: number;
+			};
 		} = await axiosInstanceWithAuth.post(
 			`${env.beURL}/api/seminari/search`,
 			body,
@@ -63,6 +67,19 @@ export const fetchSeminari = async (
 	}
 };
 
+export const fetchSeminarById = async (id: string) => {
+	try {
+		const response = await axiosInstanceWithAuth.get(
+			`${env.beURL}/api/seminari/${id}`,
+		);
+
+		return response.data;
+	} catch (error) {
+		console.error("Error fetching seminar data:", error);
+		throw error;
+	}
+};
+
 export const savePrijava = async (prijava: PrijavaNaSeminar) => {
 	try {
 		const response = await axiosInstanceWithAuth.post(
@@ -71,7 +88,7 @@ export const savePrijava = async (prijava: PrijavaNaSeminar) => {
 		);
 
 		return response.data;
-	} catch (error: any) {
+	} catch (error: unknown) {
 		if (error.response.status === 409) {
 			throw new Error("Zaposleni je već prijavljen na seminar", {
 				cause: "duplicate",

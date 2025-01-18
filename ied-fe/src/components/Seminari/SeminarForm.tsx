@@ -13,18 +13,18 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFnsV3";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { saveSeminar } from "../../api/seminari.api";
-import type { Seminar } from "../../schemas/firmaSchemas";
+import type { SeminarType } from "../../schemas/firmaSchemas";
 
 export default function SeminarForm({
 	seminar,
 	onDialogClose,
 	onSuccess,
 }: {
-	seminar?: Partial<Seminar>;
+	seminar?: Partial<SeminarType>;
 	onDialogClose?: () => void;
 	onSuccess?: () => void;
 }) {
-	const defaultSeminarData: Partial<Seminar> = {
+	const defaultSeminarData: Partial<SeminarType> = {
 		naziv: "",
 		predavac: "",
 		lokacija: "",

@@ -17,6 +17,7 @@ import type { PrijavaNaSeminar } from "../../schemas/firmaSchemas";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { deletePrijava } from "../../api/seminari.api";
 import MonetizationOnIcon from "@mui/icons-material/MonetizationOn";
+import { useNavigate } from "react-router-dom";
 
 export default function PrijaveSeminarTable({
 	prijave,
@@ -37,6 +38,11 @@ export default function PrijaveSeminarTable({
 		}
 	};
 
+	const navigate = useNavigate();
+	const handleCreateRacun = () => {
+		navigate("/racuni", { state: { prijave } });
+	};
+
 	return (
 		<>
 			<TableRow sx={{ backgroundColor: "#95bb9f" }}>
@@ -54,7 +60,9 @@ export default function PrijaveSeminarTable({
 					<Tooltip title="Kreiraj racun">
 						<IconButton
 							color="success"
-							onClick={() => console.log("le firma", prijave[0].firma_id)}
+							onClick={() => {
+								handleCreateRacun();
+							}}
 						>
 							<MonetizationOnIcon />
 						</IconButton>
