@@ -11,6 +11,7 @@ import {
 	TableContainer,
 	Box,
 	Button,
+	TextField,
 } from "@mui/material";
 import PageTitle from "../components/PageTitle";
 import iedLogo from "../../public/ied-logo-2.png";
@@ -21,19 +22,48 @@ const Racun = (
 		<Grid2 component={Paper} size={12} container>
 			<Grid2 size={7}>
 				<Box sx={{ padding: "1rem" }}>
-					<Typography>
-						Institut za ekonomsku diplomatiju d.o.o, 11080 Zemun, Pregrevica
-						168,
-					</Typography>
-					<Typography>Kontakt telefoni: 011/3077612, 3077612</Typography>
-					<Typography>PIB:SR103159254; Matični broj: 17518313;</Typography>
-					<Typography>
-						Broj rešenja o evidenciji za PDV kod Ministarstva finansija
-						Republike Srbije: 134107598;
-					</Typography>
-					<Typography>
-						Tekući račun: 170-0030035229000-87 (UniCredit Banka)
-					</Typography>
+					<TextField
+						fullWidth
+						variant="filled"
+						label="Podaci o izdavaocu računa"
+						defaultValue="Institut za ekonomsku diplomatiju d.o.o, 11080 Zemun, Pregrevica 168"
+						sx={{ mb: 2 }}
+					/>
+					<TextField
+						fullWidth
+						variant="filled"
+						label="Kontakt telefoni"
+						defaultValue="011/3077612, 3077612"
+						sx={{ mb: 2 }}
+					/>
+					<TextField
+						fullWidth
+						variant="filled"
+						label="PIB"
+						defaultValue="SR103159254"
+						sx={{ mb: 2 }}
+					/>
+					<TextField
+						fullWidth
+						variant="filled"
+						label="Matični broj"
+						defaultValue="17518313"
+						sx={{ mb: 2 }}
+					/>
+					<TextField
+						fullWidth
+						variant="filled"
+						label="Broj rešenja o evidenciji za PDV"
+						defaultValue="134107598"
+						sx={{ mb: 2 }}
+					/>
+					<TextField
+						fullWidth
+						variant="filled"
+						label="Tekući račun"
+						defaultValue="170-0030035229000-87 (UniCredit Banka)"
+						sx={{ mb: 2 }}
+					/>
 				</Box>
 			</Grid2>
 			<Grid2 size={5}>
