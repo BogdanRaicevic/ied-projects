@@ -81,7 +81,7 @@ const Racun = (
 			</Box>
 			<Divider sx={{ mt: 3, mb: 3 }} />
 			<Typography align="center" variant="h4" sx={{ mb: 3 }}>
-				PREDRAČUN BROJ:{" "}
+				PREDRAČUN BROJ:
 			</Typography>
 			<Box sx={{ mb: 3 }}>
 				<TableContainer component={Paper}>
