@@ -39,6 +39,7 @@ type Racun = PrimalacRacuna & {
 	offlineUkupnaNaknada: number | string;
 	onlinePreskaOsnovica: number | string;
 	offlinePreskaOsnovica: number | string;
+	jedinicaMere: string;
 };
 
 export default function RacunForm({
@@ -55,6 +56,7 @@ export default function RacunForm({
 		brojUcesnikaOffline: primalacRacuna.brojUcesnikaOffline || "",
 		ukupanBrojUcesnika: primalacRacuna.ukupanBrojUcesnika || "",
 		nazivSeminara: primalacRacuna.nazivSeminara || "",
+		jedinicaMere: "Broj učesnika",
 	});
 
 	// NOTE: this is a workaround to update the form when the data changes
@@ -73,6 +75,7 @@ export default function RacunForm({
 			popustOnline: 0,
 			popustOffline: 0,
 			stopaPdv: 20,
+			jedinicaMere: "Broj učesnika",
 		});
 	}, [primalacRacuna]);
 
@@ -296,7 +299,12 @@ export default function RacunForm({
 										/>
 									</TableCell>
 									<TableCell align="left">
-										<Typography>Broj učesnika</Typography>
+										<TextField
+											variant="filled"
+											name="jedinicaMere"
+											value={racun.jedinicaMere}
+											onChange={handleRacunChange}
+										/>
 									</TableCell>
 
 									<TableCell align="left">
@@ -397,7 +405,12 @@ export default function RacunForm({
 										/>
 									</TableCell>
 									<TableCell align="left">
-										<Typography>Broj učesnika</Typography>
+										<TextField
+											variant="filled"
+											name="jedinicaMere"
+											value={racun.jedinicaMere}
+											onChange={handleRacunChange}
+										/>
 									</TableCell>
 
 									<TableCell align="left">
