@@ -99,15 +99,20 @@ export default function RacunForm({
 			(1 - popustOffline / 100) *
 			(1 + stopaPdv / 100);
 
+		const onlinePreskaOsnovica =
+			onlineCena * brojUcesnikaOnline * (1 - popustOnline / 100);
+		const offlinePreskaOsnovica =
+			offlineCena * brojUcesnikaOffline * (1 - popustOffline / 100);
+
 		setRacun((prev) => {
 			return {
 				...prev,
 				onlineUkupnaNaknada: onlineUkupnaNaknada.toFixed(2),
 				offlineUkupnaNaknada: offlineUkupnaNaknada.toFixed(2),
-				pdvOffline: offlineUkupnaNaknada - offlineCena * brojUcesnikaOffline,
-				pdvOnline: onlineUkupnaNaknada - onlineCena * brojUcesnikaOnline,
-				onlinePreskaOsnovica: onlineCena * (1 - popustOnline / 100),
-				offlinePreskaOsnovica: offlineCena * (1 - popustOffline / 100),
+				pdvOffline: offlinePreskaOsnovica * (stopaPdv / 100),
+				pdvOnline: onlinePreskaOsnovica * (stopaPdv / 100),
+				onlinePreskaOsnovica,
+				offlinePreskaOsnovica,
 			};
 		});
 	}, [
@@ -298,7 +303,7 @@ export default function RacunForm({
 									<TableCell align="left">
 										<TextField
 											variant="filled"
-											name="onlineBrojUcesnika"
+											name="brojUcesnikaOnline"
 											value={racun.brojUcesnikaOnline}
 											onChange={handleRacunChange}
 										/>
@@ -341,42 +346,16 @@ export default function RacunForm({
 										/>
 									</TableCell>
 									<TableCell align="left">
-										<TextField
-											sx={{ maxWidth: 100 }}
-											name="onlinePoreskaOsnovica"
-											value={racun.onlinePreskaOsnovica}
-										/>
+										<Typography>{racun.onlinePreskaOsnovica}</Typography>
 									</TableCell>
 									<TableCell align="left">
-										<TextField
-											sx={{ maxWidth: 70 }}
-											name="stopaPdv"
-											value="20"
-											slotProps={{
-												input: {
-													endAdornment: (
-														<InputAdornment position="end">%</InputAdornment>
-													),
-												},
-											}}
-										/>
+										<Typography>{racun.stopaPdv}%</Typography>
 									</TableCell>
 									<TableCell align="left">
-										<TextField
-											sx={{ maxWidth: 70 }}
-											name="pdvOnline"
-											value={racun.pdvOnline}
-											onChange={handleRacunChange}
-										/>
+										<Typography>{racun.pdvOnline}</Typography>
 									</TableCell>
 									<TableCell align="left">
-										<TextField
-											sx={{ maxWidth: 120 }}
-											name="onlineUkupnaNaknada"
-											variant="filled"
-											value={racun.onlineUkupnaNaknada}
-											onChange={handleRacunChange}
-										/>
+										<Typography>{racun.onlineUkupnaNaknada}</Typography>
 									</TableCell>
 								</TableRow>
 							</TableBody>
@@ -425,7 +404,7 @@ export default function RacunForm({
 									<TableCell align="left">
 										<TextField
 											variant="filled"
-											name="offlineBrojUcesnika"
+											name="brojUcesnikaOffline"
 											value={racun.brojUcesnikaOffline}
 											onChange={handleRacunChange}
 										/>
@@ -468,42 +447,16 @@ export default function RacunForm({
 										/>
 									</TableCell>
 									<TableCell align="left">
-										<TextField
-											sx={{ maxWidth: 100 }}
-											name="offlinePoreskaOsnovica"
-											value={racun.offlinePreskaOsnovica}
-										/>
+										<Typography>{racun.offlinePreskaOsnovica}</Typography>
 									</TableCell>
 									<TableCell align="left">
-										<TextField
-											sx={{ maxWidth: 70 }}
-											name="stopaPdv"
-											value="20"
-											slotProps={{
-												input: {
-													endAdornment: (
-														<InputAdornment position="end">%</InputAdornment>
-													),
-												},
-											}}
-										/>
+										<Typography>{racun.stopaPdv}%</Typography>
 									</TableCell>
 									<TableCell align="left">
-										<TextField
-											sx={{ maxWidth: 70 }}
-											name="pdvOffline"
-											value={racun.pdvOffline}
-											onChange={handleRacunChange}
-										/>
+										<Typography>{racun.pdvOffline}</Typography>
 									</TableCell>
 									<TableCell align="left">
-										<TextField
-											sx={{ maxWidth: 120 }}
-											name="offlineUkupnaNaknada"
-											variant="filled"
-											value={racun.offlineUkupnaNaknada}
-											onChange={handleRacunChange}
-										/>
+										<Typography>{racun.offlineUkupnaNaknada}</Typography>
 									</TableCell>
 								</TableRow>
 							</TableBody>
