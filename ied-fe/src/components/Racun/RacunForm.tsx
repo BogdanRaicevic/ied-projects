@@ -13,7 +13,7 @@ import {
 	Box,
 } from "@mui/material";
 import iedLogo from "../../../public/ied-logo-2.png";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 type PrimalacRacuna = {
 	naziv: string;
@@ -39,7 +39,7 @@ type Racun = PrimalacRacuna & {
 export default function RacunForm({
 	primalacRacuna,
 }: { primalacRacuna: PrimalacRacuna }) {
-	const [racun, setRacuna] = useState<Partial<Racun>>({
+	const [racun, setRacun] = useState<Partial<Racun>>({
 		naziv: primalacRacuna.naziv || "",
 		adresa: primalacRacuna.adresa || "",
 		pib: primalacRacuna.pib || "",
@@ -52,12 +52,26 @@ export default function RacunForm({
 		nazivSeminara: primalacRacuna.nazivSeminara || "",
 	});
 
-	console.log("racun", racun);
+	// NOTE: this is a workaround to update the form when the data changes
+	useEffect(() => {
+		setRacun({
+			naziv: primalacRacuna.naziv || "",
+			adresa: primalacRacuna.adresa || "",
+			pib: primalacRacuna.pib || "",
+			maticniBroj: primalacRacuna.maticniBroj || "",
+			onlineCena: primalacRacuna.onlineCena || "",
+			offlineCena: primalacRacuna.offlineCena || "",
+			brojUcesnikaOnline: primalacRacuna.brojUcesnikaOnline || "",
+			brojUcesnikaOffline: primalacRacuna.brojUcesnikaOffline || "",
+			ukupanBrojUcesnika: primalacRacuna.ukupanBrojUcesnika || "",
+			nazivSeminara: primalacRacuna.nazivSeminara || "",
+		});
+	}, [primalacRacuna]);
 
 	const handleRacunChange = (
 		e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
 	) => {
-		setRacuna((prev) => {
+		setRacun((prev) => {
 			return {
 				...prev,
 				[e.target.name]: e.target.value,
@@ -192,7 +206,7 @@ export default function RacunForm({
 				</Box>
 				<Divider sx={{ mt: 3, mb: 3 }} />
 				<Typography align="center" variant="h4" sx={{ mb: 3 }}>
-					PREDRAČUN BROJ: TBD
+					Online prisustva
 				</Typography>
 				<Box sx={{ mb: 3 }}>
 					<TableContainer component={Paper}>
@@ -209,7 +223,6 @@ export default function RacunForm({
 								<TableRow>
 									<TableCell>Vrsta usluge</TableCell>
 									<TableCell>Jedinica mere</TableCell>
-									<TableCell>Vrsta prisustva</TableCell>
 									<TableCell>Količina</TableCell>
 								</TableRow>
 							</TableHead>
@@ -223,19 +236,19 @@ export default function RacunForm({
 											variant="filled"
 											name="nazivSeminara"
 											value={racun.nazivSeminara}
+											onChange={handleRacunChange}
 										/>
 									</TableCell>
 									<TableCell align="left">
 										<Typography>Broj učesnika</Typography>
 									</TableCell>
-									<TableCell align="left">
-										<Typography>Online</Typography>
-									</TableCell>
+
 									<TableCell align="left">
 										<TextField
 											variant="filled"
 											name="onlineBrojUcesnika"
 											value={racun.brojUcesnikaOnline}
+											onChange={handleRacunChange}
 										/>
 									</TableCell>
 								</TableRow>
@@ -263,6 +276,131 @@ export default function RacunForm({
 											name="onlineCena"
 											variant="filled"
 											value={racun.onlineCena}
+											onChange={handleRacunChange}
+										/>
+									</TableCell>
+									<TableCell align="left">
+										<TextField
+											sx={{ maxWidth: 70 }}
+											name="popust"
+											variant="filled"
+											value={racun.popust}
+											onChange={handleRacunChange}
+										/>
+									</TableCell>
+									<TableCell align="left">
+										<TextField
+											sx={{ maxWidth: 100 }}
+											name="poreskaOsnovica"
+											variant="filled"
+											value={racun.poreskaOsnovica}
+											onChange={handleRacunChange}
+										/>
+									</TableCell>
+									<TableCell align="left">
+										<TextField
+											sx={{ maxWidth: 70 }}
+											name="stopaPdv"
+											variant="filled"
+											value="20%"
+											onChange={handleRacunChange}
+										/>
+									</TableCell>
+									<TableCell align="left">
+										<TextField
+											sx={{ maxWidth: 70 }}
+											name="pdv"
+											variant="filled"
+											value={racun.pdv}
+											onChange={handleRacunChange}
+										/>
+									</TableCell>
+									<TableCell align="left">
+										<TextField
+											sx={{ maxWidth: 120 }}
+											name="ukupnaNaknada"
+											variant="filled"
+											value={racun.ukupnaNaknada}
+											onChange={handleRacunChange}
+										/>
+									</TableCell>
+								</TableRow>
+							</TableBody>
+						</Table>
+					</TableContainer>
+				</Box>
+
+				<Typography align="center" variant="h4" sx={{ mb: 3 }}>
+					Offline prisustva
+				</Typography>
+				<Box sx={{ mb: 3 }}>
+					<TableContainer component={Paper}>
+						<Table
+							sx={{
+								border: 0,
+								borderBottom: 1,
+								borderStyle: "dashed",
+								mb: 3,
+							}}
+							aria-label="simple table"
+						>
+							<TableHead>
+								<TableRow>
+									<TableCell>Vrsta usluge</TableCell>
+									<TableCell>Jedinica mere</TableCell>
+									<TableCell>Količina</TableCell>
+								</TableRow>
+							</TableHead>
+							<TableBody>
+								<TableRow
+									key="naziv-firme"
+									sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+								>
+									<TableCell align="left">
+										<TextField
+											variant="filled"
+											name="nazivSeminara"
+											value={racun.nazivSeminara}
+											onChange={handleRacunChange}
+										/>
+									</TableCell>
+									<TableCell align="left">
+										<Typography>Broj učesnika</Typography>
+									</TableCell>
+
+									<TableCell align="left">
+										<TextField
+											variant="filled"
+											name="offlineBrojUcesnika"
+											value={racun.brojUcesnikaOffline}
+											onChange={handleRacunChange}
+										/>
+									</TableCell>
+								</TableRow>
+							</TableBody>
+						</Table>
+						<Table sx={{ minWidth: 650 }} aria-label="simple table">
+							<TableHead>
+								<TableRow>
+									<TableCell>Cena po jedinici</TableCell>
+									<TableCell>Popust</TableCell>
+									<TableCell>Poreska osnovica</TableCell>
+									<TableCell>Stopa PDV</TableCell>
+									<TableCell>PDV</TableCell>
+									<TableCell>Ukupna naknada</TableCell>
+								</TableRow>
+							</TableHead>
+							<TableBody>
+								<TableRow
+									key="naziv-firme"
+									sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+								>
+									<TableCell align="left">
+										<TextField
+											sx={{ maxWidth: 100 }}
+											name="offlineCena"
+											variant="filled"
+											value={racun.offlineCena}
 											onChange={handleRacunChange}
 										/>
 									</TableCell>
