@@ -11,6 +11,7 @@ import {
 	TableBody,
 	Typography,
 	Box,
+	InputAdornment,
 } from "@mui/material";
 import iedLogo from "../../../public/ied-logo-2.png";
 import { useState, useEffect } from "react";
@@ -29,11 +30,16 @@ type PrimalacRacuna = {
 };
 
 type Racun = PrimalacRacuna & {
-	popust: number | string;
+	popustOnline: number | string;
+	popustOffline: number | string;
 	poreskaOsnovica: number | string;
 	stopaPdv: number | string;
-	pdv: number | string;
-	ukupnaNaknada: number | string;
+	pdvOffline: number | string;
+	pdvOnline: number | string;
+	onlineUkupnaNaknada: number | string;
+	offlineUkupnaNaknada: number | string;
+	onlinePreskaOsnovica: number | string;
+	offlinePreskaOsnovica: number | string;
 };
 
 export default function RacunForm({
@@ -65,8 +71,54 @@ export default function RacunForm({
 			brojUcesnikaOffline: primalacRacuna.brojUcesnikaOffline || "",
 			ukupanBrojUcesnika: primalacRacuna.ukupanBrojUcesnika || "",
 			nazivSeminara: primalacRacuna.nazivSeminara || "",
+			popustOnline: 0,
+			popustOffline: 0,
+			stopaPdv: 20,
 		});
 	}, [primalacRacuna]);
+
+	useEffect(() => {
+		const onlineCena = Number(racun.onlineCena) || 0;
+		const offlineCena = Number(racun.offlineCena) || 0;
+		const brojUcesnikaOnline = Number(racun?.brojUcesnikaOnline) || 0;
+		const brojUcesnikaOffline = Number(racun?.brojUcesnikaOffline) || 0;
+		const popustOnline = Number(racun?.popustOnline) || 0;
+		const popustOffline = Number(racun?.popustOffline) || 0;
+		const stopaPdv = Number(racun.stopaPdv) || 0;
+		console.log(onlineCena, brojUcesnikaOnline, popustOnline, stopaPdv);
+
+		const onlineUkupnaNaknada =
+			onlineCena *
+			brojUcesnikaOnline *
+			(1 - popustOnline / 100) *
+			(1 + stopaPdv / 100);
+
+		const offlineUkupnaNaknada =
+			offlineCena *
+			brojUcesnikaOffline *
+			(1 - popustOffline / 100) *
+			(1 + stopaPdv / 100);
+
+		setRacun((prev) => {
+			return {
+				...prev,
+				onlineUkupnaNaknada: onlineUkupnaNaknada.toFixed(2),
+				offlineUkupnaNaknada: offlineUkupnaNaknada.toFixed(2),
+				pdvOffline: offlineUkupnaNaknada - offlineCena * brojUcesnikaOffline,
+				pdvOnline: onlineUkupnaNaknada - onlineCena * brojUcesnikaOnline,
+				onlinePreskaOsnovica: onlineCena * (1 - popustOnline / 100),
+				offlinePreskaOsnovica: offlineCena * (1 - popustOffline / 100),
+			};
+		});
+	}, [
+		racun.onlineCena,
+		racun.offlineCena,
+		racun.brojUcesnikaOnline,
+		racun.brojUcesnikaOffline,
+		racun.popustOnline,
+		racun.popustOffline,
+		racun.stopaPdv,
+	]);
 
 	const handleRacunChange = (
 		e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
@@ -282,45 +334,47 @@ export default function RacunForm({
 									<TableCell align="left">
 										<TextField
 											sx={{ maxWidth: 70 }}
-											name="popust"
+											name="popustOnline"
 											variant="filled"
-											value={racun.popust}
+											value={racun.popustOnline}
 											onChange={handleRacunChange}
 										/>
 									</TableCell>
 									<TableCell align="left">
 										<TextField
 											sx={{ maxWidth: 100 }}
-											name="poreskaOsnovica"
-											variant="filled"
-											value={racun.poreskaOsnovica}
-											onChange={handleRacunChange}
+											name="onlinePoreskaOsnovica"
+											value={racun.onlinePreskaOsnovica}
 										/>
 									</TableCell>
 									<TableCell align="left">
 										<TextField
 											sx={{ maxWidth: 70 }}
 											name="stopaPdv"
-											variant="filled"
-											value="20%"
-											onChange={handleRacunChange}
+											value="20"
+											slotProps={{
+												input: {
+													endAdornment: (
+														<InputAdornment position="end">%</InputAdornment>
+													),
+												},
+											}}
 										/>
 									</TableCell>
 									<TableCell align="left">
 										<TextField
 											sx={{ maxWidth: 70 }}
-											name="pdv"
-											variant="filled"
-											value={racun.pdv}
+											name="pdvOnline"
+											value={racun.pdvOnline}
 											onChange={handleRacunChange}
 										/>
 									</TableCell>
 									<TableCell align="left">
 										<TextField
 											sx={{ maxWidth: 120 }}
-											name="ukupnaNaknada"
+											name="onlineUkupnaNaknada"
 											variant="filled"
-											value={racun.ukupnaNaknada}
+											value={racun.onlineUkupnaNaknada}
 											onChange={handleRacunChange}
 										/>
 									</TableCell>
@@ -407,45 +461,47 @@ export default function RacunForm({
 									<TableCell align="left">
 										<TextField
 											sx={{ maxWidth: 70 }}
-											name="popust"
+											name="popustOffline"
 											variant="filled"
-											value={racun.popust}
+											value={racun.popustOffline}
 											onChange={handleRacunChange}
 										/>
 									</TableCell>
 									<TableCell align="left">
 										<TextField
 											sx={{ maxWidth: 100 }}
-											name="poreskaOsnovica"
-											variant="filled"
-											value={racun.poreskaOsnovica}
-											onChange={handleRacunChange}
+											name="offlinePoreskaOsnovica"
+											value={racun.offlinePreskaOsnovica}
 										/>
 									</TableCell>
 									<TableCell align="left">
 										<TextField
 											sx={{ maxWidth: 70 }}
 											name="stopaPdv"
-											variant="filled"
-											value="20%"
-											onChange={handleRacunChange}
+											value="20"
+											slotProps={{
+												input: {
+													endAdornment: (
+														<InputAdornment position="end">%</InputAdornment>
+													),
+												},
+											}}
 										/>
 									</TableCell>
 									<TableCell align="left">
 										<TextField
 											sx={{ maxWidth: 70 }}
-											name="pdv"
-											variant="filled"
-											value={racun.pdv}
+											name="pdvOffline"
+											value={racun.pdvOffline}
 											onChange={handleRacunChange}
 										/>
 									</TableCell>
 									<TableCell align="left">
 										<TextField
 											sx={{ maxWidth: 120 }}
-											name="ukupnaNaknada"
+											name="offlineUkupnaNaknada"
 											variant="filled"
-											value={racun.ukupnaNaknada}
+											value={racun.offlineUkupnaNaknada}
 											onChange={handleRacunChange}
 										/>
 									</TableCell>
