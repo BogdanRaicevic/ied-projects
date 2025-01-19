@@ -11,7 +11,6 @@ import {
 	TableBody,
 	Typography,
 	Box,
-	InputAdornment,
 } from "@mui/material";
 import iedLogo from "../../../public/ied-logo-2.png";
 import { useState, useEffect } from "react";
