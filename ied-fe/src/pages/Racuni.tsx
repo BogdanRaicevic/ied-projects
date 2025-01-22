@@ -46,6 +46,7 @@ export default function Racuni() {
 		naziv: firma?.naziv_firme || "",
 		adresa: firma?.adresa || "",
 		pib: firma?.PIB || "",
+		mesto: firma?.mesto || "",
 		maticniBroj: firma?.maticni_broj || "",
 		onlineCena: seminar?.onlineCena || "",
 		offlineCena: seminar?.offlineCena || "",

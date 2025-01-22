@@ -19,6 +19,7 @@ type PrimalacRacuna = {
 	naziv: string;
 	adresa: string;
 	pib: number | string;
+	mesto: string;
 	maticniBroj: number | string;
 	onlineCena: number | string;
 	offlineCena: number | string;
@@ -55,6 +56,7 @@ export const RacunForm = forwardRef<RacunFormRef, RacunFormProps>(
 			naziv: primalacRacuna.naziv || "",
 			adresa: primalacRacuna.adresa || "",
 			pib: primalacRacuna.pib || "",
+			mesto: primalacRacuna.mesto || "",
 			maticniBroj: primalacRacuna.maticniBroj || "",
 			onlineCena: primalacRacuna.onlineCena || "",
 			offlineCena: primalacRacuna.offlineCena || "",
@@ -71,6 +73,7 @@ export const RacunForm = forwardRef<RacunFormRef, RacunFormProps>(
 				naziv: primalacRacuna.naziv || "",
 				adresa: primalacRacuna.adresa || "",
 				pib: primalacRacuna.pib || "",
+				mesto: primalacRacuna.mesto || "",
 				maticniBroj: primalacRacuna.maticniBroj || "",
 				onlineCena: primalacRacuna.onlineCena || "",
 				offlineCena: primalacRacuna.offlineCena || "",
@@ -242,7 +245,7 @@ export const RacunForm = forwardRef<RacunFormRef, RacunFormProps>(
 												fullWidth
 												variant="filled"
 												label="Adresa"
-												value={racun.adresa}
+												value={`${racun.mesto}, ${racun.adresa}`}
 												sx={{ mb: 2 }}
 												onChange={handleRacunChange}
 											/>
