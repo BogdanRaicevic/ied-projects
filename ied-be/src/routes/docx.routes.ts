@@ -6,24 +6,20 @@ import Docxtemplater from "docxtemplater";
 
 const router = Router();
 
-router.get("/modify-template", async (req, res, next) => {
+router.post("/modify-template", async (req, res, next) => {
+	const data = req.body;
+	console.log("data:", data);
 	const content = fs.readFileSync(
-		path.resolve(__dirname, "../templates/template.docx"),
+		path.resolve(__dirname, "../templates/template_1.docx"),
 		"binary",
 	);
 	const zip = new PizZip(content);
 	const doc = new Docxtemplater(zip);
 
-	doc.setData({
-		ime: "John",
-		prezime: "Doe",
-		offline_cena: "100",
-		online_cena: "50",
-		datum: "2021-12-12",
-	});
-
 	try {
-		doc.render();
+		doc.render({
+			...data,
+		});
 	} catch (error) {
 		next(error);
 	}

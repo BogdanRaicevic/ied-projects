@@ -2,9 +2,9 @@ import { Button } from "@mui/material";
 import PageTitle from "../components/PageTitle";
 import { updateRacunTemplate } from "../api/docx.api";
 import { useLocation } from "react-router-dom";
-import RacunForm from "../components/Racun/RacunForm";
+import { RacunForm, type Racun } from "../components/Racun/RacunForm";
 import { fetchSingleFirmaData } from "../api/firma.api";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import type {
 	FirmaType,
 	PrijavaNaSeminar,
@@ -15,6 +15,7 @@ import { fetchSeminarById } from "../api/seminari.api";
 export default function Racuni() {
 	const [firma, setFirma] = useState<FirmaType | null>(null);
 	const [seminar, setSeminar] = useState<SeminarType | null>(null);
+	const formRef = useRef<{ getRacunData: () => Partial<Racun> }>(null);
 
 	const location = useLocation();
 	const prijave: PrijavaNaSeminar[] = location.state?.prijave || [];
@@ -55,11 +56,20 @@ export default function Racuni() {
 		ukupanBrojUcesnika: prijave.length || "",
 		nazivSeminara: seminar?.naziv || "",
 	};
+
+	const handleDocxUpdate = async () => {
+		if (formRef.current) {
+			const racunData = formRef.current.getRacunData();
+			console.log("racunData:", racunData);
+			await updateRacunTemplate(racunData);
+		}
+	};
+
 	return (
 		<>
 			<PageTitle title={"Racuni"} />
-			<RacunForm primalacRacuna={primalacRacuna} />
-			<Button onClick={updateRacunTemplate} variant="contained">
+			<RacunForm primalacRacuna={primalacRacuna} ref={formRef} />
+			<Button onClick={handleDocxUpdate} variant="contained">
 				odje click
 			</Button>
 		</>
