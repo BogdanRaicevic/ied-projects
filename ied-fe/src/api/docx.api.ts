@@ -4,7 +4,6 @@ import type { Racun } from "../components/Racun/RacunForm";
 
 export const updateRacunTemplate = async (racunData: Partial<Racun>) => {
 	try {
-		console.log("updateRacunTemplate");
 		const response = await axiosInstanceWithAuth.post(
 			`${env.beURL}/api/docx/modify-template`,
 			racunData,

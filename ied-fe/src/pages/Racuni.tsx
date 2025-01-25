@@ -61,7 +61,6 @@ export default function Racuni() {
 	const handleDocxUpdate = async () => {
 		if (formRef.current) {
 			const racunData = formRef.current.getRacunData();
-			console.log("racunData:", racunData);
 			await updateRacunTemplate(racunData);
 		}
 	};
