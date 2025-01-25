@@ -7,8 +7,14 @@ import Docxtemplater from "docxtemplater";
 const router = Router();
 
 router.post("/modify-template", async (req, res, next) => {
-	const data = req.body;
+	const data = {
+		...req.body,
+		datumIzdavanjaRacuna: new Date().toLocaleDateString("sr-RS"),
+		hasOnline: Number(req.body.brojUcesnikaOnline) > 0,
+		hasOffline: Number(req.body.brojUcesnikaOffline) > 0,
+	};
 	console.log("data:", data);
+
 	const content = fs.readFileSync(
 		path.resolve(__dirname, "../templates/template_1.docx"),
 		"binary",

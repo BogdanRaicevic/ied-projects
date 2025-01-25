@@ -51,10 +51,10 @@ export default function Racuni() {
 		onlineCena: seminar?.onlineCena || "",
 		offlineCena: seminar?.offlineCena || "",
 		brojUcesnikaOnline:
-			prijave.filter((p) => p.prisustvo === "online").length || "",
+			prijave.filter((p) => p.prisustvo === "online").length || 0,
 		brojUcesnikaOffline:
-			prijave.filter((p) => p.prisustvo === "offline").length || "",
-		ukupanBrojUcesnika: prijave.length || "",
+			prijave.filter((p) => p.prisustvo === "offline").length || 0,
+		ukupanBrojUcesnika: prijave.length || 0,
 		nazivSeminara: seminar?.naziv || "",
 	};
 
