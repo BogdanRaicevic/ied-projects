@@ -37,8 +37,8 @@ export type Racun = PrimalacRacuna & {
 	pdvOnline: number | string;
 	onlineUkupnaNaknada: number | string;
 	offlineUkupnaNaknada: number | string;
-	onlinePreskaOsnovica: number | string;
-	offlinePreskaOsnovica: number | string;
+	onlinePoreskaOsnovica: number | string;
+	offlinePoreskaOsnovica: number | string;
 	jedinicaMere: string;
 };
 
@@ -109,19 +109,19 @@ export const RacunForm = forwardRef<RacunFormRef, RacunFormProps>(
 				(1 - popustOffline / 100) *
 				(1 + stopaPdv / 100);
 
-			const onlinePreskaOsnovica =
+			const onlinePoreskaOsnovica =
 				onlineCena * brojUcesnikaOnline * (1 - popustOnline / 100);
-			const offlinePreskaOsnovica =
+			const offlinePoreskaOsnovica =
 				offlineCena * brojUcesnikaOffline * (1 - popustOffline / 100);
 
 			setRacun((prev) => ({
 				...prev,
 				onlineUkupnaNaknada: onlineUkupnaNaknada.toFixed(2),
 				offlineUkupnaNaknada: offlineUkupnaNaknada.toFixed(2),
-				pdvOffline: ((offlinePreskaOsnovica * stopaPdv) / 100).toFixed(2),
-				pdvOnline: ((onlinePreskaOsnovica * stopaPdv) / 100).toFixed(2),
-				onlinePreskaOsnovica: onlinePreskaOsnovica.toFixed(2),
-				offlinePreskaOsnovica: offlinePreskaOsnovica.toFixed(2),
+				pdvOffline: ((offlinePoreskaOsnovica * stopaPdv) / 100).toFixed(2),
+				pdvOnline: ((onlinePoreskaOsnovica * stopaPdv) / 100).toFixed(2),
+				onlinePoreskaOsnovica: onlinePoreskaOsnovica.toFixed(2),
+				offlinePoreskaOsnovica: offlinePoreskaOsnovica.toFixed(2),
 			}));
 		}, [
 			racun.onlineCena,
@@ -363,7 +363,7 @@ export const RacunForm = forwardRef<RacunFormRef, RacunFormProps>(
 											/>
 										</TableCell>
 										<TableCell align="left">
-											<Typography>{racun.onlinePreskaOsnovica}</Typography>
+											<Typography>{racun.onlinePoreskaOsnovica}</Typography>
 										</TableCell>
 										<TableCell align="left">
 											<Typography>{racun.stopaPdv}%</Typography>
@@ -469,7 +469,7 @@ export const RacunForm = forwardRef<RacunFormRef, RacunFormProps>(
 											/>
 										</TableCell>
 										<TableCell align="left">
-											<Typography>{racun.offlinePreskaOsnovica}</Typography>
+											<Typography>{racun.offlinePoreskaOsnovica}</Typography>
 										</TableCell>
 										<TableCell align="left">
 											<Typography>{racun.stopaPdv}%</Typography>
