@@ -1,6 +1,10 @@
 import { env } from "./utils/envVariables";
 import { connectDB } from "./database/db";
-import express, { NextFunction, Request, Response } from "express";
+import express, {
+	type NextFunction,
+	type Request,
+	type Response,
+} from "express";
 import cors from "cors";
 import firmaRoutes from "./routes/firma.routes";
 import velicineFirmiRoutes from "./routes/velicina_firme.routes";
@@ -51,10 +55,6 @@ app.use(
 app.use(express.json());
 
 const customRequireAuth = (req: Request, res: Response, next: NextFunction) => {
-	if (process.env.NODE_ENV === "development") {
-		return next();
-	}
-
 	const auth = getAuth(req);
 	if (!auth.userId) {
 		return res.status(403).send("Forbidden");
