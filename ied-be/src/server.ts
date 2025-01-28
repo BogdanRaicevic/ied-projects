@@ -17,7 +17,7 @@ import stanjaFirmeRoutes from "./routes/stanje_firme.routes";
 import seminarRoutes from "./routes/seminari.routes";
 import testRoutes from "./routes/test.routes";
 import { errorWrapper } from "./middleware/errorWrapper";
-import { clerkMiddleware, getAuth } from "@clerk/express";
+import { clerkMiddleware, getAuth, clerkClient } from "@clerk/express";
 
 const app = express();
 
@@ -25,6 +25,8 @@ app.use(
 	cors({
 		origin: true,
 		credentials: true,
+		allowedHeaders: ["Authorization", "Content-Type"],
+		exposedHeaders: ["Authorization"],
 	}),
 );
 
@@ -35,27 +37,25 @@ app.use(
 	}),
 );
 
-// if (process.env.NODE_ENV === "development") {
-//   app.use(
-//     cors({
-//       origin: "*", // Allow all origins in development
-//       credentials: true, // Reflect CORS headers in responses
-//     })
-//   );
-// } else {
-//   // Production environment CORS policy
-//   // Replace '*' with your specific allowed origins
-//   app.use(
-//     cors({
-//       origin: ["http://localhost:8000", "https://localhost:5173"],
-//       credentials: true,
-//     })
-//   );
-// }
 app.use(express.json());
 
-const customRequireAuth = (req: Request, res: Response, next: NextFunction) => {
+const customRequireAuth = async (
+	req: Request,
+	res: Response,
+	next: NextFunction,
+) => {
 	const auth = getAuth(req);
+	console.log("auth", auth.userId);
+
+	if (auth.userId) {
+		console.log(
+			"user stuf",
+			(await clerkClient.users.getUser(auth.userId)).primaryEmailAddress
+				?.emailAddress,
+		);
+	} else {
+		console.log("no user stuff");
+	}
 	if (!auth.userId) {
 		return res.status(403).send("Forbidden");
 	}
