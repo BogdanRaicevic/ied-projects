@@ -102,7 +102,7 @@ export default function SeminarForm({
 				setAlertOpen(true);
 				onDialogClose?.(); // Close dialog and refresh parent
 				onSuccess?.(); // Refresh parent
-			} catch (error) {
+			} catch (_error) {
 				setAlertSeverity("error");
 				setAlertMessage("Greška prilikom kreiranja seminara");
 				setAlertOpen(true);
