@@ -28,7 +28,7 @@ importers:
         version: 1.5.6
       mongoose:
         specifier: ^8.8.4
-        version: 8.9.5
+        version: 8.9.6
     devDependencies:
       '@biomejs/biome':
         specifier: ^1.9.4
@@ -251,8 +251,8 @@ packages:
     resolution: {integrity: sha512-yQbXgO/OSZVD2IsiLlro+7Hf6Q18EJrKSEsdoMzKePKXct3gvD8oLcOQdIzGupr5Fj+EDe8gO/lxc1BzfMpxvA==}
     engines: {node: '>=8'}
 
-  bson@6.10.1:
-    resolution: {integrity: sha512-P92xmHDQjSKPLHqFxefqMxASNq/aWJMEZugpCjf+AF/pgcUpMMQCg7t7+ewko0/u8AapvF3luf/FoehddEK+sA==}
+  bson@6.10.2:
+    resolution: {integrity: sha512-5afhLTjqDSA3akH56E+/2J6kTDuSIlBxyXPdQslj9hcIgOUE378xdOfZvC/9q3LifJNI6KR/juZ+d0NRNYBwXg==}
     engines: {node: '>=16.20.1'}
 
   bytes@3.1.2:
@@ -576,8 +576,8 @@ packages:
       socks:
         optional: true
 
-  mongoose@8.9.5:
-    resolution: {integrity: sha512-SPhOrgBm0nKV3b+IIHGqpUTOmgVL5Z3OO9AwkFEmvOZznXTvplbomstCnPOGAyungtRXE5pJTgKpKcZTdjeESg==}
+  mongoose@8.9.6:
+    resolution: {integrity: sha512-ipLvXwNPVuuuq5H3lnSD0lpaRH3DlCoC6emnMVJvweTwxU29uxDJWxMsNpERDQt8JMvYF1HGVuTK+Id2BlQLCA==}
     engines: {node: '>=16.20.1'}
 
   mpath@0.9.0:
@@ -1033,7 +1033,7 @@ snapshots:
     dependencies:
       fill-range: 7.1.1
 
-  bson@6.10.1: {}
+  bson@6.10.2: {}
 
   bytes@3.1.2: {}
 
@@ -1321,12 +1321,12 @@ snapshots:
   mongodb@6.12.0:
     dependencies:
       '@mongodb-js/saslprep': 1.1.9
-      bson: 6.10.1
+      bson: 6.10.2
       mongodb-connection-string-url: 3.0.2
 
-  mongoose@8.9.5:
+  mongoose@8.9.6:
     dependencies:
-      bson: 6.10.1
+      bson: 6.10.2
       kareem: 2.6.3
       mongodb: 6.12.0
       mpath: 0.9.0
