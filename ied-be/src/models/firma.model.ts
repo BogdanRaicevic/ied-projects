@@ -71,11 +71,11 @@ firmaSchema.pre("save", function (next) {
 });
 
 firmaSchema.pre("findOneAndUpdate", function (next) {
-	const update = this.getUpdate() as any;
-	const ddd = update.$set?.zaposleni;
-	for (const element of ddd) {
-		if (element.radno_mesto === "") {
-			element.radno_mesto = "nema";
+	const update = this.getUpdate() as unknown as { $set: FirmaType };
+	const zaposleni = update.$set?.zaposleni;
+	for (const z of zaposleni) {
+		if (z.radno_mesto === "") {
+			z.radno_mesto = "nema";
 		}
 	}
 	next();
