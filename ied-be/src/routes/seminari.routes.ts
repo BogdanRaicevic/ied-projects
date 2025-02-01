@@ -18,6 +18,7 @@ import type {
 	SeminarQueryParams,
 	SaveSeminarParams,
 } from "ied-shared/types/seminar";
+import { ErrorWithCause } from "../utils/customErrors";
 
 const router = Router();
 
@@ -111,11 +112,12 @@ router.post(
 		try {
 			const seminar = await savePrijava(req.body);
 			res.status(201).json(seminar);
-		} catch (error: any) {
-			if (error.cause === "duplicate") {
+		} catch (error: unknown) {
+			if (error instanceof ErrorWithCause && error.cause === "duplicate") {
 				res.status(409).json({ message: error.message });
+			} else {
+				next(error);
 			}
-			next(error);
 		}
 	},
 );

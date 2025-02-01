@@ -1,4 +1,4 @@
-import { isValidObjectId, Types, type FilterQuery } from "mongoose";
+import type { FilterQuery } from "mongoose";
 import { createSeminarQuery } from "../utils/seminariQueryBuilder";
 import { Seminar, type SeminarType } from "./../models/seminar.model";
 import type {
@@ -6,6 +6,7 @@ import type {
 	SeminarQueryParams,
 } from "ied-shared/types/seminar";
 import type { PrijavaNaSeminar } from "../routes/seminari.routes";
+import { ErrorWithCause } from "../utils/customErrors";
 
 export const saveSeminar = async (
 	seminarData: SaveSeminarParams,
@@ -67,9 +68,10 @@ export const savePrijava = async (prijava: PrijavaNaSeminar) => {
 					p.zaposleni_prezime === prijava.zaposleni_prezime),
 		)
 	) {
-		throw new Error("Zaposleni je već prijavljen na seminar", {
-			cause: "duplicate",
-		});
+		throw new ErrorWithCause(
+			"Zaposleni je već prijavljen na seminar",
+			"duplicate",
+		);
 	}
 
 	seminar.prijave.push(prijavaWithoutId);
