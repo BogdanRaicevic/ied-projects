@@ -10,7 +10,7 @@ importers:
     dependencies:
       '@clerk/clerk-js':
         specifier: ^5.50.0
-        version: 5.50.0(@types/react@18.3.18)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+        version: 5.51.0(@types/react@18.3.18)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@clerk/clerk-react':
         specifier: ^5.19.0
         version: 5.22.6(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -158,6 +158,10 @@ packages:
     resolution: {integrity: sha512-FDSOghenHTiToteC/QRlv2q3DhPZ/oOXTBoirfWNx1Cx3TMVcGWQtMMmQcSvb/JjpNeGzx8Pq/b4fKEJuWm1sw==}
     engines: {node: '>=6.9.0'}
 
+  '@babel/runtime@7.26.7':
+    resolution: {integrity: sha512-AOPI3D+a8dXnja+iwsUqGRjr1BbZIe771sXdapOtYI531gSqpi92vXivKcq2asu/DFpdl1ceFAKZyRzK2PCVcQ==}
+    engines: {node: '>=6.9.0'}
+
   '@babel/template@7.25.9':
     resolution: {integrity: sha512-9DGttpmPvIxBb/2uwpVo3dqJ+O6RooAFOS+lB+xDqoE2PVCE8nfoHMdZLpfCQRLwvohzXISPZcgxt80xLfsuwg==}
     engines: {node: '>=6.9.0'}
@@ -223,8 +227,8 @@ packages:
     cpu: [x64]
     os: [win32]
 
-  '@clerk/clerk-js@5.50.0':
-    resolution: {integrity: sha512-9Pe5QySlkDOC4xNtJf+tSWRjY+aGYH33cz5jt7G0oo8knAIZutw38maoqoMh2NwLGJTg+CzoG5gX5MdWy4hpjg==}
+  '@clerk/clerk-js@5.51.0':
+    resolution: {integrity: sha512-tZROPFqnblANeupacxe8njN1Qi6wjQmQ/1s2Kn+SpAre6AojDJvI0slAxu+nI+h3eRbpvUn0GoVCsUnU9t2ZUw==}
     engines: {node: '>=18.17.0'}
     peerDependencies:
       react: ^18.0.0 || ^19.0.0 || ^19.0.0-0
@@ -237,8 +241,8 @@ packages:
       react: ^18.0.0 || ^19.0.0 || ^19.0.0-0
       react-dom: ^18.0.0 || ^19.0.0 || ^19.0.0-0
 
-  '@clerk/localizations@3.10.1':
-    resolution: {integrity: sha512-4xbZcMN8kN6FFt1SH6Qxyjmj+b36gDDqpITgSvGUNrVt8bHxlvdL0KFJbwjSG+FOdkFk7bK5mJ4PGLQt2bqaJQ==}
+  '@clerk/localizations@3.10.4':
+    resolution: {integrity: sha512-VgSDl0xrAtZZHsqfhzlwLRz9uXAKYP7VXyK6KAexYsydML4eG5GnsyuXqb3ZzbkxzvVmD9CxOVwfSf9xrpKzPg==}
     engines: {node: '>=18.17.0'}
 
   '@clerk/shared@2.20.14':
@@ -253,8 +257,8 @@ packages:
       react-dom:
         optional: true
 
-  '@clerk/shared@2.20.15':
-    resolution: {integrity: sha512-nFCt64Gkq6irGNTjVWHRCJnCyymLPYJTmfAusl9uENxFoy2BJ24dR9jIVoNLC8iKbDZTSRakOwiOjjXvZL9tJA==}
+  '@clerk/shared@2.20.18':
+    resolution: {integrity: sha512-vSQLZSRFr62+YeE1KE/Xu/eWCrwYJRNA2KRyQYmb2VPleFNmOjtTNlO4xkMZ0eN6BLKxrBo9b0NVwu3L28FhKg==}
     engines: {node: '>=18.17.0'}
     peerDependencies:
       react: ^18.0.0 || ^19.0.0 || ^19.0.0-0
@@ -269,8 +273,8 @@ packages:
     resolution: {integrity: sha512-L9UNS21sQ7OAgXKUWSMaZWayI/qmVM4DGvGCAlL0tpzbzdFU1nkxRaMOT3FkmWKSahIq4BI+vJHfMC1ki9uuGg==}
     engines: {node: '>=18.17.0'}
 
-  '@clerk/types@4.44.1':
-    resolution: {integrity: sha512-CP+ABOzzHkVVbFMTZpcf/hC2rewtVJOxeFBbvmK0p2emDJwp3tkyGhw03mrt4yiEpeEgdD3n+N0weEadVFu3mw==}
+  '@clerk/types@4.45.0':
+    resolution: {integrity: sha512-DSXPWq1xD01tzyHv7CugX2T/XfVUZX2xxQ92cs+JPTrGoqIYm+yjRWqOz1CVJ/76TbYMOrB0efCGOxEcNV/PQw==}
     engines: {node: '>=18.17.0'}
 
   '@coinbase/wallet-sdk@4.0.4':
@@ -1685,6 +1689,10 @@ snapshots:
     dependencies:
       regenerator-runtime: 0.14.1
 
+  '@babel/runtime@7.26.7':
+    dependencies:
+      regenerator-runtime: 0.14.1
+
   '@babel/template@7.25.9':
     dependencies:
       '@babel/code-frame': 7.26.2
@@ -1743,11 +1751,11 @@ snapshots:
   '@biomejs/cli-win32-x64@1.9.4':
     optional: true
 
-  '@clerk/clerk-js@5.50.0(@types/react@18.3.18)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
+  '@clerk/clerk-js@5.51.0(@types/react@18.3.18)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
     dependencies:
-      '@clerk/localizations': 3.10.1
-      '@clerk/shared': 2.20.15(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-      '@clerk/types': 4.44.1
+      '@clerk/localizations': 3.10.4
+      '@clerk/shared': 2.20.18(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@clerk/types': 4.45.0
       '@coinbase/wallet-sdk': 4.0.4
       '@emotion/cache': 11.11.0
       '@emotion/react': 11.11.1(@types/react@18.3.18)(react@18.3.1)
@@ -1778,9 +1786,9 @@ snapshots:
       react-dom: 18.3.1(react@18.3.1)
       tslib: 2.4.1
 
-  '@clerk/localizations@3.10.1':
+  '@clerk/localizations@3.10.4':
     dependencies:
-      '@clerk/types': 4.44.1
+      '@clerk/types': 4.45.0
 
   '@clerk/shared@2.20.14(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
     dependencies:
@@ -1794,9 +1802,9 @@ snapshots:
       react: 18.3.1
       react-dom: 18.3.1(react@18.3.1)
 
-  '@clerk/shared@2.20.15(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
+  '@clerk/shared@2.20.18(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
     dependencies:
-      '@clerk/types': 4.44.1
+      '@clerk/types': 4.45.0
       dequal: 2.0.3
       glob-to-regexp: 0.4.1
       js-cookie: 3.0.5
@@ -1810,7 +1818,7 @@ snapshots:
     dependencies:
       csstype: 3.1.1
 
-  '@clerk/types@4.44.1':
+  '@clerk/types@4.45.0':
     dependencies:
       csstype: 3.1.1
 
@@ -1871,9 +1879,9 @@ snapshots:
 
   '@emotion/react@11.11.1(@types/react@18.3.18)(react@18.3.1)':
     dependencies:
-      '@babel/runtime': 7.26.0
+      '@babel/runtime': 7.26.7
       '@emotion/babel-plugin': 11.13.5
-      '@emotion/cache': 11.14.0
+      '@emotion/cache': 11.11.0
       '@emotion/serialize': 1.3.3
       '@emotion/use-insertion-effect-with-fallbacks': 1.2.0(react@18.3.1)
       '@emotion/utils': 1.4.2
