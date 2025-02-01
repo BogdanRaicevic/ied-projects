@@ -1,10 +1,6 @@
 import { env } from "./utils/envVariables";
 import { connectDB } from "./database/db";
-import express, {
-	type NextFunction,
-	type Request,
-	type Response,
-} from "express";
+import express from "express";
 import cors from "cors";
 import firmaRoutes from "./routes/firma.routes";
 import velicineFirmiRoutes from "./routes/velicina_firme.routes";
@@ -17,7 +13,8 @@ import stanjaFirmeRoutes from "./routes/stanje_firme.routes";
 import seminarRoutes from "./routes/seminari.routes";
 import testRoutes from "./routes/test.routes";
 import { errorWrapper } from "./middleware/errorWrapper";
-import { clerkMiddleware, getAuth, clerkClient } from "@clerk/express";
+import { clerkMiddleware, requireAuth } from "@clerk/express";
+import { hasPermission } from "./middleware/hasPermission";
 
 const app = express();
 
@@ -39,38 +36,25 @@ app.use(
 
 app.use(express.json());
 
-const customRequireAuth = async (
-	req: Request,
-	res: Response,
-	next: NextFunction,
-) => {
-	const auth = getAuth(req);
-	console.log("auth", auth.userId);
+// const debugRequireAuth = (req: any, res: any, next: any) => {
+// 		console.log("Authorization:", req.headers.authorization);
+// 	requireAuth()(req, res, next);
+// };
 
-	if (auth.userId) {
-		console.log(
-			"user stuf",
-			(await clerkClient.users.getUser(auth.userId)).primaryEmailAddress
-				?.emailAddress,
-		);
-	} else {
-		console.log("no user stuff");
-	}
-	if (!auth.userId) {
-		return res.status(403).send("Forbidden");
-	}
-	next();
-};
-
-app.use("/api/firma", customRequireAuth, firmaRoutes);
-app.use("/api/velicine-firmi", customRequireAuth, velicineFirmiRoutes);
-app.use("/api/radna-mesta", customRequireAuth, radnaMestaRoutes);
-app.use("/api/tip-firme", customRequireAuth, tipFirmeRoutes);
-app.use("/api/delatnost", customRequireAuth, delatnostiRoutes);
-app.use("/api/mesto", customRequireAuth, mestoRoutes);
-app.use("/api/pretrage", customRequireAuth, pretrageRoutes);
-app.use("/api/stanja-firmi", customRequireAuth, stanjaFirmeRoutes);
-app.use("/api/seminari", customRequireAuth, seminarRoutes);
+app.use("/api/firma", requireAuth(), hasPermission, firmaRoutes);
+app.use(
+	"/api/velicine-firmi",
+	requireAuth(),
+	hasPermission,
+	velicineFirmiRoutes,
+);
+app.use("/api/radna-mesta", requireAuth(), hasPermission, radnaMestaRoutes);
+app.use("/api/tip-firme", requireAuth(), hasPermission, tipFirmeRoutes);
+app.use("/api/delatnost", requireAuth(), hasPermission, delatnostiRoutes);
+app.use("/api/mesto", requireAuth(), hasPermission, mestoRoutes);
+app.use("/api/pretrage", requireAuth(), hasPermission, pretrageRoutes);
+app.use("/api/stanja-firmi", requireAuth(), hasPermission, stanjaFirmeRoutes);
+app.use("/api/seminari", requireAuth(), hasPermission, seminarRoutes);
 app.use("/api/test", testRoutes);
 
 app.use(errorWrapper);
