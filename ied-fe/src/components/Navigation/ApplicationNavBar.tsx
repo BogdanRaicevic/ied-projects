@@ -13,11 +13,9 @@ import {
 
 export default function ApplicationNavBar() {
 	const navItems = [
-		// { text: "Evidencija", linkPath: "/evidencija" },
 		{ text: "Pretrage", linkPath: "/pretrage" },
-		// { text: "Računi", linkPath: "/racuni" },
-		// { text: "Zaposleni", linkPath: "/zaposleni" },
 		{ text: "Seminari", linkPath: "/seminari" },
+		{ text: "Računi", linkPath: "/racuni" },
 	];
 
 	return (
