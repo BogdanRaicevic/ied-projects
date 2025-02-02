@@ -40,6 +40,8 @@ export type Racun = PrimalacRacuna & {
 	onlinePoreskaOsnovica: number | string;
 	offlinePoreskaOsnovica: number | string;
 	jedinicaMere: string;
+	rokZaUplatu: number;
+	pozivNaBroj: string;
 };
 
 export interface RacunFormRef {
@@ -65,6 +67,8 @@ export const RacunForm = forwardRef<RacunFormRef, RacunFormProps>(
 			ukupanBrojUcesnika: primalacRacuna.ukupanBrojUcesnika || 0,
 			nazivSeminara: primalacRacuna.nazivSeminara || "",
 			jedinicaMere: "Broj učesnika",
+			rokZaUplatu: 5,
+			pozivNaBroj: "",
 		});
 
 		// NOTE: this is a workaround to update the form when the data changes
@@ -85,6 +89,8 @@ export const RacunForm = forwardRef<RacunFormRef, RacunFormProps>(
 				popustOffline: 0,
 				stopaPdv: 20,
 				jedinicaMere: "Broj učesnika",
+				rokZaUplatu: 5,
+				pozivNaBroj: "",
 			});
 		}, [primalacRacuna]);
 
@@ -486,25 +492,29 @@ export const RacunForm = forwardRef<RacunFormRef, RacunFormProps>(
 						</TableContainer>
 					</Box>
 					<Box>
-						<Typography align="right" variant="h6">
-							Napomena o poreskom
-							oslobađanju:__/__________________________________
-						</Typography>
-						<Typography align="right" variant="h6">
-							Rok za uplatu: 5 dana
-						</Typography>
-						<Typography align="right" variant="h6">
-							Poziv na broj: 838/23
-						</Typography>
+						<Box
+							sx={{
+								display: "flex",
+								alignItems: "baseline",
+								justifyContent: "flex-end",
+							}}
+						>
+							<Typography variant="h6" sx={{ mr: 1 }}>
+								Rok za uplatu
+							</Typography>
+							<TextField
+								name="rokZaUplatu"
+								variant="filled"
+								value={racun.rokZaUplatu}
+								sx={{ maxWidth: 60 }}
+								onChange={handleRacunChange}
+							/>
+							<Typography variant="h6" sx={{ ml: 1 }}>
+								dana
+							</Typography>
+						</Box>
 					</Box>
 					<Divider sx={{ mt: 3 }} />
-					<Typography align="center" variant="h6" sx={{ mb: 3 }}>
-						PREDRAČUN JE URAĐEN U ELEKTRONSKOJ FORMI I VAŽI BEZ PEČATA I
-						POTPISA.
-					</Typography>
-					<Typography align="center" variant="h6" sx={{ mb: 3 }}>
-						Mesto i datum izdavanja predračuna: Beograd, 31/10/2023
-					</Typography>
 				</Grid2>
 			</Grid2>
 		);
