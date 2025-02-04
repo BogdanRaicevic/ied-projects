@@ -22,6 +22,7 @@ export type PrijavaType = {
 	zaposleni_prezime: string;
 	zaposleni_email: string;
 	zaposleni_telefon: string;
+	// TODO: remove ne znam option after you are sure it is not used anywhere
 	prisustvo: "online" | "offline" | "ne znam";
 };
 
