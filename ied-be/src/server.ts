@@ -37,11 +37,6 @@ app.use(
 
 app.use(express.json());
 
-// const debugRequireAuth = (req: any, res: any, next: any) => {
-// 		console.log("Authorization:", req.headers.authorization);
-// 	requireAuth()(req, res, next);
-// };
-
 app.use("/api/firma", requireAuth(), hasPermission, firmaRoutes);
 app.use(
 	"/api/velicine-firmi",
@@ -56,6 +51,7 @@ app.use("/api/mesto", requireAuth(), hasPermission, mestoRoutes);
 app.use("/api/pretrage", requireAuth(), hasPermission, pretrageRoutes);
 app.use("/api/stanja-firmi", requireAuth(), hasPermission, stanjaFirmeRoutes);
 app.use("/api/seminari", requireAuth(), hasPermission, seminarRoutes);
+app.use("/api/docx", requireAuth(), hasPermission, docxRoutes);
 app.use("/api/test", testRoutes);
 
 app.use(errorWrapper);
