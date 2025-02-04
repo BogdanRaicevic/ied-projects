@@ -9,4 +9,7 @@ export default defineConfig({
 		sourcemap: false,
 		target: "esnext",
 	},
+	server: {
+		allowedHosts: ["ied-baza.xyz", "bs-baza.xyz"],
+	},
 });
