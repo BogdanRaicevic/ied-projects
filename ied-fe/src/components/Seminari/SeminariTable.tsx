@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState, memo } from "react";
-import type { Seminar } from "../../schemas/firmaSchemas";
+import type { SeminarType } from "../../schemas/firmaSchemas";
 import {
 	MaterialReactTable,
 	type MRT_ColumnDef,
@@ -24,7 +24,6 @@ import {
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
-
 import PrijaveSeminarTable from "./PrijaveSeminarTable";
 import SeminarForm from "./SeminarForm";
 
@@ -32,12 +31,14 @@ export default memo(function SeminariTable(props: {
 	queryParameters: SeminarQueryParams;
 	updateCounter: number;
 }) {
-	const [data, setData] = useState<Seminar[]>([]);
+	const [data, setData] = useState<SeminarType[]>([]);
 	const [documents, setDocuments] = useState(1000);
 	const [deletePrijavaCounter, setDeletePrijavaCounter] = useState(0);
 	const [seminarChangesCounter, setSeminarChangesCount] = useState(0);
 	const [editSeminar, setEditSeminar] = useState(false);
-	const [selectedSeminar, setSelectedSeminar] = useState<Partial<Seminar>>({});
+	const [selectedSeminar, setSelectedSeminar] = useState<Partial<SeminarType>>(
+		{},
+	);
 
 	const [pagination, setPagination] = useState<MRT_PaginationState>({
 		pageIndex: 0,
@@ -75,13 +76,13 @@ export default memo(function SeminariTable(props: {
 		setEditSeminar(true);
 	};
 
-	const seminariTableColumns: MRT_ColumnDef<Seminar>[] = [
+	const seminariTableColumns: MRT_ColumnDef<SeminarType>[] = [
 		{
 			id: "actions",
 			header: "Akcije",
 			size: 100,
 			Cell: ({ row }) => {
-				const seminar: Partial<Seminar> = row.original;
+				const seminar: Partial<SeminarType> = row.original;
 				return (
 					<Box sx={{ display: "flex", gap: "1rem" }}>
 						<Tooltip title="Edit">
@@ -142,8 +143,11 @@ export default memo(function SeminariTable(props: {
 	];
 
 	const table = useMaterialReactTable({
-		columns: useMemo<MRT_ColumnDef<Seminar>[]>(() => seminariTableColumns, []),
-		data: useMemo<Seminar[]>(() => data, [data]),
+		columns: useMemo<MRT_ColumnDef<SeminarType>[]>(
+			() => seminariTableColumns,
+			[],
+		),
+		data: useMemo<SeminarType[]>(() => data, [data]),
 		enableColumnFilterModes: true,
 		enableColumnOrdering: true,
 		enableColumnPinning: true,
@@ -195,6 +199,7 @@ export default memo(function SeminariTable(props: {
 									}}
 								>
 									<TableCell />
+									<TableCell>Akcije</TableCell>
 									<TableCell>Naziv Firme</TableCell>
 									<TableCell>Email</TableCell>
 									<TableCell>Telefon</TableCell>

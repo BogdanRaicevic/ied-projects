@@ -71,7 +71,7 @@ export function createFirmaQuery(
 	}
 
 	if (Array.isArray(params?.velicineFirmi) && params.velicineFirmi.length > 0) {
-		query.velicina = { $in: params.velicineFirmi };
+		query.velicina_firme = { $in: params.velicineFirmi };
 	}
 
 	if (Array.isArray(params?.stanjaFirme) && params.stanjaFirme.length > 0) {

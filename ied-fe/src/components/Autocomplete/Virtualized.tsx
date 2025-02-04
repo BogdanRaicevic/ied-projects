@@ -58,6 +58,7 @@ const ListboxComponent = React.forwardRef<
 	const { children, ...other } = props;
 	const itemData: React.ReactElement[] = [];
 
+	// TODO: Refactor this to use for...of
 	(children as React.ReactElement[]).forEach(
 		(item: React.ReactElement & { children?: React.ReactElement[] }) => {
 			itemData.push(item);
@@ -73,7 +74,8 @@ const ListboxComponent = React.forwardRef<
 	const itemSize = smUp ? 36 : 48;
 
 	const getChildSize = (child: React.ReactElement) => {
-		if (Object.hasOwn(child, "group")) {
+		// biome-ignore lint: // lint/suspicious/noPrototypeBuiltins
+		if (child.hasOwnProperty("group")) {
 			return 48;
 		}
 

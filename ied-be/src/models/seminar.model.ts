@@ -10,7 +10,7 @@ export type SeminarType = Document & {
 	prijave: PrijavaType[];
 };
 
-type PrijavaType = {
+export type PrijavaType = {
 	_id?: ObjectId;
 	firma_id: string;
 	firma_naziv: string;
