@@ -369,16 +369,40 @@ export const RacunForm = forwardRef<RacunFormRef, RacunFormProps>(
 											/>
 										</TableCell>
 										<TableCell align="left">
-											<Typography>{racun.onlinePoreskaOsnovica}</Typography>
+											<Typography>
+												{Number(racun.onlinePoreskaOsnovica).toLocaleString(
+													"sr-RS",
+													{
+														style: "currency",
+														currency: "RSD",
+														minimumFractionDigits: 2,
+													},
+												)}
+											</Typography>
 										</TableCell>
 										<TableCell align="left">
 											<Typography>{racun.stopaPdv}%</Typography>
 										</TableCell>
 										<TableCell align="left">
-											<Typography>{racun.pdvOnline}</Typography>
+											<Typography>
+												{Number(racun.pdvOnline).toLocaleString("sr-RS", {
+													style: "currency",
+													currency: "RSD",
+													minimumFractionDigits: 2,
+												})}
+											</Typography>
 										</TableCell>
 										<TableCell align="left">
-											<Typography>{racun.onlineUkupnaNaknada}</Typography>
+											<Typography>
+												{Number(racun.onlineUkupnaNaknada).toLocaleString(
+													"sr-RS",
+													{
+														style: "currency",
+														currency: "RSD",
+														minimumFractionDigits: 2,
+													},
+												)}
+											</Typography>
 										</TableCell>
 									</TableRow>
 								</TableBody>
@@ -475,16 +499,40 @@ export const RacunForm = forwardRef<RacunFormRef, RacunFormProps>(
 											/>
 										</TableCell>
 										<TableCell align="left">
-											<Typography>{racun.offlinePoreskaOsnovica}</Typography>
+											<Typography>
+												{Number(racun.offlinePoreskaOsnovica).toLocaleString(
+													"sr-RS",
+													{
+														style: "currency",
+														currency: "RSD",
+														minimumFractionDigits: 2,
+													},
+												)}
+											</Typography>
 										</TableCell>
 										<TableCell align="left">
 											<Typography>{racun.stopaPdv}%</Typography>
 										</TableCell>
 										<TableCell align="left">
-											<Typography>{racun.pdvOffline}</Typography>
+											<Typography>
+												{Number(racun.pdvOffline).toLocaleString("sr-RS", {
+													style: "currency",
+													currency: "RSD",
+													minimumFractionDigits: 2,
+												})}
+											</Typography>
 										</TableCell>
 										<TableCell align="left">
-											<Typography>{racun.offlineUkupnaNaknada}</Typography>
+											<Typography>
+												{Number(racun.offlineUkupnaNaknada).toLocaleString(
+													"sr-RS",
+													{
+														style: "currency",
+														currency: "RSD",
+														minimumFractionDigits: 2,
+													},
+												)}
+											</Typography>
 										</TableCell>
 									</TableRow>
 								</TableBody>
@@ -492,6 +540,30 @@ export const RacunForm = forwardRef<RacunFormRef, RacunFormProps>(
 						</TableContainer>
 					</Box>
 					<Box>
+						{/* // ukupan zbir za PDV i naknadu */}
+						<Box>
+							<Typography variant="h6" sx={{ mr: 1 }}>
+								Ukupna naknada po svim stavkama:{" "}
+								{(
+									Number(racun.onlineUkupnaNaknada) +
+									Number(racun.offlineUkupnaNaknada)
+								).toLocaleString("sr-RS", {
+									style: "currency",
+									currency: "RSD",
+									minimumFractionDigits: 2,
+								})}
+							</Typography>
+							<Typography variant="h6" sx={{ mr: 1 }}>
+								Ukupni PDV po svim stavkama:{" "}
+								{(
+									Number(racun.pdvOnline) + Number(racun.pdvOffline)
+								).toLocaleString("sr-RS", {
+									style: "currency",
+									currency: "RSD",
+									minimumFractionDigits: 2,
+								})}
+							</Typography>
+						</Box>
 						<Box
 							sx={{
 								display: "flex",
