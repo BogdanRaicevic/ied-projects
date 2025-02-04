@@ -66,16 +66,7 @@ export const savePrijava = async (prijava: PrijavaNaSeminar) => {
 		throw new Error("Seminar not found");
 	}
 
-	if (
-		seminar.prijave.some(
-			(p) =>
-				(p.zaposleni_email !== "" &&
-					p.zaposleni_email === prijava.zaposleni_email) ||
-				p.zaposleni_id === prijava.zaposleni_id ||
-				(p.zaposleni_ime === prijava.zaposleni_ime &&
-					p.zaposleni_prezime === prijava.zaposleni_prezime),
-		)
-	) {
+	if (seminar.prijave.some((p) => p.zaposleni_id === prijava.zaposleni_id)) {
 		throw new ErrorWithCause(
 			"Zaposleni je već prijavljen na seminar",
 			"duplicate",
