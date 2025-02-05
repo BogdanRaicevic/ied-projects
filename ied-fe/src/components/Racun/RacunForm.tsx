@@ -33,15 +33,17 @@ export type Racun = PrimalacRacuna & {
 	popustOnline: number | string;
 	popustOffline: number | string;
 	stopaPdv: number | string;
-	pdvOffline: number | string;
-	pdvOnline: number | string;
-	onlineUkupnaNaknada: number | string;
-	offlineUkupnaNaknada: number | string;
-	onlinePoreskaOsnovica: number | string;
-	offlinePoreskaOsnovica: number | string;
+	pdvOffline: number;
+	pdvOnline: number;
+	onlineUkupnaNaknada: number;
+	offlineUkupnaNaknada: number;
+	onlinePoreskaOsnovica: number;
+	offlinePoreskaOsnovica: number;
 	jedinicaMere: string;
 	rokZaUplatu: number;
 	pozivNaBroj: string;
+	ukupnaNaknada: number;
+	ukupanPdv: number;
 };
 
 export interface RacunFormRef {
@@ -122,12 +124,16 @@ export const RacunForm = forwardRef<RacunFormRef, RacunFormProps>(
 
 			setRacun((prev) => ({
 				...prev,
-				onlineUkupnaNaknada: onlineUkupnaNaknada.toFixed(2),
-				offlineUkupnaNaknada: offlineUkupnaNaknada.toFixed(2),
-				pdvOffline: ((offlinePoreskaOsnovica * stopaPdv) / 100).toFixed(2),
-				pdvOnline: ((onlinePoreskaOsnovica * stopaPdv) / 100).toFixed(2),
-				onlinePoreskaOsnovica: onlinePoreskaOsnovica.toFixed(2),
-				offlinePoreskaOsnovica: offlinePoreskaOsnovica.toFixed(2),
+				onlineUkupnaNaknada: onlineUkupnaNaknada,
+				offlineUkupnaNaknada: offlineUkupnaNaknada,
+				pdvOffline: (offlinePoreskaOsnovica * stopaPdv) / 100,
+				pdvOnline: (onlinePoreskaOsnovica * stopaPdv) / 100,
+				onlinePoreskaOsnovica: onlinePoreskaOsnovica,
+				offlinePoreskaOsnovica: offlinePoreskaOsnovica,
+				ukupnaNaknada: onlineUkupnaNaknada + offlineUkupnaNaknada,
+				ukupanPdv:
+					(offlinePoreskaOsnovica * stopaPdv) / 100 +
+					(onlinePoreskaOsnovica * stopaPdv) / 100,
 			}));
 		}, [
 			racun.onlineCena,
