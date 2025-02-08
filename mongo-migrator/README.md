@@ -12,3 +12,5 @@ To backup the mongo database run
 `mongodump --db ied -o "specify folder here"`
 
 To restore the mongo database run (FOR MACOS) `mongorestore --db ied ~/Downloads/ied`
+
+To restore a gz fiele run `mongorestore --uri="$MONGO_URI" --archive=/path/to/backup-2025-02-08.gz --gzip`  

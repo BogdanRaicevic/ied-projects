@@ -16,6 +16,7 @@ import testRoutes from "./routes/test.routes";
 import { errorWrapper } from "./middleware/errorWrapper";
 import { clerkMiddleware, requireAuth } from "@clerk/express";
 import { hasPermission } from "./middleware/hasPermission";
+import "./database/cron";
 
 const app = express();
 
