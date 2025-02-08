@@ -2,7 +2,8 @@ import path from "node:path";
 import { env } from "../utils/envVariables";
 import { createReadStream, existsSync, mkdirSync, unlinkSync } from "node:fs";
 import { exec } from "node:child_process";
-import { PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
+import { S3Client } from "@aws-sdk/client-s3";
+import { Upload } from "@aws-sdk/lib-storage";
 
 const BUCKET_NAME = env.aws.bucketName;
 if (!BUCKET_NAME) {
@@ -56,8 +57,13 @@ const uploadToS3 = async () => {
 	};
 
 	try {
-		await s3Client.send(new PutObjectCommand(params));
-		console.log("Backup uploaded to S3 successfully.");
+		const upload = new Upload({
+			client: s3Client,
+			params,
+		});
+
+		await upload.done();
+
 		unlinkSync(FILE_PATH); // Delete backup after upload
 	} catch (error) {
 		console.error(`Error uploading to S3: ${error}`);
