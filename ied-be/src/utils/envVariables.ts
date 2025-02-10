@@ -24,5 +24,6 @@ export const env = {
 		bucketName: config.S3_BUCKET_NAME,
 		accessKeyId: config.AWS_ACCESS_KEY_ID,
 		secretAccessKey: config.AWS_SECRET_ACCESS_KEY,
+		shouldBackup: config.BACKUP_TO_S3 === "true",
 	},
 };
