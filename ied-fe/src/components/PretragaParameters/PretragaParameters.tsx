@@ -4,7 +4,6 @@ import { Box } from "@mui/system";
 import AutocompleteMultiple from "../Autocomplete/Multiple";
 import CheckboxList from "../CheckboxList";
 import NegationCheckbox from "../NegationCheckbox";
-import { useEffect, useState } from "react";
 
 import { usePretragaStore } from "../../store/pretragaParameters.store";
 import { useFetchData } from "../../hooks/useFetchData";
@@ -26,45 +25,14 @@ export type PretragaParametersType = {
 };
 
 export default function PretragaParameters() {
-	const [velicineFirmi, setVelicineFirmi] = useState<string[]>([]);
-	const [radnaMesta, setRadnaMesta] = useState<string[]>([]);
-	const [tipoviFirme, setTipoviFirme] = useState<string[]>([]);
-	const [delatnosti, setDelatnosti] = useState<string[]>([]);
-	const [mesta, setMesta] = useState<string[]>([]);
-	const [stanjaFirme, setStanjaFirme] = useState<string[]>([]);
-
 	const {
-		delatnosti: fetchedDelatnosti,
-		mesta: fetchedMesta,
-		radnaMesta: fetchedRadnaMesta,
-		tipoviFirme: fetchedTipoviFirme,
-		velicineFirme: fetchedVelicineFirme,
-		stanjaFirme: fetchedStanjaFirme,
+		delatnosti,
+		mesta,
+		radnaMesta,
+		tipoviFirme,
+		velicineFirme,
+		stanjaFirme,
 	} = useFetchData();
-
-	useEffect(() => {
-		const fetchData = async () => {
-			try {
-				setVelicineFirmi(fetchedVelicineFirme || []);
-				setRadnaMesta(fetchedRadnaMesta || []);
-				setTipoviFirme(fetchedTipoviFirme || []);
-				setDelatnosti(fetchedDelatnosti || []);
-				setMesta(fetchedMesta || []);
-				setStanjaFirme(fetchedStanjaFirme || []);
-			} catch (error) {
-				console.error("Error fetching data:", error);
-			}
-		};
-
-		fetchData();
-	}, [
-		fetchedDelatnosti,
-		fetchedMesta,
-		fetchedRadnaMesta,
-		fetchedTipoviFirme,
-		fetchedVelicineFirme,
-		fetchedStanjaFirme,
-	]);
 
 	const { pretragaParameters, setPretragaParameters, toggleNegation } =
 		usePretragaStore();
@@ -184,7 +152,7 @@ export default function PretragaParameters() {
 				</Grid>
 				<Grid size={2}>
 					<CheckboxList
-						data={velicineFirmi}
+						data={velicineFirme}
 						subheader="Veličine Firmi"
 						onCheckedChange={(value) =>
 							handleInputChange("velicineFirmi", value)
