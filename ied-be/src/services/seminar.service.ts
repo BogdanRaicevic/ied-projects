@@ -58,6 +58,10 @@ export const getSeminarById = async (id: string) => {
 	return seminar;
 };
 
+export const getAllSeminars = async () => {
+	return await Seminar.find({});
+};
+
 export const savePrijava = async (prijava: PrijavaNaSeminar) => {
 	const { seminar_id, _id, ...prijavaWithoutId } = prijava;
 

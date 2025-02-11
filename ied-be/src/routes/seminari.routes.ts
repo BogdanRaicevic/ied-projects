@@ -9,6 +9,7 @@ import {
 	deletePrijava,
 	deleteSeminar,
 	getSeminarById,
+	getAllSeminars,
 	savePrijava,
 	saveSeminar,
 	search,
@@ -145,4 +146,17 @@ router.delete(
 		}
 	},
 );
+
+router.get(
+	"/all-seminars",
+	async (_req: Request, res: Response, next: NextFunction) => {
+		try {
+			const allSeminars = await getAllSeminars();
+			res.status(200).json(allSeminars);
+		} catch (error) {
+			next(error);
+		}
+	},
+);
+
 export default router;

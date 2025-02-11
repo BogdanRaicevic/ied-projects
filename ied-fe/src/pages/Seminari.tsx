@@ -78,7 +78,7 @@ export default function Seminari() {
 					<LocalizationProvider dateAdapter={AdapterDateFns}>
 						<DatePicker
 							format="yyyy/MM/dd"
-							label="Pocetni datum"
+							label="Početni datum"
 							name="datumOd"
 							defaultValue={queryParameters.datumOd}
 							onChange={(date) => handleDateChange("datumOd", date)}

@@ -22,6 +22,7 @@ export type PretragaParametersType = {
 	jbkjs: string;
 	maticniBroj: string;
 	komentar: string;
+	seminari: string[];
 };
 
 export default function PretragaParameters() {
@@ -167,6 +168,36 @@ export default function PretragaParameters() {
 						onCheckedChange={(value) => handleInputChange("stanjaFirme", value)}
 						checkedValues={pretragaParameters.stanjaFirme}
 					/>
+				</Grid>
+			</Grid>
+
+			<Grid container spacing={2} marginTop={2}>
+				<Grid size={8}>
+					<Grid container alignItems="center">
+						<Grid size={10} sx={{ width: "75%" }}>
+							<AutocompleteMultiple
+								data={mesta}
+								onCheckedChange={(value) =>
+									handleInputChange("seminari", value)
+								}
+								placeholder="Seminari"
+								id="seminar"
+								key="autocomplete-seminar"
+								checkedValues={pretragaParameters.mesta}
+							/>
+						</Grid>
+
+						<Grid px={2} size={2}>
+							<NegationCheckbox
+								key="negate-seminari"
+								value="negate-seminari"
+								negationChecked={pretragaParameters.negacije.includes(
+									"negate-seminari",
+								)}
+								onNegationChange={handleNegationChange}
+							/>
+						</Grid>
+					</Grid>
 				</Grid>
 			</Grid>
 
