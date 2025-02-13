@@ -7,6 +7,12 @@ interface AutocompleteMultipleProps {
 	placeholder: string;
 	id: string;
 	checkedValues: string[];
+	getOptionLabel?: (option: any) => string; // Optional custom render
+	renderTag?: (
+		getTagProps: (props: { index: number }) => any,
+		index: number,
+		option: any,
+	) => React.ReactNode; // Optional custom render
 }
 
 export default memo(function AutocompleteCheckbox({
@@ -15,6 +21,8 @@ export default memo(function AutocompleteCheckbox({
 	placeholder,
 	id,
 	checkedValues,
+	getOptionLabel,
+	renderTag,
 }: AutocompleteMultipleProps) {
 	const [selectedOptions, setSelectedOptions] =
 		useState<string[]>(checkedValues);
@@ -28,19 +36,29 @@ export default memo(function AutocompleteCheckbox({
 		onCheckedChange(value);
 	};
 
+	const defaultGetOptionLabel = (option: any): string => {
+		return typeof option === "string" ? option : String(option);
+	};
+
+	const defaultRenderTag = (
+		getTagProps: (props: { index: number }) => any,
+		index: number,
+		option: string,
+	): React.ReactNode => {
+		const { key, ...tagProps } = getTagProps({ index });
+		return <Chip variant="outlined" label={option} key={key} {...tagProps} />;
+	};
+
 	return (
 		<Autocomplete
 			multiple
 			id={`autocomplete-${id}`}
 			disableCloseOnSelect
-			getOptionLabel={(option) => option}
+			getOptionLabel={getOptionLabel || defaultGetOptionLabel} // Use the getOptionLabel prop or default
 			options={(data || []).map((option) => option)}
 			renderTags={(value: readonly string[], getTagProps) =>
 				value.map((option: string, index: number) => {
-					const { key, ...tagProps } = getTagProps({ index });
-					return (
-						<Chip variant="outlined" label={option} key={key} {...tagProps} />
-					);
+					return (renderTag || defaultRenderTag)(getTagProps, index, option);
 				})
 			}
 			renderInput={(params) => (

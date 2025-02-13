@@ -102,7 +102,7 @@ export const exportSearchedZaposleniData = async (
 	queryParameters: FilterQuery<FirmaQueryParams>,
 ) => {
 	const mongoQuery = {
-		...createFirmaQuery(queryParameters),
+		...(await createFirmaQuery(queryParameters)),
 	};
 
 	if (queryParameters.negacije?.includes("negate-radno-mesto")) {

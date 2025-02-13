@@ -214,7 +214,6 @@ export default function Firma() {
 			>
 				Dodaj zaposlenog
 			</Button>
-			{/* {renderZaposleniTable()} */}
 			<MaterialReactTable table={zapTable} />
 			<ZaposleniDialog
 				isCompanyBeingUpdated={Boolean(id)}

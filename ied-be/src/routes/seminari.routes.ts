@@ -90,6 +90,19 @@ router.post(
 	},
 );
 
+router.get(
+	"/all-seminars",
+	async (_req: Request, res: Response, next: NextFunction) => {
+		try {
+			console.log("Fetching all seminars");
+			const allSeminars = await getAllSeminars();
+			res.status(200).json(allSeminars);
+		} catch (error) {
+			next(error);
+		}
+	},
+);
+
 router.get("/:id", async (req: Request, res: Response, next: NextFunction) => {
 	try {
 		const seminar = await getSeminarById(req.params.id);
@@ -141,18 +154,6 @@ router.delete(
 		try {
 			const deletedSeminar = await deleteSeminar(req.params.id);
 			res.status(201).json(deletedSeminar);
-		} catch (error) {
-			next(error);
-		}
-	},
-);
-
-router.get(
-	"/all-seminars",
-	async (_req: Request, res: Response, next: NextFunction) => {
-		try {
-			const allSeminars = await getAllSeminars();
-			res.status(200).json(allSeminars);
 		} catch (error) {
 			next(error);
 		}

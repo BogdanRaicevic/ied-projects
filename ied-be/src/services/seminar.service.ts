@@ -59,7 +59,7 @@ export const getSeminarById = async (id: string) => {
 };
 
 export const getAllSeminars = async () => {
-	return await Seminar.find({});
+	return await Seminar.find({}, { naziv: 1, datum: 1, _id: 1 }).exec();
 };
 
 export const savePrijava = async (prijava: PrijavaNaSeminar) => {

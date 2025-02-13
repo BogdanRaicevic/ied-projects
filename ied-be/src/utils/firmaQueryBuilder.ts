@@ -1,6 +1,7 @@
 import type { FilterQuery } from "mongoose";
 import type { FirmaType } from "../models/firma.model";
 import type { FirmaQueryParams } from "ied-shared/types/firmaQueryParams";
+import { Seminar } from "../models/seminar.model";
 
 enum Negations {
 	RadnoMesto = "negate-radno-mesto",
@@ -9,9 +10,9 @@ enum Negations {
 	Mesto = "negate-mesto",
 }
 
-export function createFirmaQuery(
+export async function createFirmaQuery(
 	params: FirmaQueryParams,
-): FilterQuery<FirmaType> {
+): Promise<FilterQuery<FirmaType>> {
 	const query: FilterQuery<FirmaType> = {};
 
 	const negations = params?.negacije || [];
@@ -90,6 +91,15 @@ export function createFirmaQuery(
 		query.komentar = {
 			$regex: params.komentar.replace(/\s+/g, "\\s*"),
 			$options: "is",
+		};
+	}
+
+	if (Array.isArray(params?.seminari) && params.seminari.length > 0) {
+		query._id = {
+			$in: await Seminar.find({
+				_id: { $in: params.seminari },
+				"prijave.firma_id": { $exists: true },
+			}).distinct("prijave.firma_id"),
 		};
 	}
 

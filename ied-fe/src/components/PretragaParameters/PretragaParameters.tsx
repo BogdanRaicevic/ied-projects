@@ -1,4 +1,4 @@
-import { TextField } from "@mui/material";
+import { Chip, TextField } from "@mui/material";
 import Grid from "@mui/material/Grid2";
 import { Box } from "@mui/system";
 import AutocompleteMultiple from "../Autocomplete/Multiple";
@@ -22,7 +22,7 @@ export type PretragaParametersType = {
 	jbkjs: string;
 	maticniBroj: string;
 	komentar: string;
-	seminari: string[];
+	seminari: any[];
 };
 
 export default function PretragaParameters() {
@@ -33,6 +33,7 @@ export default function PretragaParameters() {
 		tipoviFirme,
 		velicineFirme,
 		stanjaFirme,
+		sviSeminari,
 	} = useFetchData();
 
 	const { pretragaParameters, setPretragaParameters, toggleNegation } =
@@ -176,14 +177,28 @@ export default function PretragaParameters() {
 					<Grid container alignItems="center">
 						<Grid size={10} sx={{ width: "75%" }}>
 							<AutocompleteMultiple
-								data={mesta}
+								data={sviSeminari}
 								onCheckedChange={(value) =>
 									handleInputChange("seminari", value)
 								}
 								placeholder="Seminari"
 								id="seminar"
 								key="autocomplete-seminar"
-								checkedValues={pretragaParameters.mesta}
+								checkedValues={pretragaParameters.seminari}
+								getOptionLabel={(option) => {
+									return `${option.datum} - ${option.naziv}`;
+								}}
+								renderTag={(getTagProps, index, option) => {
+									const { key, ...tagProps } = getTagProps({ index });
+									return (
+										<Chip
+											variant="outlined"
+											label={`${option.datum} - ${option.naziv}`}
+											key={key}
+											{...tagProps}
+										/>
+									);
+								}}
 							/>
 						</Grid>
 
