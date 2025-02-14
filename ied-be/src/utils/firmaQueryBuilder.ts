@@ -1,4 +1,4 @@
-import type { FilterQuery } from "mongoose";
+import mongoose, { Types, type FilterQuery } from "mongoose";
 import type { FirmaType } from "../models/firma.model";
 import type { FirmaQueryParams } from "ied-shared/types/firmaQueryParams";
 import { Seminar } from "../models/seminar.model";
@@ -8,11 +8,10 @@ enum Negations {
 	TipFirme = "negate-tip-firme",
 	Delatnost = "negate-delatnost",
 	Mesto = "negate-mesto",
+	Seminar = "negate-seminar",
 }
 
-export async function createFirmaQuery(
-	params: FirmaQueryParams,
-): Promise<FilterQuery<FirmaType>> {
+export const createFirmaQuery = async (params: FirmaQueryParams) => {
 	const query: FilterQuery<FirmaType> = {};
 
 	const negations = params?.negacije || [];
@@ -20,6 +19,7 @@ export async function createFirmaQuery(
 	const negateTipFirme = negations.includes(Negations.TipFirme);
 	const negateDelatnost = negations.includes(Negations.Delatnost);
 	const negateMesto = negations.includes(Negations.Mesto);
+	const negateSeminar = negations.includes(Negations.Seminar);
 
 	if (params?.imeFirme && params.imeFirme.length > 0) {
 		query.naziv_firme = { $regex: params.imeFirme, $options: "i" }; // Case-insensitive partial match
@@ -95,13 +95,51 @@ export async function createFirmaQuery(
 	}
 
 	if (Array.isArray(params?.seminari) && params.seminari.length > 0) {
-		query._id = {
-			$in: await Seminar.find({
-				_id: { $in: params.seminari },
-				"prijave.firma_id": { $exists: true },
-			}).distinct("prijave.firma_id"),
-		};
+		const seminarIds = params.seminari.map((seminar) =>
+			Types.ObjectId.createFromHexString(seminar._id),
+		);
+
+		const firmaIds = await Seminar.aggregate([
+			{
+				$match: {
+					_id: {
+						$in: seminarIds.map((id) => new mongoose.Types.ObjectId(id)),
+					},
+					"prijave.firma_id": { $exists: true },
+				},
+			},
+			{
+				$unwind: "$prijave",
+			},
+			{
+				$match: {
+					"prijave.firma_id": { $exists: true },
+				},
+			},
+			{
+				$group: {
+					_id: "$prijave.firma_id",
+				},
+			},
+			{
+				$project: {
+					_id: { $toObjectId: "$_id" },
+				},
+			},
+		]).exec(); // Execute the aggregation pipeline
+
+		if (negateSeminar) {
+			console.log("nagate", firmaIds);
+			query._id = {
+				$nin: firmaIds.map((firma) => firma._id),
+			};
+		} else {
+			console.log("not negated", firmaIds);
+			query._id = { $in: firmaIds.map((firma) => firma._id) }; // Extract _id values
+		}
 	}
 
+	console.log("Query", query);
+
 	return query;
-}
+};

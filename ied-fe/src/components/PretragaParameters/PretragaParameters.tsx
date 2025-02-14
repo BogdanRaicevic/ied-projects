@@ -204,10 +204,10 @@ export default function PretragaParameters() {
 
 						<Grid px={2} size={2}>
 							<NegationCheckbox
-								key="negate-seminari"
-								value="negate-seminari"
+								key="negate-seminar"
+								value="negate-seminar"
 								negationChecked={pretragaParameters.negacije.includes(
-									"negate-seminari",
+									"negate-seminar",
 								)}
 								onNegationChange={handleNegationChange}
 							/>

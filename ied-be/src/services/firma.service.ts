@@ -50,7 +50,7 @@ export const search = async (
 	pageSize = 50,
 ) => {
 	const skip = (pageIndex - 1) * pageSize;
-	const mongoQuery = createFirmaQuery(queryParameters);
+	const mongoQuery = await createFirmaQuery(queryParameters);
 
 	const totalDocuments = await Firma.countDocuments(mongoQuery);
 
@@ -68,9 +68,7 @@ export const search = async (
 export const exportSearchedFirmaData = async (
 	queryParameters: FilterQuery<FirmaQueryParams>,
 ) => {
-	const mongoQuery = {
-		...createFirmaQuery(queryParameters),
-	};
+	const mongoQuery = await createFirmaQuery(queryParameters);
 
 	const cursor = Firma.find(mongoQuery, {
 		naziv_firme: 1,
@@ -101,12 +99,10 @@ export const exportSearchedFirmaData = async (
 export const exportSearchedZaposleniData = async (
 	queryParameters: FilterQuery<FirmaQueryParams>,
 ) => {
-	const mongoQuery = {
-		...(await createFirmaQuery(queryParameters)),
-	};
+	const mongoQuery = await createFirmaQuery(queryParameters);
 
 	if (queryParameters.negacije?.includes("negate-radno-mesto")) {
-		mongoQuery.zaposleni = {
+		(await mongoQuery).zaposleni = {
 			$elemMatch: { radno_mesto: { $nin: queryParameters.radnaMesta } },
 		};
 	}

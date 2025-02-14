@@ -54,3 +54,5 @@ const seminarSchema = new Schema<SeminarType>(
 );
 
 export const Seminar = model<SeminarType>("Seminar", seminarSchema);
+
+export { Types };
