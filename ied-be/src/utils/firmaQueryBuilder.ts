@@ -126,15 +126,13 @@ export const createFirmaQuery = async (params: FirmaQueryParams) => {
           _id: { $toObjectId: "$_id" },
         },
       },
-    ]).exec(); // Execute the aggregation pipeline
+    ]).exec();
 
     if (negateSeminar) {
-      console.log("nagate", firmaIds);
       query._id = {
         $nin: firmaIds.map((firma) => firma._id),
       };
     } else {
-      console.log("not negated", firmaIds);
       query._id = { $in: firmaIds.map((firma) => firma._id) }; // Extract _id values
     }
   }
