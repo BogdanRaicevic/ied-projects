@@ -5,7 +5,7 @@ import type {
 	PrijavaNaSeminar,
 	SaveSeminarParams,
 	SeminarQueryParams,
-} from "ied-shared/types/seminar";
+} from "@ied-shared/types/index";
 import { ErrorWithCause } from "../utils/customErrors";
 
 export const saveSeminar = async (

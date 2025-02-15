@@ -14,7 +14,7 @@ import {
 	findById,
 } from "../services/firma.service";
 import type { FirmaType } from "../models/firma.model";
-import type { FirmaQueryParams } from "ied-shared/types/firmaQueryParams";
+import type { FirmaQueryParams } from "@ied-shared/types/index";
 
 const router = Router();
 

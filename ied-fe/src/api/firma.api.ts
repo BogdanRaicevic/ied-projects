@@ -1,7 +1,7 @@
 import type { FirmaType } from "../schemas/firmaSchemas";
 import { env } from "../utils/envVariables";
 import axiosInstanceWithAuth from "./interceptors/auth";
-import type { FirmaQueryParams } from "ied-shared/types/firmaQueryParams";
+import type { FirmaQueryParams } from "@ied-shared/types/index";
 
 export const fetchFirmaPretrageData = async (
 	pageSize: number,

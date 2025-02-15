@@ -1,4 +1,4 @@
-import { Schema, model } from "mongoose";
+import { Document, Schema, model } from "mongoose";
 
 export type RadnaMestaType = Document & {
   radno_mesto: string;
