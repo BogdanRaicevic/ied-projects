@@ -1,0 +1,5 @@
+packages:
+  - 'ied-be'
+  - 'ied-fe'
+  - 'ied-shared'
+  - 'mongo-migrator'

@@ -12,4 +12,5 @@ export type FirmaQueryParams = {
 	jbkjs?: string;
 	maticniBroj?: string;
 	komentar?: string;
+	seminari?: { _id: string; naziv: string; datum: string | Date }[];
 };

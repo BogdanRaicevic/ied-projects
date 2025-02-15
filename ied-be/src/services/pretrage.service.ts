@@ -1,5 +1,6 @@
-import { FirmaQueryParams } from "ied-shared/types/firmaQueryParams";
-import { Pretrage, PretrageType } from "../models/pretrage.model";
+import type { FirmaQueryParams } from "@ied-shared/types/index";
+import { Pretrage, type PretrageType } from "../models/pretrage.model";
+import { validateMongoId } from "../utils/utils";
 
 export const getAllPretrage = async () => {
   try {
@@ -16,6 +17,7 @@ export const savePretraga = async (
   pretraga: { id?: string; naziv: string }
 ) => {
   try {
+    validateMongoId(pretraga.id || "");
     const pretragaData: Partial<PretrageType> = {};
     pretragaData.naziv_pretrage = pretraga.naziv || "pretraga bez imena";
 
@@ -35,7 +37,11 @@ export const savePretraga = async (
     pretragaData.maticni_broj = queryParameters.maticniBroj;
     pretragaData.komentar = queryParameters.komentar;
 
-    const p = await Pretrage.findOneAndUpdate({ _id: pretraga.id }, pretragaData);
+    const p = await Pretrage.findOneAndUpdate(
+      { _id: pretraga.id },
+      { $set: pretragaData },
+      { new: true, runValidators: true }
+    );
 
     if (!p) {
       await Pretrage.create(pretragaData);
@@ -49,7 +55,7 @@ export const savePretraga = async (
 
 export const deletePretraga = async (id: string) => {
   try {
-    console.log("obrisi id: ", id);
+    validateMongoId(id);
     await Pretrage.findByIdAndDelete({ _id: id });
   } catch (error) {
     console.log("Error deleting pretraga", error);
