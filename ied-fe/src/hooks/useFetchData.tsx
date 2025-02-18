@@ -9,62 +9,62 @@ import { fetchAllSeminars, fetchSeminari } from "../api/seminari.api";
 import { addMonths } from "date-fns";
 
 export function useFetchData() {
-	const { data: delatnosti } = useQuery({
-		queryKey: ["delatnosti"],
-		queryFn: fetchAllDelatnosti,
-	});
+  const { data: delatnosti } = useQuery({
+    queryKey: ["delatnosti"],
+    queryFn: fetchAllDelatnosti,
+  });
 
-	const { data: mesta } = useQuery({
-		queryKey: ["mesta"],
-		queryFn: fetchAllMesta,
-	});
+  const { data: mesta } = useQuery({
+    queryKey: ["mesta"],
+    queryFn: fetchAllMesta,
+  });
 
-	const { data: radnaMesta } = useQuery({
-		queryKey: ["radnaMesta"],
-		queryFn: fetchAllRadnaMesta,
-	});
+  const { data: radnaMesta } = useQuery({
+    queryKey: ["radnaMesta"],
+    queryFn: fetchAllRadnaMesta,
+  });
 
-	const { data: tipoviFirme } = useQuery({
-		queryKey: ["tipoviFirme"],
-		queryFn: fetchAllTipoviFirme,
-	});
+  const { data: tipoviFirme } = useQuery({
+    queryKey: ["tipoviFirme"],
+    queryFn: fetchAllTipoviFirme,
+  });
 
-	const { data: velicineFirme } = useQuery({
-		queryKey: ["velicineFirme"],
-		queryFn: fetchAllVelicineFirme,
-	});
+  const { data: velicineFirme } = useQuery({
+    queryKey: ["velicineFirme"],
+    queryFn: fetchAllVelicineFirme,
+  });
 
-	const { data: stanjaFirme } = useQuery({
-		queryKey: ["stanjaFirme"],
-		queryFn: fetchAllStanjaFirme,
-	});
+  const { data: stanjaFirme } = useQuery({
+    queryKey: ["stanjaFirme"],
+    queryFn: fetchAllStanjaFirme,
+  });
 
-	const { data: sviSeminari } = useQuery({
-		queryKey: ["sviSeminari"],
-		queryFn: fetchAllSeminars,
-	});
+  const { data: sviSeminari } = useQuery({
+    queryKey: ["sviSeminari"],
+    queryFn: fetchAllSeminars,
+  });
 
-	return {
-		delatnosti,
-		mesta,
-		radnaMesta,
-		tipoviFirme,
-		velicineFirme,
-		stanjaFirme,
-		sviSeminari,
-	};
+  return {
+    delatnosti,
+    mesta,
+    radnaMesta,
+    tipoviFirme,
+    velicineFirme,
+    stanjaFirme,
+    sviSeminari,
+  };
 }
 
 export function useFetchSeminari() {
-	const { data: fetchedSeminars } = useQuery({
-		queryKey: ["fetchedSeminars"],
-		queryFn: () => {
-			return fetchSeminari(50, 0, {
-				datumOd: new Date(),
-				datumDo: addMonths(new Date(), 3),
-			});
-		},
-	});
+  const { data: fetchedSeminars } = useQuery({
+    queryKey: ["fetchedSeminars"],
+    queryFn: () => {
+      return fetchSeminari(50, 0, {
+        datumOd: new Date(),
+        datumDo: addMonths(new Date(), 3),
+      });
+    },
+  });
 
-	return { fetchedSeminars };
+  return { fetchedSeminars };
 }

@@ -21,30 +21,25 @@ import "./database/cron";
 const app = express();
 
 app.use(
-	cors({
-		origin: true,
-		credentials: true,
-		allowedHeaders: ["Authorization", "Content-Type"],
-		exposedHeaders: ["Authorization"],
-	}),
+  cors({
+    origin: true,
+    credentials: true,
+    allowedHeaders: ["Authorization", "Content-Type"],
+    exposedHeaders: ["Authorization"],
+  })
 );
 
 app.use(
-	clerkMiddleware({
-		publishableKey: env.clerk.publishableKey,
-		secretKey: env.clerk.secretKey,
-	}),
+  clerkMiddleware({
+    publishableKey: env.clerk.publishableKey,
+    secretKey: env.clerk.secretKey,
+  })
 );
 
 app.use(express.json());
 
 app.use("/api/firma", requireAuth(), hasPermission, firmaRoutes);
-app.use(
-	"/api/velicine-firmi",
-	requireAuth(),
-	hasPermission,
-	velicineFirmiRoutes,
-);
+app.use("/api/velicine-firmi", requireAuth(), hasPermission, velicineFirmiRoutes);
 app.use("/api/radna-mesta", requireAuth(), hasPermission, radnaMestaRoutes);
 app.use("/api/tip-firme", requireAuth(), hasPermission, tipFirmeRoutes);
 app.use("/api/delatnost", requireAuth(), hasPermission, delatnostiRoutes);
@@ -58,14 +53,14 @@ app.use("/api/test", testRoutes);
 app.use(errorWrapper);
 
 async function initServer() {
-	try {
-		await connectDB();
-		app.listen({ port: Number(env.be.appPort) });
-	} catch (error) {
-		console.error("Error starting server:", error);
-	}
+  try {
+    await connectDB();
+    app.listen({ port: Number(env.be.appPort) });
+  } catch (error) {
+    console.error("Error starting server:", error);
+  }
 }
 
 initServer()
-	.then(() => console.log("Server is up"))
-	.catch(console.error);
+  .then(() => console.log("Server is up"))
+  .catch(console.error);

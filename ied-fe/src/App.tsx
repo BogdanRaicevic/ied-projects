@@ -9,48 +9,48 @@ import { RedirectToSignIn, SignedIn, SignedOut } from "@clerk/clerk-react";
 const queryClient = new QueryClient();
 
 function App() {
-	return (
-		<QueryClientProvider client={queryClient}>
-			<Container component="main" maxWidth="lg">
-				<Navigation />
-				<Routes>
-					<Route
-						path="/"
-						element={
-							<>
-								<SignedOut>
-									<RedirectToSignIn />
-								</SignedOut>
-								<SignedIn>
-									<Navigate to="/pretrage" />
-								</SignedIn>
-							</>
-						}
-					/>
-					<Route
-						path="/pretrage"
-						element={
-							<SignedIn>
-								<Pretrage />
-							</SignedIn>
-						}
-					/>
-					<Route path="/racuni" element={<Racuni />} />
-					<Route path="/firma" element={<Firma />} />
-					<Route path="/firma/:id" element={<Firma />} />
-					<Route path="/zaposleni" element={<Zaposleni />} />
-					<Route
-						path="/seminari"
-						element={
-							<SignedIn>
-								<Seminari />
-							</SignedIn>
-						}
-					/>
-				</Routes>
-			</Container>
-		</QueryClientProvider>
-	);
+  return (
+    <QueryClientProvider client={queryClient}>
+      <Container component="main" maxWidth="lg">
+        <Navigation />
+        <Routes>
+          <Route
+            path="/"
+            element={
+              <>
+                <SignedOut>
+                  <RedirectToSignIn />
+                </SignedOut>
+                <SignedIn>
+                  <Navigate to="/pretrage" />
+                </SignedIn>
+              </>
+            }
+          />
+          <Route
+            path="/pretrage"
+            element={
+              <SignedIn>
+                <Pretrage />
+              </SignedIn>
+            }
+          />
+          <Route path="/racuni" element={<Racuni />} />
+          <Route path="/firma" element={<Firma />} />
+          <Route path="/firma/:id" element={<Firma />} />
+          <Route path="/zaposleni" element={<Zaposleni />} />
+          <Route
+            path="/seminari"
+            element={
+              <SignedIn>
+                <Seminari />
+              </SignedIn>
+            }
+          />
+        </Routes>
+      </Container>
+    </QueryClientProvider>
+  );
 }
 
 export default App;

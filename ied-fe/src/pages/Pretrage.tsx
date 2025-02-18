@@ -13,73 +13,67 @@ import SearchIcon from "@mui/icons-material/Search";
 const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
 
 if (!PUBLISHABLE_KEY) {
-	throw new Error("Missing Publishable Key");
+  throw new Error("Missing Publishable Key");
 }
 
 export default function Pretrage() {
-	const { pretragaParameters } = usePretragaStore();
+  const { pretragaParameters } = usePretragaStore();
 
-	const [appliedParameters, setAppliedParameters] =
-		useState(pretragaParameters);
+  const [appliedParameters, setAppliedParameters] = useState(pretragaParameters);
 
-	const handlePretraziClick = () => {
-		setAppliedParameters(pretragaParameters);
-	};
+  const handlePretraziClick = () => {
+    setAppliedParameters(pretragaParameters);
+  };
 
-	return (
-		<>
-			<PageTitle title={"Pretrage"} />
+  return (
+    <>
+      <PageTitle title={"Pretrage"} />
 
-			<PredefinedPretrage />
+      <PredefinedPretrage />
 
-			<Divider />
+      <Divider />
 
-			<PretragaParameters />
+      <PretragaParameters />
 
-			<Box
-				display="flex"
-				justifyContent="space-between"
-				alignItems="center"
-				marginBottom={4}
-			>
-				<Box>
-					<ExportDataButton
-						exportSubject="firma"
-						fileName="pretrage_firma"
-						queryParameters={pretragaParameters}
-					/>
-					<ExportDataButton
-						exportSubject="zaposleni"
-						fileName="pretrage_zaposleni"
-						queryParameters={pretragaParameters}
-					/>
-					<Button
-						sx={{ m: 1 }}
-						variant="contained"
-						size="large"
-						color="info"
-						onClick={handlePretraziClick}
-						startIcon={<SearchIcon />}
-					>
-						Pretrazi
-					</Button>
-				</Box>
+      <Box display="flex" justifyContent="space-between" alignItems="center" marginBottom={4}>
+        <Box>
+          <ExportDataButton
+            exportSubject="firma"
+            fileName="pretrage_firma"
+            queryParameters={pretragaParameters}
+          />
+          <ExportDataButton
+            exportSubject="zaposleni"
+            fileName="pretrage_zaposleni"
+            queryParameters={pretragaParameters}
+          />
+          <Button
+            sx={{ m: 1 }}
+            variant="contained"
+            size="large"
+            color="info"
+            onClick={handlePretraziClick}
+            startIcon={<SearchIcon />}
+          >
+            Pretrazi
+          </Button>
+        </Box>
 
-				<Box>
-					<Button
-						startIcon={<AddBoxIcon />}
-						href="/Firma"
-						target="_blank"
-						sx={{ m: 1 }}
-						variant="contained"
-						size="large"
-						color="secondary"
-					>
-						Dodaj Firmu
-					</Button>
-				</Box>
-			</Box>
-			<MyTable {...appliedParameters} />
-		</>
-	);
+        <Box>
+          <Button
+            startIcon={<AddBoxIcon />}
+            href="/Firma"
+            target="_blank"
+            sx={{ m: 1 }}
+            variant="contained"
+            size="large"
+            color="secondary"
+          >
+            Dodaj Firmu
+          </Button>
+        </Box>
+      </Box>
+      <MyTable {...appliedParameters} />
+    </>
+  );
 }
