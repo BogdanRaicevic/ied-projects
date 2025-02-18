@@ -43,6 +43,14 @@ export const usePretragaStore = create<PretragaStore>((set) => ({
   // }),
   toggleNegation: (value) =>
     set((state) => {
+      if (!state.pretragaParameters.negacije) {
+        return {
+          pretragaParameters: {
+            ...state.pretragaParameters,
+            negacije: [],
+          },
+        };
+      }
       const negacije = state.pretragaParameters.negacije.includes(value)
         ? state.pretragaParameters.negacije.filter((v) => v !== value)
         : [...state.pretragaParameters.negacije, value];

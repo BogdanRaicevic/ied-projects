@@ -36,14 +36,16 @@ export default function PretragaParameters() {
                   placeholder="Radno Mesto"
                   id="radno-mesto"
                   key="autocomplete-radno-mesto"
-                  checkedValues={pretragaParameters.radnaMesta}
+                  checkedValues={pretragaParameters.radnaMesta || []}
                 />
               </Grid>
               <Grid px={2} size={2}>
                 <NegationCheckbox
                   key="negate-radno-mesto"
                   value="negate-radno-mesto"
-                  negationChecked={pretragaParameters.negacije.includes("negate-radno-mesto")}
+                  negationChecked={
+                    pretragaParameters.negacije?.includes("negate-radno-mesto") || false
+                  }
                   onNegationChange={handleNegationChange}
                 />
               </Grid>
@@ -56,14 +58,16 @@ export default function PretragaParameters() {
                   placeholder="Tip Firme"
                   id="tip-firme"
                   key="autocomplete-tip-firme"
-                  checkedValues={pretragaParameters.tipoviFirme}
+                  checkedValues={pretragaParameters.tipoviFirme || []}
                 />
               </Grid>
               <Grid px={2} size={2}>
                 <NegationCheckbox
                   key="negate-tip-firme"
                   value="negate-tip-firme"
-                  negationChecked={pretragaParameters.negacije.includes("negate-tip-firme")}
+                  negationChecked={
+                    pretragaParameters.negacije?.includes("negate-tip-firme") || false
+                  }
                   onNegationChange={handleNegationChange}
                 />
               </Grid>
@@ -76,14 +80,16 @@ export default function PretragaParameters() {
                   placeholder="Delatnost"
                   id="delatnost"
                   key="autocomplete-delatnost"
-                  checkedValues={pretragaParameters.delatnosti}
+                  checkedValues={pretragaParameters.delatnosti || []}
                 />
               </Grid>
               <Grid px={2} size={2}>
                 <NegationCheckbox
                   key="negate-delatnost"
                   value="negate-delatnost"
-                  negationChecked={pretragaParameters.negacije.includes("negate-delatnost")}
+                  negationChecked={
+                    pretragaParameters.negacije?.includes("negate-delatnost") || false
+                  }
                   onNegationChange={handleNegationChange}
                 />
               </Grid>
@@ -96,7 +102,7 @@ export default function PretragaParameters() {
                   placeholder="Mesta"
                   id="mesto"
                   key="autocomplete-mesto"
-                  checkedValues={pretragaParameters.mesta}
+                  checkedValues={pretragaParameters.mesta || []}
                 />
               </Grid>
 
@@ -104,7 +110,7 @@ export default function PretragaParameters() {
                 <NegationCheckbox
                   key="negate-mesto"
                   value="negate-mesto"
-                  negationChecked={pretragaParameters.negacije.includes("negate-mesto")}
+                  negationChecked={pretragaParameters.negacije?.includes("negate-mesto") || false}
                   onNegationChange={handleNegationChange}
                 />
               </Grid>
@@ -117,7 +123,7 @@ export default function PretragaParameters() {
                   placeholder="Seminari"
                   id="seminar"
                   key="autocomplete-seminar"
-                  checkedValues={pretragaParameters.seminari}
+                  checkedValues={pretragaParameters.seminari || []}
                   getOptionLabel={(option) => {
                     return `${option.datum} - ${option.naziv}`;
                   }}
@@ -139,7 +145,7 @@ export default function PretragaParameters() {
                 <NegationCheckbox
                   key="negate-seminar"
                   value="negate-seminar"
-                  negationChecked={pretragaParameters.negacije.includes("negate-seminar")}
+                  negationChecked={pretragaParameters.negacije?.includes("negate-seminar") || false}
                   onNegationChange={handleNegationChange}
                 />
               </Grid>
@@ -151,7 +157,7 @@ export default function PretragaParameters() {
             data={velicineFirme}
             subheader="Veličine Firmi"
             onCheckedChange={(value) => handleInputChange("velicineFirmi", value)}
-            checkedValues={pretragaParameters.velicineFirmi}
+            checkedValues={pretragaParameters.velicineFirmi || []}
           />
         </Grid>
         <Grid size={2}>
@@ -159,7 +165,7 @@ export default function PretragaParameters() {
             data={stanjaFirme}
             subheader="Stanja Firmi"
             onCheckedChange={(value) => handleInputChange("stanjaFirme", value)}
-            checkedValues={pretragaParameters.stanjaFirme}
+            checkedValues={pretragaParameters.stanjaFirme || []}
           />
         </Grid>
       </Grid>
