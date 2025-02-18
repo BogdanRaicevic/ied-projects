@@ -137,8 +137,6 @@ export const createFirmaQuery = async (params: FirmaQueryParams) => {
     }
   }
 
-  console.log("params", params);
-
   if (params?.imePrezime && params.imePrezime.length > 0) {
     const imePrezime = params.imePrezime.split(" ");
     const ime = imePrezime[0];
@@ -161,15 +159,12 @@ export const createFirmaQuery = async (params: FirmaQueryParams) => {
   }
 
   if (params?.emailZaposlenog && params.emailZaposlenog.length > 0) {
-    console.log("emailZaposlenog", params.emailZaposlenog);
     query.zaposleni = {
       $elemMatch: {
         e_mail: { $regex: params.emailZaposlenog, $options: "i" },
       },
     };
   }
-
-  console.log(query);
 
   return query;
 };
