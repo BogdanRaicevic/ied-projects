@@ -90,7 +90,7 @@ export const createFirmaQuery = async (params: FirmaQueryParams) => {
   if (params?.komentar && params.komentar.length > 0) {
     query.komentar = {
       $regex: params.komentar.replace(/\s+/g, "\\s*"),
-      $options: "is",
+      $options: "i",
     };
   }
 
@@ -136,6 +136,40 @@ export const createFirmaQuery = async (params: FirmaQueryParams) => {
       query._id = { $in: firmaIds.map((firma) => firma._id) }; // Extract _id values
     }
   }
+
+  console.log("params", params);
+
+  if (params?.imePrezime && params.imePrezime.length > 0) {
+    const imePrezime = params.imePrezime.split(" ");
+    const ime = imePrezime[0];
+    const prezime = imePrezime[1] || "";
+
+    query.zaposleni = {
+      $elemMatch: {
+        $or: [
+          {
+            ime: { $regex: `^${ime}`, $options: "i" },
+            prezime: { $regex: `^${prezime}`, $options: "i" },
+          },
+          {
+            ime: { $regex: `^${prezime}`, $options: "i" },
+            prezime: { $regex: `^${ime}`, $options: "i" },
+          },
+        ],
+      },
+    };
+  }
+
+  if (params?.emailZaposlenog && params.emailZaposlenog.length > 0) {
+    console.log("emailZaposlenog", params.emailZaposlenog);
+    query.zaposleni = {
+      $elemMatch: {
+        e_mail: { $regex: params.emailZaposlenog, $options: "i" },
+      },
+    };
+  }
+
+  console.log(query);
 
   return query;
 };

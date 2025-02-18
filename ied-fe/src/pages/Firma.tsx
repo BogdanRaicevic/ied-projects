@@ -15,7 +15,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import ZaposleniDialog from "../components/Dialogs/ZaposleniDialog";
-import { fetchSingleFirmaData, saveFirma } from "../api/firma.api";
+import { fetchSingleFirma, saveFirma } from "../api/firma.api";
 import PrijavaNaSeminarDialog from "../components/Dialogs/PrijaviZaposlenogNaSeminar";
 import { useMemo } from "react";
 
@@ -46,7 +46,7 @@ export default function Firma() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const data = await fetchSingleFirmaData(String(id));
+        const data = await fetchSingleFirma(String(id));
         if (data) {
           setCompany(data);
         }
@@ -77,7 +77,7 @@ export default function Firma() {
   };
 
   const handleDelete = async (row: MRT_Row<Zaposleni>) => {
-    const latestData = await fetchSingleFirmaData(String(id));
+    const latestData = await fetchSingleFirma(String(id));
     if (!latestData) return;
 
     const filteredZaposleni = latestData.zaposleni.filter(

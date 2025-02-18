@@ -7,7 +7,7 @@ import {
   useMaterialReactTable,
   type MRT_PaginationState,
 } from "material-react-table";
-import { fetchFirmaPretrageData } from "../../api/firma.api";
+import { fetchFirmaPretrage } from "../../api/firma.api";
 import { FirmaQueryParams } from "@ied-shared/types/firmaQueryParams";
 
 export default memo(function MyTable(queryParameters: FirmaQueryParams) {
@@ -22,7 +22,7 @@ export default memo(function MyTable(queryParameters: FirmaQueryParams) {
   useEffect(() => {
     const loadData = async () => {
       const { pageIndex, pageSize } = table.getState().pagination;
-      const res = await fetchFirmaPretrageData(pageSize, pageIndex, queryParameters);
+      const res = await fetchFirmaPretrage(pageSize, pageIndex, queryParameters);
       setData(res.firmas);
       setDocuments(res.totalDocuments);
     };

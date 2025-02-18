@@ -109,6 +109,41 @@ export default function PretragaParameters() {
                 />
               </Grid>
             </Grid>
+            <Grid container alignItems="center">
+              <Grid size={10} sx={{ width: "75%" }}>
+                <AutocompleteMultiple
+                  data={sviSeminari}
+                  onCheckedChange={(value) => handleInputChange("seminari", value)}
+                  placeholder="Seminari"
+                  id="seminar"
+                  key="autocomplete-seminar"
+                  checkedValues={pretragaParameters.seminari}
+                  getOptionLabel={(option) => {
+                    return `${option.datum} - ${option.naziv}`;
+                  }}
+                  renderTag={(getTagProps, index, option) => {
+                    const { key, ...tagProps } = getTagProps({ index });
+                    return (
+                      <Chip
+                        variant="outlined"
+                        label={`${option.datum} - ${option.naziv}`}
+                        key={key}
+                        {...tagProps}
+                      />
+                    );
+                  }}
+                />
+              </Grid>
+
+              <Grid px={2} size={2}>
+                <NegationCheckbox
+                  key="negate-seminar"
+                  value="negate-seminar"
+                  negationChecked={pretragaParameters.negacije.includes("negate-seminar")}
+                  onNegationChange={handleNegationChange}
+                />
+              </Grid>
+            </Grid>
           </Grid>
         </Grid>
         <Grid size={2}>
@@ -131,41 +166,7 @@ export default function PretragaParameters() {
 
       <Grid container spacing={2} marginTop={2}>
         <Grid size={8}>
-          <Grid container alignItems="center">
-            <Grid size={10} sx={{ width: "75%" }}>
-              <AutocompleteMultiple
-                data={sviSeminari}
-                onCheckedChange={(value) => handleInputChange("seminari", value)}
-                placeholder="Seminari"
-                id="seminar"
-                key="autocomplete-seminar"
-                checkedValues={pretragaParameters.seminari}
-                getOptionLabel={(option) => {
-                  return `${option.datum} - ${option.naziv}`;
-                }}
-                renderTag={(getTagProps, index, option) => {
-                  const { key, ...tagProps } = getTagProps({ index });
-                  return (
-                    <Chip
-                      variant="outlined"
-                      label={`${option.datum} - ${option.naziv}`}
-                      key={key}
-                      {...tagProps}
-                    />
-                  );
-                }}
-              />
-            </Grid>
-
-            <Grid px={2} size={2}>
-              <NegationCheckbox
-                key="negate-seminar"
-                value="negate-seminar"
-                negationChecked={pretragaParameters.negacije.includes("negate-seminar")}
-                onNegationChange={handleNegationChange}
-              />
-            </Grid>
-          </Grid>
+          <Grid container alignItems="center"></Grid>
         </Grid>
       </Grid>
 
@@ -207,6 +208,16 @@ export default function PretragaParameters() {
             label="Komentar"
             value={pretragaParameters.komentar}
             onChange={(e) => handleInputChange("komentar", e.target.value)}
+          />
+          <TextField
+            label="Ime i prezime zaposlenog"
+            value={pretragaParameters.imePrezime}
+            onChange={(e) => handleInputChange("imePrezime", e.target.value)}
+          />
+          <TextField
+            label="E-mail zaposlenog"
+            value={pretragaParameters.emailZaposlenog}
+            onChange={(e) => handleInputChange("emailZaposlenog", e.target.value)}
           />
         </Grid>
       </Box>
