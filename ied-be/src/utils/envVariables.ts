@@ -5,12 +5,10 @@ const config = process.env;
 
 export const env = {
   be: {
-    appUri: config.BE_APP_URI,
     appPort: Number(config.BE_APP_PORT),
   },
   fe: {
-    appUri: config.FE_APP_URI,
-    appPort: Number(config.FE_APP_PORT),
+    appUrl: config.FE_APP_URL,
   },
   mongo: {
     uri: config.MONGO_URI,

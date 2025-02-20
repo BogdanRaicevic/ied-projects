@@ -22,7 +22,7 @@ const app = express();
 
 app.use(
   cors({
-    origin: true,
+    origin: [`${env.fe.appUrl}`],
     credentials: true,
     allowedHeaders: ["Authorization", "Content-Type"],
     exposedHeaders: ["Authorization"],
