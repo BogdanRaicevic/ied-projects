@@ -53,12 +53,6 @@ export const firmaFormMetadata: Metadata[] = [
     inputType: InputTypesSchema.enum.Text,
   },
   {
-    key: "postanski_broj",
-    label: "Postanski broj",
-    inputAdornment: <Approval />,
-    inputType: InputTypesSchema.enum.Text,
-  },
-  {
     key: "jbkjs",
     label: "JBKJS",
     inputAdornment: <Filter1 />,
