@@ -12,7 +12,7 @@ import {
   Typography,
   Box,
 } from "@mui/material";
-import iedLogo from "../../../public/ied-logo-2.png";
+import iedLogo from "../../images/ied-logo-2.png";
 import { useState, useEffect, forwardRef, useImperativeHandle } from "react";
 
 type PrimalacRacuna = {
