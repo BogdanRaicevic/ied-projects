@@ -12,8 +12,8 @@ import {
   Typography,
   Box,
 } from "@mui/material";
-import iedLogo from "../../images/ied-logo-2.png";
 import { useState, useEffect, forwardRef, useImperativeHandle } from "react";
+import SelectFirma from "./SelectFirma";
 
 type PrimalacRacuna = {
   naziv: string;
@@ -157,7 +157,7 @@ export const RacunForm = forwardRef<RacunFormRef, RacunFormProps>(({ primalacRac
               fullWidth
               variant="filled"
               label="Podaci o izdavaocu računa"
-              defaultValue="Institut za ekonomsku diplomatiju d.o.o, 11080 Zemun, Pregrevica 168"
+              defaultValue="Institut za ekonomsku diplomatiju d.o.o, 11080 Zemun, Bežanijska 30"
               sx={{ mb: 2 }}
             />
             <TextField
@@ -207,11 +207,8 @@ export const RacunForm = forwardRef<RacunFormRef, RacunFormProps>(({ primalacRac
               p: 1,
             }}
           >
-            <img
-              src={iedLogo}
-              alt="institut za ekonomsku diplomatiju"
-              style={{ maxWidth: "100%", maxHeight: "100%" }}
-            />
+            {/* <img src={iedLogo} style={{ maxWidth: "100%", maxHeight: "100%" }} /> */}
+            <SelectFirma />
           </Box>
         </Grid2>
       </Grid2>
