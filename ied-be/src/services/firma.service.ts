@@ -31,7 +31,11 @@ export const updateById = async (
       throw new Error("Invalid firma input data");
     }
 
-    return await Firma.findOneAndUpdate({ _id: id }, { $set: sanitizedData }, { new: true });
+    return await Firma.findOneAndUpdate(
+      { _id: id },
+      { $set: sanitizedData },
+      { new: true, runValidators: true }
+    );
   } catch (error) {
     console.error("Error updating firma:", error);
     throw error;

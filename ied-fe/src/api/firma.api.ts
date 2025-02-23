@@ -75,16 +75,10 @@ export const saveFirma = async (company: Partial<FirmaType>) => {
       data: response.data,
       status: response.status,
     };
-  } catch (error) {
+  } catch (error: any) {
     console.error("Error saving firma: ", error);
-    // if (axiosInstanceWithAuth.isAxiosError(error) && error.response) {
-    //   return { success: false, status: 500, message: error.response.data.message };
-    // }
-    return {
-      success: false,
-      status: 500,
-      message: "An unexpected error occurred",
-    };
+    // Throw the error so the caller can decide not to update state
+    throw error;
   }
 };
 

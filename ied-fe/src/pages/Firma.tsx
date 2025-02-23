@@ -9,7 +9,7 @@ import { myZaposleniColumns } from "../components/MyTable/myCompanyColumns";
 import FirmaForm from "../components/Forms/FirmaForm";
 import type { FirmaType, Zaposleni } from "../schemas/firmaSchemas";
 import { useEffect, useState } from "react";
-import { Tooltip, IconButton, Button } from "@mui/material";
+import { Tooltip, IconButton, Button, Alert } from "@mui/material";
 import { Box } from "@mui/system";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
@@ -42,6 +42,7 @@ type TODO_ANY_TYPE = any;
 export default function Firma() {
   const { id } = useParams();
   const [company, setCompany] = useState(defaultCompanyData);
+  const [errorAlert, setErrorAlert] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -126,11 +127,27 @@ export default function Firma() {
     setCompany(updatedCompany);
 
     if (isExistingCompany) {
-      const savedCompany = await saveFirma({
-        _id: company?._id,
-        zaposleni: updatedZaposleni,
-      });
-      setCompany(savedCompany.data);
+      try {
+        const savedCompany = await saveFirma({
+          _id: company?._id,
+          zaposleni: updatedZaposleni,
+        });
+        setCompany(savedCompany.data);
+        setErrorAlert(null);
+      } catch (error: any) {
+        const errorMessage = error?.response?.data || error.message;
+        setCompany(company);
+        if (errorMessage?.toLowerCase().includes("duplicate")) {
+          setErrorAlert("Zapoleni sa istim email-om već postoji: " + zaposleniData.e_mail);
+        } else {
+          setErrorAlert("Greška prilikom dodavanja zaposlenog");
+        }
+
+        // Clear alerts after 5 seconds
+        setTimeout(() => {
+          setErrorAlert(null);
+        }, 5000);
+      }
     }
 
     setOpenZaposelniDialog(false);
@@ -191,6 +208,7 @@ export default function Firma() {
   return (
     <>
       <h1>Firma: {company?.naziv_firme}</h1>
+
       <FirmaForm inputCompany={company} />
       <Button
         sx={{ my: 2 }}
@@ -205,6 +223,11 @@ export default function Firma() {
       >
         Dodaj zaposlenog
       </Button>
+      {errorAlert && (
+        <Alert severity="error" sx={{ mb: 2 }} onClose={() => setErrorAlert(null)}>
+          {errorAlert}
+        </Alert>
+      )}
       <MaterialReactTable table={zapTable} />
       <ZaposleniDialog
         isCompanyBeingUpdated={Boolean(id)}
