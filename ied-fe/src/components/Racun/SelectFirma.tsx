@@ -1,9 +1,9 @@
 import MenuItem from "@mui/material/MenuItem/MenuItem";
 import Select from "@mui/material/Select/Select";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ied, permanent, bs } from "./firmaData";
 
-export default function SelectFirma() {
+export default function SelectFirma({ onFirmaChange }: { onFirmaChange: (data: any) => void }) {
   const firmaOptions = [
     {
       name: "ied",
@@ -20,6 +20,10 @@ export default function SelectFirma() {
   ];
 
   const [firma, setFirma] = useState(firmaOptions[0]);
+
+  useEffect(() => {
+    onFirmaChange(firma.data);
+  }, [firma]);
 
   const firmaItems = firmaOptions.map((f) => {
     return (
