@@ -12,8 +12,8 @@ import {
   Typography,
   Box,
 } from "@mui/material";
-import iedLogo from "../../images/ied-logo-2.png";
 import { useState, useEffect, forwardRef, useImperativeHandle } from "react";
+import SelectFirma from "./SelectFirma";
 
 type PrimalacRacuna = {
   naziv: string;
@@ -148,6 +148,8 @@ export const RacunForm = forwardRef<RacunFormRef, RacunFormProps>(({ primalacRac
     getRacunData: () => racun,
   }));
 
+  const [selectedFirmaData, setSelectedFirmaData] = useState(null);
+
   return (
     <Grid2 container>
       <Grid2 component={Paper} size={12} container>
@@ -157,42 +159,42 @@ export const RacunForm = forwardRef<RacunFormRef, RacunFormProps>(({ primalacRac
               fullWidth
               variant="filled"
               label="Podaci o izdavaocu računa"
-              defaultValue="Institut za ekonomsku diplomatiju d.o.o, 11080 Zemun, Pregrevica 168"
+              value={selectedFirmaData?.podaciOIzdavaocuRacuna || ""}
               sx={{ mb: 2 }}
             />
             <TextField
               fullWidth
               variant="filled"
               label="Kontakt telefoni"
-              defaultValue="011/3077612, 3077612"
+              value={selectedFirmaData?.kontaktTelefoni.join(", ") || ""}
               sx={{ mb: 2 }}
             />
             <TextField
               fullWidth
               variant="filled"
               label="PIB"
-              defaultValue="SR103159254"
+              value={selectedFirmaData?.pib || ""}
               sx={{ mb: 2 }}
             />
             <TextField
               fullWidth
               variant="filled"
               label="Matični broj"
-              defaultValue="17518313"
+              value={selectedFirmaData?.maticniBroj || ""}
               sx={{ mb: 2 }}
             />
             <TextField
               fullWidth
               variant="filled"
               label="Broj rešenja o evidenciji za PDV"
-              defaultValue="134107598"
+              value={selectedFirmaData?.brojResenjaOEvidencijiZaPDV || ""}
               sx={{ mb: 2 }}
             />
             <TextField
               fullWidth
               variant="filled"
               label="Tekući račun"
-              defaultValue="170-0030035229000-87 (UniCredit Banka)"
+              value={selectedFirmaData?.tekuciRacuni || ""}
               sx={{ mb: 2 }}
             />
           </Box>
@@ -207,11 +209,8 @@ export const RacunForm = forwardRef<RacunFormRef, RacunFormProps>(({ primalacRac
               p: 1,
             }}
           >
-            <img
-              src={iedLogo}
-              alt="institut za ekonomsku diplomatiju"
-              style={{ maxWidth: "100%", maxHeight: "100%" }}
-            />
+            {/* <img src={iedLogo} style={{ maxWidth: "100%", maxHeight: "100%" }} /> */}
+            <SelectFirma onFirmaChange={(data) => setSelectedFirmaData(data)} />{" "}
           </Box>
         </Grid2>
       </Grid2>
