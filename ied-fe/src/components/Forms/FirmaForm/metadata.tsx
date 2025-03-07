@@ -5,7 +5,6 @@ import {
   ConfirmationNumber,
   Phone,
   Email,
-  Approval,
   SwitchAccount,
   Height,
   Comment,
