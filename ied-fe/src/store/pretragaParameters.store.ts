@@ -23,6 +23,8 @@ export const usePretragaStore = create<PretragaStore>((set) => ({
     maticniBroj: "",
     komentar: "",
     seminari: [],
+    imePrezime: "",
+    emailZaposlenog: "",
   },
   setPretragaParameters: (params) =>
     set((state) => {

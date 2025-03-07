@@ -17,7 +17,6 @@ export const savePretraga = async (
   pretraga: { id?: string; naziv: string }
 ) => {
   try {
-    validateMongoId(pretraga.id || "");
     const pretragaData: Partial<PretrageType> = {};
     pretragaData.naziv_pretrage = pretraga.naziv || "pretraga bez imena";
 
@@ -36,6 +35,8 @@ export const savePretraga = async (
     pretragaData.jbkjs = queryParameters.jbkjs;
     pretragaData.maticni_broj = queryParameters.maticniBroj;
     pretragaData.komentar = queryParameters.komentar;
+    pretragaData.imePrezime = queryParameters.imePrezime;
+    pretragaData.emailZaposlenog = queryParameters.emailZaposlenog;
 
     const p = await Pretrage.findOneAndUpdate(
       { _id: pretraga.id },

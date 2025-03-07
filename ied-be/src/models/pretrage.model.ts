@@ -15,6 +15,8 @@ export type PretrageType = Document & {
   jbkjs: string;
   maticni_broj: string;
   komentar: string;
+  imePrezime: string;
+  emailZaposlenog: string;
 };
 
 const pretrageSchema = new Schema<PretrageType>(
@@ -33,6 +35,8 @@ const pretrageSchema = new Schema<PretrageType>(
     jbkjs: { type: String },
     maticni_broj: { type: String },
     komentar: { type: String },
+    imePrezime: { type: String },
+    emailZaposlenog: { type: String },
   },
   { collection: "pretrage" }
 );

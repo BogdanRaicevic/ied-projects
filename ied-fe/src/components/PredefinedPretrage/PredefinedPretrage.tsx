@@ -82,6 +82,8 @@ export default function PredefinedPretrage() {
       jbkjs: option.jbkjs,
       maticniBroj: option.maticni_broj,
       komentar: option.komentar,
+      imePrezime: option.imePrezime,
+      emailZaposlenog: option.emailZaposlenog,
     };
     setPretragaParameters(mappedPregrage);
   };
