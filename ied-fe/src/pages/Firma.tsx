@@ -135,10 +135,12 @@ export default function Firma() {
         setCompany(savedCompany.data);
         setErrorAlert(null);
       } catch (error: any) {
-        const errorMessage = error?.response?.data || error.message;
+        const errorResponse = error?.response?.data;
         setCompany(company);
-        if (errorMessage?.toLowerCase().includes("duplicate")) {
-          setErrorAlert("Zapoleni sa istim email-om već postoji: " + zaposleniData.e_mail);
+        if (errorResponse?.type === "DUPLICATE_EMAIL") {
+          setErrorAlert(
+            `Zapoleni sa istim email-om već postoji. ${error?.response?.data?.message} `
+          );
         } else {
           setErrorAlert("Greška prilikom dodavanja zaposlenog");
         }

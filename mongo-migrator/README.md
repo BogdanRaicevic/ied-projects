@@ -13,4 +13,4 @@ To backup the mongo database run
 
 To restore the mongo database run (FOR MACOS) `mongorestore --db ied ~/Downloads/ied`
 
-To restore a gz fiele run `mongorestore --uri="$MONGO_URI" --archive=/path/to/backup-2025-02-08.gz --gzip`  
+To restore a gz file run `mongorestore --uri="$MONGO_URI" --archive=/path/to/backup-2025-02-08.gz --gzip`  

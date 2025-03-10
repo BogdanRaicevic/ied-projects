@@ -59,6 +59,7 @@ export const FirmaForm: React.FC<FirmaFormProps> = ({ inputCompany }) => {
   };
 
   const [alert, setAlert] = useState<SuccessAlert | ErrorAlert | null>(null);
+  const [errorAlert, setErrorAlert] = useState<string | null>(null);
 
   const {
     tipoviFirme: fetchedTipoviFirme,
@@ -104,27 +105,36 @@ export const FirmaForm: React.FC<FirmaFormProps> = ({ inputCompany }) => {
       ...autocompletes,
     };
 
-    const response = await saveFirma(data);
-    if (response.status.toString().startsWith("2")) {
+    try {
+      await saveFirma(data);
       setAlert({
         type: "success",
         message: "Firma uspešno sačuvana!",
         errors: null,
       });
-    } else {
-      setAlert({
-        type: "error",
-        message: "Firma nije sačuvana. Došlo je do greške!",
-        errors: [],
-      });
+    } catch (error: any) {
+      setErrorAlert(`Firma nije sačuvana. Došlo je do greške! ${error?.response?.data?.message}`);
+      // Clear alerts after 5 seconds
+      setTimeout(() => {
+        setErrorAlert(null);
+      }, 5000);
+    } finally {
+      const alertTimeout = setTimeout(() => {
+        setAlert(null);
+      }, 5000);
+
+      const errorTimeout = setTimeout(() => {
+        setAlert(null);
+      }, 5000);
+
+      // Clear the timeout if the component unmounts
+      const cleanup = () => {
+        clearTimeout(alertTimeout);
+        clearTimeout(errorTimeout);
+      };
+
+      cleanup();
     }
-
-    const alertTimeout = setTimeout(() => {
-      setAlert(null);
-    }, 3000);
-
-    // Clear the timeout if the component unmounts
-    return () => clearTimeout(alertTimeout);
   };
 
   const onError = (errors: any) => {
@@ -340,6 +350,11 @@ export const FirmaForm: React.FC<FirmaFormProps> = ({ inputCompany }) => {
                 </ul>
               </Box>
             )}
+          </Alert>
+        )}
+        {errorAlert && (
+          <Alert severity="error" sx={{ mb: 2 }} onClose={() => setErrorAlert(null)}>
+            {errorAlert}
           </Alert>
         )}
         <Divider sx={{ width: "100%", my: 2 }} />
