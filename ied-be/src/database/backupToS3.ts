@@ -37,10 +37,13 @@ const backupMongoDB = async () => {
 
     exec(command, (error, _stdout, stderr) => {
       if (error) {
-        console.error(`Error creating backup: ${stderr}`);
+        console.error(`[${new Date().toISOString()}] Backup Creation Failed:`);
+        console.error(`Command: ${command}`);
+        console.error(`Error: ${error.message}`);
+        console.error(`stderr: ${stderr}`);
         return reject(error);
       }
-      console.log("Backup created successfully.");
+      console.log(`[${new Date().toISOString()}] Backup created successfully`);
       resolve();
     });
   });
@@ -63,10 +66,12 @@ const uploadToS3 = async () => {
     });
 
     await upload.done();
-
+    console.log(`[${new Date().toISOString()}] Upload to S3 completed: ${FILE_NAME}`);
     unlinkSync(FILE_PATH); // Delete backup after upload
   } catch (error) {
-    console.error(`Error uploading to S3: ${error}`);
+    console.error(`[${new Date().toISOString()}] S3 Upload Failed:`);
+    console.error(`File: ${FILE_NAME}`);
+    console.error(`Error: ${error}`);
     throw error;
   }
 };
@@ -75,8 +80,16 @@ const runBackup = async () => {
   try {
     await backupMongoDB();
     await uploadToS3();
+    console.log(`[${new Date().toISOString()}] Backup process completed successfully`);
   } catch (error) {
-    console.error("Backup process failed: ", error);
+    console.error(`[${new Date().toISOString()}] Backup process failed:`);
+    console.error(error);
+    // Ensure the temporary file is cleaned up even if upload fails
+    if (existsSync(FILE_PATH)) {
+      unlinkSync(FILE_PATH);
+    }
+    // Rethrow the error so PM2 can catch it
+    throw error;
   }
 };
 
