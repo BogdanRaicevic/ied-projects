@@ -119,7 +119,7 @@ importers:
         version: 4.1.0
       material-react-table:
         specifier: ^3.0.1
-        version: 3.2.0(2aee47f5d1af0ad3c57272444a2b412d)
+        version: 3.2.1(2aee47f5d1af0ad3c57272444a2b412d)
       pdfmake:
         specifier: ^0.2.15
         version: 0.2.18
@@ -2082,8 +2082,8 @@ packages:
     resolution: {integrity: sha512-hdN1wVrZbb29eBGiGjJbeP8JbKjq1urkHJ/LIP/NY48MZ1QVXUsQBV1G1zvYFHn1XE06cwjBsOI2K3Ulnj1YXQ==}
     engines: {node: '>=8'}
 
-  material-react-table@3.2.0:
-    resolution: {integrity: sha512-q2xWG1CQ30ji+aCLKX1XrIg3zrfHT/zZ4aR49Vk/oP4+ospCgjlIVcWLapjrPoqAIDNgB9/fRRG7d1se1Z3nUg==}
+  material-react-table@3.2.1:
+    resolution: {integrity: sha512-sQtTf7bETpkPN2Hm5BVtz89wrfXCVQguz6XlwMChSnfKFO5QCKAJJC5aSIKnUc3S0AvTz/k/ILi00FnnY1Gixw==}
     engines: {node: '>=16'}
     peerDependencies:
       '@emotion/react': '>=11.13'
@@ -4993,7 +4993,7 @@ snapshots:
 
   map-obj@4.3.0: {}
 
-  material-react-table@3.2.0(2aee47f5d1af0ad3c57272444a2b412d):
+  material-react-table@3.2.1(2aee47f5d1af0ad3c57272444a2b412d):
     dependencies:
       '@emotion/react': 11.14.0(@types/react@18.3.18)(react@18.3.1)
       '@emotion/styled': 11.14.0(@emotion/react@11.14.0(@types/react@18.3.18)(react@18.3.1))(@types/react@18.3.18)(react@18.3.1)
