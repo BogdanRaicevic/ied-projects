@@ -135,15 +135,8 @@ export default function Firma() {
         setCompany(savedCompany.data);
         setErrorAlert(null);
       } catch (error: any) {
-        const errorResponse = error?.response?.data;
         setCompany(company);
-        if (errorResponse?.type === "DUPLICATE_EMAIL") {
-          setErrorAlert(
-            `Zapoleni sa istim email-om već postoji. ${error?.response?.data?.message} `
-          );
-        } else {
-          setErrorAlert("Greška prilikom dodavanja zaposlenog");
-        }
+        setErrorAlert("Greška prilikom dodavanja zaposlenog. " + error.message);
 
         // Clear alerts after 5 seconds
         setTimeout(() => {

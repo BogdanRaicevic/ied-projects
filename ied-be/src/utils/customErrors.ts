@@ -1,8 +1,10 @@
 export class ErrorWithCause extends Error {
-  cause: string;
+  code?: string;
+  details?: any;
 
-  constructor(message: string, cause: string) {
+  constructor(message: string, code?: string, details?: any) {
     super(message);
-    this.cause = cause;
+    this.code = code;
+    this.details = details;
   }
 }

@@ -2,6 +2,7 @@ import { sanitizeFilter, type FilterQuery } from "mongoose";
 import { type FirmaType, Firma } from "../models/firma.model";
 import { createFirmaQuery } from "../utils/firmaQueryBuilder";
 import type { FirmaQueryParams } from "@ied-shared/types/index";
+import { ErrorWithCause } from "../utils/customErrors";
 
 export const findById = async (id: string): Promise<FirmaType | null> => {
   try {
@@ -29,6 +30,20 @@ export const updateById = async (
     const sanitizedData = sanitizeFilter(firmaData as FilterQuery<FirmaType>);
     if (!id || typeof sanitizedData !== "object" || sanitizedData === null) {
       throw new Error("Invalid firma input data");
+    }
+
+    const duplicateEmails =
+      firmaData.zaposleni
+        ?.map((z) => z.e_mail)
+        .filter(Boolean)
+        .filter((email, index, self) => self.indexOf(email) !== index) || [];
+
+    if (duplicateEmails.length > 0) {
+      throw new ErrorWithCause(
+        "Postoje duplikati u email-ovima zaposlenih: " + duplicateEmails.join(", "),
+        "DUPLICATE_EMAILS",
+        "Postoje duplikati u email-ovima zaposlenih: " + duplicateEmails.join(", ")
+      );
     }
 
     return await Firma.findOneAndUpdate(

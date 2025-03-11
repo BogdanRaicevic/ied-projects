@@ -109,32 +109,16 @@ router.post("/", async (req: Request, res: Response, next: NextFunction) => {
   }
 });
 
-router.post("/:id", async (req: Request, res: Response, _next: NextFunction) => {
+router.post("/:id", async (req: Request, res: Response, next: NextFunction) => {
   try {
     const firma = await updateById(req.params.id, req.body);
     if (firma) {
       res.json(firma);
     } else {
-      res.status(404).json({
-        status: "error",
-        type: "FIRMA_NOT_FOUND",
-        message: "Firma not found",
-      });
+      res.status(404).send("Firma not found");
     }
-  } catch (error: any) {
-    if (error.message?.includes("Duplicate email")) {
-      res.status(400).json({
-        status: "error",
-        type: "DUPLICATE_EMAIL",
-        message: error.message,
-      });
-    } else {
-      res.status(500).json({
-        status: "error",
-        type: "INTERNAL_SERVER_ERROR",
-        message: error.message,
-      });
-    }
+  } catch (error) {
+    next(error);
   }
 });
 

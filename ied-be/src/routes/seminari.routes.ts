@@ -106,7 +106,7 @@ router.post("/save-prijava", async (req: SavePrijava, res: Response, next: NextF
     const seminar = await savePrijava(req.body);
     res.status(201).json(seminar);
   } catch (error: unknown) {
-    if (error instanceof ErrorWithCause && error.cause === "duplicate") {
+    if (error instanceof ErrorWithCause && error.code === "duplicate") {
       res.status(409).json({ message: error.message });
     } else {
       next(error);

@@ -1,7 +1,15 @@
 import type { Request, Response, NextFunction } from "express";
+import { ErrorWithCause } from "../utils/customErrors";
 
 export function errorWrapper(err: unknown, _req: Request, res: Response, next: NextFunction) {
-  if (err instanceof Error) {
+  if (err instanceof ErrorWithCause) {
+    return res.status(400).json({
+      status: "error",
+      message: err.message,
+      code: err.code,
+      details: err.details,
+    });
+  } else if (err instanceof Error) {
     console.error(err);
     next(err);
   } else {

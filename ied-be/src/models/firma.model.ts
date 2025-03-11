@@ -72,18 +72,6 @@ firmaSchema.pre("findOneAndUpdate", function (next) {
   const update = this.getUpdate() as unknown as { $set: FirmaType };
   const zaposleni = update.$set?.zaposleni;
 
-  const emails = new Set<string>();
-
-  for (const z of zaposleni) {
-    const email = z.e_mail?.trim();
-    if (email && email !== "") {
-      if (emails.has(email)) {
-        return next(new Error(`Duplicate email found in zaposleni: ${email}`));
-      }
-      emails.add(email);
-    }
-  }
-
   for (const z of zaposleni) {
     if (z.radno_mesto === "") {
       z.radno_mesto = "nema";

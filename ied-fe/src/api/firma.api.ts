@@ -77,7 +77,6 @@ export const saveFirma = async (company: Partial<FirmaType>) => {
     };
   } catch (error: any) {
     console.error("Error saving firma: ", error);
-    // Throw the error so the caller can decide not to update state
     throw error;
   }
 };
