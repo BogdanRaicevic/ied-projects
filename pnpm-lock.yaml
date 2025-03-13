@@ -89,7 +89,7 @@ importers:
         version: 11.14.0(@emotion/react@11.14.0(@types/react@18.3.18)(react@18.3.1))(@types/react@18.3.18)(react@18.3.1)
       '@fontsource/roboto':
         specifier: ^5.1.0
-        version: 5.1.1
+        version: 5.2.5
       '@hookform/resolvers':
         specifier: ^3.9.1
         version: 3.10.0(react-hook-form@7.54.2(react@18.3.1))
@@ -807,8 +807,8 @@ packages:
   '@foliojs-fork/restructure@2.0.2':
     resolution: {integrity: sha512-59SgoZ3EXbkfSX7b63tsou/SDGzwUEK6MuB5sKqgVK1/XE0fxmpsOb9DQI8LXW3KfGnAjImCGhhEb7uPPAUVNA==}
 
-  '@fontsource/roboto@5.1.1':
-    resolution: {integrity: sha512-XwVVXtERDQIM7HPUIbyDe0FP4SRovpjF7zMI8M7pbqFp3ahLJsJTd18h+E6pkar6UbV3btbwkKjYARr5M+SQow==}
+  '@fontsource/roboto@5.2.5':
+    resolution: {integrity: sha512-70r2UZ0raqLn5W+sPeKhqlf8wGvUXFWlofaDlcbt/S3d06+17gXKr3VNqDODB0I1ASme3dGT5OJj9NABt7OTZQ==}
 
   '@formkit/auto-animate@0.8.2':
     resolution: {integrity: sha512-SwPWfeRa5veb1hOIBMdzI+73te5puUBHmqqaF1Bu7FjvxlYSz/kJcZKSa9Cg60zL0uRNeJL2SbRxV6Jp6Q1nFQ==}
@@ -3673,7 +3673,7 @@ snapshots:
 
   '@foliojs-fork/restructure@2.0.2': {}
 
-  '@fontsource/roboto@5.1.1': {}
+  '@fontsource/roboto@5.2.5': {}
 
   '@formkit/auto-animate@0.8.2': {}
 
