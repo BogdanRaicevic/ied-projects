@@ -43,6 +43,7 @@ export default function Firma() {
   const { id } = useParams();
   const [company, setCompany] = useState(defaultCompanyData);
   const [errorAlert, setErrorAlert] = useState<string | null>(null);
+  const [warningAlert, setWarningAlert] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -84,11 +85,41 @@ export default function Firma() {
     const filteredZaposleni = latestData.zaposleni.filter(
       (zaposleni: Zaposleni) => zaposleni._id !== row.original._id
     );
+
+    const emailsMap = new Map<string, number>();
+    filteredZaposleni
+      .map((z) => z.e_mail)
+      .filter(Boolean)
+      .forEach((email) => {
+        if (email && emailsMap.has(email)) {
+          emailsMap.set(email, (emailsMap.get(email) || 0) + 1);
+        } else if (email) {
+          emailsMap.set(email, 0);
+        }
+      });
+
+    const duplicates = new Map(Array.from(emailsMap).filter(([_key, value]) => value >= 1));
+
+    if (duplicates.size > 0) {
+      setWarningAlert(
+        "Postoje zaposleni sa istom email adresom. ".concat(
+          Array.from(duplicates.keys()).join(", ")
+        )
+      );
+    }
+
     const updatedCompany: FirmaType = {
       ...latestData,
       zaposleni: filteredZaposleni,
     };
     setCompany(updatedCompany);
+
+    if (duplicates.size > 0) {
+      setTimeout(() => {
+        setWarningAlert(null);
+      }, 5000);
+    }
+
     saveFirma({ _id: company?._id, zaposleni: filteredZaposleni });
   };
 
@@ -221,6 +252,11 @@ export default function Firma() {
       {errorAlert && (
         <Alert severity="error" sx={{ mb: 2 }} onClose={() => setErrorAlert(null)}>
           {errorAlert}
+        </Alert>
+      )}
+      {warningAlert && (
+        <Alert severity="warning" sx={{ mb: 2 }} onClose={() => setWarningAlert(null)}>
+          {warningAlert}
         </Alert>
       )}
       <MaterialReactTable table={zapTable} />
