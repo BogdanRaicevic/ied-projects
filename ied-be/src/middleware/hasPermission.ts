@@ -1,5 +1,10 @@
 import { clerkClient, getAuth } from "@clerk/express";
 import type { Response, Request, NextFunction } from "express";
+import NodeCache from "node-cache";
+
+const myCache = new NodeCache();
+const CACHE_TTL = 1000 * 60 * 10; // 10 minutes
+
 
 export const hasPermission = async (req: Request, res: Response, next: NextFunction) => {
   try {
@@ -9,15 +14,21 @@ export const hasPermission = async (req: Request, res: Response, next: NextFunct
       return res.status(403).send("Forbidden");
     }
 
-    const currentUser = await getUserWithRetry(auth.userId);
+    if (myCache.has(auth.userId)) {
+      userStore.setCurrentUser(myCache.get(auth.userId) as string);
+      next();
+    } else {
+      const currentUser = await getUserWithRetry(auth.userId);
 
-    if (!currentUser) {
-      console.error("Clerk API is unavailable. Skipping user store update.");
-      return res.status(503).json({ error: "Service Unavailable. Please try again later." });
+      if (!currentUser) {
+        console.error("Clerk API is unavailable. Skipping user store update.");
+        return res.status(503).json({ error: "Service Unavailable. Please try again later." });
+      }
+
+      myCache.set(auth.userId, currentUser, CACHE_TTL);
+      userStore.setCurrentUser(currentUser);
+      next();
     }
-
-    userStore.setCurrentUser(currentUser);
-    next();
   } catch (error) {
     console.error("Error in hasPermission", error);
     return res.status(500).json({ error: "Internal Server Error" });
