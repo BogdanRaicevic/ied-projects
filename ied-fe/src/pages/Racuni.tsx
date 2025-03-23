@@ -2,11 +2,12 @@ import { Button } from "@mui/material";
 import PageTitle from "../components/PageTitle";
 import { updateRacunTemplate } from "../api/docx.api";
 import { useLocation } from "react-router-dom";
-import { RacunForm, type Racun } from "../components/Racun/RacunForm";
+import { RacunForm } from "../components/Racun/RacunForm";
 import { fetchSingleFirma } from "../api/firma.api";
 import { useEffect, useRef, useState } from "react";
 import type { FirmaType, PrijavaNaSeminar, SeminarType } from "../schemas/firmaSchemas";
 import { fetchSeminarById } from "../api/seminari.api";
+import { Racun } from "../components/Racun/types";
 
 export default function Racuni() {
   const [firma, setFirma] = useState<FirmaType | null>(null);
