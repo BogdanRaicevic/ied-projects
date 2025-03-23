@@ -467,7 +467,7 @@ export const RacunForm = forwardRef<RacunFormRef, RacunFormProps>(({ primalacRac
         </Box>
 
         <Typography align="center" variant="h4" sx={{ mb: 3 }}>
-          Offline prisustva
+          Prisustva u sali
         </Typography>
         <Box sx={{ mb: 3 }}>
           <TableContainer component={Paper}>
