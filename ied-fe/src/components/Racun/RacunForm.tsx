@@ -15,6 +15,7 @@ import {
 } from "@mui/material";
 import { useState, useEffect, forwardRef, useImperativeHandle } from "react";
 import SelectFirma from "./SelectFirma";
+import { IzdavacRacunaSection } from "./IzdavacRacunaSection";
 
 type PrimalacRacuna = {
   naziv: string;
@@ -55,7 +56,7 @@ export type Racun = PrimalacRacuna & {
   };
 };
 
-type IzdavacRacuna = {
+export type IzdavacRacuna = {
   naziv: string;
   kontaktTelefoni: string[];
   pib: string;
@@ -201,88 +202,15 @@ export const RacunForm = forwardRef<RacunFormRef, RacunFormProps>(({ primalacRac
 
   return (
     <Grid2 container>
-      <Grid2 component={Paper} size={12} container>
-        <Grid2 size={7}>
-          <Box sx={{ padding: "1rem" }}>
-            <TextField
-              fullWidth
-              variant="filled"
-              label="Podaci o izdavaocu računa"
-              value={selectedFirmaData?.naziv ?? ""}
-              sx={{ mb: 2 }}
-            />
-            <TextField
-              fullWidth
-              variant="filled"
-              label="Kontakt telefoni"
-              value={selectedFirmaData?.kontaktTelefoni.join(", ") ?? ""}
-              sx={{ mb: 2 }}
-            />
-            <TextField
-              fullWidth
-              variant="filled"
-              label="PIB"
-              value={selectedFirmaData?.pib ?? ""}
-              sx={{ mb: 2 }}
-            />
-            <TextField
-              fullWidth
-              variant="filled"
-              label="Matični broj"
-              value={selectedFirmaData?.maticniBroj ?? ""}
-              sx={{ mb: 2 }}
-            />
-            <TextField
-              fullWidth
-              variant="filled"
-              label="Broj rešenja o evidenciji za PDV"
-              value={selectedFirmaData?.brojResenjaOEvidencijiZaPDV ?? ""}
-              sx={{ mb: 2 }}
-            />
-            <Autocomplete
-              fullWidth
-              options={selectedFirmaData?.tekuciRacuni ?? []}
-              value={racun.izdavacRacuna?.tekuciRacun ?? ""}
-              renderInput={(params) => (
-                <TextField {...params} variant="filled" label="Tekući račun" sx={{ mb: 2 }} />
-              )}
-              onChange={(_, newValue) => {
-                if (newValue) {
-                  setRacun((prev) => ({
-                    ...prev,
-                    tekuciRacun: newValue,
-                  }));
-                  setSelectedFirmaData((prev) =>
-                    prev
-                      ? {
-                          ...prev,
-                          tekuciRacuni: [
-                            newValue,
-                            ...prev.tekuciRacuni.filter((r) => r !== newValue),
-                          ],
-                        }
-                      : null
-                  );
-                }
-              }}
-            />
-          </Box>
-        </Grid2>
-        <Grid2 size={5}>
-          <Box
-            sx={{
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              height: "100%",
-              p: 1,
-            }}
-          >
-            {/* <img src={iedLogo} style={{ maxWidth: "100%", maxHeight: "100%" }} /> */}
-            <SelectFirma onFirmaChange={(data) => setSelectedFirmaData(data)} />{" "}
-          </Box>
-        </Grid2>
-      </Grid2>
+      <TableContainer component={Paper}>
+        <Table sx={{ minWidth: 650 }} aria-label="simple table">
+          <IzdavacRacunaSection
+            selectedFirmaData={selectedFirmaData}
+            onFirmaChange={(data) => setSelectedFirmaData(data)}
+            onTekuciRacunChange={(value) => setRacun((prev) => ({ ...prev, tekuciRacun: value }))}
+          />
+        </Table>
+      </TableContainer>
       <Grid2 size={12}>
         <Divider sx={{ mt: 3, mb: 3 }} />
         <Box>
