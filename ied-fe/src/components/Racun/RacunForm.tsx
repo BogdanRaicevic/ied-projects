@@ -1,18 +1,10 @@
-import {
-  Grid2,
-  Paper,
-  TextField,
-  Divider,
-  TableContainer,
-  Table,
-  Typography,
-  Box,
-} from "@mui/material";
+import { Grid2, Paper, Divider, TableContainer, Table, Box } from "@mui/material";
 import { useState, useEffect, forwardRef, useImperativeHandle } from "react";
 import { IzdavacRacunaSection } from "./IzdavacRacunaSection";
 import { PrimalacRacunaSection } from "./PrimalacRacunaSection";
 import { OnlinePrisustvaSection } from "./OnlinePrisustvaSection";
 import { OfflinePrisustvaSection } from "./OfflinePrisustvaSection";
+import { UkupnaNaknada } from "./UkupnaNaknada";
 
 type PrimalacRacuna = {
   naziv: string;
@@ -185,12 +177,11 @@ export const RacunForm = forwardRef<RacunFormRef, RacunFormProps>(({ primalacRac
   ]);
 
   const handleRacunChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    setRacun((prev) => {
-      return {
-        ...prev,
-        [e.target.name]: e.target.value,
-      };
-    });
+    console.log(e.target.name, e.target.value);
+    setRacun((prev) => ({
+      ...prev,
+      [e.target.name]: e.target.value,
+    }));
   };
 
   useImperativeHandle(ref, () => ({
@@ -210,56 +201,11 @@ export const RacunForm = forwardRef<RacunFormRef, RacunFormProps>(({ primalacRac
       </TableContainer>
       <Grid2 size={12}>
         <Divider sx={{ mt: 3, mb: 3 }} />
-        <Box>
-          <PrimalacRacunaSection racun={racun} onRacunChange={handleRacunChange} />
-        </Box>
+        <PrimalacRacunaSection racun={racun} onRacunChange={handleRacunChange} />
         <Divider sx={{ mt: 3, mb: 3 }} />
         <OnlinePrisustvaSection racun={racun} onRacunChange={handleRacunChange} />
         <OfflinePrisustvaSection racun={racun} onRacunChange={handleRacunChange} />
-        <Box>
-          {/* // ukupan zbir za PDV i naknadu */}
-          <Box>
-            <Typography variant="h6" sx={{ mr: 1 }}>
-              Ukupna naknada po svim stavkama:{" "}
-              {(
-                Number(racun.onlineUkupnaNaknada) + Number(racun.offlineUkupnaNaknada)
-              ).toLocaleString("sr-RS", {
-                style: "currency",
-                currency: "RSD",
-                minimumFractionDigits: 2,
-              })}
-            </Typography>
-            <Typography variant="h6" sx={{ mr: 1 }}>
-              Ukupni PDV po svim stavkama:{" "}
-              {(Number(racun.pdvOnline) + Number(racun.pdvOffline)).toLocaleString("sr-RS", {
-                style: "currency",
-                currency: "RSD",
-                minimumFractionDigits: 2,
-              })}
-            </Typography>
-          </Box>
-          <Box
-            sx={{
-              display: "flex",
-              alignItems: "baseline",
-              justifyContent: "flex-end",
-            }}
-          >
-            <Typography variant="h6" sx={{ mr: 1 }}>
-              Rok za uplatu
-            </Typography>
-            <TextField
-              name="rokZaUplatu"
-              variant="filled"
-              value={racun.rokZaUplatu}
-              sx={{ maxWidth: 60 }}
-              onChange={handleRacunChange}
-            />
-            <Typography variant="h6" sx={{ ml: 1 }}>
-              dana
-            </Typography>
-          </Box>
-        </Box>
+        <UkupnaNaknada racun={racun} onRacunChange={handleRacunChange} />
         <Divider sx={{ mt: 3 }} />
       </Grid2>
     </Grid2>
