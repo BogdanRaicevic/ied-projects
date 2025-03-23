@@ -138,3 +138,6 @@
 
 # ignore DB backup folder
 **/ied-be/backup
+
+# ignore storage template folder
+**/ied-be/storage/templates
