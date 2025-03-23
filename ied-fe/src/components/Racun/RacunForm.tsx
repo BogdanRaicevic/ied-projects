@@ -11,11 +11,10 @@ import {
   TableBody,
   Typography,
   Box,
-  Autocomplete,
 } from "@mui/material";
 import { useState, useEffect, forwardRef, useImperativeHandle } from "react";
-import SelectFirma from "./SelectFirma";
 import { IzdavacRacunaSection } from "./IzdavacRacunaSection";
+import { PrimalacRacunaSection } from "./PrimalacRacunaSection";
 
 type PrimalacRacuna = {
   naziv: string;
@@ -214,60 +213,7 @@ export const RacunForm = forwardRef<RacunFormRef, RacunFormProps>(({ primalacRac
       <Grid2 size={12}>
         <Divider sx={{ mt: 3, mb: 3 }} />
         <Box>
-          <TableContainer component={Paper}>
-            <Table sx={{ minWidth: 650 }} aria-label="simple table">
-              <TableHead>
-                <TableRow>
-                  <TableCell>Primalac računa</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                <TableRow
-                  key="naziv-firme"
-                  sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-                >
-                  <TableCell align="left">
-                    <TextField
-                      name="naziv"
-                      fullWidth
-                      variant="filled"
-                      label="Naziv"
-                      value={racun.naziv}
-                      sx={{ mb: 2 }}
-                      onChange={handleRacunChange}
-                    />
-                    <TextField
-                      name="adresa"
-                      fullWidth
-                      variant="filled"
-                      label="Adresa"
-                      value={`${racun.mesto}, ${racun.adresa}`}
-                      sx={{ mb: 2 }}
-                      onChange={handleRacunChange}
-                    />
-                    <TextField
-                      name="pib"
-                      fullWidth
-                      variant="filled"
-                      label="PIB"
-                      value={racun.pib}
-                      sx={{ mb: 2 }}
-                      onChange={handleRacunChange}
-                    />
-                    <TextField
-                      name="maticniBroj"
-                      fullWidth
-                      variant="filled"
-                      label="Matični broj"
-                      value={racun.maticniBroj}
-                      sx={{ mb: 2 }}
-                      onChange={handleRacunChange}
-                    />
-                  </TableCell>
-                </TableRow>
-              </TableBody>
-            </Table>
-          </TableContainer>
+          <PrimalacRacunaSection racun={racun} onRacunChange={handleRacunChange} />
         </Box>
         <Divider sx={{ mt: 3, mb: 3 }} />
         <Typography align="center" variant="h4" sx={{ mb: 3 }}>
