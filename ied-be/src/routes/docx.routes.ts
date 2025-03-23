@@ -51,6 +51,7 @@ router.post("/modify-template", async (req, res) => {
       datumIzdavanjaRacuna: new Date().toLocaleDateString("sr-RS"),
       hasOnline: Number(req.body.brojUcesnikaOnline) > 0,
       hasOffline: Number(req.body.brojUcesnikaOffline) > 0,
+      sadasnjaGodina: new Date().getFullYear().toString().slice(-2),
     };
 
     const content = fs.readFileSync(templatePath, "binary");

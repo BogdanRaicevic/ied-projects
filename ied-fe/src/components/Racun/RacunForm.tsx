@@ -32,7 +32,7 @@ export const RacunForm = forwardRef<RacunFormRef, RacunFormProps>(({ primalacRac
     []
   );
 
-  const handleFirmaChange = useCallback((data: IzdavacRacuna) => {
+  const handleFirmaChange = useCallback((data: IzdavacRacuna | null) => {
     setSelectedFirmaData(data);
   }, []);
 

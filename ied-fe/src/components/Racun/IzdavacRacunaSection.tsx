@@ -1,6 +1,6 @@
 import { Grid2, Paper, TextField, Box, Autocomplete } from "@mui/material";
 import SelectFirma from "./SelectFirma";
-import type { IzdavacRacuna } from "./RacunForm";
+import { IzdavacRacuna } from "./types";
 
 interface IzdavacRacunaSectionProps {
   selectedFirmaData: IzdavacRacuna | null;
