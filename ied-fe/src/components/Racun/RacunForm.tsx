@@ -11,6 +11,7 @@ import {
   TableBody,
   Typography,
   Box,
+  Autocomplete,
 } from "@mui/material";
 import { useState, useEffect, forwardRef, useImperativeHandle } from "react";
 import SelectFirma from "./SelectFirma";
@@ -44,6 +45,23 @@ export type Racun = PrimalacRacuna & {
   pozivNaBroj: string;
   ukupnaNaknada: number;
   ukupanPdv: number;
+  izdavacRacuna: {
+    naziv: string;
+    kontaktTelefoni: string[];
+    pib: string;
+    maticniBroj: string;
+    brojResenjaOEvidencijiZaPDV: string;
+    tekuciRacun: string;
+  };
+};
+
+type IzdavacRacuna = {
+  naziv: string;
+  kontaktTelefoni: string[];
+  pib: string;
+  maticniBroj: string;
+  brojResenjaOEvidencijiZaPDV: string;
+  tekuciRacuni: string[];
 };
 
 export interface RacunFormRef {
@@ -55,6 +73,7 @@ interface RacunFormProps {
 }
 
 export const RacunForm = forwardRef<RacunFormRef, RacunFormProps>(({ primalacRacuna }, ref) => {
+  const [selectedFirmaData, setSelectedFirmaData] = useState<IzdavacRacuna | null>(null);
   const [racun, setRacun] = useState<Partial<Racun>>({
     naziv: primalacRacuna.naziv || "",
     adresa: primalacRacuna.adresa || "",
@@ -70,6 +89,14 @@ export const RacunForm = forwardRef<RacunFormRef, RacunFormProps>(({ primalacRac
     jedinicaMere: "Broj učesnika",
     rokZaUplatu: 5,
     pozivNaBroj: "",
+    izdavacRacuna: {
+      naziv: selectedFirmaData?.naziv ?? "",
+      kontaktTelefoni: selectedFirmaData?.kontaktTelefoni ?? [],
+      pib: selectedFirmaData?.pib ?? "",
+      maticniBroj: selectedFirmaData?.maticniBroj ?? "",
+      brojResenjaOEvidencijiZaPDV: selectedFirmaData?.brojResenjaOEvidencijiZaPDV ?? "",
+      tekuciRacun: selectedFirmaData?.tekuciRacuni?.[0] ?? "",
+    },
   });
 
   // NOTE: this is a workaround to update the form when the data changes
@@ -92,8 +119,32 @@ export const RacunForm = forwardRef<RacunFormRef, RacunFormProps>(({ primalacRac
       jedinicaMere: "Broj učesnika",
       rokZaUplatu: 5,
       pozivNaBroj: "",
+      izdavacRacuna: {
+        naziv: selectedFirmaData?.naziv ?? "",
+        kontaktTelefoni: selectedFirmaData?.kontaktTelefoni ?? [],
+        pib: selectedFirmaData?.pib ?? "",
+        maticniBroj: selectedFirmaData?.maticniBroj ?? "",
+        brojResenjaOEvidencijiZaPDV: selectedFirmaData?.brojResenjaOEvidencijiZaPDV ?? "",
+        tekuciRacun: selectedFirmaData?.tekuciRacuni?.[0] ?? "",
+      },
     });
   }, [primalacRacuna]);
+
+  useEffect(() => {
+    if (selectedFirmaData) {
+      setRacun((prev) => ({
+        ...prev,
+        izdavacRacuna: {
+          naziv: selectedFirmaData.naziv,
+          kontaktTelefoni: selectedFirmaData.kontaktTelefoni,
+          pib: selectedFirmaData.pib,
+          maticniBroj: selectedFirmaData.maticniBroj,
+          brojResenjaOEvidencijiZaPDV: selectedFirmaData.brojResenjaOEvidencijiZaPDV,
+          tekuciRacun: selectedFirmaData.tekuciRacuni[0] ?? "",
+        },
+      }));
+    }
+  }, [selectedFirmaData]);
 
   useEffect(() => {
     const onlineCena = Number(racun.onlineCena) || 0;
@@ -148,8 +199,6 @@ export const RacunForm = forwardRef<RacunFormRef, RacunFormProps>(({ primalacRac
     getRacunData: () => racun,
   }));
 
-  const [selectedFirmaData, setSelectedFirmaData] = useState(null);
-
   return (
     <Grid2 container>
       <Grid2 component={Paper} size={12} container>
@@ -159,43 +208,63 @@ export const RacunForm = forwardRef<RacunFormRef, RacunFormProps>(({ primalacRac
               fullWidth
               variant="filled"
               label="Podaci o izdavaocu računa"
-              value={selectedFirmaData?.podaciOIzdavaocuRacuna || ""}
+              value={selectedFirmaData?.naziv ?? ""}
               sx={{ mb: 2 }}
             />
             <TextField
               fullWidth
               variant="filled"
               label="Kontakt telefoni"
-              value={selectedFirmaData?.kontaktTelefoni.join(", ") || ""}
+              value={selectedFirmaData?.kontaktTelefoni.join(", ") ?? ""}
               sx={{ mb: 2 }}
             />
             <TextField
               fullWidth
               variant="filled"
               label="PIB"
-              value={selectedFirmaData?.pib || ""}
+              value={selectedFirmaData?.pib ?? ""}
               sx={{ mb: 2 }}
             />
             <TextField
               fullWidth
               variant="filled"
               label="Matični broj"
-              value={selectedFirmaData?.maticniBroj || ""}
+              value={selectedFirmaData?.maticniBroj ?? ""}
               sx={{ mb: 2 }}
             />
             <TextField
               fullWidth
               variant="filled"
               label="Broj rešenja o evidenciji za PDV"
-              value={selectedFirmaData?.brojResenjaOEvidencijiZaPDV || ""}
+              value={selectedFirmaData?.brojResenjaOEvidencijiZaPDV ?? ""}
               sx={{ mb: 2 }}
             />
-            <TextField
+            <Autocomplete
               fullWidth
-              variant="filled"
-              label="Tekući račun"
-              value={selectedFirmaData?.tekuciRacuni || ""}
-              sx={{ mb: 2 }}
+              options={selectedFirmaData?.tekuciRacuni ?? []}
+              value={racun.izdavacRacuna?.tekuciRacun ?? ""}
+              renderInput={(params) => (
+                <TextField {...params} variant="filled" label="Tekući račun" sx={{ mb: 2 }} />
+              )}
+              onChange={(_, newValue) => {
+                if (newValue) {
+                  setRacun((prev) => ({
+                    ...prev,
+                    tekuciRacun: newValue,
+                  }));
+                  setSelectedFirmaData((prev) =>
+                    prev
+                      ? {
+                          ...prev,
+                          tekuciRacuni: [
+                            newValue,
+                            ...prev.tekuciRacuni.filter((r) => r !== newValue),
+                          ],
+                        }
+                      : null
+                  );
+                }
+              }}
             />
           </Box>
         </Grid2>

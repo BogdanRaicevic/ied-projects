@@ -4,7 +4,7 @@ import bsLogo from "../../images/bs-logo.png";
 
 export const ied = {
   logo: iedLogo,
-  podaciOIzdavaocuRacuna: "Institut za ekonomsku diplomatiju d.o.o, 11080 Zemun, Bezanijska 30",
+  naziv: "Institut za ekonomsku diplomatiju d.o.o, 11080 Zemun, Bezanijska 30",
   kontaktTelefoni: ["011/3077612", "011/3077612"],
   pib: "103159254",
   maticniBroj: "17518313",
@@ -19,11 +19,11 @@ export const ied = {
 
 export const permanent = {
   logo: permanentLogo,
-  podaciOIzdavaocuRacuna: "Permanent Educom",
-  kontaktTelefoni: ["nemam podatak"],
+  naziv: "Permanent Educom",
+  kontaktTelefoni: [],
   pib: "109282264",
   maticniBroj: "64066030",
-  brojResenjaOEvidencijiZaPDV: "nemam podatak",
+  brojResenjaOEvidencijiZaPDV: "",
   tekuciRacuni: [
     "205-0000000525550-76 (Komercijalna banka)",
     "205-0000000227245-69 (Komercijalna banka)",
@@ -32,12 +32,11 @@ export const permanent = {
 
 export const bs = {
   logo: bsLogo,
-  podaciOIzdavaocuRacuna:
-    "Balkanski savet za održivi razvoj i edukaciju, 11080 Zemun, Bezanijska 30",
-  kontaktTelefoni: ["nemam podatak"],
+  naziv: "Balkanski savet za održivi razvoj i edukaciju, 11080 Zemun, Bezanijska 30",
+  kontaktTelefoni: [""],
   pib: "108935581",
   maticniBroj: "28170866",
-  brojResenjaOEvidencijiZaPDV: "nemam podatak",
+  brojResenjaOEvidencijiZaPDV: "",
   tekuciRacuni: [
     "325-9500600050635-47 (OTP banka)",
     "325-9601600007556-60 (OTP banka)",
