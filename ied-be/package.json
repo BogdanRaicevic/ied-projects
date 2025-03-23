@@ -19,7 +19,7 @@
 		"@types/express": "^4.17.21",
 		"@types/node": "^22.10.1",
 		"cross-env": "^7.0.3",
-		"globals": "^15.13.0",
+		"globals": "^16.0.0",
 		"nodemon": "^3.1.7",
 		"ts-node": "^10.9.2",
 		"typescript": "^5.7.3"
