@@ -1,4 +1,4 @@
-import { Grid2, Paper, Divider, TableContainer, Table } from "@mui/material";
+import { Grid2, Divider } from "@mui/material";
 import { useState, forwardRef, useImperativeHandle, useCallback } from "react";
 import { IzdavacRacunaSection } from "./IzdavacRacunaSection";
 import { PrimalacRacunaSection } from "./PrimalacRacunaSection";
@@ -55,15 +55,11 @@ export const CreatePredracunForm = forwardRef<RacunFormRef, RacunFormProps>(
 
     return (
       <Grid2 container>
-        <TableContainer component={Paper}>
-          <Table sx={{ minWidth: 650 }} aria-label="simple table">
-            <IzdavacRacunaSection
-              selectedFirmaData={selectedFirmaData}
-              onFirmaChange={handleFirmaChange}
-              onTekuciRacunChange={handleTekuciRacunChange}
-            />
-          </Table>
-        </TableContainer>
+        <IzdavacRacunaSection
+          selectedFirmaData={selectedFirmaData}
+          onFirmaChange={handleFirmaChange}
+          onTekuciRacunChange={handleTekuciRacunChange}
+        />
         <Grid2 size={12}>
           <Divider sx={{ mt: 3, mb: 3 }} />
           <PrimalacRacunaSection racun={racun} onRacunChange={handleRacunChange} />
