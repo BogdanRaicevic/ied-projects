@@ -1,4 +1,4 @@
-import { Button } from "@mui/material";
+import { Box, Button, Tab, Tabs } from "@mui/material";
 import PageTitle from "../components/PageTitle";
 import { updateRacunTemplate } from "../api/docx.api";
 import { useLocation } from "react-router-dom";
@@ -15,6 +15,7 @@ export default function Racuni() {
   const [seminar, setSeminar] = useState<SeminarType | null>(null);
   const [selectedFirmaData, setSelectedFirmaData] = useState<IzdavacRacuna | null>(null);
   const [selectedTekuciRacun, setSelectedTekuciRacun] = useState<string>("");
+  const [tabValue, setTabValue] = useState(0);
 
   const formRef = useRef<{ getRacunData: () => Partial<Racun> }>(null);
 
@@ -69,9 +70,12 @@ export default function Racuni() {
   }, []);
 
   const handleTekuciRacunChange = useCallback((value: string) => {
-    console.log("handleTekuciRacunChange", value);
     setSelectedTekuciRacun(value);
   }, []);
+
+  const handleTabChange = (_event: React.SyntheticEvent, newValue: number) => {
+    setTabValue(newValue);
+  };
 
   return (
     <>
@@ -82,14 +86,28 @@ export default function Racuni() {
         onTekuciRacunChange={handleTekuciRacunChange}
         selectedTekuciRacun={selectedTekuciRacun}
       />
-      <CreatePredracunForm
-        primalacRacuna={primalacRacuna}
-        selectedFirmaData={selectedFirmaData}
-        selectedTekuciRacun={selectedTekuciRacun}
-        ref={formRef}
-      />
-      <Button onClick={handleDocxUpdate} variant="contained">
-        odje click
+
+      <Box sx={{ borderBottom: 1, borderColor: "divider", mt: 3, mb: 3 }}>
+        <Tabs value={tabValue} onChange={handleTabChange} aria-label="basic tabs">
+          <Tab label="Predračun" />
+        </Tabs>
+      </Box>
+      <Box role="tabpanel" hidden={tabValue !== 0}>
+        <CreatePredracunForm
+          primalacRacuna={primalacRacuna}
+          selectedFirmaData={selectedFirmaData}
+          selectedTekuciRacun={selectedTekuciRacun}
+          ref={formRef}
+        />
+      </Box>
+      <Box role="tabpanel" hidden={tabValue !== 1}>
+        Item Two
+      </Box>
+      <Box role="tabpanel" hidden={tabValue !== 2}>
+        Item Three
+      </Box>
+      <Button sx={{ mt: 3, mb: 3 }} onClick={handleDocxUpdate} variant="contained">
+        Generisi dokument
       </Button>
     </>
   );
