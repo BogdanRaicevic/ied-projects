@@ -47,11 +47,3 @@ export type Racun = PrimalacRacuna & {
   ukupanPdv: number;
   izdavacRacuna: IzdavacRacunaForm;
 };
-
-export interface RacunFormRef {
-  getRacunData: () => Partial<Racun>;
-}
-
-export interface RacunFormProps {
-  primalacRacuna: PrimalacRacuna;
-}
