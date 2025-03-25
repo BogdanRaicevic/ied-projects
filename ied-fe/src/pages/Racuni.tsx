@@ -4,14 +4,18 @@ import { updateRacunTemplate } from "../api/docx.api";
 import { useLocation } from "react-router-dom";
 import { CreatePredracunForm } from "../components/Racun/CreatePredracunForm";
 import { fetchSingleFirma } from "../api/firma.api";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import type { FirmaType, PrijavaNaSeminar, SeminarType } from "../schemas/firmaSchemas";
 import { fetchSeminarById } from "../api/seminari.api";
-import { Racun } from "../components/Racun/types";
+import { IzdavacRacuna, Racun } from "../components/Racun/types";
+import { IzdavacRacunaSection } from "../components/Racun/IzdavacRacunaSection";
 
 export default function Racuni() {
   const [firma, setFirma] = useState<FirmaType | null>(null);
   const [seminar, setSeminar] = useState<SeminarType | null>(null);
+  const [selectedFirmaData, setSelectedFirmaData] = useState<IzdavacRacuna | null>(null);
+  const [selectedTekuciRacun, setSelectedTekuciRacun] = useState<string>("");
+
   const formRef = useRef<{ getRacunData: () => Partial<Racun> }>(null);
 
   const location = useLocation();
@@ -60,10 +64,30 @@ export default function Racuni() {
     }
   };
 
+  const handleFirmaChange = useCallback((data: IzdavacRacuna | null) => {
+    setSelectedFirmaData(data);
+  }, []);
+
+  const handleTekuciRacunChange = useCallback((value: string) => {
+    console.log("handleTekuciRacunChange", value);
+    setSelectedTekuciRacun(value);
+  }, []);
+
   return (
     <>
       <PageTitle title={"Racuni"} />
-      <CreatePredracunForm primalacRacuna={primalacRacuna} ref={formRef} />
+      <IzdavacRacunaSection
+        selectedFirmaData={selectedFirmaData}
+        onFirmaChange={handleFirmaChange}
+        onTekuciRacunChange={handleTekuciRacunChange}
+        selectedTekuciRacun={selectedTekuciRacun}
+      />
+      <CreatePredracunForm
+        primalacRacuna={primalacRacuna}
+        selectedFirmaData={selectedFirmaData}
+        selectedTekuciRacun={selectedTekuciRacun}
+        ref={formRef}
+      />
       <Button onClick={handleDocxUpdate} variant="contained">
         odje click
       </Button>

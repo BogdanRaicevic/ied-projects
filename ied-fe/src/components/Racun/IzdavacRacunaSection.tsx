@@ -6,12 +6,14 @@ interface IzdavacRacunaSectionProps {
   selectedFirmaData: IzdavacRacuna | null;
   onFirmaChange: (data: IzdavacRacuna | null) => void;
   onTekuciRacunChange: (value: string) => void;
+  selectedTekuciRacun: string;
 }
 
 export const IzdavacRacunaSection = ({
   selectedFirmaData,
   onFirmaChange,
   onTekuciRacunChange,
+  selectedTekuciRacun,
 }: IzdavacRacunaSectionProps) => {
   return (
     <Grid2 component={Paper} size={12} container>
@@ -55,7 +57,7 @@ export const IzdavacRacunaSection = ({
           <Autocomplete
             fullWidth
             options={selectedFirmaData?.tekuciRacuni ?? []}
-            value={selectedFirmaData?.tekuciRacuni?.[0] ?? ""}
+            value={selectedTekuciRacun}
             renderInput={(params) => (
               <TextField {...params} variant="filled" label="Tekući račun" sx={{ mb: 2 }} />
             )}

@@ -1,6 +1,5 @@
 import { Grid2, Divider } from "@mui/material";
-import { useState, forwardRef, useImperativeHandle, useCallback } from "react";
-import { IzdavacRacunaSection } from "./IzdavacRacunaSection";
+import { forwardRef, useImperativeHandle, useCallback, useEffect } from "react";
 import { PrimalacRacunaSection } from "./PrimalacRacunaSection";
 import { OnlinePrisustvaSection } from "./OnlinePrisustvaSection";
 import { OfflinePrisustvaSection } from "./OfflinePrisustvaSection";
@@ -15,12 +14,17 @@ interface RacunFormRef {
 
 interface RacunFormProps {
   primalacRacuna: PrimalacRacuna;
+  selectedFirmaData: IzdavacRacuna | null;
+  selectedTekuciRacun: string;
 }
 
 export const CreatePredracunForm = forwardRef<RacunFormRef, RacunFormProps>(
-  ({ primalacRacuna }, ref) => {
-    const [selectedFirmaData, setSelectedFirmaData] = useState<IzdavacRacuna | null>(null);
+  ({ primalacRacuna, selectedFirmaData, selectedTekuciRacun }, ref) => {
     const { racun, setRacun } = useInitialRacunState({ primalacRacuna, selectedFirmaData });
+
+    useEffect(() => {
+      setRacun((prev) => ({ ...prev, tekuciRacun: selectedTekuciRacun }));
+    }, [selectedTekuciRacun]);
 
     const handleCalculationsUpdate = useCallback((calculations: Partial<Racun>) => {
       setRacun((prev) => ({ ...prev, ...calculations }));
@@ -41,25 +45,12 @@ export const CreatePredracunForm = forwardRef<RacunFormRef, RacunFormProps>(
       []
     );
 
-    const handleFirmaChange = useCallback((data: IzdavacRacuna | null) => {
-      setSelectedFirmaData(data);
-    }, []);
-
-    const handleTekuciRacunChange = useCallback((value: string) => {
-      setRacun((prev) => ({ ...prev, tekuciRacun: value }));
-    }, []);
-
     useImperativeHandle(ref, () => ({
       getRacunData: () => racun,
     }));
 
     return (
       <Grid2 container>
-        <IzdavacRacunaSection
-          selectedFirmaData={selectedFirmaData}
-          onFirmaChange={handleFirmaChange}
-          onTekuciRacunChange={handleTekuciRacunChange}
-        />
         <Grid2 size={12}>
           <Divider sx={{ mt: 3, mb: 3 }} />
           <PrimalacRacunaSection racun={racun} onRacunChange={handleRacunChange} />
