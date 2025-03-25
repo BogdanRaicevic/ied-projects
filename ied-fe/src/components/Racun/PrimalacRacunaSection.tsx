@@ -1,6 +1,4 @@
 import {
-  Grid2,
-  Divider,
   TableContainer,
   Paper,
   Table,
@@ -10,7 +8,7 @@ import {
   TableBody,
   TextField,
 } from "@mui/material";
-import type { Racun } from "./RacunForm";
+import type { Racun } from "./types";
 
 interface PrimalacRacunaSectionProps {
   racun: Partial<Racun>;

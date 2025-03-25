@@ -10,7 +10,7 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import type { Racun } from "./RacunForm";
+import type { Racun } from "./types";
 
 interface OnlinePrisustvaSectionProps {
   racun: Partial<Racun>;
