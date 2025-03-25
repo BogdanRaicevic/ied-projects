@@ -2,7 +2,7 @@ import { Button } from "@mui/material";
 import PageTitle from "../components/PageTitle";
 import { updateRacunTemplate } from "../api/docx.api";
 import { useLocation } from "react-router-dom";
-import { RacunForm } from "../components/Racun/RacunForm";
+import { CreatePredracunForm } from "../components/Racun/CreatePredracunForm";
 import { fetchSingleFirma } from "../api/firma.api";
 import { useEffect, useRef, useState } from "react";
 import type { FirmaType, PrijavaNaSeminar, SeminarType } from "../schemas/firmaSchemas";
@@ -63,7 +63,7 @@ export default function Racuni() {
   return (
     <>
       <PageTitle title={"Racuni"} />
-      <RacunForm primalacRacuna={primalacRacuna} ref={formRef} />
+      <CreatePredracunForm primalacRacuna={primalacRacuna} ref={formRef} />
       <Button onClick={handleDocxUpdate} variant="contained">
         odje click
       </Button>
