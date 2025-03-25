@@ -10,8 +10,7 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import type { Racun } from "./RacunForm";
-
+import type { Racun } from "./types";
 interface OfflinePrisustvaSectionProps {
   racun: Partial<Racun>;
   onRacunChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;

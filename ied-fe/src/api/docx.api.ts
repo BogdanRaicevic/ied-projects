@@ -1,7 +1,6 @@
 import axiosInstanceWithAuth from "./interceptors/auth";
 import { env } from "../utils/envVariables";
-import type { Racun } from "../components/Racun/RacunForm";
-
+import type { Racun } from "../components/Racun/types";
 export const updateRacunTemplate = async (racunData: Partial<Racun>) => {
   try {
     const response = await axiosInstanceWithAuth.post(

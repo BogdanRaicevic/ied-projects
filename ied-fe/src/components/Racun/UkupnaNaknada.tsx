@@ -1,6 +1,6 @@
 import { Typography, TextField } from "@mui/material";
 import { Box } from "@mui/system";
-import { Racun } from "./RacunForm";
+import type { Racun } from "./types";
 
 interface UkupnaNaknadaProps {
   racun: Partial<Racun>;
