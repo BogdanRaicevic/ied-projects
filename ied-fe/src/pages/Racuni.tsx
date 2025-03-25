@@ -90,6 +90,9 @@ export default function Racuni() {
       <Box sx={{ borderBottom: 1, borderColor: "divider", mt: 3, mb: 3 }}>
         <Tabs value={tabValue} onChange={handleTabChange} aria-label="basic tabs">
           <Tab label="Predračun" />
+          <Tab label="Avansni račun" />
+          <Tab label="Konačni račun" />
+          <Tab label="Račun" />
         </Tabs>
       </Box>
       <Box role="tabpanel" hidden={tabValue !== 0}>
@@ -101,10 +104,13 @@ export default function Racuni() {
         />
       </Box>
       <Box role="tabpanel" hidden={tabValue !== 1}>
-        Item Two
+        U izradi Avansni račun
       </Box>
       <Box role="tabpanel" hidden={tabValue !== 2}>
-        Item Three
+        U izradi Konačni račun
+      </Box>
+      <Box role="tabpanel" hidden={tabValue !== 3}>
+        U izradi Račun
       </Box>
       <Button sx={{ mt: 3, mb: 3 }} onClick={handleDocxUpdate} variant="contained">
         Generisi dokument
