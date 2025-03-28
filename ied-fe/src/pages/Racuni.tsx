@@ -9,6 +9,7 @@ import type { FirmaType, PrijavaNaSeminar, SeminarType } from "../schemas/firmaS
 import { fetchSeminarById } from "../api/seminari.api";
 import { IzdavacRacuna, Racun } from "../components/Racun/types";
 import { IzdavacRacunaSection } from "../components/Racun/IzdavacRacunaSection";
+import PostAddIcon from "@mui/icons-material/PostAdd";
 
 export default function Racuni() {
   const [firma, setFirma] = useState<FirmaType | null>(null);
@@ -112,8 +113,13 @@ export default function Racuni() {
       <Box role="tabpanel" hidden={tabValue !== 3}>
         U izradi Račun
       </Box>
-      <Button sx={{ mt: 3, mb: 3 }} onClick={handleDocxUpdate} variant="contained">
-        Generisi dokument
+      <Button
+        sx={{ mt: 3, mb: 3 }}
+        onClick={handleDocxUpdate}
+        variant="contained"
+        endIcon={<PostAddIcon />}
+      >
+        Ođe Klik
       </Button>
     </>
   );
