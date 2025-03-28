@@ -1,12 +1,10 @@
 import { Grid2, Divider, Typography } from "@mui/material";
 import { forwardRef, useImperativeHandle, useCallback, useEffect } from "react";
 import { PrimalacRacunaSection } from "./PrimalacRacunaSection";
-import { OnlinePrisustvaSection } from "./OnlinePrisustvaSection";
-import { OfflinePrisustvaSection } from "./OfflinePrisustvaSection";
-import { UkupnaNaknada } from "./UkupnaNaknada";
 import { useInitialRacunState } from "./hooks/useInitialRacunState";
 import { useRacunCalculations } from "./hooks/useRacunCalculations";
 import type { IzdavacRacuna, PrimalacRacuna, Racun } from "./types";
+import { AvansSection } from "./components/AvansSection";
 
 interface RacunFormRef {
   getRacunData: () => Partial<Racun>;
@@ -18,7 +16,7 @@ interface RacunFormProps {
   selectedTekuciRacun: string;
 }
 
-export const CreatePredracunForm = forwardRef<RacunFormRef, RacunFormProps>(
+export const CreateAvansForm = forwardRef<RacunFormRef, RacunFormProps>(
   ({ primalacRacuna, selectedFirmaData, selectedTekuciRacun }, ref) => {
     const { racun, setRacun } = useInitialRacunState({ primalacRacuna, selectedFirmaData });
 
@@ -53,14 +51,11 @@ export const CreatePredracunForm = forwardRef<RacunFormRef, RacunFormProps>(
       <Grid2 container>
         <Grid2 size={12}>
           <Typography align="center" variant="h4" sx={{ mb: 3 }}>
-            Predračun __Poziv na broj: __
+            Avansni račun __Poziv na broj: __
           </Typography>
           <PrimalacRacunaSection racun={racun} onRacunChange={handleRacunChange} />
           <Divider sx={{ mt: 3, mb: 3 }} />
-          <OnlinePrisustvaSection racun={racun} onRacunChange={handleRacunChange} />
-          <OfflinePrisustvaSection racun={racun} onRacunChange={handleRacunChange} />
-          <UkupnaNaknada racun={racun} onRacunChange={handleRacunChange} />
-          <Divider sx={{ mt: 3 }} />
+          <AvansSection racun={racun} onRacunChange={handleRacunChange} />
         </Grid2>
       </Grid2>
     );

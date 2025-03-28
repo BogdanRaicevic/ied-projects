@@ -10,6 +10,7 @@ import { fetchSeminarById } from "../api/seminari.api";
 import { IzdavacRacuna, Racun } from "../components/Racun/types";
 import { IzdavacRacunaSection } from "../components/Racun/IzdavacRacunaSection";
 import PostAddIcon from "@mui/icons-material/PostAdd";
+import { CreateAvansForm } from "../components/Racun/CreateAvansForm";
 
 export default function Racuni() {
   const [firma, setFirma] = useState<FirmaType | null>(null);
@@ -105,7 +106,12 @@ export default function Racuni() {
         />
       </Box>
       <Box role="tabpanel" hidden={tabValue !== 1}>
-        U izradi Avansni račun
+        <CreateAvansForm
+          primalacRacuna={primalacRacuna}
+          selectedFirmaData={selectedFirmaData}
+          selectedTekuciRacun={selectedTekuciRacun}
+          ref={formRef}
+        />
       </Box>
       <Box role="tabpanel" hidden={tabValue !== 2}>
         U izradi Konačni račun

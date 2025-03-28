@@ -35,7 +35,7 @@ export const UkupnaNaknada = ({ racun, onRacunChange }: UkupnaNaknadaProps) => {
         sx={{
           display: "flex",
           alignItems: "baseline",
-          justifyContent: "flex-end",
+          justifyContent: "flex-start",
         }}
       >
         <Typography variant="h6" sx={{ mr: 1 }}>
