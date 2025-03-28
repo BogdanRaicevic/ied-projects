@@ -46,4 +46,5 @@ export type Racun = PrimalacRacuna & {
   ukupnaNaknada: number;
   ukupanPdv: number;
   izdavacRacuna: IzdavacRacunaForm;
+  avansBezPdv: number;
 };
