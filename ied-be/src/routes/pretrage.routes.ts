@@ -1,4 +1,4 @@
-import { deletePretraga, getAllPretrage, savePretraga } from "./../services/pretrage.service";
+import { deletePretraga, getAllPretrage, savePretraga } from "./../services/pretrage.service.js";
 import { Router, type Request, type Response, type NextFunction } from "express";
 
 const router = Router();

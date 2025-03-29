@@ -1,7 +1,7 @@
 import type { PrijavaNaSeminar, SeminarType } from "../schemas/firmaSchemas";
 import { env } from "../utils/envVariables";
 import axiosInstanceWithAuth from "./interceptors/auth";
-import type { SeminarQueryParams } from "@ied-shared/types/index";
+import type { SeminarQueryParams } from "@ied-shared/types/seminar";
 
 export const saveSeminar = async (
   naziv: string,

@@ -1,5 +1,5 @@
 import { Router, type Request, type Response, type NextFunction } from "express";
-import { getAllVelicineFirmi } from "../services/velicina_firme.service";
+import { getAllVelicineFirmi } from "../services/velicina_firme.service.js";
 
 const router = Router();
 

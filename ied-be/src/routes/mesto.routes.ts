@@ -1,5 +1,5 @@
 import { Router, type Request, type Response, type NextFunction } from "express";
-import { getAllMesta } from "../services/mesta.service";
+import { getAllMesta } from "../services/mesta.service.js";
 
 const router = Router();
 

@@ -1,7 +1,7 @@
 import mongoose, { Types, type FilterQuery } from "mongoose";
-import type { FirmaType } from "../models/firma.model";
-import type { FirmaQueryParams } from "@ied-shared/types/index";
-import { Seminar } from "../models/seminar.model";
+import type { FirmaType } from "../models/firma.model.js";
+import type { FirmaQueryParams } from "@ied-shared/types/firmaQueryParams.js";
+import { Seminar } from "../models/seminar.model.js";
 
 enum Negations {
   RadnoMesto = "negate-radno-mesto",
