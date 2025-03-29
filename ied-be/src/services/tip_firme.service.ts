@@ -1,4 +1,4 @@
-import { TipFirme } from "../models/tip_firme.model.js";
+import { TipFirme } from "../models/tip_firme.model";
 
 export const getAllTipoviFirme = async () => {
   try {

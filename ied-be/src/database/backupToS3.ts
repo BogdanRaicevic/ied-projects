@@ -1,10 +1,10 @@
 import path from "node:path";
-import { env } from "../utils/envVariables.js";
+import { env } from "../utils/envVariables";
 import { createReadStream, existsSync, mkdirSync, unlinkSync } from "node:fs";
 import { exec } from "node:child_process";
 import { S3Client } from "@aws-sdk/client-s3";
 import { Upload } from "@aws-sdk/lib-storage";
-import { __dirname } from "../utils/path.js";
+import { __dirname } from "../utils/path";
 
 const BUCKET_NAME = env.aws.bucketName;
 if (!BUCKET_NAME) {

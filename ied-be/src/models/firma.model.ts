@@ -1,5 +1,5 @@
 import { Document, Schema, model } from "mongoose";
-import { type Zaposleni, zaposleniSchema } from "./zaposleni.model.js";
+import { type Zaposleni, zaposleniSchema } from "./zaposleni.model";
 
 type FirmaType = Document & {
   ID_firma: number;

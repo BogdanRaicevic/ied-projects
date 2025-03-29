@@ -1,4 +1,4 @@
-import { VelicineFirmi } from "../models/velicina_firme.model.js";
+import { VelicineFirmi } from "../models/velicina_firme.model";
 
 export const getAllVelicineFirmi = async () => {
   try {

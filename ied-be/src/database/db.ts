@@ -1,6 +1,6 @@
-import { env } from "../utils/envVariables.js";
+import { env } from "../utils/envVariables";
 import mongoose from "mongoose";
-import { TODO_ANY } from "../utils/utils.js";
+import { TODO_ANY } from "../utils/utils";
 
 const uri = env.mongo.uri ?? "";
 let dbConnection: TODO_ANY;

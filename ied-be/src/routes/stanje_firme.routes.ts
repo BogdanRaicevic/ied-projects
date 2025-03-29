@@ -1,5 +1,5 @@
 import { Router, type Request, type Response, type NextFunction } from "express";
-import { getAllStanjaFirmi } from "../services/stanje_firme.service.js";
+import { getAllStanjaFirmi } from "../services/stanje_firme.service";
 
 const router = Router();
 

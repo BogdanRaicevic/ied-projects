@@ -7,9 +7,9 @@ import {
   exportSearchedFirmaData,
   exportSearchedZaposleniData,
   findById,
-} from "../services/firma.service.js";
-import type { FirmaType } from "../models/firma.model.js";
-import type { FirmaQueryParams } from "@ied-shared/types/firmaQueryParams.js";
+} from "../services/firma.service";
+import type { FirmaType } from "../models/firma.model";
+import type { FirmaQueryParams } from "@ied-shared/types/firmaQueryParams";
 
 const router = Router();
 

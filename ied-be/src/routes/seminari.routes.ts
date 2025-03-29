@@ -8,15 +8,15 @@ import {
   savePrijava,
   saveSeminar,
   search,
-} from "../services/seminar.service.js";
+} from "../services/seminar.service";
 import type { FilterQuery } from "mongoose";
-import type { SeminarType } from "../models/seminar.model.js";
+import type { SeminarType } from "../models/seminar.model";
 import type {
   SeminarQueryParams,
   SaveSeminarParams,
   PrijavaNaSeminar,
-} from "@ied-shared/types/seminar.js";
-import { ErrorWithCause } from "../utils/customErrors.js";
+} from "@ied-shared/types/seminar";
+import { ErrorWithCause } from "../utils/customErrors";
 
 const router = Router();
 

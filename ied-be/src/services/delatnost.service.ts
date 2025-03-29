@@ -1,4 +1,4 @@
-import { Delatnost } from "../models/delatnosti.model.js";
+import { Delatnost } from "../models/delatnosti.model";
 
 export const getAllDelatnosti = async () => {
   try {
