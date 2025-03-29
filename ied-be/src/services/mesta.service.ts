@@ -1,4 +1,4 @@
-import { Mesto } from "../models/mesto.model";
+import { Mesto } from "../models/mesto.model.js";
 
 export const getAllMesta = async () => {
   try {

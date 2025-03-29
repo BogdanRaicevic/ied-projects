@@ -1,6 +1,6 @@
 import { CronJob } from "cron";
-import runBackup from "./backupToS3";
-import { env } from "../utils/envVariables";
+import runBackup from "./backupToS3.js";
+import { env } from "../utils/envVariables.js";
 
 const job = new CronJob(
   "0 22 * * *", // once a day at 22:00

@@ -1,4 +1,4 @@
-import { RadnaMesta } from "../models/radna_mesta.model";
+import { RadnaMesta } from "../models/radna_mesta.model.js";
 
 export const getAllRadnaMesta = async () => {
   try {

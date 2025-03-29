@@ -1,9 +1,10 @@
 import path from "node:path";
-import { env } from "../utils/envVariables";
+import { env } from "../utils/envVariables.js";
 import { createReadStream, existsSync, mkdirSync, unlinkSync } from "node:fs";
 import { exec } from "node:child_process";
 import { S3Client } from "@aws-sdk/client-s3";
 import { Upload } from "@aws-sdk/lib-storage";
+import { __dirname } from "../utils/path.js";
 
 const BUCKET_NAME = env.aws.bucketName;
 if (!BUCKET_NAME) {
@@ -93,7 +94,14 @@ const runBackup = async () => {
   }
 };
 
-if (require.main === module) {
+// ESM way to check if the file is being run directly
+const isMainModule = () => {
+  const mainModule = process.argv[1];
+  const currentModule = __dirname;
+  return mainModule === currentModule;
+};
+
+if (isMainModule()) {
   runBackup();
 }
 

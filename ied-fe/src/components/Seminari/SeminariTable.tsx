@@ -7,7 +7,7 @@ import {
   type MRT_PaginationState,
 } from "material-react-table";
 import { deleteSeminar, fetchSeminari } from "../../api/seminari.api";
-import type { SeminarQueryParams } from "@ied-shared/types/index";
+import type { SeminarQueryParams } from "@ied-shared/types/seminar";
 import {
   Box,
   Dialog,
