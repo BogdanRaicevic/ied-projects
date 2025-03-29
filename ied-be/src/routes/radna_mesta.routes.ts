@@ -1,5 +1,5 @@
 import { Router, type Request, type Response, type NextFunction } from "express";
-import { getAllRadnaMesta } from "../services/radna_mesta.service.js";
+import { getAllRadnaMesta } from "../services/radna_mesta.service";
 
 const router = Router();
 

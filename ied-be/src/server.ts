@@ -1,22 +1,22 @@
-import { env } from "./utils/envVariables.js";
-import { connectDB } from "./database/db.js";
+import { env } from "./utils/envVariables";
+import { connectDB } from "./database/db";
 import express from "express";
 import cors from "cors";
-import firmaRoutes from "./routes/firma.routes.js";
-import velicineFirmiRoutes from "./routes/velicina_firme.routes.js";
-import radnaMestaRoutes from "./routes/radna_mesta.routes.js";
-import tipFirmeRoutes from "./routes/tip_firme.routes.js";
-import delatnostiRoutes from "./routes/delatnost.routes.js";
-import mestoRoutes from "./routes/mesto.routes.js";
-import pretrageRoutes from "./routes/pretrage.routes.js";
-import stanjaFirmeRoutes from "./routes/stanje_firme.routes.js";
-import seminarRoutes from "./routes/seminari.routes.js";
-import docxRoutes from "./routes/docx.routes.js";
-import testRoutes from "./routes/test.routes.js";
-import { errorWrapper } from "./middleware/errorWrapper.js";
+import firmaRoutes from "./routes/firma.routes";
+import velicineFirmiRoutes from "./routes/velicina_firme.routes";
+import radnaMestaRoutes from "./routes/radna_mesta.routes";
+import tipFirmeRoutes from "./routes/tip_firme.routes";
+import delatnostiRoutes from "./routes/delatnost.routes";
+import mestoRoutes from "./routes/mesto.routes";
+import pretrageRoutes from "./routes/pretrage.routes";
+import stanjaFirmeRoutes from "./routes/stanje_firme.routes";
+import seminarRoutes from "./routes/seminari.routes";
+import docxRoutes from "./routes/docx.routes";
+import testRoutes from "./routes/test.routes";
+import { errorWrapper } from "./middleware/errorWrapper";
 import { clerkMiddleware, requireAuth } from "@clerk/express";
-import { hasPermission } from "./middleware/hasPermission.js";
-import "./database/cron.js";
+import { hasPermission } from "./middleware/hasPermission";
+import "./database/cron";
 
 const app = express();
 

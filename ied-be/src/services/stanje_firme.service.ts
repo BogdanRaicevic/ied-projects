@@ -1,4 +1,4 @@
-import { StanjeFirme } from "../models/stanje_firme.model.js";
+import { StanjeFirme } from "../models/stanje_firme.model";
 
 export const getAllStanjaFirmi = async () => {
   try {

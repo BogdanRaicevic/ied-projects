@@ -1,13 +1,13 @@
 import type { FilterQuery } from "mongoose";
-import { createSeminarQuery } from "../utils/seminariQueryBuilder.js";
-import { Seminar, type SeminarType } from "./../models/seminar.model.js";
+import { createSeminarQuery } from "../utils/seminariQueryBuilder";
+import { Seminar, type SeminarType } from "./../models/seminar.model";
 import type {
   PrijavaNaSeminar,
   SaveSeminarParams,
   SeminarQueryParams,
-} from "@ied-shared/types/seminar.js";
-import { ErrorWithCause } from "../utils/customErrors.js";
-import { validateMongoId } from "../utils/utils.js";
+} from "@ied-shared/types/seminar";
+import { ErrorWithCause } from "../utils/customErrors";
+import { validateMongoId } from "../utils/utils";
 
 export const saveSeminar = async (seminarData: SaveSeminarParams): Promise<SeminarType> => {
   if (seminarData._id) {

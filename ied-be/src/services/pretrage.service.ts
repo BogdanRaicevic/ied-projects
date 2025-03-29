@@ -1,6 +1,6 @@
-import type { FirmaQueryParams } from "@ied-shared/types/firmaQueryParams.js";
-import { Pretrage, type PretrageType } from "../models/pretrage.model.js";
-import { validateMongoId } from "../utils/utils.js";
+import type { FirmaQueryParams } from "@ied-shared/types/firmaQueryParams";
+import { Pretrage, type PretrageType } from "../models/pretrage.model";
+import { validateMongoId } from "../utils/utils";
 
 export const getAllPretrage = async () => {
   try {

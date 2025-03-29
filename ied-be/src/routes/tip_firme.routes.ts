@@ -1,5 +1,5 @@
 import { Router, type Request, type Response, type NextFunction } from "express";
-import { getAllTipoviFirme } from "../services/tip_firme.service.js";
+import { getAllTipoviFirme } from "../services/tip_firme.service";
 
 const router = Router();
 
