@@ -11,6 +11,7 @@ import {
   Typography,
 } from "@mui/material";
 import type { Racun } from "./../types";
+import { formatToRSDNumber } from "../../../utils/helpers";
 
 interface AvansSectionProps {
   racun: Partial<Racun>;
@@ -20,6 +21,7 @@ interface AvansSectionProps {
 export const AvansSection = ({ racun, onRacunChange }: AvansSectionProps) => {
   const avansPdv = (Number(racun.avansBezPdv ?? 0) * Number(racun.stopaPdv)) / 100;
   const avans = Number(racun.avansBezPdv) + Number(avansPdv);
+
   return (
     <Box>
       <Box sx={{ mb: 3 }}>
@@ -67,10 +69,10 @@ export const AvansSection = ({ racun, onRacunChange }: AvansSectionProps) => {
                   <Typography>{racun.stopaPdv}%</Typography>
                 </TableCell>
                 <TableCell align="left">
-                  <Typography>{avansPdv}</Typography>
+                  <Typography>{formatToRSDNumber(avansPdv)}</Typography>
                 </TableCell>
                 <TableCell align="left">
-                  <Typography>{avans}</Typography>
+                  <Typography>{formatToRSDNumber(avans)}</Typography>
                 </TableCell>
               </TableRow>
             </TableBody>
