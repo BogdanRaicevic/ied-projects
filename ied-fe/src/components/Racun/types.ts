@@ -19,14 +19,6 @@ export type IzdavacRacuna = {
   maticniBroj: string;
   brojResenjaOEvidencijiZaPDV: string;
   tekuciRacuni: string[];
-};
-
-export type IzdavacRacunaForm = {
-  naziv: string;
-  kontaktTelefoni: string[];
-  pib: string;
-  maticniBroj: string;
-  brojResenjaOEvidencijiZaPDV: string;
   tekuciRacun: string;
 };
 
@@ -45,6 +37,6 @@ export type Racun = PrimalacRacuna & {
   pozivNaBroj: string;
   ukupnaNaknada: number;
   ukupanPdv: number;
-  izdavacRacuna: IzdavacRacunaForm;
+  izdavacRacuna: IzdavacRacuna;
   avansBezPdv: number;
 };

@@ -78,7 +78,6 @@ export default function Racuni() {
         },
       } as Partial<Racun>;
 
-      console.log("Generating document with data:", racunData);
       await updateRacunTemplate(racunData, tabValue);
     }
   };
@@ -104,8 +103,8 @@ export default function Racuni() {
         <Tabs value={tabValue} onChange={handleTabChange} aria-label="basic tabs">
           <Tab label="Predračun" value={RacunTypes.PREDRACUN} />
           <Tab label="Avansni račun" value={RacunTypes.AVANSNI_RACUN} />
-          <Tab label="Konačni račun" value={RacunTypes.KONACNI_RACUN} />
-          <Tab label="Račun" value={RacunTypes.RACUN} />
+          {/* <Tab label="Konačni račun" value={RacunTypes.KONACNI_RACUN} />
+          <Tab label="Račun" value={RacunTypes.RACUN} /> */}
         </Tabs>
       </Box>
       <Box role="tabpanel" hidden={tabValue !== RacunTypes.PREDRACUN}>
