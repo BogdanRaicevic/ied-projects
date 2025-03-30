@@ -1,13 +1,15 @@
 import { Router } from "express";
 import fs from "node:fs";
 import path from "node:path";
+import { fileURLToPath } from "node:url";
 import PizZip from "pizzip";
 import Docxtemplater from "docxtemplater";
+import { RacunTypes } from "@ied-shared/constants/racun";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const router = Router();
-
-// Define allowed template names to prevent directory traversal
-const ALLOWED_TEMPLATES = ["predracun.docx"];
 
 const sanitizeFilename = (str: string): string => {
   const serbianChars: { [key: string]: string } = {
@@ -26,10 +28,18 @@ const sanitizeFilename = (str: string): string => {
 };
 
 router.post("/modify-template", async (req, res) => {
+  const templatesMap = new Map<RacunTypes, string>([
+    [RacunTypes.PREDRACUN, "predracun.docx"],
+    [RacunTypes.AVANSNI_RACUN, "avansni_racun.docx"],
+    [RacunTypes.KONACNI_RACUN, "konacni_racun.docx"],
+    [RacunTypes.RACUN, "racun.docx"],
+  ]);
+
   try {
     // Validate template name if you want to support multiple templates
-    const templateName = "predracun.docx"; // or get from request if supporting multiple
-    if (!ALLOWED_TEMPLATES.includes(templateName)) {
+    const templateName = templatesMap.get(req.body.racunType);
+    console.log("templateName", templateName);
+    if (!templateName) {
       return res.status(400).json({ error: "Invalid template name" });
     }
 

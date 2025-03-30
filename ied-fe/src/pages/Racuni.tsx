@@ -11,13 +11,14 @@ import { IzdavacRacuna, Racun } from "../components/Racun/types";
 import { IzdavacRacunaSection } from "../components/Racun/IzdavacRacunaSection";
 import PostAddIcon from "@mui/icons-material/PostAdd";
 import { CreateAvansForm } from "../components/Racun/CreateAvansForm";
+import { RacunTypes } from "@ied-shared/constants/racun";
 
 export default function Racuni() {
   const [firma, setFirma] = useState<FirmaType | null>(null);
   const [seminar, setSeminar] = useState<SeminarType | null>(null);
   const [selectedFirmaData, setSelectedFirmaData] = useState<IzdavacRacuna | null>(null);
   const [selectedTekuciRacun, setSelectedTekuciRacun] = useState<string>("");
-  const [tabValue, setTabValue] = useState(0);
+  const [tabValue, setTabValue] = useState<RacunTypes>(RacunTypes.PREDRACUN);
 
   const formRef = useRef<{ getRacunData: () => Partial<Racun> }>(null);
 
@@ -63,7 +64,7 @@ export default function Racuni() {
   const handleDocxUpdate = async () => {
     if (formRef.current) {
       const racunData = formRef.current.getRacunData();
-      await updateRacunTemplate(racunData);
+      await updateRacunTemplate(racunData, tabValue);
     }
   };
 
@@ -75,7 +76,7 @@ export default function Racuni() {
     setSelectedTekuciRacun(value);
   }, []);
 
-  const handleTabChange = (_event: React.SyntheticEvent, newValue: number) => {
+  const handleTabChange = (_event: React.SyntheticEvent, newValue: RacunTypes) => {
     setTabValue(newValue);
   };
 
@@ -91,13 +92,13 @@ export default function Racuni() {
 
       <Box sx={{ borderBottom: 1, borderColor: "divider", mt: 3, mb: 3 }}>
         <Tabs value={tabValue} onChange={handleTabChange} aria-label="basic tabs">
-          <Tab label="Predračun" />
-          <Tab label="Avansni račun" />
-          <Tab label="Konačni račun" />
-          <Tab label="Račun" />
+          <Tab label="Predračun" value={RacunTypes.PREDRACUN} />
+          <Tab label="Avansni račun" value={RacunTypes.AVANSNI_RACUN} />
+          <Tab label="Konačni račun" value={RacunTypes.KONACNI_RACUN} />
+          <Tab label="Račun" value={RacunTypes.RACUN} />
         </Tabs>
       </Box>
-      <Box role="tabpanel" hidden={tabValue !== 0}>
+      <Box role="tabpanel" hidden={tabValue !== RacunTypes.PREDRACUN}>
         <CreatePredracunForm
           primalacRacuna={primalacRacuna}
           selectedFirmaData={selectedFirmaData}
@@ -105,7 +106,7 @@ export default function Racuni() {
           ref={formRef}
         />
       </Box>
-      <Box role="tabpanel" hidden={tabValue !== 1}>
+      <Box role="tabpanel" hidden={tabValue !== RacunTypes.AVANSNI_RACUN}>
         <CreateAvansForm
           primalacRacuna={primalacRacuna}
           selectedFirmaData={selectedFirmaData}
@@ -113,10 +114,10 @@ export default function Racuni() {
           ref={formRef}
         />
       </Box>
-      <Box role="tabpanel" hidden={tabValue !== 2}>
+      <Box role="tabpanel" hidden={tabValue !== RacunTypes.KONACNI_RACUN}>
         U izradi Konačni račun
       </Box>
-      <Box role="tabpanel" hidden={tabValue !== 3}>
+      <Box role="tabpanel" hidden={tabValue !== RacunTypes.RACUN}>
         U izradi Račun
       </Box>
       <Button

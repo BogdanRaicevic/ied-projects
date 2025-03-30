@@ -1,11 +1,17 @@
 import axiosInstanceWithAuth from "./interceptors/auth";
 import { env } from "../utils/envVariables";
 import type { Racun } from "../components/Racun/types";
-export const updateRacunTemplate = async (racunData: Partial<Racun>) => {
+import { RacunTypes } from "@ied-shared/constants/racun";
+
+export const updateRacunTemplate = async (racunData: Partial<Racun>, racunType: RacunTypes) => {
+  const payload = {
+    ...racunData,
+    racunType,
+  };
   try {
     const response = await axiosInstanceWithAuth.post(
       `${env.beURL}/api/docx/modify-template`,
-      racunData,
+      payload,
       {
         responseType: "blob",
       }
