@@ -27,6 +27,8 @@ export const useRacunCalculations = ({
 
     const onlinePoreskaOsnovica = onlineCena * brojUcesnikaOnline * (1 - popustOnline / 100);
     const offlinePoreskaOsnovica = offlineCena * brojUcesnikaOffline * (1 - popustOffline / 100);
+    const avansPdv = (Number(racun.avansBezPdv) * stopaPdv) / 100;
+    const avans = Number(racun.avansBezPdv) + Number(avansPdv);
 
     return {
       onlineUkupnaNaknada,
@@ -38,6 +40,8 @@ export const useRacunCalculations = ({
       ukupnaNaknada: onlineUkupnaNaknada + offlineUkupnaNaknada,
       ukupanPdv:
         (offlinePoreskaOsnovica * stopaPdv) / 100 + (onlinePoreskaOsnovica * stopaPdv) / 100,
+      avansPdv,
+      avans,
     };
   }, [
     racun.onlineCena,
@@ -47,6 +51,7 @@ export const useRacunCalculations = ({
     racun.popustOnline,
     racun.popustOffline,
     racun.stopaPdv,
+    racun.avansBezPdv,
   ]);
 
   useEffect(() => {

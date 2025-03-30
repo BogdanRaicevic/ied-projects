@@ -53,12 +53,6 @@ router.post("/modify-template", async (req, res) => {
 
     const flattenedData = {
       ...req.body,
-      izdavacRacunaNaziv: req.body.izdavacRacuna?.naziv || "",
-      izdavacRacunaKontaktTelefoni: req.body.izdavacRacuna?.kontaktTelefoni?.join(", ") || "",
-      izdavacRacunaPib: req.body.izdavacRacuna?.pib || "",
-      izdavacRacunaMaticniBroj: req.body.izdavacRacuna?.maticniBroj || "",
-      izdavacRacunaBrojResenja: req.body.izdavacRacuna?.brojResenjaOEvidencijiZaPDV || "",
-      izdavacRacunaTekuciRacun: req.body.izdavacRacuna?.tekuciRacun || "",
       datumIzdavanjaRacuna: new Date().toLocaleDateString("sr-RS"),
       hasOnline: Number(req.body.brojUcesnikaOnline) > 0,
       hasOffline: Number(req.body.brojUcesnikaOffline) > 0,
