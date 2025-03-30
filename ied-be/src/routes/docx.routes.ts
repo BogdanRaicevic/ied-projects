@@ -28,19 +28,16 @@ const sanitizeFilename = (str: string): string => {
 };
 
 router.post("/modify-template", async (req, res) => {
-  const templatesMap = new Map<RacunTypes, string>([
-    [RacunTypes.PREDRACUN, "predracun"],
-    [RacunTypes.AVANSNI_RACUN, "avansni_racun"],
-    [RacunTypes.KONACNI_RACUN, "konacni_racun"],
-    [RacunTypes.RACUN, "racun"],
-  ]);
-
   try {
     // Validate template name if you want to support multiple templates
-    const templateName = templatesMap.get(req.body.racunType as RacunTypes);
-    console.log("templateName", templateName);
-    if (!templateName) {
-      return res.status(400).json({ error: "Invalid template name" });
+    const templateName = req.body.racunType;
+
+    // Check if the racunType is valid
+    if (!Object.values(RacunTypes).includes(req.body.racunType)) {
+      return res.status(400).json({
+        error: "Invalid template name",
+        validTypes: Object.values(RacunTypes),
+      });
     }
 
     const templatePath = path.resolve(
