@@ -27,7 +27,7 @@ export const updateRacunTemplate = async (racunData: Partial<Racun>, racunType: 
     const url = window.URL.createObjectURL(new Blob([response.data]));
     const link = document.createElement("a");
     link.href = url;
-    const fileName = `racun_${racunData.naziv?.trim()}_${racunData.nazivSeminara?.trim()}_${new Date().toISOString().split("T")[0].replace(/-/g, "")}.docx`;
+    const fileName = `${racunType}_${racunData.naziv?.trim()}_${racunData.nazivSeminara?.trim()}_${new Date().toISOString().split("T")[0].replace(/-/g, "")}.docx`;
 
     link.setAttribute("download", `${fileName}.docx`);
     document.body.appendChild(link);

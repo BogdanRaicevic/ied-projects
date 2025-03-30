@@ -29,21 +29,25 @@ const sanitizeFilename = (str: string): string => {
 
 router.post("/modify-template", async (req, res) => {
   const templatesMap = new Map<RacunTypes, string>([
-    [RacunTypes.PREDRACUN, "predracun.docx"],
-    [RacunTypes.AVANSNI_RACUN, "avansni_racun.docx"],
-    [RacunTypes.KONACNI_RACUN, "konacni_racun.docx"],
-    [RacunTypes.RACUN, "racun.docx"],
+    [RacunTypes.PREDRACUN, "predracun"],
+    [RacunTypes.AVANSNI_RACUN, "avansni_racun"],
+    [RacunTypes.KONACNI_RACUN, "konacni_racun"],
+    [RacunTypes.RACUN, "racun"],
   ]);
 
   try {
     // Validate template name if you want to support multiple templates
-    const templateName = templatesMap.get(req.body.racunType);
+    const templateName = templatesMap.get(req.body.racunType as RacunTypes);
     console.log("templateName", templateName);
     if (!templateName) {
       return res.status(400).json({ error: "Invalid template name" });
     }
 
-    const templatePath = path.resolve(__dirname, "../../storage/templates", templateName);
+    const templatePath = path.resolve(
+      __dirname,
+      "../../storage/templates",
+      templateName.concat(".docx")
+    );
 
     // Check if template exists
     if (!fs.existsSync(templatePath)) {
@@ -79,7 +83,7 @@ router.post("/modify-template", async (req, res) => {
     );
 
     const fileName = sanitizeFilename(
-      `racun_${flattenedData.naziv.trim()}_${flattenedData.nazivSeminara.trim()}_${new Date().toISOString().split("T")[0].replace(/-/g, "")}.docx`
+      `${templateName}_${flattenedData.naziv.trim()}_${flattenedData.nazivSeminara.trim()}_${new Date().toISOString().split("T")[0].replace(/-/g, "")}.docx`
     );
     console.log("fileName", fileName);
     res.setHeader(`Content-Disposition`, `attachment; filename=${fileName}`);
