@@ -8,7 +8,10 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import type { FirmaType, PrijavaNaSeminar, SeminarType } from "../schemas/firmaSchemas";
 import { fetchSeminarById } from "../api/seminari.api";
 import { IzdavacRacuna, Racun } from "../components/Racun/types";
-import { IzdavacRacunaSection } from "../components/Racun/IzdavacRacunaSection";
+import {
+  IzdavacRacunaSection,
+  IzdavacRacunaSectionRef,
+} from "../components/Racun/IzdavacRacunaSection";
 import PostAddIcon from "@mui/icons-material/PostAdd";
 import { CreateAvansForm } from "../components/Racun/CreateAvansForm";
 import { RacunTypes } from "@ied-shared/constants/racun";
@@ -17,10 +20,10 @@ export default function Racuni() {
   const [firma, setFirma] = useState<FirmaType | null>(null);
   const [seminar, setSeminar] = useState<SeminarType | null>(null);
   const [selectedFirmaData, setSelectedFirmaData] = useState<IzdavacRacuna | null>(null);
-  const [selectedTekuciRacun, setSelectedTekuciRacun] = useState<string>("");
   const [tabValue, setTabValue] = useState<RacunTypes>(RacunTypes.PREDRACUN);
 
   const formRef = useRef<{ getRacunData: () => Partial<Racun> }>(null);
+  const izdavacRacunaRef = useRef<IzdavacRacunaSectionRef>(null);
 
   const location = useLocation();
   const prijave: PrijavaNaSeminar[] = location.state?.prijave || [];
@@ -62,18 +65,26 @@ export default function Racuni() {
   };
 
   const handleDocxUpdate = async () => {
-    if (formRef.current) {
-      const racunData = formRef.current.getRacunData();
+    if (formRef.current && izdavacRacunaRef.current) {
+      const izdavacRacunaData = izdavacRacunaRef.current.getIzdavacRacunaData();
+      const tekuciRacun = izdavacRacunaRef.current.getTekuciRacun();
+      const formData = formRef.current.getRacunData();
+
+      const racunData = {
+        ...formData,
+        izdavacRacuna: {
+          ...izdavacRacunaData,
+          tekuciRacun,
+        },
+      } as Partial<Racun>;
+
+      console.log("Generating document with data:", racunData);
       await updateRacunTemplate(racunData, tabValue);
     }
   };
 
   const handleFirmaChange = useCallback((data: IzdavacRacuna | null) => {
     setSelectedFirmaData(data);
-  }, []);
-
-  const handleTekuciRacunChange = useCallback((value: string) => {
-    setSelectedTekuciRacun(value);
   }, []);
 
   const handleTabChange = (_event: React.SyntheticEvent, newValue: RacunTypes) => {
@@ -84,10 +95,9 @@ export default function Racuni() {
     <>
       <PageTitle title={"Racuni"} />
       <IzdavacRacunaSection
+        ref={izdavacRacunaRef}
         selectedFirmaData={selectedFirmaData}
         onFirmaChange={handleFirmaChange}
-        onTekuciRacunChange={handleTekuciRacunChange}
-        selectedTekuciRacun={selectedTekuciRacun}
       />
 
       <Box sx={{ borderBottom: 1, borderColor: "divider", mt: 3, mb: 3 }}>
@@ -102,7 +112,7 @@ export default function Racuni() {
         <CreatePredracunForm
           primalacRacuna={primalacRacuna}
           selectedFirmaData={selectedFirmaData}
-          selectedTekuciRacun={selectedTekuciRacun}
+          selectedTekuciRacun={izdavacRacunaRef.current?.getTekuciRacun() || ""}
           ref={formRef}
         />
       </Box>
@@ -110,7 +120,7 @@ export default function Racuni() {
         <CreateAvansForm
           primalacRacuna={primalacRacuna}
           selectedFirmaData={selectedFirmaData}
-          selectedTekuciRacun={selectedTekuciRacun}
+          selectedTekuciRacun={izdavacRacunaRef.current?.getTekuciRacun() || ""}
           ref={formRef}
         />
       </Box>
