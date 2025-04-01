@@ -16,4 +16,9 @@ export default defineConfig({
       allow: [path.resolve(__dirname), path.resolve(__dirname, "..")],
     },
   },
+  resolve: {
+    alias: {
+      "@ied-shared": path.resolve(__dirname, "../ied-shared/src"),
+    },
+  },
 });

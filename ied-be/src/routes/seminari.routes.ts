@@ -15,7 +15,7 @@ import type {
   SeminarQueryParams,
   SaveSeminarParams,
   PrijavaNaSeminar,
-} from "@ied-shared/types/index";
+} from "@ied-shared/types/seminar";
 import { ErrorWithCause } from "../utils/customErrors";
 
 const router = Router();

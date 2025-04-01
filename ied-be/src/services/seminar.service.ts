@@ -5,7 +5,7 @@ import type {
   PrijavaNaSeminar,
   SaveSeminarParams,
   SeminarQueryParams,
-} from "@ied-shared/types/index";
+} from "@ied-shared/types/seminar";
 import { ErrorWithCause } from "../utils/customErrors";
 import { validateMongoId } from "../utils/utils";
 

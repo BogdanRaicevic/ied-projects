@@ -1,11 +1,17 @@
 import axiosInstanceWithAuth from "./interceptors/auth";
 import { env } from "../utils/envVariables";
 import type { Racun } from "../components/Racun/types";
-export const updateRacunTemplate = async (racunData: Partial<Racun>) => {
+import { RacunTypes } from "@ied-shared/constants/racun";
+
+export const updateRacunTemplate = async (racunData: Partial<Racun>, racunType: RacunTypes) => {
+  const payload = {
+    ...racunData,
+    racunType,
+  };
   try {
     const response = await axiosInstanceWithAuth.post(
       `${env.beURL}/api/docx/modify-template`,
-      racunData,
+      payload,
       {
         responseType: "blob",
       }
@@ -21,7 +27,7 @@ export const updateRacunTemplate = async (racunData: Partial<Racun>) => {
     const url = window.URL.createObjectURL(new Blob([response.data]));
     const link = document.createElement("a");
     link.href = url;
-    const fileName = `racun_${racunData.naziv?.trim()}_${racunData.nazivSeminara?.trim()}_${new Date().toISOString().split("T")[0].replace(/-/g, "")}.docx`;
+    const fileName = `${racunType}_${racunData.naziv?.trim()}_${racunData.nazivSeminara?.trim()}_${new Date().toISOString().split("T")[0].replace(/-/g, "")}.docx`;
 
     link.setAttribute("download", `${fileName}.docx`);
     document.body.appendChild(link);

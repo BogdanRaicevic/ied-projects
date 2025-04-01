@@ -1,13 +1,15 @@
 import { Router } from "express";
 import fs from "node:fs";
 import path from "node:path";
+import { fileURLToPath } from "node:url";
 import PizZip from "pizzip";
 import Docxtemplater from "docxtemplater";
+import { RacunTypes } from "@ied-shared/constants/racun";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const router = Router();
-
-// Define allowed template names to prevent directory traversal
-const ALLOWED_TEMPLATES = ["predracun.docx"];
 
 const sanitizeFilename = (str: string): string => {
   const serbianChars: { [key: string]: string } = {
@@ -28,26 +30,36 @@ const sanitizeFilename = (str: string): string => {
 router.post("/modify-template", async (req, res) => {
   try {
     // Validate template name if you want to support multiple templates
-    const templateName = "predracun.docx"; // or get from request if supporting multiple
-    if (!ALLOWED_TEMPLATES.includes(templateName)) {
-      return res.status(400).json({ error: "Invalid template name" });
+    const templateName = req.body.racunType;
+
+    // Check if the racunType is valid
+    if (!Object.values(RacunTypes).includes(req.body.racunType)) {
+      return res.status(400).json({
+        error: "Invalid template name",
+        validTypes: Object.values(RacunTypes),
+      });
     }
 
-    const templatePath = path.resolve(__dirname, "../../storage/templates", templateName);
+    // Sanitize the template name to prevent path traversal
+    const sanitizedTemplateName = templateName.replace(/[^a-zA-Z0-9-_.]/g, "");
+    if (sanitizedTemplateName !== templateName) {
+      return res.status(400).json({ error: "Invalid template name format" });
+    }
 
-    // Check if template exists
-    if (!fs.existsSync(templatePath)) {
-      return res.status(404).json({ error: "Template not found" });
+    const templatePath = path.resolve(
+      __dirname,
+      "../../storage/templates",
+      sanitizedTemplateName.concat(".docx")
+    );
+
+    // Additional check to ensure the resolved path is within the templates directory
+    const templatesDir = path.resolve(__dirname, "../../storage/templates");
+    if (!templatePath.startsWith(templatesDir)) {
+      return res.status(400).json({ error: "Invalid template path" });
     }
 
     const flattenedData = {
       ...req.body,
-      izdavacRacunaNaziv: req.body.izdavacRacuna?.naziv || "",
-      izdavacRacunaKontaktTelefoni: req.body.izdavacRacuna?.kontaktTelefoni?.join(", ") || "",
-      izdavacRacunaPib: req.body.izdavacRacuna?.pib || "",
-      izdavacRacunaMaticniBroj: req.body.izdavacRacuna?.maticniBroj || "",
-      izdavacRacunaBrojResenja: req.body.izdavacRacuna?.brojResenjaOEvidencijiZaPDV || "",
-      izdavacRacunaTekuciRacun: req.body.izdavacRacuna?.tekuciRacun || "",
       datumIzdavanjaRacuna: new Date().toLocaleDateString("sr-RS"),
       hasOnline: Number(req.body.brojUcesnikaOnline) > 0,
       hasOffline: Number(req.body.brojUcesnikaOffline) > 0,
@@ -69,7 +81,7 @@ router.post("/modify-template", async (req, res) => {
     );
 
     const fileName = sanitizeFilename(
-      `racun_${flattenedData.naziv.trim()}_${flattenedData.nazivSeminara.trim()}_${new Date().toISOString().split("T")[0].replace(/-/g, "")}.docx`
+      `${sanitizedTemplateName}_${flattenedData.naziv.trim()}_${flattenedData.nazivSeminara.trim()}_${new Date().toISOString().split("T")[0].replace(/-/g, "")}.docx`
     );
     console.log("fileName", fileName);
     res.setHeader(`Content-Disposition`, `attachment; filename=${fileName}`);

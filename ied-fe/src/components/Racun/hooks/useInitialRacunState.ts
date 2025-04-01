@@ -35,6 +35,7 @@ const getInitialRacunState = (
     brojResenjaOEvidencijiZaPDV: selectedFirmaData?.brojResenjaOEvidencijiZaPDV ?? "",
     tekuciRacun: selectedFirmaData?.tekuciRacuni?.[0] ?? "",
   },
+  avansBezPdv: 0,
 });
 
 export const useInitialRacunState = ({

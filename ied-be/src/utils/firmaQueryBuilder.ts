@@ -1,6 +1,6 @@
 import mongoose, { Types, type FilterQuery } from "mongoose";
 import type { FirmaType } from "../models/firma.model";
-import type { FirmaQueryParams } from "@ied-shared/types/index";
+import type { FirmaQueryParams } from "@ied-shared/types/firmaQueryParams";
 import { Seminar } from "../models/seminar.model";
 
 enum Negations {

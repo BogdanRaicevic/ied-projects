@@ -7,7 +7,7 @@ import NegationCheckbox from "../NegationCheckbox";
 
 import { usePretragaStore } from "../../store/pretragaParameters.store";
 import { useFetchData } from "../../hooks/useFetchData";
-import { FirmaQueryParams } from "@ied-shared/types";
+import { FirmaQueryParams } from "@ied-shared/types/firmaQueryParams";
 
 export default function PretragaParameters() {
   const { delatnosti, mesta, radnaMesta, tipoviFirme, velicineFirme, stanjaFirme, sviSeminari } =

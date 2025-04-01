@@ -18,16 +18,8 @@ export type IzdavacRacuna = {
   pib: string;
   maticniBroj: string;
   brojResenjaOEvidencijiZaPDV: string;
-  tekuciRacuni: string[];
-};
-
-export type IzdavacRacunaForm = {
-  naziv: string;
-  kontaktTelefoni: string[];
-  pib: string;
-  maticniBroj: string;
-  brojResenjaOEvidencijiZaPDV: string;
   tekuciRacun: string;
+  tekuciRacuni?: string[];
 };
 
 export type Racun = PrimalacRacuna & {
@@ -45,13 +37,6 @@ export type Racun = PrimalacRacuna & {
   pozivNaBroj: string;
   ukupnaNaknada: number;
   ukupanPdv: number;
-  izdavacRacuna: IzdavacRacunaForm;
+  izdavacRacuna: IzdavacRacuna;
+  avansBezPdv: number;
 };
-
-export interface RacunFormRef {
-  getRacunData: () => Partial<Racun>;
-}
-
-export interface RacunFormProps {
-  primalacRacuna: PrimalacRacuna;
-}

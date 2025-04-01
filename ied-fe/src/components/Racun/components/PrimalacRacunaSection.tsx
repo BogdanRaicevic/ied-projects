@@ -8,7 +8,7 @@ import {
   TableBody,
   TextField,
 } from "@mui/material";
-import type { Racun } from "./types";
+import type { Racun } from "../types";
 
 interface PrimalacRacunaSectionProps {
   racun: Partial<Racun>;

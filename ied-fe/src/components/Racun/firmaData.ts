@@ -5,7 +5,7 @@ import bsLogo from "../../images/bs-logo.png";
 export const ied = {
   logo: iedLogo,
   naziv: "Institut za ekonomsku diplomatiju d.o.o, 11080 Zemun, Bezanijska 30",
-  kontaktTelefoni: ["011/3077612", "011/3077612"],
+  kontaktTelefoni: ["011/3077612", "011/3077613"],
   pib: "103159254",
   maticniBroj: "17518313",
   brojResenjaOEvidencijiZaPDV: "134107598",
