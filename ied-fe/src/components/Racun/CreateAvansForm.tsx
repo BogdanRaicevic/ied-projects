@@ -1,6 +1,6 @@
 import { Grid2, Divider, Typography } from "@mui/material";
 import { forwardRef, useImperativeHandle, useCallback, useEffect } from "react";
-import { PrimalacRacunaSection } from "./PrimalacRacunaSection";
+import { PrimalacRacunaSection } from "./components/PrimalacRacunaSection";
 import { useInitialRacunState } from "./hooks/useInitialRacunState";
 import { useRacunCalculations } from "./hooks/useRacunCalculations";
 import type { IzdavacRacuna, PrimalacRacuna, Racun } from "./types";

@@ -1,7 +1,7 @@
 import { Grid2, Paper, TextField, Box, Autocomplete } from "@mui/material";
 import { forwardRef, useImperativeHandle, useState, useEffect } from "react";
-import SelectFirma from "./SelectFirma";
-import { IzdavacRacuna } from "./types";
+import SelectFirma from "../SelectFirma";
+import { IzdavacRacuna } from "../types";
 
 export interface IzdavacRacunaSectionRef {
   getIzdavacRacunaData: () => IzdavacRacuna | null;
