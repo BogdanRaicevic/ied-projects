@@ -37,9 +37,11 @@ export const useRacunCalculations = ({
       pdvOnline: (onlinePoreskaOsnovica * stopaPdv) / 100,
       onlinePoreskaOsnovica,
       offlinePoreskaOsnovica,
-      ukupnaNaknada: onlineUkupnaNaknada + offlineUkupnaNaknada,
+      ukupnaNaknada: onlineUkupnaNaknada + offlineUkupnaNaknada - avans,
       ukupanPdv:
-        (offlinePoreskaOsnovica * stopaPdv) / 100 + (onlinePoreskaOsnovica * stopaPdv) / 100,
+        (offlinePoreskaOsnovica * stopaPdv) / 100 +
+        (onlinePoreskaOsnovica * stopaPdv) / 100 -
+        avansPdv,
       avansPdv,
       avans,
     };

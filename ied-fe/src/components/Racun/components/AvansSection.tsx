@@ -24,6 +24,9 @@ export const AvansSection = ({ racun, onRacunChange }: AvansSectionProps) => {
 
   return (
     <Box>
+      <Typography align="center" variant="h4" sx={{ mb: 3 }}>
+        Avans
+      </Typography>
       <Box sx={{ mb: 3 }}>
         <TableContainer component={Paper}>
           <Table
