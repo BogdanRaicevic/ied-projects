@@ -40,15 +40,22 @@ router.post("/modify-template", async (req, res) => {
       });
     }
 
+    // Sanitize the template name to prevent path traversal
+    const sanitizedTemplateName = templateName.replace(/[^a-zA-Z0-9-_.]/g, "");
+    if (sanitizedTemplateName !== templateName) {
+      return res.status(400).json({ error: "Invalid template name format" });
+    }
+
     const templatePath = path.resolve(
       __dirname,
       "../../storage/templates",
-      templateName.concat(".docx")
+      sanitizedTemplateName.concat(".docx")
     );
 
-    // Check if template exists
-    if (!fs.existsSync(templatePath)) {
-      return res.status(404).json({ error: "Template not found" });
+    // Additional check to ensure the resolved path is within the templates directory
+    const templatesDir = path.resolve(__dirname, "../../storage/templates");
+    if (!templatePath.startsWith(templatesDir)) {
+      return res.status(400).json({ error: "Invalid template path" });
     }
 
     const flattenedData = {
@@ -74,7 +81,7 @@ router.post("/modify-template", async (req, res) => {
     );
 
     const fileName = sanitizeFilename(
-      `${templateName}_${flattenedData.naziv.trim()}_${flattenedData.nazivSeminara.trim()}_${new Date().toISOString().split("T")[0].replace(/-/g, "")}.docx`
+      `${sanitizedTemplateName}_${flattenedData.naziv.trim()}_${flattenedData.nazivSeminara.trim()}_${new Date().toISOString().split("T")[0].replace(/-/g, "")}.docx`
     );
     console.log("fileName", fileName);
     res.setHeader(`Content-Disposition`, `attachment; filename=${fileName}`);
