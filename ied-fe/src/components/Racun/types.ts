@@ -18,8 +18,8 @@ export type IzdavacRacuna = {
   pib: string;
   maticniBroj: string;
   brojResenjaOEvidencijiZaPDV: string;
-  tekuciRacuni: string[];
   tekuciRacun: string;
+  tekuciRacuni?: string[];
 };
 
 export type Racun = PrimalacRacuna & {
