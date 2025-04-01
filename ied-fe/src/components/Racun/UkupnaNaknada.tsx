@@ -1,6 +1,7 @@
 import { Typography, TextField } from "@mui/material";
 import { Box } from "@mui/system";
 import type { Racun } from "./types";
+import { formatToRSDNumber } from "../../utils/helpers";
 
 interface UkupnaNaknadaProps {
   racun: Partial<Racun>;
@@ -12,23 +13,10 @@ export const UkupnaNaknada = ({ racun, onRacunChange }: UkupnaNaknadaProps) => {
     <Box>
       <Box>
         <Typography variant="h6" sx={{ mr: 1 }}>
-          Ukupna naknada po svim stavkama:{" "}
-          {(Number(racun.onlineUkupnaNaknada) + Number(racun.offlineUkupnaNaknada)).toLocaleString(
-            "sr-RS",
-            {
-              style: "currency",
-              currency: "RSD",
-              minimumFractionDigits: 2,
-            }
-          )}
+          Ukupna naknada po svim stavkama: {formatToRSDNumber(racun.ukupnaNaknada ?? 0)}
         </Typography>
         <Typography variant="h6" sx={{ mr: 1 }}>
-          Ukupni PDV po svim stavkama:{" "}
-          {(Number(racun.pdvOnline) + Number(racun.pdvOffline)).toLocaleString("sr-RS", {
-            style: "currency",
-            currency: "RSD",
-            minimumFractionDigits: 2,
-          })}
+          Ukupni PDV po svim stavkama: {formatToRSDNumber(racun.ukupanPdv ?? 0)}
         </Typography>
       </Box>
       <Box

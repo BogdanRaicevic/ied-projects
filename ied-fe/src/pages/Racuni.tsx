@@ -15,6 +15,7 @@ import {
 import PostAddIcon from "@mui/icons-material/PostAdd";
 import { CreateAvansForm } from "../components/Racun/CreateAvansForm";
 import { RacunTypes } from "@ied-shared/constants/racun";
+import { CreateKonacniRacunForm } from "../components/Racun/CreateKonacniRacunForm";
 
 export default function Racuni() {
   const [firma, setFirma] = useState<FirmaType | null>(null);
@@ -103,8 +104,8 @@ export default function Racuni() {
         <Tabs value={tabValue} onChange={handleTabChange} aria-label="basic tabs">
           <Tab label="Predračun" value={RacunTypes.PREDRACUN} />
           <Tab label="Avansni račun" value={RacunTypes.AVANSNI_RACUN} />
-          {/* <Tab label="Konačni račun" value={RacunTypes.KONACNI_RACUN} />
-          <Tab label="Račun" value={RacunTypes.RACUN} /> */}
+          <Tab label="Konačni račun" value={RacunTypes.KONACNI_RACUN} />
+          {/*<Tab label="Račun" value={RacunTypes.RACUN} /> */}
         </Tabs>
       </Box>
       <Box role="tabpanel" hidden={tabValue !== RacunTypes.PREDRACUN}>
@@ -124,7 +125,12 @@ export default function Racuni() {
         />
       </Box>
       <Box role="tabpanel" hidden={tabValue !== RacunTypes.KONACNI_RACUN}>
-        U izradi Konačni račun
+        <CreateKonacniRacunForm
+          primalacRacuna={primalacRacuna}
+          selectedFirmaData={selectedFirmaData}
+          selectedTekuciRacun={izdavacRacunaRef.current?.getTekuciRacun() || ""}
+          ref={formRef}
+        />
       </Box>
       <Box role="tabpanel" hidden={tabValue !== RacunTypes.RACUN}>
         U izradi Račun
