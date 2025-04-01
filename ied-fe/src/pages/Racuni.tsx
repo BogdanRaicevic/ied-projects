@@ -11,7 +11,7 @@ import { IzdavacRacuna, Racun } from "../components/Racun/types";
 import {
   IzdavacRacunaSection,
   IzdavacRacunaSectionRef,
-} from "../components/Racun/IzdavacRacunaSection";
+} from "../components/Racun/components/IzdavacRacunaSection";
 import PostAddIcon from "@mui/icons-material/PostAdd";
 import { CreateAvansForm } from "../components/Racun/CreateAvansForm";
 import { RacunTypes } from "@ied-shared/constants/racun";

@@ -1,8 +1,8 @@
 import { Grid2, Divider, Typography } from "@mui/material";
 import { forwardRef, useImperativeHandle, useCallback, useEffect } from "react";
-import { PrimalacRacunaSection } from "./PrimalacRacunaSection";
-import { OnlinePrisustvaSection } from "./OnlinePrisustvaSection";
-import { OfflinePrisustvaSection } from "./OfflinePrisustvaSection";
+import { PrimalacRacunaSection } from "./components/PrimalacRacunaSection";
+import { OnlinePrisustvaSection } from "./components/OnlinePrisustvaSection";
+import { OfflinePrisustvaSection } from "./components/OfflinePrisustvaSection";
 import { UkupnaNaknada } from "./UkupnaNaknada";
 import { useInitialRacunState } from "./hooks/useInitialRacunState";
 import { useRacunCalculations } from "./hooks/useRacunCalculations";
