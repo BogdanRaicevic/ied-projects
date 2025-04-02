@@ -27,8 +27,7 @@ jobs:
       run: ls -la ${{ github.workspace }}
 
     - name: Install dependencies
-      run: pnpm install --frozen-lockfile  
-      working-directory: ${{ github.workspace }}
+      run: pnpm install --frozen-lockfile
       
     - name: Build shared package
       run: pnpm --filter ied-shared build
