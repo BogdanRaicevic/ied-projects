@@ -1,19 +1,14 @@
 {
-  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": ["config:base"],
-  "pnpm": {
-    "fileMatch": ["^pnpm-lock\\.yaml$"]
+  "packageManager": "pnpm",
+  "rangeStrategy": "bump",
+  "lockFileMaintenance": {
+    "enabled": true
   },
-  "postUpdateOptions": ["pnpmDedupe"],
-  "rangeStrategy": "pin",
-  "separateMinorPatch": true,
-  "separateMultipleMajor": true,
-  "packageManager": "pnpm@10",
-  "enabledManagers": ["npm", "pnpm"],
-  "includePaths": [
-    "ied-be/package.json",
-    "ied-fe/package.json",
-    "ied-shared/package.json",
-    "mongo-migrator/package.json"
+  "packageRules": [
+    {
+      "matchPaths": ["ied-be/**", "ied-fe/**", "ied-shared/**", "ied-migrator/**"],
+      "groupName": "workspace dependencies"
+    }
   ]
 }

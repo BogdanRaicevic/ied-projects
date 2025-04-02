@@ -6,8 +6,6 @@ settings:
 
 importers:
 
-  .: {}
-
   ied-be:
     dependencies:
       '@aws-sdk/client-s3':
