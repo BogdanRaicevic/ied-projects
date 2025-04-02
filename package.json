@@ -1,0 +1,6 @@
+{
+  "name": "ied-projects",
+  "private": true,
+  "workspaces": ["ied-be", "ied-fe", "ied-shared", "mongo-migrator"],
+  "packageManager": "pnpm@10"
+}
