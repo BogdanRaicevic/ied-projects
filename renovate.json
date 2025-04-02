@@ -1,6 +1,19 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": [
-    "config:recommended"
+  "extends": ["config:base"],
+  "pnpm": {
+    "fileMatch": ["^pnpm-lock\\.yaml$"]
+  },
+  "postUpdateOptions": ["pnpmDedupe"],
+  "rangeStrategy": "pin",
+  "separateMinorPatch": true,
+  "separateMultipleMajor": true,
+  "packageManager": "pnpm@10",
+  "enabledManagers": ["npm", "pnpm"],
+  "includePaths": [
+    "ied-be/package.json",
+    "ied-fe/package.json",
+    "ied-shared/package.json",
+    "mongo-migrator/package.json"
   ]
 }
