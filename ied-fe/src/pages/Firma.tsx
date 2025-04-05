@@ -179,8 +179,7 @@ export default function Firma() {
     setOpenZaposelniDialog(false);
   };
 
-  const handlePrijaviNaSeminar = (row: MRT_Row<Zaposleni>) => {
-    console.log("row", row);
+  const handlePrijaviNaSeminar = () => {
     setOpenPrijavaNaSeminarDialog(true);
   };
 
@@ -197,7 +196,7 @@ export default function Firma() {
             <IconButton
               onClick={() => {
                 setSelectedRow(row);
-                handlePrijaviNaSeminar(row);
+                handlePrijaviNaSeminar();
               }}
             >
               <PersonAddIcon />

@@ -6,7 +6,7 @@ import { fetchAllTipoviFirme } from "../api/tip_firme.api";
 import { fetchAllVelicineFirme } from "../api/velicina_firme.api";
 import { fetchAllStanjaFirme } from "../api/stanja_firme.api";
 import { fetchAllSeminars, fetchSeminari } from "../api/seminari.api";
-import { addMonths } from "date-fns";
+import { addMonths, subMonths } from "date-fns";
 
 export function useFetchData() {
   const { data: delatnosti } = useQuery({
@@ -60,7 +60,8 @@ export function useFetchSeminari() {
     queryKey: ["fetchedSeminars"],
     queryFn: () => {
       return fetchSeminari(50, 0, {
-        datumOd: new Date(),
+        // TODO: need to use only subDays(-7) to allow late registration
+        datumOd: subMonths(new Date(), 3),
         datumDo: addMonths(new Date(), 3),
       });
     },
