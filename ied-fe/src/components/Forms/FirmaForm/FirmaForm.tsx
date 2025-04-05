@@ -60,39 +60,9 @@ export const FirmaForm: React.FC<FirmaFormProps> = ({ inputCompany }) => {
 
   const [alert, setAlert] = useState<SuccessAlert | ErrorAlert | null>(null);
   const [errorAlert, setErrorAlert] = useState<string | null>(null);
-
-  const {
-    tipoviFirme: fetchedTipoviFirme,
-    velicineFirme: fetchedVelicineFirme,
-    stanjaFirme: fetchedStanjaFirme,
-    mesta: fetchedMesta,
-    delatnosti: fetchedDelatnosti,
-  } = useFetchData();
-
-  const [tipoviFirme, setTipoviFirme] = useState([]);
-  const [stanjaFirme, setStanjaFirme] = useState([]);
-  const [velicinieFirme, setVelicineFirme] = useState([]);
-  const [mesta, setMesta] = useState([]);
-  const [delatnosti, setDelatnosti] = useState([]);
   const [autocompletes, setAutocompletes] = useState<Record<string, string>>({});
 
-  useEffect(() => {
-    const fetchData = () => {
-      setTipoviFirme(fetchedTipoviFirme || []);
-      setStanjaFirme(fetchedStanjaFirme || []);
-      setVelicineFirme(fetchedVelicineFirme || []);
-      setMesta(fetchedMesta || []);
-      setDelatnosti(fetchedDelatnosti || []);
-    };
-
-    fetchData();
-  }, [
-    fetchedStanjaFirme,
-    fetchedTipoviFirme,
-    fetchedVelicineFirme,
-    fetchedMesta,
-    fetchedDelatnosti,
-  ]);
+  const { tipoviFirme, velicineFirme, stanjaFirme, mesta, delatnosti } = useFetchData();
 
   useEffect(() => {
     setCompany(inputCompany);
@@ -227,7 +197,7 @@ export const FirmaForm: React.FC<FirmaFormProps> = ({ inputCompany }) => {
           optionsData = tipoviFirme;
           break;
         case "velicina_firme":
-          optionsData = velicinieFirme;
+          optionsData = velicineFirme;
           break;
         case "stanje_firme":
           optionsData = stanjaFirme;
