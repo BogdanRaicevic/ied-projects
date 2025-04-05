@@ -25,7 +25,6 @@ import AutocompleteSingle from "../../Autocomplete/Single";
 import { useFetchData } from "../../../hooks/useFetchData";
 import { firmaFormMetadata } from "./metadata";
 import { deleteFirma, saveFirma } from "../../../api/firma.api";
-import { extractErrorMessages, type ValidationError } from "../../../utils/zodErrorHelper";
 
 type FirmaFormProps = {
   inputCompany: FirmaType;
@@ -38,45 +37,28 @@ export const FirmaForm: React.FC<FirmaFormProps> = ({ inputCompany }) => {
     handleSubmit,
     reset,
     watch,
+    setValue,
   } = useForm<FirmaType>({
     resolver: zodResolver(FirmaSchema),
     defaultValues: inputCompany || {},
   });
 
-  // TODO: add types
-  const [company, setCompany] = useState(inputCompany);
-
-  type SuccessAlert = {
-    type: "success";
-    message: string;
-    errors: null;
-  };
-
-  type ErrorAlert = {
-    type: "error";
-    message: string;
-    errors: ValidationError[];
-  };
-
-  const [alert, setAlert] = useState<SuccessAlert | ErrorAlert | null>(null);
-  const [errorAlert, setErrorAlert] = useState<string | null>(null);
-  const [autocompletes, setAutocompletes] = useState<Record<string, string>>({});
-
   const { tipoviFirme, velicineFirme, stanjaFirme, mesta, delatnosti } = useFetchData();
 
+  const [alert, setAlert] = useState<any>(null);
+  const [errorAlert, setErrorAlert] = useState<string | null>(null);
+
+  // Update form values when inputCompany changes
   useEffect(() => {
-    setCompany(inputCompany);
-    reset(inputCompany);
+    if (inputCompany) {
+      reset(inputCompany);
+    }
   }, [inputCompany, reset]);
 
   const onSubmit = async (data: FirmaType) => {
-    data = {
-      ...data,
-      ...autocompletes,
-    };
-
     try {
-      await saveFirma(data);
+      const savedCompany = await saveFirma(data);
+      reset(savedCompany.data);
       setAlert({
         type: "success",
         message: "Firma uspešno sačuvana!",
@@ -84,7 +66,6 @@ export const FirmaForm: React.FC<FirmaFormProps> = ({ inputCompany }) => {
       });
     } catch (error: any) {
       setErrorAlert(`Firma nije sačuvana. Došlo je do greške! ${error?.response?.data?.message}`);
-      // Clear alerts after 5 seconds
       setTimeout(() => {
         setErrorAlert(null);
       }, 5000);
@@ -97,7 +78,6 @@ export const FirmaForm: React.FC<FirmaFormProps> = ({ inputCompany }) => {
         setAlert(null);
       }, 5000);
 
-      // Clear the timeout if the component unmounts
       const cleanup = () => {
         clearTimeout(alertTimeout);
         clearTimeout(errorTimeout);
@@ -107,44 +87,19 @@ export const FirmaForm: React.FC<FirmaFormProps> = ({ inputCompany }) => {
     }
   };
 
-  const onError = (errors: any) => {
-    const data = {
-      ...watch(),
-      ...autocompletes,
-    };
-    const errorMessages = extractErrorMessages(errors, data);
-    setAlert({
-      type: "error",
-      message: "Firma nije sačuvana. Došlo je do greške!",
-      errors: errorMessages,
-    });
-    console.error("Validation errors", errors);
-  };
-
   const handleDelete = async (id: string) => {
     try {
       const confirmed = window.confirm("Da li ste sigurni da želite da obrišete firmu?");
       if (confirmed) {
         await deleteFirma(id);
-        setAlert({
-          type: "success",
-          message: "Firma uspešno obrisana!",
-          errors: null,
-        });
         window.close();
       }
     } catch (error) {
       console.error("Error deleting company", error);
-      setAlert({
-        type: "error",
-        message: "Greška prilikom brisanja firme",
-        errors: [],
-      });
     }
   };
 
   function renderFiled(item: Metadata, errors: any) {
-    // console.log("render file", item);
     if (item.inputType === InputTypesSchema.enum.Text) {
       return (
         <TextField
@@ -158,7 +113,6 @@ export const FirmaForm: React.FC<FirmaFormProps> = ({ inputCompany }) => {
             },
           }}
           name={item.key}
-          defaultValue={company[item.key as keyof FirmaType]}
           error={Boolean(errors[item.key])}
           helperText={errors[item.key]?.message}
         />
@@ -183,7 +137,6 @@ export const FirmaForm: React.FC<FirmaFormProps> = ({ inputCompany }) => {
           name={item.key}
           multiline
           rows={10}
-          defaultValue={company[item.key as keyof FirmaType]}
           error={errors[item.key]}
           helperText={errors[item.key]?.message}
         />
@@ -217,20 +170,14 @@ export const FirmaForm: React.FC<FirmaFormProps> = ({ inputCompany }) => {
           data={optionsData}
           id={item.key}
           placeholder={item.label}
-          preselected={company[item.key as keyof FirmaType] as string}
+          preselected={watch(item.key as keyof FirmaType) as string}
           onChange={(newValue) => {
-            handleAutocomplete(item.key, newValue);
+            setValue(item.key as keyof FirmaType, newValue);
           }}
         />
       );
     }
   }
-  const handleAutocomplete = (key: string, newValue: any) => {
-    setAutocompletes((prevState) => ({
-      ...prevState,
-      [key]: newValue,
-    }));
-  };
 
   const inputItems = (inputType: z.infer<typeof InputTypesSchema>) => {
     return firmaFormMetadata
@@ -245,7 +192,7 @@ export const FirmaForm: React.FC<FirmaFormProps> = ({ inputCompany }) => {
   };
 
   return (
-    <Box onSubmit={handleSubmit(onSubmit, onError)} component="form" sx={{ mt: 4 }}>
+    <Box onSubmit={handleSubmit(onSubmit)} component="form" sx={{ mt: 4 }}>
       <Grid container m={0} spacing={2}>
         {inputItems(InputTypesSchema.enum.Text).map((item) => {
           return (
@@ -289,13 +236,13 @@ export const FirmaForm: React.FC<FirmaFormProps> = ({ inputCompany }) => {
               </Typography>
             )}
           </Box>
-          {company?._id && (
+          {inputCompany?._id && (
             <Button
               sx={{ my: 2 }}
               size="large"
               variant="contained"
               color="error"
-              onClick={() => handleDelete(company._id || "")}
+              onClick={() => handleDelete(inputCompany._id || "")}
             >
               Obriši firmu
             </Button>
@@ -303,31 +250,15 @@ export const FirmaForm: React.FC<FirmaFormProps> = ({ inputCompany }) => {
         </Grid>
 
         {alert && (
-          <Alert severity={alert.type} onClose={() => setAlert(null)}>
+          <Alert severity={alert.type} sx={{ width: "100%", mt: 2 }} onClose={() => setAlert(null)}>
             {alert.message}
-            {alert.errors && (
-              <Box sx={{ mt: 2 }}>
-                <Typography variant="h6">Greške:</Typography>
-                <ul>
-                  {alert.errors.map((error) => {
-                    return (
-                      <li key={error.message}>
-                        {error.message}; Polje: `{error.field}`; Problematična vrednost: `
-                        {<b>{error.value}</b>}`
-                      </li>
-                    );
-                  })}
-                </ul>
-              </Box>
-            )}
           </Alert>
         )}
         {errorAlert && (
-          <Alert severity="error" sx={{ mb: 2 }} onClose={() => setErrorAlert(null)}>
+          <Alert severity="error" sx={{ width: "100%", mt: 2 }} onClose={() => setErrorAlert(null)}>
             {errorAlert}
           </Alert>
         )}
-        <Divider sx={{ width: "100%", my: 2 }} />
       </Grid>
     </Box>
   );
