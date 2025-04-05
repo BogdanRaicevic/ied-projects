@@ -48,12 +48,12 @@ router.post("/modify-template", async (req, res) => {
 
     const templatePath = path.resolve(
       __dirname,
-      "../../storage/templates",
+      "../../src/templates",
       sanitizedTemplateName.concat(".docx")
     );
 
     // Additional check to ensure the resolved path is within the templates directory
-    const templatesDir = path.resolve(__dirname, "../../storage/templates");
+    const templatesDir = path.resolve(__dirname, "../../src/templates");
     if (!templatePath.startsWith(templatesDir)) {
       return res.status(400).json({ error: "Invalid template path" });
     }
