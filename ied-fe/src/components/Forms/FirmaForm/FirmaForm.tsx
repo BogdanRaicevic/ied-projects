@@ -47,21 +47,31 @@ export const FirmaForm: React.FC<FirmaFormProps> = ({ inputCompany }) => {
 
   const [alert, setAlert] = useState<any>(null);
   const [errorAlert, setErrorAlert] = useState<string | null>(null);
+  const [currentFirmaId, setCurrentFirmaId] = useState<string | null>(inputCompany?._id || null);
 
   // Update form values when inputCompany changes
   useEffect(() => {
     if (inputCompany) {
       reset(inputCompany);
+      setCurrentFirmaId(inputCompany._id || null);
     }
   }, [inputCompany, reset]);
 
   const onSubmit = async (data: FirmaType) => {
     try {
-      const savedCompany = await saveFirma(data);
+      // If we have an _id, we're updating an existing firma
+      const firmaData = currentFirmaId ? { ...data, _id: currentFirmaId } : data;
+      const savedCompany = await saveFirma(firmaData);
+
+      // Update the current firma ID if this was a new creation
+      if (!currentFirmaId) {
+        setCurrentFirmaId(savedCompany.data._id);
+      }
+
       reset(savedCompany.data);
       setAlert({
         type: "success",
-        message: "Firma uspešno sačuvana!",
+        message: currentFirmaId ? "Firma uspešno ažurirana!" : "Firma uspešno sačuvana!",
         errors: null,
       });
     } catch (error: any) {
@@ -92,10 +102,18 @@ export const FirmaForm: React.FC<FirmaFormProps> = ({ inputCompany }) => {
       const confirmed = window.confirm("Da li ste sigurni da želite da obrišete firmu?");
       if (confirmed) {
         await deleteFirma(id);
+        setAlert({
+          type: "success",
+          message: "Firma uspešno obrisana!",
+          errors: null,
+        });
         window.close();
       }
-    } catch (error) {
-      console.error("Error deleting company", error);
+    } catch (error: any) {
+      setErrorAlert(`Greška prilikom brisanja firme: ${error?.response?.data?.message}`);
+      setTimeout(() => {
+        setErrorAlert(null);
+      }, 5000);
     }
   };
 
