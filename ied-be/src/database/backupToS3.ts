@@ -12,8 +12,13 @@ if (!BUCKET_NAME) {
 }
 const MONGO_URI = env.mongo.uri;
 const BACKUP_DIR = path.join(__dirname, "backup");
-const FILE_NAME = `backup-${new Date().toISOString().split("T")[0]}.gz`;
-const FILE_PATH = path.join(BACKUP_DIR, FILE_NAME);
+
+const getCurrentDate = () => {
+  const now = new Date();
+  return now.toISOString().split("T")[0];
+};
+
+const getBackupFilename = () => `backup-${getCurrentDate()}.gz`;
 
 if (!existsSync(BACKUP_DIR)) {
   mkdirSync(BACKUP_DIR, { recursive: true });
@@ -33,8 +38,11 @@ const s3Client = new S3Client({
 });
 
 const backupMongoDB = async () => {
-  return new Promise<void>((resolve, reject) => {
-    const command = `mongodump --uri=${MONGO_URI} --archive=${FILE_PATH} --gzip`;
+  const fileName = getBackupFilename();
+  const filePath = path.join(BACKUP_DIR, fileName);
+
+  return new Promise<{ fileName: string; filePath: string }>((resolve, reject) => {
+    const command = `mongodump --uri=${MONGO_URI} --archive=${filePath} --gzip`;
 
     exec(command, (error, _stdout, stderr) => {
       if (error) {
@@ -45,17 +53,17 @@ const backupMongoDB = async () => {
         return reject(error);
       }
       console.log(`[${new Date().toISOString()}] Backup created successfully`);
-      resolve();
+      resolve({ fileName, filePath });
     });
   });
 };
 
-const uploadToS3 = async () => {
-  const fileStream = createReadStream(FILE_PATH);
+const uploadToS3 = async (fileName: string, filePath: string) => {
+  const fileStream = createReadStream(filePath);
 
   const params = {
     Bucket: BUCKET_NAME,
-    Key: `backups/${FILE_NAME}`,
+    Key: `backups/${fileName}`,
     Body: fileStream,
     ContentType: "application/gzip",
   };
@@ -67,11 +75,11 @@ const uploadToS3 = async () => {
     });
 
     await upload.done();
-    console.log(`[${new Date().toISOString()}] Upload to S3 completed: ${FILE_NAME}`);
-    unlinkSync(FILE_PATH); // Delete backup after upload
+    console.log(`[${new Date().toISOString()}] Upload to S3 completed: ${fileName}`);
+    unlinkSync(filePath); // Delete backup after upload
   } catch (error) {
     console.error(`[${new Date().toISOString()}] S3 Upload Failed:`);
-    console.error(`File: ${FILE_NAME}`);
+    console.error(`File: ${fileName}`);
     console.error(`Error: ${error}`);
     throw error;
   }
@@ -79,15 +87,16 @@ const uploadToS3 = async () => {
 
 const runBackup = async () => {
   try {
-    await backupMongoDB();
-    await uploadToS3();
+    const { fileName, filePath } = await backupMongoDB();
+    await uploadToS3(fileName, filePath);
     console.log(`[${new Date().toISOString()}] Backup process completed successfully`);
   } catch (error) {
     console.error(`[${new Date().toISOString()}] Backup process failed:`);
     console.error(error);
     // Ensure the temporary file is cleaned up even if upload fails
-    if (existsSync(FILE_PATH)) {
-      unlinkSync(FILE_PATH);
+    const filePath = path.join(BACKUP_DIR, getBackupFilename());
+    if (existsSync(filePath)) {
+      unlinkSync(filePath);
     }
     // Rethrow the error so PM2 can catch it
     throw error;
