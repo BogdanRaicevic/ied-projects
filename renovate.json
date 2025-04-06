@@ -1,15 +1,4 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": ["config:base"],
-  "packageManager": "pnpm",
-  "rangeStrategy": "bump",
-  "lockFileMaintenance": {
-    "enabled": true
-  },
-  "packageRules": [
-    {
-      "matchPaths": ["ied-be/**", "ied-fe/**", "ied-shared/**", "ied-migrator/**"],
-      "groupName": "workspace dependencies"
-    }
-  ]
+  "extends": ["config:recommended"]
 }
