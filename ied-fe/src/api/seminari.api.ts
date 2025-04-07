@@ -3,29 +3,17 @@ import { env } from "../utils/envVariables";
 import axiosInstanceWithAuth from "./interceptors/auth";
 import type { SeminarQueryParams } from "@ied-shared/types/seminar";
 
-export const saveSeminar = async (
-  naziv: string,
-  predavac: string,
-  lokacija: string,
-  onlineCena: string,
-  offlineCena: string,
-  datum: string,
-  _id?: string
-) => {
+export const saveSeminar = async (seminarData: Partial<SeminarType>) => {
   try {
-    if (!naziv) {
-      console.log("Seminar must contain a name");
+    if (!seminarData.naziv) {
+      console.error("Seminar must contain a name");
       return;
     }
-    const response = await axiosInstanceWithAuth.post(`${env.beURL}/api/seminari/save`, {
-      naziv,
-      predavac,
-      lokacija,
-      onlineCena,
-      offlineCena,
-      datum,
-      _id,
-    });
+
+    const response = await axiosInstanceWithAuth.post(
+      `${env.beURL}/api/seminari/save`,
+      seminarData
+    );
 
     return response.data;
   } catch (error) {

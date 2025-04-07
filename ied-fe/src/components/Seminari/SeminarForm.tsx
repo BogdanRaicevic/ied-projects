@@ -57,14 +57,6 @@ export default function SeminarForm({
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const formattedOfflineCena = Number.isNaN(Number(seminarData.offlineCena))
-        ? "0"
-        : Number(seminarData.offlineCena).toFixed(2);
-      const formattedOnlineCena = Number.isNaN(Number(seminarData.onlineCena))
-        ? "0"
-        : Number(seminarData.onlineCena).toFixed(2);
-      const formattedDate = selectedDate ? format(selectedDate, "yyyy-MM-dd") : "";
-
       if (!seminarData.naziv) {
         setAlertSeverity("error");
         setAlertMessage("Naziv seminara je obavezan");
@@ -74,15 +66,7 @@ export default function SeminarForm({
       }
 
       try {
-        await saveSeminar(
-          seminarData.naziv,
-          seminarData.predavac || "",
-          seminarData.lokacija || "",
-          formattedOfflineCena,
-          formattedOnlineCena,
-          formattedDate,
-          seminarData?._id
-        );
+        await saveSeminar(seminarData);
 
         setAlertSeverity("success");
         setAlertMessage("Uspešno kreiran seminar");
@@ -140,7 +124,7 @@ export default function SeminarForm({
               startAdornment: <InputAdornment position="start">RSD</InputAdornment>,
             },
           }}
-          defaultValue={seminarData.offlineCena}
+          value={seminarData.offlineCena}
           onChange={handleChange}
         />
         <TextField
@@ -153,7 +137,7 @@ export default function SeminarForm({
               startAdornment: <InputAdornment position="start">RSD</InputAdornment>,
             },
           }}
-          defaultValue={seminarData.onlineCena}
+          value={seminarData.onlineCena}
           onChange={handleChange}
         />
         <FormControl sx={{ m: 1 }}>
@@ -164,7 +148,6 @@ export default function SeminarForm({
               name="datum"
               value={selectedDate}
               onChange={handleDateChange}
-              disablePast
             />
           </LocalizationProvider>
         </FormControl>
