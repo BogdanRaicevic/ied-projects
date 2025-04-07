@@ -1,4 +1,4 @@
-import { Grid2, Divider, Typography, TextField } from "@mui/material";
+import { Grid2, Divider, Typography, TextField, Box } from "@mui/material";
 import { forwardRef, useImperativeHandle, useCallback, useEffect } from "react";
 import { PrimalacRacunaSection } from "./components/PrimalacRacunaSection";
 import { useInitialRacunState } from "./hooks/useInitialRacunState";
@@ -50,16 +50,19 @@ export const CreateAvansForm = forwardRef<RacunFormRef, RacunFormProps>(
     return (
       <Grid2 container>
         <Grid2 size={12}>
-          <Typography align="center" variant="h4" sx={{ mb: 3 }}>
-            Avansni račun
+          <Box
+            sx={{ display: "flex", alignItems: "center", justifyContent: "center", mb: 3, gap: 2 }}
+          >
+            <Typography variant="h4">Avansni račun</Typography>
             <TextField
               name="pozivNaBroj"
+              placeholder="Poziv na broj"
               value={racun.pozivNaBroj}
               size="small"
-              sx={{ width: "150px", ml: 1 }}
+              sx={{ width: "150px" }}
               onChange={handleRacunChange}
             />
-          </Typography>
+          </Box>
           <PrimalacRacunaSection racun={racun} onRacunChange={handleRacunChange} />
           <Divider sx={{ mt: 3, mb: 3 }} />
           <AvansSection racun={racun} onRacunChange={handleRacunChange} />

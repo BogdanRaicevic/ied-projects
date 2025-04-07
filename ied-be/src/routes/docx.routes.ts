@@ -5,6 +5,7 @@ import { fileURLToPath } from "node:url";
 import PizZip from "pizzip";
 import Docxtemplater from "docxtemplater";
 import { RacunTypes } from "@ied-shared/constants/racun";
+import { format } from "date-fns";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -61,6 +62,7 @@ router.post("/modify-template", async (req, res) => {
     const flattenedData = {
       ...req.body,
       datumIzdavanjaRacuna: new Date().toLocaleDateString("sr-RS"),
+      datumPrometaUsluge: format(req.body.datumPrometaUsluge, "dd.MM.yyyy"),
       hasOnline: Number(req.body.brojUcesnikaOnline) > 0,
       hasOffline: Number(req.body.brojUcesnikaOffline) > 0,
       sadasnjaGodina: new Date().getFullYear().toString().slice(-2),

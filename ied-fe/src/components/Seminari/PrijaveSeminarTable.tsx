@@ -55,7 +55,7 @@ export default function PrijaveSeminarTable({
           </IconButton>
         </TableCell>
         <TableCell>
-          <Tooltip title="Kreiraj racun">
+          <Tooltip title="Kreiraj račun">
             <IconButton
               color="success"
               onClick={() => {

@@ -1,4 +1,4 @@
-import { Grid2, Divider, Typography, TextField } from "@mui/material";
+import { Grid2, Divider, Typography, TextField, Box, FormControl } from "@mui/material";
 import { forwardRef, useImperativeHandle, useCallback, useEffect } from "react";
 import { PrimalacRacunaSection } from "./components/PrimalacRacunaSection";
 import { useInitialRacunState } from "./hooks/useInitialRacunState";
@@ -8,6 +8,9 @@ import { AvansSection } from "./components/AvansSection";
 import { OfflinePrisustvaSection } from "./components/OfflinePrisustvaSection";
 import { OnlinePrisustvaSection } from "./components/OnlinePrisustvaSection";
 import { UkupnaNaknada } from "./UkupnaNaknada";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFnsV3";
 
 interface RacunFormRef {
   getRacunData: () => Partial<Racun>;
@@ -50,19 +53,46 @@ export const CreateKonacniRacunForm = forwardRef<RacunFormRef, RacunFormProps>(
       getRacunData: () => racun,
     }));
 
+    const handleDateChange = (filedName: string, date: Date | null) => {
+      setRacun((prev) => ({
+        ...prev,
+        [filedName]: date,
+      }));
+    };
+
+    console.log("racun je:", racun);
+
     return (
       <Grid2 container>
         <Grid2 size={12}>
-          <Typography align="center" variant="h4" sx={{ mb: 3 }}>
-            Konačni račun
+          <Box
+            sx={{ display: "flex", alignItems: "center", justifyContent: "center", mb: 3, gap: 2 }}
+          >
+            <Typography variant="h4">Konačni račun</Typography>
             <TextField
               name="pozivNaBroj"
+              placeholder="Poziv na broj"
               value={racun.pozivNaBroj}
               size="small"
-              sx={{ width: "150px", ml: 1 }}
+              sx={{ width: "150px" }}
               onChange={handleRacunChange}
             />
-          </Typography>
+          </Box>
+          <Box
+            sx={{ display: "flex", alignItems: "center", justifyContent: "center", mb: 3, gap: 2 }}
+          >
+            <FormControl sx={{ m: 1 }}>
+              <LocalizationProvider dateAdapter={AdapterDateFns}>
+                <DatePicker
+                  format="dd.MM.yyyy"
+                  label="Datum prometa usluge"
+                  name="datumPrometaUsluge"
+                  value={racun.datumPrometaUsluge ? new Date(racun.datumPrometaUsluge) : null}
+                  onChange={(date) => handleDateChange("datumPrometaUsluge", date)}
+                />
+              </LocalizationProvider>
+            </FormControl>
+          </Box>
           <PrimalacRacunaSection racun={racun} onRacunChange={handleRacunChange} />
           <Divider sx={{ mt: 3, mb: 3 }} />
           <OnlinePrisustvaSection racun={racun} onRacunChange={handleRacunChange} />

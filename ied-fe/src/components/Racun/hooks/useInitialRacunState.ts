@@ -13,6 +13,8 @@ const getInitialRacunState = (
   naziv: primalacRacuna.naziv || "",
   adresa: primalacRacuna.adresa || "",
   pib: primalacRacuna.pib || "",
+  lokacijaSeminara: primalacRacuna.lokacijaSeminara || "",
+  datumPrometaUsluge: primalacRacuna.datumPrometaUsluge || "",
   mesto: primalacRacuna.mesto || "",
   maticniBroj: primalacRacuna.maticniBroj || "",
   onlineCena: primalacRacuna.onlineCena || "",
