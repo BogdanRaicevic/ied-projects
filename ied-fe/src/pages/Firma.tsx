@@ -8,7 +8,7 @@ import { useParams } from "react-router-dom";
 import { myZaposleniColumns } from "../components/MyTable/myCompanyColumns";
 import FirmaForm from "../components/Forms/FirmaForm";
 import type { FirmaType, Zaposleni } from "../schemas/firmaSchemas";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { Tooltip, IconButton, Button, Alert } from "@mui/material";
 import { Box } from "@mui/system";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -17,7 +17,6 @@ import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import ZaposleniDialog from "../components/Dialogs/ZaposleniDialog";
 import { fetchSingleFirma, saveFirma } from "../api/firma.api";
 import PrijavaNaSeminarDialog from "../components/Dialogs/PrijaviZaposlenogNaSeminar";
-import { useMemo } from "react";
 
 const defaultCompanyData: FirmaType = {
   ID_firma: 0,
@@ -65,15 +64,6 @@ export default function Firma() {
   const [selectedRow, setSelectedRow] = useState<MRT_Row<Zaposleni> | null>(null);
 
   const handleEdit = (row: MRT_Row<Zaposleni>) => {
-    const updatedZaposleni = company?.zaposleni.map((zaposleni: TODO_ANY_TYPE) =>
-      zaposleni._id === row.original._id ? row.original : zaposleni
-    );
-    const updatedCompany: FirmaType = {
-      ...defaultCompanyData,
-      ...company,
-      zaposleni: updatedZaposleni || [],
-    };
-    setCompany(updatedCompany);
     setSelectedRow(row);
     setOpenZaposelniDialog(true);
   };
@@ -150,7 +140,6 @@ export default function Firma() {
     }
 
     const updatedCompany: FirmaType = {
-      ...defaultCompanyData,
       ...company,
       zaposleni: updatedZaposleni || [],
     };
@@ -159,17 +148,13 @@ export default function Firma() {
 
     if (isExistingCompany) {
       try {
-        const savedCompany = await saveFirma({
-          _id: company?._id,
-          zaposleni: updatedZaposleni,
-        });
+        const savedCompany = await saveFirma(updatedCompany);
         setCompany(savedCompany.data);
         setErrorAlert(null);
       } catch (error: any) {
         setCompany(company);
         setErrorAlert("Greška prilikom dodavanja zaposlenog. " + error.message);
 
-        // Clear alerts after 5 seconds
         setTimeout(() => {
           setErrorAlert(null);
         }, 5000);
@@ -234,7 +219,7 @@ export default function Firma() {
     <>
       <h1>Firma: {company?.naziv_firme}</h1>
 
-      <FirmaForm inputCompany={company} />
+      <FirmaForm inputCompany={company} onSubmit={(updatedCompany) => setCompany(updatedCompany)} />
       <Button
         sx={{ my: 2 }}
         size="large"

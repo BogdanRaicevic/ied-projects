@@ -28,9 +28,10 @@ import { deleteFirma, saveFirma } from "../../../api/firma.api";
 
 type FirmaFormProps = {
   inputCompany: FirmaType;
+  onSubmit?: (data: FirmaType) => void;
 };
 
-export const FirmaForm: React.FC<FirmaFormProps> = ({ inputCompany }) => {
+export const FirmaForm: React.FC<FirmaFormProps> = ({ inputCompany, onSubmit: parentOnSubmit }) => {
   const {
     register,
     formState: { errors },
@@ -66,6 +67,11 @@ export const FirmaForm: React.FC<FirmaFormProps> = ({ inputCompany }) => {
       // Update the current firma ID if this was a new creation
       if (!currentFirmaId) {
         setCurrentFirmaId(savedCompany.data._id);
+      }
+
+      // Call parent onSubmit if provided
+      if (parentOnSubmit) {
+        parentOnSubmit(savedCompany.data);
       }
 
       reset(savedCompany.data);
