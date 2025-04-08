@@ -20,6 +20,7 @@ import { useFetchSeminari } from "../../hooks/useFetchData";
 import type { FirmaType, PrijavaNaSeminar, Zaposleni } from "../../schemas/firmaSchemas";
 import { savePrijava } from "../../api/seminari.api";
 import { useEffect, useState } from "react";
+import { format } from "date-fns";
 
 export default function PrijavaNaSeminarDialog({
   open,
@@ -154,12 +155,12 @@ export default function PrijavaNaSeminarDialog({
             <Autocomplete
               disablePortal
               options={seminari || []}
-              getOptionLabel={(option) => `${option.datum} - ${option.naziv}`}
+              getOptionLabel={(option) => `${format(option.datum, "dd.MM.yyyy")} - ${option.naziv}`}
               renderOption={(params, option) => (
                 <Box component="li" {...params} key={option._id}>
                   <Box>
                     <Typography variant="caption" display="block">
-                      {option.datum?.toString()}
+                      {format(option.datum, "dd.MM.yyyy")}
                     </Typography>
                     <Typography variant="body1" sx={{ pl: 3 }}>
                       {option.naziv}
