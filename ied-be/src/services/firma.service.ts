@@ -65,14 +65,16 @@ export const exportSearchedFirmaData = async (queryParameters: FilterQuery<Firma
   const cursor = Firma.find(mongoQuery, {
     naziv_firme: 1,
     e_mail: 1,
+    delatnost: 1,
+    tip_firme: 1,
     _id: 0,
   }).cursor();
 
-  let res = "naziv_firme, e_mail\n";
+  let res = "naziv_firme, e_mail, delatnost, tip_firme\n";
   cursor.on("data", (doc) => {
     const plainObject = doc.toObject();
     if (plainObject.e_mail !== "nema" && plainObject.e_mail !== "") {
-      res += `${plainObject.naziv_firme},${plainObject.e_mail}\n`;
+      res += `${plainObject.naziv_firme},${plainObject.e_mail},${plainObject.delatnost},${plainObject.tip_firme}\n`;
     }
   });
 
