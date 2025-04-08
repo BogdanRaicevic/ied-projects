@@ -73,23 +73,30 @@ export default memo(function SeminariTable(props: {
     setEditSeminar(true);
   };
 
-  const handleExportEmails = (seminar: Partial<SeminarType>) => {
-    const emails = seminar.prijave?.map((p) => p.zaposleni_email) || [];
-    const csv = emails.join("\n");
-    console.log(csv);
+  const handleExportUcesnikaSeminara = (seminar: Partial<SeminarType>) => {
+    let csv = "Redni Broj, Naziv firme, Ime i Prezime, Email\n";
+    const data = seminar.prijave
+      ?.map(
+        (p, index) =>
+          `${index + 1},${p.firma_naziv},${p.zaposleni_ime} ${p.zaposleni_prezime},${p.zaposleni_email}`
+      )
+      .join("\n");
+
+    csv += data;
     exportDataToCSV(seminar, "klijenti", csv);
   };
 
   const handleExportSeminarTable = (seminar: Partial<SeminarType>) => {
-    const csvRows: string[] =
-      seminar.prijave?.map((p) => {
-        return `${p.firma_naziv},${p.zaposleni_ime},${p.zaposleni_prezime},${p.zaposleni_email},${p.zaposleni_telefon}`;
-      }) || [];
+    const csvRows: string =
+      `${seminar.naziv}\n` +
+      "Redni Broj, Naziv firme, Ime i Prezime, Email\n" +
+      seminar.prijave
+        ?.map((p, index) => {
+          return `${index + 1}, ${p.firma_naziv},${p.zaposleni_ime} ${p.zaposleni_prezime},${p.zaposleni_email}`;
+        })
+        .join("\n");
 
-    const csv = csvRows.join("\n");
-    exportDataToCSV(seminar, "seminar", csv);
-
-    console.log(csv);
+    exportDataToCSV(seminar, "seminar", csvRows);
   };
 
   const exportDataToCSV = async (
@@ -134,12 +141,12 @@ export default memo(function SeminariTable(props: {
                 <EditIcon />
               </IconButton>
             </Tooltip>
-            <Tooltip title="Export mejlova">
+            <Tooltip title="Export učesnika">
               <IconButton
                 color="secondary"
                 onClick={() => {
                   if (seminar._id) {
-                    handleExportEmails(seminar);
+                    handleExportUcesnikaSeminara(seminar);
                   }
                 }}
               >
