@@ -10,7 +10,7 @@ export type PrimalacRacuna = {
   brojUcesnikaOffline: number | string;
   ukupanBrojUcesnika: number | string;
   nazivSeminara?: string;
-  datumPrometaUsluge?: string;
+  datumPrometaUsluge?: string | Date;
   lokacijaSeminara?: string;
 };
 

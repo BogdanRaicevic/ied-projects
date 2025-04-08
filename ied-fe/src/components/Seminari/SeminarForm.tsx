@@ -1,7 +1,6 @@
 import * as React from "react";
 import { TextField, Box, Button, FormControl, Alert, Snackbar } from "@mui/material";
 import InputAdornment from "@mui/material/InputAdornment";
-import { parse } from "date-fns";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { saveSeminar } from "../../api/seminari.api";
 import type { SeminarType } from "../../schemas/firmaSchemas";
