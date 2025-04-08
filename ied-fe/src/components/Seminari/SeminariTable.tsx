@@ -28,6 +28,7 @@ import PrijaveSeminarTable from "./PrijaveSeminarTable";
 import SeminarForm from "./SeminarForm";
 import ForwardToInboxIcon from "@mui/icons-material/ForwardToInbox";
 import TableViewIcon from "@mui/icons-material/TableView";
+import { format } from "date-fns";
 
 export default memo(function SeminariTable(props: {
   queryParameters: SeminarQueryParams;
@@ -191,6 +192,12 @@ export default memo(function SeminariTable(props: {
     {
       header: "Datum",
       accessorKey: "datum",
+      Cell: ({ cell }) => {
+        const value = cell.getValue() as string | Date;
+        if (!value) return null;
+        return format(value, "yyyy-MM-dd");
+      },
+      sortingFn: "datetime",
     },
     {
       header: "Broj Učesnika",

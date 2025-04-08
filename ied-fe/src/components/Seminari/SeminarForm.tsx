@@ -1,7 +1,7 @@
 import * as React from "react";
 import { TextField, Box, Button, FormControl, Alert, Snackbar } from "@mui/material";
 import InputAdornment from "@mui/material/InputAdornment";
-import { format, parse } from "date-fns";
+import { parse } from "date-fns";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { saveSeminar } from "../../api/seminari.api";
 import type { SeminarType } from "../../schemas/firmaSchemas";
@@ -15,29 +15,32 @@ export default function SeminarForm({
   onDialogClose?: () => void;
   onSuccess?: () => void;
 }) {
-  const defaultSeminarData: Partial<SeminarType> = {
+  const defaultSeminarData: SeminarType = {
     naziv: "",
     predavac: "",
     lokacija: "",
     offlineCena: "",
     onlineCena: "",
-    datum: format(new Date(), "yyyy-MM-dd"),
+    datum: new Date(),
+    datumOd: new Date(),
+    datumDo: new Date(),
+    prijave: [],
   };
-  const [seminarData, setSeminarData] = React.useState(seminar || defaultSeminarData);
-
-  const parseDateString = (dateString?: string | null | undefined): Date => {
-    if (!dateString) {
-      return parse(new Date().toISOString(), "yyyy-MM-dd", new Date());
-    }
-    return parse(dateString, "yyyy-MM-dd", new Date());
-  };
+  const [seminarData, setSeminarData] = React.useState<SeminarType>({
+    ...defaultSeminarData,
+    ...seminar,
+  });
 
   const [selectedDate, setSelectedDate] = React.useState<Date | null>(
-    parseDateString(seminar?.datum) // create date-fns date object from string format yyyy-MM-dd, or today
+    seminar?.datum ? new Date(seminar.datum) : new Date()
   );
 
   const handleDateChange = (newDate: Date | null) => {
     setSelectedDate(newDate);
+    setSeminarData((prev) => ({
+      ...prev,
+      datum: newDate || new Date(),
+    }));
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
