@@ -68,19 +68,12 @@ export default function Firma() {
     setOpenZaposelniDialog(true);
   };
 
-  const handleDelete = async (row: MRT_Row<Zaposleni>) => {
-    const latestData = await fetchSingleFirma(String(id));
-    if (!latestData) return;
-
-    const filteredZaposleni = latestData.zaposleni.filter(
-      (zaposleni: Zaposleni) => zaposleni._id !== row.original._id
-    );
-
+  const checkDuplicateEmails = (zaposleni: Zaposleni[]) => {
     const emailsMap = new Map<string, number>();
-    filteredZaposleni
-      .map((z) => z.e_mail)
-      .filter(Boolean)
-      .forEach((email) => {
+    zaposleni
+      .map((z: Zaposleni) => z.e_mail)
+      .filter((email: string | undefined): email is string => email !== undefined)
+      .forEach((email: string) => {
         if (email && emailsMap.has(email)) {
           emailsMap.set(email, (emailsMap.get(email) || 0) + 1);
         } else if (email) {
@@ -96,20 +89,27 @@ export default function Firma() {
           Array.from(duplicates.keys()).join(", ")
         )
       );
+      setTimeout(() => {
+        setWarningAlert(null);
+      }, 5000);
     }
+  };
+
+  const handleDelete = async (row: MRT_Row<Zaposleni>) => {
+    const latestData = await fetchSingleFirma(String(id));
+    if (!latestData) return;
+
+    const filteredZaposleni = latestData.zaposleni.filter(
+      (zaposleni: Zaposleni) => zaposleni._id !== row.original._id
+    );
+
+    checkDuplicateEmails(filteredZaposleni);
 
     const updatedCompany: FirmaType = {
       ...latestData,
       zaposleni: filteredZaposleni,
     };
     setCompany(updatedCompany);
-
-    if (duplicates.size > 0) {
-      setTimeout(() => {
-        setWarningAlert(null);
-      }, 5000);
-    }
-
     saveFirma({ _id: company?._id, zaposleni: filteredZaposleni });
   };
 
@@ -138,6 +138,8 @@ export default function Firma() {
     } else {
       updatedZaposleni = [...(company?.zaposleni || []), employeeToAdd];
     }
+
+    checkDuplicateEmails(updatedZaposleni);
 
     const updatedCompany: FirmaType = {
       ...company,
@@ -219,7 +221,13 @@ export default function Firma() {
     <>
       <h1>Firma: {company?.naziv_firme}</h1>
 
-      <FirmaForm inputCompany={company} onSubmit={(updatedCompany) => setCompany(updatedCompany)} />
+      <FirmaForm
+        inputCompany={company}
+        onSubmit={(updatedCompany) => {
+          checkDuplicateEmails(updatedCompany.zaposleni);
+          setCompany(updatedCompany);
+        }}
+      />
       <Button
         sx={{ my: 2 }}
         size="large"
