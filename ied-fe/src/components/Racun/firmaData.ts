@@ -30,9 +30,6 @@ export const permanent = {
   ],
 };
 
-// Za kad budemo radili i devizno
-const _brojResenjaOEvidencijiZaPDVDevizno = "Oslobođeno PDV-a prema članu 12. Zakona o PDV-u";
-
 export const bs = {
   logo: bsLogo,
   naziv: "Balkanski savet za održivi razvoj i edukaciju, 11080 Zemun, Bezanijska 30",
