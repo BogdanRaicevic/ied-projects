@@ -92,21 +92,20 @@ export const exportSearchedZaposleniData = async (
   queryParameters: FilterQuery<FirmaQueryParams>
 ) => {
   const mongoQuery = await createFirmaQuery(queryParameters);
+  console.log("queryParameters", queryParameters);
 
   if (queryParameters.negacije?.includes("negate-radno-mesto")) {
-    (await mongoQuery).zaposleni = {
+    mongoQuery.zaposleni = {
       $elemMatch: { radno_mesto: { $nin: queryParameters.radnaMesta } },
     };
   }
 
-  // Create a readable stream from the database with only "naziv_firme" and "e_mail" properties
   const cursor = Firma.find(mongoQuery, {
     zaposleni: 1,
     _id: 0,
   }).cursor();
 
-  // Create a writable stream to a file
-  let res = "ime i prezime, e_mail\n";
+  let res = "ime i prezime, e_mail, radno mesto\n";
 
   // Write the data to the writable stream
   cursor.on("data", (doc) => {
@@ -122,7 +121,7 @@ export const exportSearchedZaposleniData = async (
           queryParameters.negacije?.includes("negate-radno-mesto") &&
           !queryParameters.radnaMesta.includes(z.radno_mesto)
         ) {
-          res += `${z.ime} ${z.prezime},${z.e_mail}\n`;
+          res += `${z.ime} ${z.prezime},${z.e_mail}, ${z.radno_mesto}\n`;
           continue;
         }
 
@@ -130,7 +129,8 @@ export const exportSearchedZaposleniData = async (
           queryParameters.radnaMesta.length === 0 ||
           queryParameters.radnaMesta.includes(z.radno_mesto)
         ) {
-          res += `${z.ime} ${z.prezime},${z.e_mail}\n`;
+          res += `${z.ime} ${z.prezime},${z.e_mail}, ${z.radno_mesto}\n`;
+          console.log("z", z);
         }
       }
     }
