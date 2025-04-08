@@ -8,6 +8,7 @@ import NegationCheckbox from "../NegationCheckbox";
 import { usePretragaStore } from "../../store/pretragaParameters.store";
 import { useFetchData } from "../../hooks/useFetchData";
 import { FirmaQueryParams } from "@ied-shared/types/firmaQueryParams";
+import { format } from "date-fns";
 
 export default function PretragaParameters() {
   const { delatnosti, mesta, radnaMesta, tipoviFirme, velicineFirme, stanjaFirme, sviSeminari } =
@@ -125,14 +126,14 @@ export default function PretragaParameters() {
                   key="autocomplete-seminar"
                   checkedValues={pretragaParameters.seminari || []}
                   getOptionLabel={(option) => {
-                    return `${option.datum} - ${option.naziv}`;
+                    return `${format(option.datum, "dd.MM.yyyy")} - ${option.naziv}`;
                   }}
                   renderTag={(getTagProps, index, option) => {
                     const { key, ...tagProps } = getTagProps({ index });
                     return (
                       <Chip
                         variant="outlined"
-                        label={`${option.datum} - ${option.naziv}`}
+                        label={`${format(option.datum, "dd.MM.yyyy")} - ${option.naziv}`}
                         key={key}
                         {...tagProps}
                       />
