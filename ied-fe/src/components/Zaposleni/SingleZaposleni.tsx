@@ -51,10 +51,8 @@ export function SingleZaposleni(zaposleni: Zaposleni) {
         prijavljeniValue={zaposleniPrijava.zeleMarketingMaterijal}
         prijavaChange={handleChange}
       />
-      {
-        // TODO: Fix zaposleni form missing on submit
-      }
-      <ZaposleniForm isCompanyBeingUpdated onSubmit={() => ""} zaposleni={zaposleni as TODO_ANY} />
+
+      <ZaposleniForm onSubmit={() => ""} zaposleni={zaposleni as TODO_ANY} />
 
       <Card>
         <CardContent>

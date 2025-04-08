@@ -228,43 +228,46 @@ export default function Firma() {
           setCompany(updatedCompany);
         }}
       />
-      <Button
-        sx={{ my: 2 }}
-        size="large"
-        variant="contained"
-        color="secondary"
-        type="button"
-        onClick={() => {
-          setSelectedRow(null);
-          setOpenZaposelniDialog(true);
-        }}
-      >
-        Dodaj zaposlenog
-      </Button>
-      {errorAlert && (
-        <Alert severity="error" sx={{ mb: 2 }} onClose={() => setErrorAlert(null)}>
-          {errorAlert}
-        </Alert>
+      {company?._id && (
+        <>
+          <Button
+            sx={{ my: 2 }}
+            size="large"
+            variant="contained"
+            color="secondary"
+            type="button"
+            onClick={() => {
+              setSelectedRow(null);
+              setOpenZaposelniDialog(true);
+            }}
+          >
+            Dodaj zaposlenog
+          </Button>
+          {errorAlert && (
+            <Alert severity="error" sx={{ mb: 2 }} onClose={() => setErrorAlert(null)}>
+              {errorAlert}
+            </Alert>
+          )}
+          {warningAlert && (
+            <Alert severity="warning" sx={{ mb: 2 }} onClose={() => setWarningAlert(null)}>
+              {warningAlert}
+            </Alert>
+          )}
+          <MaterialReactTable table={zapTable} />
+          <ZaposleniDialog
+            zaposleni={selectedRow?.original}
+            open={openZaposleniDialog}
+            onClose={handleClose}
+            onSubmit={handleZaposleniSubmit}
+          />
+          <PrijavaNaSeminarDialog
+            open={openPrijavaNaSeminarDialog}
+            onClose={handleClosePrijavaDialog}
+            companyData={company}
+            zaposleniData={selectedRow?.original ?? {}}
+          />
+        </>
       )}
-      {warningAlert && (
-        <Alert severity="warning" sx={{ mb: 2 }} onClose={() => setWarningAlert(null)}>
-          {warningAlert}
-        </Alert>
-      )}
-      <MaterialReactTable table={zapTable} />
-      <ZaposleniDialog
-        isCompanyBeingUpdated={Boolean(id)}
-        zaposleni={selectedRow?.original}
-        open={openZaposleniDialog}
-        onClose={handleClose}
-        onSubmit={handleZaposleniSubmit}
-      />
-      <PrijavaNaSeminarDialog
-        open={openPrijavaNaSeminarDialog}
-        onClose={handleClosePrijavaDialog}
-        companyData={company}
-        zaposleniData={selectedRow?.original ?? {}}
-      />
     </>
   );
 }

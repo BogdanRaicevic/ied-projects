@@ -8,16 +8,11 @@ import Single from "../Autocomplete/Single";
 import { useFetchData } from "../../hooks/useFetchData";
 
 type ZaposleniFormProps = {
-  isCompanyBeingUpdated: boolean;
   zaposleni?: Zaposleni;
   onSubmit: (zaposleniData: Zaposleni) => void;
 };
 
-export function ZaposleniForm({
-  isCompanyBeingUpdated = false,
-  zaposleni,
-  onSubmit,
-}: ZaposleniFormProps) {
+export function ZaposleniForm({ zaposleni, onSubmit }: ZaposleniFormProps) {
   const {
     register,
     handleSubmit,
@@ -121,21 +116,14 @@ export function ZaposleniForm({
           }}
         ></Single>
       </Box>
-      <>
-        <Button
-          onClick={handleSubmit(handleDodajZaposlenog, onError)}
-          sx={{ m: 1 }}
-          variant="contained"
-          type="submit"
-        >
-          {isCompanyBeingUpdated ? "Sacuvaj zaposlenog" : "Dodaj u tabelu"}
-        </Button>
-        {isCompanyBeingUpdated ? null : (
-          <Alert severity="warning">
-            Ne zaboravite da kliknete na dugme <b>Sačuvaj</b>
-          </Alert>
-        )}
-      </>
+      <Button
+        onClick={handleSubmit(handleDodajZaposlenog, onError)}
+        sx={{ m: 1 }}
+        variant="contained"
+        type="submit"
+      >
+        Sačuvaj zaposlenog
+      </Button>
     </Box>
   );
 }

@@ -3,7 +3,6 @@ import type { Zaposleni } from "../../schemas/firmaSchemas";
 import { ZaposleniForm } from "../Zaposleni/ZaposleniFrom";
 
 type ZaposleniDialogProps = {
-  isCompanyBeingUpdated: boolean;
   zaposleni?: Zaposleni;
   open: boolean;
   onClose: () => void;
@@ -11,7 +10,6 @@ type ZaposleniDialogProps = {
 };
 
 const ZaposleniDialog: React.FC<ZaposleniDialogProps> = ({
-  isCompanyBeingUpdated,
   zaposleni,
   open,
   onClose,
@@ -22,11 +20,7 @@ const ZaposleniDialog: React.FC<ZaposleniDialogProps> = ({
       <DialogTitle>Zaposleni</DialogTitle>
       <DialogContent>
         <Box sx={{ p: 2 }}>
-          <ZaposleniForm
-            isCompanyBeingUpdated={isCompanyBeingUpdated}
-            zaposleni={zaposleni}
-            onSubmit={onSubmit}
-          />
+          <ZaposleniForm zaposleni={zaposleni} onSubmit={onSubmit} />
         </Box>
       </DialogContent>
     </Dialog>
