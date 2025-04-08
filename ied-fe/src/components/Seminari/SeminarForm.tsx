@@ -2,8 +2,6 @@ import * as React from "react";
 import { TextField, Box, Button, FormControl, Alert, Snackbar } from "@mui/material";
 import InputAdornment from "@mui/material/InputAdornment";
 import { format, parse } from "date-fns";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFnsV3";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { saveSeminar } from "../../api/seminari.api";
 import type { SeminarType } from "../../schemas/firmaSchemas";
@@ -141,15 +139,13 @@ export default function SeminarForm({
           onChange={handleChange}
         />
         <FormControl sx={{ m: 1 }}>
-          <LocalizationProvider dateAdapter={AdapterDateFns}>
-            <DatePicker
-              format="yyyy-MM-dd"
-              label="Datum održavanja"
-              name="datum"
-              value={selectedDate}
-              onChange={handleDateChange}
-            />
-          </LocalizationProvider>
+          <DatePicker
+            format="yyyy-MM-dd"
+            label="Datum održavanja"
+            name="datum"
+            value={selectedDate}
+            onChange={handleDateChange}
+          />
         </FormControl>
         <Button sx={{ m: 1 }} size="large" variant="contained" color="primary" type="submit">
           {seminar?._id ? "Izmeni" : "Kreiraj"} seminar

@@ -8,9 +8,7 @@ import { AvansSection } from "./components/AvansSection";
 import { OfflinePrisustvaSection } from "./components/OfflinePrisustvaSection";
 import { OnlinePrisustvaSection } from "./components/OnlinePrisustvaSection";
 import { UkupnaNaknada } from "./UkupnaNaknada";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFnsV3";
 
 interface RacunFormRef {
   getRacunData: () => Partial<Racun>;
@@ -82,15 +80,13 @@ export const CreateKonacniRacunForm = forwardRef<RacunFormRef, RacunFormProps>(
             sx={{ display: "flex", alignItems: "center", justifyContent: "center", mb: 3, gap: 2 }}
           >
             <FormControl sx={{ m: 1 }}>
-              <LocalizationProvider dateAdapter={AdapterDateFns}>
-                <DatePicker
-                  format="dd.MM.yyyy"
-                  label="Datum prometa usluge"
-                  name="datumPrometaUsluge"
-                  value={racun.datumPrometaUsluge ? new Date(racun.datumPrometaUsluge) : null}
-                  onChange={(date) => handleDateChange("datumPrometaUsluge", date)}
-                />
-              </LocalizationProvider>
+              <DatePicker
+                format="dd.MM.yyyy"
+                label="Datum prometa usluge"
+                name="datumPrometaUsluge"
+                value={racun.datumPrometaUsluge ? new Date(racun.datumPrometaUsluge) : null}
+                onChange={(date) => handleDateChange("datumPrometaUsluge", date)}
+              />
             </FormControl>
           </Box>
           <PrimalacRacunaSection racun={racun} onRacunChange={handleRacunChange} />

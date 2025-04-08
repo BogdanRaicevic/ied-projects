@@ -1,6 +1,5 @@
 import { Box, Button, FormControl, TextField } from "@mui/material";
-import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
-import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFnsV3";
+import { DatePicker } from "@mui/x-date-pickers";
 import { useState } from "react";
 import { addMonths, subMonths } from "date-fns";
 import SeminarForm from "../components/Seminari/SeminarForm";
@@ -75,25 +74,23 @@ export default function Seminari() {
           onChange={handleInputChange}
         />
         <FormControl sx={{ m: 1 }}>
-          <LocalizationProvider dateAdapter={AdapterDateFns}>
-            <DatePicker
-              format="yyyy/MM/dd"
-              label="Početni datum"
-              name="datumOd"
-              defaultValue={queryParameters.datumOd}
-              onChange={(date) => handleDateChange("datumOd", date)}
-            />
-            <Box display="flex" alignItems="center" justifyContent="center">
-              <UnfoldLess />
-            </Box>
-            <DatePicker
-              format="yyyy/MM/dd"
-              label="Kranji datum"
-              name="datumDo"
-              defaultValue={queryParameters.datumDo}
-              onChange={(date) => handleDateChange("datumDo", date)}
-            />
-          </LocalizationProvider>
+          <DatePicker
+            format="yyyy/MM/dd"
+            label="Početni datum"
+            name="datumOd"
+            defaultValue={queryParameters.datumOd}
+            onChange={(date) => handleDateChange("datumOd", date)}
+          />
+          <Box display="flex" alignItems="center" justifyContent="center">
+            <UnfoldLess />
+          </Box>
+          <DatePicker
+            format="yyyy/MM/dd"
+            label="Kranji datum"
+            name="datumDo"
+            defaultValue={queryParameters.datumDo}
+            onChange={(date) => handleDateChange("datumDo", date)}
+          />
         </FormControl>
         <Button
           onClick={handlePretraziSeminare}
