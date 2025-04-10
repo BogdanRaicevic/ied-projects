@@ -2,7 +2,7 @@ import { sanitizeFilter, type FilterQuery } from "mongoose";
 import { type FirmaType, Firma } from "../models/firma.model";
 import { createFirmaQuery } from "../utils/firmaQueryBuilder";
 import type { FirmaQueryParams } from "@ied-shared/types/firmaQueryParams";
-
+import { getZaposleniIdsFromSeminars } from "./seminar.service";
 export const findById = async (id: string): Promise<FirmaType | null> => {
   try {
     return await Firma.findById(id);
@@ -73,9 +73,7 @@ export const exportSearchedFirmaData = async (queryParameters: FilterQuery<Firma
   let res = "naziv_firme, e_mail, delatnost, tip_firme\n";
   cursor.on("data", (doc) => {
     const plainObject = doc.toObject();
-    if (plainObject.e_mail !== "nema" && plainObject.e_mail !== "") {
-      res += `${plainObject.naziv_firme},${plainObject.e_mail},${plainObject.delatnost},${plainObject.tip_firme}\n`;
-    }
+    res += `${plainObject.naziv_firme},${plainObject.e_mail},${plainObject.delatnost},${plainObject.tip_firme}\n`;
   });
 
   return new Promise<string>((resolve, reject) => {
@@ -96,6 +94,10 @@ export const exportSearchedZaposleniData = async (
   const mongoQuery = await createFirmaQuery(queryParameters);
   console.log("queryParameters", queryParameters);
 
+  const seminarAttendees: string[] = await getZaposleniIdsFromSeminars(
+    queryParameters.seminari || []
+  );
+
   if (queryParameters.negacije?.includes("negate-radno-mesto")) {
     mongoQuery.zaposleni = {
       $elemMatch: { radno_mesto: { $nin: queryParameters.radnaMesta } },
@@ -115,24 +117,28 @@ export const exportSearchedZaposleniData = async (
 
     if (plainObject.zaposleni) {
       for (const z of plainObject.zaposleni) {
-        if (!z.e_mail) {
+        const isZaposleniInSeminar = queryParameters.seminari
+          ? seminarAttendees?.includes(z._id.toString())
+          : true;
+
+        const isRadnoMestoNegated = queryParameters.negacije?.includes("negate-radno-mesto");
+        const isRadnoMestoIncluded = queryParameters.radnaMesta.includes(z.radno_mesto);
+        const hasNoRadnaMestaFilter = queryParameters.radnaMesta.length === 0;
+
+        // Skip if zaposleni is not in the specified seminars
+        if (!isZaposleniInSeminar) {
           continue;
         }
 
-        if (
-          queryParameters.negacije?.includes("negate-radno-mesto") &&
-          !queryParameters.radnaMesta.includes(z.radno_mesto)
-        ) {
-          res += `${z.ime} ${z.prezime},${z.e_mail}, ${z.radno_mesto}\n`;
+        // Handle negated radno mesto case
+        if (isRadnoMestoNegated && !isRadnoMestoIncluded) {
+          res += `${z._id}, ${z.ime} ${z.prezime},${z.e_mail}, ${z.radno_mesto}\n`;
           continue;
         }
 
-        if (
-          queryParameters.radnaMesta.length === 0 ||
-          queryParameters.radnaMesta.includes(z.radno_mesto)
-        ) {
-          res += `${z.ime} ${z.prezime},${z.e_mail}, ${z.radno_mesto}\n`;
-          console.log("z", z);
+        // Handle included radno mesto case
+        if (hasNoRadnaMestaFilter || isRadnoMestoIncluded) {
+          res += `${z._id}, ${z.ime} ${z.prezime},${z.e_mail}, ${z.radno_mesto}\n`;
         }
       }
     }

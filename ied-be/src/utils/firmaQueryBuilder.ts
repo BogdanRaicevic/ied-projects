@@ -95,45 +95,20 @@ export const createFirmaQuery = async (params: FirmaQueryParams) => {
   }
 
   if (Array.isArray(params?.seminari) && params.seminari.length > 0) {
-    const seminarIds = params.seminari.map((seminar) =>
-      Types.ObjectId.createFromHexString(seminar._id)
-    );
-
-    const firmaIds = await Seminar.aggregate([
-      {
-        $match: {
-          _id: {
-            $in: seminarIds.map((id) => new mongoose.Types.ObjectId(id)),
-          },
-          "prijave.firma_id": { $exists: true },
-        },
-      },
-      {
-        $unwind: "$prijave",
-      },
-      {
-        $match: {
-          "prijave.firma_id": { $exists: true },
-        },
-      },
-      {
-        $group: {
-          _id: "$prijave.firma_id",
-        },
-      },
-      {
-        $project: {
-          _id: { $toObjectId: "$_id" },
-        },
-      },
-    ]).exec();
+    const seminarIds = params.seminari.map((s) => s._id);
 
     if (negateSeminar) {
       query._id = {
-        $nin: firmaIds.map((firma) => firma._id),
+        $nin: await Seminar.distinct("prijave.firma_id", {
+          _id: { $in: seminarIds },
+        }),
       };
     } else {
-      query._id = { $in: firmaIds.map((firma) => firma._id) }; // Extract _id values
+      query._id = {
+        $in: await Seminar.distinct("prijave.firma_id", {
+          _id: { $in: seminarIds },
+        }),
+      };
     }
   }
 

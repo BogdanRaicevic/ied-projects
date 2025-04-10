@@ -1,4 +1,4 @@
-import { Document, type ObjectId, Schema, Types, model } from "mongoose";
+import { Document, ObjectId, Schema, Types, model } from "mongoose";
 
 export type SeminarType = Document & {
   naziv: string;
@@ -12,12 +12,12 @@ export type SeminarType = Document & {
 
 export type PrijavaType = {
   _id?: ObjectId;
-  firma_id: string;
+  firma_id: ObjectId;
   firma_naziv: string;
   firma_email: string;
   firma_telefon: string;
 
-  zaposleni_id: string;
+  zaposleni_id: ObjectId;
   zaposleni_ime: string;
   zaposleni_prezime: string;
   zaposleni_email: string;
@@ -28,8 +28,8 @@ export type PrijavaType = {
 
 const prijavaSchema = new Schema<PrijavaType>({
   _id: { type: Types.ObjectId, default: () => new Types.ObjectId() },
-  firma_id: { type: String, required: true },
-  zaposleni_id: { type: String, required: true },
+  firma_id: { type: Types.ObjectId, required: true },
+  zaposleni_id: { type: Types.ObjectId, required: true },
   firma_naziv: { type: String, required: true },
   firma_email: String,
   firma_telefon: String,

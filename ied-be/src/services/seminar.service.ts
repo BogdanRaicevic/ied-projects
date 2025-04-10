@@ -1,6 +1,6 @@
-import type { FilterQuery } from "mongoose";
+import type { FilterQuery, ObjectId } from "mongoose";
 import { createSeminarQuery } from "../utils/seminariQueryBuilder";
-import { Seminar, type SeminarType } from "./../models/seminar.model";
+import { Seminar, Types, type SeminarType } from "./../models/seminar.model";
 import type {
   PrijavaNaSeminar,
   SaveSeminarParams,
@@ -8,6 +8,7 @@ import type {
 } from "@ied-shared/types/seminar";
 import { ErrorWithCause } from "../utils/customErrors";
 import { validateMongoId } from "../utils/utils";
+import { Firma } from "../models/firma.model";
 
 export const saveSeminar = async (seminarData: SaveSeminarParams): Promise<SeminarType> => {
   if (seminarData._id) {
@@ -62,21 +63,38 @@ export const getAllSeminars = async () => {
   return await Seminar.find({}, { naziv: 1, datum: 1, _id: 1 }).exec();
 };
 
+type PrijavaInput = PrijavaNaSeminar & {
+  firma_id: ObjectId;
+  zaposleni_id: ObjectId;
+  seminar_id: ObjectId;
+  _id?: ObjectId;
+};
+
 export const savePrijava = async (prijava: PrijavaNaSeminar) => {
   const { seminar_id, _id, ...prijavaWithoutId } = prijava;
 
   validateMongoId(seminar_id);
+  validateMongoId(prijava.zaposleni_id);
+  validateMongoId(prijava.firma_id);
 
   const seminar = await Seminar.findById(seminar_id);
   if (!seminar) {
     throw new Error("Seminar not found");
   }
 
-  if (seminar.prijave.some((p) => p.zaposleni_id === prijava.zaposleni_id)) {
+  // Verify zaposleni exists in firma
+  const firma = await Firma.findOne({
+    "zaposleni._id": new Types.ObjectId(prijava.zaposleni_id),
+  });
+  if (!firma) {
+    throw new Error("Zaposleni not found in any firma");
+  }
+
+  if (seminar.prijave.some((p) => p.zaposleni_id.toString() === prijava.zaposleni_id)) {
     throw new ErrorWithCause("Zaposleni je već prijavljen na seminar", "duplicate");
   }
 
-  seminar.prijave.push(prijavaWithoutId);
+  seminar.prijave.push(prijavaWithoutId as PrijavaInput);
   return await seminar.save();
 };
 
@@ -100,4 +118,16 @@ export const deleteSeminar = async (id: string) => {
   }
 
   return seminar;
+};
+
+export const getZaposleniIdsFromSeminars = async (seminarIds: string[]): Promise<string[]> => {
+  if (seminarIds.length > 0) {
+    const seminars = await Seminar.find(
+      { _id: { $in: seminarIds } },
+      { "prijave.zaposleni_id": 1 }
+    );
+
+    return seminars.flatMap((s) => s.prijave.map((p) => p.zaposleni_id.toString()));
+  }
+  return [];
 };
