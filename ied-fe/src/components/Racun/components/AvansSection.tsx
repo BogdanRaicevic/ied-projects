@@ -40,7 +40,7 @@ export const AvansSection = ({ racun, onRacunChange }: AvansSectionProps) => {
           >
             <TableHead>
               <TableRow>
-                <TableCell>Vrsta usluge</TableCell>
+                <TableCell>Seminar</TableCell>
                 <TableCell>Avans bez PDV</TableCell>
                 <TableCell>Stopa PDV</TableCell>
                 <TableCell>PDV</TableCell>

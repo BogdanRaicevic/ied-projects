@@ -36,7 +36,7 @@ export const OnlinePrisustvaSection = ({ racun, onRacunChange }: OnlinePrisustva
           >
             <TableHead>
               <TableRow>
-                <TableCell>Vrsta usluge</TableCell>
+                <TableCell>Seminar</TableCell>
                 <TableCell>Jedinica mere</TableCell>
                 <TableCell>Količina</TableCell>
               </TableRow>
@@ -76,7 +76,7 @@ export const OnlinePrisustvaSection = ({ racun, onRacunChange }: OnlinePrisustva
           <Table sx={{ minWidth: 650 }} aria-label="simple table">
             <TableHead>
               <TableRow>
-                <TableCell>Cena po jedinici</TableCell>
+                <TableCell>Cena online</TableCell>
                 <TableCell>Popust</TableCell>
                 <TableCell>Poreska osnovica</TableCell>
                 <TableCell>Stopa PDV</TableCell>
