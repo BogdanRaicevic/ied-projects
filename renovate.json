@@ -1,17 +1,9 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": ["config:base"],
-  "packageManager": "pnpm",
-  "pnpm": {
-    "enabled": true
-  },
+  "extends": ["config:base", ":preserveSemverRanges"],
   "dependencyDashboard": true,
-  "enabledManagers": ["pnpm"],
-  "monorepo": {
-    "enabled": true
-  },
   "baseBranches": ["main"],
-  "ignorePaths": ["**/dist/**", "**/build/**"],
+  "ignorePaths": ["**/node_modules/**", "**/dist/**", "**/build/**"],
   "packageRules": [
     {
       "matchUpdateTypes": ["minor", "patch"],
@@ -19,5 +11,8 @@
       "groupSlug": "minor-patch"
     }
   ],
+  "lockFileMaintenance": {
+    "enabled": true
+  },
   "labels": ["dependencies"]
 }
