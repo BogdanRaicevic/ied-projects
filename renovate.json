@@ -14,5 +14,6 @@
   "lockFileMaintenance": {
     "enabled": true
   },
-  "labels": ["dependencies"]
+  "labels": ["dependencies"],
+  "schedule": ["at any time"]
 }
