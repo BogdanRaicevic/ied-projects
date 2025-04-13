@@ -1,49 +1,23 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": ["config:base"],
+  "packageManager": "pnpm",
+  "pnpm": {
+    "enabled": true
+  },
+  "dependencyDashboard": true,
+  "enabledManagers": ["pnpm"],
+  "monorepo": {
+    "enabled": true
+  },
+  "baseBranches": ["main"],
+  "ignorePaths": ["**/dist/**", "**/build/**"],
   "packageRules": [
     {
-      "matchPackagePatterns": ["*"],
       "matchUpdateTypes": ["minor", "patch"],
-      "groupName": "all non-major dependencies",
-      "groupSlug": "all-minor-patch"
-    },
-    {
-      "matchPackagePatterns": ["*"],
-      "matchUpdateTypes": ["major"],
-      "groupName": "all major dependencies",
-      "groupSlug": "all-major"
+      "groupName": "minor and patch updates",
+      "groupSlug": "minor-patch"
     }
   ],
-  "lockFileMaintenance": {
-    "enabled": true,
-    "automerge": true,
-    "automergeType": "pr",
-    "platformAutomerge": true
-  },
-  "rangeStrategy": "pin",
-  "labels": ["dependencies"],
-  "vulnerabilityAlerts": {
-    "enabled": true,
-    "labels": ["security"]
-  },
-  "pnpm": {
-    "fileMatch": ["(^|/)pnpm-lock\\.yaml$"]
-  },
-  "ignorePaths": [
-    "**/node_modules/**",
-    "**/bower_components/**",
-    "**/vendor/**",
-    "**/examples/**",
-    "**/__tests__/**",
-    "**/test/**",
-    "**/tests/**"
-  ],
-  "enabledManagers": ["npm", "pnpm"],
-  "packageFiles": [
-    "ied-be/package.json",
-    "ied-fe/package.json",
-    "ied-shared/package.json",
-    "mongo-migrator/package.json"
-  ]
+  "labels": ["dependencies"]
 }
