@@ -34,7 +34,7 @@
     "cors": "^2.8.5",
     "cron": "^4.1.4",
     "date-fns": "^4.1.0",
-    "docxtemplater": "^3.55.9",
+    "docxtemplater": "^3.60.1",
     "dotenv": "^16.5.0",
     "express": "^4.21.2",
     "ied-shared": "workspace:^",
