@@ -218,7 +218,7 @@ importers:
         specifier: ^8.7.1
         version: 8.12.1
       mysql2:
-        specifier: ^3.11.3
+        specifier: ^3.13.0
         version: 3.13.0
       ts-node:
         specifier: ^10.9.2
