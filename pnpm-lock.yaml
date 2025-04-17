@@ -9,10 +9,10 @@ importers:
   ied-be:
     dependencies:
       '@aws-sdk/client-s3':
-        specifier: ^3.744.0
+        specifier: ^3.758.0
         version: 3.758.0
       '@aws-sdk/lib-storage':
-        specifier: ^3.744.0
+        specifier: ^3.758.0
         version: 3.758.0(@aws-sdk/client-s3@3.758.0)
       '@clerk/express':
         specifier: ^1.4.6
@@ -3264,8 +3264,8 @@ snapshots:
   '@clerk/clerk-js@5.56.0(@types/react@18.3.18)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
     dependencies:
       '@clerk/localizations': 3.12.0
-      '@clerk/shared': 3.2.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-      '@clerk/types': 4.49.1
+      '@clerk/shared': 3.7.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@clerk/types': 4.54.1
       '@coinbase/wallet-sdk': 4.3.0
       '@emotion/cache': 11.11.0
       '@emotion/react': 11.11.1(@types/react@18.3.18)(react@18.3.1)
@@ -3310,7 +3310,7 @@ snapshots:
 
   '@clerk/localizations@3.12.0':
     dependencies:
-      '@clerk/types': 4.49.1
+      '@clerk/types': 4.54.1
 
   '@clerk/shared@3.0.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
     dependencies:
