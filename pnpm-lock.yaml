@@ -27,7 +27,7 @@ importers:
         specifier: ^4.1.0
         version: 4.1.0
       docxtemplater:
-        specifier: ^3.55.9
+        specifier: ^3.60.1
         version: 3.60.1
       dotenv:
         specifier: ^16.5.0
