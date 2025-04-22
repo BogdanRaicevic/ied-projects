@@ -117,28 +117,25 @@ export const exportSearchedZaposleniData = async (
 
     if (plainObject.zaposleni) {
       for (const z of plainObject.zaposleni) {
-        const isZaposleniInSeminar = queryParameters.seminari
-          ? seminarAttendees?.includes(z._id.toString())
-          : true;
+        const isZaposleniInSeminar = seminarAttendees?.includes(z._id.toString());
 
         const isRadnoMestoNegated = queryParameters.negacije?.includes("negate-radno-mesto");
         const isRadnoMestoIncluded = queryParameters.radnaMesta.includes(z.radno_mesto);
         const hasNoRadnaMestaFilter = queryParameters.radnaMesta.length === 0;
 
         // Skip if zaposleni is not in the specified seminars
-        if (!isZaposleniInSeminar) {
+        if (queryParameters.seminari.length > 0 && !isZaposleniInSeminar) {
           continue;
         }
 
         // Handle negated radno mesto case
         if (isRadnoMestoNegated && !isRadnoMestoIncluded) {
-          res += `${z._id}, ${z.ime} ${z.prezime},${z.e_mail}, ${z.radno_mesto}\n`;
+          res += `${z.ime} ${z.prezime},${z.e_mail}, ${z.radno_mesto}\n`;
           continue;
         }
 
-        // Handle included radno mesto case
         if (hasNoRadnaMestaFilter || isRadnoMestoIncluded) {
-          res += `${z._id}, ${z.ime} ${z.prezime},${z.e_mail}, ${z.radno_mesto}\n`;
+          res += `${z.ime} ${z.prezime},${z.e_mail}, ${z.radno_mesto}\n`;
         }
       }
     }
