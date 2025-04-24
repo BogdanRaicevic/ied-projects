@@ -1,63 +1,52 @@
-import { useEffect, useCallback } from "react";
-import type { Racun } from "../types";
+import { useEffect } from "react";
+import { useRacunStore } from "../store/useRacunStore";
 
-interface UseRacunCalculationsProps {
-  racun: Partial<Racun>;
-  onCalculationsUpdate: (calculations: Partial<Racun>) => void;
-}
+export const useRacunCalculations = () => {
+  const { seminar, stopaPdv, avansBezPdv } = useRacunStore((state) => state.racunData);
+  const updateCalculations = useRacunStore((state) => state.updateCalculations);
 
-export const useRacunCalculations = ({
-  racun,
-  onCalculationsUpdate,
-}: UseRacunCalculationsProps) => {
-  const calculateValues = useCallback(() => {
-    const onlineCena = Number(racun.onlineCena) || 0;
-    const offlineCena = Number(racun.offlineCena) || 0;
-    const brojUcesnikaOnline = Number(racun?.brojUcesnikaOnline) || 0;
-    const brojUcesnikaOffline = Number(racun?.brojUcesnikaOffline) || 0;
-    const popustOnline = Number(racun?.popustOnline) || 0;
-    const popustOffline = Number(racun?.popustOffline) || 0;
-    const stopaPdv = Number(racun.stopaPdv) || 0;
+  useEffect(() => {
+    const onlineCenaNum = Number(seminar.onlineCena) || 0;
+    const offlineCenaNum = Number(seminar.offlineCena) || 0;
+    const brojUcesnikaOnlineNum = Number(seminar.brojUcesnikaOnline) || 0;
+    const brojUcesnikaOfflineNum = Number(seminar.brojUcesnikaOffline) || 0;
+    const popustOnlineNum = Number(seminar.popustOnline) || 0;
+    const popustOfflineNum = Number(seminar.popustOffline) || 0;
+    const stopaPdvNum = Number(stopaPdv) || 0;
+    const avansBezPdvNum = Number(seminar.avansBezPdv) || 0;
 
     const onlineUkupnaNaknada =
-      onlineCena * brojUcesnikaOnline * (1 - popustOnline / 100) * (1 + stopaPdv / 100);
+      onlineCenaNum * brojUcesnikaOnlineNum * (1 - popustOnlineNum / 100) * (1 + stopaPdvNum / 100);
 
     const offlineUkupnaNaknada =
-      offlineCena * brojUcesnikaOffline * (1 - popustOffline / 100) * (1 + stopaPdv / 100);
+      offlineCenaNum *
+      brojUcesnikaOfflineNum *
+      (1 - popustOfflineNum / 100) *
+      (1 + stopaPdvNum / 100);
 
-    const onlinePoreskaOsnovica = onlineCena * brojUcesnikaOnline * (1 - popustOnline / 100);
-    const offlinePoreskaOsnovica = offlineCena * brojUcesnikaOffline * (1 - popustOffline / 100);
-    const avansPdv = (Number(racun.avansBezPdv) * stopaPdv) / 100;
-    const avans = Number(racun.avansBezPdv) + Number(avansPdv);
+    const onlinePoreskaOsnovica =
+      onlineCenaNum * brojUcesnikaOnlineNum * (1 - popustOnlineNum / 100);
+    const offlinePoreskaOsnovica =
+      offlineCenaNum * brojUcesnikaOfflineNum * (1 - popustOfflineNum / 100);
+    const avansPdv = (avansBezPdvNum * stopaPdvNum) / 100;
+    const avans = avansBezPdvNum + avansPdv;
 
-    return {
+    const calculations = {
       onlineUkupnaNaknada,
       offlineUkupnaNaknada,
-      pdvOffline: (offlinePoreskaOsnovica * stopaPdv) / 100,
-      pdvOnline: (onlinePoreskaOsnovica * stopaPdv) / 100,
       onlinePoreskaOsnovica,
       offlinePoreskaOsnovica,
+      pdvOnline: (onlinePoreskaOsnovica * stopaPdvNum) / 100,
+      pdvOffline: (offlinePoreskaOsnovica * stopaPdvNum) / 100,
       ukupnaNaknada: onlineUkupnaNaknada + offlineUkupnaNaknada - avans,
       ukupanPdv:
-        (offlinePoreskaOsnovica * stopaPdv) / 100 +
-        (onlinePoreskaOsnovica * stopaPdv) / 100 -
+        (offlinePoreskaOsnovica * stopaPdvNum) / 100 +
+        (onlinePoreskaOsnovica * stopaPdvNum) / 100 -
         avansPdv,
       avansPdv,
       avans,
     };
-  }, [
-    racun.onlineCena,
-    racun.offlineCena,
-    racun.brojUcesnikaOnline,
-    racun.brojUcesnikaOffline,
-    racun.popustOnline,
-    racun.popustOffline,
-    racun.stopaPdv,
-    racun.avansBezPdv,
-  ]);
 
-  useEffect(() => {
-    const calculations = calculateValues();
-    onCalculationsUpdate(calculations);
-  }, [calculateValues, onCalculationsUpdate]);
+    updateCalculations(calculations);
+  }, [seminar, stopaPdv, avansBezPdv, updateCalculations]);
 };

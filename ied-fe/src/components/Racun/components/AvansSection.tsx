@@ -10,17 +10,15 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import type { Racun } from "./../types";
 import { formatToRSDNumber } from "../../../utils/helpers";
+import { useRacunStore } from "../store/useRacunStore";
 
-interface AvansSectionProps {
-  racun: Partial<Racun>;
-  onRacunChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
-}
+export const AvansSection = () => {
+  const racunData = useRacunStore((state) => state.racunData);
+  const updateNestedField = useRacunStore((state) => state.updateNestedField);
 
-export const AvansSection = ({ racun, onRacunChange }: AvansSectionProps) => {
-  const avansPdv = (Number(racun.avansBezPdv ?? 0) * Number(racun.stopaPdv)) / 100;
-  const avans = Number(racun.avansBezPdv) + Number(avansPdv);
+  const avansPdv = (Number(racunData.seminar.avansBezPdv ?? 0) * Number(racunData.stopaPdv)) / 100;
+  const avans = Number(racunData.seminar.avansBezPdv) + Number(avansPdv);
 
   return (
     <Box>
@@ -56,20 +54,20 @@ export const AvansSection = ({ racun, onRacunChange }: AvansSectionProps) => {
                   <TextField
                     variant="filled"
                     name="nazivSeminara"
-                    value={racun.nazivSeminara}
-                    onChange={onRacunChange}
+                    value={racunData.seminar.naziv || ""}
+                    onChange={(e) => updateNestedField("seminar.naziv", e.target.value)}
                   />
                 </TableCell>
                 <TableCell align="left">
                   <TextField
                     variant="filled"
                     name="avansBezPdv"
-                    value={racun.avansBezPdv === 0 ? "" : racun.avansBezPdv}
-                    onChange={onRacunChange}
+                    value={racunData.seminar.avansBezPdv ?? 0}
+                    onChange={(e) => updateNestedField("seminar.avansBezPdv", e.target.value)}
                   />
                 </TableCell>
                 <TableCell align="left">
-                  <Typography>{racun.stopaPdv}%</Typography>
+                  <Typography>{racunData.stopaPdv}%</Typography>
                 </TableCell>
                 <TableCell align="left">
                   <Typography>{formatToRSDNumber(avansPdv)}</Typography>

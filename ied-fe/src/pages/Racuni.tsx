@@ -4,27 +4,25 @@ import { updateRacunTemplate } from "../api/docx.api";
 import { useLocation } from "react-router-dom";
 import { CreatePredracunForm } from "../components/Racun/CreatePredracunForm";
 import { fetchSingleFirma } from "../api/firma.api";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import type { FirmaType, PrijavaNaSeminar, SeminarType } from "../schemas/firmaSchemas";
 import { fetchSeminarById } from "../api/seminari.api";
-import { IzdavacRacuna, Racun } from "../components/Racun/types";
-import {
-  IzdavacRacunaSection,
-  IzdavacRacunaSectionRef,
-} from "../components/Racun/components/IzdavacRacunaSection";
-import PostAddIcon from "@mui/icons-material/PostAdd";
-import { CreateAvansForm } from "../components/Racun/CreateAvansForm";
 import { RacunTypes } from "@ied-shared/constants/racun";
 import { CreateKonacniRacunForm } from "../components/Racun/CreateKonacniRacunForm";
+import { useRacunStore } from "../components/Racun/store/useRacunStore";
+import { IzdavacRacunaSection } from "../components/Racun/components/IzdavacRacunaSection";
+import { CreateAvansForm } from "../components/Racun/CreateAvansForm";
+import PostAddIcon from "@mui/icons-material/PostAdd";
+import { useRacunCalculations } from "../components/Racun/hooks/useRacunCalculations";
 
 export default function Racuni() {
   const [firma, setFirma] = useState<FirmaType | null>(null);
   const [seminar, setSeminar] = useState<SeminarType | null>(null);
-  const [selectedFirmaData, setSelectedFirmaData] = useState<IzdavacRacuna | null>(null);
   const [tabValue, setTabValue] = useState<RacunTypes>(RacunTypes.PREDRACUN);
 
-  const formRef = useRef<{ getRacunData: () => Partial<Racun> }>(null);
-  const izdavacRacunaRef = useRef<IzdavacRacunaSectionRef>(null);
+  // Get store actions
+  const updateNestedField = useRacunStore((state) => state.updateNestedField);
+  const getCompleteRacunData = useRacunStore((state) => state.getCompleteRacunData);
 
   const location = useLocation();
   const prijave: PrijavaNaSeminar[] = location.state?.prijave || [];
@@ -51,56 +49,66 @@ export default function Racuni() {
     fetchFirma();
   }, [prijave]);
 
-  const primalacRacuna = {
-    naziv: firma?.naziv_firme || "",
-    adresa: firma?.adresa || "",
-    pib: firma?.PIB || "",
-    mesto: firma?.mesto || "",
-    maticniBroj: firma?.maticni_broj || "",
-    onlineCena: seminar?.onlineCena || "",
-    offlineCena: seminar?.offlineCena || "",
-    brojUcesnikaOnline: prijave.filter((p) => p.prisustvo === "online").length || 0,
-    brojUcesnikaOffline: prijave.filter((p) => p.prisustvo === "offline").length || 0,
-    ukupanBrojUcesnika: prijave.length || 0,
-    nazivSeminara: seminar?.naziv || "",
-    datumPrometaUsluge: seminar?.datum || new Date(),
-    lokacijaSeminara: seminar?.lokacija || "",
-  };
+  // Update store with data
+  useEffect(() => {
+    // Instead of updating the whole object at once, you can update nested properties individually
+    if (seminar) {
+      updateNestedField("seminar.onlineCena", seminar.onlineCena || 0);
+      updateNestedField("seminar.offlineCena", seminar.offlineCena || 0);
+      updateNestedField("seminar.naziv", seminar.naziv || "");
+      updateNestedField("seminar.datum", seminar.datum || new Date());
+      updateNestedField("seminar.lokacija", seminar.lokacija || "");
+    }
+
+    updateNestedField(
+      "seminar.brojUcesnikaOnline",
+      prijave.filter((p) => p.prisustvo === "online").length || 0
+    );
+    updateNestedField(
+      "seminar.brojUcesnikaOffline",
+      prijave.filter((p) => p.prisustvo === "offline").length || 0
+    );
+
+    if (firma) {
+      updateNestedField("primalacRacuna.naziv", firma.naziv_firme || "");
+      updateNestedField("primalacRacuna.adresa", firma.adresa || "");
+      updateNestedField("primalacRacuna.pib", firma.PIB || "");
+      updateNestedField("primalacRacuna.mesto", firma.mesto || "");
+      updateNestedField("primalacRacuna.maticniBroj", firma.maticni_broj || "");
+    }
+  }, [firma, seminar, prijave, updateNestedField]);
 
   const handleDocxUpdate = async () => {
-    if (formRef.current && izdavacRacunaRef.current) {
-      const izdavacRacunaData = izdavacRacunaRef.current.getIzdavacRacunaData();
-      const tekuciRacun = izdavacRacunaRef.current.getTekuciRacun();
-      const formData = formRef.current.getRacunData();
+    const racunData = getCompleteRacunData();
+    console.log("racunData", racunData);
 
-      const racunData = {
-        ...formData,
-        izdavacRacuna: {
-          ...izdavacRacunaData,
-          tekuciRacun,
-        },
-      } as Partial<Racun>;
-
-      await updateRacunTemplate(racunData, tabValue);
-    }
+    await updateRacunTemplate(racunData, tabValue);
   };
-
-  const handleFirmaChange = useCallback((data: IzdavacRacuna | null) => {
-    setSelectedFirmaData(data);
-  }, []);
 
   const handleTabChange = (_event: React.SyntheticEvent, newValue: RacunTypes) => {
     setTabValue(newValue);
   };
 
+  // Function to render the appropriate form based on current tab
+  const renderActiveForm = () => {
+    switch (tabValue) {
+      case RacunTypes.PREDRACUN:
+        return <CreatePredracunForm />;
+      case RacunTypes.AVANSNI_RACUN:
+        return <CreateAvansForm />;
+      case RacunTypes.KONACNI_RACUN:
+        return <CreateKonacniRacunForm />;
+      default:
+        return <CreatePredracunForm />;
+    }
+  };
+
+  useRacunCalculations();
+
   return (
     <>
       <PageTitle title={"Racuni"} />
-      <IzdavacRacunaSection
-        ref={izdavacRacunaRef}
-        selectedFirmaData={selectedFirmaData}
-        onFirmaChange={handleFirmaChange}
-      />
+      <IzdavacRacunaSection />
 
       <Box sx={{ borderBottom: 1, borderColor: "divider", mt: 3, mb: 3 }}>
         <Tabs value={tabValue} onChange={handleTabChange} aria-label="basic tabs">
@@ -110,33 +118,10 @@ export default function Racuni() {
           {/*<Tab label="Račun" value={RacunTypes.RACUN} /> */}
         </Tabs>
       </Box>
-      <Box role="tabpanel" hidden={tabValue !== RacunTypes.PREDRACUN}>
-        <CreatePredracunForm
-          primalacRacuna={primalacRacuna}
-          selectedFirmaData={selectedFirmaData}
-          selectedTekuciRacun={izdavacRacunaRef.current?.getTekuciRacun() || ""}
-          ref={formRef}
-        />
-      </Box>
-      <Box role="tabpanel" hidden={tabValue !== RacunTypes.AVANSNI_RACUN}>
-        <CreateAvansForm
-          primalacRacuna={primalacRacuna}
-          selectedFirmaData={selectedFirmaData}
-          selectedTekuciRacun={izdavacRacunaRef.current?.getTekuciRacun() || ""}
-          ref={formRef}
-        />
-      </Box>
-      <Box role="tabpanel" hidden={tabValue !== RacunTypes.KONACNI_RACUN}>
-        <CreateKonacniRacunForm
-          primalacRacuna={primalacRacuna}
-          selectedFirmaData={selectedFirmaData}
-          selectedTekuciRacun={izdavacRacunaRef.current?.getTekuciRacun() || ""}
-          ref={formRef}
-        />
-      </Box>
-      <Box role="tabpanel" hidden={tabValue !== RacunTypes.RACUN}>
-        U izradi Račun
-      </Box>
+
+      {/* Render only the active form instead of hiding inactive ones */}
+      {renderActiveForm()}
+
       <Button
         sx={{ mt: 3, mb: 3 }}
         onClick={handleDocxUpdate}

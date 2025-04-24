@@ -8,7 +8,6 @@ export type PrimalacRacuna = {
   offlineCena: number | string;
   brojUcesnikaOnline: number | string;
   brojUcesnikaOffline: number | string;
-  ukupanBrojUcesnika: number | string;
   nazivSeminara?: string;
   datumPrometaUsluge?: string | Date;
   lokacijaSeminara?: string;

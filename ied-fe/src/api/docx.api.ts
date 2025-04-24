@@ -3,7 +3,7 @@ import { env } from "../utils/envVariables";
 import type { Racun } from "../components/Racun/types";
 import { RacunTypes } from "@ied-shared/constants/racun";
 
-export const updateRacunTemplate = async (racunData: Racun, racunType: RacunTypes) => {
+export const updateRacunTemplate = async (racunData: any, racunType: RacunTypes) => {
   const payload = {
     ...racunData,
     racunType,
@@ -27,7 +27,7 @@ export const updateRacunTemplate = async (racunData: Racun, racunType: RacunType
     const url = window.URL.createObjectURL(new Blob([response.data]));
     const link = document.createElement("a");
     link.href = url;
-    const fileName = `${racunType}_${sanitizeFilename(racunData.naziv)}_${sanitizeFilename(racunData.nazivSeminara)}_${new Date().toISOString().split("T")[0].replace(/-/g, "")}.docx`;
+    const fileName = `${racunType}_${sanitizeFilename(racunData.primalacRacuna.naziv)}_${sanitizeFilename(racunData.seminar.naziv)}_${new Date().toISOString().split("T")[0].replace(/-/g, "")}.docx`;
 
     link.setAttribute("download", `${fileName}.docx`);
     document.body.appendChild(link);

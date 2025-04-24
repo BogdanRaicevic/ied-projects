@@ -3,38 +3,39 @@ import { Document, Schema, model } from "mongoose";
 const racunSchema = new Schema(
   {
     izdavacRacuna: {
-      naziv: { type: String, required: true },
-      kontaktTelefoni: { type: [String], required: true },
-      pib: { type: String, required: true },
-      maticniBroj: { type: String, required: true },
-      adresa: { type: String, required: true },
-      mesto: { type: String, required: true },
-      brojResenjaOEvidencijiZaPdv: { type: String, required: true },
-      tekuciRacun: { type: String, required: true },
+      naziv: { type: String, required: false },
+      kontaktTelefoni: { type: [String], required: false },
+      pib: { type: String, required: false },
+      maticniBroj: { type: String, required: false },
+      // TODO: Zasto imam i Adresu i mesto?
+      adresa: { type: String, required: false },
+      mesto: { type: String, required: false },
+      brojResenjaOEvidencijiZaPdv: { type: String, required: false },
+      tekuciRacun: { type: String, required: false },
     },
     tipRacuna: {
       type: String,
       enum: ["predracun", "racun", "avansniRacun", "konacniRacun"],
-      required: true,
+      required: false,
     },
     primalacRacuna: {
-      naziv: { type: String, required: true },
-      adresa: { type: String, required: true },
-      pib: { type: String, required: true },
-      maticniBroj: { type: String, required: true },
-      mesto: { type: String, required: true },
+      naziv: { type: String, required: false },
+      adresa: { type: String, required: false },
+      pib: { type: String, required: false },
+      maticniBroj: { type: String, required: false },
+      mesto: { type: String, required: false },
     },
-    nazivSeminara: { type: String, required: true },
-    datumOdrzavanjaSeminara: { type: Date, required: true },
-    datumPrometaUsluge: { type: Date, required: true },
-    jedinicaMere: { type: String, required: true },
+    nazivSeminara: { type: String, required: false },
+    datumOdrzavanjaSeminara: { type: Date, required: false },
+    datumPrometaUsluge: { type: Date, required: false },
+    jedinicaMere: { type: String, required: false },
     brojUcesnikaOnline: { type: Number, default: 0 },
     brojUcesnikaOffline: { type: Number, default: 0 },
     onlineCena: { type: Number, default: 0 },
     offlineCena: { type: Number, default: 0 },
     popustOnline: { type: Number, default: 0 },
     popustOffline: { type: Number, default: 0 },
-    stopaPdv: { type: Number, required: true },
+    stopaPdv: { type: Number, required: false },
     onlineUkupnaNaknada: { type: Number, default: 0 },
     offlineUkupnaNaknada: { type: Number, default: 0 },
     onlinePoreskaOsnovica: { type: Number, default: 0 },
@@ -43,11 +44,11 @@ const racunSchema = new Schema(
     avans: { type: Number, default: 0 },
     ukupnaNaknada: { type: Number, default: 0 },
     ukupanPdv: { type: Number, default: 0 },
-    rokZaUplatu: { type: Number, required: true },
+    rokZaUplatu: { type: Number, required: false },
     pozivNaBroj: {
       type: Number,
-      required: true,
-      unique: true,
+      required: false,
+      unique: false,
     },
     dateCreatedAt: { type: Date, default: Date.now },
     dateUpdatedAt: { type: Date, default: Date.now },
@@ -73,8 +74,8 @@ export type Racun = Document & {
   primalacRacuna: {
     naziv: string;
     adresa: string;
-    pib: string;
-    maticniBroj: string;
+    pib: number;
+    maticniBroj: number;
     mesto: string;
   };
   nazivSeminara: string;

@@ -10,13 +10,12 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import type { Racun } from "../types";
-interface OfflinePrisustvaSectionProps {
-  racun: Partial<Racun>;
-  onRacunChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
-}
+import { useRacunStore } from "../store/useRacunStore";
 
-export const OfflinePrisustvaSection = ({ racun, onRacunChange }: OfflinePrisustvaSectionProps) => {
+export const OfflinePrisustvaSection = () => {
+  const racunData = useRacunStore((state) => state.racunData);
+  const updateNestedField = useRacunStore((state) => state.updateNestedField);
+
   return (
     <Box>
       <Typography align="center" variant="h4" sx={{ mb: 3 }}>
@@ -49,24 +48,26 @@ export const OfflinePrisustvaSection = ({ racun, onRacunChange }: OfflinePrisust
                   <TextField
                     variant="filled"
                     name="nazivSeminara"
-                    value={racun.nazivSeminara}
-                    onChange={onRacunChange}
+                    value={racunData.seminar.naziv || ""}
+                    onChange={(e) => updateNestedField("seminar.naziv", e.target.value)}
                   />
                 </TableCell>
                 <TableCell align="left">
                   <TextField
                     variant="filled"
                     name="jedinicaMere"
-                    value={racun.jedinicaMere}
-                    onChange={onRacunChange}
+                    value={racunData.seminar.jedinicaMere || ""}
+                    onChange={(e) => updateNestedField("seminar.jedinicaMere", e.target.value)}
                   />
                 </TableCell>
                 <TableCell align="left">
                   <TextField
                     variant="filled"
                     name="brojUcesnikaOffline"
-                    value={racun.brojUcesnikaOffline}
-                    onChange={onRacunChange}
+                    value={racunData.seminar.brojUcesnikaOffline || ""}
+                    onChange={(e) =>
+                      updateNestedField("seminar.brojUcesnikaOffline", e.target.value)
+                    }
                   />
                 </TableCell>
               </TableRow>
@@ -75,7 +76,7 @@ export const OfflinePrisustvaSection = ({ racun, onRacunChange }: OfflinePrisust
           <Table sx={{ minWidth: 650 }} aria-label="simple table">
             <TableHead>
               <TableRow>
-                <TableCell>Cena u sali</TableCell>
+                <TableCell>Cena online</TableCell>
                 <TableCell>Popust</TableCell>
                 <TableCell>Poreska osnovica</TableCell>
                 <TableCell>Stopa PDV</TableCell>
@@ -93,8 +94,8 @@ export const OfflinePrisustvaSection = ({ racun, onRacunChange }: OfflinePrisust
                     sx={{ maxWidth: 100 }}
                     name="offlineCena"
                     variant="filled"
-                    value={racun.offlineCena}
-                    onChange={onRacunChange}
+                    value={racunData.seminar.offlineCena || ""}
+                    onChange={(e) => updateNestedField("seminar.offlineCena", e.target.value)}
                   />
                 </TableCell>
                 <TableCell align="left">
@@ -102,13 +103,13 @@ export const OfflinePrisustvaSection = ({ racun, onRacunChange }: OfflinePrisust
                     sx={{ maxWidth: 70 }}
                     name="popustOffline"
                     variant="filled"
-                    value={racun.popustOffline}
-                    onChange={onRacunChange}
+                    value={racunData.seminar.popustOffline || ""}
+                    onChange={(e) => updateNestedField("seminar.popustOffline", e.target.value)}
                   />
                 </TableCell>
                 <TableCell align="left">
                   <Typography>
-                    {Number(racun.offlinePoreskaOsnovica).toLocaleString("sr-RS", {
+                    {Number(racunData.calculations.offlinePoreskaOsnovica).toLocaleString("sr-RS", {
                       style: "currency",
                       currency: "RSD",
                       minimumFractionDigits: 2,
@@ -116,11 +117,11 @@ export const OfflinePrisustvaSection = ({ racun, onRacunChange }: OfflinePrisust
                   </Typography>
                 </TableCell>
                 <TableCell align="left">
-                  <Typography>{racun.stopaPdv}%</Typography>
+                  <Typography>{racunData.stopaPdv}%</Typography>
                 </TableCell>
                 <TableCell align="left">
                   <Typography>
-                    {Number(racun.pdvOffline).toLocaleString("sr-RS", {
+                    {Number(racunData.calculations.pdvOffline).toLocaleString("sr-RS", {
                       style: "currency",
                       currency: "RSD",
                       minimumFractionDigits: 2,
@@ -129,7 +130,7 @@ export const OfflinePrisustvaSection = ({ racun, onRacunChange }: OfflinePrisust
                 </TableCell>
                 <TableCell align="left">
                   <Typography>
-                    {Number(racun.offlineUkupnaNaknada).toLocaleString("sr-RS", {
+                    {Number(racunData.calculations.offlineUkupnaNaknada).toLocaleString("sr-RS", {
                       style: "currency",
                       currency: "RSD",
                       minimumFractionDigits: 2,
