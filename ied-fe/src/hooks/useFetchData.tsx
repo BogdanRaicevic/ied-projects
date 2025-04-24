@@ -7,6 +7,7 @@ import { fetchAllVelicineFirme } from "../api/velicina_firme.api";
 import { fetchAllStanjaFirme } from "../api/stanja_firme.api";
 import { fetchAllSeminars, fetchSeminari } from "../api/seminari.api";
 import { addMonths, subMonths } from "date-fns";
+import { getIzdavaciRacuna } from "../api/racuni.api";
 
 export function useFetchData() {
   const { data: delatnosti } = useQuery({
@@ -69,3 +70,14 @@ export function useFetchSeminari() {
 
   return { fetchedSeminars };
 }
+
+export const fetchIzdavaciRacuna = () => {
+  const { data: izdavaciRacuna } = useQuery({
+    queryKey: ["izdavaciRacuna"],
+    queryFn: () => {
+      return getIzdavaciRacuna();
+    },
+  });
+
+  return izdavaciRacuna;
+};

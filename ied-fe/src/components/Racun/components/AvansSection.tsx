@@ -53,7 +53,7 @@ export const AvansSection = () => {
                 <TableCell align="left">
                   <TextField
                     variant="filled"
-                    name="nazivSeminara"
+                    name="naziv"
                     value={racunData.seminar.naziv || ""}
                     onChange={(e) => updateNestedField("seminar.naziv", e.target.value)}
                   />

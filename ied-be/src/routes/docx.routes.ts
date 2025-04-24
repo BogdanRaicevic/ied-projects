@@ -6,7 +6,7 @@ import PizZip from "pizzip";
 import Docxtemplater from "docxtemplater";
 import { RacunTypes } from "@ied-shared/constants/racun";
 import { format } from "date-fns";
-// import { saveRacun } from "../services/racuni.service";
+import { saveRacun } from "../services/racuni.service";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -70,8 +70,8 @@ router.post("/modify-template", async (req, res) => {
     hasOffline: Number(req.body.seminar.brojUcesnikaOffline) > 0,
   };
 
-  console.log("flattenedData", racunData);
-  // await saveRacun(flattenedData);
+  console.log("racunData", racunData);
+  await saveRacun(racunData);
   // res.send(flattenedData);
   try {
     const content = fs.readFileSync(templatePath, "binary");

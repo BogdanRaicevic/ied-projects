@@ -1,6 +1,5 @@
 import axiosInstanceWithAuth from "./interceptors/auth";
 import { env } from "../utils/envVariables";
-import type { Racun } from "../components/Racun/types";
 import { RacunTypes } from "@ied-shared/constants/racun";
 
 export const updateRacunTemplate = async (racunData: any, racunType: RacunTypes) => {
