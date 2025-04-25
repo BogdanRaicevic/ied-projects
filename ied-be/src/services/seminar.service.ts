@@ -39,7 +39,7 @@ export const search = async (
 
   return {
     courser: Seminar.find(mongoQuery, { zaposleni: 0 })
-      .sort({ naziv_firme: 1 })
+      .sort({ datum: -1 })
       .skip(skip)
       .limit(pageSize)
       .cursor(),

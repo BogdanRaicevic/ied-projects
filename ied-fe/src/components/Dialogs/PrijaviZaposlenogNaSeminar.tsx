@@ -153,7 +153,6 @@ export default function PrijavaNaSeminarDialog({
               </RadioGroup>
             </FormControl>
             <Autocomplete
-              disablePortal
               options={seminari || []}
               getOptionLabel={(option) => `${format(option.datum, "dd.MM.yyyy")} - ${option.naziv}`}
               renderOption={(params, option) => (
