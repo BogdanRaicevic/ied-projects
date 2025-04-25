@@ -3,7 +3,7 @@ import { env } from "../utils/envVariables";
 import type { Racun } from "../components/Racun/types";
 import { RacunTypes } from "@ied-shared/constants/racun";
 
-export const updateRacunTemplate = async (racunData: Partial<Racun>, racunType: RacunTypes) => {
+export const updateRacunTemplate = async (racunData: Racun, racunType: RacunTypes) => {
   const payload = {
     ...racunData,
     racunType,
@@ -27,7 +27,7 @@ export const updateRacunTemplate = async (racunData: Partial<Racun>, racunType: 
     const url = window.URL.createObjectURL(new Blob([response.data]));
     const link = document.createElement("a");
     link.href = url;
-    const fileName = `${racunType}_${racunData.naziv?.trim()}_${racunData.nazivSeminara?.trim()}_${new Date().toISOString().split("T")[0].replace(/-/g, "")}.docx`;
+    const fileName = `${racunType}_${sanitizeFilename(racunData.naziv)}_${sanitizeFilename(racunData.nazivSeminara)}_${new Date().toISOString().split("T")[0].replace(/-/g, "")}.docx`;
 
     link.setAttribute("download", `${fileName}.docx`);
     document.body.appendChild(link);
@@ -38,4 +38,13 @@ export const updateRacunTemplate = async (racunData: Partial<Racun>, racunType: 
     console.error("Error generating document:", error);
     throw error; // Re-throw to handle in the component
   }
+};
+
+const sanitizeFilename = (str: string) => {
+  if (!str) return "";
+  // Remove characters that may cause issues in filenames and headers
+  return str
+    .trim()
+    .replace(/[^\w\s.-]/g, "_") // Replace non-alphanumeric chars except for some safe ones
+    .replace(/\s+/g, "_"); // Replace spaces with underscores
 };

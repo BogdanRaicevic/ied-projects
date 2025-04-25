@@ -41,4 +41,5 @@ export type Racun = PrimalacRacuna & {
   ukupanPdv: number;
   izdavacRacuna: IzdavacRacuna;
   avansBezPdv: number;
+  nazivSeminara: string;
 };
