@@ -4,8 +4,8 @@ import { updateRacunTemplate } from "../api/docx.api";
 import { useLocation } from "react-router-dom";
 import { CreatePredracunForm } from "../components/Racun/CreatePredracunForm";
 import { fetchSingleFirma } from "../api/firma.api";
-import { useEffect, useState } from "react";
-import type { FirmaType, PrijavaNaSeminar, SeminarType } from "../schemas/firmaSchemas";
+import { useEffect, useMemo, useState } from "react";
+import { type FirmaType, type SeminarType, PrijavaNaSeminar } from "../schemas/firmaSchemas";
 import { fetchSeminarById } from "../api/seminari.api";
 import { RacunTypes } from "@ied-shared/constants/racun";
 import { CreateKonacniRacunForm } from "../components/Racun/CreateKonacniRacunForm";
@@ -25,7 +25,10 @@ export default function Racuni() {
   const getCompleteRacunData = useRacunStore((state) => state.getCompleteRacunData);
 
   const location = useLocation();
-  const prijave: PrijavaNaSeminar[] = location.state?.prijave || [];
+  const prijave: PrijavaNaSeminar[] = useMemo(
+    () => location.state?.prijave || [],
+    [location.state?.prijave]
+  );
 
   useEffect(() => {
     const fetchFirma = async () => {
@@ -49,34 +52,56 @@ export default function Racuni() {
     fetchFirma();
   }, [prijave]);
 
-  // Update store with data
+  // --- Extract Primitives and Derived Values ---
+  const seminarOnlineCena = seminar?.onlineCena;
+  const seminarOfflineCena = seminar?.offlineCena;
+  const seminarNaziv = seminar?.naziv;
+  const seminarDatum = seminar?.datum; // Note: Date objects might still cause issues if new instances are created. Consider storing as string/timestamp if needed.
+  const seminarLokacija = seminar?.lokacija;
+
+  const firmaNaziv = firma?.naziv_firme;
+  const firmaAdresa = firma?.adresa;
+  const firmaPIB = firma?.PIB;
+  const firmaMesto = firma?.mesto;
+  const firmaMaticniBroj = firma?.maticni_broj;
+
+  const onlineCount = prijave.filter((p) => p.prisustvo === "online").length || 0;
+  const offlineCount = prijave.filter((p) => p.prisustvo === "offline").length || 0;
+  // --- End Primitives Extraction ---
+
   useEffect(() => {
-    // Instead of updating the whole object at once, you can update nested properties individually
-    if (seminar) {
-      updateNestedField("seminar.onlineCena", seminar.onlineCena || 0);
-      updateNestedField("seminar.offlineCena", seminar.offlineCena || 0);
-      updateNestedField("seminar.naziv", seminar.naziv || "");
-      updateNestedField("seminar.datum", seminar.datum || new Date());
-      updateNestedField("seminar.lokacija", seminar.lokacija || "");
+    if (seminar !== null) {
+      updateNestedField("seminar.onlineCena", seminarOnlineCena || 0);
+      updateNestedField("seminar.offlineCena", seminarOfflineCena || 0);
+      updateNestedField("seminar.naziv", seminarNaziv || "");
+      updateNestedField("seminar.datum", seminarDatum || new Date());
+      updateNestedField("seminar.lokacija", seminarLokacija || "");
     }
 
-    updateNestedField(
-      "seminar.brojUcesnikaOnline",
-      prijave.filter((p) => p.prisustvo === "online").length || 0
-    );
-    updateNestedField(
-      "seminar.brojUcesnikaOffline",
-      prijave.filter((p) => p.prisustvo === "offline").length || 0
-    );
+    updateNestedField("seminar.brojUcesnikaOnline", onlineCount);
+    updateNestedField("seminar.brojUcesnikaOffline", offlineCount);
 
-    if (firma) {
-      updateNestedField("primalacRacuna.naziv", firma.naziv_firme || "");
-      updateNestedField("primalacRacuna.adresa", firma.adresa || "");
-      updateNestedField("primalacRacuna.pib", firma.PIB || "");
-      updateNestedField("primalacRacuna.mesto", firma.mesto || "");
-      updateNestedField("primalacRacuna.maticniBroj", firma.maticni_broj || "");
+    if (firma !== null) {
+      updateNestedField("primalacRacuna.naziv", firmaNaziv || "");
+      updateNestedField("primalacRacuna.adresa", firmaAdresa || "");
+      updateNestedField("primalacRacuna.pib", firmaPIB || "");
+      updateNestedField("primalacRacuna.mesto", firmaMesto || "");
+      updateNestedField("primalacRacuna.maticniBroj", firmaMaticniBroj || "");
     }
-  }, [firma, seminar, prijave, updateNestedField]);
+  }, [
+    seminarOnlineCena,
+    seminarOfflineCena,
+    seminarNaziv,
+    seminarDatum,
+    seminarLokacija,
+    onlineCount,
+    offlineCount,
+    firmaNaziv,
+    firmaAdresa,
+    firmaPIB,
+    firmaMesto,
+    firmaMaticniBroj,
+  ]);
 
   const handleDocxUpdate = async () => {
     const racunData = getCompleteRacunData();

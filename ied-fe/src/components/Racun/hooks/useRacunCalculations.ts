@@ -2,18 +2,28 @@ import { useEffect } from "react";
 import { useRacunStore } from "../store/useRacunStore";
 
 export const useRacunCalculations = () => {
-  const { seminar, stopaPdv, avansBezPdv } = useRacunStore((state) => state.racunData);
+  const {
+    seminar: {
+      onlineCena,
+      offlineCena,
+      brojUcesnikaOnline,
+      brojUcesnikaOffline,
+      popustOnline,
+      popustOffline,
+      avansBezPdv,
+    },
+  } = useRacunStore((state) => state.racunData);
   const updateCalculations = useRacunStore((state) => state.updateCalculations);
 
   useEffect(() => {
-    const onlineCenaNum = Number(seminar.onlineCena) || 0;
-    const offlineCenaNum = Number(seminar.offlineCena) || 0;
-    const brojUcesnikaOnlineNum = Number(seminar.brojUcesnikaOnline) || 0;
-    const brojUcesnikaOfflineNum = Number(seminar.brojUcesnikaOffline) || 0;
-    const popustOnlineNum = Number(seminar.popustOnline) || 0;
-    const popustOfflineNum = Number(seminar.popustOffline) || 0;
-    const stopaPdvNum = Number(stopaPdv) || 0;
-    const avansBezPdvNum = Number(seminar.avansBezPdv) || 0;
+    const onlineCenaNum = Number(onlineCena) || 0;
+    const offlineCenaNum = Number(offlineCena) || 0;
+    const brojUcesnikaOnlineNum = Number(brojUcesnikaOnline) || 0;
+    const brojUcesnikaOfflineNum = Number(brojUcesnikaOffline) || 0;
+    const popustOnlineNum = Number(popustOnline) || 0;
+    const popustOfflineNum = Number(popustOffline) || 0;
+    const stopaPdvNum = 20;
+    const avansBezPdvNum = Number(avansBezPdv) || 0;
 
     const onlineUkupnaNaknada =
       onlineCenaNum * brojUcesnikaOnlineNum * (1 - popustOnlineNum / 100) * (1 + stopaPdvNum / 100);
@@ -48,5 +58,14 @@ export const useRacunCalculations = () => {
     };
 
     updateCalculations(calculations);
-  }, [seminar, stopaPdv, avansBezPdv, updateCalculations]);
+  }, [
+    onlineCena,
+    offlineCena,
+    brojUcesnikaOnline,
+    brojUcesnikaOffline,
+    popustOnline,
+    popustOffline,
+    avansBezPdv,
+    avansBezPdv,
+  ]);
 };
