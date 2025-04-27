@@ -71,13 +71,11 @@ export function useFetchSeminari() {
   return { fetchedSeminars };
 }
 
-export const fetchIzdavaciRacuna = () => {
-  const { data: izdavaciRacuna } = useQuery({
+export const useFetchIzdavaciRacuna = () => {
+  return useQuery({
     queryKey: ["izdavaciRacuna"],
     queryFn: () => {
       return getIzdavaciRacuna();
     },
   });
-
-  return izdavaciRacuna;
 };

@@ -1,64 +1,51 @@
 import { Grid2, Paper, TextField, Box, Autocomplete } from "@mui/material";
-import SelectFirma from "../SelectFirma";
+import SelectIzdavacRacuna from "../SelectIzdavacRacuna";
 import { useRacunStore } from "../store/useRacunStore";
-import { fetchIzdavaciRacuna } from "../../../hooks/useFetchData";
+import { useFetchIzdavaciRacuna } from "../../../hooks/useFetchData";
+import { useEffect, useMemo } from "react";
 
 export const IzdavacRacunaSection = () => {
-  const izdavacRacuna = useRacunStore((state) => state.izdavacRacuna);
-  const setIzdavacRacuna = useRacunStore((state) => state.setIzdavacRacuna);
-  const tekuciRacun = useRacunStore((state) => state.selectedTekuciRacun);
+  const selectedIzdavac = useRacunStore((state) => state.izdavacRacuna);
+  const storeTekuciRacun = useRacunStore((state) => state.selectedTekuciRacun);
   const setTekuciRacun = useRacunStore((state) => state.setTekuciRacun);
+
+  const { data: allIzdavaciData, isLoading } = useFetchIzdavaciRacuna();
+
+  const currentIzdavacData = useMemo(() => {
+    if (isLoading || !allIzdavaciData || !selectedIzdavac) {
+      return null;
+    }
+
+    return allIzdavaciData?.find(
+      (f: { id: string; tekuciRacuni: string[] }) => f.id === selectedIzdavac
+    );
+  }, [selectedIzdavac, isLoading, allIzdavaciData]);
+
+  const tekuciRacuniOptions = currentIzdavacData?.tekuciRacuni || [];
+
+  useEffect(() => {
+    if (selectedIzdavac) {
+      setTekuciRacun("");
+    }
+  }, [selectedIzdavac, setTekuciRacun]);
+
+  if (isLoading) {
+    return <div>Loading Firma data...</div>;
+  }
 
   return (
     <Grid2 component={Paper} size={12} container>
       <Grid2 size={7}>
         <Box sx={{ padding: "1rem" }}>
-          <TextField
-            fullWidth
-            variant="filled"
-            label="Podaci o izdavaocu računa"
-            value={izdavacRacuna?.naziv ?? ""}
-            sx={{ mb: 2 }}
-          />
-          <TextField
-            fullWidth
-            variant="filled"
-            label="Kontakt telefoni"
-            value={izdavacRacuna?.kontaktTelefoni.join(", ") ?? ""}
-            sx={{ mb: 2 }}
-          />
-          <TextField
-            fullWidth
-            variant="filled"
-            label="PIB"
-            value={izdavacRacuna?.pib ?? ""}
-            sx={{ mb: 2 }}
-          />
-          <TextField
-            fullWidth
-            variant="filled"
-            label="Matični broj"
-            value={izdavacRacuna?.maticniBroj ?? ""}
-            sx={{ mb: 2 }}
-          />
-          <TextField
-            fullWidth
-            variant="filled"
-            label="Broj rešenja o evidenciji za PDV"
-            value={izdavacRacuna?.brojResenjaOEvidencijiZaPDV ?? ""}
-            sx={{ mb: 2 }}
-          />
           <Autocomplete
             fullWidth
-            options={izdavacRacuna?.tekuciRacuni ?? []}
-            value={tekuciRacun}
+            options={tekuciRacuniOptions}
+            value={storeTekuciRacun || null}
             renderInput={(params) => (
               <TextField {...params} variant="filled" label="Tekući račun" sx={{ mb: 2 }} />
             )}
             onChange={(_, newValue) => {
-              if (newValue) {
-                setTekuciRacun(newValue);
-              }
+              setTekuciRacun(newValue || "");
             }}
           />
         </Box>
@@ -73,12 +60,7 @@ export const IzdavacRacunaSection = () => {
             p: 1,
           }}
         >
-          <SelectFirma
-            onFirmaChange={(data) => {
-              setIzdavacRacuna(data);
-              setTekuciRacun(data.tekuciRacuni[0]);
-            }}
-          />
+          <SelectIzdavacRacuna />
         </Box>
       </Grid2>
     </Grid2>

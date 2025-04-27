@@ -68,7 +68,7 @@ const initialRacunData: Partial<any> = {
 
 export const useRacunStore = create<RacunState>((set, get) => ({
   racunData: initialRacunData,
-  izdavacRacuna: null,
+  izdavacRacuna: "ied",
   selectedTekuciRacun: "",
 
   updateRacunData: (data) =>
