@@ -14,16 +14,12 @@ const updateNestedProperty = (obj: any, path: string[], value: any): any => {
 interface RacunState {
   // Core data
   racunData: Partial<any>;
-  izdavacRacuna: any | null;
-  selectedTekuciRacun: string;
 
   // Actions
   updateRacunData: (data: Partial<any>) => void;
   updateNestedField: (fieldPath: string, value: any) => void;
   updateCalculations: (calculations: Partial<any>) => void;
   updateField: (field: keyof any, value: any) => void;
-  setIzdavacRacuna: (data: any | null) => void;
-  setTekuciRacun: (tekuciRacun: string) => void;
 
   // Getter for complete racun data
   getCompleteRacunData: () => Partial<any>;
@@ -64,12 +60,15 @@ const initialRacunData: Partial<any> = {
     avansPdv: 0,
     avans: 0,
   },
+  tekuciRacun: "",
+  izdavacRacuna: "ied",
+  // pozivNaBroj: 0,
 };
 
 export const useRacunStore = create<RacunState>((set, get) => ({
   racunData: initialRacunData,
   izdavacRacuna: "ied",
-  selectedTekuciRacun: "",
+  tekuciRacun: "",
 
   updateRacunData: (data) =>
     set((state) => ({
@@ -100,27 +99,15 @@ export const useRacunStore = create<RacunState>((set, get) => ({
       racunData: { ...state.racunData, [field]: value },
     })),
 
-  setIzdavacRacuna: (data) => set({ izdavacRacuna: data }),
-
-  setTekuciRacun: (tekuciRacun) => set({ selectedTekuciRacun: tekuciRacun }),
-
   getCompleteRacunData: () => {
-    const { racunData, izdavacRacuna, selectedTekuciRacun } = get();
+    const { racunData } = get();
     return {
       ...racunData,
-      izdavacRacuna: izdavacRacuna
-        ? {
-            ...izdavacRacuna,
-            tekuciRacun: selectedTekuciRacun,
-          }
-        : undefined,
     };
   },
 
   reset: () =>
     set({
       racunData: initialRacunData,
-      izdavacRacuna: null,
-      selectedTekuciRacun: "",
     }),
 }));

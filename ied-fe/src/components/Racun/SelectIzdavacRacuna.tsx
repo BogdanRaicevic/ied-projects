@@ -12,14 +12,14 @@ export default function SelectIzdavacRacuna() {
     { id: "bs", logo: bsLogo },
   ];
 
-  const selectedIzdavac = useRacunStore((state) => state.izdavacRacuna);
-  const setIzdavacRacuna = useRacunStore((state) => state.setIzdavacRacuna);
+  const selectedIzdavac = useRacunStore((state) => state.racunData.izdavacRacuna);
+  const updateField = useRacunStore((state) => state.updateField);
 
   return (
     <Select
-      sx={{ maxWidth: 300 }}
+      sx={{ maxWidth: 300, maxHeight: 70 }}
       value={selectedIzdavac}
-      onChange={(e) => setIzdavacRacuna(e.target.value as string)}
+      onChange={(e) => updateField("izdavacRacuna", e.target.value as string)}
     >
       {options.map((opt) => (
         <MenuItem key={opt.id} value={opt.id}>

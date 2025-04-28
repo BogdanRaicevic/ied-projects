@@ -105,7 +105,6 @@ export default function Racuni() {
 
   const handleDocxUpdate = async () => {
     const racunData = getCompleteRacunData();
-    console.log("racunData", racunData);
 
     await updateRacunTemplate(racunData, tabValue);
   };

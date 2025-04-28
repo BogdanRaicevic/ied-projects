@@ -5,8 +5,8 @@ import { fileURLToPath } from "node:url";
 import PizZip from "pizzip";
 import Docxtemplater from "docxtemplater";
 import { RacunTypes } from "@ied-shared/constants/racun";
-import { format } from "date-fns";
 import { saveRacun } from "../services/racuni.service";
+import { izdavacRacuna } from "../constants/izdavacRacuna.const";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -31,10 +31,10 @@ const sanitizeFilename = (str: string): string => {
 
 router.post("/modify-template", async (req, res) => {
   // Validate template name if you want to support multiple templates
-  const templateName = req.body.racunType;
+  const templateName = req.body.tipRacuna;
 
   // Check if the racunType is valid
-  if (!Object.values(RacunTypes).includes(req.body.racunType)) {
+  if (!Object.values(RacunTypes).includes(req.body.tipRacuna)) {
     return res.status(400).json({
       error: "Invalid template name",
       validTypes: Object.values(RacunTypes),
@@ -61,11 +61,7 @@ router.post("/modify-template", async (req, res) => {
 
   const racunData = {
     ...req.body,
-    datumIzdavanjaRacuna: new Date().toLocaleDateString("sr-RS"),
-    datumPrometaUsluge: format(
-      new Date(req.body.seminar.datum).toLocaleDateString("sr-RS"),
-      "dd.MM.yyyy"
-    ),
+    datumIzdavanjaRacuna: new Date(),
     hasOnline: Number(req.body.seminar.brojUcesnikaOnline) > 0,
     hasOffline: Number(req.body.seminar.brojUcesnikaOffline) > 0,
   };
@@ -78,7 +74,12 @@ router.post("/modify-template", async (req, res) => {
     const zip = new PizZip(content);
     const doc = new Docxtemplater(zip);
 
-    doc.render(racunData);
+    const dataForDocumentRednering = {
+      ...racunData,
+      izdavacRacuna: { ...izdavacRacuna.find((d) => d.id === req.body.izdavacRacuna) },
+    };
+
+    doc.render(dataForDocumentRednering);
 
     const buf = doc.getZip().generate({ type: "nodebuffer" });
 

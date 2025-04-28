@@ -5,9 +5,9 @@ import { useFetchIzdavaciRacuna } from "../../../hooks/useFetchData";
 import { useEffect, useMemo } from "react";
 
 export const IzdavacRacunaSection = () => {
-  const selectedIzdavac = useRacunStore((state) => state.izdavacRacuna);
-  const storeTekuciRacun = useRacunStore((state) => state.selectedTekuciRacun);
-  const setTekuciRacun = useRacunStore((state) => state.setTekuciRacun);
+  const selectedIzdavac = useRacunStore((state) => state.racunData.izdavacRacuna);
+  const tekuciRacun = useRacunStore((state) => state.racunData.tekuciRacun);
+  const updateField = useRacunStore((state) => state.updateField);
 
   const { data: allIzdavaciData, isLoading } = useFetchIzdavaciRacuna();
 
@@ -25,9 +25,9 @@ export const IzdavacRacunaSection = () => {
 
   useEffect(() => {
     if (selectedIzdavac) {
-      setTekuciRacun("");
+      updateField("tekuciRacun", "");
     }
-  }, [selectedIzdavac, setTekuciRacun]);
+  }, [selectedIzdavac, updateField]);
 
   if (isLoading) {
     return <div>Loading Firma data...</div>;
@@ -40,12 +40,12 @@ export const IzdavacRacunaSection = () => {
           <Autocomplete
             fullWidth
             options={tekuciRacuniOptions}
-            value={storeTekuciRacun || null}
+            value={tekuciRacun || null}
             renderInput={(params) => (
               <TextField {...params} variant="filled" label="Tekući račun" sx={{ mb: 2 }} />
             )}
             onChange={(_, newValue) => {
-              setTekuciRacun(newValue || "");
+              updateField("tekuciRacun", newValue || "");
             }}
           />
         </Box>

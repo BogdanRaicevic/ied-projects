@@ -30,9 +30,9 @@ export const PrimalacRacunaSection = () => {
                 fullWidth
                 variant="filled"
                 label="Naziv"
-                value={racun.seminar.naziv || ""}
+                value={racun.primalacRacuna.naziv || ""}
                 sx={{ mb: 2 }}
-                onChange={(e) => updateNestedField("seminar.naziv", e.target.value)}
+                onChange={(e) => updateNestedField("primalacRacuna.naziv", e.target.value)}
               />
               <TextField
                 name="mesto"
