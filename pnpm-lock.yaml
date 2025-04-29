@@ -39,7 +39,7 @@ importers:
         specifier: workspace:^
         version: link:../ied-shared
       mongoose:
-        specifier: ^8.8.4
+        specifier: ^8.12.1
         version: 8.12.1
       node-cache:
         specifier: ^5.1.2
@@ -215,7 +215,7 @@ importers:
         specifier: ^22.14.1
         version: 22.14.1
       mongoose:
-        specifier: ^8.7.1
+        specifier: ^8.12.1
         version: 8.12.1
       mysql2:
         specifier: ^3.13.0
