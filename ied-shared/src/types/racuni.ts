@@ -21,32 +21,32 @@ export const SeminarRacunSchema = z.object({
   jedinicaMere: z.string().optional(),
   brojUcesnikaOnline: z.number().min(0).default(0),
   brojUcesnikaOffline: z.number().min(0).default(0),
-  onlineCena: z.number().min(0).default(0),
-  offlineCena: z.number().min(0).default(0),
-  popustOnline: z
+  onlineCena: z.coerce.number().min(0).default(0),
+  offlineCena: z.coerce.number().min(0).default(0),
+  popustOnline: z.coerce
     .number()
     .min(0, { message: "Popust online mora biti između 0 i 100" })
     .max(100, { message: "Popust online mora biti između 0 i 100" })
     .default(0),
-  popustOffline: z
+  popustOffline: z.coerce
     .number()
     .min(0, { message: "Popust offline mora biti između 0 i 100" })
     .max(100, { message: "Popust offline mora biti između 0 i 100" })
     .default(0),
-  avansBezPdv: z.number().default(0),
+  avansBezPdv: z.coerce.number().min(0).default(0),
 });
 
 export const CalculationsRacunSchema = z.object({
-  onlineUkupnaNaknada: z.number().min(0).default(0),
-  offlineUkupnaNaknada: z.number().min(0).default(0),
-  onlinePoreskaOsnovica: z.number().min(0).default(0),
-  offlinePoreskaOsnovica: z.number().min(0).default(0),
-  pdvOnline: z.number().min(0).default(0),
-  pdvOffline: z.number().min(0).default(0),
-  avansPdv: z.number().min(0).default(0),
-  avans: z.number().min(0).default(0),
-  ukupnaNaknada: z.number().min(0).default(0),
-  ukupanPdv: z.number().min(0).default(0),
+  onlineUkupnaNaknada: z.coerce.number().min(0).optional().default(0),
+  offlineUkupnaNaknada: z.coerce.number().min(0).optional().default(0),
+  onlinePoreskaOsnovica: z.coerce.number().min(0).optional().default(0),
+  offlinePoreskaOsnovica: z.coerce.number().min(0).optional().default(0),
+  pdvOnline: z.coerce.number().min(0).optional().default(0),
+  pdvOffline: z.coerce.number().min(0).optional().default(0),
+  avansPdv: z.coerce.number().min(0).optional().default(0),
+  avans: z.coerce.number().min(0).optional().default(0),
+  ukupnaNaknada: z.coerce.number().min(0).optional().default(0),
+  ukupanPdv: z.coerce.number().min(0).optional().default(0),
 });
 
 export enum TipRacuna {

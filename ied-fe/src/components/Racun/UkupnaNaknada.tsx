@@ -37,9 +37,8 @@ export const UkupnaNaknada = () => {
           name="rokZaUplatu"
           variant="filled"
           value={racunData.rokZaUplatu || 0}
-          sx={{ maxWidth: 60 }}
+          sx={{ maxWidth: 100 }}
           onChange={(e) => {
-            console.log(e.target.value);
             handleChange(e);
           }}
         />

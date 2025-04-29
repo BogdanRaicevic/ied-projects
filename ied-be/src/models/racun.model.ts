@@ -91,7 +91,6 @@ racunSchema.pre("save", async function (next) {
       sequenceNumber = lastSequence + 1;
     }
 
-    // Format sequence number to 3 digits (e.g., 1 -> "001", 12 -> "012", 123 -> "123")
     const sequenceString = sequenceNumber.toString().padStart(4, "0");
 
     this.pozivNaBroj = `${datePrefix}${sequenceString}`;

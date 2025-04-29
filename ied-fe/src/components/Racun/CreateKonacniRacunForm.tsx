@@ -4,7 +4,6 @@ import { AvansSection } from "./components/AvansSection";
 import { OfflinePrisustvaSection } from "./components/OfflinePrisustvaSection";
 import { OnlinePrisustvaSection } from "./components/OnlinePrisustvaSection";
 import { UkupnaNaknada } from "./UkupnaNaknada";
-import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { useRacunStore } from "./store/useRacunStore";
 
 export const CreateKonacniRacunForm = () => {
@@ -29,19 +28,6 @@ export const CreateKonacniRacunForm = () => {
         >
           <Typography variant="h4">Konačni račun</Typography>
           {pozivNaBroj}
-        </Box>
-        <Box
-          sx={{ display: "flex", alignItems: "center", justifyContent: "center", mb: 3, gap: 2 }}
-        >
-          <FormControl sx={{ m: 1 }}>
-            <DatePicker
-              format="dd.MM.yyyy"
-              label="Datum prometa usluge"
-              name="datumPrometaUsluge"
-              value={racunData.seminar.datum ? new Date(racunData.seminar.datum) : null}
-              onChange={(date) => updateField("datumPrometaUsluge", date)}
-            />
-          </FormControl>
         </Box>
         <PrimalacRacunaSection />
         <Divider sx={{ mt: 3, mb: 3 }} />

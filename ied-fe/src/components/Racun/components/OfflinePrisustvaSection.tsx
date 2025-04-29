@@ -66,7 +66,7 @@ export const OfflinePrisustvaSection = () => {
                     name="brojUcesnikaOffline"
                     value={racunData.seminar.brojUcesnikaOffline || 0}
                     onChange={(e) =>
-                      updateNestedField("seminar.brojUcesnikaOffline", e.target.value)
+                      updateNestedField("seminar.brojUcesnikaOffline", Number(e.target.value))
                     }
                   />
                 </TableCell>
@@ -95,7 +95,9 @@ export const OfflinePrisustvaSection = () => {
                     name="offlineCena"
                     variant="filled"
                     value={racunData.seminar.offlineCena || 0}
-                    onChange={(e) => updateNestedField("seminar.offlineCena", e.target.value)}
+                    onChange={(e) =>
+                      updateNestedField("seminar.offlineCena", Number(e.target.value))
+                    }
                   />
                 </TableCell>
                 <TableCell align="left">
@@ -104,7 +106,9 @@ export const OfflinePrisustvaSection = () => {
                     name="popustOffline"
                     variant="filled"
                     value={racunData.seminar.popustOffline || 0}
-                    onChange={(e) => updateNestedField("seminar.popustOffline", e.target.value)}
+                    onChange={(e) =>
+                      updateNestedField("seminar.popustOffline", Number(e.target.value))
+                    }
                   />
                 </TableCell>
                 <TableCell align="left">

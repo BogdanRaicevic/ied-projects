@@ -8,6 +8,7 @@ import { saveRacun } from "../services/racuni.service";
 import { izdavacRacuna } from "../constants/izdavacRacuna.const";
 import { validate } from "../middleware/validateSchema";
 import { RacunSchema, TipRacuna } from "@ied-shared/types/racuni";
+import { formatDate } from "date-fns";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -29,6 +30,8 @@ const sanitizeFilename = (str: string): string => {
   };
   return str.replace(/[šŠđĐčČćĆžŽ]/g, (char) => serbianChars[char] || char);
 };
+
+const formatToLocalDate = (date: Date): string => formatDate(date, "dd.MM.yyyy");
 
 router.post("/modify-template", validate(RacunSchema), async (req, res) => {
   // Validate template name if you want to support multiple templates
@@ -72,9 +75,15 @@ router.post("/modify-template", validate(RacunSchema), async (req, res) => {
     const dataForDocumentRednering = {
       ...savedRacun,
       izdavacRacuna: { ...izdavacRacuna.find((d) => d.id === req.body.izdavacRacuna) },
-      datumIzdavanjaRacuna: new Date().toLocaleDateString("sr-RS"),
+      datumIzdavanjaRacuna: formatToLocalDate(new Date()),
       hasOnline: Number(req.body.seminar.brojUcesnikaOnline) > 0,
       hasOffline: Number(req.body.seminar.brojUcesnikaOffline) > 0,
+      seminar: {
+        ...(savedRacun.seminar ?? {}),
+        datum: savedRacun.seminar?.datum
+          ? formatToLocalDate(new Date(savedRacun.seminar.datum))
+          : undefined,
+      },
     };
 
     console.log("dataForDocumentRednering", dataForDocumentRednering);

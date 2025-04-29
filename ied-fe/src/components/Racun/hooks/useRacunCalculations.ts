@@ -42,19 +42,20 @@ export const useRacunCalculations = () => {
     const avans = avansBezPdvNum + avansPdv;
 
     const calculations = {
-      onlineUkupnaNaknada,
-      offlineUkupnaNaknada,
-      onlinePoreskaOsnovica,
-      offlinePoreskaOsnovica,
-      pdvOnline: (onlinePoreskaOsnovica * stopaPdvNum) / 100,
-      pdvOffline: (offlinePoreskaOsnovica * stopaPdvNum) / 100,
-      ukupnaNaknada: onlineUkupnaNaknada + offlineUkupnaNaknada - avans,
-      ukupanPdv:
+      onlineUkupnaNaknada: roundToTwoDecimals(onlineUkupnaNaknada),
+      offlineUkupnaNaknada: roundToTwoDecimals(offlineUkupnaNaknada),
+      onlinePoreskaOsnovica: roundToTwoDecimals(onlinePoreskaOsnovica),
+      offlinePoreskaOsnovica: roundToTwoDecimals(offlinePoreskaOsnovica),
+      pdvOnline: roundToTwoDecimals((onlinePoreskaOsnovica * stopaPdvNum) / 100),
+      pdvOffline: roundToTwoDecimals((offlinePoreskaOsnovica * stopaPdvNum) / 100),
+      ukupnaNaknada: roundToTwoDecimals(onlineUkupnaNaknada + offlineUkupnaNaknada - avans),
+      ukupanPdv: roundToTwoDecimals(
         (offlinePoreskaOsnovica * stopaPdvNum) / 100 +
-        (onlinePoreskaOsnovica * stopaPdvNum) / 100 -
-        avansPdv,
-      avansPdv,
-      avans,
+          (onlinePoreskaOsnovica * stopaPdvNum) / 100 -
+          avansPdv
+      ),
+      avansPdv: roundToTwoDecimals(avansPdv),
+      avans: roundToTwoDecimals(avans),
     };
 
     updateCalculations(calculations);
@@ -68,4 +69,9 @@ export const useRacunCalculations = () => {
     avansBezPdv,
     avansBezPdv,
   ]);
+};
+
+const roundToTwoDecimals = (num: number): number => {
+  // Multiply by 100, round to the nearest integer, then divide by 100
+  return Math.round((num + Number.EPSILON) * 100) / 100;
 };
