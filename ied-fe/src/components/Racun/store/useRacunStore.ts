@@ -1,4 +1,5 @@
 import { create } from "zustand";
+import { IzdavacRacuna, Racun, TipRacuna } from "@ied-shared/types/racuni";
 
 // Helper function for updating nested properties
 const updateNestedProperty = (obj: any, path: string[], value: any): any => {
@@ -13,20 +14,20 @@ const updateNestedProperty = (obj: any, path: string[], value: any): any => {
 
 interface RacunState {
   // Core data
-  racunData: Partial<any>;
+  racunData: Racun;
 
   // Actions
-  updateRacunData: (data: Partial<any>) => void;
+  updateRacunData: (data: Racun) => void;
   updateNestedField: (fieldPath: string, value: any) => void;
-  updateCalculations: (calculations: Partial<any>) => void;
+  updateCalculations: (calculations: Racun) => void;
   updateField: (field: keyof any, value: any) => void;
 
   // Getter for complete racun data
-  getCompleteRacunData: () => Partial<any>;
+  getCompleteRacunData: () => Racun;
   reset: () => void;
 }
 
-const initialRacunData: Partial<any> = {
+const initialRacunData: Racun = {
   seminar: {
     naziv: "",
     datum: new Date(),
@@ -61,8 +62,8 @@ const initialRacunData: Partial<any> = {
     avans: 0,
   },
   tekuciRacun: "",
-  izdavacRacuna: "ied",
-  // pozivNaBroj: 0,
+  izdavacRacuna: IzdavacRacuna.IED,
+  tipRacuna: TipRacuna.PREDRACUN,
 };
 
 export const useRacunStore = create<RacunState>((set, get) => ({

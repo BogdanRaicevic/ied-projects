@@ -47,6 +47,9 @@ importers:
       pizzip:
         specifier: ^3.1.7
         version: 3.1.8
+      zod:
+        specifier: ^3.24.3
+        version: 3.24.3
     devDependencies:
       '@biomejs/biome':
         specifier: ^1.9.4

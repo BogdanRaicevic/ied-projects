@@ -41,13 +41,26 @@ export const CalculationsRacunSchema = z.object({
   ukupanPdv: z.number().default(0),
 });
 
+export enum TipRacuna {
+  PREDRACUN = "predracun",
+  AVANSNI_RACUN = "avansniRacun",
+  KONACNI_RACUN = "konacniRacun",
+  RACUN = "racun",
+}
+
+export enum IzdavacRacuna {
+  IED = "ied",
+  PERMANENT = "permanent",
+  BS = "bs",
+}
+
 export const RacunSchema = z.object({
-  izdavacRacuna: z.enum(["ied", "permanent", "bs"]),
-  tipRacuna: z.enum(["predracun", "racun", "avansniRacun", "konacniRacun"]),
+  izdavacRacuna: z.nativeEnum(IzdavacRacuna),
+  tipRacuna: z.nativeEnum(TipRacuna),
   tekuciRacun: z.string().min(1, { message: "Tekući račun je obavezan" }),
   primalacRacuna: PrimalacRacunaSchema,
   seminar: SeminarRacunSchema,
-  calculations: CalculationsRacunSchema.optional(),
+  calculations: CalculationsRacunSchema,
   rokZaUplatu: z.number().optional(),
   pozivNaBroj: z.string().optional(),
   dateCreatedAt: z.date().optional(), // Added optional, BE sets default

@@ -4,9 +4,10 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import PizZip from "pizzip";
 import Docxtemplater from "docxtemplater";
-import { RacunTypes } from "@ied-shared/constants/racun";
 import { saveRacun } from "../services/racuni.service";
 import { izdavacRacuna } from "../constants/izdavacRacuna.const";
+import { validate } from "../middleware/validateSchema";
+import { RacunSchema, TipRacuna } from "@ied-shared/types/racuni";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -29,15 +30,17 @@ const sanitizeFilename = (str: string): string => {
   return str.replace(/[šŠđĐčČćĆžŽ]/g, (char) => serbianChars[char] || char);
 };
 
-router.post("/modify-template", async (req, res) => {
+router.post("/modify-template", validate(RacunSchema), async (req, res) => {
   // Validate template name if you want to support multiple templates
   const templateName = req.body.tipRacuna;
 
+  console.log("templateName", templateName);
+
   // Check if the racunType is valid
-  if (!Object.values(RacunTypes).includes(req.body.tipRacuna)) {
+  if (!Object.values(TipRacuna).includes(templateName as TipRacuna)) {
     return res.status(400).json({
       error: "Invalid template name",
-      validTypes: Object.values(RacunTypes),
+      validTypes: Object.values(TipRacuna),
     });
   }
 
@@ -52,6 +55,8 @@ router.post("/modify-template", async (req, res) => {
     "../../src/templates",
     sanitizedTemplateName.concat(".docx")
   );
+
+  console.log("templatePath", templatePath);
 
   // Additional check to ensure the resolved path is within the templates directory
   const templatesDir = path.resolve(__dirname, "../../src/templates");
@@ -68,7 +73,6 @@ router.post("/modify-template", async (req, res) => {
 
   console.log("racunData", racunData);
   await saveRacun(racunData);
-  // res.send(flattenedData);
   try {
     const content = fs.readFileSync(templatePath, "binary");
     const zip = new PizZip(content);

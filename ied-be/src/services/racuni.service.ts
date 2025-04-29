@@ -1,6 +1,6 @@
 import { Racun } from "../models/racun.model";
 
-export const saveRacun = async (racun: Partial<Racun>) => {
+export const saveRacun = async (racun: Racun) => {
   try {
     const newRacun = new Racun(racun);
     console.log("Saving Racun:", newRacun);
@@ -26,7 +26,7 @@ export const getRacunById = async (id: string) => {
   }
 };
 
-export const updateRacunById = async (id: string, updatedRacun: Partial<Racun>) => {
+export const updateRacunById = async (id: string, updatedRacun: Racun) => {
   try {
     // Add { runValidators: true } to ensure updates also adhere to schema validation
     const racun = await Racun.findByIdAndUpdate(id, updatedRacun, {

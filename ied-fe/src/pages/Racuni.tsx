@@ -7,18 +7,18 @@ import { fetchSingleFirma } from "../api/firma.api";
 import { useEffect, useMemo, useState } from "react";
 import { type FirmaType, type SeminarType, PrijavaNaSeminar } from "../schemas/firmaSchemas";
 import { fetchSeminarById } from "../api/seminari.api";
-import { RacunTypes } from "@ied-shared/constants/racun";
 import { CreateKonacniRacunForm } from "../components/Racun/CreateKonacniRacunForm";
 import { useRacunStore } from "../components/Racun/store/useRacunStore";
 import { IzdavacRacunaSection } from "../components/Racun/components/IzdavacRacunaSection";
 import { CreateAvansForm } from "../components/Racun/CreateAvansForm";
 import PostAddIcon from "@mui/icons-material/PostAdd";
 import { useRacunCalculations } from "../components/Racun/hooks/useRacunCalculations";
+import { TipRacuna } from "@ied-shared/index";
 
 export default function Racuni() {
   const [firma, setFirma] = useState<FirmaType | null>(null);
   const [seminar, setSeminar] = useState<SeminarType | null>(null);
-  const [tabValue, setTabValue] = useState<RacunTypes>(RacunTypes.PREDRACUN);
+  const [tabValue, setTabValue] = useState<TipRacuna>(TipRacuna.PREDRACUN);
 
   // Get store actions
   const updateNestedField = useRacunStore((state) => state.updateNestedField);
@@ -109,18 +109,18 @@ export default function Racuni() {
     await updateRacunTemplate(racunData, tabValue);
   };
 
-  const handleTabChange = (_event: React.SyntheticEvent, newValue: RacunTypes) => {
+  const handleTabChange = (_event: React.SyntheticEvent, newValue: TipRacuna) => {
     setTabValue(newValue);
   };
 
   // Function to render the appropriate form based on current tab
   const renderActiveForm = () => {
     switch (tabValue) {
-      case RacunTypes.PREDRACUN:
+      case TipRacuna.PREDRACUN:
         return <CreatePredracunForm />;
-      case RacunTypes.AVANSNI_RACUN:
+      case TipRacuna.AVANSNI_RACUN:
         return <CreateAvansForm />;
-      case RacunTypes.KONACNI_RACUN:
+      case TipRacuna.KONACNI_RACUN:
         return <CreateKonacniRacunForm />;
       default:
         return <CreatePredracunForm />;
@@ -136,10 +136,10 @@ export default function Racuni() {
 
       <Box sx={{ borderBottom: 1, borderColor: "divider", mt: 3, mb: 3 }}>
         <Tabs value={tabValue} onChange={handleTabChange} aria-label="basic tabs">
-          <Tab label="Predračun" value={RacunTypes.PREDRACUN} />
-          <Tab label="Avansni račun" value={RacunTypes.AVANSNI_RACUN} />
-          <Tab label="Konačni račun" value={RacunTypes.KONACNI_RACUN} />
-          {/*<Tab label="Račun" value={RacunTypes.RACUN} /> */}
+          <Tab label="Predračun" value={TipRacuna.PREDRACUN} />
+          <Tab label="Avansni račun" value={TipRacuna.AVANSNI_RACUN} />
+          <Tab label="Konačni račun" value={TipRacuna.KONACNI_RACUN} />
+          {/*<Tab label="Račun" value={TipRacuna.RACUN} /> */}
         </Tabs>
       </Box>
 

@@ -1,9 +1,12 @@
 import axiosInstanceWithAuth from "./interceptors/auth";
 import { env } from "../utils/envVariables";
-import { RacunTypes } from "@ied-shared/constants/racun";
+import { Racun, TipRacuna } from "@ied-shared/types/racuni";
 
-export const updateRacunTemplate = async (racunData: any, tipRacuna: RacunTypes) => {
-  const payload = {
+export const updateRacunTemplate = async (
+  racunData: Omit<Racun, "tipRacuna">,
+  tipRacuna: TipRacuna
+) => {
+  const payload: Racun = {
     ...racunData,
     tipRacuna,
   };
@@ -35,7 +38,7 @@ export const updateRacunTemplate = async (racunData: any, tipRacuna: RacunTypes)
     window.URL.revokeObjectURL(url);
   } catch (error) {
     console.error("Error generating document:", error);
-    throw error; // Re-throw to handle in the component
+    throw error;
   }
 };
 
