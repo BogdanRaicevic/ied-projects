@@ -1,6 +1,7 @@
 import axiosInstanceWithAuth from "./interceptors/auth";
 import { env } from "../utils/envVariables";
-import { Racun, TipRacuna } from "@ied-shared/types/racuni";
+import { Racun, RacunSchema, TipRacuna } from "@ied-shared/types/racuni";
+import { validateOrThrow } from "../utils/zodErrorHelper";
 
 export const updateRacunTemplate = async (
   racunData: Omit<Racun, "tipRacuna">,
@@ -10,7 +11,10 @@ export const updateRacunTemplate = async (
     ...racunData,
     tipRacuna,
   };
+
   try {
+    validateOrThrow(RacunSchema, payload);
+
     const response = await axiosInstanceWithAuth.post(
       `${env.beURL}/api/docx/modify-template`,
       payload,
@@ -37,7 +41,7 @@ export const updateRacunTemplate = async (
     link.remove();
     window.URL.revokeObjectURL(url);
   } catch (error) {
-    console.error("Error generating document:", error);
+    console.error("Generate racun API eror:", error);
     throw error;
   }
 };

@@ -1,4 +1,4 @@
-import { Box, Button, Tab, Tabs } from "@mui/material";
+import { Alert, Box, Button, Tab, Tabs } from "@mui/material";
 import PageTitle from "../components/PageTitle";
 import { updateRacunTemplate } from "../api/docx.api";
 import { useLocation } from "react-router-dom";
@@ -14,11 +14,13 @@ import { CreateAvansForm } from "../components/Racun/CreateAvansForm";
 import PostAddIcon from "@mui/icons-material/PostAdd";
 import { useRacunCalculations } from "../components/Racun/hooks/useRacunCalculations";
 import { TipRacuna } from "@ied-shared/index";
+import handlePromiseError from "../utils/helpers";
 
 export default function Racuni() {
   const [firma, setFirma] = useState<FirmaType | null>(null);
   const [seminar, setSeminar] = useState<SeminarType | null>(null);
   const [tabValue, setTabValue] = useState<TipRacuna>(TipRacuna.PREDRACUN);
+  const [apiError, setApiError] = useState<string | null>(null); // State for error message
 
   // Get store actions
   const updateNestedField = useRacunStore((state) => state.updateNestedField);
@@ -46,6 +48,7 @@ export default function Racuni() {
         }
       } catch (error) {
         console.error("Error:", error);
+        setApiError("Greška pri učitavanju podataka firme ili seminara.");
       }
     };
 
@@ -104,9 +107,12 @@ export default function Racuni() {
   ]);
 
   const handleDocxUpdate = async () => {
+    setApiError(null);
     const racunData = getCompleteRacunData();
 
-    await updateRacunTemplate(racunData, tabValue);
+    const errors = await handlePromiseError(updateRacunTemplate(racunData, tabValue));
+
+    setApiError(errors); // Set the result (null on success, string on error)
   };
 
   const handleTabChange = (_event: React.SyntheticEvent, newValue: TipRacuna) => {
@@ -146,6 +152,11 @@ export default function Racuni() {
       {/* Render only the active form instead of hiding inactive ones */}
       {renderActiveForm()}
 
+      {apiError && (
+        <Alert severity="error" sx={{ my: 2 }}>
+          {apiError}
+        </Alert>
+      )}
       <Button
         sx={{ mt: 3, mb: 3 }}
         onClick={handleDocxUpdate}
