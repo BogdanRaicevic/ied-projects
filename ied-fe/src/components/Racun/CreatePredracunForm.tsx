@@ -6,8 +6,19 @@ import { UkupnaNaknada } from "./UkupnaNaknada";
 import { useRacunStore } from "./store/useRacunStore";
 
 export const CreatePredracunForm = () => {
-  // const racunData = useRacunStore((state) => state.racunData);
-  // const updateField = useRacunStore((state) => state.updateField);
+  const racunData = useRacunStore((state) => state.racunData);
+  const updateField = useRacunStore((state) => state.updateField);
+
+  const pozivNaBroj = racunData.pozivNaBroj && (
+    <TextField
+      name="pozivNaBroj"
+      placeholder="Poziv na broj"
+      value={racunData.pozivNaBroj || ""}
+      size="small"
+      sx={{ width: "150px" }}
+      onChange={(e) => updateField("pozivNaBroj", e.target.value)}
+    />
+  );
 
   return (
     <Grid2 container>
@@ -16,14 +27,7 @@ export const CreatePredracunForm = () => {
           sx={{ display: "flex", alignItems: "center", justifyContent: "center", mb: 3, gap: 2 }}
         >
           <Typography variant="h4">Predračun</Typography>
-          {/* <TextField
-            name="pozivNaBroj"
-            placeholder="Poziv na broj"
-            value={racunData.pozivNaBroj || ""}
-            size="small"
-            sx={{ width: "150px" }}
-            onChange={(e) => updateField("pozivNaBroj", e.target.value)}
-          /> */}
+          {pozivNaBroj}
         </Box>
         <PrimalacRacunaSection />
         <Divider sx={{ mt: 3, mb: 3 }} />

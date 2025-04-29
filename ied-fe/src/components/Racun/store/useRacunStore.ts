@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { IzdavacRacuna, Racun, TipRacuna } from "@ied-shared/types/racuni";
+import { CalculationsRacun, IzdavacRacuna, Racun, TipRacuna } from "@ied-shared/types/racuni";
 
 // Helper function for updating nested properties
 const updateNestedProperty = (obj: any, path: string[], value: any): any => {
@@ -13,13 +13,12 @@ const updateNestedProperty = (obj: any, path: string[], value: any): any => {
 };
 
 interface RacunState {
-  // Core data
   racunData: Racun;
 
   // Actions
   updateRacunData: (data: Racun) => void;
   updateNestedField: (fieldPath: string, value: any) => void;
-  updateCalculations: (calculations: Racun) => void;
+  updateCalculations: (calculations: CalculationsRacun) => void;
   updateField: (field: keyof any, value: any) => void;
 
   // Getter for complete racun data

@@ -11,6 +11,16 @@ export const CreateKonacniRacunForm = () => {
   const racunData = useRacunStore((state) => state.racunData);
   const updateField = useRacunStore((state) => state.updateField);
 
+  const pozivNaBroj = racunData.pozivNaBroj && (
+    <TextField
+      name="pozivNaBroj"
+      placeholder="Poziv na broj"
+      value={racunData.pozivNaBroj || ""}
+      size="small"
+      sx={{ width: "150px" }}
+      onChange={(e) => updateField("pozivNaBroj", e.target.value)}
+    />
+  );
   return (
     <Grid2 container>
       <Grid2 size={12}>
@@ -18,14 +28,7 @@ export const CreateKonacniRacunForm = () => {
           sx={{ display: "flex", alignItems: "center", justifyContent: "center", mb: 3, gap: 2 }}
         >
           <Typography variant="h4">Konačni račun</Typography>
-          <TextField
-            name="pozivNaBroj"
-            placeholder="Poziv na broj"
-            value={racunData.pozivNaBroj || ""}
-            size="small"
-            sx={{ width: "150px" }}
-            onChange={(e) => updateField("pozivNaBroj", e.target.value)}
-          />
+          {pozivNaBroj}
         </Box>
         <Box
           sx={{ display: "flex", alignItems: "center", justifyContent: "center", mb: 3, gap: 2 }}
@@ -35,7 +38,7 @@ export const CreateKonacniRacunForm = () => {
               format="dd.MM.yyyy"
               label="Datum prometa usluge"
               name="datumPrometaUsluge"
-              value={racunData.datumPrometaUsluge ? new Date(racunData.datumPrometaUsluge) : null}
+              value={racunData.seminar.datum ? new Date(racunData.seminar.datum) : null}
               onChange={(date) => updateField("datumPrometaUsluge", date)}
             />
           </FormControl>
