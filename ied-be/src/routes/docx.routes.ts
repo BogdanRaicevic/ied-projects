@@ -34,8 +34,6 @@ router.post("/modify-template", validate(RacunSchema), async (req, res) => {
   // Validate template name if you want to support multiple templates
   const templateName = req.body.tipRacuna;
 
-  console.log("templateName", templateName);
-
   // Check if the racunType is valid
   if (!Object.values(TipRacuna).includes(templateName as TipRacuna)) {
     return res.status(400).json({
@@ -64,25 +62,22 @@ router.post("/modify-template", validate(RacunSchema), async (req, res) => {
     return res.status(400).json({ error: "Invalid template path" });
   }
 
-  const racunData = {
-    ...req.body,
-    datumIzdavanjaRacuna: new Date(),
-    hasOnline: Number(req.body.seminar.brojUcesnikaOnline) > 0,
-    hasOffline: Number(req.body.seminar.brojUcesnikaOffline) > 0,
-  };
+  const savedRacun = (await saveRacun(req.body)).toObject();
 
-  console.log("racunData", racunData);
-  await saveRacun(racunData);
   try {
     const content = fs.readFileSync(templatePath, "binary");
     const zip = new PizZip(content);
     const doc = new Docxtemplater(zip);
 
     const dataForDocumentRednering = {
-      ...racunData,
+      ...savedRacun,
       izdavacRacuna: { ...izdavacRacuna.find((d) => d.id === req.body.izdavacRacuna) },
+      datumIzdavanjaRacuna: new Date().toLocaleDateString("sr-RS"),
+      hasOnline: Number(req.body.seminar.brojUcesnikaOnline) > 0,
+      hasOffline: Number(req.body.seminar.brojUcesnikaOffline) > 0,
     };
 
+    console.log("dataForDocumentRednering", dataForDocumentRednering);
     doc.render(dataForDocumentRednering);
 
     const buf = doc.getZip().generate({ type: "nodebuffer" });
@@ -94,7 +89,7 @@ router.post("/modify-template", validate(RacunSchema), async (req, res) => {
     );
 
     const fileName = sanitizeFilename(
-      `${sanitizedTemplateName}_${racunData.primalacRacuna.naziv.trim()}_${racunData.seminar.naziv.trim()}_${new Date().toISOString().split("T")[0].replace(/-/g, "")}.docx`
+      `${sanitizedTemplateName}_${dataForDocumentRednering.primalacRacuna?.naziv}_${dataForDocumentRednering.seminar?.naziv}_${new Date().toISOString().split("T")[0].replace(/-/g, "")}.docx`
     );
     console.log("fileName", fileName);
     res.setHeader(`Content-Disposition`, `attachment; filename=${fileName}`);

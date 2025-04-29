@@ -5,7 +5,7 @@ import { useLocation } from "react-router-dom";
 import { CreatePredracunForm } from "../components/Racun/CreatePredracunForm";
 import { fetchSingleFirma } from "../api/firma.api";
 import { useEffect, useMemo, useState } from "react";
-import { type FirmaType, type SeminarType, PrijavaNaSeminar } from "../schemas/firmaSchemas";
+import { type FirmaType } from "../schemas/firmaSchemas";
 import { fetchSeminarById } from "../api/seminari.api";
 import { CreateKonacniRacunForm } from "../components/Racun/CreateKonacniRacunForm";
 import { useRacunStore } from "../components/Racun/store/useRacunStore";
@@ -13,12 +13,12 @@ import { IzdavacRacunaSection } from "../components/Racun/components/IzdavacRacu
 import { CreateAvansForm } from "../components/Racun/CreateAvansForm";
 import PostAddIcon from "@mui/icons-material/PostAdd";
 import { useRacunCalculations } from "../components/Racun/hooks/useRacunCalculations";
-import { TipRacuna } from "@ied-shared/index";
+import { PrijavaZodType, SeminarZodType, TipRacuna } from "@ied-shared/index";
 import handlePromiseError from "../utils/helpers";
 
 export default function Racuni() {
   const [firma, setFirma] = useState<FirmaType | null>(null);
-  const [seminar, setSeminar] = useState<SeminarType | null>(null);
+  const [seminar, setSeminar] = useState<SeminarZodType | null>(null);
   const [tabValue, setTabValue] = useState<TipRacuna>(TipRacuna.PREDRACUN);
   const [apiError, setApiError] = useState<string | null>(null); // State for error message
 
@@ -27,9 +27,13 @@ export default function Racuni() {
   const getCompleteRacunData = useRacunStore((state) => state.getCompleteRacunData);
 
   const location = useLocation();
-  const prijave: PrijavaNaSeminar[] = useMemo(
+  const prijave: PrijavaZodType[] = useMemo(
     () => location.state?.prijave || [],
     [location.state?.prijave]
+  );
+  const seminarId: string = useMemo(
+    () => location.state?.seminarId || "",
+    [location.state?.seminarId]
   );
 
   useEffect(() => {
@@ -42,8 +46,8 @@ export default function Racuni() {
         }
 
         // Fetch seminar
-        if (prijave[0]?.seminar_id) {
-          const seminarData = await fetchSeminarById(prijave[0].seminar_id);
+        if (seminarId) {
+          const seminarData = await fetchSeminarById(seminarId);
           setSeminar(seminarData);
         }
       } catch (error) {
@@ -149,7 +153,6 @@ export default function Racuni() {
         </Tabs>
       </Box>
 
-      {/* Render only the active form instead of hiding inactive ones */}
       {renderActiveForm()}
 
       {apiError && (

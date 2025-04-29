@@ -3,7 +3,6 @@ import { Racun } from "../models/racun.model";
 export const saveRacun = async (racun: Racun) => {
   try {
     const newRacun = new Racun(racun);
-    console.log("Saving Racun:", newRacun);
     await newRacun.save();
     return newRacun;
   } catch (error) {

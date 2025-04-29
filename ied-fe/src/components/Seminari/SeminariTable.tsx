@@ -1,5 +1,4 @@
 import { useEffect, useMemo, useState, memo } from "react";
-import type { SeminarType } from "../../schemas/firmaSchemas";
 import {
   MaterialReactTable,
   type MRT_ColumnDef,
@@ -7,7 +6,7 @@ import {
   type MRT_PaginationState,
 } from "material-react-table";
 import { deleteSeminar, fetchSeminari } from "../../api/seminari.api";
-import type { SeminarQueryParams } from "@ied-shared/types/seminar";
+import type { SeminarQueryParamsZodType, SeminarZodType } from "@ied-shared/types/seminar";
 import {
   Box,
   Dialog,
@@ -31,15 +30,15 @@ import TableViewIcon from "@mui/icons-material/TableView";
 import { format } from "date-fns";
 
 export default memo(function SeminariTable(props: {
-  queryParameters: SeminarQueryParams;
+  queryParameters: SeminarQueryParamsZodType;
   updateCounter: number;
 }) {
-  const [data, setData] = useState<SeminarType[]>([]);
+  const [data, setData] = useState<SeminarZodType[]>([]);
   const [documents, setDocuments] = useState(1000);
   const [deletePrijavaCounter, setDeletePrijavaCounter] = useState(0);
   const [seminarChangesCounter, setSeminarChangesCount] = useState(0);
   const [editSeminar, setEditSeminar] = useState(false);
-  const [selectedSeminar, setSelectedSeminar] = useState<Partial<SeminarType>>({});
+  const [selectedSeminar, setSelectedSeminar] = useState<Partial<SeminarZodType>>({});
 
   const [pagination, setPagination] = useState<MRT_PaginationState>({
     pageIndex: 0,
@@ -54,14 +53,7 @@ export default memo(function SeminariTable(props: {
       setDocuments(res.totalDocuments);
     };
     loadData();
-  }, [
-    pagination,
-    documents,
-    props,
-    deletePrijavaCounter,
-    seminarChangesCounter,
-    props.updateCounter,
-  ]);
+  }, [pagination, props, deletePrijavaCounter, seminarChangesCounter, props.updateCounter]);
 
   const handleDelete = async (id: string) => {
     await deleteSeminar(id);
@@ -73,7 +65,7 @@ export default memo(function SeminariTable(props: {
     setEditSeminar(true);
   };
 
-  const handleExportUcesnikaSeminara = (seminar: Partial<SeminarType>) => {
+  const handleExportUcesnikaSeminara = (seminar: Partial<SeminarZodType>) => {
     let csv = "Redni Broj, Naziv firme, Ime i Prezime, Email\n";
     const data = seminar.prijave
       ?.map(
@@ -86,7 +78,7 @@ export default memo(function SeminariTable(props: {
     exportDataToCSV(seminar, "klijenti", csv);
   };
 
-  const handleExportSeminarTable = (seminar: Partial<SeminarType>) => {
+  const handleExportSeminarTable = (seminar: Partial<SeminarZodType>) => {
     const csvRows: string =
       `${seminar.naziv}\n` +
       "Redni Broj, Naziv firme, Ime i Prezime, Email\n" +
@@ -100,7 +92,7 @@ export default memo(function SeminariTable(props: {
   };
 
   const exportDataToCSV = async (
-    seminar: Partial<SeminarType>,
+    seminar: Partial<SeminarZodType>,
     exportSubject: "seminar" | "klijenti",
     csvData: string
   ) => {
@@ -120,13 +112,13 @@ export default memo(function SeminariTable(props: {
     }
   };
 
-  const seminariTableColumns: MRT_ColumnDef<SeminarType>[] = [
+  const seminariTableColumns: MRT_ColumnDef<SeminarZodType>[] = [
     {
       id: "actions",
       header: "Akcije",
       size: 100,
       Cell: ({ row }) => {
-        const seminar: Partial<SeminarType> = row.original;
+        const seminar: Partial<SeminarZodType> = row.original;
         return (
           <Box sx={{ display: "flex", gap: "1rem" }}>
             <Tooltip title="Edit">
@@ -213,8 +205,8 @@ export default memo(function SeminariTable(props: {
   ];
 
   const table = useMaterialReactTable({
-    columns: useMemo<MRT_ColumnDef<SeminarType>[]>(() => seminariTableColumns, []),
-    data: useMemo<SeminarType[]>(() => data, [data]),
+    columns: useMemo<MRT_ColumnDef<SeminarZodType>[]>(() => seminariTableColumns, []),
+    data: useMemo<SeminarZodType[]>(() => data, [data]),
     enableColumnFilterModes: true,
     enableColumnOrdering: true,
     enableColumnPinning: true,
@@ -230,13 +222,6 @@ export default memo(function SeminariTable(props: {
     enableExpanding: true,
     renderDetailPanel: (row) => {
       const participants = row.row.original.prijave;
-      const seminarId = row.row.original._id;
-
-      if (seminarId) {
-        for (const p of participants) {
-          p.seminar_id = seminarId;
-        }
-      }
 
       const groupedParticipants = participants.reduce(
         (acc, curr) => {
@@ -274,15 +259,18 @@ export default memo(function SeminariTable(props: {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {Object.entries(groupedParticipants).map(([naziv_firme, prijave]) => (
-                  <PrijaveSeminarTable
-                    key={naziv_firme}
-                    prijave={prijave}
-                    onDelete={() => {
-                      setDeletePrijavaCounter((prev) => prev + 1);
-                    }}
-                  />
-                ))}
+                {Object.entries(groupedParticipants).map(([naziv_firme, prijave]) => {
+                  return (
+                    <PrijaveSeminarTable
+                      key={naziv_firme}
+                      seminarId={row.row.original._id || ""}
+                      prijave={prijave}
+                      onDelete={() => {
+                        setDeletePrijavaCounter((prev) => prev + 1);
+                      }}
+                    />
+                  );
+                })}
               </TableBody>
             </Table>
           </TableContainer>

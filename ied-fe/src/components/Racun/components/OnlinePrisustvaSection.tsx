@@ -94,7 +94,7 @@ export const OnlinePrisustvaSection = () => {
                     sx={{ maxWidth: 100 }}
                     name="onlineCena"
                     variant="filled"
-                    value={racunData.seminar.onlineCena || ""}
+                    value={racunData.seminar.onlineCena || 0}
                     onChange={(e) => updateNestedField("seminar.onlineCena", e.target.value)}
                   />
                 </TableCell>
@@ -103,7 +103,7 @@ export const OnlinePrisustvaSection = () => {
                     sx={{ maxWidth: 70 }}
                     name="popustOnline"
                     variant="filled"
-                    value={racunData.seminar.popustOnline || ""}
+                    value={racunData.seminar.popustOnline || 0}
                     onChange={(e) => updateNestedField("seminar.popustOnline", e.target.value)}
                   />
                 </TableCell>

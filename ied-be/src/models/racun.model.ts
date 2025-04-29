@@ -49,7 +49,7 @@ const racunSchema = new Schema(
       ukupnaNaknada: { type: Number, default: 0, min: 0 },
       ukupanPdv: { type: Number, default: 0, min: 0 },
     },
-    rokZaUplatu: { type: Number, required: false },
+    rokZaUplatu: { type: Number, default: 0, min: 0 },
     pozivNaBroj: {
       type: String,
       required: false,

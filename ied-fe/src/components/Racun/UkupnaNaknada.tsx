@@ -33,9 +33,10 @@ export const UkupnaNaknada = () => {
           Rok za uplatu
         </Typography>
         <TextField
+          type="number"
           name="rokZaUplatu"
           variant="filled"
-          value={racunData.rokZaUplatu || ""}
+          value={racunData.rokZaUplatu || 0}
           sx={{ maxWidth: 60 }}
           onChange={(e) => {
             console.log(e.target.value);

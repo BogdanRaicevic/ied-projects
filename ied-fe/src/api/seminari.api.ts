@@ -1,9 +1,12 @@
-import type { PrijavaNaSeminar, SeminarType } from "../schemas/firmaSchemas";
 import { env } from "../utils/envVariables";
 import axiosInstanceWithAuth from "./interceptors/auth";
-import type { SeminarQueryParams } from "@ied-shared/types/seminar";
+import type {
+  PrijavaZodType,
+  SeminarQueryParamsZodType,
+  SeminarZodType,
+} from "@ied-shared/types/seminar";
 
-export const saveSeminar = async (seminarData: Partial<SeminarType>) => {
+export const saveSeminar = async (seminarData: SeminarZodType) => {
   try {
     if (!seminarData.naziv) {
       console.error("Seminar must contain a name");
@@ -25,7 +28,7 @@ export const saveSeminar = async (seminarData: Partial<SeminarType>) => {
 export const fetchSeminari = async (
   pageSize: number,
   pageIndex: number,
-  queryParameters: SeminarQueryParams
+  queryParameters: SeminarQueryParamsZodType
 ) => {
   try {
     const body = {
@@ -36,7 +39,7 @@ export const fetchSeminari = async (
 
     const response: {
       data: {
-        seminari: SeminarType[];
+        seminari: SeminarZodType[];
         totalPages: number;
         totalDocuments: number;
       };
@@ -60,11 +63,15 @@ export const fetchSeminarById = async (id: string) => {
   }
 };
 
-export const savePrijava = async (prijava: PrijavaNaSeminar) => {
+export const savePrijava = async (seminar_id: string, prijava: PrijavaZodType) => {
+  const payload = {
+    ...prijava,
+    seminar_id,
+  };
   try {
     const response = await axiosInstanceWithAuth.post(
       `${env.beURL}/api/seminari/save-prijava`,
-      prijava
+      payload
     );
 
     return response.data;

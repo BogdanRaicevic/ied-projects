@@ -69,7 +69,7 @@ export const RacunSchema = z.object({
   primalacRacuna: PrimalacRacunaSchema,
   seminar: SeminarRacunSchema,
   calculations: CalculationsRacunSchema,
-  rokZaUplatu: z.number().optional(),
+  rokZaUplatu: z.coerce.number().optional(),
   pozivNaBroj: z.string().optional(),
   dateCreatedAt: z.date().optional(), // Added optional, BE sets default
   dateUpdatedAt: z.date().optional(), // Added optional, BE sets default
