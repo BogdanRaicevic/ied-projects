@@ -21,7 +21,6 @@ interface RacunState {
   updateCalculations: (calculations: CalculationsRacun) => void;
   updateField: (field: keyof any, value: any) => void;
 
-  // Getter for complete racun data
   getCompleteRacunData: () => Racun;
   reset: () => void;
 }

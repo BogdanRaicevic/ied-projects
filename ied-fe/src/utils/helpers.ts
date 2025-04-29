@@ -19,8 +19,6 @@ async function handlePromiseError<T>(promise: Promise<T>): Promise<string | null
     await promise; // Wait for the promise to settle
     return null; // Success, return null
   } catch (error: unknown) {
-    console.error("handlePromiseError caught:", error); // Log the raw error
-
     if (error instanceof ZodError) {
       const formatted = error.errors
         .map((e) => `${e.path.join(".") || "validation"}: ${e.message}`)

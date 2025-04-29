@@ -16,29 +16,37 @@ export const SeminarRacunSchema = z.object({
       if (typeof arg == "string" || arg instanceof Date) return new Date(arg);
     },
     z.date({ required_error: "Datum seminara je obavezan" })
-  ), // Required
+  ),
   lokacija: z.string().optional(),
   jedinicaMere: z.string().optional(),
-  brojUcesnikaOnline: z.number().default(0),
-  brojUcesnikaOffline: z.number().default(0),
-  onlineCena: z.number().default(0),
-  offlineCena: z.number().default(0),
-  popustOnline: z.number().default(0),
-  popustOffline: z.number().default(0),
+  brojUcesnikaOnline: z.number().min(0).default(0),
+  brojUcesnikaOffline: z.number().min(0).default(0),
+  onlineCena: z.number().min(0).default(0),
+  offlineCena: z.number().min(0).default(0),
+  popustOnline: z
+    .number()
+    .min(0, { message: "Popust online mora biti između 0 i 100" })
+    .max(100, { message: "Popust online mora biti između 0 i 100" })
+    .default(0),
+  popustOffline: z
+    .number()
+    .min(0, { message: "Popust offline mora biti između 0 i 100" })
+    .max(100, { message: "Popust offline mora biti između 0 i 100" })
+    .default(0),
   avansBezPdv: z.number().default(0),
 });
 
 export const CalculationsRacunSchema = z.object({
-  onlineUkupnaNaknada: z.number().default(0),
-  offlineUkupnaNaknada: z.number().default(0),
-  onlinePoreskaOsnovica: z.number().default(0),
-  offlinePoreskaOsnovica: z.number().default(0),
-  pdvOnline: z.number().default(0),
-  pdvOffline: z.number().default(0),
-  avansPdv: z.number().default(0),
-  avans: z.number().default(0),
-  ukupnaNaknada: z.number().default(0),
-  ukupanPdv: z.number().default(0),
+  onlineUkupnaNaknada: z.number().min(0).default(0),
+  offlineUkupnaNaknada: z.number().min(0).default(0),
+  onlinePoreskaOsnovica: z.number().min(0).default(0),
+  offlinePoreskaOsnovica: z.number().min(0).default(0),
+  pdvOnline: z.number().min(0).default(0),
+  pdvOffline: z.number().min(0).default(0),
+  avansPdv: z.number().min(0).default(0),
+  avans: z.number().min(0).default(0),
+  ukupnaNaknada: z.number().min(0).default(0),
+  ukupanPdv: z.number().min(0).default(0),
 });
 
 export enum TipRacuna {
