@@ -29,6 +29,7 @@ export default function Racuni() {
   const getCompleteRacunData = useRacunStore((state) => state.getCompleteRacunData);
   const setRacunData = useRacunStore((state) => state.updateRacunData);
   const reset = useRacunStore((state) => state.reset);
+  const resetSeminarCalculationData = useRacunStore((state) => state.resetSeminarCalculationData);
 
   const location = useLocation();
   const prijave: PrijavaZodType[] = useMemo(
@@ -67,8 +68,6 @@ export default function Racuni() {
 
   // Add this effect to handle tab changes from navigation
   useEffect(() => {
-    console.log("Selected Tab:", location.state.selectedTipRacuna);
-    console.log("selectedRacun:", location.state.selectedRacunId);
     if (location.state?.selectedTipRacuna) {
       setTabValue(location.state.selectedTipRacuna);
 
@@ -80,8 +79,6 @@ export default function Racuni() {
 
           const racun = await fetchRacunById(location.state.selectedRacunId);
 
-          console.log("Fetched Racun:", racun);
-          // Set the invoice data in the Zustand store
           setRacunData(racun);
         } catch (error) {
           console.error("Error loading invoice:", error);
@@ -156,6 +153,7 @@ export default function Racuni() {
   };
 
   const handleTabChange = (_event: React.SyntheticEvent, newValue: TipRacuna | "pretrage") => {
+    resetSeminarCalculationData();
     setTabValue(newValue);
   };
 

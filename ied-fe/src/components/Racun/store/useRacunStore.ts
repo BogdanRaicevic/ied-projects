@@ -23,6 +23,7 @@ interface RacunState {
 
   getCompleteRacunData: () => Racun;
   reset: () => void;
+  resetSeminarCalculationData: () => void;
 }
 
 const initialRacunData: Racun = {
@@ -109,4 +110,35 @@ export const useRacunStore = create<RacunState>((set, get) => ({
     set({
       racunData: initialRacunData,
     }),
+
+  resetSeminarCalculationData: () =>
+    set((state) => ({
+      racunData: {
+        ...state.racunData,
+        seminar: {
+          ...state.racunData.seminar,
+          offlineCena: 0,
+          onlineCena: 0,
+          popustOnline: 0,
+          popustOffline: 0,
+          avansBezPdv: 0,
+          brojUcesnikaOffline: 0,
+          brojUcesnikaOnline: 0,
+        },
+        calculations: {
+          offlineUkupnaNaknada: 0,
+          onlineUkupnaNaknada: 0,
+          offlinePoreskaOsnovica: 0,
+          onlinePoreskaOsnovica: 0,
+          pdvOffline: 0,
+          pdvOnline: 0,
+          avansPdv: 0,
+          avans: 0,
+          ukupanPdv: 0,
+          ukupnaNaknada: 0,
+        },
+        pozivNaBroj: "",
+        rokZaUplatu: 0,
+      },
+    })),
 }));
