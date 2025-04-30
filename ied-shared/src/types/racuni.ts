@@ -74,6 +74,7 @@ export const RacunSchema = z.object({
   dateCreatedAt: z.date().optional(), // Added optional, BE sets default
   dateUpdatedAt: z.date().optional(), // Added optional, BE sets default
   stopaPdv: z.number().default(20),
+  _id: z.string().optional(),
 });
 
 // Inferred Types

@@ -1,7 +1,7 @@
 import { Alert, Box, Button, Tab, Tabs } from "@mui/material";
 import PageTitle from "../components/PageTitle";
 import { updateRacunTemplate } from "../api/docx.api";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { CreatePredracunForm } from "../components/Racun/CreatePredracunForm";
 import { fetchSingleFirma } from "../api/firma.api";
 import { useEffect, useMemo, useState } from "react";
@@ -37,6 +37,8 @@ export default function Racuni() {
     [location.state?.seminarId]
   );
 
+  const navigate = useNavigate(); // Use the navigate function from react-router-dom
+
   useEffect(() => {
     const fetchFirma = async () => {
       try {
@@ -59,6 +61,33 @@ export default function Racuni() {
 
     fetchFirma();
   }, [prijave]);
+
+  // Add this effect to handle tab changes from navigation
+  useEffect(() => {
+    console.log("Selected Tab:", location.state.selectedTab);
+    console.log("selectedPozivNaBroj:", location.state.selectedPozivNaBroj);
+    console.log("selectedRacun:", location.state.selectedRacun);
+    if (location.state?.selectedTab) {
+      setTabValue(location.state.selectedTab);
+
+      if (location.state.selectedPozivNaBroj) {
+        const fetchInvoice = async () => {
+          try {
+            // const invoiceData = await fetchInvoiceById(location.state.selectedInvoiceId);
+            // Update your form state with this data
+            // updateRacunData(invoiceData);
+          } catch (error) {
+            console.error("Error loading invoice:", error);
+            setApiError("Greška pri učitavanju podataka računa.");
+          }
+        };
+
+        fetchInvoice();
+      }
+
+      navigate("", { state: {}, replace: true });
+    }
+  }, [location.state?.selectedTab]);
 
   // --- Extract Primitives and Derived Values ---
   const seminarOnlineCena = seminar?.onlineCena;

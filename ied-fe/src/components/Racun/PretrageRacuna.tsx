@@ -2,14 +2,19 @@ import { useState, useEffect, useMemo } from "react";
 import { searchRacuni } from "../../api/racuni.api";
 import { MaterialReactTable, MRT_ColumnDef, useMaterialReactTable } from "material-react-table";
 import { Racun } from "@ied-shared/index";
-import { Box, Chip, FormControl, MenuItem, Select, SelectChangeEvent } from "@mui/material";
+import { Link, Box, Chip, FormControl, MenuItem, Select, SelectChangeEvent } from "@mui/material";
 import { blue, green, purple, red } from "@mui/material/colors";
 import { formatDate } from "date-fns";
+import { useNavigate } from "react-router-dom";
 
 export const PretrageRacuna = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-  const [racuniData, setRacuniData] = useState<any>(null);
+  const [racuniData, setRacuniData] = useState<{
+    totalDocuments: number;
+    totalPages: number;
+    racuni: Racun[];
+  }>();
 
   useEffect(() => {
     const fetchRacuni = async () => {
@@ -33,6 +38,27 @@ export const PretrageRacuna = () => {
       {
         accessorKey: "pozivNaBroj",
         header: "Poziv na broj",
+        Cell: ({ cell }) => {
+          const value = cell.getValue<string>();
+          const navigate = useNavigate();
+
+          return (
+            <Link
+              onClick={(e) => {
+                e.preventDefault();
+                navigate("", {
+                  state: {
+                    selectedTab: cell.row.original.tipRacuna,
+                    selectedPozivNaBroj: value,
+                    selectedRacunId: cell.row.original._id,
+                  },
+                });
+              }}
+            >
+              {value}
+            </Link>
+          );
+        },
       },
       {
         accessorKey: "tipRacuna",
@@ -184,7 +210,6 @@ export const PretrageRacuna = () => {
   );
 };
 
-// Custom filter component for izdavacRacuna
 const IzdavacFilterHeader = ({ column }: { column: any }) => {
   const [value, setValue] = useState<string>("");
 

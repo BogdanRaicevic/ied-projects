@@ -64,7 +64,7 @@ export const OnlinePrisustvaSection = () => {
                   <TextField
                     variant="filled"
                     name="brojUcesnikaOnline"
-                    value={racunData.seminar.brojUcesnikaOnline || ""}
+                    value={racunData.seminar.brojUcesnikaOnline || 0}
                     onChange={(e) =>
                       updateNestedField("seminar.brojUcesnikaOnline", Number(e.target.value))
                     }
