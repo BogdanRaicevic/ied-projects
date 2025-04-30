@@ -32,7 +32,7 @@ export const saveSeminar = async (seminarData: SeminarZodType): Promise<SeminarT
   return await seminar.save();
 };
 
-export const search = async (
+export const searchSeminars = async (
   queryParameters: FilterQuery<SeminarQueryParamsZodType>,
   pageIndex = 1,
   pageSize = 50

@@ -7,7 +7,7 @@ import {
   getAllSeminars,
   savePrijava,
   saveSeminar,
-  search,
+  searchSeminars,
 } from "../services/seminar.service";
 import type { FilterQuery } from "mongoose";
 import type { SeminarType } from "../models/seminar.model";
@@ -48,7 +48,7 @@ router.post(
 
     console.log("serch", query);
     try {
-      const paginationResult = await search(
+      const paginationResult = await searchSeminars(
         {
           ...rest,
           datumOd,

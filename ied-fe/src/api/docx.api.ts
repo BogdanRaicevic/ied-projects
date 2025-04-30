@@ -5,8 +5,11 @@ import { validateOrThrow } from "../utils/zodErrorHelper";
 
 export const updateRacunTemplate = async (
   racunData: Omit<Racun, "tipRacuna">,
-  tipRacuna: TipRacuna
+  tipRacuna: TipRacuna | "pretrage"
 ) => {
+  if (tipRacuna === "pretrage") {
+    throw new Error("Tip računa 'pretrage' nije podržan za generisanje dokumenata.");
+  }
   const payload: Racun = {
     ...racunData,
     tipRacuna,

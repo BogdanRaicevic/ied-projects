@@ -15,11 +15,12 @@ import PostAddIcon from "@mui/icons-material/PostAdd";
 import { useRacunCalculations } from "../components/Racun/hooks/useRacunCalculations";
 import { PrijavaZodType, SeminarZodType, TipRacuna } from "@ied-shared/index";
 import handlePromiseError from "../utils/helpers";
+import { PretrageRacuna } from "../components/Racun/PretrageRacuna";
 
 export default function Racuni() {
   const [firma, setFirma] = useState<FirmaType | null>(null);
   const [seminar, setSeminar] = useState<SeminarZodType | null>(null);
-  const [tabValue, setTabValue] = useState<TipRacuna>(TipRacuna.PREDRACUN);
+  const [tabValue, setTabValue] = useState<TipRacuna | "pretrage">("pretrage");
   const [apiError, setApiError] = useState<string | null>(null); // State for error message
 
   // Get store actions
@@ -119,13 +120,15 @@ export default function Racuni() {
     setApiError(errors); // Set the result (null on success, string on error)
   };
 
-  const handleTabChange = (_event: React.SyntheticEvent, newValue: TipRacuna) => {
+  const handleTabChange = (_event: React.SyntheticEvent, newValue: TipRacuna | "pretrage") => {
     setTabValue(newValue);
   };
 
   // Function to render the appropriate form based on current tab
   const renderActiveForm = () => {
     switch (tabValue) {
+      case "pretrage":
+        return <PretrageRacuna />;
       case TipRacuna.PREDRACUN:
         return <CreatePredracunForm />;
       case TipRacuna.AVANSNI_RACUN:
@@ -133,7 +136,7 @@ export default function Racuni() {
       case TipRacuna.KONACNI_RACUN:
         return <CreateKonacniRacunForm />;
       default:
-        return <CreatePredracunForm />;
+        return <PretrageRacuna />;
     }
   };
 
@@ -146,6 +149,7 @@ export default function Racuni() {
 
       <Box sx={{ borderBottom: 1, borderColor: "divider", mt: 3, mb: 3 }}>
         <Tabs value={tabValue} onChange={handleTabChange} aria-label="basic tabs">
+          <Tab label="Pretrage" value="pretrage" />
           <Tab label="Predračun" value={TipRacuna.PREDRACUN} />
           <Tab label="Avansni račun" value={TipRacuna.AVANSNI_RACUN} />
           <Tab label="Konačni račun" value={TipRacuna.KONACNI_RACUN} />
@@ -160,14 +164,16 @@ export default function Racuni() {
           {apiError}
         </Alert>
       )}
-      <Button
-        sx={{ mt: 3, mb: 3 }}
-        onClick={handleDocxUpdate}
-        variant="contained"
-        endIcon={<PostAddIcon />}
-      >
-        Ođe Klik
-      </Button>
+      {tabValue !== "pretrage" && (
+        <Button
+          sx={{ mt: 3, mb: 3 }}
+          onClick={handleDocxUpdate}
+          variant="contained"
+          endIcon={<PostAddIcon />}
+        >
+          Ođe Klik
+        </Button>
+      )}
     </>
   );
 }

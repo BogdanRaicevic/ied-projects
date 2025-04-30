@@ -10,3 +10,17 @@ export const getIzdavaciRacuna = async () => {
     throw error;
   }
 };
+
+export const searchRacuni = async (searchParams: any) => {
+  try {
+    const response = await axiosInstanceWithAuth.post(
+      `${env.beURL}/api/racuni/search`,
+      searchParams
+    );
+    console.log("searchRacuni response", response.data);
+    return response.data;
+  } catch (error) {
+    console.error("Error searching racuni:", error);
+    throw error;
+  }
+};

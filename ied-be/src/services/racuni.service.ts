@@ -53,19 +53,22 @@ export const deleteRacunById = async (id: string) => {
   }
 };
 
-export const getAllRacuni = async (pageIndex = 1, pageSize = 50) => {
+// TODO: queryParmaeters: RacuniQueryParamsZodType
+export const searchRacuni = async (pageIndex = 1, pageSize = 50, _queryParameters: any) => {
   try {
     const skip = (pageIndex - 1) * pageSize;
-    // Use Promise.all to run count and find potentially in parallel
-    const [totalDocuments, resultsCursor] = await Promise.all([
+    // const mongoQuery = createRacunQuery(queryParameters.queryParameters);
+    const [totalDocuments, racuni] = await Promise.all([
       Racun.countDocuments(),
-      Racun.find().sort({ createdAt: -1 }).skip(skip).limit(pageSize).cursor(),
+      Racun.find().sort({ pozivNaBroj: -1 }).skip(skip).limit(pageSize),
     ]);
 
+    const totalPages = Math.ceil(totalDocuments / pageSize);
+
     return {
-      cursor: resultsCursor,
+      racuni,
       totalDocuments,
-      totalPages: Math.ceil(totalDocuments / pageSize),
+      totalPages,
     };
   } catch (error) {
     console.error("Error getting all Racuni:", error);
