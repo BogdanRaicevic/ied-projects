@@ -16,6 +16,7 @@ import { useRacunCalculations } from "../components/Racun/hooks/useRacunCalculat
 import { PrijavaZodType, SeminarZodType, TipRacuna } from "@ied-shared/index";
 import handlePromiseError from "../utils/helpers";
 import { PretrageRacuna } from "../components/Racun/PretrageRacuna";
+import { fetchRacunById } from "../api/racuni.api";
 
 export default function Racuni() {
   const [firma, setFirma] = useState<FirmaType | null>(null);
@@ -26,6 +27,8 @@ export default function Racuni() {
   // Get store actions
   const updateNestedField = useRacunStore((state) => state.updateNestedField);
   const getCompleteRacunData = useRacunStore((state) => state.getCompleteRacunData);
+  const setRacunData = useRacunStore((state) => state.updateRacunData);
+  const reset = useRacunStore((state) => state.reset);
 
   const location = useLocation();
   const prijave: PrijavaZodType[] = useMemo(
@@ -64,30 +67,33 @@ export default function Racuni() {
 
   // Add this effect to handle tab changes from navigation
   useEffect(() => {
-    console.log("Selected Tab:", location.state.selectedTab);
-    console.log("selectedPozivNaBroj:", location.state.selectedPozivNaBroj);
-    console.log("selectedRacun:", location.state.selectedRacun);
-    if (location.state?.selectedTab) {
-      setTabValue(location.state.selectedTab);
+    console.log("Selected Tab:", location.state.selectedTipRacuna);
+    console.log("selectedRacun:", location.state.selectedRacunId);
+    if (location.state?.selectedTipRacuna) {
+      setTabValue(location.state.selectedTipRacuna);
 
-      if (location.state.selectedPozivNaBroj) {
-        const fetchInvoice = async () => {
-          try {
-            // const invoiceData = await fetchInvoiceById(location.state.selectedInvoiceId);
-            // Update your form state with this data
-            // updateRacunData(invoiceData);
-          } catch (error) {
-            console.error("Error loading invoice:", error);
-            setApiError("Greška pri učitavanju podataka računa.");
-          }
-        };
+      const fetchInvoice = async () => {
+        try {
+          setApiError(null);
 
-        fetchInvoice();
-      }
+          reset();
+
+          const racun = await fetchRacunById(location.state.selectedRacunId);
+
+          console.log("Fetched Racun:", racun);
+          // Set the invoice data in the Zustand store
+          setRacunData(racun);
+        } catch (error) {
+          console.error("Error loading invoice:", error);
+          setApiError("Greška pri učitavanju podataka računa.");
+        }
+      };
+
+      fetchInvoice();
 
       navigate("", { state: {}, replace: true });
     }
-  }, [location.state?.selectedTab]);
+  }, [location.state?.selectedTipRacuna]);
 
   // --- Extract Primitives and Derived Values ---
   const seminarOnlineCena = seminar?.onlineCena;

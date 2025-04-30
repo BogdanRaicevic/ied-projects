@@ -17,10 +17,19 @@ export const searchRacuni = async (searchParams: any) => {
       `${env.beURL}/api/racuni/search`,
       searchParams
     );
-    console.log("searchRacuni response", response.data);
     return response.data;
   } catch (error) {
     console.error("Error searching racuni:", error);
+    throw error;
+  }
+};
+
+export const fetchRacunById = async (id: string) => {
+  try {
+    const response = await axiosInstanceWithAuth.get(`${env.beURL}/api/racuni/${id}`);
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching racun by ID:", error);
     throw error;
   }
 };

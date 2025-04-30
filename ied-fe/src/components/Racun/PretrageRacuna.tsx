@@ -48,7 +48,7 @@ export const PretrageRacuna = () => {
                 e.preventDefault();
                 navigate("", {
                   state: {
-                    selectedTab: cell.row.original.tipRacuna,
+                    selectedTipRacuna: cell.row.original.tipRacuna,
                     selectedPozivNaBroj: value,
                     selectedRacunId: cell.row.original._id,
                   },

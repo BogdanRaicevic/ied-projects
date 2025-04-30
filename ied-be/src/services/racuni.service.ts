@@ -14,7 +14,6 @@ export const saveRacun = async (racun: Racun) => {
 export const getRacunById = async (id: string) => {
   try {
     const racun = await Racun.findById(id);
-    // Optional: Check if racun exists and throw a specific error if not found
     if (!racun) {
       throw new Error(`Racun with ID ${id} not found.`);
     }
