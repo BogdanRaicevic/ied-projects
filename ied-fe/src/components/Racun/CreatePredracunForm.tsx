@@ -16,6 +16,7 @@ export const CreatePredracunForm = () => {
       value={racunData.pozivNaBroj || ""}
       size="small"
       sx={{ width: "150px" }}
+      disabled
       onChange={(e) => updateField("pozivNaBroj", e.target.value)}
     />
   );
