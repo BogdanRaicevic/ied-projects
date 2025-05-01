@@ -1,13 +1,12 @@
-import { Router } from "express";
+import { Router, Request } from "express";
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import PizZip from "pizzip";
 import Docxtemplater from "docxtemplater";
-import { saveRacun } from "../services/racuni.service";
 import { izdavacRacuna } from "../constants/izdavacRacuna.const";
 import { validate } from "../middleware/validateSchema";
-import { RacunSchema, TipRacuna } from "@ied-shared/types/racuni";
+import { Racun, RacunSchema, TipRacuna } from "@ied-shared/types/racuni";
 import { formatDate } from "date-fns";
 
 const __filename = fileURLToPath(import.meta.url);
@@ -33,84 +32,87 @@ const sanitizeFilename = (str: string): string => {
 
 const formatToLocalDate = (date: Date): string => formatDate(date, "dd.MM.yyyy");
 
-router.post("/modify-template", validate(RacunSchema), async (req, res) => {
-  // Validate template name if you want to support multiple templates
-  const templateName = req.body.tipRacuna;
+router.post(
+  "/modify-template",
+  validate(RacunSchema),
+  async (req: Request<{}, any, Racun>, res) => {
+    // Validate template name if you want to support multiple templates
+    const templateName = req.body.tipRacuna;
+    const racunData = req.body;
 
-  // Check if the racunType is valid
-  if (!Object.values(TipRacuna).includes(templateName as TipRacuna)) {
-    return res.status(400).json({
-      error: "Invalid template name",
-      validTypes: Object.values(TipRacuna),
-    });
-  }
+    // Check if the racunType is valid
+    if (!Object.values(TipRacuna).includes(templateName as TipRacuna)) {
+      return res.status(400).json({
+        error: "Invalid template name",
+        validTypes: Object.values(TipRacuna),
+      });
+    }
 
-  // Sanitize the template name to prevent path traversal
-  const sanitizedTemplateName = templateName.replace(/[^a-zA-Z0-9-_.]/g, "");
-  if (sanitizedTemplateName !== templateName) {
-    return res.status(400).json({ error: "Invalid template name format" });
-  }
+    // Sanitize the template name to prevent path traversal
+    const sanitizedTemplateName = templateName.replace(/[^a-zA-Z0-9-_.]/g, "");
+    if (sanitizedTemplateName !== templateName) {
+      return res.status(400).json({ error: "Invalid template name format" });
+    }
 
-  const templatePath = path.resolve(
-    __dirname,
-    "../../src/templates",
-    sanitizedTemplateName.concat(".docx")
-  );
-
-  console.log("templatePath", templatePath);
-
-  // Additional check to ensure the resolved path is within the templates directory
-  const templatesDir = path.resolve(__dirname, "../../src/templates");
-  if (!templatePath.startsWith(templatesDir)) {
-    return res.status(400).json({ error: "Invalid template path" });
-  }
-
-  const savedRacun = (await saveRacun(req.body)).toObject();
-
-  try {
-    const content = fs.readFileSync(templatePath, "binary");
-    const zip = new PizZip(content);
-    const doc = new Docxtemplater(zip);
-
-    const dataForDocumentRednering = {
-      ...savedRacun,
-      izdavacRacuna: { ...izdavacRacuna.find((d) => d.id === req.body.izdavacRacuna) },
-      datumIzdavanjaRacuna: formatToLocalDate(new Date()),
-      hasOnline: Number(req.body.seminar.brojUcesnikaOnline) > 0,
-      hasOffline: Number(req.body.seminar.brojUcesnikaOffline) > 0,
-      seminar: {
-        ...(savedRacun.seminar ?? {}),
-        datum: savedRacun.seminar?.datum
-          ? formatToLocalDate(new Date(savedRacun.seminar.datum))
-          : undefined,
-      },
-    };
-
-    console.log("dataForDocumentRednering", dataForDocumentRednering);
-    doc.render(dataForDocumentRednering);
-
-    const buf = doc.getZip().generate({ type: "nodebuffer" });
-
-    // Set appropriate headers
-    res.setHeader(
-      "Content-Type",
-      "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+    const templatePath = path.resolve(
+      __dirname,
+      "../../src/templates",
+      sanitizedTemplateName.concat(".docx")
     );
 
-    const fileName = sanitizeFilename(
-      `${sanitizedTemplateName}_${dataForDocumentRednering.primalacRacuna?.naziv}_${dataForDocumentRednering.seminar?.naziv}_${new Date().toISOString().split("T")[0].replace(/-/g, "")}.docx`
-    );
-    console.log("fileName", fileName);
-    res.setHeader(`Content-Disposition`, `attachment; filename=${fileName}`);
+    console.log("templatePath", templatePath);
 
-    res.send(buf);
-  } catch (error) {
-    console.error("Template processing error:", error);
-    res.status(500).json({
-      error: "Error processing template",
-      details: error instanceof Error ? error.message : "Unknown error",
-    });
+    // Additional check to ensure the resolved path is within the templates directory
+    const templatesDir = path.resolve(__dirname, "../../src/templates");
+    if (!templatePath.startsWith(templatesDir)) {
+      return res.status(400).json({ error: "Invalid template path" });
+    }
+
+    try {
+      const content = fs.readFileSync(templatePath, "binary");
+      const zip = new PizZip(content);
+      const doc = new Docxtemplater(zip);
+
+      const dataForDocumentRednering = {
+        ...racunData,
+        izdavacRacuna: { ...izdavacRacuna.find((d) => d.id === req.body.izdavacRacuna) },
+        datumIzdavanjaRacuna: formatToLocalDate(new Date()),
+        hasOnline: Number(req.body.seminar.brojUcesnikaOnline) > 0,
+        hasOffline: Number(req.body.seminar.brojUcesnikaOffline) > 0,
+        seminar: {
+          ...(racunData.seminar ?? {}),
+          datum: racunData.seminar?.datum
+            ? formatToLocalDate(new Date(racunData.seminar.datum))
+            : undefined,
+        },
+      };
+
+      console.log("dataForDocumentRednering", dataForDocumentRednering);
+      doc.render(dataForDocumentRednering);
+
+      const buf = doc.getZip().generate({ type: "nodebuffer" });
+
+      // Set appropriate headers
+      res.setHeader(
+        "Content-Type",
+        "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+      );
+
+      const fileName = sanitizeFilename(
+        `${sanitizedTemplateName}_${dataForDocumentRednering.primalacRacuna?.naziv}_${dataForDocumentRednering.seminar?.naziv}_${new Date().toISOString().split("T")[0].replace(/-/g, "")}.docx`
+      );
+      console.log("fileName", fileName);
+      res.setHeader(`Content-Disposition`, `attachment; filename=${fileName}`);
+
+      res.send(buf);
+    } catch (error) {
+      console.error("Template processing error:", error);
+      res.status(500).json({
+        error: "Error processing template",
+        details: error instanceof Error ? error.message : "Unknown error",
+      });
+    }
   }
-});
+);
 
 export default router;
