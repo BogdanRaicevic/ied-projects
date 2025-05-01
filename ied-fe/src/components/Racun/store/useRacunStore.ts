@@ -139,6 +139,9 @@ export const useRacunStore = create<RacunState>((set, get) => ({
         },
         pozivNaBroj: "",
         rokZaUplatu: 0,
+        _id: undefined,
+        dateCreatedAt: undefined,
+        dateUpdatedAt: undefined,
       },
     })),
 }));

@@ -26,12 +26,10 @@ export const getRacunById = async (id: string) => {
 
 export const updateRacunById = async (id: string, updatedRacun: Racun) => {
   try {
-    // Add { runValidators: true } to ensure updates also adhere to schema validation
     const racun = await Racun.findByIdAndUpdate(id, updatedRacun, {
       new: true,
       runValidators: true,
     });
-    // Optional: Check if racun was found and updated
     if (!racun) {
       throw new Error(`Racun with ID ${id} not found for update.`);
     }

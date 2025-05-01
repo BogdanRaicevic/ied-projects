@@ -71,8 +71,8 @@ export const RacunSchema = z.object({
   calculations: CalculationsRacunSchema,
   rokZaUplatu: z.coerce.number().optional(),
   pozivNaBroj: z.string().optional(),
-  dateCreatedAt: z.date().optional(), // Added optional, BE sets default
-  dateUpdatedAt: z.date().optional(), // Added optional, BE sets default
+  dateCreatedAt: z.coerce.date().optional(), // Added optional, BE sets default
+  dateUpdatedAt: z.coerce.date().optional(), // Added optional, BE sets default
   stopaPdv: z.number().default(20),
   _id: z.string().optional(),
 });

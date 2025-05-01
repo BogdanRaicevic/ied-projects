@@ -55,10 +55,12 @@ const racunSchema = new Schema(
       required: false,
     },
     stopaPdv: { type: Number, default: 20, required: true },
-    dateCreatedAt: { type: Date, default: Date.now },
-    dateUpdatedAt: { type: Date, default: Date.now },
+    dateCreatedAt: { type: Date, default: Date.now, immutable: true },
   },
-  { collection: "racuni" }
+  {
+    collection: "racuni",
+    timestamps: { createdAt: "dateCreatedAt", updatedAt: "dateUpdatedAt" },
+  }
 );
 
 // --- COMPOUND UNIQUE INDEX ---

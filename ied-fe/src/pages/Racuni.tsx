@@ -16,7 +16,7 @@ import { useRacunCalculations } from "../components/Racun/hooks/useRacunCalculat
 import { PrijavaZodType, SeminarZodType, TipRacuna } from "@ied-shared/index";
 import handlePromiseError from "../utils/helpers";
 import { PretrageRacuna } from "../components/Racun/PretrageRacuna";
-import { fetchRacunById } from "../api/racuni.api";
+import { fetchRacunById, saveNewRacun, updateRacunById } from "../api/racuni.api";
 
 export default function Racuni() {
   const [firma, setFirma] = useState<FirmaType | null>(null);
@@ -30,6 +30,7 @@ export default function Racuni() {
   const setRacunData = useRacunStore((state) => state.updateRacunData);
   const reset = useRacunStore((state) => state.reset);
   const resetSeminarCalculationData = useRacunStore((state) => state.resetSeminarCalculationData);
+  const racunData = useRacunStore((state) => state.racunData);
 
   const location = useLocation();
   const prijave: PrijavaZodType[] = useMemo(
@@ -146,9 +147,21 @@ export default function Racuni() {
   const handleDocxUpdate = async () => {
     setApiError(null);
     const racunData = getCompleteRacunData();
-
     const errors = await handlePromiseError(updateRacunTemplate(racunData, tabValue));
+    setApiError(errors); // Set the result (null on success, string on error)
+  };
 
+  const handleSaveRacun = async () => {
+    setApiError(null);
+    const racunData = getCompleteRacunData();
+    const errors = await handlePromiseError(saveNewRacun(racunData));
+    setApiError(errors); // Set the result (null on success, string on error)
+  };
+
+  const handleUpdateRacun = async () => {
+    setApiError(null);
+    const racunData = getCompleteRacunData();
+    const errors = await handlePromiseError(updateRacunById(racunData));
     setApiError(errors); // Set the result (null on success, string on error)
   };
 
@@ -198,14 +211,22 @@ export default function Racuni() {
         </Alert>
       )}
       {tabValue !== "pretrage" && (
-        <Button
-          sx={{ mt: 3, mb: 3 }}
-          onClick={handleDocxUpdate}
-          variant="contained"
-          endIcon={<PostAddIcon />}
-        >
-          Ođe Klik
-        </Button>
+        <>
+          {!racunData._id && <Button onClick={handleSaveRacun}>Sačuvaj račun</Button>}
+          {racunData._id && (
+            <Button onClick={handleUpdateRacun} sx={{ ml: 2 }}>
+              Ažuriraj račun
+            </Button>
+          )}
+          <Button
+            sx={{ mt: 3, mb: 3 }}
+            onClick={handleDocxUpdate}
+            variant="contained"
+            endIcon={<PostAddIcon />}
+          >
+            Ođe Klik
+          </Button>
+        </>
       )}
     </>
   );
