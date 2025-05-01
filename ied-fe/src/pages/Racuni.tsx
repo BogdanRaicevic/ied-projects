@@ -1,6 +1,6 @@
 import { Alert, Box, Button, Snackbar, Tab, Tabs } from "@mui/material";
 import PageTitle from "../components/PageTitle";
-import { updateRacunTemplate } from "../api/docx.api";
+import { generateRacunDocument } from "../api/docx.api";
 import { useLocation, useNavigate } from "react-router-dom";
 import { CreatePredracunForm } from "../components/Racun/CreatePredracunForm";
 import { fetchSingleFirma } from "../api/firma.api";
@@ -150,12 +150,21 @@ export default function Racuni() {
   const handleDocxUpdate = async () => {
     setApiError(null);
     const racunData = getCompleteRacunData();
-    const errors = await handlePromiseError(updateRacunTemplate(racunData, tabValue));
-    setApiError(errors); // Set the result (null on success, string on error)
+    const errors = await handlePromiseError(generateRacunDocument(racunData));
+
+    if (errors) {
+      setAlertMessage(errors);
+      setAlertSeverity("error");
+    } else {
+      setAlertMessage("Račun uspešno sačuvan!");
+      setAlertSeverity("success");
+      reset();
+    }
+    setAlertOpen(true);
   };
 
   const handleSaveRacun = async () => {
-    setApiError(null); // Clear persistent error if any
+    setApiError(null);
     const racunData = getCompleteRacunData();
     const errors = await handlePromiseError(saveNewRacun(racunData));
 
@@ -167,11 +176,11 @@ export default function Racuni() {
       setAlertSeverity("success");
       reset();
     }
-    setAlertOpen(true); // Show the alert
+    setAlertOpen(true);
   };
 
   const handleUpdateRacun = async () => {
-    setApiError(null); // Clear persistent error if any
+    setApiError(null);
     const racunData = getCompleteRacunData();
     const errors = await handlePromiseError(updateRacunById(racunData));
 
@@ -182,7 +191,7 @@ export default function Racuni() {
       setAlertMessage("Račun uspešno ažuriran!");
       setAlertSeverity("success");
     }
-    setAlertOpen(true); // Show the alert
+    setAlertOpen(true);
   };
 
   const handleTabChange = (_event: React.SyntheticEvent, newValue: TipRacuna | "pretrage") => {

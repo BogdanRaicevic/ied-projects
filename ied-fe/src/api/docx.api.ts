@@ -3,24 +3,18 @@ import { env } from "../utils/envVariables";
 import { Racun, RacunSchema, TipRacuna } from "@ied-shared/types/racuni";
 import { validateOrThrow } from "../utils/zodErrorHelper";
 
-export const updateRacunTemplate = async (
-  racunData: Omit<Racun, "tipRacuna">,
-  tipRacuna: TipRacuna | "pretrage"
-) => {
-  if (tipRacuna === "pretrage") {
-    throw new Error("Tip računa 'pretrage' nije podržan za generisanje dokumenata.");
+export const generateRacunDocument = async (racunData: Racun) => {
+  const tipRacuna = racunData.tipRacuna;
+  if (!Object.values(TipRacuna).includes(tipRacuna)) {
+    throw new Error(`Tip računa ${racunData.tipRacuna} nije podržan za generisanje dokumenata.`);
   }
-  const payload: Racun = {
-    ...racunData,
-    tipRacuna,
-  };
 
   try {
-    validateOrThrow(RacunSchema, payload);
+    validateOrThrow(RacunSchema, racunData);
 
     const response = await axiosInstanceWithAuth.post(
       `${env.beURL}/api/docx/modify-template`,
-      payload,
+      racunData,
       {
         responseType: "blob",
       }
@@ -36,7 +30,7 @@ export const updateRacunTemplate = async (
     const url = window.URL.createObjectURL(new Blob([response.data]));
     const link = document.createElement("a");
     link.href = url;
-    const fileName = `${tipRacuna}_${sanitizeFilename(racunData.primalacRacuna.naziv)}_${sanitizeFilename(racunData.seminar.naziv)}_${new Date().toISOString().split("T")[0].replace(/-/g, "")}.docx`;
+    const fileName = `${racunData.tipRacuna}_${sanitizeFilename(racunData.primalacRacuna.naziv)}_${sanitizeFilename(racunData.seminar.naziv)}_${new Date().toISOString().split("T")[0].replace(/-/g, "")}.docx`;
 
     link.setAttribute("download", `${fileName}.docx`);
     document.body.appendChild(link);
