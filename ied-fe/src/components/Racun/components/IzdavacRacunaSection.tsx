@@ -23,12 +23,6 @@ export const IzdavacRacunaSection = () => {
 
   const tekuciRacuniOptions = currentIzdavacData?.tekuciRacuni || [];
 
-  useEffect(() => {
-    if (selectedIzdavac) {
-      updateField("tekuciRacun", "");
-    }
-  }, [selectedIzdavac, updateField]);
-
   if (isLoading) {
     return <div>Loading Firma data...</div>;
   }
