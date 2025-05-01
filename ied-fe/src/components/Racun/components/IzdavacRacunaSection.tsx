@@ -2,7 +2,7 @@ import { Grid2, Paper, TextField, Box, Autocomplete } from "@mui/material";
 import SelectIzdavacRacuna from "../SelectIzdavacRacuna";
 import { useRacunStore } from "../store/useRacunStore";
 import { useFetchIzdavaciRacuna } from "../../../hooks/useFetchData";
-import { useEffect, useMemo } from "react";
+import { useMemo } from "react";
 
 export const IzdavacRacunaSection = () => {
   const selectedIzdavac = useRacunStore((state) => state.racunData.izdavacRacuna);

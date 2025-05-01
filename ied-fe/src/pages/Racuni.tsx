@@ -1,4 +1,4 @@
-import { Alert, Box, Button, Tab, Tabs } from "@mui/material";
+import { Alert, Box, Button, Snackbar, Tab, Tabs } from "@mui/material";
 import PageTitle from "../components/PageTitle";
 import { updateRacunTemplate } from "../api/docx.api";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -22,7 +22,10 @@ export default function Racuni() {
   const [firma, setFirma] = useState<FirmaType | null>(null);
   const [seminar, setSeminar] = useState<SeminarZodType | null>(null);
   const [tabValue, setTabValue] = useState<TipRacuna | "pretrage">("pretrage");
-  const [apiError, setApiError] = useState<string | null>(null); // State for error message
+  const [apiError, setApiError] = useState<string | null>(null); // Keep this for persistent errors if needed
+  const [alertOpen, setAlertOpen] = useState(false);
+  const [alertMessage, setAlertMessage] = useState("");
+  const [alertSeverity, setAlertSeverity] = useState<"success" | "error">("success");
 
   // Get store actions
   const updateNestedField = useRacunStore((state) => state.updateNestedField);
@@ -152,17 +155,34 @@ export default function Racuni() {
   };
 
   const handleSaveRacun = async () => {
-    setApiError(null);
+    setApiError(null); // Clear persistent error if any
     const racunData = getCompleteRacunData();
     const errors = await handlePromiseError(saveNewRacun(racunData));
-    setApiError(errors); // Set the result (null on success, string on error)
+
+    if (errors) {
+      setAlertMessage(errors);
+      setAlertSeverity("error");
+    } else {
+      setAlertMessage("Račun uspešno sačuvan!");
+      setAlertSeverity("success");
+      reset();
+    }
+    setAlertOpen(true); // Show the alert
   };
 
   const handleUpdateRacun = async () => {
-    setApiError(null);
+    setApiError(null); // Clear persistent error if any
     const racunData = getCompleteRacunData();
     const errors = await handlePromiseError(updateRacunById(racunData));
-    setApiError(errors); // Set the result (null on success, string on error)
+
+    if (errors) {
+      setAlertMessage(errors);
+      setAlertSeverity("error");
+    } else {
+      setAlertMessage("Račun uspešno ažuriran!");
+      setAlertSeverity("success");
+    }
+    setAlertOpen(true); // Show the alert
   };
 
   const handleTabChange = (_event: React.SyntheticEvent, newValue: TipRacuna | "pretrage") => {
@@ -187,6 +207,14 @@ export default function Racuni() {
   };
 
   useRacunCalculations();
+
+  // Add this function to handle closing the Snackbar
+  const handleAlertClose = (_event?: React.SyntheticEvent | Event, reason?: string) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setAlertOpen(false);
+  };
 
   return (
     <>
@@ -228,6 +256,22 @@ export default function Racuni() {
           </Button>
         </>
       )}
+
+      <Snackbar
+        open={alertOpen}
+        autoHideDuration={5000} // 5 seconds
+        onClose={handleAlertClose}
+        anchorOrigin={{ vertical: "bottom", horizontal: "center" }} // Position
+      >
+        <Alert
+          onClose={handleAlertClose}
+          severity={alertSeverity}
+          sx={{ width: "100%" }}
+          variant="filled"
+        >
+          {alertMessage}
+        </Alert>
+      </Snackbar>
     </>
   );
 }
