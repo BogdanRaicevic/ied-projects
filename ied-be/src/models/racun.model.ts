@@ -55,6 +55,7 @@ const racunSchema = new Schema(
       required: false,
     },
     stopaPdv: { type: Number, default: 20, required: true },
+    linkedPozivNaBroj: { type: String, required: false },
     dateCreatedAt: { type: Date, default: Date.now, immutable: true },
   },
   {
@@ -145,4 +146,5 @@ export type Racun = Document & {
   };
   rokZaUplatu: number;
   pozivNaBroj: string;
+  linkedPozivNaBroj: string;
 };

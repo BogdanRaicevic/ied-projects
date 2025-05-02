@@ -29,6 +29,7 @@ export default function Racuni() {
 
   // Get store actions
   const updateNestedField = useRacunStore((state) => state.updateNestedField);
+  const updateField = useRacunStore((state) => state.updateField);
   const getCompleteRacunData = useRacunStore((state) => state.getCompleteRacunData);
   const setRacunData = useRacunStore((state) => state.updateRacunData);
   const reset = useRacunStore((state) => state.reset);
@@ -197,6 +198,7 @@ export default function Racuni() {
   const handleTabChange = (_event: React.SyntheticEvent, newValue: TipRacuna | "pretrage") => {
     resetSeminarCalculationData();
     setTabValue(newValue);
+    updateField("tipRacuna", newValue);
   };
 
   // Function to render the appropriate form based on current tab

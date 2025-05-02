@@ -74,7 +74,14 @@ export const RacunSchema = z.object({
   dateCreatedAt: z.coerce.date().optional(), // Added optional, BE sets default
   dateUpdatedAt: z.coerce.date().optional(), // Added optional, BE sets default
   stopaPdv: z.number().default(20),
+  linkedPozivNaBroj: z.string().optional(),
   _id: z.string().optional(),
+});
+
+export const RacunQuerySchema = z.object({
+  pozivNaBroj: z.string().min(1, "pozivNaBroj is required"),
+  izdavacRacuna: z.nativeEnum(IzdavacRacuna),
+  tipRacuna: z.nativeEnum(TipRacuna).optional(),
 });
 
 // Inferred Types

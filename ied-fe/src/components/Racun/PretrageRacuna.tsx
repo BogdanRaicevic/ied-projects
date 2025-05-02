@@ -2,14 +2,24 @@ import { useState, useEffect, useMemo } from "react";
 import { searchRacuni } from "../../api/racuni.api";
 import { MaterialReactTable, MRT_ColumnDef, useMaterialReactTable } from "material-react-table";
 import { Racun } from "@ied-shared/index";
-import { Link, Box, Chip, FormControl, MenuItem, Select, SelectChangeEvent } from "@mui/material";
+import {
+  Link,
+  Box,
+  Chip,
+  FormControl,
+  MenuItem,
+  Select,
+  SelectChangeEvent,
+  Tooltip,
+  IconButton,
+} from "@mui/material";
 import { blue, green, purple, red } from "@mui/material/colors";
 import { formatDate } from "date-fns";
 import { useNavigate } from "react-router-dom";
+import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 
 export const PretrageRacuna = () => {
   const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string | null>(null);
   const [racuniData, setRacuniData] = useState<{
     totalDocuments: number;
     totalPages: number;
@@ -23,7 +33,6 @@ export const PretrageRacuna = () => {
         const data = await searchRacuni({ pageIndex: 1, pageSize: 50 });
         setRacuniData(data);
       } catch (err) {
-        setError("Greška prilikom učitavanja računa");
         console.error(err);
       } finally {
         setLoading(false);
@@ -42,21 +51,33 @@ export const PretrageRacuna = () => {
           const value = cell.getValue<string>();
           const navigate = useNavigate();
 
+          const handleCopyClick = (event: React.MouseEvent) => {
+            event.preventDefault(); // Prevent navigation
+            navigator.clipboard.writeText(value);
+          };
+
           return (
-            <Link
-              onClick={(e) => {
-                e.preventDefault();
-                navigate("", {
-                  state: {
-                    selectedTipRacuna: cell.row.original.tipRacuna,
-                    selectedPozivNaBroj: value,
-                    selectedRacunId: cell.row.original._id,
-                  },
-                });
-              }}
-            >
-              {value}
-            </Link>
+            <Box>
+              <Link
+                onClick={(e) => {
+                  e.preventDefault();
+                  navigate("", {
+                    state: {
+                      selectedTipRacuna: cell.row.original.tipRacuna,
+                      selectedPozivNaBroj: value,
+                      selectedRacunId: cell.row.original._id,
+                    },
+                  });
+                }}
+              >
+                {value}
+              </Link>
+              <Tooltip title="Kopiraj poziv na broj" arrow>
+                <IconButton sx={{ marginLeft: 1 }} size="small" onClick={handleCopyClick}>
+                  <ContentCopyIcon />
+                </IconButton>
+              </Tooltip>
+            </Box>
           );
         },
       },

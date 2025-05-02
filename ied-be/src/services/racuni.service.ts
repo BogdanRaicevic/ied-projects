@@ -1,3 +1,4 @@
+import { IzdavacRacuna, TipRacuna } from "@ied-shared/index";
 import { Racun } from "../models/racun.model";
 
 export const saveRacun = async (racun: Racun) => {
@@ -69,6 +70,28 @@ export const searchRacuni = async (pageIndex = 1, pageSize = 50, _queryParameter
     };
   } catch (error) {
     console.error("Error getting all Racuni:", error);
+    throw error;
+  }
+};
+
+export const getRacunByPozivNaBrojAndIzdavac = async (
+  pozivNaBroj: string,
+  izdavacRacuna: IzdavacRacuna,
+  tipRacuna: TipRacuna
+) => {
+  try {
+    const racun = await Racun.findOne({ pozivNaBroj, izdavacRacuna, tipRacuna });
+    if (!racun) {
+      throw new Error(
+        `Racun with PozivNaBroj ${pozivNaBroj}, IzdavacRacuna ${izdavacRacuna} and Tip Racuna ${tipRacuna} not found.`
+      );
+    }
+    return racun;
+  } catch (error) {
+    console.error(
+      `Error getting Racun by PozivNaBroj ${pozivNaBroj}, IzdavacRacuna ${izdavacRacuna} and Tip Racuna ${tipRacuna}:`,
+      error
+    );
     throw error;
   }
 };

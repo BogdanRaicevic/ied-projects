@@ -2,7 +2,7 @@ import { Router, type Request, type Response, type NextFunction } from "express"
 import { izdavacRacuna } from "../constants/izdavacRacuna.const";
 import { getRacunById, saveRacun, searchRacuni, updateRacunById } from "../services/racuni.service";
 import { validate } from "../middleware/validateSchema";
-import { RacunSchema } from "@ied-shared/index";
+import { RacunQuerySchema, RacunSchema } from "@ied-shared/index";
 import { Racun } from "../models/racun.model";
 
 const router = Router();
@@ -77,6 +77,33 @@ router.put(
         return res.status(404).send("Racun not found");
       }
       res.json(result);
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
+router.get(
+  "/",
+  async (
+    req: Request<{}, any, any, z.infer<typeof RacunQuerySchema>>,
+    res: Response,
+    next: NextFunction
+  ) => {
+    try {
+      const { pozivNaBroj, izdavacRacuna, tipRacuna } = req.query;
+
+      console.log("Query parameters:", req.query);
+
+      if (!pozivNaBroj || !izdavacRacuna) {
+        return res.status(400).send("Missing required query parameters");
+      }
+
+      const racun = await Racun.findOne({ pozivNaBroj, izdavacRacuna, tipRacuna });
+      if (!racun) {
+        return res.status(404).send("Racun not found");
+      }
+      res.json(racun);
     } catch (error) {
       next(error);
     }

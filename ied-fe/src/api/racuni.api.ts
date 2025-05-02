@@ -1,6 +1,6 @@
 import axiosInstanceWithAuth from "./interceptors/auth";
 import { env } from "../utils/envVariables";
-import { Racun } from "@ied-shared/index";
+import { IzdavacRacuna, Racun, TipRacuna } from "@ied-shared/index";
 
 export const getIzdavaciRacuna = async () => {
   try {
@@ -12,7 +12,9 @@ export const getIzdavaciRacuna = async () => {
   }
 };
 
-export const searchRacuni = async (searchParams: any) => {
+export const searchRacuni = async (
+  searchParams: any
+): Promise<{ totalDocuments: number; totalPages: number; racuni: Racun[] }> => {
   try {
     const response = await axiosInstanceWithAuth.post(
       `${env.beURL}/api/racuni/search`,
@@ -25,7 +27,7 @@ export const searchRacuni = async (searchParams: any) => {
   }
 };
 
-export const fetchRacunById = async (id: string) => {
+export const fetchRacunById = async (id: string): Promise<Racun> => {
   try {
     const response = await axiosInstanceWithAuth.get(`${env.beURL}/api/racuni/${id}`);
     return response.data;
@@ -35,7 +37,29 @@ export const fetchRacunById = async (id: string) => {
   }
 };
 
-export const saveNewRacun = async (racun: Racun) => {
+export const getRacunByPozivNaBrojAndIzdavac = async (
+  pozivNaBroj: string,
+  izdavacRacuna: IzdavacRacuna,
+  tipRacuna?: TipRacuna
+): Promise<Racun> => {
+  try {
+    const params = new URLSearchParams({
+      pozivNaBroj: pozivNaBroj,
+      izdavacRacuna: izdavacRacuna,
+      ...(tipRacuna && { tipRacuna: tipRacuna }),
+    });
+
+    const response = await axiosInstanceWithAuth.get(
+      `${env.beURL}/api/racuni?${params.toString()}`
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching racun by poziv na broj and izdavac:", error);
+    throw error;
+  }
+};
+
+export const saveNewRacun = async (racun: Racun): Promise<Racun> => {
   try {
     if (racun._id || racun.pozivNaBroj) {
       console.log("Racun already has an ID or pozivNaBroj, skipping save operation.");
@@ -49,7 +73,7 @@ export const saveNewRacun = async (racun: Racun) => {
   }
 };
 
-export const updateRacunById = async (updatedRacun: Racun) => {
+export const updateRacunById = async (updatedRacun: Racun): Promise<Racun> => {
   try {
     const response = await axiosInstanceWithAuth.put(
       `${env.beURL}/api/racuni/update/${updatedRacun._id}`,
