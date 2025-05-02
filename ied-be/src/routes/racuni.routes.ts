@@ -89,13 +89,25 @@ router.get(
     try {
       const { pozivNaBroj, izdavacRacuna, tipRacuna } = req.query;
 
+      if (
+        typeof pozivNaBroj !== "string" ||
+        typeof izdavacRacuna !== "string" ||
+        (tipRacuna && typeof tipRacuna !== "string")
+      ) {
+        return res.status(400).send("Invalid query parameter types");
+      }
+
       console.log("Query parameters:", req.query);
 
       if (!pozivNaBroj || !izdavacRacuna) {
         return res.status(400).send("Missing required query parameters");
       }
 
-      const racun = await Racun.findOne({ pozivNaBroj, izdavacRacuna, tipRacuna });
+      const racun = await Racun.findOne({
+        pozivNaBroj: { $eq: pozivNaBroj },
+        izdavacRacuna: { $eq: izdavacRacuna },
+        ...(tipRacuna && { tipRacuna: { $eq: tipRacuna } }),
+      });
       if (!racun) {
         return res.status(404).send("Racun not found");
       }
