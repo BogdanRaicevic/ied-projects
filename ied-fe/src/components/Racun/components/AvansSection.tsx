@@ -14,7 +14,7 @@ import {
 import { formatToRSDNumber } from "../../../utils/helpers";
 import { useRacunStore } from "../store/useRacunStore";
 import { getRacunByPozivNaBrojAndIzdavac } from "../../../api/racuni.api";
-import { TipRacuna } from "@ied-shared/types/racuni";
+import { TipRacuna } from "@ied-shared/types/racuni.zod";
 
 export const AvansSection = () => {
   const racunData = useRacunStore((state) => state.racunData);

@@ -1,7 +1,7 @@
 import { useState, useEffect, useMemo } from "react";
 import { searchRacuni } from "../../api/racuni.api";
 import { MaterialReactTable, MRT_ColumnDef, useMaterialReactTable } from "material-react-table";
-import { Racun } from "@ied-shared/index";
+import { RacunZod } from "@ied-shared/index";
 import {
   Link,
   Box,
@@ -23,7 +23,7 @@ export const PretrageRacuna = () => {
   const [racuniData, setRacuniData] = useState<{
     totalDocuments: number;
     totalPages: number;
-    racuni: Racun[];
+    racuni: RacunZod[];
   }>();
 
   useEffect(() => {
@@ -42,7 +42,7 @@ export const PretrageRacuna = () => {
     fetchRacuni();
   }, []);
 
-  const racuniColumns = useMemo<MRT_ColumnDef<Racun>[]>(
+  const racuniColumns = useMemo<MRT_ColumnDef<RacunZod>[]>(
     () => [
       {
         accessorKey: "pozivNaBroj",

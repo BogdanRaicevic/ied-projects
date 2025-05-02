@@ -1,6 +1,6 @@
 import axiosInstanceWithAuth from "./interceptors/auth";
 import { env } from "../utils/envVariables";
-import { IzdavacRacuna, Racun, TipRacuna } from "@ied-shared/index";
+import { IzdavacRacuna, RacunZod, TipRacuna } from "@ied-shared/index";
 
 export const getIzdavaciRacuna = async () => {
   try {
@@ -14,7 +14,7 @@ export const getIzdavaciRacuna = async () => {
 
 export const searchRacuni = async (
   searchParams: any
-): Promise<{ totalDocuments: number; totalPages: number; racuni: Racun[] }> => {
+): Promise<{ totalDocuments: number; totalPages: number; racuni: RacunZod[] }> => {
   try {
     const response = await axiosInstanceWithAuth.post(
       `${env.beURL}/api/racuni/search`,
@@ -27,7 +27,7 @@ export const searchRacuni = async (
   }
 };
 
-export const fetchRacunById = async (id: string): Promise<Racun> => {
+export const fetchRacunById = async (id: string): Promise<RacunZod> => {
   try {
     const response = await axiosInstanceWithAuth.get(`${env.beURL}/api/racuni/${id}`);
     return response.data;
@@ -41,7 +41,7 @@ export const getRacunByPozivNaBrojAndIzdavac = async (
   pozivNaBroj: string,
   izdavacRacuna: IzdavacRacuna,
   tipRacuna?: TipRacuna
-): Promise<Racun> => {
+): Promise<RacunZod> => {
   try {
     const params = new URLSearchParams({
       pozivNaBroj: pozivNaBroj,
@@ -59,7 +59,7 @@ export const getRacunByPozivNaBrojAndIzdavac = async (
   }
 };
 
-export const saveNewRacun = async (racun: Racun): Promise<Racun> => {
+export const saveNewRacun = async (racun: RacunZod): Promise<RacunZod> => {
   try {
     if (racun._id || racun.pozivNaBroj) {
       console.log("Racun already has an ID or pozivNaBroj, skipping save operation.");
@@ -73,7 +73,7 @@ export const saveNewRacun = async (racun: Racun): Promise<Racun> => {
   }
 };
 
-export const updateRacunById = async (updatedRacun: Racun): Promise<Racun> => {
+export const updateRacunById = async (updatedRacun: RacunZod): Promise<RacunZod> => {
   try {
     const response = await axiosInstanceWithAuth.put(
       `${env.beURL}/api/racuni/update/${updatedRacun._id}`,

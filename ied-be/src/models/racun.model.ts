@@ -106,9 +106,9 @@ racunSchema.pre("save", async function (next) {
 });
 // --- END OF PRE-SAVE HOOK ---
 
-export const Racun = model("Racun", racunSchema);
+export const RacunModel = model("Racun", racunSchema);
 
-export type Racun = Document & {
+export type RacunModel = Document & {
   izdavacRacuna: "ied" | "permanent" | "bs";
   tipRacuna: "predracun" | "racun" | "avansniRacun" | "konacniRacun";
   tekuciRacun: string;

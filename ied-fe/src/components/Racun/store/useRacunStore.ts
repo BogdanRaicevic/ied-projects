@@ -1,5 +1,10 @@
 import { create } from "zustand";
-import { CalculationsRacun, IzdavacRacuna, Racun, TipRacuna } from "@ied-shared/types/racuni";
+import {
+  CalculationsRacunZod,
+  IzdavacRacuna,
+  RacunZod,
+  TipRacuna,
+} from "@ied-shared/types/racuni.zod";
 
 // Helper function for updating nested properties
 const updateNestedProperty = (obj: any, path: string[], value: any): any => {
@@ -13,20 +18,20 @@ const updateNestedProperty = (obj: any, path: string[], value: any): any => {
 };
 
 interface RacunState {
-  racunData: Racun;
+  racunData: RacunZod;
 
   // Actions
-  updateRacunData: (data: Racun) => void;
+  updateRacunData: (data: RacunZod) => void;
   updateNestedField: (fieldPath: string, value: any) => void;
-  updateCalculations: (calculations: CalculationsRacun) => void;
+  updateCalculations: (calculations: CalculationsRacunZod) => void;
   updateField: (field: keyof any, value: any) => void;
 
-  getCompleteRacunData: () => Racun;
+  getCompleteRacunData: () => RacunZod;
   reset: () => void;
   resetSeminarCalculationData: () => void;
 }
 
-const initialRacunData: Racun = {
+const initialRacunData: RacunZod = {
   seminar: {
     naziv: "",
     datum: new Date(),
@@ -115,16 +120,6 @@ export const useRacunStore = create<RacunState>((set, get) => ({
     set((state) => ({
       racunData: {
         ...state.racunData,
-        seminar: {
-          ...state.racunData.seminar,
-          offlineCena: 0,
-          onlineCena: 0,
-          popustOnline: 0,
-          popustOffline: 0,
-          avansBezPdv: 0,
-          brojUcesnikaOffline: 0,
-          brojUcesnikaOnline: 0,
-        },
         calculations: {
           offlineUkupnaNaknada: 0,
           onlineUkupnaNaknada: 0,
@@ -138,7 +133,6 @@ export const useRacunStore = create<RacunState>((set, get) => ({
           ukupnaNaknada: 0,
         },
         pozivNaBroj: "",
-        rokZaUplatu: 0,
         _id: undefined,
         dateCreatedAt: undefined,
         dateUpdatedAt: undefined,

@@ -1,9 +1,14 @@
 import { Router, type Request, type Response, type NextFunction } from "express";
 import { izdavacRacuna } from "../constants/izdavacRacuna.const";
-import { getRacunById, saveRacun, searchRacuni, updateRacunById } from "../services/racuni.service";
+import {
+  getRacunById,
+  getRacunByPozivNaBrojAndIzdavac,
+  saveRacun,
+  searchRacuni,
+  updateRacunById,
+} from "../services/racuni.service";
 import { validate } from "../middleware/validateSchema";
-import { RacunQuery, RacunSchema } from "@ied-shared/index";
-import { Racun } from "../models/racun.model";
+import { RacunZod, RacunQueryZod, RacunSchema } from "@ied-shared/index";
 
 const router = Router();
 
@@ -51,7 +56,7 @@ router.get("/:id", async (req: Request, res: Response, next: NextFunction) => {
 router.post(
   "/save",
   validate(RacunSchema),
-  async (req: Request<{}, any, Racun>, res: Response, next: NextFunction) => {
+  async (req: Request<{}, any, RacunZod>, res: Response, next: NextFunction) => {
     try {
       const racun = req.body;
       const result = await saveRacun(racun);
@@ -68,7 +73,7 @@ router.post(
 router.put(
   "/update/:id",
   validate(RacunSchema),
-  async (req: Request<{ id: string }, any, Racun>, res: Response, next: NextFunction) => {
+  async (req: Request<{ id: string }, any, RacunZod>, res: Response, next: NextFunction) => {
     try {
       const { id } = req.params;
       const racun = req.body;
@@ -85,7 +90,7 @@ router.put(
 
 router.get(
   "/",
-  async (req: Request<{}, any, any, RacunQuery>, res: Response, next: NextFunction) => {
+  async (req: Request<{}, any, any, RacunQueryZod>, res: Response, next: NextFunction) => {
     try {
       const { pozivNaBroj, izdavacRacuna, tipRacuna } = req.query;
 
@@ -103,11 +108,7 @@ router.get(
         return res.status(400).send("Missing required query parameters");
       }
 
-      const racun = await Racun.findOne({
-        pozivNaBroj: { $eq: pozivNaBroj },
-        izdavacRacuna: { $eq: izdavacRacuna },
-        ...(tipRacuna && { tipRacuna: { $eq: tipRacuna } }),
-      });
+      const racun = await getRacunByPozivNaBrojAndIzdavac(pozivNaBroj, izdavacRacuna, tipRacuna);
       if (!racun) {
         return res.status(404).send("Racun not found");
       }

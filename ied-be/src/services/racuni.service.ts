@@ -1,9 +1,9 @@
-import { IzdavacRacuna, TipRacuna } from "@ied-shared/index";
-import { Racun } from "../models/racun.model";
+import { IzdavacRacuna, RacunZod, TipRacuna } from "@ied-shared/index";
+import { RacunModel } from "../models/racun.model";
 
-export const saveRacun = async (racun: Racun) => {
+export const saveRacun = async (racun: RacunZod) => {
   try {
-    const newRacun = new Racun(racun);
+    const newRacun = new RacunModel(racun);
     await newRacun.save();
     return newRacun;
   } catch (error) {
@@ -14,7 +14,7 @@ export const saveRacun = async (racun: Racun) => {
 
 export const getRacunById = async (id: string) => {
   try {
-    const racun = await Racun.findById(id);
+    const racun = await RacunModel.findById(id);
     if (!racun) {
       throw new Error(`Racun with ID ${id} not found.`);
     }
@@ -25,9 +25,9 @@ export const getRacunById = async (id: string) => {
   }
 };
 
-export const updateRacunById = async (id: string, updatedRacun: Racun) => {
+export const updateRacunById = async (id: string, updatedRacun: RacunZod) => {
   try {
-    const racun = await Racun.findByIdAndUpdate(id, updatedRacun, {
+    const racun = await RacunModel.findByIdAndUpdate(id, updatedRacun, {
       new: true,
       runValidators: true,
     });
@@ -43,7 +43,7 @@ export const updateRacunById = async (id: string, updatedRacun: Racun) => {
 
 export const deleteRacunById = async (id: string) => {
   try {
-    const racun = await Racun.findByIdAndDelete(id);
+    const racun = await RacunModel.findByIdAndDelete(id);
     return racun;
   } catch (error) {
     console.error(`Error deleting Racun by ID ${id}:`, error);
@@ -57,8 +57,8 @@ export const searchRacuni = async (pageIndex = 1, pageSize = 50, _queryParameter
     const skip = (pageIndex - 1) * pageSize;
     // const mongoQuery = createRacunQuery(queryParameters.queryParameters);
     const [totalDocuments, racuni] = await Promise.all([
-      Racun.countDocuments(),
-      Racun.find().sort({ pozivNaBroj: -1 }).skip(skip).limit(pageSize),
+      RacunModel.countDocuments(),
+      RacunModel.find().sort({ pozivNaBroj: -1 }).skip(skip).limit(pageSize),
     ]);
 
     const totalPages = Math.ceil(totalDocuments / pageSize);
@@ -77,10 +77,10 @@ export const searchRacuni = async (pageIndex = 1, pageSize = 50, _queryParameter
 export const getRacunByPozivNaBrojAndIzdavac = async (
   pozivNaBroj: string,
   izdavacRacuna: IzdavacRacuna,
-  tipRacuna: TipRacuna
+  tipRacuna?: TipRacuna
 ) => {
   try {
-    const racun = await Racun.findOne({ pozivNaBroj, izdavacRacuna, tipRacuna });
+    const racun = await RacunModel.findOne({ pozivNaBroj, izdavacRacuna, tipRacuna });
     if (!racun) {
       throw new Error(
         `Racun with PozivNaBroj ${pozivNaBroj}, IzdavacRacuna ${izdavacRacuna} and Tip Racuna ${tipRacuna} not found.`

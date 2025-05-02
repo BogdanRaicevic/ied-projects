@@ -1,9 +1,9 @@
 import axiosInstanceWithAuth from "./interceptors/auth";
 import { env } from "../utils/envVariables";
-import { Racun, RacunSchema, TipRacuna } from "@ied-shared/types/racuni";
+import { RacunZod, RacunSchema, TipRacuna } from "@ied-shared/types/racuni.zod";
 import { validateOrThrow } from "../utils/zodErrorHelper";
 
-export const generateRacunDocument = async (racunData: Racun) => {
+export const generateRacunDocument = async (racunData: RacunZod) => {
   const tipRacuna = racunData.tipRacuna;
   if (!Object.values(TipRacuna).includes(tipRacuna)) {
     throw new Error(`Tip računa ${racunData.tipRacuna} nije podržan za generisanje dokumenata.`);

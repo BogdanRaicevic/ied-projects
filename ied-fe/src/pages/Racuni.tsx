@@ -21,7 +21,6 @@ import { fetchRacunById, saveNewRacun, updateRacunById } from "../api/racuni.api
 export default function Racuni() {
   const [firma, setFirma] = useState<FirmaType | null>(null);
   const [seminar, setSeminar] = useState<SeminarZodType | null>(null);
-  const [tabValue, setTabValue] = useState<TipRacuna | "pretrage">("pretrage");
   const [apiError, setApiError] = useState<string | null>(null); // Keep this for persistent errors if needed
   const [alertOpen, setAlertOpen] = useState(false);
   const [alertMessage, setAlertMessage] = useState("");
@@ -46,7 +45,10 @@ export default function Racuni() {
     [location.state?.seminarId]
   );
 
-  const navigate = useNavigate(); // Use the navigate function from react-router-dom
+  const initialTab = seminarId ? TipRacuna.PREDRACUN : "pretrage";
+  const [tabValue, setTabValue] = useState<TipRacuna | "pretrage">(initialTab);
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchFirma = async () => {
@@ -62,6 +64,7 @@ export default function Racuni() {
           const seminarData = await fetchSeminarById(seminarId);
           setSeminar(seminarData);
         }
+        updateField("tipRacuna", TipRacuna.PREDRACUN);
       } catch (error) {
         console.error("Error:", error);
         setApiError("Greška pri učitavanju podataka firme ili seminara.");
