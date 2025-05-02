@@ -20,9 +20,7 @@ router.get("/izdavaci", async (_req: Request, res: Response, next: NextFunction)
         tekuciRacuni: i.tekuciRacuni,
       };
     });
-    if (!result) {
-      return res.status(404).send("Izdavaci not found");
-    }
+
     res.json(result);
   } catch (error) {
     next(error);
@@ -31,9 +29,9 @@ router.get("/izdavaci", async (_req: Request, res: Response, next: NextFunction)
 
 router.post("/search", async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const { pageIndex, pageSize, ...queryParmaneters } = req.body;
+    const { pageIndex, pageSize, ...queryParameters } = req.body;
 
-    const result = await searchRacuni(pageIndex, pageSize, queryParmaneters);
+    const result = await searchRacuni(pageIndex, pageSize, queryParameters);
     res.json(result);
   } catch (error) {
     next(error);

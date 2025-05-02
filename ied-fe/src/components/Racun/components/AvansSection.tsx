@@ -26,7 +26,7 @@ export const AvansSection = () => {
 
   const handleSearchAvansniRacun = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;
-    if (value.length === 10) {
+    if (value.length === 10 && !isNaN(Number(value))) {
       const avansniRacun = await getRacunByPozivNaBrojAndIzdavac(
         value,
         racunData.izdavacRacuna,
@@ -35,7 +35,6 @@ export const AvansSection = () => {
       updateNestedField("seminar.avansBezPdv", avansniRacun.seminar.avansBezPdv);
       updateNestedField("seminar.naziv", avansniRacun.seminar.naziv);
       updateField("linkedPozivNaBroj", avansniRacun.pozivNaBroj);
-      console.log("avansni racun", avansniRacun);
     } else {
       return;
     }
@@ -51,7 +50,12 @@ export const AvansSection = () => {
           placeholder="Poziv na broj"
           onChange={handleSearchAvansniRacun}
           sx={{ minWidth: 450, mb: 3 }}
+          type="number"
           slotProps={{
+            htmlInput: {
+              maxLength: 10,
+              inputMode: "numeric",
+            },
             input: {
               startAdornment: (
                 <>
@@ -96,7 +100,7 @@ export const AvansSection = () => {
                   <TextField
                     variant="filled"
                     name="naziv"
-                    value={racunData.seminar.naziv || ""}
+                    value={racunData.seminar.naziv ?? ""}
                     onChange={(e) => updateNestedField("seminar.naziv", e.target.value)}
                   />
                 </TableCell>
@@ -105,7 +109,9 @@ export const AvansSection = () => {
                     variant="filled"
                     name="avansBezPdv"
                     value={racunData.seminar.avansBezPdv ?? 0}
-                    onChange={(e) => updateNestedField("seminar.avansBezPdv", e.target.value)}
+                    onChange={(e) =>
+                      updateNestedField("seminar.avansBezPdv", Number(e.target.value) || 0)
+                    }
                   />
                 </TableCell>
                 <TableCell align="left">

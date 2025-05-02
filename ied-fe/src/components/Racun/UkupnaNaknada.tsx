@@ -8,7 +8,8 @@ export const UkupnaNaknada = () => {
   const updateField = useRacunStore((state) => state.updateField);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    updateField(e.target.name, e.target.value);
+    const value = e.target.value === "" ? undefined : Number(e.target.value);
+    updateField(e.target.name, value);
   };
 
   return (

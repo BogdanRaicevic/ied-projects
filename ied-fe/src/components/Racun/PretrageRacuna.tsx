@@ -26,22 +26,6 @@ export const PretrageRacuna = () => {
     racuni: RacunZod[];
   }>();
 
-  useEffect(() => {
-    const fetchRacuni = async () => {
-      try {
-        setLoading(true);
-        const data = await searchRacuni({ pageIndex: 1, pageSize: 50 });
-        setRacuniData(data);
-      } catch (err) {
-        console.error(err);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchRacuni();
-  }, []);
-
   const racuniColumns = useMemo<MRT_ColumnDef<RacunZod>[]>(
     () => [
       {
@@ -222,6 +206,28 @@ export const PretrageRacuna = () => {
       isLoading: loading,
     },
   });
+
+  const pageIndex = racuniTable.getState().pagination.pageIndex;
+  const pageSize = racuniTable.getState().pagination.pageSize;
+
+  useEffect(() => {
+    const fetchRacuni = async () => {
+      try {
+        setLoading(true);
+        const data = await searchRacuni({
+          pageIndex,
+          pageSize,
+        });
+        setRacuniData(data);
+      } catch (err) {
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchRacuni();
+  }, [pageIndex, pageSize]);
 
   return (
     <div>

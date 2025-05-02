@@ -1,4 +1,4 @@
-import { Grid2, Paper, TextField, Box, Autocomplete } from "@mui/material";
+import { Grid2, Paper, TextField, Box, Autocomplete, Alert } from "@mui/material";
 import SelectIzdavacRacuna from "../SelectIzdavacRacuna";
 import { useRacunStore } from "../store/useRacunStore";
 import { useFetchIzdavaciRacuna } from "../../../hooks/useFetchData";
@@ -9,7 +9,7 @@ export const IzdavacRacunaSection = () => {
   const tekuciRacun = useRacunStore((state) => state.racunData.tekuciRacun);
   const updateField = useRacunStore((state) => state.updateField);
 
-  const { data: allIzdavaciData, isLoading } = useFetchIzdavaciRacuna();
+  const { data: allIzdavaciData, isLoading, isError } = useFetchIzdavaciRacuna();
 
   const currentIzdavacData = useMemo(() => {
     if (isLoading || !allIzdavaciData || !selectedIzdavac) {
@@ -25,6 +25,10 @@ export const IzdavacRacunaSection = () => {
 
   if (isLoading) {
     return <div>Loading Firma data...</div>;
+  }
+
+  if (isError) {
+    return <Alert severity="error">Greška pri učitavanju izdavača računa</Alert>;
   }
 
   return (

@@ -24,7 +24,7 @@ interface RacunState {
   updateRacunData: (data: RacunZod) => void;
   updateNestedField: (fieldPath: string, value: any) => void;
   updateCalculations: (calculations: CalculationsRacunZod) => void;
-  updateField: (field: keyof any, value: any) => void;
+  updateField: <K extends keyof RacunZod>(field: K, value: RacunZod[K]) => void;
 
   getCompleteRacunData: () => RacunZod;
   reset: () => void;
@@ -72,8 +72,6 @@ const initialRacunData: RacunZod = {
 
 export const useRacunStore = create<RacunState>((set, get) => ({
   racunData: initialRacunData,
-  izdavacRacuna: "ied",
-  tekuciRacun: "",
 
   updateRacunData: (data) =>
     set((state) => ({

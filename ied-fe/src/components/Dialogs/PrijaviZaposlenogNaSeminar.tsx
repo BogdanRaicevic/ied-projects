@@ -34,7 +34,7 @@ export default function PrijavaNaSeminarDialog({
   companyData: FirmaType;
   zaposleniData: Zaposleni;
 }) {
-  const [prijavaState, setPrijavaState] = useState<"succeess" | "warning" | "error" | "">("");
+  const [prijavaState, setPrijavaState] = useState<"success" | "warning" | "error" | "">("");
   const [selectedSeminar, setSelectedSeminar] = useState<string>("");
   const [prisustvo, setPrisustvo] = useState<"online" | "offline">("online");
 

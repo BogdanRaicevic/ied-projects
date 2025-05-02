@@ -22,7 +22,6 @@ export type PrijavaType = {
   zaposleni_prezime: string;
   zaposleni_email: string;
   zaposleni_telefon: string;
-  // TODO: remove ne znam option after you are sure it is not used anywhere
   prisustvo: "online" | "offline";
 };
 
@@ -47,7 +46,7 @@ const seminarSchema = new Schema<SeminarType>(
     lokacija: { type: String, required: false },
     offlineCena: { type: Number, required: false },
     onlineCena: { type: Number, required: false },
-    datum: { type: Schema.Types.Mixed, required: false },
+    datum: { type: Date, required: false },
     prijave: [prijavaSchema],
   },
   { collection: "seminari" }

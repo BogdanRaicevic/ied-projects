@@ -48,7 +48,7 @@ export const OnlinePrisustvaSection = () => {
                   <TextField
                     variant="filled"
                     name="naziv"
-                    value={racunData.seminar.naziv || ""}
+                    value={racunData.seminar.naziv ?? ""}
                     onChange={(e) => updateNestedField("seminar.naziv", e.target.value)}
                   />
                 </TableCell>

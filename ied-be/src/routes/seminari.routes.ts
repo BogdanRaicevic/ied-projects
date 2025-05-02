@@ -33,8 +33,8 @@ router.post(
 );
 
 const ExtendedSearchSeminarType = z.object({
-  pageIndex: z.number().optional(),
-  pageSize: z.number().optional(),
+  pageIndex: z.coerce.number().optional(),
+  pageSize: z.coerce.number().optional(),
   queryParameters: SeminarQueryParamsSchema,
 });
 
