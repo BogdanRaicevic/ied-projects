@@ -89,3 +89,4 @@ export type Racun = z.infer<typeof RacunSchema>;
 export type PrimalacRacuna = z.infer<typeof PrimalacRacunaSchema>;
 export type SeminarRacun = z.infer<typeof SeminarRacunSchema>;
 export type CalculationsRacun = z.infer<typeof CalculationsRacunSchema>;
+export type RacunQuery = z.infer<typeof RacunQuerySchema>;

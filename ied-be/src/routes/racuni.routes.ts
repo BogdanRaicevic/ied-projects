@@ -2,7 +2,7 @@ import { Router, type Request, type Response, type NextFunction } from "express"
 import { izdavacRacuna } from "../constants/izdavacRacuna.const";
 import { getRacunById, saveRacun, searchRacuni, updateRacunById } from "../services/racuni.service";
 import { validate } from "../middleware/validateSchema";
-import { RacunQuerySchema, RacunSchema } from "@ied-shared/index";
+import { RacunQuery, RacunSchema } from "@ied-shared/index";
 import { Racun } from "../models/racun.model";
 
 const router = Router();
@@ -85,11 +85,7 @@ router.put(
 
 router.get(
   "/",
-  async (
-    req: Request<{}, any, any, z.infer<typeof RacunQuerySchema>>,
-    res: Response,
-    next: NextFunction
-  ) => {
+  async (req: Request<{}, any, any, RacunQuery>, res: Response, next: NextFunction) => {
     try {
       const { pozivNaBroj, izdavacRacuna, tipRacuna } = req.query;
 
