@@ -29,7 +29,7 @@ router.get("/izdavaci", async (_req: Request, res: Response, next: NextFunction)
 
 router.post("/search", async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const { pageIndex, pageSize, ...queryParameters } = req.body;
+    const { pageIndex = 1, pageSize = 10, ...queryParameters } = req.body;
 
     const result = await searchRacuni(pageIndex, pageSize, queryParameters);
     res.json(result);

@@ -82,7 +82,7 @@ racunSchema.pre("save", async function (next) {
     const datePrefix = `${year}${month}${day}`; // e.g., "250428"
 
     // Find the last document created today with the same prefix
-    const lastRacunToday = await model("Racun", racunSchema)
+    const lastRacunToday = await model("Racun")
       .findOne({ pozivNaBroj: { $regex: `^${datePrefix}` } })
       .sort({ pozivNaBroj: -1 })
       .exec();

@@ -201,14 +201,14 @@ export const PretrageRacuna = () => {
       size: "small",
       sx: { minWidth: "300px" },
     },
-    // Show loading state
     state: {
       isLoading: loading,
     },
+    rowCount: racuniData?.totalDocuments || 0,
   });
 
-  const pageIndex = racuniTable.getState().pagination.pageIndex;
-  const pageSize = racuniTable.getState().pagination.pageSize;
+  const pageIndex = racuniTable.getState().pagination.pageIndex + 1 || 1;
+  const pageSize = racuniTable.getState().pagination.pageSize || 50;
 
   useEffect(() => {
     const fetchRacuni = async () => {
