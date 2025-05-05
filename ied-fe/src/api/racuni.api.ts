@@ -1,6 +1,7 @@
 import axiosInstanceWithAuth from "./interceptors/auth";
 import { env } from "../utils/envVariables";
-import { IzdavacRacuna, RacunZod, TipRacuna } from "@ied-shared/index";
+import { IzdavacRacuna, RacunSchema, RacunZod, TipRacuna } from "@ied-shared/index";
+import { validateOrThrow } from "../utils/zodErrorHelper";
 
 export const getIzdavaciRacuna = async () => {
   try {
@@ -61,6 +62,7 @@ export const getRacunByPozivNaBrojAndIzdavac = async (
 
 export const saveNewRacun = async (racun: RacunZod): Promise<RacunZod> => {
   try {
+    validateOrThrow(RacunSchema, racun);
     if (racun._id || racun.pozivNaBroj) {
       console.log("Racun already has an ID or pozivNaBroj, skipping save operation.");
       return racun; // or handle as needed

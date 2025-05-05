@@ -33,16 +33,6 @@ export const extractErrorMessages = (errors: any, data: any): ValidationError[] 
   return validationErrors;
 };
 
-// Helper function to format Zod errors (optional but recommended)
-export const formatZodErrors = (errors: ZodError["errors"]): string => {
-  return errors
-    .map((err) => {
-      const path = err.path.join(".");
-      return `${path ? `${path}: ` : ""}${err.message}`;
-    })
-    .join("; ");
-};
-
 export function validateOrThrow<T>(
   schema: ZodSchema<T>,
   data: unknown,
