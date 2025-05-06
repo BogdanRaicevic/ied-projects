@@ -70,6 +70,7 @@ const initialRacunData: RacunZod = {
   tekuciRacun: "",
   izdavacRacuna: IzdavacRacuna.IED,
   tipRacuna: TipRacuna.PREDRACUN,
+  rokZaUplatu: 0,
 };
 
 export const useRacunStore = create<RacunState>((set, get) => ({
