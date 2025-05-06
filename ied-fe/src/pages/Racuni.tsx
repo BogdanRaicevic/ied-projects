@@ -156,7 +156,7 @@ export default function Racuni() {
   const handleDocxUpdate = async () => {
     setApiError(null);
     const racunData = getCompleteRacunData();
-    const errors = await handlePromiseError(generateRacunDocument(racunData));
+    const [errors] = await handlePromiseError(generateRacunDocument(racunData));
 
     if (errors) {
       setAlertMessage(errors);
@@ -164,7 +164,6 @@ export default function Racuni() {
     } else {
       setAlertMessage("Račun uspešno sačuvan!");
       setAlertSeverity("success");
-      reset();
     }
     setAlertOpen(true);
   };
@@ -172,15 +171,15 @@ export default function Racuni() {
   const handleSaveRacun = async () => {
     setApiError(null);
     const racunData = getCompleteRacunData();
-    const errors = await handlePromiseError(saveNewRacun(racunData));
+    const [errors, data] = await handlePromiseError(saveNewRacun(racunData));
 
     if (errors) {
       setAlertMessage(errors);
       setAlertSeverity("error");
-    } else {
+    } else if (data) {
       setAlertMessage("Račun uspešno sačuvan!");
       setAlertSeverity("success");
-      reset();
+      setRacunData(data);
     }
     setAlertOpen(true);
   };
@@ -188,14 +187,15 @@ export default function Racuni() {
   const handleUpdateRacun = async () => {
     setApiError(null);
     const racunData = getCompleteRacunData();
-    const errors = await handlePromiseError(updateRacunById(racunData));
+    const [errors, data] = await handlePromiseError(updateRacunById(racunData));
 
     if (errors) {
       setAlertMessage(errors);
       setAlertSeverity("error");
-    } else {
+    } else if (data) {
       setAlertMessage("Račun uspešno ažuriran!");
       setAlertSeverity("success");
+      setRacunData(data);
     }
     setAlertOpen(true);
   };
@@ -255,22 +255,26 @@ export default function Racuni() {
         </Alert>
       )}
       {tabValue !== "pretrage" && (
-        <>
-          {!racunData._id && <Button onClick={handleSaveRacun}>Sačuvaj račun</Button>}
+        <Box sx={{ display: "flex", justifyContent: "space-between", mt: 3, mb: 3 }}>
+          {!racunData._id && (
+            <Button variant="outlined" onClick={handleSaveRacun}>
+              Sačuvaj račun
+            </Button>
+          )}
           {racunData._id && (
-            <Button onClick={handleUpdateRacun} sx={{ ml: 2 }}>
+            <Button variant="outlined" onClick={handleUpdateRacun}>
               Ažuriraj račun
             </Button>
           )}
           <Button
-            sx={{ mt: 3, mb: 3 }}
             onClick={handleDocxUpdate}
             variant="contained"
             endIcon={<PostAddIcon />}
+            disabled={!racunData._id}
           >
             Ođe Klik
           </Button>
-        </>
+        </Box>
       )}
 
       <Snackbar
