@@ -119,6 +119,7 @@ export default function Racuni() {
 
   useEffect(() => {
     if (seminar !== null) {
+      updateNestedField("seminar.seminar_id", seminar._id || "");
       updateNestedField("seminar.onlineCena", seminarOnlineCena || 0);
       updateNestedField("seminar.offlineCena", seminarOfflineCena || 0);
       updateNestedField("seminar.naziv", seminarNaziv || "");
@@ -130,6 +131,7 @@ export default function Racuni() {
     updateNestedField("seminar.brojUcesnikaOffline", offlineCount);
 
     if (firma !== null) {
+      updateNestedField("primalacRacuna.firma_id", firma._id || "");
       updateNestedField("primalacRacuna.naziv", firmaNaziv || "");
       updateNestedField("primalacRacuna.adresa", firmaAdresa || "");
       updateNestedField("primalacRacuna.pib", firmaPIB || "");

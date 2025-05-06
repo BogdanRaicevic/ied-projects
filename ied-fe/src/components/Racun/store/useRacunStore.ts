@@ -33,6 +33,7 @@ interface RacunState {
 
 const initialRacunData: RacunZod = {
   seminar: {
+    seminar_id: "",
     naziv: "",
     datum: new Date(),
     lokacija: "",
@@ -46,6 +47,7 @@ const initialRacunData: RacunZod = {
     avansBezPdv: 0,
   },
   primalacRacuna: {
+    firma_id: "",
     naziv: "",
     adresa: "",
     mesto: "",

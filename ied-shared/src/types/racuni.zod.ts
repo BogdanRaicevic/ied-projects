@@ -1,6 +1,7 @@
 import { z } from "zod";
 
 export const PrimalacRacunaSchema = z.object({
+  firma_id: z.string(),
   naziv: z.string().min(1, { message: "Naziv primaoca je obavezan" }),
   adresa: z.string().optional(),
   pib: z.string().optional(),
@@ -9,6 +10,7 @@ export const PrimalacRacunaSchema = z.object({
 });
 
 export const SeminarRacunSchema = z.object({
+  seminar_id: z.string(),
   naziv: z.string().min(1, { message: "Naziv seminara je obavezan" }),
   // Use preprocess to handle date strings from forms/JSON
   datum: z.preprocess(
