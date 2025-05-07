@@ -1,7 +1,7 @@
 const ied = {
   id: "ied",
   naziv: "Institut za ekonomsku diplomatiju d.o.o, 11080 Zemun, Bezanijska 30",
-  kontaktTelefoni: ["011/3077612", "011/3077613"],
+  kontaktTelefoni: ["011/307-76-12", "011/307-76-13"],
   pib: 103159254,
   maticniBroj: 17518313,
   brojResenjaOEvidencijiZaPDV: "/",
@@ -15,8 +15,8 @@ const ied = {
 
 const permanent = {
   id: "permanent",
-  naziv: "Permanent Educom",
-  kontaktTelefoni: ["063 506 097"],
+  naziv: "Permanent Educom, 11070 Beograd, Novi Beograd, Radoja Dakića 1/18",
+  kontaktTelefoni: [],
   pib: 109282264,
   maticniBroj: 64066030,
   brojResenjaOEvidencijiZaPDV: "Oslobođeno PDV-a prema članu 33. Zakona o PDV-u",
@@ -29,7 +29,7 @@ const permanent = {
 const bs = {
   id: "bs",
   naziv: "Balkanski savet za održivi razvoj i edukaciju, 11080 Zemun, Bezanijska 30",
-  kontaktTelefoni: ["011 655 8305", "064 821 33 22"],
+  kontaktTelefoni: ["011/655-83-05", "064/821-33-22"],
   pib: 108935581,
   maticniBroj: 28170866,
   brojResenjaOEvidencijiZaPDV: "/",
