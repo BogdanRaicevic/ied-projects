@@ -1,7 +1,12 @@
 import { useState, useEffect, useMemo } from "react";
 import { searchRacuni } from "../../api/racuni.api";
-import { MaterialReactTable, MRT_ColumnDef, useMaterialReactTable } from "material-react-table";
-import { RacunZod } from "@ied-shared/index";
+import {
+  MaterialReactTable,
+  MRT_ColumnDef,
+  MRT_PaginationState,
+  useMaterialReactTable,
+} from "material-react-table";
+import { PretrageRacunaZodType, RacunZod } from "@ied-shared/index";
 import {
   Link,
   Box,
@@ -17,6 +22,12 @@ import { blue, green, purple, red } from "@mui/material/colors";
 import { formatDate } from "date-fns";
 import { useNavigate } from "react-router-dom";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
+import { ParametriPretrageRacuna } from "./ParametriPretrageRacuna";
+
+type SearchState = {
+  filterValues: PretrageRacunaZodType;
+  pagination: MRT_PaginationState;
+};
 
 export const PretrageRacuna = () => {
   const [loading, setLoading] = useState<boolean>(true);
@@ -186,15 +197,27 @@ export const PretrageRacuna = () => {
     []
   );
 
+  const [searchState, setSearchState] = useState<SearchState>({
+    filterValues: {},
+    pagination: {
+      pageIndex: 0,
+      pageSize: 20,
+    },
+  });
+
+  const handleSearch = (newFilters: PretrageRacunaZodType) => {
+    setSearchState((prev) => ({
+      filterValues: newFilters,
+      pagination: { ...prev.pagination, pageIndex: 0 },
+    }));
+  };
+
   const racuniTable = useMaterialReactTable({
-    columns: racuniColumns,
-    data: racuniData?.racuni || [],
+    columns: useMemo<MRT_ColumnDef<RacunZod>[]>(() => racuniColumns, [racuniColumns]),
+    data: useMemo<RacunZod[]>(() => racuniData?.racuni || [], [racuniData?.racuni]),
     enableFilters: true,
     enableColumnFilters: true,
-    enableGlobalFilter: true,
     enableSorting: true,
-
-    // These props improve the search/filter UX
     muiSearchTextFieldProps: {
       variant: "outlined",
       placeholder: "Pretraži...",
@@ -203,21 +226,33 @@ export const PretrageRacuna = () => {
     },
     state: {
       isLoading: loading,
+      pagination: searchState.pagination,
     },
     rowCount: racuniData?.totalDocuments || 0,
+    manualPagination: true,
+    muiPaginationProps: {
+      rowsPerPageOptions: [10, 20, 50, 100],
+    },
+    enablePagination: true,
+    paginationDisplayMode: "default",
+    positionToolbarAlertBanner: "bottom",
+    onPaginationChange: (updater) => {
+      setSearchState((prev) => ({
+        ...prev,
+        pagination: typeof updater === "function" ? updater(prev.pagination) : updater,
+      }));
+    },
   });
-
-  const pageIndex = racuniTable.getState().pagination.pageIndex + 1 || 1;
-  const pageSize = racuniTable.getState().pagination.pageSize || 50;
 
   useEffect(() => {
     const fetchRacuni = async () => {
       try {
         setLoading(true);
-        const data = await searchRacuni({
-          pageIndex,
-          pageSize,
-        });
+        const data = await searchRacuni(
+          searchState.pagination.pageIndex,
+          searchState.pagination.pageSize,
+          searchState.filterValues
+        );
         setRacuniData(data);
       } catch (err) {
         console.error(err);
@@ -227,11 +262,12 @@ export const PretrageRacuna = () => {
     };
 
     fetchRacuni();
-  }, [pageIndex, pageSize]);
+  }, [searchState]);
 
   return (
     <div>
       <h1>Pretrage Racuna</h1>
+      <ParametriPretrageRacuna onSearch={handleSearch} />
       <MaterialReactTable table={racuniTable} />
     </div>
   );

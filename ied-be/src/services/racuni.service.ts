@@ -1,5 +1,6 @@
-import { IzdavacRacuna, RacunZod, TipRacuna } from "@ied-shared/index";
+import { IzdavacRacuna, PretrageRacunaZodType, RacunZod, TipRacuna } from "@ied-shared/index";
 import { RacunModel } from "../models/racun.model";
+import { createRacunQuery } from "../utils/racuniQueryBuilder";
 
 export const saveRacun = async (racun: RacunZod) => {
   try {
@@ -51,14 +52,18 @@ export const deleteRacunById = async (id: string) => {
   }
 };
 
-// TODO: queryParmaeters: RacuniQueryParamsZodType
-export const searchRacuni = async (pageIndex = 1, pageSize = 50, _queryParameters: any) => {
+export const searchRacuni = async (
+  pageIndex = 0,
+  pageSize = 50,
+  queryParameters: PretrageRacunaZodType
+) => {
   try {
-    const skip = (pageIndex - 1) * pageSize;
-    // const mongoQuery = createRacunQuery(queryParameters.queryParameters);
+    const skip = pageIndex * pageSize;
+    const mongoQuery = createRacunQuery(queryParameters);
+
     const [totalDocuments, racuni] = await Promise.all([
-      RacunModel.countDocuments(),
-      RacunModel.find().sort({ pozivNaBroj: -1 }).skip(skip).limit(pageSize),
+      RacunModel.countDocuments(mongoQuery),
+      RacunModel.find(mongoQuery).sort({ pozivNaBroj: -1 }).skip(skip).limit(pageSize),
     ]);
 
     const totalPages = Math.ceil(totalDocuments / pageSize);

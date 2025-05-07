@@ -86,9 +86,21 @@ export const RacunQuerySchema = z.object({
   tipRacuna: z.nativeEnum(TipRacuna).optional(),
 });
 
+export const PretrageRacunaSchma = z.object({
+  pozivNaBroj: z.coerce.number().nonnegative().optional(),
+  datumOd: z.coerce.date().optional(),
+  datumDo: z.coerce.date().optional(),
+  izdavacRacuna: z.array(z.nativeEnum(IzdavacRacuna)).optional(),
+  tipRacuna: z.array(z.nativeEnum(TipRacuna)).optional(),
+  imeFirme: z.string().optional(),
+  pibFirme: z.coerce.number().nonnegative().optional(),
+  nazivSeminara: z.string().optional(),
+});
+
 // Inferred Types
 export type RacunZod = z.infer<typeof RacunSchema>;
 export type PrimalacRacunaZod = z.infer<typeof PrimalacRacunaSchema>;
 export type SeminarRacunZod = z.infer<typeof SeminarRacunSchema>;
 export type CalculationsRacunZod = z.infer<typeof CalculationsRacunSchema>;
 export type RacunQueryZod = z.infer<typeof RacunQuerySchema>;
+export type PretrageRacunaZodType = z.infer<typeof PretrageRacunaSchma>;

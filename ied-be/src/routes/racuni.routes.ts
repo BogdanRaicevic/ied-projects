@@ -8,7 +8,7 @@ import {
   updateRacunById,
 } from "../services/racuni.service";
 import { validate } from "../middleware/validateSchema";
-import { RacunZod, RacunQueryZod, RacunSchema } from "@ied-shared/index";
+import { RacunZod, RacunQueryZod, RacunSchema, PretrageRacunaZodType } from "@ied-shared/index";
 
 const router = Router();
 
@@ -27,16 +27,23 @@ router.get("/izdavaci", async (_req: Request, res: Response, next: NextFunction)
   }
 });
 
-router.post("/search", async (req: Request, res: Response, next: NextFunction) => {
-  try {
-    const { pageIndex = 1, pageSize = 10, ...queryParameters } = req.body;
+router.post(
+  "/search",
+  async (
+    req: Request<{}, {}, { pageSize: number; pageIndex: number } & PretrageRacunaZodType>,
+    res: Response,
+    next: NextFunction
+  ) => {
+    try {
+      const { pageIndex = 0, pageSize = 10, ...queryParameters } = req.body;
 
-    const result = await searchRacuni(pageIndex, pageSize, queryParameters);
-    res.json(result);
-  } catch (error) {
-    next(error);
+      const result = await searchRacuni(pageIndex, pageSize, queryParameters);
+      res.json(result);
+    } catch (error) {
+      next(error);
+    }
   }
-});
+);
 
 router.get("/:id", async (req: Request, res: Response, next: NextFunction) => {
   try {
@@ -99,8 +106,6 @@ router.get(
       ) {
         return res.status(400).send("Invalid query parameter types");
       }
-
-      console.log("Query parameters:", req.query);
 
       if (!pozivNaBroj || !izdavacRacuna) {
         return res.status(400).send("Missing required query parameters");

@@ -6,7 +6,7 @@ import PizZip from "pizzip";
 import Docxtemplater from "docxtemplater";
 import { izdavacRacuna } from "../constants/izdavacRacuna.const";
 import { validate } from "../middleware/validateSchema";
-import { Racun, RacunSchema, TipRacuna } from "@ied-shared/types/racuni";
+import { RacunZod, RacunSchema, TipRacuna } from "@ied-shared/types/racuni.zod";
 import { formatDate } from "date-fns";
 
 const __filename = fileURLToPath(import.meta.url);
@@ -35,7 +35,7 @@ const formatToLocalDate = (date: Date): string => formatDate(date, "dd.MM.yyyy")
 router.post(
   "/modify-template",
   validate(RacunSchema),
-  async (req: Request<{}, any, Racun>, res) => {
+  async (req: Request<{}, any, RacunZod>, res) => {
     // Validate template name if you want to support multiple templates
     const templateName = req.body.tipRacuna;
     const racunData = req.body;

@@ -1,6 +1,12 @@
 import axiosInstanceWithAuth from "./interceptors/auth";
 import { env } from "../utils/envVariables";
-import { IzdavacRacuna, RacunSchema, RacunZod, TipRacuna } from "@ied-shared/index";
+import {
+  IzdavacRacuna,
+  PretrageRacunaZodType,
+  RacunSchema,
+  RacunZod,
+  TipRacuna,
+} from "@ied-shared/index";
 import { validateOrThrow } from "../utils/zodErrorHelper";
 
 export const getIzdavaciRacuna = async () => {
@@ -14,8 +20,15 @@ export const getIzdavaciRacuna = async () => {
 };
 
 export const searchRacuni = async (
-  searchParams: any
+  pageIndex: number,
+  pageSize: number,
+  queryParameters: PretrageRacunaZodType
 ): Promise<{ totalDocuments: number; totalPages: number; racuni: RacunZod[] }> => {
+  const searchParams = {
+    ...queryParameters,
+    pageIndex: pageIndex,
+    pageSize: pageSize,
+  };
   try {
     const response = await axiosInstanceWithAuth.post(
       `${env.beURL}/api/racuni/search`,
