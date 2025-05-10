@@ -99,7 +99,7 @@ router.post(
       );
 
       const fileName = sanitizeFilename(
-        `${sanitizedTemplateName}_${dataForDocumentRednering.primalacRacuna?.naziv}_${dataForDocumentRednering.seminar?.naziv}_${new Date().toISOString().split("T")[0].replace(/-/g, "")}.docx`
+        `${racunData.pozivNaBroj}_${dataForDocumentRednering.primalacRacuna?.naziv}.docx`
       );
       console.log("fileName", fileName);
       res.setHeader(`Content-Disposition`, `attachment; filename=${fileName}`);

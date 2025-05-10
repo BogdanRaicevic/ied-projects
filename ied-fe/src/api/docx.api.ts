@@ -30,7 +30,7 @@ export const generateRacunDocument = async (racunData: RacunZod) => {
     const url = window.URL.createObjectURL(new Blob([response.data]));
     const link = document.createElement("a");
     link.href = url;
-    const fileName = `${racunData.tipRacuna}_${sanitizeFilename(racunData.primalacRacuna.naziv)}_${sanitizeFilename(racunData.seminar.naziv)}_${new Date().toISOString().split("T")[0].replace(/-/g, "")}.docx`;
+    const fileName = `${racunData.pozivNaBroj}_${sanitizeFilename(racunData.primalacRacuna.naziv)}.docx`;
 
     link.setAttribute("download", `${fileName}.docx`);
     document.body.appendChild(link);
