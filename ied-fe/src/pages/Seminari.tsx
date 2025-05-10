@@ -5,16 +5,17 @@ import { addMonths, subMonths } from "date-fns";
 import SeminarForm from "../components/Seminari/SeminarForm";
 import { UnfoldLess } from "@mui/icons-material";
 import SeminariTable from "../components/Seminari/SeminariTable";
+import { SeminarQueryParamsZodType } from "@ied-shared/index";
 
 export default function Seminari() {
-  const [queryParameters, setQueryParameters] = useState({
+  const [queryParameters, setQueryParameters] = useState<SeminarQueryParamsZodType>({
     naziv: "",
     predavac: "",
     lokacija: "",
     datumOd: subMonths(new Date(), 3),
     datumDo: addMonths(new Date(), 3),
   });
-  const [tableInputParameters, setTableInputParameters] = useState({
+  const [tableInputParameters, setTableInputParameters] = useState<SeminarQueryParamsZodType>({
     naziv: "",
     predavac: "",
     lokacija: "",
@@ -41,8 +42,10 @@ export default function Seminari() {
   const handleDateChange = (filedName: string, date: Date | null) => {
     setQueryParameters((prev) => ({
       ...prev,
-      [filedName]: date || "",
+      [filedName]: date || new Date(),
     }));
+
+    console.log("queryParameters", queryParameters);
   };
 
   const parametriPretrage = () => (

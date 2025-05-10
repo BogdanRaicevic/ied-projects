@@ -13,17 +13,19 @@ import { Box } from "@mui/system";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import { useState } from "react";
-import type { PrijavaNaSeminar } from "../../schemas/firmaSchemas";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { deletePrijava } from "../../api/seminari.api";
 import MonetizationOnIcon from "@mui/icons-material/MonetizationOn";
 import { useNavigate } from "react-router-dom";
+import { PrijavaZodType } from "@ied-shared/index";
 
 export default function PrijaveSeminarTable({
+  seminarId,
   prijave,
   onDelete,
 }: {
-  prijave: PrijavaNaSeminar[];
+  seminarId: string;
+  prijave: PrijavaZodType[];
   onDelete?: () => void;
 }) {
   const [open, setOpen] = useState(false);
@@ -38,7 +40,7 @@ export default function PrijaveSeminarTable({
 
   const navigate = useNavigate();
   const handleCreateRacun = () => {
-    navigate("/racuni", { state: { prijave } });
+    navigate("/racuni", { state: { prijave, seminarId } });
   };
 
   return (
@@ -95,7 +97,7 @@ export default function PrijaveSeminarTable({
                       <TableCell>
                         <IconButton
                           color="error"
-                          onClick={() => onePrijavaDelete(prijava.zaposleni_id, prijava.seminar_id)}
+                          onClick={() => onePrijavaDelete(prijava.zaposleni_id, seminarId)}
                         >
                           <DeleteIcon />
                         </IconButton>

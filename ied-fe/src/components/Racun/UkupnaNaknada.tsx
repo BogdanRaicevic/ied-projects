@@ -1,22 +1,26 @@
 import { Typography, TextField } from "@mui/material";
 import { Box } from "@mui/system";
-import type { Racun } from "./types";
 import { formatToRSDNumber } from "../../utils/helpers";
+import { useRacunStore } from "./store/useRacunStore";
 
-interface UkupnaNaknadaProps {
-  racun: Partial<Racun>;
-  onRacunChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
-}
+export const UkupnaNaknada = () => {
+  const racunData = useRacunStore((state) => state.racunData);
+  const updateField = useRacunStore((state) => state.updateField);
 
-export const UkupnaNaknada = ({ racun, onRacunChange }: UkupnaNaknadaProps) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const value = e.target.value === "" ? undefined : Number(e.target.value);
+    updateField(e.target.name, value);
+  };
+
   return (
     <Box>
       <Box>
         <Typography variant="h6" sx={{ mr: 1 }}>
-          Ukupna naknada po svim stavkama: {formatToRSDNumber(racun.ukupnaNaknada ?? 0)}
+          Ukupna naknada po svim stavkama:{" "}
+          {formatToRSDNumber(racunData.calculations.ukupnaNaknada ?? 0)}
         </Typography>
         <Typography variant="h6" sx={{ mr: 1 }}>
-          Ukupni PDV po svim stavkama: {formatToRSDNumber(racun.ukupanPdv ?? 0)}
+          Ukupni PDV po svim stavkama: {formatToRSDNumber(racunData.calculations.ukupanPdv ?? 0)}
         </Typography>
       </Box>
       <Box
@@ -30,13 +34,13 @@ export const UkupnaNaknada = ({ racun, onRacunChange }: UkupnaNaknadaProps) => {
           Rok za uplatu
         </Typography>
         <TextField
+          type="number"
           name="rokZaUplatu"
           variant="filled"
-          value={racun.rokZaUplatu}
-          sx={{ maxWidth: 60 }}
+          value={racunData.rokZaUplatu || 0}
+          sx={{ maxWidth: 100 }}
           onChange={(e) => {
-            console.log(e.target.value);
-            onRacunChange(e);
+            handleChange(e);
           }}
         />
         <Typography variant="h6" sx={{ ml: 1 }}>

@@ -1,35 +1,34 @@
-import { Document, ObjectId, Schema, Types, model } from "mongoose";
+import { Document, Schema, Types, model } from "mongoose";
 
 export type SeminarType = Document & {
   naziv: string;
   predavac?: string;
   lokacija?: string;
-  offlineCena?: string;
-  onlineCena?: string;
-  datum?: string | Date;
+  offlineCena?: number;
+  onlineCena?: number;
+  datum?: Date;
   prijave: PrijavaType[];
 };
 
 export type PrijavaType = {
-  _id?: ObjectId;
-  firma_id: ObjectId;
+  _id?: Types.ObjectId;
+  firma_id: Types.ObjectId;
   firma_naziv: string;
   firma_email: string;
   firma_telefon: string;
 
-  zaposleni_id: ObjectId;
+  zaposleni_id: Types.ObjectId;
   zaposleni_ime: string;
   zaposleni_prezime: string;
   zaposleni_email: string;
   zaposleni_telefon: string;
-  // TODO: remove ne znam option after you are sure it is not used anywhere
-  prisustvo: "online" | "offline" | "ne znam";
+  prisustvo: "online" | "offline";
 };
 
 const prijavaSchema = new Schema<PrijavaType>({
-  _id: { type: Types.ObjectId, default: () => new Types.ObjectId() },
-  firma_id: { type: Types.ObjectId, required: true },
-  zaposleni_id: { type: Types.ObjectId, required: true },
+  _id: { type: Schema.Types.ObjectId, default: () => new Types.ObjectId() },
+  firma_id: { type: Schema.Types.ObjectId, required: true },
+  zaposleni_id: { type: Schema.Types.ObjectId, required: true },
   firma_naziv: { type: String, required: true },
   firma_email: String,
   firma_telefon: String,
@@ -37,7 +36,7 @@ const prijavaSchema = new Schema<PrijavaType>({
   zaposleni_prezime: String,
   zaposleni_email: String,
   zaposleni_telefon: String,
-  prisustvo: { type: String, enum: ["online", "offline", "ne znam"] },
+  prisustvo: { type: String, enum: ["online", "offline"] },
 });
 
 const seminarSchema = new Schema<SeminarType>(
@@ -45,9 +44,9 @@ const seminarSchema = new Schema<SeminarType>(
     naziv: { type: String, required: true },
     predavac: { type: String, required: false },
     lokacija: { type: String, required: false },
-    offlineCena: { type: String, required: false },
-    onlineCena: { type: String, required: false },
-    datum: { type: Schema.Types.Mixed, required: false },
+    offlineCena: { type: Number, required: false },
+    onlineCena: { type: Number, required: false },
+    datum: { type: Date, required: false },
     prijave: [prijavaSchema],
   },
   { collection: "seminari" }

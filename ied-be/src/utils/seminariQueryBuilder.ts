@@ -1,8 +1,8 @@
 import type { FilterQuery } from "mongoose";
 import type { SeminarType } from "../models/seminar.model";
-import type { SeminarQueryParams } from "@ied-shared/types/seminar";
+import type { SeminarQueryParamsZodType } from "@ied-shared/types/seminar";
 
-export function createSeminarQuery(params: SeminarQueryParams): FilterQuery<SeminarType> {
+export function createSeminarQuery(params: SeminarQueryParamsZodType): FilterQuery<SeminarType> {
   const query: FilterQuery<SeminarType> = {};
 
   if (params?.naziv && params.naziv.length > 0) {
@@ -19,7 +19,7 @@ export function createSeminarQuery(params: SeminarQueryParams): FilterQuery<Semi
 
   if (params?.datumOd && params?.datumDo) {
     query.datum = {
-      $gte: params.datumOd, // String comparison works for `yyyy-MM-dd`
+      $gte: params.datumOd,
       $lte: params.datumDo,
     };
   } else if (params?.datumOd) {
