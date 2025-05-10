@@ -4,7 +4,7 @@ import { blue, green, purple, red } from "@mui/material/colors";
 import { Box } from "@mui/system";
 import { DatePicker } from "@mui/x-date-pickers";
 import { subMonths } from "date-fns";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 interface ParametriPretrageRacunaProps {
   onSearch: (filters: PretrageRacunaZodType) => void;
@@ -46,6 +46,24 @@ export const ParametriPretrageRacuna = ({ onSearch }: ParametriPretrageRacunaPro
 
     onSearch(filters);
   };
+
+  useEffect(() => {
+    const handleKeyPress = (event: KeyboardEvent) => {
+      if (event.key === "Enter") {
+        // Prevent default form submission if this component is part of a <form>
+        // event.preventDefault();
+        handlePretraziClick();
+      }
+    };
+
+    // Add event listener when the component mounts
+    document.addEventListener("keydown", handleKeyPress);
+
+    // Remove event listener when the component unmounts
+    return () => {
+      document.removeEventListener("keydown", handleKeyPress);
+    };
+  }, [handlePretraziClick]); // Re-run effect if handlePretraziClick changes (though it's stable here)
 
   return (
     <>
