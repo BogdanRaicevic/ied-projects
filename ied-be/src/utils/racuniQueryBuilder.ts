@@ -24,7 +24,7 @@ export function createRacunQuery(params: PretrageRacunaZodType): FilterQuery<Rac
   }
 
   if (params?.izdavacRacuna && params.izdavacRacuna.length > 0) {
-    query.izdavacRacuna = { $regex: params.izdavacRacuna, $options: "i" }; // Case-insensitive partial match
+    query.izdavacRacuna = { $in: params.izdavacRacuna }; // Case-insensitive partial match
   }
 
   if (params?.imeFirme && params.imeFirme.length > 0) {
