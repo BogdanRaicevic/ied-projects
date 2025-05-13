@@ -65,6 +65,7 @@ export default function Racuni() {
           setSeminar(seminarData);
         }
         updateField("tipRacuna", TipRacuna.PREDRACUN);
+        setTabValue(TipRacuna.PREDRACUN);
       } catch (error) {
         console.error("Error:", error);
         setApiError("Greška pri učitavanju podataka firme ili seminara.");
@@ -203,7 +204,7 @@ export default function Racuni() {
   const handleTabChange = (_event: React.SyntheticEvent, newValue: TipRacuna | "pretrage") => {
     resetSeminarCalculationData();
     setTabValue(newValue);
-    updateField("tipRacuna", newValue);
+    updateField("tipRacuna", newValue === "pretrage" ? TipRacuna.PREDRACUN : newValue);
   };
 
   // Function to render the appropriate form based on current tab

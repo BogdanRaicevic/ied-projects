@@ -1,4 +1,4 @@
-import { ZodError, ZodSchema } from "zod";
+import { ZodSchema } from "zod";
 
 export type ValidationError = {
   message: string;
