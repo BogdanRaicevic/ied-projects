@@ -75,7 +75,7 @@ export const RacunSchema = z.object({
   pozivNaBroj: z.string().optional(),
   dateCreatedAt: z.coerce.date().optional(), // Added optional, BE sets default
   dateUpdatedAt: z.coerce.date().optional(), // Added optional, BE sets default
-  stopaPdv: z.number().default(20),
+  stopaPdv: z.coerce.number().default(20),
   linkedPozivNaBroj: z.string().optional(),
   _id: z.string().optional(),
 });

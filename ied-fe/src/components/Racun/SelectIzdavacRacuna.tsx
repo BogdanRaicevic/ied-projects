@@ -4,6 +4,7 @@ import iedLogo from "../../images/ied-logo.png";
 import permanentLogo from "../../images/permanent-logo.png";
 import bsLogo from "../../images/bs-logo.png";
 import { useRacunStore } from "./store/useRacunStore";
+import { IzdavacRacuna } from "@ied-shared/index";
 
 export default function SelectIzdavacRacuna() {
   const options = [
@@ -16,9 +17,10 @@ export default function SelectIzdavacRacuna() {
   const updateField = useRacunStore((state) => state.updateField);
 
   const handleChange = (event: SelectChangeEvent<string>) => {
-    const selectedValue = event.target.value as string;
+    const selectedValue = event.target.value as IzdavacRacuna;
     updateField("izdavacRacuna", selectedValue);
     updateField("tekuciRacun", "");
+    updateField("stopaPdv", selectedValue === "permanent" ? 0 : 20);
   };
 
   return (

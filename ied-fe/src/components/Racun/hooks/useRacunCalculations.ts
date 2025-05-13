@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { useRacunStore } from "../store/useRacunStore";
 
+// TODO: move billing calculations to the backend
 export const useRacunCalculations = () => {
   const {
     seminar: {
@@ -12,18 +13,19 @@ export const useRacunCalculations = () => {
       popustOffline,
       avansBezPdv,
     },
+    stopaPdv,
   } = useRacunStore((state) => state.racunData);
   const updateCalculations = useRacunStore((state) => state.updateCalculations);
 
   useEffect(() => {
-    const onlineCenaNum = Number(onlineCena) || 0;
-    const offlineCenaNum = Number(offlineCena) || 0;
-    const brojUcesnikaOnlineNum = Number(brojUcesnikaOnline) || 0;
-    const brojUcesnikaOfflineNum = Number(brojUcesnikaOffline) || 0;
-    const popustOnlineNum = Number(popustOnline) || 0;
-    const popustOfflineNum = Number(popustOffline) || 0;
-    const stopaPdvNum = 20;
-    const avansBezPdvNum = Number(avansBezPdv) || 0;
+    const onlineCenaNum = onlineCena || 0;
+    const offlineCenaNum = offlineCena || 0;
+    const brojUcesnikaOnlineNum = brojUcesnikaOnline || 0;
+    const brojUcesnikaOfflineNum = brojUcesnikaOffline || 0;
+    const popustOnlineNum = popustOnline || 0;
+    const popustOfflineNum = popustOffline || 0;
+    const stopaPdvNum = stopaPdv || 0;
+    const avansBezPdvNum = avansBezPdv || 0;
 
     const onlineUkupnaNaknada =
       onlineCenaNum * brojUcesnikaOnlineNum * (1 - popustOnlineNum / 100) * (1 + stopaPdvNum / 100);
