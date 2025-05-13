@@ -69,7 +69,6 @@ export const useRacunCalculations = () => {
     popustOnline,
     popustOffline,
     avansBezPdv,
-    avansBezPdv,
     stopaPdv,
   ]);
 };

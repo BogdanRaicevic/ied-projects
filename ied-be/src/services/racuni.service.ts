@@ -45,6 +45,9 @@ export const updateRacunById = async (id: string, updatedRacun: RacunZod) => {
 export const deleteRacunById = async (id: string) => {
   try {
     const racun = await RacunModel.findByIdAndDelete(id);
+    if (!racun) {
+      throw new Error(`Racun with ID ${id} not found for deletion.`);
+    }
     return racun;
   } catch (error) {
     console.error(`Error deleting Racun by ID ${id}:`, error);

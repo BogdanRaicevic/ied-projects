@@ -98,8 +98,8 @@ router.post(
         ...racunData,
         izdavacRacuna: { ...izdavacRacuna.find((d) => d.id === req.body.izdavacRacuna) },
         datumIzdavanjaRacuna: formatToLocalDate(new Date()),
-        hasOnline: Number(req.body.seminar.brojUcesnikaOnline) > 0,
-        hasOffline: Number(req.body.seminar.brojUcesnikaOffline) > 0,
+        hasOnline: (req.body.seminar.brojUcesnikaOnline || 0) > 0,
+        hasOffline: (req.body.seminar.brojUcesnikaOffline || 0) > 0,
         seminar: {
           ...(racunData.seminar ?? {}),
           datum: racunData.seminar?.datum
