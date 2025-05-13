@@ -4,13 +4,13 @@ import { Box } from "@mui/system";
 import AutocompleteMultiple from "../Autocomplete/Multiple";
 import CheckboxList from "../CheckboxList";
 import NegationCheckbox from "../NegationCheckbox";
-
 import { usePretragaStore } from "../../store/pretragaParameters.store";
 import { useFetchData } from "../../hooks/useFetchData";
 import { FirmaQueryParams } from "@ied-shared/types/firmaQueryParams";
 import { format } from "date-fns";
+import { useEffect } from "react";
 
-export default function PretragaParameters() {
+export default function PretragaParameters({ onSearchSubmit }: { onSearchSubmit: () => void }) {
   const { delatnosti, mesta, radnaMesta, tipoviFirme, velicineFirme, stanjaFirme, sviSeminari } =
     useFetchData();
 
@@ -23,6 +23,23 @@ export default function PretragaParameters() {
   const handleInputChange = (field: keyof FirmaQueryParams, value: any) => {
     setPretragaParameters({ [field]: value });
   };
+
+  useEffect(() => {
+    const handleKeyPress = (event: KeyboardEvent) => {
+      if (event.key === "Enter") {
+        // Prevent default form submission if this component is part of a <form>
+        // event.preventDefault();
+        onSearchSubmit(); // Call the passed-in function
+      }
+    };
+
+    document.addEventListener("keydown", handleKeyPress);
+
+    // Remove event listener when the component unmounts
+    return () => {
+      document.removeEventListener("keydown", handleKeyPress);
+    };
+  }, [onSearchSubmit]); // Add onSearchSubmit to dependency array
 
   return (
     <>
