@@ -70,6 +70,7 @@ export const useRacunCalculations = () => {
     popustOffline,
     avansBezPdv,
     avansBezPdv,
+    stopaPdv,
   ]);
 };
 

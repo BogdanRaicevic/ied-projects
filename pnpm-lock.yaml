@@ -17,6 +17,12 @@ importers:
       '@clerk/express':
         specifier: ^1.4.6
         version: 1.4.8(express@4.21.2)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      angular:
+        specifier: ^1.8.3
+        version: 1.8.3
+      angular-expressions:
+        specifier: ^1.4.3
+        version: 1.4.3
       cors:
         specifier: ^2.8.5
         version: 2.8.5
@@ -1565,6 +1571,13 @@ packages:
     resolution: {integrity: sha512-OvQ/2pUDKmgfCg++xsTX1wGxfTaszcHVcTctW4UJB4hibJx2HXxxO5UmVgyjMa+ZDsiaf5wWLXYpRWMmBI0QHg==}
     engines: {node: '>=0.4.0'}
     hasBin: true
+
+  angular-expressions@1.4.3:
+    resolution: {integrity: sha512-r7j+dqOuHy0OYiR5AazDixU/Us3TDN2FfuxGX4Dq6d61Y2MhBQHMdUNBfkkLPjDqVm2Is394h31gC3bcBwy9zw==}
+
+  angular@1.8.3:
+    resolution: {integrity: sha512-5qjkWIQQVsHj4Sb5TcEs4WZWpFeVFHXwxEBHUhrny41D8UrBAd6T/6nPPAsLngJCReIOqi95W3mxdveveutpZw==}
+    deprecated: For the actively supported Angular, see https://www.npmjs.com/package/@angular/core. AngularJS support has officially ended. For extended AngularJS support options, see https://goo.gle/angularjs-path-forward.
 
   arg@4.1.3:
     resolution: {integrity: sha512-58S9QDqG0Xx27YwPSt9fJxivjYl432YCwfDMfZ+71RAqUrZef7LrKQZ3LHLOwCS4FLNBplP533Zx895SeOCHvA==}
@@ -4394,6 +4407,10 @@ snapshots:
       acorn: 8.14.1
 
   acorn@8.14.1: {}
+
+  angular-expressions@1.4.3: {}
+
+  angular@1.8.3: {}
 
   arg@4.1.3: {}
 

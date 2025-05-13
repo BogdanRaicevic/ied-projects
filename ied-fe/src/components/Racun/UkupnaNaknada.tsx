@@ -2,14 +2,15 @@ import { Typography, TextField } from "@mui/material";
 import { Box } from "@mui/system";
 import { formatToRSDNumber } from "../../utils/helpers";
 import { useRacunStore } from "./store/useRacunStore";
+import { IzdavacRacuna } from "@ied-shared/index";
 
 export const UkupnaNaknada = () => {
   const racunData = useRacunStore((state) => state.racunData);
   const updateField = useRacunStore((state) => state.updateField);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const value = e.target.value === "" ? undefined : Number(e.target.value);
-    updateField(e.target.name, value);
+    const value = e.target.value === "" ? 0 : Number(e.target.value);
+    updateField("rokZaUplatu", value);
   };
 
   return (
@@ -19,9 +20,11 @@ export const UkupnaNaknada = () => {
           Ukupna naknada po svim stavkama:{" "}
           {formatToRSDNumber(racunData.calculations.ukupnaNaknada ?? 0)}
         </Typography>
-        <Typography variant="h6" sx={{ mr: 1 }}>
-          Ukupni PDV po svim stavkama: {formatToRSDNumber(racunData.calculations.ukupanPdv ?? 0)}
-        </Typography>
+        {racunData.izdavacRacuna !== IzdavacRacuna.PERMANENT && (
+          <Typography variant="h6" sx={{ mr: 1 }}>
+            Ukupni PDV po svim stavkama: {formatToRSDNumber(racunData.calculations.ukupanPdv ?? 0)}
+          </Typography>
+        )}
       </Box>
       <Box
         sx={{
