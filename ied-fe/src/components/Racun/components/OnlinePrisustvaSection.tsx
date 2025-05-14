@@ -63,6 +63,7 @@ export const OnlinePrisustvaSection = () => {
                 <TableCell align="left">
                   <TextField
                     variant="filled"
+                    type="number"
                     name="brojUcesnikaOnline"
                     value={racunData.seminar.brojUcesnikaOnline || 0}
                     onChange={(e) =>

@@ -89,6 +89,7 @@ racunSchema.pre("save", async function (next) {
       .sort({ pozivNaBroj: -1 })
       .exec();
 
+    // TODO: handle race condition that can create duplicate pozivNaBroj
     let sequenceNumber = 1; // Default to 001
     if (lastRacunToday && lastRacunToday.pozivNaBroj) {
       // Extract the sequence part (last 4 digits) and increment
