@@ -6,9 +6,8 @@ import PizZip from "pizzip";
 import Docxtemplater from "docxtemplater";
 import { izdavacRacuna } from "../constants/izdavacRacuna.const";
 import { validate } from "../middleware/validateSchema";
-import { RacunZod, RacunSchema, TipRacuna } from "@ied-shared/types/racuni.zod";
+import { RacunZod, RacunSchema, TipRacuna, IzdavacRacuna } from "@ied-shared/types/racuni.zod";
 import { formatDate } from "date-fns";
-import angularExpressions from "angular-expressions";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -69,30 +68,10 @@ router.post(
       return res.status(400).json({ error: "Invalid template path" });
     }
 
-    // This is the parser function structure Docxtemplater expects
-    const angularParser = (tag: string) => {
-      // Replace typographic quotes with standard ones for angular-expressions
-      const sanitizedTag = tag.replace(/’/g, "'").replace(/“/g, '"').replace(/”/g, '"');
-      return {
-        get(scope: any) {
-          if (tag === ".") {
-            // Handles the case for the current scope object itself
-            return scope;
-          }
-          try {
-            const compiledExpression = angularExpressions.compile(sanitizedTag);
-            return compiledExpression(scope);
-          } catch (error) {
-            console.error(`Error parsing tag "${sanitizedTag}" with angularExpressions:`, error);
-            return undefined; // Or handle error as needed
-          }
-        },
-      };
-    };
-
     try {
       const content = fs.readFileSync(templatePath, "binary");
       const zip = new PizZip(content);
+      const doc = new Docxtemplater(zip);
 
       const dataForDocumentRednering = {
         ...racunData,
@@ -100,6 +79,7 @@ router.post(
         datumIzdavanjaRacuna: formatToLocalDate(new Date()),
         hasOnline: (req.body.seminar.brojUcesnikaOnline || 0) > 0,
         hasOffline: (req.body.seminar.brojUcesnikaOffline || 0) > 0,
+        shouldRenderPdvBlock: racunData.izdavacRacuna !== IzdavacRacuna.PERMANENT,
         seminar: {
           ...(racunData.seminar ?? {}),
           datum: racunData.seminar?.datum
@@ -107,10 +87,6 @@ router.post(
             : undefined,
         },
       };
-
-      const doc = new Docxtemplater(zip, {
-        parser: angularParser,
-      });
 
       doc.render(dataForDocumentRednering);
 
