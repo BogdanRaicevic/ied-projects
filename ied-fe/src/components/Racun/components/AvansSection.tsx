@@ -26,6 +26,8 @@ export const AvansSection = () => {
 
   const handleSearchAvansniRacun = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;
+    updateField("linkedPozivNaBroj", value);
+
     if (value.length === 10 && !isNaN(Number(value))) {
       const avansniRacun = await getRacunByPozivNaBrojAndIzdavac(
         value,
@@ -34,9 +36,6 @@ export const AvansSection = () => {
       );
       updateNestedField("seminar.avansBezPdv", avansniRacun.seminar.avansBezPdv);
       updateNestedField("seminar.naziv", avansniRacun.seminar.naziv);
-      updateField("linkedPozivNaBroj", avansniRacun.pozivNaBroj);
-    } else {
-      return;
     }
   };
 
@@ -48,6 +47,7 @@ export const AvansSection = () => {
       {racunData.tipRacuna === TipRacuna.KONACNI_RACUN && (
         <TextField
           placeholder="Poziv na broj"
+          value={racunData.linkedPozivNaBroj || 0}
           onChange={handleSearchAvansniRacun}
           sx={{ minWidth: 450, mb: 3 }}
           type="number"

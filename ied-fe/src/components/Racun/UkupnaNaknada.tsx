@@ -37,6 +37,7 @@ export const UkupnaNaknada = () => {
           Rok za uplatu
         </Typography>
         <TextField
+          label="Rok za uplatu"
           type="number"
           name="rokZaUplatu"
           variant="filled"
@@ -49,6 +50,19 @@ export const UkupnaNaknada = () => {
         <Typography variant="h6" sx={{ ml: 1 }}>
           dana
         </Typography>
+      </Box>
+      <Box sx={{ mt: 2 }}>
+        <TextField
+          placeholder="Iznos uplaćen na račun"
+          label="Iznos uplaćen na račun"
+          type="number"
+          name="placeno"
+          variant="filled"
+          value={racunData.placeno || 0}
+          onChange={(e) => {
+            updateField("placeno", e.target.value === "" ? 0 : Number(e.target.value));
+          }}
+        ></TextField>
       </Box>
     </Box>
   );

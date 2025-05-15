@@ -57,6 +57,7 @@ const racunSchema = new Schema(
       type: String,
       required: false,
     },
+    placeno: { type: Number, default: 0, min: 0 },
     stopaPdv: { type: Number, default: 20, required: true },
     linkedPozivNaBroj: { type: String, required: false },
     dateCreatedAt: { type: Date, default: Date.now, immutable: true },
@@ -154,4 +155,5 @@ export type RacunModel = Document & {
   rokZaUplatu: number;
   pozivNaBroj: string;
   linkedPozivNaBroj: string;
+  placeno: { type: Number; default: 0; min: 0 };
 };

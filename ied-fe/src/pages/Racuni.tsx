@@ -11,6 +11,7 @@ import { CreateKonacniRacunForm } from "../components/Racun/CreateKonacniRacunFo
 import { useRacunStore } from "../components/Racun/store/useRacunStore";
 import { IzdavacRacunaSection } from "../components/Racun/components/IzdavacRacunaSection";
 import { CreateAvansForm } from "../components/Racun/CreateAvansForm";
+import { CreateRacunForm } from "../components/Racun/CreateRacunForm";
 import PostAddIcon from "@mui/icons-material/PostAdd";
 import { useRacunCalculations } from "../components/Racun/hooks/useRacunCalculations";
 import { PrijavaZodType, SeminarZodType, TipRacuna } from "@ied-shared/index";
@@ -218,6 +219,8 @@ export default function Racuni() {
         return <CreateAvansForm />;
       case TipRacuna.KONACNI_RACUN:
         return <CreateKonacniRacunForm />;
+      case TipRacuna.RACUN:
+        return <CreateRacunForm />;
       default:
         return <PretrageRacuna />;
     }
@@ -243,7 +246,7 @@ export default function Racuni() {
           <Tab label="Predračun" value={TipRacuna.PREDRACUN} />
           <Tab label="Avansni račun" value={TipRacuna.AVANSNI_RACUN} />
           <Tab label="Konačni račun" value={TipRacuna.KONACNI_RACUN} />
-          {/*<Tab label="Račun" value={TipRacuna.RACUN} /> */}
+          <Tab label="Račun" value={TipRacuna.RACUN} />
         </Tabs>
       </Box>
 
