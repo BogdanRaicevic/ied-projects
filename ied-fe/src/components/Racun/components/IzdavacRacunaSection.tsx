@@ -32,7 +32,7 @@ export const IzdavacRacunaSection = () => {
   }
 
   return (
-    <Grid2 component={Paper} size={12} container>
+    <Grid2 sx={{ mt: 3, mb: 3 }} component={Paper} size={12} container>
       <Grid2 size={7}>
         <Box sx={{ padding: "1rem" }}>
           <Autocomplete

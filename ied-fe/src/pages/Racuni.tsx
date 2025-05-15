@@ -236,7 +236,6 @@ export default function Racuni() {
   return (
     <>
       <PageTitle title={"Racuni"} />
-      <IzdavacRacunaSection />
 
       <Box sx={{ borderBottom: 1, borderColor: "divider", mt: 3, mb: 3 }}>
         <Tabs value={tabValue} onChange={handleTabChange} aria-label="basic tabs">
@@ -249,6 +248,7 @@ export default function Racuni() {
       </Box>
 
       {renderActiveForm()}
+      {tabValue !== "pretrage" && <IzdavacRacunaSection />}
 
       {apiError && (
         <Alert severity="error" sx={{ my: 2 }}>
