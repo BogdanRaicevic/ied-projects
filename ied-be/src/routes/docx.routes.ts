@@ -86,6 +86,7 @@ router.post(
             ? formatToLocalDate(new Date(racunData.seminar.datum))
             : undefined,
         },
+        datumUplateAvansa: formatToLocalDate(racunData.datumUplateAvansa || new Date()),
       };
 
       doc.render(dataForDocumentRednering);

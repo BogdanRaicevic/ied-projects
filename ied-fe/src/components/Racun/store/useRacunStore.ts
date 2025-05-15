@@ -71,6 +71,7 @@ const initialRacunData: RacunZod = {
   izdavacRacuna: IzdavacRacuna.IED,
   tipRacuna: TipRacuna.PREDRACUN,
   rokZaUplatu: 0,
+  datumUplateAvansa: new Date(),
 };
 
 export const useRacunStore = create<RacunState>((set, get) => ({
@@ -134,6 +135,10 @@ export const useRacunStore = create<RacunState>((set, get) => ({
           ukupnaNaknada: 0,
         },
         pozivNaBroj: "",
+        rokZaUplatu: 0,
+        linkedPozivNaBroj: "",
+        tekuciRacun: "",
+        datumUplateAvansa: new Date(),
         _id: undefined,
         dateCreatedAt: undefined,
         dateUpdatedAt: undefined,

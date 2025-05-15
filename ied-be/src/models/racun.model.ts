@@ -51,6 +51,7 @@ const racunSchema = new Schema(
       ukupnaNaknada: { type: Number, default: 0, min: 0 },
       ukupanPdv: { type: Number, default: 0, min: 0 },
     },
+    datumUplateAvansa: { type: Date, required: false, default: new Date() },
     rokZaUplatu: { type: Number, default: 0, min: 0 },
     pozivNaBroj: {
       type: String,
@@ -149,6 +150,7 @@ export type RacunModel = Document & {
     ukupnaNaknada: number;
     ukupanPdv: number;
   };
+  datumUplateAvansa: Date;
   rokZaUplatu: number;
   pozivNaBroj: string;
   linkedPozivNaBroj: string;

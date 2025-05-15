@@ -2,6 +2,7 @@ import { Grid2, Divider, Typography, TextField, Box } from "@mui/material";
 import { PrimalacRacunaSection } from "./components/PrimalacRacunaSection";
 import { AvansSection } from "./components/AvansSection";
 import { useRacunStore } from "./store/useRacunStore";
+import { DatePicker } from "@mui/x-date-pickers";
 
 export const CreateAvansForm = () => {
   const racunData = useRacunStore((state) => state.racunData);
@@ -31,6 +32,13 @@ export const CreateAvansForm = () => {
         <PrimalacRacunaSection />
         <Divider sx={{ mt: 3, mb: 3 }} />
         <AvansSection />
+        <DatePicker
+          sx={{ mt: 3 }}
+          label="Datum uplate avansa"
+          format="yyyy.MM.dd"
+          value={racunData.datumUplateAvansa || new Date()}
+          onChange={(e) => updateField("datumUplateAvansa", e || new Date())}
+        ></DatePicker>
       </Grid2>
     </Grid2>
   );
