@@ -9,156 +9,156 @@ importers:
   ied-be:
     dependencies:
       '@aws-sdk/client-s3':
-        specifier: ^3.758.0
+        specifier: 3.758.0
         version: 3.758.0
       '@aws-sdk/lib-storage':
-        specifier: ^3.758.0
+        specifier: 3.758.0
         version: 3.758.0(@aws-sdk/client-s3@3.758.0)
       '@clerk/express':
-        specifier: ^1.4.6
+        specifier: 1.4.6
         version: 1.4.6(express@4.21.2)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       cors:
-        specifier: ^2.8.5
+        specifier: 2.8.5
         version: 2.8.5
       cron:
-        specifier: ^4.3.0
+        specifier: 4.3.0
         version: 4.3.0
       date-fns:
-        specifier: ^4.1.0
+        specifier: 4.1.0
         version: 4.1.0
       docxtemplater:
-        specifier: ^3.60.1
+        specifier: 3.60.1
         version: 3.60.1
       dotenv:
-        specifier: ^16.5.0
+        specifier: 16.5.0
         version: 16.5.0
       express:
-        specifier: ^4.21.2
+        specifier: 4.21.2
         version: 4.21.2
       ied-shared:
         specifier: workspace:^
         version: link:../ied-shared
       mongoose:
-        specifier: ^8.8.4
+        specifier: 8.12.1
         version: 8.12.1
       node-cache:
-        specifier: ^5.1.2
+        specifier: 5.1.2
         version: 5.1.2
       pizzip:
-        specifier: ^3.1.7
+        specifier: 3.1.8
         version: 3.1.8
     devDependencies:
       '@biomejs/biome':
-        specifier: ^1.9.4
+        specifier: 1.9.4
         version: 1.9.4
       '@types/cors':
-        specifier: ^2.8.17
+        specifier: 2.8.17
         version: 2.8.17
       '@types/express':
-        specifier: ^4.17.21
+        specifier: 4.17.21
         version: 4.17.21
       '@types/node':
-        specifier: ^22.14.1
+        specifier: 22.14.1
         version: 22.14.1
       cross-env:
-        specifier: ^7.0.3
+        specifier: 7.0.3
         version: 7.0.3
       globals:
-        specifier: ^16.0.0
+        specifier: 16.0.0
         version: 16.0.0
       tsx:
-        specifier: ^4.19.3
+        specifier: 4.19.3
         version: 4.19.3
       typescript:
-        specifier: ^5.8.3
+        specifier: 5.8.3
         version: 5.8.3
 
   ied-fe:
     dependencies:
       '@clerk/clerk-js':
-        specifier: ^5.56.0
+        specifier: 5.56.0
         version: 5.56.0(@types/react@18.3.18)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@clerk/clerk-react':
-        specifier: ^5.24.2
+        specifier: 5.24.2
         version: 5.24.2(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@emotion/react':
-        specifier: ^11.13.5
+        specifier: 11.14.0
         version: 11.14.0(@types/react@18.3.18)(react@18.3.1)
       '@emotion/styled':
-        specifier: ^11.13.5
+        specifier: 11.14.0
         version: 11.14.0(@emotion/react@11.14.0(@types/react@18.3.18)(react@18.3.1))(@types/react@18.3.18)(react@18.3.1)
       '@fontsource/roboto':
-        specifier: ^5.1.0
+        specifier: 5.2.5
         version: 5.2.5
       '@hookform/resolvers':
-        specifier: ^3.9.1
+        specifier: 3.10.0
         version: 3.10.0(react-hook-form@7.55.0(react@18.3.1))
       '@mui/icons-material':
-        specifier: ^6.4.8
+        specifier: 6.4.8
         version: 6.4.8(@mui/material@6.4.8(@emotion/react@11.14.0(@types/react@18.3.18)(react@18.3.1))(@emotion/styled@11.14.0(@emotion/react@11.14.0(@types/react@18.3.18)(react@18.3.1))(@types/react@18.3.18)(react@18.3.1))(@types/react@18.3.18)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(@types/react@18.3.18)(react@18.3.1)
       '@mui/material':
-        specifier: ^6.4.8
+        specifier: 6.4.8
         version: 6.4.8(@emotion/react@11.14.0(@types/react@18.3.18)(react@18.3.1))(@emotion/styled@11.14.0(@emotion/react@11.14.0(@types/react@18.3.18)(react@18.3.1))(@types/react@18.3.18)(react@18.3.1))(@types/react@18.3.18)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@mui/styled-engine-sc':
-        specifier: ^6.4.6
+        specifier: 6.4.6
         version: 6.4.6(styled-components@6.1.16(react-dom@18.3.1(react@18.3.1))(react@18.3.1))
       '@mui/system':
-        specifier: ^6.4.8
+        specifier: 6.4.8
         version: 6.4.8(@emotion/react@11.14.0(@types/react@18.3.18)(react@18.3.1))(@emotion/styled@11.14.0(@emotion/react@11.14.0(@types/react@18.3.18)(react@18.3.1))(@types/react@18.3.18)(react@18.3.1))(@types/react@18.3.18)(react@18.3.1)
       '@mui/x-date-pickers':
-        specifier: ^7.28.0
+        specifier: 7.28.0
         version: 7.28.0(@emotion/react@11.14.0(@types/react@18.3.18)(react@18.3.1))(@emotion/styled@11.14.0(@emotion/react@11.14.0(@types/react@18.3.18)(react@18.3.1))(@types/react@18.3.18)(react@18.3.1))(@mui/material@6.4.8(@emotion/react@11.14.0(@types/react@18.3.18)(react@18.3.1))(@emotion/styled@11.14.0(@emotion/react@11.14.0(@types/react@18.3.18)(react@18.3.1))(@types/react@18.3.18)(react@18.3.1))(@types/react@18.3.18)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(@mui/system@6.4.8(@emotion/react@11.14.0(@types/react@18.3.18)(react@18.3.1))(@emotion/styled@11.14.0(@emotion/react@11.14.0(@types/react@18.3.18)(react@18.3.1))(@types/react@18.3.18)(react@18.3.1))(@types/react@18.3.18)(react@18.3.1))(@types/react@18.3.18)(date-fns@4.1.0)(luxon@3.6.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@tanstack/react-query':
-        specifier: ^5.69.0
+        specifier: 5.69.0
         version: 5.69.0(react@18.3.1)
       axios:
-        specifier: ^1.8.4
+        specifier: 1.8.4
         version: 1.8.4
       date-fns:
-        specifier: ^4.1.0
+        specifier: 4.1.0
         version: 4.1.0
       material-react-table:
-        specifier: ^3.0.1
+        specifier: 3.2.1
         version: 3.2.1(ac128c313ea4f2a8f7673c267acae3ba)
       pdfmake:
-        specifier: ^0.2.15
+        specifier: 0.2.18
         version: 0.2.18
       react:
-        specifier: ^18.3.1
+        specifier: 18.3.1
         version: 18.3.1
       react-dom:
-        specifier: ^18.3.1
+        specifier: 18.3.1
         version: 18.3.1(react@18.3.1)
       react-hook-form:
-        specifier: ^7.55.0
+        specifier: 7.55.0
         version: 7.55.0(react@18.3.1)
       react-router-dom:
-        specifier: ^6.28.0
+        specifier: 6.30.0
         version: 6.30.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       react-table:
-        specifier: ^7.8.0
+        specifier: 7.8.0
         version: 7.8.0(react@18.3.1)
       react-window:
-        specifier: ^1.8.10
+        specifier: 1.8.11
         version: 1.8.11(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       styled-components:
-        specifier: ^6.1.16
+        specifier: 6.1.16
         version: 6.1.16(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       uuid:
-        specifier: ^11.0.0
+        specifier: 11.1.0
         version: 11.1.0
       zod:
-        specifier: ^3.23.8
+        specifier: 3.24.2
         version: 3.24.2
       zustand:
-        specifier: ^5.0.0
+        specifier: 5.0.3
         version: 5.0.3(@types/react@18.3.18)(react@18.3.1)(use-sync-external-store@1.4.0(react@18.3.1))
     devDependencies:
       '@biomejs/biome':
-        specifier: ^1.9.4
+        specifier: 1.9.4
         version: 1.9.4
       '@types/pdfmake':
-        specifier: ^0.2.10
+        specifier: 0.2.11
         version: 0.2.11
       '@types/react':
         specifier: 18.3.18
@@ -167,28 +167,28 @@ importers:
         specifier: 18.3.5
         version: 18.3.5(@types/react@18.3.18)
       '@types/react-router-dom':
-        specifier: ^5.3.3
+        specifier: 5.3.3
         version: 5.3.3
       '@types/react-table':
-        specifier: ^7.7.20
+        specifier: 7.7.20
         version: 7.7.20
       '@types/react-window':
-        specifier: ^1.8.8
+        specifier: 1.8.8
         version: 1.8.8
       '@types/uuid':
-        specifier: ^10.0.0
+        specifier: 10.0.0
         version: 10.0.0
       '@vitejs/plugin-react-swc':
-        specifier: ^3.8.0
+        specifier: 3.8.0
         version: 3.8.0(@swc/helpers@0.5.15)(vite@6.3.0(@types/node@22.14.1)(tsx@4.19.3))
       globals:
-        specifier: ^16.0.0
+        specifier: 16.0.0
         version: 16.0.0
       ied-shared:
         specifier: workspace:^
         version: link:../ied-shared
       typescript:
-        specifier: ^5.8.3
+        specifier: 5.8.3
         version: 5.8.3
       vite:
         specifier: ^6.3.0
@@ -197,35 +197,35 @@ importers:
   ied-shared:
     devDependencies:
       '@biomejs/biome':
-        specifier: ^1.9.4
+        specifier: 1.9.4
         version: 1.9.4
       '@types/node':
-        specifier: ^22.14.1
+        specifier: 22.14.1
         version: 22.14.1
       tsx:
-        specifier: ^4.19.3
+        specifier: 4.19.3
         version: 4.19.3
       typescript:
-        specifier: ^5.8.3
+        specifier: 5.8.3
         version: 5.8.3
 
   mongo-migrator:
     dependencies:
       '@types/node':
-        specifier: ^22.14.1
+        specifier: 22.14.1
         version: 22.14.1
       mongoose:
-        specifier: ^8.7.1
+        specifier: 8.12.1
         version: 8.12.1
       mysql2:
-        specifier: ^3.13.0
+        specifier: 3.13.0
         version: 3.13.0
       ts-node:
-        specifier: ^10.9.2
+        specifier: 10.9.2
         version: 10.9.2(@swc/core@1.11.9(@swc/helpers@0.5.15))(@types/node@22.14.1)(typescript@5.8.3)
     devDependencies:
       typescript:
-        specifier: ^5.8.3
+        specifier: 5.8.3
         version: 5.8.3
 
 packages:
