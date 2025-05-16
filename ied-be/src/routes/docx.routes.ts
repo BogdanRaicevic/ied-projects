@@ -1,11 +1,13 @@
-import { Router } from "express";
+import { Router, Request } from "express";
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import PizZip from "pizzip";
 import Docxtemplater from "docxtemplater";
-import { RacunTypes } from "@ied-shared/constants/racun";
-import { format } from "date-fns";
+import { izdavacRacuna } from "../constants/izdavacRacuna.const";
+import { validate } from "../middleware/validateSchema";
+import { RacunZod, RacunSchema, TipRacuna, IzdavacRacuna } from "@ied-shared/types/racuni.zod";
+import { formatDate } from "date-fns";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -28,16 +30,21 @@ const sanitizeFilename = (str: string): string => {
   return str.replace(/[šŠđĐčČćĆžŽ]/g, (char) => serbianChars[char] || char);
 };
 
-router.post("/modify-template", async (req, res) => {
-  try {
+const formatToLocalDate = (date: Date): string => formatDate(date, "dd.MM.yyyy");
+
+router.post(
+  "/modify-template",
+  validate(RacunSchema),
+  async (req: Request<{}, any, RacunZod>, res) => {
     // Validate template name if you want to support multiple templates
-    const templateName = req.body.racunType;
+    const templateName = req.body.tipRacuna;
+    const racunData = req.body;
 
     // Check if the racunType is valid
-    if (!Object.values(RacunTypes).includes(req.body.racunType)) {
+    if (!Object.values(TipRacuna).includes(templateName as TipRacuna)) {
       return res.status(400).json({
         error: "Invalid template name",
-        validTypes: Object.values(RacunTypes),
+        validTypes: Object.values(TipRacuna),
       });
     }
 
@@ -53,49 +60,60 @@ router.post("/modify-template", async (req, res) => {
       sanitizedTemplateName.concat(".docx")
     );
 
+    console.log("templatePath", templatePath);
+
     // Additional check to ensure the resolved path is within the templates directory
     const templatesDir = path.resolve(__dirname, "../../src/templates");
     if (!templatePath.startsWith(templatesDir)) {
       return res.status(400).json({ error: "Invalid template path" });
     }
 
-    const flattenedData = {
-      ...req.body,
-      datumIzdavanjaRacuna: new Date().toLocaleDateString("sr-RS"),
-      datumPrometaUsluge: format(req.body.datumPrometaUsluge, "dd.MM.yyyy"),
-      hasOnline: Number(req.body.brojUcesnikaOnline) > 0,
-      hasOffline: Number(req.body.brojUcesnikaOffline) > 0,
-      sadasnjaGodina: new Date().getFullYear().toString().slice(-2),
-    };
+    try {
+      const content = fs.readFileSync(templatePath, "binary");
+      const zip = new PizZip(content);
+      const doc = new Docxtemplater(zip);
 
-    const content = fs.readFileSync(templatePath, "binary");
-    const zip = new PizZip(content);
-    const doc = new Docxtemplater(zip);
+      const dataForDocumentRednering = {
+        ...racunData,
+        izdavacRacuna: { ...izdavacRacuna.find((d) => d.id === req.body.izdavacRacuna) },
+        datumIzdavanjaRacuna: formatToLocalDate(new Date()),
+        hasOnline: (req.body.seminar.brojUcesnikaOnline || 0) > 0,
+        hasOffline: (req.body.seminar.brojUcesnikaOffline || 0) > 0,
+        shouldRenderPdvBlock: racunData.izdavacRacuna !== IzdavacRacuna.PERMANENT,
+        seminar: {
+          ...(racunData.seminar ?? {}),
+          datum: racunData.seminar?.datum
+            ? formatToLocalDate(new Date(racunData.seminar.datum))
+            : undefined,
+        },
+        datumUplateAvansa: formatToLocalDate(racunData.datumUplateAvansa || new Date()),
+      };
 
-    doc.render(flattenedData);
+      doc.render(dataForDocumentRednering);
 
-    const buf = doc.getZip().generate({ type: "nodebuffer" });
+      const buf = doc.getZip().generate({ type: "nodebuffer" });
 
-    // Set appropriate headers
-    res.setHeader(
-      "Content-Type",
-      "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-    );
+      // Set appropriate headers
+      res.setHeader(
+        "Content-Type",
+        "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+      );
 
-    const fileName = sanitizeFilename(
-      `${sanitizedTemplateName}_${flattenedData.naziv.trim()}_${flattenedData.nazivSeminara.trim()}_${new Date().toISOString().split("T")[0].replace(/-/g, "")}.docx`
-    );
-    console.log("fileName", fileName);
-    res.setHeader(`Content-Disposition`, `attachment; filename=${fileName}`);
+      const fileName = sanitizeFilename(
+        `${racunData.pozivNaBroj}_${dataForDocumentRednering.primalacRacuna?.naziv}.docx`
+      );
+      console.log("fileName", fileName);
+      res.setHeader(`Content-Disposition`, `attachment; filename=${fileName}`);
 
-    res.send(buf);
-  } catch (error) {
-    console.error("Template processing error:", error);
-    res.status(500).json({
-      error: "Error processing template",
-      details: error instanceof Error ? error.message : "Unknown error",
-    });
+      res.send(buf);
+    } catch (error) {
+      console.error("Template processing error:", error);
+      res.status(500).json({
+        error: "Error processing template",
+        details: error instanceof Error ? error.message : "Unknown error",
+      });
+    }
   }
-});
+);
 
 export default router;

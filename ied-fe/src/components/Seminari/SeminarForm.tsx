@@ -3,29 +3,27 @@ import { TextField, Box, Button, FormControl, Alert, Snackbar } from "@mui/mater
 import InputAdornment from "@mui/material/InputAdornment";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { saveSeminar } from "../../api/seminari.api";
-import type { SeminarType } from "../../schemas/firmaSchemas";
+import { SeminarZodType } from "@ied-shared/index";
 
 export default function SeminarForm({
   seminar,
   onDialogClose,
   onSuccess,
 }: {
-  seminar?: Partial<SeminarType>;
+  seminar?: Partial<SeminarZodType>;
   onDialogClose?: () => void;
   onSuccess?: () => void;
 }) {
-  const defaultSeminarData: SeminarType = {
+  const defaultSeminarData: SeminarZodType = {
     naziv: "",
     predavac: "",
     lokacija: "",
-    offlineCena: "",
-    onlineCena: "",
+    offlineCena: 0,
+    onlineCena: 0,
     datum: new Date(),
-    datumOd: new Date(),
-    datumDo: new Date(),
     prijave: [],
   };
-  const [seminarData, setSeminarData] = React.useState<SeminarType>({
+  const [seminarData, setSeminarData] = React.useState<SeminarZodType>({
     ...defaultSeminarData,
     ...seminar,
   });

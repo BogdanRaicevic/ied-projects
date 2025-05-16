@@ -10,14 +10,12 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import type { Racun } from "../types";
+import { useRacunStore } from "../store/useRacunStore";
 
-interface OnlinePrisustvaSectionProps {
-  racun: Partial<Racun>;
-  onRacunChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
-}
+export const OnlinePrisustvaSection = () => {
+  const racunData = useRacunStore((state) => state.racunData);
+  const updateNestedField = useRacunStore((state) => state.updateNestedField);
 
-export const OnlinePrisustvaSection = ({ racun, onRacunChange }: OnlinePrisustvaSectionProps) => {
   return (
     <Box>
       <Typography align="center" variant="h4" sx={{ mb: 3 }}>
@@ -36,7 +34,7 @@ export const OnlinePrisustvaSection = ({ racun, onRacunChange }: OnlinePrisustva
           >
             <TableHead>
               <TableRow>
-                <TableCell>Vrsta usluge</TableCell>
+                <TableCell>Seminar</TableCell>
                 <TableCell>Jedinica mere</TableCell>
                 <TableCell>Količina</TableCell>
               </TableRow>
@@ -49,25 +47,28 @@ export const OnlinePrisustvaSection = ({ racun, onRacunChange }: OnlinePrisustva
                 <TableCell align="left">
                   <TextField
                     variant="filled"
-                    name="nazivSeminara"
-                    value={racun.nazivSeminara}
-                    onChange={onRacunChange}
+                    name="naziv"
+                    value={racunData.seminar.naziv ?? ""}
+                    onChange={(e) => updateNestedField("seminar.naziv", e.target.value)}
                   />
                 </TableCell>
                 <TableCell align="left">
                   <TextField
                     variant="filled"
                     name="jedinicaMere"
-                    value={racun.jedinicaMere}
-                    onChange={onRacunChange}
+                    value={racunData.seminar.jedinicaMere || ""}
+                    onChange={(e) => updateNestedField("seminar.jedinicaMere", e.target.value)}
                   />
                 </TableCell>
                 <TableCell align="left">
                   <TextField
                     variant="filled"
+                    type="number"
                     name="brojUcesnikaOnline"
-                    value={racun.brojUcesnikaOnline}
-                    onChange={onRacunChange}
+                    value={racunData.seminar.brojUcesnikaOnline || 0}
+                    onChange={(e) =>
+                      updateNestedField("seminar.brojUcesnikaOnline", Number(e.target.value))
+                    }
                   />
                 </TableCell>
               </TableRow>
@@ -76,7 +77,7 @@ export const OnlinePrisustvaSection = ({ racun, onRacunChange }: OnlinePrisustva
           <Table sx={{ minWidth: 650 }} aria-label="simple table">
             <TableHead>
               <TableRow>
-                <TableCell>Cena po jedinici</TableCell>
+                <TableCell>Cena online</TableCell>
                 <TableCell>Popust</TableCell>
                 <TableCell>Poreska osnovica</TableCell>
                 <TableCell>Stopa PDV</TableCell>
@@ -94,8 +95,10 @@ export const OnlinePrisustvaSection = ({ racun, onRacunChange }: OnlinePrisustva
                     sx={{ maxWidth: 100 }}
                     name="onlineCena"
                     variant="filled"
-                    value={racun.onlineCena}
-                    onChange={onRacunChange}
+                    value={racunData.seminar.onlineCena || 0}
+                    onChange={(e) =>
+                      updateNestedField("seminar.onlineCena", Number(e.target.value))
+                    }
                   />
                 </TableCell>
                 <TableCell align="left">
@@ -103,13 +106,15 @@ export const OnlinePrisustvaSection = ({ racun, onRacunChange }: OnlinePrisustva
                     sx={{ maxWidth: 70 }}
                     name="popustOnline"
                     variant="filled"
-                    value={racun.popustOnline}
-                    onChange={onRacunChange}
+                    value={racunData.seminar.popustOnline || 0}
+                    onChange={(e) =>
+                      updateNestedField("seminar.popustOnline", Number(e.target.value))
+                    }
                   />
                 </TableCell>
                 <TableCell align="left">
                   <Typography>
-                    {Number(racun.onlinePoreskaOsnovica).toLocaleString("sr-RS", {
+                    {Number(racunData.calculations.onlinePoreskaOsnovica).toLocaleString("sr-RS", {
                       style: "currency",
                       currency: "RSD",
                       minimumFractionDigits: 2,
@@ -117,11 +122,11 @@ export const OnlinePrisustvaSection = ({ racun, onRacunChange }: OnlinePrisustva
                   </Typography>
                 </TableCell>
                 <TableCell align="left">
-                  <Typography>{racun.stopaPdv}%</Typography>
+                  <Typography>{racunData.stopaPdv}%</Typography>
                 </TableCell>
                 <TableCell align="left">
                   <Typography>
-                    {Number(racun.pdvOnline).toLocaleString("sr-RS", {
+                    {Number(racunData.calculations.pdvOnline).toLocaleString("sr-RS", {
                       style: "currency",
                       currency: "RSD",
                       minimumFractionDigits: 2,
@@ -130,7 +135,7 @@ export const OnlinePrisustvaSection = ({ racun, onRacunChange }: OnlinePrisustva
                 </TableCell>
                 <TableCell align="left">
                   <Typography>
-                    {Number(racun.onlineUkupnaNaknada).toLocaleString("sr-RS", {
+                    {Number(racunData.calculations.onlineUkupnaNaknada).toLocaleString("sr-RS", {
                       style: "currency",
                       currency: "RSD",
                       minimumFractionDigits: 2,

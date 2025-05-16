@@ -9,25 +9,71 @@ import {
   TableBody,
   TextField,
   Typography,
+  Chip,
 } from "@mui/material";
-import type { Racun } from "./../types";
 import { formatToRSDNumber } from "../../../utils/helpers";
+import { useRacunStore } from "../store/useRacunStore";
+import { getRacunByPozivNaBrojAndIzdavac } from "../../../api/racuni.api";
+import { TipRacuna } from "@ied-shared/types/racuni.zod";
 
-interface AvansSectionProps {
-  racun: Partial<Racun>;
-  onRacunChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
-}
+export const AvansSection = () => {
+  const racunData = useRacunStore((state) => state.racunData);
+  const updateNestedField = useRacunStore((state) => state.updateNestedField);
+  const updateField = useRacunStore((state) => state.updateField);
 
-export const AvansSection = ({ racun, onRacunChange }: AvansSectionProps) => {
-  const avansPdv = (Number(racun.avansBezPdv ?? 0) * Number(racun.stopaPdv)) / 100;
-  const avans = Number(racun.avansBezPdv) + Number(avansPdv);
+  const avansPdv = (Number(racunData.seminar.avansBezPdv ?? 0) * Number(racunData.stopaPdv)) / 100;
+  const avans = Number(racunData.seminar.avansBezPdv) + Number(avansPdv);
+
+  const handleSearchAvansniRacun = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const value = event.target.value;
+    updateField("linkedPozivNaBroj", value);
+
+    if (value.length === 10 && !isNaN(Number(value))) {
+      const avansniRacun = await getRacunByPozivNaBrojAndIzdavac(
+        value,
+        racunData.izdavacRacuna,
+        TipRacuna.AVANSNI_RACUN
+      );
+      updateNestedField("seminar.avansBezPdv", avansniRacun.seminar.avansBezPdv);
+      updateNestedField("seminar.naziv", avansniRacun.seminar.naziv);
+    } else {
+      updateNestedField("seminar.avansBezPdv", 0);
+    }
+  };
 
   return (
     <Box>
       <Typography align="center" variant="h4" sx={{ mb: 3 }}>
         Avans
       </Typography>
-      <Box sx={{ mb: 3 }}>
+      {racunData.tipRacuna === TipRacuna.KONACNI_RACUN && (
+        <TextField
+          placeholder="Poziv na broj"
+          value={racunData.linkedPozivNaBroj || 0}
+          onChange={handleSearchAvansniRacun}
+          sx={{ minWidth: 450, mb: 3 }}
+          type="number"
+          slotProps={{
+            htmlInput: {
+              maxLength: 10,
+              inputMode: "numeric",
+            },
+            input: {
+              startAdornment: (
+                <>
+                  <Chip
+                    sx={{ padding: 1, margin: 1 }}
+                    label={racunData.izdavacRacuna}
+                    size="small"
+                  />
+                  <Chip sx={{ padding: 1, margin: 1 }} label={"AVANSNI RAČUN"} size="small" />
+                </>
+              ),
+            },
+          }}
+        />
+      )}
+      {(racunData.linkedPozivNaBroj || racunData.tipRacuna === TipRacuna.AVANSNI_RACUN) && (
         <TableContainer component={Paper}>
           <Table
             sx={{
@@ -40,7 +86,7 @@ export const AvansSection = ({ racun, onRacunChange }: AvansSectionProps) => {
           >
             <TableHead>
               <TableRow>
-                <TableCell>Vrsta usluge</TableCell>
+                <TableCell>Seminar</TableCell>
                 <TableCell>Avans bez PDV</TableCell>
                 <TableCell>Stopa PDV</TableCell>
                 <TableCell>PDV</TableCell>
@@ -55,21 +101,23 @@ export const AvansSection = ({ racun, onRacunChange }: AvansSectionProps) => {
                 <TableCell align="left">
                   <TextField
                     variant="filled"
-                    name="nazivSeminara"
-                    value={racun.nazivSeminara}
-                    onChange={onRacunChange}
+                    name="naziv"
+                    value={racunData.seminar.naziv ?? ""}
+                    onChange={(e) => updateNestedField("seminar.naziv", e.target.value)}
                   />
                 </TableCell>
                 <TableCell align="left">
                   <TextField
                     variant="filled"
                     name="avansBezPdv"
-                    value={racun.avansBezPdv === 0 ? "" : racun.avansBezPdv}
-                    onChange={onRacunChange}
+                    value={racunData.seminar.avansBezPdv ?? 0}
+                    onChange={(e) =>
+                      updateNestedField("seminar.avansBezPdv", Number(e.target.value) || 0)
+                    }
                   />
                 </TableCell>
                 <TableCell align="left">
-                  <Typography>{racun.stopaPdv}%</Typography>
+                  <Typography>{racunData.stopaPdv}%</Typography>
                 </TableCell>
                 <TableCell align="left">
                   <Typography>{formatToRSDNumber(avansPdv)}</Typography>
@@ -81,7 +129,7 @@ export const AvansSection = ({ racun, onRacunChange }: AvansSectionProps) => {
             </TableBody>
           </Table>
         </TableContainer>
-      </Box>
+      )}
     </Box>
   );
 };

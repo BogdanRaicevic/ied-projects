@@ -17,10 +17,11 @@ import {
 } from "@mui/material";
 import { Grid } from "@mui/system";
 import { useFetchSeminari } from "../../hooks/useFetchData";
-import type { FirmaType, PrijavaNaSeminar, Zaposleni } from "../../schemas/firmaSchemas";
+import type { FirmaType, Zaposleni } from "../../schemas/firmaSchemas";
 import { savePrijava } from "../../api/seminari.api";
 import { useEffect, useState } from "react";
 import { format } from "date-fns";
+import { PrijavaZodType } from "@ied-shared/index";
 
 export default function PrijavaNaSeminarDialog({
   open,
@@ -33,9 +34,9 @@ export default function PrijavaNaSeminarDialog({
   companyData: FirmaType;
   zaposleniData: Zaposleni;
 }) {
-  const [prijavaState, setPrijavaState] = useState<"succeess" | "warning" | "error" | "">("");
+  const [prijavaState, setPrijavaState] = useState<"success" | "warning" | "error" | "">("");
   const [selectedSeminar, setSelectedSeminar] = useState<string>("");
-  const [prisustvo, setPrisustvo] = useState<"online" | "offline" | "ne znam">("online");
+  const [prisustvo, setPrisustvo] = useState<"online" | "offline">("online");
 
   useEffect(() => {
     if (open) {
@@ -50,22 +51,21 @@ export default function PrijavaNaSeminarDialog({
       throw new Error("Nedostaju podaci o firmi, zaposlenom ili seminaru");
     }
 
-    const prijava: PrijavaNaSeminar = {
+    const prijava: PrijavaZodType = {
       firma_id: companyData._id,
       zaposleni_id: zaposleniData._id,
-      prisustvo,
-      seminar_id: selectedSeminar,
-      firma_naziv: companyData.naziv_firme,
-      firma_email: companyData.e_mail,
-      firma_telefon: companyData.telefon,
+      firma_naziv: companyData.naziv_firme || "",
+      firma_email: companyData.e_mail || "",
+      firma_telefon: companyData.telefon || "",
       zaposleni_ime: zaposleniData.ime,
       zaposleni_prezime: zaposleniData.prezime,
       zaposleni_email: zaposleniData.e_mail,
       zaposleni_telefon: zaposleniData.telefon,
+      prisustvo,
     };
 
     try {
-      await savePrijava(prijava);
+      await savePrijava(selectedSeminar, prijava);
       onClose();
     } catch (error: any) {
       if (error.cause === "duplicate") {
@@ -153,7 +153,6 @@ export default function PrijavaNaSeminarDialog({
               </RadioGroup>
             </FormControl>
             <Autocomplete
-              disablePortal
               options={seminari || []}
               getOptionLabel={(option) => `${format(option.datum, "dd.MM.yyyy")} - ${option.naziv}`}
               renderOption={(params, option) => (

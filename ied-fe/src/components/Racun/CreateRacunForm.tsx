@@ -1,10 +1,11 @@
 import { Grid2, Divider, Typography, TextField, Box } from "@mui/material";
 import { PrimalacRacunaSection } from "./components/PrimalacRacunaSection";
-import { AvansSection } from "./components/AvansSection";
+import { OfflinePrisustvaSection } from "./components/OfflinePrisustvaSection";
+import { OnlinePrisustvaSection } from "./components/OnlinePrisustvaSection";
+import { UkupnaNaknada } from "./UkupnaNaknada";
 import { useRacunStore } from "./store/useRacunStore";
-import { DatePicker } from "@mui/x-date-pickers";
 
-export const CreateAvansForm = () => {
+export const CreateRacunForm = () => {
   const racunData = useRacunStore((state) => state.racunData);
   const updateField = useRacunStore((state) => state.updateField);
 
@@ -26,19 +27,15 @@ export const CreateAvansForm = () => {
         <Box
           sx={{ display: "flex", alignItems: "center", justifyContent: "center", mb: 3, gap: 2 }}
         >
-          <Typography variant="h4">Avansni račun</Typography>
+          <Typography variant="h4">Konačni račun</Typography>
           {pozivNaBroj}
         </Box>
         <PrimalacRacunaSection />
         <Divider sx={{ mt: 3, mb: 3 }} />
-        <AvansSection />
-        <DatePicker
-          sx={{ mt: 3 }}
-          label="Datum uplate avansa"
-          format="yyyy.MM.dd"
-          value={racunData.datumUplateAvansa || new Date()}
-          onChange={(e) => updateField("datumUplateAvansa", e || new Date())}
-        ></DatePicker>
+        <OnlinePrisustvaSection />
+        <OfflinePrisustvaSection />
+        <UkupnaNaknada />
+        <Divider sx={{ mt: 3 }} />
       </Grid2>
     </Grid2>
   );

@@ -92,7 +92,6 @@ export const exportSearchedZaposleniData = async (
   queryParameters: FilterQuery<FirmaQueryParams>
 ) => {
   const mongoQuery = await createFirmaQuery(queryParameters);
-  console.log("queryParameters", queryParameters);
 
   const seminarAttendees: string[] = await getZaposleniIdsFromSeminars(
     queryParameters.seminari || []

@@ -8,14 +8,12 @@ import {
   TableBody,
   TextField,
 } from "@mui/material";
-import type { Racun } from "../types";
+import { useRacunStore } from "../store/useRacunStore";
 
-interface PrimalacRacunaSectionProps {
-  racun: Partial<Racun>;
-  onRacunChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
-}
+export const PrimalacRacunaSection = () => {
+  const racun = useRacunStore((state) => state.racunData);
+  const updateNestedField = useRacunStore((state) => state.updateNestedField);
 
-export const PrimalacRacunaSection = ({ racun, onRacunChange }: PrimalacRacunaSectionProps) => {
   return (
     <TableContainer component={Paper}>
       <Table sx={{ minWidth: 650 }} aria-label="simple table">
@@ -32,36 +30,45 @@ export const PrimalacRacunaSection = ({ racun, onRacunChange }: PrimalacRacunaSe
                 fullWidth
                 variant="filled"
                 label="Naziv"
-                value={racun.naziv}
+                value={racun.primalacRacuna.naziv || ""}
                 sx={{ mb: 2 }}
-                onChange={onRacunChange}
+                onChange={(e) => updateNestedField("primalacRacuna.naziv", e.target.value)}
+              />
+              <TextField
+                name="mesto"
+                fullWidth
+                variant="filled"
+                label="Mesto"
+                value={racun.primalacRacuna.mesto || ""}
+                sx={{ mb: 2 }}
+                onChange={(e) => updateNestedField("primalacRacuna.mesto", e.target.value)}
               />
               <TextField
                 name="adresa"
                 fullWidth
                 variant="filled"
                 label="Adresa"
-                value={`${racun.mesto}, ${racun.adresa}`}
+                value={racun.primalacRacuna.adresa || ""}
                 sx={{ mb: 2 }}
-                onChange={onRacunChange}
+                onChange={(e) => updateNestedField("primalacRacuna.adresa", e.target.value)}
               />
               <TextField
                 name="pib"
                 fullWidth
                 variant="filled"
                 label="PIB"
-                value={racun.pib}
+                value={racun.primalacRacuna.pib || ""}
                 sx={{ mb: 2 }}
-                onChange={onRacunChange}
+                onChange={(e) => updateNestedField("primalacRacuna.pib", e.target.value)}
               />
               <TextField
                 name="maticniBroj"
                 fullWidth
                 variant="filled"
                 label="Matični broj"
-                value={racun.maticniBroj}
+                value={racun.primalacRacuna.maticniBroj || ""}
                 sx={{ mb: 2 }}
-                onChange={onRacunChange}
+                onChange={(e) => updateNestedField("primalacRacuna.maticniBroj", e.target.value)}
               />
             </TableCell>
           </TableRow>

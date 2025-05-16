@@ -1,63 +1,79 @@
-import { useEffect, useCallback } from "react";
-import type { Racun } from "../types";
+import { useEffect } from "react";
+import { useRacunStore } from "../store/useRacunStore";
 
-interface UseRacunCalculationsProps {
-  racun: Partial<Racun>;
-  onCalculationsUpdate: (calculations: Partial<Racun>) => void;
-}
-
-export const useRacunCalculations = ({
-  racun,
-  onCalculationsUpdate,
-}: UseRacunCalculationsProps) => {
-  const calculateValues = useCallback(() => {
-    const onlineCena = Number(racun.onlineCena) || 0;
-    const offlineCena = Number(racun.offlineCena) || 0;
-    const brojUcesnikaOnline = Number(racun?.brojUcesnikaOnline) || 0;
-    const brojUcesnikaOffline = Number(racun?.brojUcesnikaOffline) || 0;
-    const popustOnline = Number(racun?.popustOnline) || 0;
-    const popustOffline = Number(racun?.popustOffline) || 0;
-    const stopaPdv = Number(racun.stopaPdv) || 0;
-
-    const onlineUkupnaNaknada =
-      onlineCena * brojUcesnikaOnline * (1 - popustOnline / 100) * (1 + stopaPdv / 100);
-
-    const offlineUkupnaNaknada =
-      offlineCena * brojUcesnikaOffline * (1 - popustOffline / 100) * (1 + stopaPdv / 100);
-
-    const onlinePoreskaOsnovica = onlineCena * brojUcesnikaOnline * (1 - popustOnline / 100);
-    const offlinePoreskaOsnovica = offlineCena * brojUcesnikaOffline * (1 - popustOffline / 100);
-    const avansPdv = (Number(racun.avansBezPdv) * stopaPdv) / 100;
-    const avans = Number(racun.avansBezPdv) + Number(avansPdv);
-
-    return {
-      onlineUkupnaNaknada,
-      offlineUkupnaNaknada,
-      pdvOffline: (offlinePoreskaOsnovica * stopaPdv) / 100,
-      pdvOnline: (onlinePoreskaOsnovica * stopaPdv) / 100,
-      onlinePoreskaOsnovica,
-      offlinePoreskaOsnovica,
-      ukupnaNaknada: onlineUkupnaNaknada + offlineUkupnaNaknada - avans,
-      ukupanPdv:
-        (offlinePoreskaOsnovica * stopaPdv) / 100 +
-        (onlinePoreskaOsnovica * stopaPdv) / 100 -
-        avansPdv,
-      avansPdv,
-      avans,
-    };
-  }, [
-    racun.onlineCena,
-    racun.offlineCena,
-    racun.brojUcesnikaOnline,
-    racun.brojUcesnikaOffline,
-    racun.popustOnline,
-    racun.popustOffline,
-    racun.stopaPdv,
-    racun.avansBezPdv,
-  ]);
+// TODO: move billing calculations to the backend
+export const useRacunCalculations = () => {
+  const {
+    seminar: {
+      onlineCena,
+      offlineCena,
+      brojUcesnikaOnline,
+      brojUcesnikaOffline,
+      popustOnline,
+      popustOffline,
+      avansBezPdv,
+    },
+    stopaPdv,
+  } = useRacunStore((state) => state.racunData);
+  const updateCalculations = useRacunStore((state) => state.updateCalculations);
 
   useEffect(() => {
-    const calculations = calculateValues();
-    onCalculationsUpdate(calculations);
-  }, [calculateValues, onCalculationsUpdate]);
+    const onlineCenaNum = onlineCena || 0;
+    const offlineCenaNum = offlineCena || 0;
+    const brojUcesnikaOnlineNum = brojUcesnikaOnline || 0;
+    const brojUcesnikaOfflineNum = brojUcesnikaOffline || 0;
+    const popustOnlineNum = popustOnline || 0;
+    const popustOfflineNum = popustOffline || 0;
+    const stopaPdvNum = stopaPdv || 0;
+    const avansBezPdvNum = avansBezPdv || 0;
+
+    const onlineUkupnaNaknada =
+      onlineCenaNum * brojUcesnikaOnlineNum * (1 - popustOnlineNum / 100) * (1 + stopaPdvNum / 100);
+
+    const offlineUkupnaNaknada =
+      offlineCenaNum *
+      brojUcesnikaOfflineNum *
+      (1 - popustOfflineNum / 100) *
+      (1 + stopaPdvNum / 100);
+
+    const onlinePoreskaOsnovica =
+      onlineCenaNum * brojUcesnikaOnlineNum * (1 - popustOnlineNum / 100);
+    const offlinePoreskaOsnovica =
+      offlineCenaNum * brojUcesnikaOfflineNum * (1 - popustOfflineNum / 100);
+    const avansPdv = (avansBezPdvNum * stopaPdvNum) / 100;
+    const avans = avansBezPdvNum + avansPdv;
+
+    const calculations = {
+      onlineUkupnaNaknada: roundToTwoDecimals(onlineUkupnaNaknada),
+      offlineUkupnaNaknada: roundToTwoDecimals(offlineUkupnaNaknada),
+      onlinePoreskaOsnovica: roundToTwoDecimals(onlinePoreskaOsnovica),
+      offlinePoreskaOsnovica: roundToTwoDecimals(offlinePoreskaOsnovica),
+      pdvOnline: roundToTwoDecimals((onlinePoreskaOsnovica * stopaPdvNum) / 100),
+      pdvOffline: roundToTwoDecimals((offlinePoreskaOsnovica * stopaPdvNum) / 100),
+      ukupnaNaknada: roundToTwoDecimals(onlineUkupnaNaknada + offlineUkupnaNaknada - avans),
+      ukupanPdv: roundToTwoDecimals(
+        (offlinePoreskaOsnovica * stopaPdvNum) / 100 +
+          (onlinePoreskaOsnovica * stopaPdvNum) / 100 -
+          avansPdv
+      ),
+      avansPdv: roundToTwoDecimals(avansPdv),
+      avans: roundToTwoDecimals(avans),
+    };
+
+    updateCalculations(calculations);
+  }, [
+    onlineCena,
+    offlineCena,
+    brojUcesnikaOnline,
+    brojUcesnikaOffline,
+    popustOnline,
+    popustOffline,
+    avansBezPdv,
+    stopaPdv,
+  ]);
+};
+
+const roundToTwoDecimals = (num: number): number => {
+  // Multiply by 100, round to the nearest integer, then divide by 100
+  return Math.round((num + Number.EPSILON) * 100) / 100;
 };

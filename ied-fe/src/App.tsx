@@ -6,7 +6,15 @@ import Firma from "./pages/Firma";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { RedirectToSignIn, SignedIn, SignedOut } from "@clerk/clerk-react";
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      refetchOnWindowFocus: false,
+      refetchOnMount: false,
+      retry: false,
+    },
+  },
+});
 
 function App() {
   return (

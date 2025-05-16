@@ -33,7 +33,7 @@ export default function Pretrage() {
 
       <Divider />
 
-      <PretragaParameters />
+      <PretragaParameters onSearchSubmit={handlePretraziClick} />
 
       <Box display="flex" justifyContent="space-between" alignItems="center" marginBottom={4}>
         <Box>

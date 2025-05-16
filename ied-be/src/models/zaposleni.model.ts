@@ -1,7 +1,7 @@
-import { type ObjectId, Schema, Types } from "mongoose";
+import { Schema, Types } from "mongoose";
 
 export type Zaposleni = {
-  _id: ObjectId;
+  _id: Types.ObjectId;
   ID_kontakt_osoba: number;
   ime: string;
   prezime: string;
@@ -19,7 +19,7 @@ export type Zaposleni = {
 };
 
 export const zaposleniSchema = new Schema<Zaposleni>({
-  _id: { type: Types.ObjectId, default: () => new Types.ObjectId() },
+  _id: { type: Schema.Types.ObjectId, default: () => new Types.ObjectId() },
   ID_kontakt_osoba: Number,
   ime: String,
   prezime: String,

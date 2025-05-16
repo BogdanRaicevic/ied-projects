@@ -1,40 +1,43 @@
-export type SeminarQueryParams = {
-	naziv?: string;
-	lokacija?: string;
-	predavac?: string;
-	datumOd?: Date | string;
-	datumDo?: Date | string;
-	datum?: Date | string | string[];
-	cena?: string;
-	cenaOd?: string;
-	cenaDo?: string;
-	brojUcesnika?: string;
-	brojUcesnikaOd?: string;
-	brojUcesnikaDo?: string;
-};
+import { z } from "zod";
 
-export type SaveSeminarParams = {
-	naziv: string;
-	predavac?: string;
-	lokacija?: string;
-	onlineCena?: string;
-	offlineCena?: string;
-	datum?: string | string[];
-	prijava?: PrijavaNaSeminar;
-	_id?: string;
-};
+// Schema corresponding to PrijavaType in seminar.model.ts
+export const PrijavaSchema = z.object({
+  _id: z.string().optional(),
+  firma_id: z.string(),
+  firma_naziv: z.string(),
+  firma_email: z.string().optional(),
+  firma_telefon: z.string().optional(),
+  zaposleni_id: z.string(),
+  zaposleni_ime: z.string().optional(),
+  zaposleni_prezime: z.string().optional(),
+  zaposleni_email: z.string().optional(),
+  zaposleni_telefon: z.string().optional(),
+  prisustvo: z.enum(["online", "offline"]),
+});
 
-export type PrijavaNaSeminar = {
-	seminar_id: string;
-	firma_id: string;
-	firma_naziv: string;
-	firma_email: string;
-	firma_telefon: string;
-	zaposleni_id: string;
-	zaposleni_ime: string;
-	zaposleni_prezime: string;
-	zaposleni_email: string;
-	zaposleni_telefon: string;
-	prisustvo: "online" | "offline" | "ne znam";
-	_id?: string;
-};
+export type PrijavaZodType = z.infer<typeof PrijavaSchema>;
+
+export const SeminarSchema = z.object({
+  _id: z.string().optional(),
+  naziv: z.string().min(1, "Naziv seminara je obavezan"),
+  predavac: z.string().optional(),
+  lokacija: z.string().optional(),
+  offlineCena: z.coerce.number().min(0).nonnegative("Cena ne može biti negativna").default(0),
+  onlineCena: z.coerce.number().min(0).nonnegative("Cena ne može biti negativna").default(0),
+  datum: z.coerce.date(),
+  prijave: z.array(PrijavaSchema).default([]),
+});
+
+// Infer the type from the Zod schema
+export type SeminarZodType = z.infer<typeof SeminarSchema>;
+
+export const SeminarQueryParamsSchema = z.object({
+  naziv: z.string().optional(),
+  lokacija: z.string().optional(),
+  predavac: z.string().optional(),
+  datumOd: z.coerce.date().optional(),
+  datumDo: z.coerce.date().optional(),
+  datum: z.coerce.date().optional(),
+});
+
+export type SeminarQueryParamsZodType = z.infer<typeof SeminarQueryParamsSchema>;
