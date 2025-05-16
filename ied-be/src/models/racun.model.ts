@@ -155,5 +155,5 @@ export type RacunModel = Document & {
   rokZaUplatu: number;
   pozivNaBroj: string;
   linkedPozivNaBroj: string;
-  placeno: { type: Number; default: 0; min: 0 };
+  placeno: number;
 };

@@ -36,6 +36,8 @@ export const AvansSection = () => {
       );
       updateNestedField("seminar.avansBezPdv", avansniRacun.seminar.avansBezPdv);
       updateNestedField("seminar.naziv", avansniRacun.seminar.naziv);
+    } else {
+      updateNestedField("seminar.avansBezPdv", 0);
     }
   };
 
