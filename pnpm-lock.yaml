@@ -42,8 +42,8 @@ importers:
         specifier: workspace:^
         version: link:../ied-shared
       mongoose:
-        specifier: ^8.8.4
-        version: 8.13.2
+        specifier: ^8.15.0
+        version: 8.15.0
       node-cache:
         specifier: ^5.1.2
         version: 5.1.2
@@ -225,8 +225,8 @@ importers:
         specifier: ^22.14.1
         version: 22.14.1
       mongoose:
-        specifier: ^8.7.1
-        version: 8.13.2
+        specifier: ^8.15.0
+        version: 8.15.0
       mysql2:
         specifier: ^3.13.0
         version: 3.14.0
@@ -2119,8 +2119,8 @@ packages:
   mongodb-connection-string-url@3.0.2:
     resolution: {integrity: sha512-rMO7CGo/9BFwyZABcKAWL8UJwH/Kc2x0g72uhDWzG48URRax5TCIcJ7Rc3RZqffZzO/Gwff/jyKwCU9TN8gehA==}
 
-  mongodb@6.15.0:
-    resolution: {integrity: sha512-ifBhQ0rRzHDzqp9jAQP6OwHSH7dbYIQjD3SbJs9YYk9AikKEettW/9s/tbSFDTpXcRbF+u1aLrhHxDFaYtZpFQ==}
+  mongodb@6.16.0:
+    resolution: {integrity: sha512-D1PNcdT0y4Grhou5Zi/qgipZOYeWrhLEpk33n3nm6LGtz61jvO88WlrWCK/bigMjpnOdAUKKQwsGIl0NtWMyYw==}
     engines: {node: '>=16.20.1'}
     peerDependencies:
       '@aws-sdk/credential-providers': ^3.188.0
@@ -2146,8 +2146,8 @@ packages:
       socks:
         optional: true
 
-  mongoose@8.13.2:
-    resolution: {integrity: sha512-riCBqZmNkYBWjXpM3qWLDQw7QmTKsVZDPhLXFJqC87+OjocEVpvS3dA2BPPUiLAu+m0/QmEj5pSXKhH+/DgerQ==}
+  mongoose@8.15.0:
+    resolution: {integrity: sha512-WFKsY1q12ScGabnZWUB9c/QzZmz/ESorrV27OembB7Gz6rrh9m3GA4Srsv1uvW1s9AHO5DeZ6DdUTyF9zyNERQ==}
     engines: {node: '>=16.20.1'}
 
   mpath@0.9.0:
@@ -4954,17 +4954,17 @@ snapshots:
       '@types/whatwg-url': 11.0.5
       whatwg-url: 14.2.0
 
-  mongodb@6.15.0:
+  mongodb@6.16.0:
     dependencies:
       '@mongodb-js/saslprep': 1.2.2
       bson: 6.10.3
       mongodb-connection-string-url: 3.0.2
 
-  mongoose@8.13.2:
+  mongoose@8.15.0:
     dependencies:
       bson: 6.10.3
       kareem: 2.6.3
-      mongodb: 6.15.0
+      mongodb: 6.16.0
       mpath: 0.9.0
       mquery: 5.0.0
       ms: 2.1.3
