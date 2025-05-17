@@ -85,7 +85,7 @@ importers:
         specifier: ^5.56.0
         version: 5.62.0(@types/react@18.3.18)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@clerk/clerk-react':
-        specifier: ^5.24.2
+        specifier: ^5.29.0
         version: 5.29.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@emotion/react':
         specifier: ^11.13.5
