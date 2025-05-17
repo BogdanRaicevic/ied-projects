@@ -127,7 +127,7 @@ importers:
         specifier: ^3.0.1
         version: 3.2.1(20f7b0d37ecf1a8f6687acf097ad7bd5)
       pdfmake:
-        specifier: ^0.2.15
+        specifier: ^0.2.18
         version: 0.2.18
       react:
         specifier: ^18.3.1
