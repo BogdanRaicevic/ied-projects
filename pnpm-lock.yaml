@@ -48,8 +48,8 @@ importers:
         specifier: ^5.1.2
         version: 5.1.2
       pizzip:
-        specifier: ^3.1.7
-        version: 3.1.8
+        specifier: ^3.2.0
+        version: 3.2.0
       zod:
         specifier: ^3.24.3
         version: 3.24.3
@@ -2251,8 +2251,8 @@ packages:
     resolution: {integrity: sha512-M7BAV6Rlcy5u+m6oPhAPFgJTzAioX/6B0DxyvDlo9l8+T3nLKbrczg2WLUyzd45L8RqfUMyGPzekbMvX2Ldkwg==}
     engines: {node: '>=12'}
 
-  pizzip@3.1.8:
-    resolution: {integrity: sha512-Nynadaz6/o1cmXDQGKqmTnbeaY10BGNc1PPOZYJMfLcjWfVJQ1ARngpVO+BrrRl/WUNIj0V9uJNrP72mkfsY5A==}
+  pizzip@3.2.0:
+    resolution: {integrity: sha512-X4NPNICxCfIK8VYhF6wbksn81vTiziyLbvKuORVAmolvnUzl1A1xmz9DAWKxPRq9lZg84pJOOAMq3OE61bD8IQ==}
 
   png-js@1.0.0:
     resolution: {integrity: sha512-k+YsbhpA9e+EFfKjTCH3VW6aoKlyNYI6NYdTfDL4CIvFnvsuO84ttonmZE7rc+v23SLTH8XX+5w/Ak9v0xGY4g==}
@@ -5071,7 +5071,7 @@ snapshots:
 
   picomatch@4.0.2: {}
 
-  pizzip@3.1.8:
+  pizzip@3.2.0:
     dependencies:
       pako: 2.1.0
 
