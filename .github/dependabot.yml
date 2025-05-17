@@ -1,23 +1,13 @@
 version: 2
 updates:
-  # Enable version updates for pnpm
-  - package-ecosystem: "npm" # See documentation for possible values
-    directory: "/" # Location of package manifests
+  - package-ecosystem: "npm"
+    directory: "/"
     schedule:
       interval: "daily"
-    # Specify labels for Dependabot PRs
     labels:
       - "dependencies"
       - "dependabot"
-    # Specify the directories for each package within the monorepo
-    registries:
-      - "*"
-    ignore:
-      # Ignore updates to node itself
-      - dependency-name: "node"
-      - dependency-name: "npm"
 
-  # Maintain dependencies for ied-be
   - package-ecosystem: "npm"
     directory: "/ied-be"
     schedule:
@@ -27,7 +17,6 @@ updates:
       - "dependabot"
       - "ied-be"
 
-  # Maintain dependencies for ied-fe
   - package-ecosystem: "npm"
     directory: "/ied-fe"
     schedule:
@@ -37,7 +26,6 @@ updates:
       - "dependabot"
       - "ied-fe"
 
-  # Maintain dependencies for ied-shared
   - package-ecosystem: "npm"
     directory: "/ied-shared"
     schedule:
@@ -47,7 +35,6 @@ updates:
       - "dependabot"
       - "ied-shared"
 
-  # Maintain dependencies for mongo-migrator
   - package-ecosystem: "npm"
     directory: "/mongo-migrator"
     schedule:
@@ -55,4 +42,4 @@ updates:
     labels:
       - "dependencies"
       - "dependabot"
-      - "mongo-migrator" 
+      - "mongo-migrator"
