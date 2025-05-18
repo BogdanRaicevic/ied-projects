@@ -2,7 +2,7 @@ import { Typography, TextField } from "@mui/material";
 import { Box } from "@mui/system";
 import { formatToRSDNumber } from "../../utils/helpers";
 import { useRacunStore } from "./store/useRacunStore";
-import { IzdavacRacuna } from "@ied-shared/index";
+import { IzdavacRacuna, TipRacuna } from "@ied-shared/index";
 
 export const UkupnaNaknada = () => {
   const racunData = useRacunStore((state) => state.racunData);
@@ -51,19 +51,21 @@ export const UkupnaNaknada = () => {
           dana
         </Typography>
       </Box>
-      <Box sx={{ mt: 2 }}>
-        <TextField
-          placeholder="Iznos uplaćen na račun"
-          label="Iznos uplaćen na račun"
-          type="number"
-          name="placeno"
-          variant="filled"
-          value={racunData.placeno || 0}
-          onChange={(e) => {
-            updateField("placeno", e.target.value === "" ? 0 : Number(e.target.value));
-          }}
-        ></TextField>
-      </Box>
+      {racunData.tipRacuna === TipRacuna.RACUN && (
+        <Box sx={{ mt: 2 }}>
+          <TextField
+            placeholder="Iznos uplaćen na račun"
+            label="Iznos uplaćen na račun"
+            type="number"
+            name="placeno"
+            variant="filled"
+            value={racunData.placeno || 0}
+            onChange={(e) => {
+              updateField("placeno", e.target.value === "" ? 0 : Number(e.target.value));
+            }}
+          ></TextField>
+        </Box>
+      )}
     </Box>
   );
 };
