@@ -28,7 +28,7 @@ export const AvansSection = () => {
     const value = event.target.value;
     updateField("linkedPozivNaBroj", value);
 
-    if (value.length === 10 && !isNaN(Number(value))) {
+    if (value.length >= 5 && !isNaN(Number(value))) {
       const avansniRacun = await getRacunByPozivNaBrojAndIzdavac(
         value,
         racunData.izdavacRacuna,

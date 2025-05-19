@@ -1,4 +1,5 @@
 import { Document, Schema, model } from "mongoose";
+import { SequenceModel } from "./sequence.model";
 
 const racunSchema = new Schema(
   {
@@ -82,26 +83,21 @@ racunSchema.pre("save", async function (next) {
     const today = new Date();
     const year = today.getFullYear().toString().slice(-2); // Last 2 digits of year
     const month = (today.getMonth() + 1).toString().padStart(2, "0"); // Month (01-12)
-    const day = today.getDate().toString().padStart(2, "0"); // Day (01-31)
-    const datePrefix = `${year}${month}${day}`; // e.g., "250428"
+    const datePrefix = `${year}${month}`; // e.g., "2504"
 
-    // Find the last document created today with the same prefix
-    const lastRacunToday = await model("Racun")
-      .findOne({ pozivNaBroj: { $regex: `^${datePrefix}` } })
-      .sort({ pozivNaBroj: -1 })
-      .exec();
+    const sequenceDoc = await SequenceModel.findOneAndUpdate(
+      { _id: datePrefix },
+      { $inc: { sequenceNumber: 1 } },
+      {
+        new: true,
+        upsert: true,
+        setDefaultsOnInsert: true,
+      }
+    ).exec();
 
-    // TODO: handle race condition that can create duplicate pozivNaBroj
-    let sequenceNumber = 1; // Default to 001
-    if (lastRacunToday && lastRacunToday.pozivNaBroj) {
-      // Extract the sequence part (last 4 digits) and increment
-      const lastSequence = parseInt(lastRacunToday.pozivNaBroj.slice(-4), 10);
-      sequenceNumber = lastSequence + 1;
-    }
+    const sequenceNumber = sequenceDoc ? sequenceDoc.sequenceNumber : 1;
 
-    const sequenceString = sequenceNumber.toString().padStart(4, "0");
-
-    this.pozivNaBroj = `${datePrefix}${sequenceString}`;
+    this.pozivNaBroj = `${datePrefix}${sequenceNumber}`;
 
     next();
   } catch (error: any) {
