@@ -30,9 +30,21 @@ export const generateRacunDocument = async (racunData: RacunZod) => {
     const url = window.URL.createObjectURL(new Blob([response.data]));
     const link = document.createElement("a");
     link.href = url;
-    const fileName = `${racunData.pozivNaBroj}_${sanitizeFilename(racunData.primalacRacuna.naziv)}.docx`;
 
-    link.setAttribute("download", `${fileName}.docx`);
+    // Try to get filename from Content-Disposition header
+    let fileName = "document.docx";
+    const disposition = response.headers["content-disposition"];
+    if (disposition && disposition.includes("filename=")) {
+      const match = disposition.match(/filename="?([^"]+)"?/);
+      if (match && match[1]) {
+        fileName = match[1];
+      }
+    } else {
+      // fallback if header is missing
+      fileName = `${racunData.pozivNaBroj}_${sanitizeFilename(racunData.primalacRacuna.naziv)}.docx`;
+    }
+
+    link.setAttribute("download", `${fileName}`);
     document.body.appendChild(link);
     link.click();
     link.remove();
