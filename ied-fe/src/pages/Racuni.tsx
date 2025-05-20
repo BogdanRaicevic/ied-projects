@@ -101,6 +101,13 @@ export default function Racuni() {
     }
   }, [location.state?.selectedTipRacuna]);
 
+  // Add this useEffect to reset the store on unmount (when leaving the page)
+  useEffect(() => {
+    return () => {
+      reset();
+    };
+  }, []);
+
   // --- Extract Primitives and Derived Values ---
   const seminarOnlineCena = seminar?.onlineCena;
   const seminarOfflineCena = seminar?.offlineCena;
@@ -204,7 +211,11 @@ export default function Racuni() {
   const handleTabChange = (_event: React.SyntheticEvent, newValue: TipRacuna | "pretrage") => {
     setTabValue(newValue);
     updateField("tipRacuna", newValue === "pretrage" ? TipRacuna.PREDRACUN : newValue);
-    resetSeminarCalculationData();
+    if (newValue === "pretrage") {
+      reset();
+    } else {
+      resetSeminarCalculationData();
+    }
   };
 
   // Function to render the appropriate form based on current tab
