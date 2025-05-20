@@ -6,7 +6,7 @@ import { TipRacuna } from "@ied-shared/index";
 export const useRacunCalculations = () => {
   const {
     seminar: { onlineCena, offlineCena, brojUcesnikaOnline, brojUcesnikaOffline },
-    calculations: { avansBezPdv, popustOnline, popustOffline },
+    calculations: { avansBezPdv, popustOnline, popustOffline, placeno },
     tipRacuna,
     stopaPdv,
   } = useRacunStore((state) => state.racunData);
@@ -50,7 +50,7 @@ export const useRacunCalculations = () => {
       ukupnaNaknada:
         tipRacuna === TipRacuna.KONACNI_RACUN
           ? roundToTwoDecimals(onlineUkupnaNaknada + offlineUkupnaNaknada - avans)
-          : roundToTwoDecimals(onlineUkupnaNaknada + offlineUkupnaNaknada),
+          : roundToTwoDecimals(onlineUkupnaNaknada + offlineUkupnaNaknada - placeno),
       ukupanPdv: roundToTwoDecimals(
         (offlinePoreskaOsnovica * stopaPdvNum) / 100 +
           (onlinePoreskaOsnovica * stopaPdvNum) / 100 -
@@ -59,6 +59,7 @@ export const useRacunCalculations = () => {
       avansPdv: roundToTwoDecimals(avansPdv),
       avans: roundToTwoDecimals(avans),
       avansBezPdv: avansBezPdvNum,
+      placeno: placeno || 0,
     };
 
     updateCalculations(calculations);
@@ -71,6 +72,8 @@ export const useRacunCalculations = () => {
     popustOffline,
     avansBezPdv,
     stopaPdv,
+    placeno,
+    tipRacuna,
   ]);
 };
 

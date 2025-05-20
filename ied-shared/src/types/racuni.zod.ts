@@ -49,6 +49,7 @@ export const CalculationsRacunSchema = z.object({
   ukupnaNaknada: z.coerce.number().min(0).optional().default(0),
   ukupanPdv: z.coerce.number().min(0).optional().default(0),
   avansBezPdv: z.coerce.number().min(0).default(0),
+  placeno: z.coerce.number().min(0).optional().default(0),
 });
 
 export enum TipRacuna {
@@ -78,7 +79,6 @@ export const RacunSchema = z.object({
   dateUpdatedAt: z.coerce.date().optional(), // Added optional, BE sets default
   stopaPdv: z.coerce.number().default(20),
   linkedPozivNaBroj: z.string().optional(),
-  placeno: z.coerce.number().min(0).optional().default(0),
   _id: z.string().optional(),
 });
 

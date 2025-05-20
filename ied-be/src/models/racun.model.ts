@@ -159,8 +159,8 @@ RacunBaseModel.discriminator(
       pdvOffline: { type: Number, default: 0, min: 0 },
       ukupnaNaknada: { type: Number, default: 0, min: 0 },
       ukupanPdv: { type: Number, default: 0, min: 0 },
+      placeno: { type: Number, default: 0, min: 0 },
     },
-    placeno: { type: Number, default: 0, min: 0 },
   })
 );
 
@@ -248,8 +248,8 @@ export type Racun2Model = RacunBaseModel & {
     pdvOffline: number;
     ukupnaNaknada: number;
     ukupanPdv: number;
+    placeno: number;
   };
-  placeno: number;
 };
 
 export type AllRacuni = PredracunModel | AvansniRacunModel | KonacniRacunModel | Racun2Model;

@@ -67,12 +67,12 @@ const initialRacunData: RacunZod = {
     avansPdv: 0,
     avans: 0,
     avansBezPdv: 0,
+    placeno: 0,
   },
   tekuciRacun: "",
   izdavacRacuna: IzdavacRacuna.IED,
   tipRacuna: TipRacuna.PREDRACUN,
   rokZaUplatu: 0,
-  placeno: 0,
   datumUplateAvansa: new Date(),
 };
 

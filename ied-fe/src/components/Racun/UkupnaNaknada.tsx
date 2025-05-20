@@ -7,6 +7,7 @@ import { IzdavacRacuna, TipRacuna } from "@ied-shared/index";
 export const UkupnaNaknada = () => {
   const racunData = useRacunStore((state) => state.racunData);
   const updateField = useRacunStore((state) => state.updateField);
+  const updateNestedField = useRacunStore((state) => state.updateNestedField);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const value = e.target.value === "" ? 0 : Number(e.target.value);
@@ -61,9 +62,12 @@ export const UkupnaNaknada = () => {
             type="number"
             name="placeno"
             variant="filled"
-            value={racunData.placeno || 0}
+            value={racunData.calculations.placeno || 0}
             onChange={(e) => {
-              updateField("placeno", e.target.value === "" ? 0 : Number(e.target.value));
+              updateNestedField(
+                "calculations.placeno",
+                e.target.value === "" ? 0 : Number(e.target.value)
+              );
             }}
           ></TextField>
         </Box>
