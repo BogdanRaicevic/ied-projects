@@ -26,31 +26,33 @@ export const UkupnaNaknada = () => {
           </Typography>
         )}
       </Box>
-      <Box
-        sx={{
-          display: "flex",
-          alignItems: "baseline",
-          justifyContent: "flex-start",
-        }}
-      >
-        <Typography variant="h6" sx={{ mr: 1 }}>
-          Rok za uplatu
-        </Typography>
-        <TextField
-          label="Rok za uplatu"
-          type="number"
-          name="rokZaUplatu"
-          variant="filled"
-          value={racunData.rokZaUplatu || 0}
-          sx={{ maxWidth: 100 }}
-          onChange={(e) => {
-            handleChange(e);
+      {racunData.tipRacuna === TipRacuna.PREDRACUN && (
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "baseline",
+            justifyContent: "flex-start",
           }}
-        />
-        <Typography variant="h6" sx={{ ml: 1 }}>
-          dana
-        </Typography>
-      </Box>
+        >
+          <Typography variant="h6" sx={{ mr: 1 }}>
+            Rok za uplatu
+          </Typography>
+          <TextField
+            label="Rok za uplatu"
+            type="number"
+            name="rokZaUplatu"
+            variant="filled"
+            value={racunData.rokZaUplatu || 0}
+            sx={{ maxWidth: 100 }}
+            onChange={(e) => {
+              handleChange(e);
+            }}
+          />
+          <Typography variant="h6" sx={{ ml: 1 }}>
+            dana
+          </Typography>
+        </Box>
+      )}
       {racunData.tipRacuna === TipRacuna.RACUN && (
         <Box sx={{ mt: 2 }}>
           <TextField
