@@ -35,7 +35,6 @@ export const SeminarRacunSchema = z.object({
     .min(0, { message: "Popust offline mora biti između 0 i 100" })
     .max(100, { message: "Popust offline mora biti između 0 i 100" })
     .default(0),
-  avansBezPdv: z.coerce.number().min(0).default(0),
 });
 
 export const CalculationsRacunSchema = z.object({
@@ -49,6 +48,7 @@ export const CalculationsRacunSchema = z.object({
   avans: z.coerce.number().min(0).optional().default(0),
   ukupnaNaknada: z.coerce.number().min(0).optional().default(0),
   ukupanPdv: z.coerce.number().min(0).optional().default(0),
+  avansBezPdv: z.coerce.number().min(0).default(0),
 });
 
 export enum TipRacuna {

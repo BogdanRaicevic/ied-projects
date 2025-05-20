@@ -70,7 +70,7 @@ racunBaseSchema.pre("save", async function (next) {
     const datePrefix = `${year}${month}`; // e.g., "2504"
 
     const sequenceDoc = await SequenceModel.findOneAndUpdate(
-      { _id: datePrefix },
+      { _id: `${this.izdavacRacuna}_${this.tipRacuna}_${datePrefix}` },
       { $inc: { sequenceNumber: 1 } },
       {
         new: true,
@@ -80,13 +80,15 @@ racunBaseSchema.pre("save", async function (next) {
     ).exec();
 
     const sequenceNumber = sequenceDoc ? sequenceDoc.sequenceNumber : 1;
+    const sequenceNumberPadded = sequenceNumber.toString().padStart(4, "0");
 
-    this.pozivNaBroj = `${datePrefix}${sequenceNumber}`;
+    this.pozivNaBroj = `${datePrefix}${sequenceNumberPadded}`;
 
     next();
-  } catch (error: any) {
-    console.error("Error generating pozivNaBroj:", error);
-    next(error);
+  } catch (error: unknown) {
+    const err = error instanceof Error ? error : new Error(String(error));
+    console.error("Error generating pozivNaBroj:", err.message);
+    next(err);
   }
 });
 // --- END OF PRE-SAVE HOOK ---
