@@ -1,7 +1,7 @@
 import { Document, Schema, model } from "mongoose";
 import { SequenceModel } from "./sequence.model";
 
-const racunSchema = new Schema(
+const racunBaseSchema = new Schema(
   {
     izdavacRacuna: {
       type: String,
@@ -32,35 +32,19 @@ const racunSchema = new Schema(
       datum: { type: Date, required: true },
       lokacija: { type: String, required: false },
       jedinicaMere: { type: String, required: false },
-      brojUcesnikaOnline: { type: Number, default: 0, min: 0 },
-      brojUcesnikaOffline: { type: Number, default: 0, min: 0 },
       onlineCena: { type: Number, default: 0, min: 0 },
       offlineCena: { type: Number, default: 0, min: 0 },
       popustOnline: { type: Number, default: 0, min: 0, max: 100 },
       popustOffline: { type: Number, default: 0, min: 0, max: 100 },
-      avansBezPdv: { type: Number, default: 0, min: 0 },
+      brojUcesnikaOnline: { type: Number, default: 0, min: 0 },
+      brojUcesnikaOffline: { type: Number, default: 0, min: 0 },
     },
-    calculations: {
-      onlineUkupnaNaknada: { type: Number, default: 0, min: 0 },
-      offlineUkupnaNaknada: { type: Number, default: 0, min: 0 },
-      onlinePoreskaOsnovica: { type: Number, default: 0, min: 0 },
-      offlinePoreskaOsnovica: { type: Number, default: 0, min: 0 },
-      pdvOnline: { type: Number, default: 0, min: 0 },
-      pdvOffline: { type: Number, default: 0, min: 0 },
-      avansPdv: { type: Number, default: 0, min: 0 },
-      avans: { type: Number, default: 0, min: 0 },
-      ukupnaNaknada: { type: Number, default: 0, min: 0 },
-      ukupanPdv: { type: Number, default: 0, min: 0 },
-    },
-    datumUplateAvansa: { type: Date, required: false, default: new Date() },
     rokZaUplatu: { type: Number, default: 0, min: 0 },
     pozivNaBroj: {
       type: String,
       required: false,
     },
-    placeno: { type: Number, default: 0, min: 0 },
     stopaPdv: { type: Number, default: 20, required: true },
-    linkedPozivNaBroj: { type: String, required: false },
     dateCreatedAt: { type: Date, default: Date.now, immutable: true },
   },
   {
@@ -70,10 +54,10 @@ const racunSchema = new Schema(
 );
 
 // --- COMPOUND UNIQUE INDEX ---
-racunSchema.index({ izdavacRacuna: 1, pozivNaBroj: 1 }, { unique: true });
+racunBaseSchema.index({ izdavacRacuna: 1, pozivNaBroj: 1 }, { unique: true });
 
 // --- PRE-SAVE HOOK FOR pozivNaBroj ---
-racunSchema.pre("save", async function (next) {
+racunBaseSchema.pre("save", async function (next) {
   // Only run for new documents
   if (!this.isNew) {
     return next();
@@ -107,9 +91,74 @@ racunSchema.pre("save", async function (next) {
 });
 // --- END OF PRE-SAVE HOOK ---
 
-export const RacunModel = model("Racun", racunSchema);
+export const RacunBaseModel = model("Racun", racunBaseSchema);
 
-export type RacunModel = Document & {
+RacunBaseModel.discriminator(
+  "predracun",
+  new Schema({
+    calculations: {
+      onlineUkupnaNaknada: { type: Number, default: 0, min: 0 },
+      offlineUkupnaNaknada: { type: Number, default: 0, min: 0 },
+      onlinePoreskaOsnovica: { type: Number, default: 0, min: 0 },
+      offlinePoreskaOsnovica: { type: Number, default: 0, min: 0 },
+      pdvOnline: { type: Number, default: 0, min: 0 },
+      pdvOffline: { type: Number, default: 0, min: 0 },
+      ukupnaNaknada: { type: Number, default: 0, min: 0 },
+      ukupanPdv: { type: Number, default: 0, min: 0 },
+    },
+  })
+);
+
+RacunBaseModel.discriminator(
+  "avansniRacun",
+  new Schema({
+    calculations: {
+      avansBezPdv: { type: Number, default: 0, min: 0 },
+      avansPdv: { type: Number, default: 0, min: 0 },
+      avans: { type: Number, default: 0, min: 0 },
+    },
+    datumUplateAvansa: { type: Date, required: false, default: new Date() },
+  })
+);
+
+RacunBaseModel.discriminator(
+  "konacniRacun",
+  new Schema({
+    calculations: {
+      onlineUkupnaNaknada: { type: Number, default: 0, min: 0 },
+      offlineUkupnaNaknada: { type: Number, default: 0, min: 0 },
+      onlinePoreskaOsnovica: { type: Number, default: 0, min: 0 },
+      offlinePoreskaOsnovica: { type: Number, default: 0, min: 0 },
+      pdvOnline: { type: Number, default: 0, min: 0 },
+      pdvOffline: { type: Number, default: 0, min: 0 },
+      ukupnaNaknada: { type: Number, default: 0, min: 0 },
+      ukupanPdv: { type: Number, default: 0, min: 0 },
+      avansBezPdv: { type: Number, default: 0, min: 0 },
+      avansPdv: { type: Number, default: 0, min: 0 },
+      avans: { type: Number, default: 0, min: 0 },
+    },
+    linkedPozivNaBroj: { type: String, required: true },
+  })
+);
+
+RacunBaseModel.discriminator(
+  "racun",
+  new Schema({
+    calculations: {
+      onlineUkupnaNaknada: { type: Number, default: 0, min: 0 },
+      offlineUkupnaNaknada: { type: Number, default: 0, min: 0 },
+      onlinePoreskaOsnovica: { type: Number, default: 0, min: 0 },
+      offlinePoreskaOsnovica: { type: Number, default: 0, min: 0 },
+      pdvOnline: { type: Number, default: 0, min: 0 },
+      pdvOffline: { type: Number, default: 0, min: 0 },
+      ukupnaNaknada: { type: Number, default: 0, min: 0 },
+      ukupanPdv: { type: Number, default: 0, min: 0 },
+    },
+    placeno: { type: Number, default: 0, min: 0 },
+  })
+);
+
+export type RacunBaseModel = Document & {
   izdavacRacuna: "ied" | "permanent" | "bs";
   tipRacuna: "predracun" | "racun" | "avansniRacun" | "konacniRacun";
   tekuciRacun: string;
@@ -133,8 +182,12 @@ export type RacunModel = Document & {
     offlineCena: number;
     popustOnline: number;
     popustOffline: number;
-    avansBezPdv: number;
   };
+  rokZaUplatu: number;
+  pozivNaBroj: string;
+};
+
+export type PredracunModel = RacunBaseModel & {
   calculations: {
     onlineUkupnaNaknada: number;
     offlineUkupnaNaknada: number;
@@ -142,14 +195,49 @@ export type RacunModel = Document & {
     offlinePoreskaOsnovica: number;
     pdvOnline: number;
     pdvOffline: number;
-    avansPdv: number;
-    avans: number;
     ukupnaNaknada: number;
     ukupanPdv: number;
   };
+};
+
+export type AvansniRacunModel = RacunBaseModel & {
+  calculations: {
+    avansBezPdv: number;
+    avansPdv: number;
+    avans: number;
+  };
   datumUplateAvansa: Date;
-  rokZaUplatu: number;
-  pozivNaBroj: string;
+};
+
+export type KonacniRacunModel = RacunBaseModel & {
+  calculations: {
+    onlineUkupnaNaknada: number;
+    offlineUkupnaNaknada: number;
+    onlinePoreskaOsnovica: number;
+    offlinePoreskaOsnovica: number;
+    pdvOnline: number;
+    pdvOffline: number;
+    ukupnaNaknada: number;
+    ukupanPdv: number;
+    avansBezPdv: number;
+    avansPdv: number;
+    avans: number;
+  };
   linkedPozivNaBroj: string;
+};
+
+export type Racun2Model = RacunBaseModel & {
+  calculations: {
+    onlineUkupnaNaknada: number;
+    offlineUkupnaNaknada: number;
+    onlinePoreskaOsnovica: number;
+    offlinePoreskaOsnovica: number;
+    pdvOnline: number;
+    pdvOffline: number;
+    ukupnaNaknada: number;
+    ukupanPdv: number;
+  };
   placeno: number;
 };
+
+export type AllRacuni = PredracunModel | AvansniRacunModel | KonacniRacunModel | Racun2Model;

@@ -1,10 +1,16 @@
 import { IzdavacRacuna, PretrageRacunaZodType, RacunZod, TipRacuna } from "@ied-shared/index";
-import { RacunModel } from "../models/racun.model";
+import { RacunBaseModel } from "../models/racun.model";
 import { createRacunQuery } from "../utils/racuniQueryBuilder";
 
 export const saveRacun = async (racun: RacunZod) => {
+  const DiscriminatorModel = RacunBaseModel.discriminators?.[racun.tipRacuna];
+
+  if (!DiscriminatorModel) {
+    throw new Error(`Unknown racun type: ${racun.tipRacuna}`);
+  }
+
   try {
-    const newRacun = new RacunModel(racun);
+    const newRacun = new DiscriminatorModel(racun);
     await newRacun.save();
     return newRacun;
   } catch (error) {
@@ -15,7 +21,7 @@ export const saveRacun = async (racun: RacunZod) => {
 
 export const getRacunById = async (id: string) => {
   try {
-    const racun = await RacunModel.findById(id);
+    const racun = await RacunBaseModel.findById(id);
     if (!racun) {
       throw new Error(`Racun with ID ${id} not found.`);
     }
@@ -28,7 +34,13 @@ export const getRacunById = async (id: string) => {
 
 export const updateRacunById = async (id: string, updatedRacun: RacunZod) => {
   try {
-    const racun = await RacunModel.findByIdAndUpdate(id, updatedRacun, {
+    const DiscriminatorModel = RacunBaseModel.discriminators?.[updatedRacun.tipRacuna];
+
+    if (!DiscriminatorModel) {
+      throw new Error(`Unknown racun type: ${updatedRacun.tipRacuna}`);
+    }
+
+    const racun = await DiscriminatorModel.findByIdAndUpdate(id, updatedRacun, {
       new: true,
       runValidators: true,
     });
@@ -44,7 +56,7 @@ export const updateRacunById = async (id: string, updatedRacun: RacunZod) => {
 
 export const deleteRacunById = async (id: string) => {
   try {
-    const racun = await RacunModel.findByIdAndDelete(id);
+    const racun = await RacunBaseModel.findByIdAndDelete(id);
     if (!racun) {
       throw new Error(`Racun with ID ${id} not found for deletion.`);
     }
@@ -65,8 +77,8 @@ export const searchRacuni = async (
     const mongoQuery = createRacunQuery(queryParameters);
 
     const [totalDocuments, racuni] = await Promise.all([
-      RacunModel.countDocuments(mongoQuery),
-      RacunModel.find(mongoQuery).sort({ pozivNaBroj: -1 }).skip(skip).limit(pageSize),
+      RacunBaseModel.countDocuments(mongoQuery),
+      RacunBaseModel.find(mongoQuery).sort({ pozivNaBroj: -1 }).skip(skip).limit(pageSize),
     ]);
 
     const totalPages = Math.ceil(totalDocuments / pageSize);
@@ -88,7 +100,7 @@ export const getRacunByPozivNaBrojAndIzdavac = async (
   tipRacuna?: TipRacuna
 ) => {
   try {
-    const racun = await RacunModel.findOne({ pozivNaBroj, izdavacRacuna, tipRacuna });
+    const racun = await RacunBaseModel.findOne({ pozivNaBroj, izdavacRacuna, tipRacuna });
     if (!racun) {
       throw new Error(
         `Racun with PozivNaBroj ${pozivNaBroj}, IzdavacRacuna ${izdavacRacuna} and Tip Racuna ${tipRacuna} not found.`
