@@ -34,12 +34,9 @@ const racunBaseSchema = new Schema(
       jedinicaMere: { type: String, required: false },
       onlineCena: { type: Number, default: 0, min: 0 },
       offlineCena: { type: Number, default: 0, min: 0 },
-      popustOnline: { type: Number, default: 0, min: 0, max: 100 },
-      popustOffline: { type: Number, default: 0, min: 0, max: 100 },
       brojUcesnikaOnline: { type: Number, default: 0, min: 0 },
       brojUcesnikaOffline: { type: Number, default: 0, min: 0 },
     },
-    rokZaUplatu: { type: Number, default: 0, min: 0 },
     pozivNaBroj: {
       type: String,
       required: false,
@@ -103,11 +100,14 @@ RacunBaseModel.discriminator(
       offlineUkupnaNaknada: { type: Number, default: 0, min: 0 },
       onlinePoreskaOsnovica: { type: Number, default: 0, min: 0 },
       offlinePoreskaOsnovica: { type: Number, default: 0, min: 0 },
+      popustOnline: { type: Number, default: 0, min: 0, max: 100 },
+      popustOffline: { type: Number, default: 0, min: 0, max: 100 },
       pdvOnline: { type: Number, default: 0, min: 0 },
       pdvOffline: { type: Number, default: 0, min: 0 },
       ukupnaNaknada: { type: Number, default: 0, min: 0 },
       ukupanPdv: { type: Number, default: 0, min: 0 },
     },
+    rokZaUplatu: { type: Number, default: 0, min: 0 },
   })
 );
 
@@ -131,6 +131,8 @@ RacunBaseModel.discriminator(
       offlineUkupnaNaknada: { type: Number, default: 0, min: 0 },
       onlinePoreskaOsnovica: { type: Number, default: 0, min: 0 },
       offlinePoreskaOsnovica: { type: Number, default: 0, min: 0 },
+      popustOnline: { type: Number, default: 0, min: 0, max: 100 },
+      popustOffline: { type: Number, default: 0, min: 0, max: 100 },
       pdvOnline: { type: Number, default: 0, min: 0 },
       pdvOffline: { type: Number, default: 0, min: 0 },
       ukupnaNaknada: { type: Number, default: 0, min: 0 },
@@ -151,6 +153,8 @@ RacunBaseModel.discriminator(
       offlineUkupnaNaknada: { type: Number, default: 0, min: 0 },
       onlinePoreskaOsnovica: { type: Number, default: 0, min: 0 },
       offlinePoreskaOsnovica: { type: Number, default: 0, min: 0 },
+      popustOnline: { type: Number, default: 0, min: 0, max: 100 },
+      popustOffline: { type: Number, default: 0, min: 0, max: 100 },
       pdvOnline: { type: Number, default: 0, min: 0 },
       pdvOffline: { type: Number, default: 0, min: 0 },
       ukupnaNaknada: { type: Number, default: 0, min: 0 },
@@ -185,7 +189,6 @@ export type RacunBaseModel = Document & {
     popustOnline: number;
     popustOffline: number;
   };
-  rokZaUplatu: number;
   pozivNaBroj: string;
 };
 
@@ -195,11 +198,14 @@ export type PredracunModel = RacunBaseModel & {
     offlineUkupnaNaknada: number;
     onlinePoreskaOsnovica: number;
     offlinePoreskaOsnovica: number;
+    popustOnline: number;
+    popustOffline: number;
     pdvOnline: number;
     pdvOffline: number;
     ukupnaNaknada: number;
     ukupanPdv: number;
   };
+  rokZaUplatu: number;
 };
 
 export type AvansniRacunModel = RacunBaseModel & {
@@ -217,6 +223,8 @@ export type KonacniRacunModel = RacunBaseModel & {
     offlineUkupnaNaknada: number;
     onlinePoreskaOsnovica: number;
     offlinePoreskaOsnovica: number;
+    popustOnline: number;
+    popustOffline: number;
     pdvOnline: number;
     pdvOffline: number;
     ukupnaNaknada: number;
@@ -234,6 +242,8 @@ export type Racun2Model = RacunBaseModel & {
     offlineUkupnaNaknada: number;
     onlinePoreskaOsnovica: number;
     offlinePoreskaOsnovica: number;
+    popustOnline: number;
+    popustOffline: number;
     pdvOnline: number;
     pdvOffline: number;
     ukupnaNaknada: number;

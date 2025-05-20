@@ -25,6 +25,13 @@ export const SeminarRacunSchema = z.object({
   brojUcesnikaOffline: z.number().min(0).default(0),
   onlineCena: z.coerce.number().min(0).default(0),
   offlineCena: z.coerce.number().min(0).default(0),
+});
+
+export const CalculationsRacunSchema = z.object({
+  onlineUkupnaNaknada: z.coerce.number().min(0).optional().default(0),
+  offlineUkupnaNaknada: z.coerce.number().min(0).optional().default(0),
+  onlinePoreskaOsnovica: z.coerce.number().min(0).optional().default(0),
+  offlinePoreskaOsnovica: z.coerce.number().min(0).optional().default(0),
   popustOnline: z.coerce
     .number()
     .min(0, { message: "Popust online mora biti između 0 i 100" })
@@ -35,13 +42,6 @@ export const SeminarRacunSchema = z.object({
     .min(0, { message: "Popust offline mora biti između 0 i 100" })
     .max(100, { message: "Popust offline mora biti između 0 i 100" })
     .default(0),
-});
-
-export const CalculationsRacunSchema = z.object({
-  onlineUkupnaNaknada: z.coerce.number().min(0).optional().default(0),
-  offlineUkupnaNaknada: z.coerce.number().min(0).optional().default(0),
-  onlinePoreskaOsnovica: z.coerce.number().min(0).optional().default(0),
-  offlinePoreskaOsnovica: z.coerce.number().min(0).optional().default(0),
   pdvOnline: z.coerce.number().min(0).optional().default(0),
   pdvOffline: z.coerce.number().min(0).optional().default(0),
   avansPdv: z.coerce.number().min(0).optional().default(0),

@@ -106,9 +106,9 @@ export const OnlinePrisustvaSection = () => {
                     sx={{ maxWidth: 70 }}
                     name="popustOnline"
                     variant="filled"
-                    value={racunData.seminar.popustOnline || 0}
+                    value={racunData.calculations.popustOnline || 0}
                     onChange={(e) =>
-                      updateNestedField("seminar.popustOnline", Number(e.target.value))
+                      updateNestedField("calculations.popustOnline", Number(e.target.value))
                     }
                   />
                 </TableCell>

@@ -41,8 +41,7 @@ const initialRacunData: RacunZod = {
     brojUcesnikaOffline: 0,
     onlineCena: 0,
     offlineCena: 0,
-    popustOnline: 0,
-    popustOffline: 0,
+
     jedinicaMere: "Broj učesnika",
   },
   primalacRacuna: {
@@ -59,6 +58,8 @@ const initialRacunData: RacunZod = {
     offlineUkupnaNaknada: 0,
     onlinePoreskaOsnovica: 0,
     offlinePoreskaOsnovica: 0,
+    popustOnline: 0,
+    popustOffline: 0,
     pdvOnline: 0,
     pdvOffline: 0,
     ukupnaNaknada: 0,
@@ -136,6 +137,8 @@ export const useRacunStore = create<RacunState>((set, get) => ({
           ukupanPdv: 0,
           ukupnaNaknada: 0,
           placeno: 0,
+          popustOnline: 0,
+          popustOffline: 0,
         },
         pozivNaBroj: "",
         rokZaUplatu: 0,

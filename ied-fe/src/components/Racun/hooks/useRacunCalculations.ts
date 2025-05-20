@@ -1,18 +1,13 @@
 import { useEffect } from "react";
 import { useRacunStore } from "../store/useRacunStore";
+import { TipRacuna } from "@ied-shared/index";
 
 // TODO: move billing calculations to the backend
 export const useRacunCalculations = () => {
   const {
-    seminar: {
-      onlineCena,
-      offlineCena,
-      brojUcesnikaOnline,
-      brojUcesnikaOffline,
-      popustOnline,
-      popustOffline,
-      avansBezPdv,
-    },
+    seminar: { onlineCena, offlineCena, brojUcesnikaOnline, brojUcesnikaOffline },
+    calculations: { avansBezPdv, popustOnline, popustOffline },
+    tipRacuna,
     stopaPdv,
   } = useRacunStore((state) => state.racunData);
   const updateCalculations = useRacunStore((state) => state.updateCalculations);
@@ -48,9 +43,14 @@ export const useRacunCalculations = () => {
       offlineUkupnaNaknada: roundToTwoDecimals(offlineUkupnaNaknada),
       onlinePoreskaOsnovica: roundToTwoDecimals(onlinePoreskaOsnovica),
       offlinePoreskaOsnovica: roundToTwoDecimals(offlinePoreskaOsnovica),
+      popustOnline: popustOnlineNum,
+      popustOffline: popustOfflineNum,
       pdvOnline: roundToTwoDecimals((onlinePoreskaOsnovica * stopaPdvNum) / 100),
       pdvOffline: roundToTwoDecimals((offlinePoreskaOsnovica * stopaPdvNum) / 100),
-      ukupnaNaknada: roundToTwoDecimals(onlineUkupnaNaknada + offlineUkupnaNaknada - avans),
+      ukupnaNaknada:
+        tipRacuna === TipRacuna.KONACNI_RACUN
+          ? roundToTwoDecimals(onlineUkupnaNaknada + offlineUkupnaNaknada - avans)
+          : roundToTwoDecimals(onlineUkupnaNaknada + offlineUkupnaNaknada),
       ukupanPdv: roundToTwoDecimals(
         (offlinePoreskaOsnovica * stopaPdvNum) / 100 +
           (onlinePoreskaOsnovica * stopaPdvNum) / 100 -
@@ -58,6 +58,7 @@ export const useRacunCalculations = () => {
       ),
       avansPdv: roundToTwoDecimals(avansPdv),
       avans: roundToTwoDecimals(avans),
+      avansBezPdv: avansBezPdvNum,
     };
 
     updateCalculations(calculations);
