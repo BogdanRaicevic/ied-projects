@@ -50,12 +50,19 @@ export const useRacunCalculations = () => {
       ukupnaNaknada:
         tipRacuna === TipRacuna.KONACNI_RACUN
           ? roundToTwoDecimals(onlineUkupnaNaknada + offlineUkupnaNaknada - avans)
-          : roundToTwoDecimals(onlineUkupnaNaknada + offlineUkupnaNaknada - placeno),
-      ukupanPdv: roundToTwoDecimals(
-        (offlinePoreskaOsnovica * stopaPdvNum) / 100 +
-          (onlinePoreskaOsnovica * stopaPdvNum) / 100 -
-          avansPdv
-      ),
+          : roundToTwoDecimals(
+              onlineUkupnaNaknada +
+                offlineUkupnaNaknada -
+                (tipRacuna === TipRacuna.RACUN ? avans : 0)
+            ),
+      ukupanPdv:
+        tipRacuna === TipRacuna.AVANSNI_RACUN
+          ? avansPdv
+          : roundToTwoDecimals(
+              (offlinePoreskaOsnovica * stopaPdvNum) / 100 +
+                (onlinePoreskaOsnovica * stopaPdvNum) / 100 -
+                (tipRacuna === TipRacuna.KONACNI_RACUN ? avansPdv : 0)
+            ),
       avansPdv: roundToTwoDecimals(avansPdv),
       avans: roundToTwoDecimals(avans),
       avansBezPdv: avansBezPdvNum,
