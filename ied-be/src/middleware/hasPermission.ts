@@ -3,8 +3,7 @@ import type { Response, Request, NextFunction } from "express";
 import NodeCache from "node-cache";
 
 const myCache = new NodeCache();
-const CACHE_TTL = 1000 * 60 * 10; // 10 minutes
-
+const CACHE_TTL = 3000 * 60 * 10; // 30 minutes
 
 export const hasPermission = async (req: Request, res: Response, next: NextFunction) => {
   try {
@@ -15,7 +14,6 @@ export const hasPermission = async (req: Request, res: Response, next: NextFunct
     }
 
     if (myCache.has(auth.userId)) {
-      userStore.setCurrentUser(myCache.get(auth.userId) as string);
       next();
     } else {
       const currentUser = await getUserWithRetry(auth.userId);
@@ -26,7 +24,6 @@ export const hasPermission = async (req: Request, res: Response, next: NextFunct
       }
 
       myCache.set(auth.userId, currentUser, CACHE_TTL);
-      userStore.setCurrentUser(currentUser);
       next();
     }
   } catch (error) {
@@ -57,17 +54,3 @@ const getUserWithRetry = async (
   }
   return null;
 };
-
-class UserStore {
-  private currentUser: string | null = null;
-
-  setCurrentUser(user: string) {
-    this.currentUser = user;
-  }
-
-  getCurrentUser() {
-    return this.currentUser;
-  }
-}
-
-export const userStore = new UserStore();
