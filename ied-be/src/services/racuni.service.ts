@@ -40,10 +40,14 @@ export const updateRacunById = async (id: string, updatedRacun: RacunZod) => {
       throw new Error(`Unknown racun type: ${updatedRacun.tipRacuna}`);
     }
 
-    const racun = await DiscriminatorModel.findByIdAndUpdate(id, updatedRacun, {
-      new: true,
-      runValidators: true,
-    });
+    const racun = await DiscriminatorModel.findByIdAndUpdate(
+      id,
+      { $set: updatedRacun },
+      {
+        new: true,
+        runValidators: true,
+      }
+    );
     if (!racun) {
       throw new Error(`Racun with ID ${id} not found for update.`);
     }
@@ -78,7 +82,7 @@ export const searchRacuni = async (
 
     const [totalDocuments, racuni] = await Promise.all([
       RacunBaseModel.countDocuments(mongoQuery),
-      RacunBaseModel.find(mongoQuery).sort({ pozivNaBroj: -1 }).skip(skip).limit(pageSize),
+      RacunBaseModel.find(mongoQuery).sort({ pozivNaBroj: -1 }).skip(skip).limit(pageSize).lean(),
     ]);
 
     const totalPages = Math.ceil(totalDocuments / pageSize);
@@ -100,7 +104,7 @@ export const getRacunByPozivNaBrojAndIzdavac = async (
   tipRacuna?: TipRacuna
 ) => {
   try {
-    const racun = await RacunBaseModel.findOne({ pozivNaBroj, izdavacRacuna, tipRacuna });
+    const racun = await RacunBaseModel.findOne({ pozivNaBroj, izdavacRacuna, tipRacuna }).lean();
     if (!racun) {
       throw new Error(
         `Racun with PozivNaBroj ${pozivNaBroj}, IzdavacRacuna ${izdavacRacuna} and Tip Racuna ${tipRacuna} not found.`

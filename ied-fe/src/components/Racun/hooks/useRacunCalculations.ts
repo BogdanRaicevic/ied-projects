@@ -65,8 +65,8 @@ export const useRacunCalculations = () => {
             ),
       avansPdv: roundToTwoDecimals(avansPdv),
       avans: roundToTwoDecimals(avans),
-      avansBezPdv: avansBezPdvNum,
-      placeno: placeno || 0,
+      avansBezPdv: roundToTwoDecimals(avansBezPdvNum),
+      placeno: roundToTwoDecimals(placeno) || 0,
     };
 
     updateCalculations(calculations);
