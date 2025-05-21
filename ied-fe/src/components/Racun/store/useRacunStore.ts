@@ -6,7 +6,6 @@ import {
   TipRacuna,
 } from "@ied-shared/types/racuni.zod";
 
-// Helper function for updating nested properties
 const updateNestedProperty = (obj: any, path: string[], value: any): any => {
   if (path.length === 0) return value;
 
@@ -31,6 +30,23 @@ interface RacunState {
   resetSeminarCalculationData: () => void;
 }
 
+const initialCalculations: CalculationsRacunZod = {
+  onlineUkupnaNaknada: 0,
+  offlineUkupnaNaknada: 0,
+  onlinePoreskaOsnovica: 0,
+  offlinePoreskaOsnovica: 0,
+  popustOnline: 0,
+  popustOffline: 0,
+  pdvOnline: 0,
+  pdvOffline: 0,
+  ukupnaNaknada: 0,
+  ukupanPdv: 0,
+  avansPdv: 0,
+  avans: 0,
+  avansBezPdv: 0,
+  placeno: 0,
+};
+
 const initialRacunData: RacunZod = {
   seminar: {
     seminar_id: "",
@@ -54,20 +70,7 @@ const initialRacunData: RacunZod = {
   },
   stopaPdv: 20,
   calculations: {
-    onlineUkupnaNaknada: 0,
-    offlineUkupnaNaknada: 0,
-    onlinePoreskaOsnovica: 0,
-    offlinePoreskaOsnovica: 0,
-    popustOnline: 0,
-    popustOffline: 0,
-    pdvOnline: 0,
-    pdvOffline: 0,
-    ukupnaNaknada: 0,
-    ukupanPdv: 0,
-    avansPdv: 0,
-    avans: 0,
-    avansBezPdv: 0,
-    placeno: 0,
+    ...initialCalculations,
   },
   tekuciRacun: "",
   izdavacRacuna: IzdavacRacuna.IED,
@@ -125,20 +128,7 @@ export const useRacunStore = create<RacunState>((set, get) => ({
       racunData: {
         ...state.racunData,
         calculations: {
-          offlineUkupnaNaknada: 0,
-          onlineUkupnaNaknada: 0,
-          offlinePoreskaOsnovica: 0,
-          onlinePoreskaOsnovica: 0,
-          pdvOffline: 0,
-          pdvOnline: 0,
-          avansBezPdv: 0,
-          avansPdv: 0,
-          avans: 0,
-          ukupanPdv: 0,
-          ukupnaNaknada: 0,
-          placeno: 0,
-          popustOnline: 0,
-          popustOffline: 0,
+          ...initialCalculations,
         },
         pozivNaBroj: "",
         rokZaUplatu: 0,

@@ -35,7 +35,7 @@ export const generateRacunDocument = async (racunData: RacunZod) => {
     let fileName = "document.docx";
     const disposition = response.headers["content-disposition"];
     if (disposition && disposition.includes("filename=")) {
-      const match = disposition.match(/filename="?([^"]+)"?/);
+      const match = disposition.match(/filename=["']?([^"';\n]+)["']?/);
       if (match && match[1]) {
         fileName = match[1];
       }

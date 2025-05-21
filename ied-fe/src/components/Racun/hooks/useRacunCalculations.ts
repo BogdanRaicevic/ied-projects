@@ -57,7 +57,7 @@ export const useRacunCalculations = () => {
             ),
       ukupanPdv:
         tipRacuna === TipRacuna.AVANSNI_RACUN
-          ? avansPdv
+          ? roundToTwoDecimals(avansPdv)
           : roundToTwoDecimals(
               (offlinePoreskaOsnovica * stopaPdvNum) / 100 +
                 (onlinePoreskaOsnovica * stopaPdvNum) / 100 -
