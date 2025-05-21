@@ -9,7 +9,7 @@ export const UkupnaNaknada = () => {
   const updateField = useRacunStore((state) => state.updateField);
   const updateNestedField = useRacunStore((state) => state.updateNestedField);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleNumericalChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const value = e.target.value === "" ? 0 : Number(e.target.value);
     updateField("rokZaUplatu", value);
   };
@@ -40,13 +40,12 @@ export const UkupnaNaknada = () => {
           </Typography>
           <TextField
             label="Rok za uplatu"
-            type="number"
             name="rokZaUplatu"
             variant="filled"
             value={racunData.rokZaUplatu || 0}
             sx={{ maxWidth: 100 }}
             onChange={(e) => {
-              handleChange(e);
+              handleNumericalChange(e);
             }}
           />
           <Typography variant="h6" sx={{ ml: 1 }}>
