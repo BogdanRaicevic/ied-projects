@@ -56,7 +56,7 @@ racunBaseSchema.index({ izdavacRacuna: 1, pozivNaBroj: 1 }, { unique: true });
 // --- PRE-SAVE HOOK FOR pozivNaBroj ---
 racunBaseSchema.pre("save", async function (next) {
   // Only run for new documents
-  if (!this.isNew) {
+  if (!this.isNew || this.pozivNaBroj) {
     return next();
   }
 
@@ -119,7 +119,7 @@ RacunBaseModel.discriminator(
       avansPdv: { type: Number, default: 0, min: 0 },
       avans: { type: Number, default: 0, min: 0 },
     },
-    datumUplateAvansa: { type: Date, required: false, default: new Date() },
+    datumUplateAvansa: { type: Date, required: false, default: Date.now },
   })
 );
 
@@ -236,7 +236,7 @@ export type KonacniRacunModel = RacunBaseModel & {
   linkedPozivNaBroj: string;
 };
 
-export type Racun2Model = RacunBaseModel & {
+export type RacunModel = RacunBaseModel & {
   calculations: {
     onlineUkupnaNaknada: number;
     offlineUkupnaNaknada: number;
@@ -252,4 +252,4 @@ export type Racun2Model = RacunBaseModel & {
   };
 };
 
-export type AllRacuni = PredracunModel | AvansniRacunModel | KonacniRacunModel | Racun2Model;
+export type AllRacuni = PredracunModel | AvansniRacunModel | KonacniRacunModel | RacunModel;
