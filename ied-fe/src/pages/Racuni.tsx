@@ -76,7 +76,6 @@ export default function Racuni() {
     fetchFirma();
   }, [prijave]);
 
-  // Add this effect to handle tab changes from navigation
   useEffect(() => {
     if (location.state?.selectedTipRacuna) {
       setTabValue(location.state.selectedTipRacuna);
@@ -101,6 +100,13 @@ export default function Racuni() {
       navigate("", { state: {}, replace: true });
     }
   }, [location.state?.selectedTipRacuna]);
+
+  // Add this useEffect to reset the store on unmount (when leaving the page)
+  useEffect(() => {
+    return () => {
+      reset();
+    };
+  }, []);
 
   // --- Extract Primitives and Derived Values ---
   const seminarOnlineCena = seminar?.onlineCena;
@@ -203,9 +209,13 @@ export default function Racuni() {
   };
 
   const handleTabChange = (_event: React.SyntheticEvent, newValue: TipRacuna | "pretrage") => {
-    resetSeminarCalculationData();
     setTabValue(newValue);
     updateField("tipRacuna", newValue === "pretrage" ? TipRacuna.PREDRACUN : newValue);
+    if (newValue === "pretrage") {
+      reset();
+    } else {
+      resetSeminarCalculationData();
+    }
   };
 
   // Function to render the appropriate form based on current tab

@@ -1,0 +1,28 @@
+{
+  "name": "ied-monorepo",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Monorepo for IED projects",
+  "workspaces": [
+    "ied-fe",
+    "ied-be",
+    "ied-shared",
+    "mongo-migrator"
+  ],
+  "scripts": {
+    "build": "pnpm -r run build",
+    "dev": "pnpm -r run dev",
+    "lint": "pnpm -r run lint:all",
+    "format": "pnpm -r run format",
+    "knip": "knip"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^1.9.4",
+    "@types/node": "^22.14.1",
+    "knip": "^5.57.0",
+    "typescript": "^5.8.3"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

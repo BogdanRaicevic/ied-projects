@@ -77,7 +77,7 @@ export const OfflinePrisustvaSection = () => {
           <Table sx={{ minWidth: 650 }} aria-label="simple table">
             <TableHead>
               <TableRow>
-                <TableCell>Cena online</TableCell>
+                <TableCell>Cena offline</TableCell>
                 <TableCell>Popust</TableCell>
                 <TableCell>Poreska osnovica</TableCell>
                 <TableCell>Stopa PDV</TableCell>
@@ -106,9 +106,9 @@ export const OfflinePrisustvaSection = () => {
                     sx={{ maxWidth: 70 }}
                     name="popustOffline"
                     variant="filled"
-                    value={racunData.seminar.popustOffline || 0}
+                    value={racunData.calculations.popustOffline || 0}
                     onChange={(e) =>
-                      updateNestedField("seminar.popustOffline", Number(e.target.value))
+                      updateNestedField("calculations.popustOffline", Number(e.target.value))
                     }
                   />
                 </TableCell>

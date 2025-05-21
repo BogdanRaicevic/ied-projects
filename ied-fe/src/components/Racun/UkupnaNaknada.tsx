@@ -7,6 +7,7 @@ import { IzdavacRacuna, TipRacuna } from "@ied-shared/index";
 export const UkupnaNaknada = () => {
   const racunData = useRacunStore((state) => state.racunData);
   const updateField = useRacunStore((state) => state.updateField);
+  const updateNestedField = useRacunStore((state) => state.updateNestedField);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const value = e.target.value === "" ? 0 : Number(e.target.value);
@@ -26,31 +27,33 @@ export const UkupnaNaknada = () => {
           </Typography>
         )}
       </Box>
-      <Box
-        sx={{
-          display: "flex",
-          alignItems: "baseline",
-          justifyContent: "flex-start",
-        }}
-      >
-        <Typography variant="h6" sx={{ mr: 1 }}>
-          Rok za uplatu
-        </Typography>
-        <TextField
-          label="Rok za uplatu"
-          type="number"
-          name="rokZaUplatu"
-          variant="filled"
-          value={racunData.rokZaUplatu || 0}
-          sx={{ maxWidth: 100 }}
-          onChange={(e) => {
-            handleChange(e);
+      {racunData.tipRacuna === TipRacuna.PREDRACUN && (
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "baseline",
+            justifyContent: "flex-start",
           }}
-        />
-        <Typography variant="h6" sx={{ ml: 1 }}>
-          dana
-        </Typography>
-      </Box>
+        >
+          <Typography variant="h6" sx={{ mr: 1 }}>
+            Rok za uplatu
+          </Typography>
+          <TextField
+            label="Rok za uplatu"
+            type="number"
+            name="rokZaUplatu"
+            variant="filled"
+            value={racunData.rokZaUplatu || 0}
+            sx={{ maxWidth: 100 }}
+            onChange={(e) => {
+              handleChange(e);
+            }}
+          />
+          <Typography variant="h6" sx={{ ml: 1 }}>
+            dana
+          </Typography>
+        </Box>
+      )}
       {racunData.tipRacuna === TipRacuna.RACUN && (
         <Box sx={{ mt: 2 }}>
           <TextField
@@ -59,9 +62,12 @@ export const UkupnaNaknada = () => {
             type="number"
             name="placeno"
             variant="filled"
-            value={racunData.placeno || 0}
+            value={racunData.calculations.placeno || 0}
             onChange={(e) => {
-              updateField("placeno", e.target.value === "" ? 0 : Number(e.target.value));
+              updateNestedField(
+                "calculations.placeno",
+                e.target.value === "" ? 0 : Number(e.target.value)
+              );
             }}
           ></TextField>
         </Box>

@@ -27,7 +27,15 @@ const sanitizeFilename = (str: string): string => {
     ž: "z",
     Ž: "Z",
   };
-  return str.replace(/[šŠđĐčČćĆžŽ]/g, (char) => serbianChars[char] || char);
+  // Replace Serbian characters
+  let sanitized = str.replace(/[šŠđĐčČćĆžŽ]/g, (char) => serbianChars[char] || char);
+  // Remove or replace problematic characters (except underscore, dash, and dot for extension)
+  sanitized = sanitized.replace(/[^a-zA-Z0-9-_\.]/g, "_");
+  // Replace multiple underscores with a single underscore
+  sanitized = sanitized.replace(/_+/g, "_");
+  // Remove trailing dots (except for extension)
+  sanitized = sanitized.replace(/\.+(?=\.)/g, "");
+  return sanitized;
 };
 
 const formatToLocalDate = (date: Date): string => formatDate(date, "dd.MM.yyyy");

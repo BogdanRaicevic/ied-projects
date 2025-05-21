@@ -21,23 +21,24 @@ export const AvansSection = () => {
   const updateNestedField = useRacunStore((state) => state.updateNestedField);
   const updateField = useRacunStore((state) => state.updateField);
 
-  const avansPdv = (Number(racunData.seminar.avansBezPdv ?? 0) * Number(racunData.stopaPdv)) / 100;
-  const avans = Number(racunData.seminar.avansBezPdv) + Number(avansPdv);
+  const avansPdv =
+    (Number(racunData.calculations.avansBezPdv ?? 0) * Number(racunData.stopaPdv)) / 100;
+  const avans = Number(racunData.calculations.avansBezPdv) + Number(avansPdv);
 
   const handleSearchAvansniRacun = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;
     updateField("linkedPozivNaBroj", value);
 
-    if (value.length === 10 && !isNaN(Number(value))) {
+    if (value.length === 8 && !isNaN(Number(value))) {
       const avansniRacun = await getRacunByPozivNaBrojAndIzdavac(
         value,
         racunData.izdavacRacuna,
         TipRacuna.AVANSNI_RACUN
       );
-      updateNestedField("seminar.avansBezPdv", avansniRacun.seminar.avansBezPdv);
+      updateNestedField("calculations.avansBezPdv", avansniRacun.calculations.avansBezPdv);
       updateNestedField("seminar.naziv", avansniRacun.seminar.naziv);
     } else {
-      updateNestedField("seminar.avansBezPdv", 0);
+      updateNestedField("calculations.avansBezPdv", 0);
     }
   };
 
@@ -110,9 +111,9 @@ export const AvansSection = () => {
                   <TextField
                     variant="filled"
                     name="avansBezPdv"
-                    value={racunData.seminar.avansBezPdv ?? 0}
+                    value={racunData.calculations.avansBezPdv ?? 0}
                     onChange={(e) =>
-                      updateNestedField("seminar.avansBezPdv", Number(e.target.value) || 0)
+                      updateNestedField("calculations.avansBezPdv", Number(e.target.value) || 0)
                     }
                   />
                 </TableCell>

@@ -25,6 +25,13 @@ export const SeminarRacunSchema = z.object({
   brojUcesnikaOffline: z.number().min(0).default(0),
   onlineCena: z.coerce.number().min(0).default(0),
   offlineCena: z.coerce.number().min(0).default(0),
+});
+
+export const CalculationsRacunSchema = z.object({
+  onlineUkupnaNaknada: z.coerce.number().min(0).default(0),
+  offlineUkupnaNaknada: z.coerce.number().min(0).default(0),
+  onlinePoreskaOsnovica: z.coerce.number().min(0).default(0),
+  offlinePoreskaOsnovica: z.coerce.number().min(0).default(0),
   popustOnline: z.coerce
     .number()
     .min(0, { message: "Popust online mora biti između 0 i 100" })
@@ -35,20 +42,14 @@ export const SeminarRacunSchema = z.object({
     .min(0, { message: "Popust offline mora biti između 0 i 100" })
     .max(100, { message: "Popust offline mora biti između 0 i 100" })
     .default(0),
+  pdvOnline: z.coerce.number().min(0).default(0),
+  pdvOffline: z.coerce.number().min(0).default(0),
+  avansPdv: z.coerce.number().min(0).default(0),
+  avans: z.coerce.number().min(0).default(0),
+  ukupnaNaknada: z.coerce.number().min(0).default(0),
+  ukupanPdv: z.coerce.number().min(0).default(0),
   avansBezPdv: z.coerce.number().min(0).default(0),
-});
-
-export const CalculationsRacunSchema = z.object({
-  onlineUkupnaNaknada: z.coerce.number().min(0).optional().default(0),
-  offlineUkupnaNaknada: z.coerce.number().min(0).optional().default(0),
-  onlinePoreskaOsnovica: z.coerce.number().min(0).optional().default(0),
-  offlinePoreskaOsnovica: z.coerce.number().min(0).optional().default(0),
-  pdvOnline: z.coerce.number().min(0).optional().default(0),
-  pdvOffline: z.coerce.number().min(0).optional().default(0),
-  avansPdv: z.coerce.number().min(0).optional().default(0),
-  avans: z.coerce.number().min(0).optional().default(0),
-  ukupnaNaknada: z.coerce.number().min(0).optional().default(0),
-  ukupanPdv: z.coerce.number().min(0).optional().default(0),
+  placeno: z.coerce.number().min(0).default(0),
 });
 
 export enum TipRacuna {
@@ -72,13 +73,12 @@ export const RacunSchema = z.object({
   seminar: SeminarRacunSchema,
   calculations: CalculationsRacunSchema,
   rokZaUplatu: z.coerce.number().default(0),
-  datumUplateAvansa: z.coerce.date().optional(), // Added optional, BE sets default
+  datumUplateAvansa: z.coerce.date().optional(),
   pozivNaBroj: z.string().optional(),
-  dateCreatedAt: z.coerce.date().optional(), // Added optional, BE sets default
-  dateUpdatedAt: z.coerce.date().optional(), // Added optional, BE sets default
+  dateCreatedAt: z.coerce.date().optional(),
+  dateUpdatedAt: z.coerce.date().optional(),
   stopaPdv: z.coerce.number().default(20),
   linkedPozivNaBroj: z.string().optional(),
-  placeno: z.coerce.number().min(0).optional().default(0),
   _id: z.string().optional(),
 });
 

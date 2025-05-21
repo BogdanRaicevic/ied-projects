@@ -21,33 +21,31 @@ export const FirmaSchema = z.object({
   _id: z.string().optional(),
   ID_firma: z.number().optional(),
   naziv_firme: z.string().max(100).nullable().default(""),
-  adresa: z.string().max(150).optional().nullable().default(""),
-  PIB: z.string().or(z.literal("")).optional().nullable().default(""),
+  adresa: z.string().max(150).nullable().default(""),
+  PIB: z.string().or(z.literal("")).nullable().default(""),
   telefon: z.string().nullable().default(""),
   e_mail: z
     .string()
     .email("Ne ispravna email adresa")
     .max(100, "Predugacka email adresa")
     .or(z.literal(""))
-    .optional()
     .nullable()
     .default(""),
-  tip_firme: z.string().optional().nullable().default(""),
-  delatnost: z.string().optional().nullable().default(""),
-  komentar: z.string().max(1000).optional().nullable().default(""),
-  stanje_firme: z.string().max(50).optional().nullable().default(""),
+  tip_firme: z.string().nullable().default(""),
+  delatnost: z.string().nullable().default(""),
+  komentar: z.string().max(1000).nullable().default(""),
+  stanje_firme: z.string().max(50).nullable().default(""),
   mesto: z.string().nullable().default(""),
 
-  velicina_firme: z.string().optional().nullable().default(""),
+  velicina_firme: z.string().nullable().default(""),
   zaposleni: z.array(ZaposleniSchema).default([]),
   jbkjs: z
     .string()
     .regex(/^\d{5}$/, "JBKJS moze da se sastoji samo od 5 brojeva")
     .or(z.literal(""))
-    .optional()
     .nullable()
     .default(""),
-  maticni_broj: z.string().optional().or(z.literal("")).nullable().default(""),
+  maticni_broj: z.string().or(z.literal("")).nullable().default(""),
 });
 export type FirmaType = z.infer<typeof FirmaSchema>;
 
