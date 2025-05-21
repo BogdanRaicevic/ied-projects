@@ -104,7 +104,12 @@ export const getRacunByPozivNaBrojAndIzdavac = async (
   tipRacuna?: TipRacuna
 ) => {
   try {
-    const racun = await RacunBaseModel.findOne({ pozivNaBroj, izdavacRacuna, tipRacuna }).lean();
+    const racun = await RacunBaseModel.findOne({
+      pozivNaBroj: { $eq: pozivNaBroj },
+      izdavacRacuna: { $eq: izdavacRacuna },
+      ...(tipRacuna && { tipRacuna: { $eq: tipRacuna } }),
+    }).lean();
+
     if (!racun) {
       throw new Error(
         `Racun with PozivNaBroj ${pozivNaBroj}, IzdavacRacuna ${izdavacRacuna} and Tip Racuna ${tipRacuna} not found.`

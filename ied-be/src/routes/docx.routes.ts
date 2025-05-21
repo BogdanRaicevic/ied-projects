@@ -15,6 +15,9 @@ const __dirname = path.dirname(__filename);
 const router = Router();
 
 const sanitizeFilename = (str: string): string => {
+  if (str.length > 255) {
+    throw new Error("Filename is too long");
+  }
   const serbianChars: { [key: string]: string } = {
     š: "s",
     Š: "S",

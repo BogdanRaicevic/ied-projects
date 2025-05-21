@@ -13,6 +13,7 @@ const racunBaseSchema = new Schema(
       type: String,
       enum: ["predracun", "racun", "avansniRacun", "konacniRacun"],
       required: true,
+      imutable: true,
     },
     tekuciRacun: {
       type: String,
@@ -186,8 +187,6 @@ export type RacunBaseModel = Document & {
     brojUcesnikaOffline: number;
     onlineCena: number;
     offlineCena: number;
-    popustOnline: number;
-    popustOffline: number;
   };
   pozivNaBroj: string;
 };
