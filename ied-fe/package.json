@@ -13,7 +13,6 @@
   },
   "homepage": "http://BogdanRaicevic.github.io/ied-fe",
   "dependencies": {
-    "@clerk/clerk-js": "^5.62.0",
     "@clerk/clerk-react": "^5.29.0",
     "@emotion/react": "^11.13.5",
     "@emotion/styled": "^11.13.5",
