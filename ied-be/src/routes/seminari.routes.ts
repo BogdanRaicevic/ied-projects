@@ -46,7 +46,6 @@ router.post(
     console.log("req body", req.body);
     const { datumOd, datumDo, ...rest } = query as SeminarQueryParamsZodType;
 
-    console.log("serch", query);
     try {
       const paginationResult = await searchSeminars(
         {

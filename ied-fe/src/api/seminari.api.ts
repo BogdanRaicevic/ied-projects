@@ -1,4 +1,3 @@
-import { env } from "../utils/envVariables";
 import axiosInstanceWithAuth from "./interceptors/auth";
 import type {
   PrijavaZodType,
@@ -13,10 +12,7 @@ export const saveSeminar = async (seminarData: SeminarZodType) => {
       return;
     }
 
-    const response = await axiosInstanceWithAuth.post(
-      `${env.beURL}/api/seminari/save`,
-      seminarData
-    );
+    const response = await axiosInstanceWithAuth.post(`/api/seminari/save`, seminarData);
 
     return response.data;
   } catch (error) {
@@ -43,18 +39,18 @@ export const fetchSeminari = async (
         totalPages: number;
         totalDocuments: number;
       };
-    } = await axiosInstanceWithAuth.post(`${env.beURL}/api/seminari/search`, body);
+    } = await axiosInstanceWithAuth.post(`/api/seminari/search`, body);
 
     return response.data;
   } catch (error) {
-    console.error("Error fetching firma data:", error);
+    console.error("Error fetching seminari data:", error);
     throw error;
   }
 };
 
 export const fetchSeminarById = async (id: string) => {
   try {
-    const response = await axiosInstanceWithAuth.get(`${env.beURL}/api/seminari/${id}`);
+    const response = await axiosInstanceWithAuth.get(`/api/seminari/${id}`);
 
     return response.data;
   } catch (error) {
@@ -69,10 +65,7 @@ export const savePrijava = async (seminar_id: string, prijava: PrijavaZodType) =
     seminar_id,
   };
   try {
-    const response = await axiosInstanceWithAuth.post(
-      `${env.beURL}/api/seminari/save-prijava`,
-      payload
-    );
+    const response = await axiosInstanceWithAuth.post(`/api/seminari/save-prijava`, payload);
 
     return response.data;
   } catch (error: any) {
@@ -88,7 +81,7 @@ export const savePrijava = async (seminar_id: string, prijava: PrijavaZodType) =
 export const deletePrijava = async (zaposleni_id: string, seminar_id: string) => {
   try {
     const response = await axiosInstanceWithAuth.delete(
-      `${env.beURL}/api/seminari/delete-prijava/?zaposleni_id=${zaposleni_id}&seminar_id=${seminar_id}`
+      `/api/seminari/delete-prijava/?zaposleni_id=${zaposleni_id}&seminar_id=${seminar_id}`
     );
 
     return response.data;
@@ -100,7 +93,7 @@ export const deletePrijava = async (zaposleni_id: string, seminar_id: string) =>
 
 export const deleteSeminar = async (id: string) => {
   try {
-    const response = await axiosInstanceWithAuth.delete(`${env.beURL}/api/seminari/delete/${id}`);
+    const response = await axiosInstanceWithAuth.delete(`/api/seminari/delete/${id}`);
 
     return response.data;
   } catch (error) {
@@ -111,7 +104,7 @@ export const deleteSeminar = async (id: string) => {
 
 export const fetchAllSeminars = async () => {
   try {
-    const response = await axiosInstanceWithAuth.get(`${env.beURL}/api/seminari/all-seminars`);
+    const response = await axiosInstanceWithAuth.get(`/api/seminari/all-seminars`);
 
     return response.data;
   } catch (error) {

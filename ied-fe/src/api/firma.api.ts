@@ -1,5 +1,4 @@
 import type { FirmaType } from "../schemas/firmaSchemas";
-import { env } from "../utils/envVariables";
 import axiosInstanceWithAuth from "./interceptors/auth";
 import type { FirmaQueryParams } from "@ied-shared/types/firmaQueryParams";
 
@@ -17,7 +16,7 @@ export const fetchFirmaPretrage = async (
 
     const response: {
       data: { firmas: any[]; totalPages: number; totalDocuments: number };
-    } = await axiosInstanceWithAuth.post(`${env.beURL}/api/firma/search`, body);
+    } = await axiosInstanceWithAuth.post(`/api/firma/search`, body);
     return response.data;
   } catch (error) {
     console.error("Error fetching firma data:", error);
@@ -27,10 +26,10 @@ export const fetchFirmaPretrage = async (
 
 export const fetchSingleFirma = async (id: string): Promise<FirmaType | null> => {
   try {
-    const response = await axiosInstanceWithAuth.get(`${env.beURL}/api/firma/${id}`);
+    const response = await axiosInstanceWithAuth.get(`/api/firma/${id}`);
     return response.data;
   } catch (error) {
-    console.error("Error fetching firma data:", error);
+    console.error("Error fetching single firma data:", error);
     throw error;
   }
 };
@@ -42,7 +41,7 @@ export const exportData = async (queryParameters: any, exportSubject: "firma" | 
     };
 
     const response = await axiosInstanceWithAuth.post(
-      `${env.beURL}/api/firma/export-${exportSubject}-data`,
+      `/api/firma/export-${exportSubject}-data`,
       body
     );
     return response.data;
@@ -61,16 +60,13 @@ export const saveFirma = async (company: Partial<FirmaType>) => {
 
   try {
     if (company._id) {
-      const response = await axiosInstanceWithAuth.post(
-        `${env.beURL}/api/firma/${company._id}`,
-        company
-      );
+      const response = await axiosInstanceWithAuth.post(`/api/firma/${company._id}`, company);
       return {
         data: response.data,
         status: response.status,
       };
     }
-    const response = await axiosInstanceWithAuth.post(`${env.beURL}/api/firma`, company);
+    const response = await axiosInstanceWithAuth.post(`/api/firma`, company);
     return {
       data: response.data,
       status: response.status,
@@ -83,7 +79,7 @@ export const saveFirma = async (company: Partial<FirmaType>) => {
 
 export const deleteFirma = async (id: string) => {
   try {
-    const response = await axiosInstanceWithAuth.delete(`${env.beURL}/api/firma/${id}`);
+    const response = await axiosInstanceWithAuth.delete(`/api/firma/${id}`);
     return {
       data: response.data,
       status: response.status,

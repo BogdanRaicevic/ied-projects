@@ -6,7 +6,6 @@ export const validate =
     try {
       const result = await schema.safeParseAsync(req.body);
 
-      console.log("Validation result:", result);
       if (!result.success) {
         console.error("Validation Errors:", result.error.errors);
         return res.status(400).json({

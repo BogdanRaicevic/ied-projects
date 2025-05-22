@@ -1,5 +1,4 @@
 import axiosInstanceWithAuth from "./interceptors/auth";
-import { env } from "../utils/envVariables";
 import { RacunZod, RacunSchema, TipRacuna } from "@ied-shared/types/racuni.zod";
 import { validateOrThrow } from "../utils/zodErrorHelper";
 
@@ -12,13 +11,9 @@ export const generateRacunDocument = async (racunData: RacunZod) => {
   try {
     validateOrThrow(RacunSchema, racunData);
 
-    const response = await axiosInstanceWithAuth.post(
-      `${env.beURL}/api/docx/modify-template`,
-      racunData,
-      {
-        responseType: "blob",
-      }
-    );
+    const response = await axiosInstanceWithAuth.post(`/api/docx/modify-template`, racunData, {
+      responseType: "blob",
+    });
 
     // Check if the response is an error message
     if (response.headers["content-type"]?.includes("application/json")) {

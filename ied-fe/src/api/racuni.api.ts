@@ -1,5 +1,4 @@
 import axiosInstanceWithAuth from "./interceptors/auth";
-import { env } from "../utils/envVariables";
 import {
   IzdavacRacuna,
   PretrageRacunaZodType,
@@ -11,7 +10,7 @@ import { validateOrThrow } from "../utils/zodErrorHelper";
 
 export const getIzdavaciRacuna = async () => {
   try {
-    const response = await axiosInstanceWithAuth.get(`${env.beURL}/api/racuni/izdavaci`);
+    const response = await axiosInstanceWithAuth.get(`/api/racuni/izdavaci`);
     return response.data;
   } catch (error) {
     console.error("Error fetching izdavaci racuna:", error);
@@ -30,10 +29,7 @@ export const searchRacuni = async (
     pageSize: pageSize,
   };
   try {
-    const response = await axiosInstanceWithAuth.post(
-      `${env.beURL}/api/racuni/search`,
-      searchParams
-    );
+    const response = await axiosInstanceWithAuth.post(`/api/racuni/search`, searchParams);
     return response.data;
   } catch (error) {
     console.error("Error searching racuni:", error);
@@ -43,7 +39,7 @@ export const searchRacuni = async (
 
 export const fetchRacunById = async (id: string): Promise<RacunZod> => {
   try {
-    const response = await axiosInstanceWithAuth.get(`${env.beURL}/api/racuni/${id}`);
+    const response = await axiosInstanceWithAuth.get(`/api/racuni/${id}`);
     return response.data;
   } catch (error) {
     console.error("Error fetching racun by ID:", error);
@@ -63,9 +59,7 @@ export const getRacunByPozivNaBrojAndIzdavac = async (
       ...(tipRacuna && { tipRacuna: tipRacuna }),
     });
 
-    const response = await axiosInstanceWithAuth.get(
-      `${env.beURL}/api/racuni?${params.toString()}`
-    );
+    const response = await axiosInstanceWithAuth.get(`/api/racuni?${params.toString()}`);
     return response.data;
   } catch (error) {
     console.error("Error fetching racun by poziv na broj and izdavac:", error);
@@ -80,7 +74,7 @@ export const saveNewRacun = async (racun: RacunZod): Promise<RacunZod> => {
       console.log("Racun already has an ID or pozivNaBroj, skipping save operation.");
       return racun; // or handle as needed
     }
-    const response = await axiosInstanceWithAuth.post(`${env.beURL}/api/racuni/save`, racun);
+    const response = await axiosInstanceWithAuth.post(`/api/racuni/save`, racun);
     console.log("Racun saved:", response.data);
     return response.data;
   } catch (error) {
@@ -92,7 +86,7 @@ export const saveNewRacun = async (racun: RacunZod): Promise<RacunZod> => {
 export const updateRacunById = async (updatedRacun: RacunZod): Promise<RacunZod> => {
   try {
     const response = await axiosInstanceWithAuth.put(
-      `${env.beURL}/api/racuni/update/${updatedRacun._id}`,
+      `/api/racuni/update/${updatedRacun._id}`,
       updatedRacun
     );
     return response.data;
