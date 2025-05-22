@@ -199,6 +199,10 @@ export default memo(function SeminariTable(props: {
       sortingFn: "datetime",
     },
     {
+      header: "Detalji",
+      accessorKey: "detalji",
+    },
+    {
       header: "Broj Učesnika",
       accessorFn: (row) => row.prijave?.length || 0,
     },

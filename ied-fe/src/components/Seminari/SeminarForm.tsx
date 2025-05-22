@@ -21,6 +21,7 @@ export default function SeminarForm({
     offlineCena: 0,
     onlineCena: 0,
     datum: new Date(),
+    detalji: "",
     prijave: [],
   };
   const [seminarData, setSeminarData] = React.useState<SeminarZodType>({
@@ -147,6 +148,17 @@ export default function SeminarForm({
             onChange={handleDateChange}
           />
         </FormControl>
+        <TextField
+          fullWidth
+          multiline
+          rows={4}
+          label="Detalji seminara"
+          sx={{ m: 1 }}
+          id="detalji"
+          name="detalji"
+          value={seminarData.detalji}
+          onChange={handleChange}
+        />
         <Button sx={{ m: 1 }} size="large" variant="contained" color="primary" type="submit">
           {seminar?._id ? "Izmeni" : "Kreiraj"} seminar
         </Button>

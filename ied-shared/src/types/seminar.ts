@@ -1,6 +1,5 @@
 import { z } from "zod";
 
-// Schema corresponding to PrijavaType in seminar.model.ts
 export const PrijavaSchema = z.object({
   _id: z.string().optional(),
   firma_id: z.string(),
@@ -15,8 +14,6 @@ export const PrijavaSchema = z.object({
   prisustvo: z.enum(["online", "offline"]),
 });
 
-export type PrijavaZodType = z.infer<typeof PrijavaSchema>;
-
 export const SeminarSchema = z.object({
   _id: z.string().optional(),
   naziv: z.string().min(1, "Naziv seminara je obavezan"),
@@ -25,11 +22,9 @@ export const SeminarSchema = z.object({
   offlineCena: z.coerce.number().min(0).nonnegative("Cena ne može biti negativna").default(0),
   onlineCena: z.coerce.number().min(0).nonnegative("Cena ne može biti negativna").default(0),
   datum: z.coerce.date(),
+  detalji: z.string().optional(),
   prijave: z.array(PrijavaSchema).default([]),
 });
-
-// Infer the type from the Zod schema
-export type SeminarZodType = z.infer<typeof SeminarSchema>;
 
 export const SeminarQueryParamsSchema = z.object({
   naziv: z.string().optional(),
@@ -40,4 +35,6 @@ export const SeminarQueryParamsSchema = z.object({
   datum: z.coerce.date().optional(),
 });
 
+export type PrijavaZodType = z.infer<typeof PrijavaSchema>;
+export type SeminarZodType = z.infer<typeof SeminarSchema>;
 export type SeminarQueryParamsZodType = z.infer<typeof SeminarQueryParamsSchema>;

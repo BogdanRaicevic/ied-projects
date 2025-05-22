@@ -1,6 +1,6 @@
-import type { FilterQuery } from "mongoose";
+import { Types, type FilterQuery } from "mongoose";
 import { createSeminarQuery } from "../utils/seminariQueryBuilder";
-import { PrijavaType, Seminar, Types, type SeminarType } from "./../models/seminar.model";
+import { PrijavaType, Seminar, type SeminarType } from "./../models/seminar.model";
 import type {
   PrijavaZodType,
   SeminarQueryParamsZodType,

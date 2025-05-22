@@ -8,6 +8,7 @@ const racunBaseSchema = new Schema(
       enum: ["ied", "permanent", "bs"],
       required: true,
       index: true,
+      immutable: true,
     },
     tipRacuna: {
       type: String,

@@ -7,6 +7,7 @@ export type SeminarType = Document & {
   offlineCena?: number;
   onlineCena?: number;
   datum?: Date;
+  detalji?: string;
   prijave: PrijavaType[];
 };
 
@@ -47,11 +48,10 @@ const seminarSchema = new Schema<SeminarType>(
     offlineCena: { type: Number, required: false },
     onlineCena: { type: Number, required: false },
     datum: { type: Date, required: false },
+    detalji: { type: String, required: false },
     prijave: [prijavaSchema],
   },
   { collection: "seminari" }
 );
 
 export const Seminar = model<SeminarType>("Seminar", seminarSchema);
-
-export { Types };
