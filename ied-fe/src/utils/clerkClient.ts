@@ -9,7 +9,5 @@ export async function initClerk() {
   if (!clerkLoaded) {
     await clerk.load();
     clerkLoaded = true;
-
-    console.log("Clerk loaded", clerkLoaded);
   }
 }
