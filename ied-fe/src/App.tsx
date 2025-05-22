@@ -4,10 +4,7 @@ import Navigation from "./components/Navigation";
 import { Pretrage, Zaposleni, Seminari, Racuni } from "./pages";
 import Firma from "./pages/Firma";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { RedirectToSignIn, SignedIn, SignedOut, useAuth } from "@clerk/clerk-react";
-import { useEffect } from "react";
-import { setAuthToken } from "./api/interceptors/auth";
-
+import { RedirectToSignIn, SignedIn, SignedOut } from "@clerk/clerk-react";
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
@@ -19,24 +16,6 @@ const queryClient = new QueryClient({
 });
 
 function App() {
-  const { getToken, isSignedIn } = useAuth();
-
-  useEffect(() => {
-    let isMounted = true;
-    async function updateToken() {
-      if (isSignedIn) {
-        const token = await getToken();
-        if (isMounted) setAuthToken(token || null);
-      } else {
-        setAuthToken(null);
-      }
-    }
-    updateToken();
-    return () => {
-      isMounted = false;
-    };
-  }, [getToken, isSignedIn]);
-
   return (
     <QueryClientProvider client={queryClient}>
       <Container component="main" maxWidth="lg">
