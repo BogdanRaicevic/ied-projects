@@ -66,7 +66,7 @@ importers:
         specifier: ^3.2.0
         version: 3.2.0
       zod:
-        specifier: ^3.24.3
+        specifier: ^3.25.17
         version: 3.25.17
     devDependencies:
       '@biomejs/biome':
@@ -166,7 +166,7 @@ importers:
         specifier: ^11.0.0
         version: 11.1.0
       zod:
-        specifier: ^3.24.3
+        specifier: ^3.25.17
         version: 3.25.17
       zustand:
         specifier: ^5.0.3
@@ -212,7 +212,7 @@ importers:
   ied-shared:
     dependencies:
       zod:
-        specifier: ^3.24.3
+        specifier: ^3.25.17
         version: 3.25.17
     devDependencies:
       '@biomejs/biome':
