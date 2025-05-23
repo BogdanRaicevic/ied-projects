@@ -106,9 +106,21 @@ export const OnlinePrisustvaSection = () => {
                     name="popustOnline"
                     variant="filled"
                     value={racunData.calculations.popustOnline || 0}
-                    onChange={(e) =>
-                      updateNestedField("calculations.popustOnline", Number(e.target.value))
-                    }
+                    onChange={(e) => {
+                      const value = e.target.value;
+                      if (value === "" || /^\d*\.?\d*$/.test(value)) {
+                        const numValue = parseFloat(value);
+                        if (
+                          value === "" ||
+                          (!isNaN(numValue) && numValue >= 0 && numValue <= 100)
+                        ) {
+                          updateNestedField(
+                            "calculations.popustOnline",
+                            value === "" ? 0 : numValue
+                          );
+                        }
+                      }
+                    }}
                   />
                 </TableCell>
                 <TableCell align="left">
