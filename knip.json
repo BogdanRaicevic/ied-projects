@@ -24,7 +24,6 @@
     "./mongo-migrator/src/migrations/**"
   ],
   "ignoreDependencies": [
-    "typescript",
     "tsx",
     "@biomejs/biome",
     "globals",
