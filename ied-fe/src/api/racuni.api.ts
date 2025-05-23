@@ -30,7 +30,14 @@ export const searchRacuni = async (
   };
   try {
     const response = await axiosInstanceWithAuth.post(`/api/racuni/search`, searchParams);
-    return response.data;
+    const rawData = response.data;
+    const parsedData = rawData.racuni.map((racun: any) => RacunSchema.parse(racun));
+
+    return {
+      totalDocuments: rawData.totalDocuments,
+      totalPages: rawData.totalPages,
+      racuni: parsedData,
+    };
   } catch (error) {
     console.error("Error searching racuni:", error);
     throw error;
@@ -40,7 +47,7 @@ export const searchRacuni = async (
 export const fetchRacunById = async (id: string): Promise<RacunZod> => {
   try {
     const response = await axiosInstanceWithAuth.get(`/api/racuni/${id}`);
-    return response.data;
+    return RacunSchema.parse(response.data);
   } catch (error) {
     console.error("Error fetching racun by ID:", error);
     throw error;
