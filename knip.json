@@ -22,5 +22,15 @@
     "**/.idea/**",
     "**/.vscode/**",
     "./mongo-migrator/src/migrations/**"
+  ],
+  "ignoreDependencies": [
+    "typescript",
+    "tsx",
+    "@biomejs/biome",
+    "globals",
+    "@mui/styled-engine-sc",
+    "styled-components",
+    "@types/react-router-dom",
+    "ied-shared"
   ]
 }
