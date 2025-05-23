@@ -1,6 +1,6 @@
 import { Document, Schema, model } from "mongoose";
 
-export type DelatnostType = Document & {
+type DelatnostType = Document & {
   delatnost: string;
 };
 
