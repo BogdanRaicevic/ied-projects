@@ -63,7 +63,7 @@ router.post(
   validate(RacunSchema),
   async (req: Request<{}, any, RacunZod>, res: Response, next: NextFunction) => {
     try {
-      const racun = req.body;
+      const racun = RacunSchema.parse(req.body);
       const result = await saveRacun(racun);
       if (!result) {
         return res.status(404).send("Racun not found");
