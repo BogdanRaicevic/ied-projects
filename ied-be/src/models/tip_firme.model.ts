@@ -1,6 +1,6 @@
 import { Document, Schema, model } from "mongoose";
 
-export type TipFirmeType = Document & {
+type TipFirmeType = Document & {
   tip_firme: string;
 };
 

@@ -1,5 +1,11 @@
 packages:
-  - 'ied-be'
-  - 'ied-fe'
-  - 'ied-shared'
-  - 'mongo-migrator'
+  - ied-be
+  - ied-fe
+  - ied-shared
+  - mongo-migrator
+
+onlyBuiltDependencies:
+  - '@clerk/shared'
+  - '@swc/core'
+  - browser-tabs-lock
+  - core-js
