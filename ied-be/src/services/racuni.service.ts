@@ -21,7 +21,7 @@ export const saveRacun = async (racun: RacunZod) => {
 
 export const getRacunById = async (id: string) => {
   try {
-    const racun = await RacunBaseModel.findById(id);
+    const racun = await RacunBaseModel.findById(id).lean();
     if (!racun) {
       throw new Error(`Racun with ID ${id} not found.`);
     }
