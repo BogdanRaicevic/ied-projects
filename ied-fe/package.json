@@ -35,7 +35,6 @@
     "react-table": "^7.8.0",
     "react-window": "^1.8.10",
     "styled-components": "^6.1.17",
-    "uuid": "^11.0.0",
     "zod": "^3.25.17",
     "zustand": "^5.0.3"
   },
@@ -46,7 +45,6 @@
     "@types/react-router-dom": "^5.3.3",
     "@types/react-table": "^7.7.20",
     "@types/react-window": "^1.8.8",
-    "@types/uuid": "^10.0.0",
     "@vitejs/plugin-react-swc": "^3.8.0",
     "globals": "^16.0.0",
     "ied-shared": "workspace:^",

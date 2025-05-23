@@ -1,6 +1,6 @@
 import { Document, Schema, model } from "mongoose";
 
-export type VelicineFirmiType = Document & {
+type VelicineFirmiType = Document & {
   ID_velicina_firme: number;
   velicina_firme: string;
 };

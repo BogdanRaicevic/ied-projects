@@ -1,0 +1,35 @@
+{
+  "$schema": "https://unpkg.com/knip@5/schema.json",
+  "rules": {
+    "duplicates": "error",
+    "files": "error",
+    "dependencies": "error",
+    "unresolved": "error",
+    "exports": "error",
+    "types": "error"
+  },
+  "ignore": [
+    "**/node_modules/**",
+    "**/dist/**",
+    "**/build/**",
+    "**/coverage/**",
+    "**/public/**",
+    "**/out/**",
+    "**/.next/**",
+    "**/.nuxt/**",
+    "**/.vercel/**",
+    "**/.git/**",
+    "**/.idea/**",
+    "**/.vscode/**",
+    "./mongo-migrator/src/migrations/**"
+  ],
+  "ignoreDependencies": [
+    "tsx",
+    "@biomejs/biome",
+    "globals",
+    "@mui/styled-engine-sc",
+    "styled-components",
+    "@types/react-router-dom",
+    "ied-shared"
+  ]
+}

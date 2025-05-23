@@ -52,7 +52,7 @@ export type FirmaType = z.infer<typeof FirmaSchema>;
 const inputTypes = ["Text", "Switch", "Select", "TextMultiline"] as const;
 export const InputTypesSchema = z.enum(inputTypes);
 
-export const MetadataSchema = z.object({
+const MetadataSchema = z.object({
   key: z.string(),
   label: z.string(),
   inputAdornment: z.any(),
