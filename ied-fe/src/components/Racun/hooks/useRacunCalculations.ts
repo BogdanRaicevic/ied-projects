@@ -53,7 +53,7 @@ export const useRacunCalculations = () => {
           : roundToTwoDecimals(
               onlineUkupnaNaknada +
                 offlineUkupnaNaknada -
-                (tipRacuna === TipRacuna.RACUN ? avans : 0)
+                (tipRacuna === TipRacuna.RACUN ? placeno : 0)
             ),
       ukupanPdv:
         tipRacuna === TipRacuna.AVANSNI_RACUN
