@@ -20,10 +20,7 @@ const permanent = {
   pib: 109282264,
   maticniBroj: 64066030,
   brojResenjaOEvidencijiZaPDV: "Oslobođeno PDV-a prema članu 33. Zakona o PDV-u",
-  tekuciRacuni: [
-    "205-0000000525550-76 (Komercijalna banka)",
-    "205-0000000227245-69 (Komercijalna banka)",
-  ],
+  tekuciRacuni: ["205-0000000227245-69 (Komercijalna banka)"],
 };
 
 const bs = {
@@ -33,11 +30,7 @@ const bs = {
   pib: 108935581,
   maticniBroj: 28170866,
   brojResenjaOEvidencijiZaPDV: "/",
-  tekuciRacuni: [
-    "325-9500600050635-47 (OTP banka)",
-    "325-9601600007556-60 (OTP banka)",
-    "325-9500700090623-23 (OTP banka)",
-  ],
+  tekuciRacuni: ["325-9500600050635-47 (OTP banka)"],
 };
 
 export const izdavacRacuna = [ied, permanent, bs];
