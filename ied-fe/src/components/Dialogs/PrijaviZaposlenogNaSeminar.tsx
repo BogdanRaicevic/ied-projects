@@ -14,8 +14,8 @@ import {
   Typography,
   Box,
   Alert,
+  Grid,
 } from "@mui/material";
-import { Grid } from "@mui/system";
 import { useFetchSeminari } from "../../hooks/useFetchData";
 import type { FirmaType, Zaposleni } from "../../schemas/firmaSchemas";
 import { savePrijava } from "../../api/seminari.api";

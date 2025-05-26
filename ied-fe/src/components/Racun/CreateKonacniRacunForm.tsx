@@ -1,4 +1,4 @@
-import { Grid2, Divider, Typography, TextField, Box } from "@mui/material";
+import { Divider, Typography, TextField, Box } from "@mui/material";
 import { PrimalacRacunaSection } from "./components/PrimalacRacunaSection";
 import { AvansSection } from "./components/AvansSection";
 import { OfflinePrisustvaSection } from "./components/OfflinePrisustvaSection";
@@ -23,22 +23,18 @@ export const CreateKonacniRacunForm = () => {
   );
 
   return (
-    <Grid2 container>
-      <Grid2 size={12}>
-        <Box
-          sx={{ display: "flex", alignItems: "center", justifyContent: "center", mb: 3, gap: 2 }}
-        >
-          <Typography variant="h4">Konačni račun</Typography>
-          {pozivNaBroj}
-        </Box>
-        <PrimalacRacunaSection />
-        <Divider sx={{ mt: 3, mb: 3 }} />
-        <OnlinePrisustvaSection />
-        <OfflinePrisustvaSection />
-        <AvansSection />
-        <UkupnaNaknada />
-        <Divider sx={{ mt: 3 }} />
-      </Grid2>
-    </Grid2>
+    <Box>
+      <Box sx={{ display: "flex", alignItems: "center", justifyContent: "center", mb: 3, gap: 2 }}>
+        <Typography variant="h4">Konačni račun</Typography>
+        {pozivNaBroj}
+      </Box>
+      <PrimalacRacunaSection />
+      <Divider sx={{ mt: 3, mb: 3 }} />
+      <OnlinePrisustvaSection />
+      <OfflinePrisustvaSection />
+      <AvansSection />
+      <UkupnaNaknada />
+      <Divider sx={{ mt: 3 }} />
+    </Box>
   );
 };

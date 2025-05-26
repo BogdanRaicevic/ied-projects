@@ -8,8 +8,8 @@ import {
   TableHead,
   TableBody,
   Tooltip,
+  Box,
 } from "@mui/material";
-import { Box } from "@mui/system";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import { useState } from "react";

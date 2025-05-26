@@ -1,6 +1,5 @@
 // import SelectSeminar from "../components/SelectSeminar";
-import { Box, Button, TextField } from "@mui/material";
-import Grid from "@mui/material/Grid2";
+import { Box, Button, Grid, TextField } from "@mui/material";
 import PaginatedList from "../components/PaginatedList/PaginatedList";
 export default function Zaposleni() {
   // const handleSeminarSelect = (seminarId: string) => {
