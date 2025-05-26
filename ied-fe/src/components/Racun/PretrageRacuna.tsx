@@ -340,6 +340,9 @@ const TipRacunaFilterHeader = ({ column }: { column: any }) => {
               sx={{ backgroundColor: red[300], color: "#fff" }}
             />
           </MenuItem>
+          <MenuItem value="racun">
+            <Chip label="Račun" size="small" />
+          </MenuItem>
         </Select>
       </FormControl>
     </Box>

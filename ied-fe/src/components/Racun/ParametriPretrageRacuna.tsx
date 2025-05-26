@@ -1,6 +1,6 @@
 import { IzdavacRacuna, PretrageRacunaZodType, TipRacuna } from "@ied-shared/index";
 import { Button, Chip, InputLabel, MenuItem, Select, TextField } from "@mui/material";
-import { blue, green, purple, red } from "@mui/material/colors";
+import { blue, green, grey, purple, red } from "@mui/material/colors";
 import { Box } from "@mui/system";
 import { DatePicker } from "@mui/x-date-pickers";
 import { subMonths } from "date-fns";
@@ -24,6 +24,7 @@ export const ParametriPretrageRacuna = ({ onSearch }: ParametriPretrageRacunaPro
     avansniRacun: { label: "Avans", color: green[200] },
     predracun: { label: "Predračun", color: red[300] },
     konacniRacun: { label: "Konačni Račun", color: blue[200] },
+    racun: { label: "Račun", color: grey[300] },
   };
 
   const izdavacRacunaChips: Record<string, { label: string; color: string }> = {
