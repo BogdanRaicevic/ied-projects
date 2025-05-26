@@ -54,6 +54,7 @@ export const PretrageRacuna = () => {
           return (
             <Box>
               <Link
+                sx={{ cursor: "pointer" }}
                 onClick={(e) => {
                   e.preventDefault();
                   navigate("", {
