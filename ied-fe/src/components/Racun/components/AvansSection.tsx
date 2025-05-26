@@ -26,7 +26,14 @@ export const AvansSection = () => {
   const avans = Number(racunData.calculations.avansBezPdv) + Number(avansPdv);
 
   const handleSearchAvansniRacun = async (event: React.ChangeEvent<HTMLInputElement>) => {
-    const value = event.target.value;
+    let value = event.target.value;
+
+    value = value.replace(/[^0-9]/g, "");
+
+    if (value.length > 1 && value.startsWith("0")) {
+      value = value.replace(/^0+/, "") || "0";
+    }
+
     updateField("linkedPozivNaBroj", value);
 
     if (value.length === 8 && !isNaN(Number(value))) {
@@ -50,10 +57,10 @@ export const AvansSection = () => {
       {racunData.tipRacuna === TipRacuna.KONACNI_RACUN && (
         <TextField
           placeholder="Poziv na broj"
+          label="Poziv na broj avansnog računa"
           value={racunData.linkedPozivNaBroj || 0}
           onChange={handleSearchAvansniRacun}
           sx={{ minWidth: 450, mb: 3 }}
-          type="number"
           slotProps={{
             htmlInput: {
               maxLength: 10,
