@@ -20,7 +20,7 @@
   "devDependencies": {
     "@biomejs/biome": "^1.9.4",
     "@types/cors": "^2.8.17",
-    "@types/express": "^4.17.21",
+    "@types/express": "^5.0.0",
     "@types/node": "^22.15.21",
     "cross-env": "^7.0.3",
     "globals": "^16.1.0",
@@ -37,7 +37,7 @@
     "docxtemplater": "^3.61.1",
     "dotenv": "^16.5.0",
     "es-toolkit": "^1.38.0",
-    "express": "^4.21.2",
+    "express": "^5.0.0",
     "ied-shared": "workspace:^",
     "mongoose": "^8.15.0",
     "node-cache": "^5.1.2",
