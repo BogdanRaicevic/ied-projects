@@ -1,13 +1,10 @@
-import { Clerk } from "@clerk/clerk-js";
+let getTokenFn: (() => Promise<string | null>) | null = null;
 
-export const clerk = new Clerk(import.meta.env.VITE_CLERK_PUBLISHABLE_KEY);
+export const setGetTokenFn = (fn: () => Promise<string | null>) => {
+  getTokenFn = fn;
+};
 
-// Boot ClerkJS at runtime
-let clerkLoaded = false;
-
-export async function initClerk() {
-  if (!clerkLoaded) {
-    await clerk.load();
-    clerkLoaded = true;
-  }
-}
+export const getClerkToken = async (): Promise<string | null> => {
+  if (!getTokenFn) throw new Error("getTokenFn not set yet");
+  return await getTokenFn();
+};

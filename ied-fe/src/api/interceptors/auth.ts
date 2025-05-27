@@ -1,6 +1,6 @@
 import axios from "axios";
 import { env } from "../../utils/envVariables";
-import { clerk, initClerk } from "../../utils/clerkClient";
+import { getClerkToken } from "../../utils/clerkClient";
 
 const axiosInstanceWithAuth = axios.create({
   baseURL: env.beURL,
@@ -8,13 +8,10 @@ const axiosInstanceWithAuth = axios.create({
 
 axiosInstanceWithAuth.interceptors.request.use(
   async (config) => {
-    await initClerk();
-    const token = await clerk.session?.getToken();
-
+    const token = await getClerkToken();
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
-
     return config;
   },
   (error) => Promise.reject(error)
