@@ -12,7 +12,7 @@ importers:
         specifier: ^1.9.4
         version: 1.9.4
       '@types/node':
-        specifier: ^22.14.1
+        specifier: ^22.15.21
         version: 22.15.21
       knip:
         specifier: ^5.57.1
@@ -79,7 +79,7 @@ importers:
         specifier: ^4.17.21
         version: 4.17.22
       '@types/node':
-        specifier: ^22.14.1
+        specifier: ^22.15.21
         version: 22.15.21
       cross-env:
         specifier: ^7.0.3
@@ -213,7 +213,7 @@ importers:
         specifier: ^1.9.4
         version: 1.9.4
       '@types/node':
-        specifier: ^22.14.1
+        specifier: ^22.15.21
         version: 22.15.21
       tsx:
         specifier: ^4.19.3
@@ -225,7 +225,7 @@ importers:
   mongo-migrator:
     dependencies:
       '@types/node':
-        specifier: ^22.14.1
+        specifier: ^22.15.21
         version: 22.15.21
       mongoose:
         specifier: ^8.15.0

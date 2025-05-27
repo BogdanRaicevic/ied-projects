@@ -10,7 +10,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@types/node": "^22.14.1",
+    "@types/node": "^22.15.21",
     "mongoose": "^8.15.0",
     "mysql2": "^3.14.0",
     "ts-node": "^10.9.2"
