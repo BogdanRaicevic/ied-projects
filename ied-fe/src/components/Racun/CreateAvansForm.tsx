@@ -1,4 +1,4 @@
-import { Grid2, Divider, Typography, TextField, Box } from "@mui/material";
+import { Divider, Typography, TextField, Box } from "@mui/material";
 import { PrimalacRacunaSection } from "./components/PrimalacRacunaSection";
 import { AvansSection } from "./components/AvansSection";
 import { useRacunStore } from "./store/useRacunStore";
@@ -21,25 +21,21 @@ export const CreateAvansForm = () => {
   );
 
   return (
-    <Grid2 container>
-      <Grid2 size={12}>
-        <Box
-          sx={{ display: "flex", alignItems: "center", justifyContent: "center", mb: 3, gap: 2 }}
-        >
-          <Typography variant="h4">Avansni račun</Typography>
-          {pozivNaBroj}
-        </Box>
-        <PrimalacRacunaSection />
-        <Divider sx={{ mt: 3, mb: 3 }} />
-        <AvansSection />
-        <DatePicker
-          sx={{ mt: 3 }}
-          label="Datum uplate avansa"
-          format="yyyy.MM.dd"
-          value={racunData.datumUplateAvansa || new Date()}
-          onChange={(e) => updateField("datumUplateAvansa", e || new Date())}
-        ></DatePicker>
-      </Grid2>
-    </Grid2>
+    <Box>
+      <Box sx={{ display: "flex", alignItems: "center", justifyContent: "center", mb: 3, gap: 2 }}>
+        <Typography variant="h4">Avansni račun</Typography>
+        {pozivNaBroj}
+      </Box>
+      <PrimalacRacunaSection />
+      <Divider sx={{ mt: 3, mb: 3 }} />
+      <AvansSection />
+      <DatePicker
+        sx={{ mt: 3 }}
+        label="Datum uplate avansa"
+        format="yyyy.MM.dd"
+        value={racunData.datumUplateAvansa || new Date()}
+        onChange={(e) => updateField("datumUplateAvansa", e || new Date())}
+      ></DatePicker>
+    </Box>
   );
 };

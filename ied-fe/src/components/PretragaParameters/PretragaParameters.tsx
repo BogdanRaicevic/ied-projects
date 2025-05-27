@@ -1,6 +1,4 @@
-import { Chip, TextField } from "@mui/material";
-import Grid from "@mui/material/Grid2";
-import { Box } from "@mui/system";
+import { Box, Chip, Grid, TextField } from "@mui/material";
 import AutocompleteMultiple from "../Autocomplete/Multiple";
 import CheckboxList from "../CheckboxList";
 import NegationCheckbox from "../NegationCheckbox";

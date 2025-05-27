@@ -1,6 +1,5 @@
-import Grid from "@mui/material/Grid2";
 import VirtualizedAutocomplete from "../Autocomplete/Virtualized";
-import { Button } from "@mui/material";
+import { Button, Grid } from "@mui/material";
 import PretragaSaveDialog from "../Dialogs/PretragaSaveDialog";
 import { useEffect, useState } from "react";
 import { deletePretraga, fetchAllPretrage, savePretraga } from "../../api/pretrage.api";

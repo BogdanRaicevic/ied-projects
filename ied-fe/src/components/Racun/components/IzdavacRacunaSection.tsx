@@ -1,4 +1,4 @@
-import { Grid2, Paper, TextField, Box, Autocomplete, Alert } from "@mui/material";
+import { Grid, Paper, TextField, Box, Autocomplete, Alert } from "@mui/material";
 import SelectIzdavacRacuna from "../SelectIzdavacRacuna";
 import { useRacunStore } from "../store/useRacunStore";
 import { useFetchIzdavaciRacuna } from "../../../hooks/useFetchData";
@@ -32,8 +32,8 @@ export const IzdavacRacunaSection = () => {
   }
 
   return (
-    <Grid2 sx={{ mt: 3, mb: 3 }} component={Paper} size={12} container>
-      <Grid2 size={7}>
+    <Grid sx={{ mt: 3, mb: 3 }} component={Paper} size={12} container>
+      <Grid size={7}>
         <Box sx={{ padding: "1rem" }}>
           <Autocomplete
             fullWidth
@@ -47,8 +47,8 @@ export const IzdavacRacunaSection = () => {
             }}
           />
         </Box>
-      </Grid2>
-      <Grid2 size={5}>
+      </Grid>
+      <Grid size={5}>
         <Box
           sx={{
             display: "flex",
@@ -60,7 +60,7 @@ export const IzdavacRacunaSection = () => {
         >
           <SelectIzdavacRacuna />
         </Box>
-      </Grid2>
-    </Grid2>
+      </Grid>
+    </Grid>
   );
 };

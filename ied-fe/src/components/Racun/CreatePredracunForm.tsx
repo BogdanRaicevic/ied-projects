@@ -1,4 +1,4 @@
-import { Grid2, Divider, Typography, TextField, Box } from "@mui/material";
+import { Divider, Typography, TextField, Box } from "@mui/material";
 import { PrimalacRacunaSection } from "./components/PrimalacRacunaSection";
 import { OnlinePrisustvaSection } from "./components/OnlinePrisustvaSection";
 import { OfflinePrisustvaSection } from "./components/OfflinePrisustvaSection";
@@ -22,21 +22,17 @@ export const CreatePredracunForm = () => {
   );
 
   return (
-    <Grid2 container>
-      <Grid2 size={12}>
-        <Box
-          sx={{ display: "flex", alignItems: "center", justifyContent: "center", mb: 3, gap: 2 }}
-        >
-          <Typography variant="h4">Predračun</Typography>
-          {pozivNaBroj}
-        </Box>
-        <PrimalacRacunaSection />
-        <Divider sx={{ mt: 3, mb: 3 }} />
-        <OnlinePrisustvaSection />
-        <OfflinePrisustvaSection />
-        <UkupnaNaknada />
-        <Divider sx={{ mt: 3 }} />
-      </Grid2>
-    </Grid2>
+    <Box>
+      <Box sx={{ display: "flex", alignItems: "center", justifyContent: "center", mb: 3, gap: 2 }}>
+        <Typography variant="h4">Predračun</Typography>
+        {pozivNaBroj}
+      </Box>
+      <PrimalacRacunaSection />
+      <Divider sx={{ mt: 3, mb: 3 }} />
+      <OnlinePrisustvaSection />
+      <OfflinePrisustvaSection />
+      <UkupnaNaknada />
+      <Divider sx={{ mt: 3 }} />
+    </Box>
   );
 };

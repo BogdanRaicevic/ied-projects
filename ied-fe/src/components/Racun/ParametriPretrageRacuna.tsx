@@ -1,7 +1,6 @@
 import { IzdavacRacuna, PretrageRacunaZodType, TipRacuna } from "@ied-shared/index";
-import { Button, Chip, InputLabel, MenuItem, Select, TextField } from "@mui/material";
+import { Button, Chip, InputLabel, MenuItem, Select, TextField, Box } from "@mui/material";
 import { blue, green, grey, purple, red } from "@mui/material/colors";
-import { Box } from "@mui/system";
 import { DatePicker } from "@mui/x-date-pickers";
 import { subMonths } from "date-fns";
 import { useEffect, useState } from "react";

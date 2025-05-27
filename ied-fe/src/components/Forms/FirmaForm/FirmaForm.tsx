@@ -6,13 +6,13 @@ import {
   Divider,
   Alert,
   Typography,
+  Grid,
+  Box,
 } from "@mui/material";
-import { Box } from "@mui/system";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import type React from "react";
 import { useEffect, useState } from "react";
-import Grid from "@mui/material/Grid2";
 import {
   type Metadata,
   FirmaSchema,
