@@ -4,7 +4,6 @@ const ied = {
   kontaktTelefoni: ["011/307-76-12", "011/307-76-13"],
   pib: 103159254,
   maticniBroj: 17518313,
-  brojResenjaOEvidencijiZaPDV: "/",
   tekuciRacuni: [
     "170-0030035229000-87 (UniCredit Banka)",
     "325-950060005103705 (OTP banka)",
@@ -29,7 +28,6 @@ const bs = {
   kontaktTelefoni: ["011/655-83-05", "064/821-33-22"],
   pib: 108935581,
   maticniBroj: 28170866,
-  brojResenjaOEvidencijiZaPDV: "/",
   tekuciRacuni: ["325-9500600050635-47 (OTP banka)"],
 };
 
