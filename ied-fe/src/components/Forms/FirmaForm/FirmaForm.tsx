@@ -39,9 +39,9 @@ export const FirmaForm: React.FC<FirmaFormProps> = ({ inputCompany, onSubmit: pa
     reset,
     watch,
     setValue,
-  } = useForm<FirmaType>({
+  } = useForm<z.input<typeof FirmaSchema>, any, z.output<typeof FirmaSchema>>({
     resolver: zodResolver(FirmaSchema),
-    defaultValues: inputCompany || {},
+    defaultValues: inputCompany,
   });
 
   const { tipoviFirme, velicineFirme, stanjaFirme, mesta, delatnosti } = useFetchData();

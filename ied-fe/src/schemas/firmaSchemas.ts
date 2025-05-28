@@ -20,32 +20,31 @@ export type Zaposleni = z.infer<typeof ZaposleniSchema>;
 export const FirmaSchema = z.object({
   _id: z.string().optional(),
   ID_firma: z.number().optional(),
-  naziv_firme: z.string().max(100).nullable().default(""),
-  adresa: z.string().max(150).nullable().default(""),
-  PIB: z.string().or(z.literal("")).nullable().default(""),
-  telefon: z.string().nullable().default(""),
+  naziv_firme: z.string().max(100).default(""),
+  adresa: z.string().max(150).default(""),
+  PIB: z.string().or(z.literal("")).default(""),
+  telefon: z.string().default(""),
   e_mail: z
     .string()
     .email("Ne ispravna email adresa")
     .max(100, "Predugacka email adresa")
     .or(z.literal(""))
-    .nullable()
-    .default(""),
-  tip_firme: z.string().nullable().default(""),
-  delatnost: z.string().nullable().default(""),
-  komentar: z.string().max(1000).nullable().default(""),
-  stanje_firme: z.string().max(50).nullable().default(""),
-  mesto: z.string().nullable().default(""),
 
-  velicina_firme: z.string().nullable().default(""),
+    .default(""),
+  tip_firme: z.string().default(""),
+  delatnost: z.string().default(""),
+  komentar: z.string().max(1000).default(""),
+  stanje_firme: z.string().max(50).default(""),
+  mesto: z.string().default(""),
+
+  velicina_firme: z.string().default(""),
   zaposleni: z.array(ZaposleniSchema).default([]),
   jbkjs: z
     .string()
     .regex(/^\d{5}$/, "JBKJS moze da se sastoji samo od 5 brojeva")
     .or(z.literal(""))
-    .nullable()
     .default(""),
-  maticni_broj: z.string().or(z.literal("")).nullable().default(""),
+  maticni_broj: z.string().or(z.literal("")).default(""),
 });
 export type FirmaType = z.infer<typeof FirmaSchema>;
 
