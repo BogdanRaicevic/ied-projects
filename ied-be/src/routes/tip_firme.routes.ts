@@ -7,7 +7,8 @@ router.get("/", async (_req: Request, res: Response, next: NextFunction) => {
   try {
     const result = await getAllTipoviFirme();
     if (!result) {
-      return res.status(404).send("Tip firme not found");
+      res.status(404).send("Tip firme not found");
+      return;
     }
     res.json(result);
   } catch (error) {

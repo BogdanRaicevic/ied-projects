@@ -79,7 +79,8 @@ router.get("/:id", async (req: Request, res: Response, next: NextFunction) => {
   try {
     const firma = await findById(String(id));
     if (!firma) {
-      return res.status(404).send("Firma not found");
+      res.status(404).send("Firma not found");
+      return;
     }
     res.json(firma);
   } catch (error) {

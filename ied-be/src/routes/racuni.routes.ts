@@ -50,7 +50,8 @@ router.get("/:id", async (req: Request, res: Response, next: NextFunction) => {
     const { id } = req.params;
     const racun = await getRacunById(id);
     if (!racun) {
-      return res.status(404).send("Racun not found");
+      res.status(404).send("Racun not found");
+      return;
     }
     res.json(racun);
   } catch (error) {
@@ -65,7 +66,8 @@ router.post(
     try {
       const result = await saveRacun(req.body);
       if (!result) {
-        return res.status(404).send("Racun not found");
+        res.status(404).send("Racun not found");
+        return;
       }
       res.json(result);
     } catch (error) {
@@ -83,7 +85,8 @@ router.put(
       const racun = req.body;
       const result = await updateRacunById(id, racun);
       if (!result) {
-        return res.status(404).send("Racun not found");
+        res.status(404).send("Racun not found");
+        return;
       }
       res.json(result);
     } catch (error) {
@@ -103,16 +106,19 @@ router.get(
         typeof izdavacRacuna !== "string" ||
         (tipRacuna && typeof tipRacuna !== "string")
       ) {
-        return res.status(400).send("Invalid query parameter types");
+        res.status(400).send("Invalid query parameter types");
+        return;
       }
 
       if (!pozivNaBroj || !izdavacRacuna) {
-        return res.status(400).send("Missing required query parameters");
+        res.status(400).send("Missing required query parameters");
+        return;
       }
 
       const racun = await getRacunByPozivNaBrojAndIzdavac(pozivNaBroj, izdavacRacuna, tipRacuna);
       if (!racun) {
-        return res.status(404).send("Racun not found");
+        res.status(404).send("Racun not found");
+        return;
       }
       res.json(racun);
     } catch (error) {

@@ -10,7 +10,8 @@ export const hasPermission = async (req: Request, res: Response, next: NextFunct
     const auth = getAuth(req);
 
     if (!auth.userId) {
-      return res.status(403).send("Forbidden");
+      res.status(403).send("Forbidden");
+      return;
     }
 
     if (myCache.has(auth.userId)) {
@@ -20,7 +21,8 @@ export const hasPermission = async (req: Request, res: Response, next: NextFunct
 
       if (!currentUser) {
         console.error("Clerk API is unavailable. Skipping user store update.");
-        return res.status(503).json({ error: "Service Unavailable. Please try again later." });
+        res.status(503).json({ error: "Service Unavailable. Please try again later." });
+        return;
       }
 
       myCache.set(auth.userId, currentUser, CACHE_TTL);
@@ -28,7 +30,8 @@ export const hasPermission = async (req: Request, res: Response, next: NextFunct
     }
   } catch (error) {
     console.error("Error in hasPermission", error);
-    return res.status(500).json({ error: "Internal Server Error" });
+    res.status(500).json({ error: "Internal Server Error" });
+    return;
   }
 };
 
