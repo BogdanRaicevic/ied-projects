@@ -8,10 +8,11 @@ export const validate =
 
       if (!result.success) {
         console.error("Validation Errors:", result.error.errors);
-        return res.status(400).json({
+        res.status(400).json({
           message: "Validation failed",
           errors: result.error.errors,
         });
+        return;
       }
 
       req.body = result.data;

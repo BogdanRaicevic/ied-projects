@@ -1,5 +1,4 @@
-import { Router, type Request, type Response, type NextFunction, query } from "express";
-import { format } from "date-fns";
+import { Router, type Request, type Response, type NextFunction } from "express";
 import {
   deletePrijava,
   deleteSeminar,
@@ -11,7 +10,7 @@ import {
 } from "../services/seminar.service";
 import type { FilterQuery } from "mongoose";
 import type { SeminarType } from "../models/seminar.model";
-import type { PrijavaZodType, SeminarQueryParamsZodType } from "@ied-shared/types/seminar";
+import type { SeminarQueryParamsZodType } from "@ied-shared/types/seminar";
 import { ErrorWithCause } from "../utils/customErrors";
 import { validate } from "../middleware/validateSchema";
 import { PrijavaSchema, SeminarQueryParamsSchema, SeminarSchema } from "@ied-shared/types/seminar";

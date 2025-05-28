@@ -7,7 +7,8 @@ router.get("/all-names", async (_req: Request, res: Response, next: NextFunction
   try {
     const result = await getAllMesta();
     if (!result) {
-      return res.status(404).send("Mesta not found");
+      res.status(404).send("Mesta not found");
+      return;
     }
     res.json(result);
   } catch (error) {

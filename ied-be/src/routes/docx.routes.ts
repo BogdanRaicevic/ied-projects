@@ -53,16 +53,18 @@ router.post(
 
     // Check if the racunType is valid
     if (!Object.values(TipRacuna).includes(templateName as TipRacuna)) {
-      return res.status(400).json({
+      res.status(400).json({
         error: "Invalid template name",
         validTypes: Object.values(TipRacuna),
       });
+      return;
     }
 
     // Sanitize the template name to prevent path traversal
     const sanitizedTemplateName = templateName.replace(/[^a-zA-Z0-9-_.]/g, "");
     if (sanitizedTemplateName !== templateName) {
-      return res.status(400).json({ error: "Invalid template name format" });
+      res.status(400).json({ error: "Invalid template name format" });
+      return;
     }
 
     const templatePath = path.resolve(
@@ -76,7 +78,8 @@ router.post(
     // Additional check to ensure the resolved path is within the templates directory
     const templatesDir = path.resolve(__dirname, "../../src/templates");
     if (!templatePath.startsWith(templatesDir)) {
-      return res.status(400).json({ error: "Invalid template path" });
+      res.status(400).json({ error: "Invalid template path" });
+      return;
     }
 
     try {

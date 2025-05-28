@@ -7,7 +7,8 @@ router.get("/", async (_req: Request, res: Response, next: NextFunction) => {
   try {
     const result = await getAllPretrage();
     if (!result) {
-      return res.status(404).send("Pretrage not found");
+      res.status(404).send("Pretrage not found");
+      return;
     }
     res.json(result);
   } catch (error) {
