@@ -3,7 +3,7 @@ import permanentLogo from "../../images/permanent-logo.png";
 import bsLogo from "../../images/bs-logo.png";
 import { useRacunStore } from "./store/useRacunStore";
 import { IzdavacRacuna } from "@ied-shared/index";
-import { MenuItem, Select, SelectChangeEvent } from "@mui/material";
+import { FormControl, MenuItem, Select, SelectChangeEvent, Tooltip } from "@mui/material";
 
 export default function SelectIzdavacRacuna() {
   const options = [
@@ -13,6 +13,7 @@ export default function SelectIzdavacRacuna() {
   ];
 
   const selectedIzdavac = useRacunStore((state) => state.racunData.izdavacRacuna);
+  const pozivNaBroj = useRacunStore((state) => state.racunData.pozivNaBroj);
   const updateField = useRacunStore((state) => state.updateField);
 
   const handleChange = (event: SelectChangeEvent<string>) => {
@@ -22,13 +23,31 @@ export default function SelectIzdavacRacuna() {
     updateField("stopaPdv", selectedValue === "permanent" ? 0 : 20);
   };
 
+  const isDisabled = !!pozivNaBroj && pozivNaBroj !== "";
+
   return (
-    <Select sx={{ maxWidth: 300, maxHeight: 70 }} value={selectedIzdavac} onChange={handleChange}>
-      {options.map((opt) => (
-        <MenuItem key={opt.id} value={opt.id}>
-          <img src={opt.logo} style={{ maxWidth: "200px", width: "100%" }} />
-        </MenuItem>
-      ))}
-    </Select>
+    <FormControl fullWidth sx={{ mb: 2 }}>
+      <Tooltip
+        title={
+          isDisabled ? "Izdavač se ne može promeniti nakon što je poziv na broj generisan" : ""
+        }
+        arrow
+        placement="top"
+      >
+        <Select
+          sx={{ maxWidth: 300, maxHeight: 70 }}
+          value={selectedIzdavac}
+          onChange={handleChange}
+          disabled={isDisabled}
+          variant={isDisabled ? "filled" : "outlined"}
+        >
+          {options.map((opt) => (
+            <MenuItem key={opt.id} value={opt.id}>
+              <img src={opt.logo} style={{ maxWidth: "200px", width: "100%" }} />
+            </MenuItem>
+          ))}
+        </Select>
+      </Tooltip>
+    </FormControl>
   );
 }
