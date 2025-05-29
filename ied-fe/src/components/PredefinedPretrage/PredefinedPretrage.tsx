@@ -9,7 +9,7 @@ import ZoomInIcon from "@mui/icons-material/ZoomIn";
 import ZoomOutIcon from "@mui/icons-material/ZoomOut";
 import RestartAltIcon from "@mui/icons-material/RestartAlt";
 
-export default function PredefinedPretrage() {
+export default function PredefinedPretrage({ onReset }: { onReset?: () => void }) {
   const [pretrage, setPretrage] = useState<TODO_ANY[]>([]);
 
   const fetchPretrage = async () => {
@@ -35,7 +35,7 @@ export default function PredefinedPretrage() {
     setOpenPretrageSaveDialog(true);
   };
 
-  const { pretragaParameters, setPretragaParameters, resetPretragaParameters } = usePretragaStore();
+  const { pretragaParameters, setPretragaParameters } = usePretragaStore();
 
   const handleSavePretraga = async (nazivPretrage: string, isNew: boolean) => {
     try {
@@ -123,7 +123,7 @@ export default function PredefinedPretrage() {
           variant="contained"
           size="large"
           color="info"
-          onClick={resetPretragaParameters}
+          onClick={onReset}
         >
           RESET
         </Button>

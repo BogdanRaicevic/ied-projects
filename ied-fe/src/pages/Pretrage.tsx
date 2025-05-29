@@ -4,31 +4,38 @@ import Divider from "@mui/material/Divider";
 import PredefinedPretrage from "../components/PredefinedPretrage/PredefinedPretrage";
 import PretragaParameters from "../components/PretragaParameters/PretragaParameters";
 import ExportDataButton from "../components/SaveDataButton";
-import { useEffect } from "react";
-import { usePretragaStore } from "../store/pretragaParameters.store";
+import { useEffect, useState } from "react";
+import { defaultPeretragaParameters, usePretragaStore } from "../store/pretragaParameters.store";
 import { Box, Button } from "@mui/material";
 import AddBoxIcon from "@mui/icons-material/AddBox";
 import SearchIcon from "@mui/icons-material/Search";
 
 export default function Pretrage() {
-  const { pretragaParameters, setPretragaParameters } = usePretragaStore();
+  const { pretragaParameters, setPretragaParameters, resetPretragaParameters } = usePretragaStore();
+  const [appliedParameters, setAppliedParameters] = useState(pretragaParameters);
 
   useEffect(() => {
     const saved = localStorage.getItem("pretragaParameters");
     if (saved) {
       setPretragaParameters(JSON.parse(saved));
+      setAppliedParameters(JSON.parse(saved)); // hydrate both
     }
   }, [setPretragaParameters]);
 
   const handlePretraziClick = () => {
-    return pretragaParameters;
+    setAppliedParameters(pretragaParameters);
+  };
+
+  const handleReset = () => {
+    resetPretragaParameters();
+    setAppliedParameters(defaultPeretragaParameters);
   };
 
   return (
     <>
       <PageTitle title={"Pretrage"} />
 
-      <PredefinedPretrage />
+      <PredefinedPretrage onReset={handleReset} />
 
       <Divider />
 
@@ -72,7 +79,7 @@ export default function Pretrage() {
           </Button>
         </Box>
       </Box>
-      <MyTable {...pretragaParameters} />
+      <MyTable {...appliedParameters} />
     </>
   );
 }

@@ -8,7 +8,7 @@ type PretragaStore = {
   resetPretragaParameters: () => void;
 };
 
-const defaultPeretragaParameters: FirmaQueryParams = {
+export const defaultPeretragaParameters: FirmaQueryParams = {
   imeFirme: "",
   pib: "",
   email: "",
@@ -69,6 +69,7 @@ export const usePretragaStore = create<PretragaStore>((set) => ({
   resetPretragaParameters: () =>
     set(() => {
       localStorage.removeItem("pretragaParameters");
+      localStorage.removeItem("myTablePagination");
       return { pretragaParameters: defaultPeretragaParameters };
     }),
 }));

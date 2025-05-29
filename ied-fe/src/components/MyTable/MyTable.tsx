@@ -14,10 +14,15 @@ export default memo(function MyTable(queryParameters: FirmaQueryParams) {
   const [data, setData] = useState<FirmaType[]>([]);
   const [documents, setDocuments] = useState(1000);
 
+  const defaultPagination = { pageIndex: 0, pageSize: 50 };
   const [pagination, setPagination] = useState<MRT_PaginationState>(() => {
     const saved = localStorage.getItem("myTablePagination");
-    return saved ? JSON.parse(saved) : { pageIndex: 0, pageSize: 50 };
+    return saved ? JSON.parse(saved) : defaultPagination;
   });
+
+  useEffect(() => {
+    setPagination(defaultPagination);
+  }, [queryParameters]);
 
   useEffect(() => {
     localStorage.setItem("myTablePagination", JSON.stringify(pagination));
