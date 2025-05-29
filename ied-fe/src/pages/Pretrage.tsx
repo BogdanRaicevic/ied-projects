@@ -15,12 +15,17 @@ export default function Pretrage() {
   const [appliedParameters, setAppliedParameters] = useState(pretragaParameters);
 
   useEffect(() => {
+    localStorage.setItem("pretragaParameters", JSON.stringify(appliedParameters));
+  }, [appliedParameters]);
+
+  useEffect(() => {
+    console.log("Pretraga parameters updated:");
     const saved = localStorage.getItem("pretragaParameters");
     if (saved) {
       setPretragaParameters(JSON.parse(saved));
       setAppliedParameters(JSON.parse(saved)); // hydrate both
     }
-  }, [setPretragaParameters]);
+  }, []);
 
   const handlePretraziClick = () => {
     setAppliedParameters(pretragaParameters);
