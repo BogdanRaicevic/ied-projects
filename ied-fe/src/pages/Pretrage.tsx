@@ -4,25 +4,24 @@ import Divider from "@mui/material/Divider";
 import PredefinedPretrage from "../components/PredefinedPretrage/PredefinedPretrage";
 import PretragaParameters from "../components/PretragaParameters/PretragaParameters";
 import ExportDataButton from "../components/SaveDataButton";
-import { useState } from "react";
+import { useEffect } from "react";
 import { usePretragaStore } from "../store/pretragaParameters.store";
 import { Box, Button } from "@mui/material";
 import AddBoxIcon from "@mui/icons-material/AddBox";
 import SearchIcon from "@mui/icons-material/Search";
 
-const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
-
-if (!PUBLISHABLE_KEY) {
-  throw new Error("Missing Publishable Key");
-}
-
 export default function Pretrage() {
-  const { pretragaParameters } = usePretragaStore();
+  const { pretragaParameters, setPretragaParameters } = usePretragaStore();
 
-  const [appliedParameters, setAppliedParameters] = useState(pretragaParameters);
+  useEffect(() => {
+    const saved = localStorage.getItem("pretragaParameters");
+    if (saved) {
+      setPretragaParameters(JSON.parse(saved));
+    }
+  }, [setPretragaParameters]);
 
   const handlePretraziClick = () => {
-    setAppliedParameters(pretragaParameters);
+    return pretragaParameters;
   };
 
   return (
@@ -73,7 +72,7 @@ export default function Pretrage() {
           </Button>
         </Box>
       </Box>
-      <MyTable {...appliedParameters} />
+      <MyTable {...pretragaParameters} />
     </>
   );
 }
