@@ -7,8 +7,9 @@ import type { TODO_ANY } from "../../../../ied-be/src/utils/utils";
 import { usePretragaStore } from "../../store/pretragaParameters.store";
 import ZoomInIcon from "@mui/icons-material/ZoomIn";
 import ZoomOutIcon from "@mui/icons-material/ZoomOut";
+import RestartAltIcon from "@mui/icons-material/RestartAlt";
 
-export default function PredefinedPretrage() {
+export default function PredefinedPretrage({ onReset }: { onReset?: () => void }) {
   const [pretrage, setPretrage] = useState<TODO_ANY[]>([]);
 
   const fetchPretrage = async () => {
@@ -116,6 +117,15 @@ export default function PredefinedPretrage() {
           onClick={handleDeletePretraga}
         >
           Obrisi pretragu
+        </Button>
+        <Button
+          startIcon={<RestartAltIcon />}
+          variant="contained"
+          size="large"
+          color="info"
+          onClick={onReset}
+        >
+          RESET
         </Button>
       </Grid>
     </Grid>

@@ -4,32 +4,43 @@ import Divider from "@mui/material/Divider";
 import PredefinedPretrage from "../components/PredefinedPretrage/PredefinedPretrage";
 import PretragaParameters from "../components/PretragaParameters/PretragaParameters";
 import ExportDataButton from "../components/SaveDataButton";
-import { useState } from "react";
-import { usePretragaStore } from "../store/pretragaParameters.store";
+import { useEffect, useState } from "react";
+import { defaultPeretragaParameters, usePretragaStore } from "../store/pretragaParameters.store";
 import { Box, Button } from "@mui/material";
 import AddBoxIcon from "@mui/icons-material/AddBox";
 import SearchIcon from "@mui/icons-material/Search";
 
-const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
-
-if (!PUBLISHABLE_KEY) {
-  throw new Error("Missing Publishable Key");
-}
-
 export default function Pretrage() {
-  const { pretragaParameters } = usePretragaStore();
-
+  const { pretragaParameters, setPretragaParameters, resetPretragaParameters } = usePretragaStore();
   const [appliedParameters, setAppliedParameters] = useState(pretragaParameters);
+
+  useEffect(() => {
+    localStorage.setItem("pretragaParameters", JSON.stringify(appliedParameters));
+  }, [appliedParameters]);
+
+  useEffect(() => {
+    console.log("Pretraga parameters updated:");
+    const saved = localStorage.getItem("pretragaParameters");
+    if (saved) {
+      setPretragaParameters(JSON.parse(saved));
+      setAppliedParameters(JSON.parse(saved)); // hydrate both
+    }
+  }, []);
 
   const handlePretraziClick = () => {
     setAppliedParameters(pretragaParameters);
+  };
+
+  const handleReset = () => {
+    resetPretragaParameters();
+    setAppliedParameters(defaultPeretragaParameters);
   };
 
   return (
     <>
       <PageTitle title={"Pretrage"} />
 
-      <PredefinedPretrage />
+      <PredefinedPretrage onReset={handleReset} />
 
       <Divider />
 

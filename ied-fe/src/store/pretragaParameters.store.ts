@@ -5,27 +5,30 @@ type PretragaStore = {
   pretragaParameters: FirmaQueryParams;
   setPretragaParameters: (params: Partial<FirmaQueryParams>) => void;
   toggleNegation: (value: string) => void;
+  resetPretragaParameters: () => void;
+};
+
+export const defaultPeretragaParameters: FirmaQueryParams = {
+  imeFirme: "",
+  pib: "",
+  email: "",
+  velicineFirmi: [],
+  radnaMesta: [],
+  tipoviFirme: [],
+  delatnosti: [],
+  mesta: [],
+  negacije: [],
+  stanjaFirme: [],
+  jbkjs: "",
+  maticniBroj: "",
+  komentar: "",
+  seminari: [],
+  imePrezime: "",
+  emailZaposlenog: "",
 };
 
 export const usePretragaStore = create<PretragaStore>((set) => ({
-  pretragaParameters: {
-    imeFirme: "",
-    pib: "",
-    email: "",
-    velicineFirmi: [],
-    radnaMesta: [],
-    tipoviFirme: [],
-    delatnosti: [],
-    mesta: [],
-    negacije: [],
-    stanjaFirme: [],
-    jbkjs: "",
-    maticniBroj: "",
-    komentar: "",
-    seminari: [],
-    imePrezime: "",
-    emailZaposlenog: "",
-  },
+  pretragaParameters: defaultPeretragaParameters,
   setPretragaParameters: (params) =>
     set((state) => {
       const updatedParameters = {
@@ -42,7 +45,6 @@ export const usePretragaStore = create<PretragaStore>((set) => ({
 
       return state;
     }),
-  // }),
   toggleNegation: (value) =>
     set((state) => {
       if (!state.pretragaParameters.negacije) {
@@ -63,5 +65,11 @@ export const usePretragaStore = create<PretragaStore>((set) => ({
           negacije,
         },
       };
+    }),
+  resetPretragaParameters: () =>
+    set(() => {
+      localStorage.removeItem("pretragaParameters");
+      localStorage.removeItem("myTablePagination");
+      return { pretragaParameters: defaultPeretragaParameters };
     }),
 }));
