@@ -18,6 +18,7 @@ import {
   FirmaSchema,
   InputTypesSchema,
   type FirmaType,
+  Zaposleni,
 } from "../../../schemas/firmaSchemas";
 import type { z } from "zod";
 
@@ -59,10 +60,6 @@ export const FirmaForm: React.FC<FirmaFormProps> = ({ inputCompany, onSubmit: pa
   }, [inputCompany, reset]);
 
   const onSubmit = async (data: FirmaType) => {
-    const result = FirmaSchema.safeParse(data);
-    if (!result.success) {
-      console.log("Zod validation error:", result.error);
-    }
     try {
       // If we have an _id, we're updating an existing firma
       const firmaData = currentFirmaId ? { ...data, _id: currentFirmaId } : data;
@@ -219,8 +216,6 @@ export const FirmaForm: React.FC<FirmaFormProps> = ({ inputCompany, onSubmit: pa
       });
   };
 
-  console.log("errors", errors);
-
   return (
     <Box onSubmit={handleSubmit(onSubmit)} component="form" sx={{ mt: 4 }}>
       <Grid container m={0} spacing={2}>
@@ -290,9 +285,29 @@ export const FirmaForm: React.FC<FirmaFormProps> = ({ inputCompany, onSubmit: pa
           </Alert>
         )}
         {/* TODO: Remove this and substitute with a more generic error handling */}
-        {Object.keys(errors).length > 0 && (
+        {Array.isArray(errors.zaposleni) && errors.zaposleni.some(Boolean) && (
           <Alert severity="error" sx={{ width: "100%", mb: 2 }}>
-            Proverite sva polja forme. Neka polja nisu ispravno popunjena.
+            <ul style={{ margin: 0, paddingLeft: 20 }}>
+              {errors.zaposleni.map((zErr, idx) =>
+                zErr
+                  ? Object.entries(zErr).map(([field, errObj]) => {
+                      // Get the problematic value if available
+                      const value = inputCompany.zaposleni?.[idx]?.[field as keyof Zaposleni];
+                      return (
+                        <li key={field + idx}>
+                          Zaposleni #{idx + 1} - <b>{field}</b>
+                          {value !== undefined && (
+                            <>
+                              (<span style={{ color: "#d32f2f" }}>{String(value)}</span>)
+                            </>
+                          )}
+                          : {(errObj as any)?.message}
+                        </li>
+                      );
+                    })
+                  : null
+              )}
+            </ul>
           </Alert>
         )}
       </Grid>
