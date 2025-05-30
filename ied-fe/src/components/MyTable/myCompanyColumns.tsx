@@ -5,16 +5,24 @@ import { Icon, Link } from "@mui/material";
 import BusinessIcon from "@mui/icons-material/Business";
 
 export const myCompanyColumns: MRT_ColumnDef<FirmaType>[] = [
-  // {
-  //   header: "Prijavljeni",
-  //   accessorKey: "zeleMarketingMaterijal",
-  //   muiTableBodyCellProps: ({ cell }) => ({
-  //     sx: {
-  //       backgroundColor: cell.getValue() === true ? "#47e147" : "salmon",
-  //     },
-  //   }),
-  //   Cell: ({ cell }) => <span>{cell.getValue<boolean>() ? "DA" : "Ne"}</span>,
-  // },
+  {
+    header: "R. BR.",
+    accessorKey: "rowNumber",
+    size: 20,
+    enableSorting: false,
+    enableColumnActions: false,
+    enableColumnFilter: false,
+    enableColumnOrdering: false,
+    enableHiding: false,
+    muiTableHeadCellProps: { sx: { position: "sticky", left: 0, zIndex: 2, background: "#fff" } },
+    muiTableBodyCellProps: { sx: { position: "sticky", left: 0, zIndex: 1, background: "#fff" } },
+
+    Cell: ({ row, table }) => {
+      const pageIndex = table.getState().pagination.pageIndex;
+      const pageSize = table.getState().pagination.pageSize;
+      return pageIndex * pageSize + row.index + 1;
+    },
+  },
   {
     header: "Naziv kompanije",
     accessorKey: "naziv_firme",
@@ -85,6 +93,21 @@ export const myCompanyColumns: MRT_ColumnDef<FirmaType>[] = [
 ];
 
 export const myZaposleniColumns: MRT_ColumnDef<Zaposleni>[] = [
+  {
+    header: "R. BR.",
+    accessorKey: "rowNumber",
+    size: 20,
+    enableSorting: false,
+    enableColumnActions: false,
+    enableColumnFilter: false,
+    enableColumnOrdering: false,
+    enableHiding: false,
+    Cell: ({ row, table }) => {
+      const pageIndex = table.getState().pagination.pageIndex;
+      const pageSize = table.getState().pagination.pageSize;
+      return pageIndex * pageSize + row.index + 1;
+    },
+  },
   {
     header: "Ime i Prezime",
     accessorFn: (row) => `${row.ime} ${row.prezime}`,
