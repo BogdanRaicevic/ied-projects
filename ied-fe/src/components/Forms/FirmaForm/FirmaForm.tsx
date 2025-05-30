@@ -40,7 +40,7 @@ export const FirmaForm: React.FC<FirmaFormProps> = ({ inputCompany, onSubmit: pa
     watch,
     setValue,
   } = useForm<z.input<typeof FirmaSchema>, any, z.output<typeof FirmaSchema>>({
-    resolver: zodResolver(FirmaSchema),
+    resolver: zodResolver(FirmaSchema), // find a way to pull error from this
     defaultValues: inputCompany,
   });
 
@@ -59,6 +59,10 @@ export const FirmaForm: React.FC<FirmaFormProps> = ({ inputCompany, onSubmit: pa
   }, [inputCompany, reset]);
 
   const onSubmit = async (data: FirmaType) => {
+    const result = FirmaSchema.safeParse(data);
+    if (!result.success) {
+      console.log("Zod validation error:", result.error);
+    }
     try {
       // If we have an _id, we're updating an existing firma
       const firmaData = currentFirmaId ? { ...data, _id: currentFirmaId } : data;
@@ -215,6 +219,8 @@ export const FirmaForm: React.FC<FirmaFormProps> = ({ inputCompany, onSubmit: pa
       });
   };
 
+  console.log("errors", errors);
+
   return (
     <Box onSubmit={handleSubmit(onSubmit)} component="form" sx={{ mt: 4 }}>
       <Grid container m={0} spacing={2}>
@@ -281,6 +287,12 @@ export const FirmaForm: React.FC<FirmaFormProps> = ({ inputCompany, onSubmit: pa
         {errorAlert && (
           <Alert severity="error" sx={{ width: "100%", mt: 2 }} onClose={() => setErrorAlert(null)}>
             {errorAlert}
+          </Alert>
+        )}
+        {/* TODO: Remove this and substitute with a more generic error handling */}
+        {Object.keys(errors).length > 0 && (
+          <Alert severity="error" sx={{ width: "100%", mb: 2 }}>
+            Proverite sva polja forme. Neka polja nisu ispravno popunjena.
           </Alert>
         )}
       </Grid>

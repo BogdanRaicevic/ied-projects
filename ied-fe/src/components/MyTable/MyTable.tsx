@@ -53,6 +53,11 @@ export default memo(function MyTable(queryParameters: FirmaQueryParams) {
       pagination,
     },
     rowCount: documents,
+    initialState: {
+      columnPinning: {
+        left: ["rowNumber", "naziv_firme"],
+      },
+    },
   });
   return <MaterialReactTable table={table} />;
 });

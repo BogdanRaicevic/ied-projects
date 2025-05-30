@@ -213,6 +213,9 @@ export default function Firma() {
         pageIndex: 0,
         pageSize: 50,
       },
+      columnPinning: {
+        left: ["rowNumber", "actions"],
+      },
     },
   });
 
