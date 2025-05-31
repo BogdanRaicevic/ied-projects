@@ -20,10 +20,11 @@ import { hasPermission } from "./middleware/hasPermission";
 import "./database/cron";
 
 const app = express();
-
+const allowedOrigins = env.fe.allowedPorts.map(port => `${env.fe.appUrl}:${port}`);
+console.log("Allowed Origins:", allowedOrigins);
 app.use(
   cors({
-    origin: [`${env.fe.appUrl}`],
+    origin: allowedOrigins,
     credentials: true,
     allowedHeaders: ["Authorization", "Content-Type"],
     exposedHeaders: ["Authorization"],

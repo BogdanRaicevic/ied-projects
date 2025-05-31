@@ -9,6 +9,7 @@ export const env = {
   },
   fe: {
     appUrl: config.FE_APP_URL,
+    allowedPorts: config.FE_APP_ALLOWED_PORTS?.split(",").map(Number) || [],
   },
   mongo: {
     uri: config.MONGO_URI,
