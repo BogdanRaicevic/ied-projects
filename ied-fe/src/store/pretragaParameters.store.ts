@@ -11,19 +11,19 @@ type PretragaStore = {
   setPretragaParameters: (params: Partial<FirmaQueryParams>) => void;
   setPaginationParameters: (pagination: { pageIndex: number; pageSize: number }) => void;
   toggleNegation: (value: string) => void;
-  applyParameters: () => void;
+  setAppliedParameters: () => void;
   loadFromStorage: () => void;
   resetParameters: () => void;
 };
 
-const localStoragePretrageParameters = 'appliedPretragaParameters'
-const localStorageTablePagination = 'tablePagination';
+const APPLIED_PRETRAGE = "appliedPretragaParameters";
+const PAGINATION_PRETRAGE = "tablePagination";
 
 const defaultPagination = {
   pageIndex: 0,
   pageSize: 50,
-}
-const defaultParameters: FirmaQueryParams = {
+};
+export const defaultPretrageParameters: FirmaQueryParams = {
   imeFirme: "",
   pib: "",
   email: "",
@@ -43,8 +43,8 @@ const defaultParameters: FirmaQueryParams = {
 };
 
 export const usePretragaStore = create<PretragaStore>((set, get) => ({
-  pretragaParameters: defaultParameters,
-  appliedParameters: defaultParameters,
+  pretragaParameters: defaultPretrageParameters,
+  appliedParameters: defaultPretrageParameters,
   pagination: defaultPagination,
   setPretragaParameters: (params) =>
     set((state) => ({
@@ -59,12 +59,11 @@ export const usePretragaStore = create<PretragaStore>((set, get) => ({
         ...state.pagination,
         ...pagination,
       };
-      localStorage.setItem(localStorageTablePagination, JSON.stringify(newPagination));
+      localStorage.setItem(PAGINATION_PRETRAGE, JSON.stringify(newPagination));
       return { pagination: newPagination };
     }),
   toggleNegation: (value) =>
     set((state) => {
-
       const currentNegacije = state.pretragaParameters.negacije || [];
       const negacije = currentNegacije.includes(value)
         ? currentNegacije.filter((v) => v !== value)
@@ -77,24 +76,27 @@ export const usePretragaStore = create<PretragaStore>((set, get) => ({
         },
       };
     }),
-  applyParameters: () => {
+  setAppliedParameters: () => {
     const { pretragaParameters } = get();
-    localStorage.setItem(localStoragePretrageParameters, JSON.stringify(pretragaParameters));
+    localStorage.setItem(APPLIED_PRETRAGE, JSON.stringify(pretragaParameters));
     set({ appliedParameters: pretragaParameters });
   },
   loadFromStorage: () => {
-    const saved = localStorage.getItem(localStoragePretrageParameters);
-    if (saved) {
-      const appliedParameters = JSON.parse(saved);
+    const savedPretragaParameters = localStorage.getItem(APPLIED_PRETRAGE);
+    if (savedPretragaParameters) {
+      const appliedParameters = JSON.parse(savedPretragaParameters);
       set({
         appliedParameters,
-        pretragaParameters: appliedParameters
+        pretragaParameters: appliedParameters,
       });
     } else {
-      set({ pretragaParameters: defaultParameters, appliedParameters: defaultParameters });
+      set({
+        pretragaParameters: defaultPretrageParameters,
+        appliedParameters: defaultPretrageParameters,
+      });
     }
 
-    const savedPagination = localStorage.getItem(localStorageTablePagination);
+    const savedPagination = localStorage.getItem(PAGINATION_PRETRAGE);
     if (savedPagination) {
       const pagination = JSON.parse(savedPagination);
       set({ pagination });
@@ -104,11 +106,11 @@ export const usePretragaStore = create<PretragaStore>((set, get) => ({
   },
   resetParameters: () => {
     set({
-      pretragaParameters: defaultParameters,
-      appliedParameters: defaultParameters,
+      pretragaParameters: defaultPretrageParameters,
+      appliedParameters: defaultPretrageParameters,
       pagination: defaultPagination,
     });
-    localStorage.removeItem(localStorageTablePagination);
-    localStorage.removeItem(localStoragePretrageParameters);
+    localStorage.removeItem(PAGINATION_PRETRAGE);
+    localStorage.removeItem(APPLIED_PRETRAGE);
   },
 }));

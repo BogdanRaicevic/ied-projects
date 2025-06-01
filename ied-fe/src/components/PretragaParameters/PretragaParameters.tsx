@@ -1,33 +1,48 @@
-import { Box, Chip, Grid, TextField } from "@mui/material";
+import { Box, Button, Chip, Grid, TextField } from "@mui/material";
 import AutocompleteMultiple from "../Autocomplete/Multiple";
 import CheckboxList from "../CheckboxList";
 import NegationCheckbox from "../NegationCheckbox";
-import { usePretragaStore } from "../../store/pretragaParameters.store";
+import { defaultPretrageParameters, usePretragaStore } from "../../store/pretragaParameters.store";
 import { useFetchData } from "../../hooks/useFetchData";
 import { FirmaQueryParams } from "@ied-shared/types/firmaQueryParams";
 import { format } from "date-fns";
 import { useEffect } from "react";
+import AddBoxIcon from "@mui/icons-material/AddBox";
+import SearchIcon from "@mui/icons-material/Search";
+import { Controller, useForm } from "react-hook-form";
+import { ExportButtons } from "./ExportButtons";
 
-export default function PretragaParameters({ onSearchSubmit }: { onSearchSubmit: () => void }) {
+export default function PretragaParameters() {
   const { delatnosti, mesta, radnaMesta, tipoviFirme, velicineFirme, stanjaFirme, sviSeminari } =
     useFetchData();
 
-  const { pretragaParameters, setPretragaParameters, toggleNegation } = usePretragaStore();
+  const {
+    setPretragaParameters,
+    setPaginationParameters,
+    setAppliedParameters: applyParameters,
+    appliedParameters,
+    loadFromStorage,
+  } = usePretragaStore();
 
-  const handleNegationChange = (value: string) => {
-    toggleNegation(value);
-  };
+  const { control, handleSubmit, reset } = useForm({
+    defaultValues: defaultPretrageParameters as FirmaQueryParams,
+  });
 
-  const handleInputChange = (field: keyof FirmaQueryParams, value: any) => {
-    setPretragaParameters({ [field]: value });
-  };
+  useEffect(() => {
+    loadFromStorage();
+  }, [loadFromStorage]);
+
+  // Effect to update the form when storePretragaParameters changes (e.g., after loading from localStorage)
+  useEffect(() => {
+    reset(appliedParameters);
+  }, [appliedParameters, reset]);
 
   useEffect(() => {
     const handleKeyPress = (event: KeyboardEvent) => {
       if (event.key === "Enter") {
         // Prevent default form submission if this component is part of a <form>
         // event.preventDefault();
-        onSearchSubmit(); // Call the passed-in function
+        handleSubmit(onSubmit)();
       }
     };
 
@@ -37,151 +52,252 @@ export default function PretragaParameters({ onSearchSubmit }: { onSearchSubmit:
     return () => {
       document.removeEventListener("keydown", handleKeyPress);
     };
-  }, [onSearchSubmit]); // Add onSearchSubmit to dependency array
+  }, [handleSubmit]);
+
+  const onSubmit = (data: FirmaQueryParams) => {
+    setPretragaParameters(data);
+    setPaginationParameters({ pageIndex: 0, pageSize: 50 });
+    applyParameters();
+  };
 
   return (
-    <>
+    <form onSubmit={handleSubmit(onSubmit)}>
       <Grid container spacing={2} marginTop={2}>
         <Grid size={8}>
           <Grid container direction="column" gap={2}>
             <Grid container alignItems="center">
               <Grid size={10} sx={{ width: "75%" }}>
-                <AutocompleteMultiple
-                  data={radnaMesta}
-                  onCheckedChange={(value) => handleInputChange("radnaMesta", value)}
-                  placeholder="Radno Mesto"
-                  id="radno-mesto"
-                  key="autocomplete-radno-mesto"
-                  checkedValues={pretragaParameters.radnaMesta || []}
+                <Controller
+                  name="radnaMesta"
+                  control={control}
+                  render={({ field }) => (
+                    <AutocompleteMultiple
+                      data={radnaMesta}
+                      onCheckedChange={field.onChange}
+                      placeholder="Radno Mesto"
+                      id="radno-mesto"
+                      key="autocomplete-radno-mesto"
+                      checkedValues={field.value || []}
+                    />
+                  )}
                 />
               </Grid>
               <Grid px={2} size={2}>
-                <NegationCheckbox
-                  key="negate-radno-mesto"
-                  value="negate-radno-mesto"
-                  negationChecked={
-                    pretragaParameters.negacije?.includes("negate-radno-mesto") || false
-                  }
-                  onNegationChange={handleNegationChange}
+                <Controller
+                  name="negacije"
+                  control={control}
+                  render={({ field }) => (
+                    <NegationCheckbox
+                      key="negate-radno-mesto"
+                      value="negate-radno-mesto"
+                      negationChecked={field.value?.includes("negate-radno-mesto") || false}
+                      onNegationChange={(val) => {
+                        // Toggle logic for negation
+                        if (field.value?.includes(val)) {
+                          field.onChange(field.value.filter((v: string) => v !== val));
+                        } else {
+                          field.onChange([...(field.value || []), val]);
+                        }
+                      }}
+                    />
+                  )}
                 />
               </Grid>
             </Grid>
             <Grid container alignItems="center">
               <Grid size={10} sx={{ width: "75%" }}>
-                <AutocompleteMultiple
-                  data={tipoviFirme}
-                  onCheckedChange={(value) => handleInputChange("tipoviFirme", value)}
-                  placeholder="Tip Firme"
-                  id="tip-firme"
-                  key="autocomplete-tip-firme"
-                  checkedValues={pretragaParameters.tipoviFirme || []}
+                <Controller
+                  name="tipoviFirme"
+                  control={control}
+                  render={({ field }) => (
+                    <AutocompleteMultiple
+                      data={tipoviFirme}
+                      onCheckedChange={field.onChange}
+                      placeholder="Tip Firme"
+                      id="tip-firme"
+                      key="autocomplete-tip-firme"
+                      checkedValues={field.value || []}
+                    />
+                  )}
                 />
               </Grid>
               <Grid px={2} size={2}>
-                <NegationCheckbox
-                  key="negate-tip-firme"
-                  value="negate-tip-firme"
-                  negationChecked={
-                    pretragaParameters.negacije?.includes("negate-tip-firme") || false
-                  }
-                  onNegationChange={handleNegationChange}
+                <Controller
+                  name="negacije"
+                  control={control}
+                  render={({ field }) => (
+                    <NegationCheckbox
+                      key="negate-tip-firme"
+                      value="negate-tip-firme"
+                      negationChecked={field.value?.includes("negate-tip-firme") || false}
+                      onNegationChange={(val) => {
+                        if (field.value?.includes(val)) {
+                          field.onChange(field.value.filter((v: string) => v !== val));
+                        } else {
+                          field.onChange([...(field.value || []), val]);
+                        }
+                      }}
+                    />
+                  )}
                 />
               </Grid>
             </Grid>
             <Grid container alignItems="center">
               <Grid size={10} sx={{ width: "75%" }}>
-                <AutocompleteMultiple
-                  data={delatnosti}
-                  onCheckedChange={(value) => handleInputChange("delatnosti", value)}
-                  placeholder="Delatnost"
-                  id="delatnost"
-                  key="autocomplete-delatnost"
-                  checkedValues={pretragaParameters.delatnosti || []}
+                <Controller
+                  name="delatnosti"
+                  control={control}
+                  render={({ field }) => (
+                    <AutocompleteMultiple
+                      data={delatnosti}
+                      onCheckedChange={field.onChange}
+                      placeholder="Delatnost"
+                      id="delatnost"
+                      key="autocomplete-delatnost"
+                      checkedValues={field.value || []}
+                    />
+                  )}
                 />
               </Grid>
               <Grid px={2} size={2}>
-                <NegationCheckbox
-                  key="negate-delatnost"
-                  value="negate-delatnost"
-                  negationChecked={
-                    pretragaParameters.negacije?.includes("negate-delatnost") || false
-                  }
-                  onNegationChange={handleNegationChange}
+                <Controller
+                  name="negacije"
+                  control={control}
+                  render={({ field }) => (
+                    <NegationCheckbox
+                      key="negate-delatnost"
+                      value="negate-delatnost"
+                      negationChecked={field.value?.includes("negate-delatnost") || false}
+                      onNegationChange={(val) => {
+                        if (field.value?.includes(val)) {
+                          field.onChange(field.value.filter((v: string) => v !== val));
+                        } else {
+                          field.onChange([...(field.value || []), val]);
+                        }
+                      }}
+                    />
+                  )}
                 />
               </Grid>
             </Grid>
             <Grid container alignItems="center">
               <Grid size={10} sx={{ width: "75%" }}>
-                <AutocompleteMultiple
-                  data={mesta}
-                  onCheckedChange={(value) => handleInputChange("mesta", value)}
-                  placeholder="Mesta"
-                  id="mesto"
-                  key="autocomplete-mesto"
-                  checkedValues={pretragaParameters.mesta || []}
+                <Controller
+                  name="mesta"
+                  control={control}
+                  render={({ field }) => (
+                    <AutocompleteMultiple
+                      data={mesta}
+                      onCheckedChange={field.onChange}
+                      placeholder="Mesta"
+                      id="mesto"
+                      key="autocomplete-mesto"
+                      checkedValues={field.value || []}
+                    />
+                  )}
                 />
               </Grid>
-
               <Grid px={2} size={2}>
-                <NegationCheckbox
-                  key="negate-mesto"
-                  value="negate-mesto"
-                  negationChecked={pretragaParameters.negacije?.includes("negate-mesto") || false}
-                  onNegationChange={handleNegationChange}
+                <Controller
+                  name="negacije"
+                  control={control}
+                  render={({ field }) => (
+                    <NegationCheckbox
+                      key="negate-mesto"
+                      value="negate-mesto"
+                      negationChecked={field.value?.includes("negate-mesto") || false}
+                      onNegationChange={(val) => {
+                        if (field.value?.includes(val)) {
+                          field.onChange(field.value.filter((v: string) => v !== val));
+                        } else {
+                          field.onChange([...(field.value || []), val]);
+                        }
+                      }}
+                    />
+                  )}
                 />
               </Grid>
             </Grid>
             <Grid container alignItems="center">
               <Grid size={10} sx={{ width: "75%" }}>
-                <AutocompleteMultiple
-                  data={sviSeminari}
-                  onCheckedChange={(value) => handleInputChange("seminari", value)}
-                  placeholder="Seminari"
-                  id="seminar"
-                  key="autocomplete-seminar"
-                  checkedValues={pretragaParameters.seminari || []}
-                  getOptionLabel={(option) => {
-                    return `${format(option.datum, "dd.MM.yyyy")} - ${option.naziv}`;
-                  }}
-                  renderTag={(getTagProps, index, option) => {
-                    const { key, ...tagProps } = getTagProps({ index });
-                    return (
-                      <Chip
-                        variant="outlined"
-                        label={`${format(option.datum, "dd.MM.yyyy")} - ${option.naziv}`}
-                        key={key}
-                        {...tagProps}
-                      />
-                    );
-                  }}
+                <Controller
+                  name="seminari"
+                  control={control}
+                  render={({ field }) => (
+                    <AutocompleteMultiple
+                      data={sviSeminari}
+                      onCheckedChange={field.onChange}
+                      placeholder="Seminari"
+                      id="seminar"
+                      key="autocomplete-seminar"
+                      checkedValues={field.value || []}
+                      getOptionLabel={(option) => {
+                        return `${format(option.datum, "dd.MM.yyyy")} - ${option.naziv}`;
+                      }}
+                      renderTag={(getTagProps, index, option) => {
+                        const { key, ...tagProps } = getTagProps({ index });
+                        return (
+                          <Chip
+                            variant="outlined"
+                            label={`${format(option.datum, "dd.MM.yyyy")} - ${option.naziv}`}
+                            key={key}
+                            {...tagProps}
+                          />
+                        );
+                      }}
+                    />
+                  )}
                 />
               </Grid>
-
               <Grid px={2} size={2}>
-                <NegationCheckbox
-                  key="negate-seminar"
-                  value="negate-seminar"
-                  negationChecked={pretragaParameters.negacije?.includes("negate-seminar") || false}
-                  onNegationChange={handleNegationChange}
+                <Controller
+                  name="negacije"
+                  control={control}
+                  render={({ field }) => (
+                    <NegationCheckbox
+                      key="negate-seminar"
+                      value="negate-seminar"
+                      negationChecked={field.value?.includes("negate-seminar") || false}
+                      onNegationChange={(val) => {
+                        if (field.value?.includes(val)) {
+                          field.onChange(field.value.filter((v: string) => v !== val));
+                        } else {
+                          field.onChange([...(field.value || []), val]);
+                        }
+                      }}
+                    />
+                  )}
                 />
               </Grid>
             </Grid>
           </Grid>
         </Grid>
         <Grid size={2}>
-          <CheckboxList
-            data={velicineFirme}
-            subheader="Veličine Firmi"
-            onCheckedChange={(value) => handleInputChange("velicineFirmi", value)}
-            checkedValues={pretragaParameters.velicineFirmi || []}
+          <Controller
+            name="velicineFirmi"
+            control={control}
+            render={({ field }) => (
+              <CheckboxList
+                data={velicineFirme}
+                subheader="Veličine Firmi"
+                checkedValues={field.value || []}
+                onCheckedChange={field.onChange}
+              />
+            )}
           />
         </Grid>
         <Grid size={2}>
-          <CheckboxList
-            data={stanjaFirme}
-            subheader="Stanja Firmi"
-            onCheckedChange={(value) => handleInputChange("stanjaFirme", value)}
-            checkedValues={pretragaParameters.stanjaFirme || []}
+          <Controller
+            name="stanjaFirme"
+            control={control}
+            render={({ field }) => (
+              <CheckboxList
+                data={stanjaFirme}
+                subheader="Stanja Firmi"
+                checkedValues={field.value || []}
+                onCheckedChange={field.onChange}
+              />
+            )}
           />
         </Grid>
       </Grid>
@@ -193,56 +309,84 @@ export default function PretragaParameters({ onSearchSubmit }: { onSearchSubmit:
       </Grid>
 
       <Box
-        component="form"
         sx={{
           "& .MuiTextField-root": { m: 1, width: "25ch" },
         }}
-        noValidate
-        autoComplete="off"
       >
         <Grid mt={4} maxWidth="lg">
-          <TextField
-            label="Ime Firme"
-            value={pretragaParameters.imeFirme}
-            onChange={(e) => handleInputChange("imeFirme", e.target.value)}
+          <Controller
+            name="imeFirme"
+            control={control}
+            render={({ field }) => <TextField label="Ime Firme" {...field} />}
           />
-          <TextField
-            label="PIB"
-            value={pretragaParameters.pib}
-            onChange={(e) => handleInputChange("pib", e.target.value)}
+          <Controller
+            name="pib"
+            control={control}
+            render={({ field }) => <TextField label="PIB" {...field} />}
           />
-          <TextField
-            label="Matični broj"
-            value={pretragaParameters.maticniBroj}
-            onChange={(e) => handleInputChange("maticniBroj", e.target.value)}
+          <Controller
+            name="maticniBroj"
+            control={control}
+            render={({ field }) => <TextField label="Matični broj" {...field} />}
           />
-          <TextField
-            label="E-mail"
-            value={pretragaParameters.email}
-            onChange={(e) => handleInputChange("email", e.target.value)}
+          <Controller
+            name="email"
+            control={control}
+            render={({ field }) => <TextField label="E-mail" {...field} />}
           />
-          <TextField
-            label="JBKJS"
-            value={pretragaParameters.jbkjs}
-            onChange={(e) => handleInputChange("jbkjs", e.target.value)}
+          <Controller
+            name="jbkjs"
+            control={control}
+            render={({ field }) => <TextField label="JBKJS" {...field} />}
           />
-          <TextField
-            label="Komentar"
-            value={pretragaParameters.komentar}
-            onChange={(e) => handleInputChange("komentar", e.target.value)}
+          <Controller
+            name="komentar"
+            control={control}
+            render={({ field }) => <TextField label="Komentar" {...field} />}
           />
-          <TextField
-            label="Ime i prezime zaposlenog"
-            value={pretragaParameters.imePrezime}
-            onChange={(e) => handleInputChange("imePrezime", e.target.value)}
+          <Controller
+            name="imePrezime"
+            control={control}
+            render={({ field }) => <TextField label="Ime i prezime zaposlenog" {...field} />}
           />
-          <TextField
-            label="E-mail zaposlenog"
-            value={pretragaParameters.emailZaposlenog}
-            onChange={(e) => handleInputChange("emailZaposlenog", e.target.value)}
+          <Controller
+            name="emailZaposlenog"
+            control={control}
+            render={({ field }) => <TextField label="E-mail zaposlenog" {...field} />}
           />
         </Grid>
       </Box>
-    </>
+
+      <Box display="flex" justifyContent="space-between" alignItems="center" marginBottom={4}>
+        <Box>
+          <ExportButtons control={control} />
+
+          <Button
+            sx={{ m: 1 }}
+            variant="contained"
+            size="large"
+            color="info"
+            startIcon={<SearchIcon />}
+            type="submit"
+          >
+            Pretrazi
+          </Button>
+        </Box>
+
+        <Box>
+          <Button
+            startIcon={<AddBoxIcon />}
+            href="/Firma"
+            target="_blank"
+            sx={{ m: 1 }}
+            variant="contained"
+            size="large"
+            color="secondary"
+          >
+            Dodaj Firmu
+          </Button>
+        </Box>
+      </Box>
+    </form>
   );
 }

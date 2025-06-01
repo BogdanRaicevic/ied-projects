@@ -35,7 +35,12 @@ export default function PredefinedPretrage() {
     setOpenPretrageSaveDialog(true);
   };
 
-  const { pretragaParameters, setPretragaParameters, resetParameters } = usePretragaStore();
+  const {
+    pretragaParameters,
+    setPretragaParameters,
+    resetParameters,
+    setAppliedParameters: applyParameters,
+  } = usePretragaStore();
 
   const handleSavePretraga = async (nazivPretrage: string, isNew: boolean) => {
     try {
@@ -89,6 +94,7 @@ export default function PredefinedPretrage() {
       emailZaposlenog: option.emailZaposlenog,
     };
     setPretragaParameters(mappedPregrage);
+    applyParameters();
   };
 
   return (
