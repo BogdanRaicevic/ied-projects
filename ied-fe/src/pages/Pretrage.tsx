@@ -17,14 +17,20 @@ if (!PUBLISHABLE_KEY) {
 }
 
 export default function Pretrage() {
-  const { pretragaParameters, appliedParameters, applyParameters, loadFromStorage } =
-    usePretragaStore();
+  const {
+    pretragaParameters,
+    appliedParameters,
+    applyParameters,
+    loadFromStorage,
+    setPaginationParameters,
+  } = usePretragaStore();
 
   useEffect(() => {
     loadFromStorage();
   }, [loadFromStorage]);
 
   const handlePretraziClick = () => {
+    setPaginationParameters({ pageIndex: 0, pageSize: 50 });
     applyParameters();
   };
 
