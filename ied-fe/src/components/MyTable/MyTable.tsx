@@ -21,13 +21,13 @@ export default memo(function MyTable(queryParameters: FirmaQueryParams) {
 
   useEffect(() => {
     const loadData = async () => {
-      const { pageIndex, pageSize } = table.getState().pagination;
+      const { pageIndex, pageSize } = pagination;
       const res = await fetchFirmaPretrage(pageSize, pageIndex, queryParameters);
       setData(res.firmas);
       setDocuments(res.totalDocuments);
     };
     loadData();
-  }, [pagination, documents, queryParameters]);
+  }, [pagination.pageIndex, pagination.pageSize, queryParameters]);
 
   const table = useMaterialReactTable({
     columns: useMemo<MRT_ColumnDef<FirmaType>[]>(() => myCompanyColumns, []),

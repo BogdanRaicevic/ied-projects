@@ -7,6 +7,7 @@ import type { TODO_ANY } from "../../../../ied-be/src/utils/utils";
 import { usePretragaStore } from "../../store/pretragaParameters.store";
 import ZoomInIcon from "@mui/icons-material/ZoomIn";
 import ZoomOutIcon from "@mui/icons-material/ZoomOut";
+import { RestartAltOutlined } from "@mui/icons-material";
 
 export default function PredefinedPretrage() {
   const [pretrage, setPretrage] = useState<TODO_ANY[]>([]);
@@ -34,7 +35,7 @@ export default function PredefinedPretrage() {
     setOpenPretrageSaveDialog(true);
   };
 
-  const { pretragaParameters, setPretragaParameters } = usePretragaStore();
+  const { pretragaParameters, setPretragaParameters, resetParameters } = usePretragaStore();
 
   const handleSavePretraga = async (nazivPretrage: string, isNew: boolean) => {
     try {
@@ -119,6 +120,15 @@ export default function PredefinedPretrage() {
           onClick={handleDeletePretraga}
         >
           Obrisi pretragu
+        </Button>
+        <Button
+          startIcon={<RestartAltOutlined />}
+          variant="contained"
+          size="large"
+          color="info"
+          onClick={resetParameters}
+        >
+          Reset
         </Button>
       </Grid>
     </Grid>

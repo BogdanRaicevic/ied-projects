@@ -4,7 +4,7 @@ import Divider from "@mui/material/Divider";
 import PredefinedPretrage from "../components/PredefinedPretrage/PredefinedPretrage";
 import PretragaParameters from "../components/PretragaParameters/PretragaParameters";
 import ExportDataButton from "../components/SaveDataButton";
-import { useState } from "react";
+import { useEffect } from "react";
 import { usePretragaStore } from "../store/pretragaParameters.store";
 import { Box, Button } from "@mui/material";
 import AddBoxIcon from "@mui/icons-material/AddBox";
@@ -17,12 +17,15 @@ if (!PUBLISHABLE_KEY) {
 }
 
 export default function Pretrage() {
-  const { pretragaParameters } = usePretragaStore();
+  const { pretragaParameters, appliedParameters, applyParameters, loadFromStorage } =
+    usePretragaStore();
 
-  const [appliedParameters, setAppliedParameters] = useState(pretragaParameters);
+  useEffect(() => {
+    loadFromStorage();
+  }, [loadFromStorage]);
 
   const handlePretraziClick = () => {
-    setAppliedParameters(pretragaParameters);
+    applyParameters();
   };
 
   return (

@@ -3,59 +3,52 @@ import { create } from "zustand";
 
 type PretragaStore = {
   pretragaParameters: FirmaQueryParams;
+  appliedParameters: FirmaQueryParams;
   setPretragaParameters: (params: Partial<FirmaQueryParams>) => void;
   toggleNegation: (value: string) => void;
+  applyParameters: () => void;
+  loadFromStorage: () => void;
+  resetParameters: () => void;
 };
 
-export const usePretragaStore = create<PretragaStore>((set) => ({
-  pretragaParameters: {
-    imeFirme: "",
-    pib: "",
-    email: "",
-    velicineFirmi: [],
-    radnaMesta: [],
-    tipoviFirme: [],
-    delatnosti: [],
-    mesta: [],
-    negacije: [],
-    stanjaFirme: [],
-    jbkjs: "",
-    maticniBroj: "",
-    komentar: "",
-    seminari: [],
-    imePrezime: "",
-    emailZaposlenog: "",
-  },
+const STORAGE_KEY = 'appliedPretragaParameters'
+
+const defaultParameters: FirmaQueryParams = {
+  imeFirme: "",
+  pib: "",
+  email: "",
+  velicineFirmi: [],
+  radnaMesta: [],
+  tipoviFirme: [],
+  delatnosti: [],
+  mesta: [],
+  negacije: [],
+  stanjaFirme: [],
+  jbkjs: "",
+  maticniBroj: "",
+  komentar: "",
+  seminari: [],
+  imePrezime: "",
+  emailZaposlenog: "",
+};
+
+export const usePretragaStore = create<PretragaStore>((set, get) => ({
+  pretragaParameters: defaultParameters,
+  appliedParameters: defaultParameters,
   setPretragaParameters: (params) =>
-    set((state) => {
-      const updatedParameters = {
+    set((state) => ({
+      pretragaParameters: {
         ...state.pretragaParameters,
         ...params,
-      };
-
-      // Only update the state if there is an actual change
-      if (JSON.stringify(state.pretragaParameters) !== JSON.stringify(updatedParameters)) {
-        return {
-          pretragaParameters: updatedParameters,
-        };
-      }
-
-      return state;
-    }),
-  // }),
+      },
+    })),
   toggleNegation: (value) =>
     set((state) => {
-      if (!state.pretragaParameters.negacije) {
-        return {
-          pretragaParameters: {
-            ...state.pretragaParameters,
-            negacije: [],
-          },
-        };
-      }
-      const negacije = state.pretragaParameters.negacije.includes(value)
-        ? state.pretragaParameters.negacije.filter((v) => v !== value)
-        : [...state.pretragaParameters.negacije, value];
+
+      const currentNegacije = state.pretragaParameters.negacije || [];
+      const negacije = currentNegacije.includes(value)
+        ? currentNegacije.filter((v) => v !== value)
+        : [...currentNegacije, value];
 
       return {
         pretragaParameters: {
@@ -64,4 +57,26 @@ export const usePretragaStore = create<PretragaStore>((set) => ({
         },
       };
     }),
+  applyParameters: () => {
+    const { pretragaParameters } = get();
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(pretragaParameters));
+    set({ appliedParameters: pretragaParameters });
+  },
+  loadFromStorage: () => {
+    const saved = localStorage.getItem(STORAGE_KEY);
+    if (saved) {
+      const appliedParameters = JSON.parse(saved);
+      set({
+        appliedParameters,
+        pretragaParameters: appliedParameters
+      });
+    }
+  },
+  resetParameters: () => {
+    set({
+      pretragaParameters: defaultParameters,
+      appliedParameters: defaultParameters
+    });
+    localStorage.removeItem(STORAGE_KEY);
+  },
 }));
