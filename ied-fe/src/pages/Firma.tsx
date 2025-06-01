@@ -51,6 +51,8 @@ export default function Firma() {
           setCompany(data);
         }
       } catch (error) {
+        // TODO: show error snackbar or toast
+        setErrorAlert("Greška prilikom učitavanja podataka o firmi.");
         console.error("Error fetching company data:", error);
       }
     };

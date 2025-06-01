@@ -108,6 +108,7 @@ export default memo(function SeminariTable(props: {
       document.body.removeChild(a);
       URL.revokeObjectURL(url);
     } catch (error) {
+      // TODO: show error snackbar or toast
       console.error("Error exporting data:", error);
     }
   };

@@ -45,6 +45,7 @@ export default function PredefinedPretrage() {
       setOpenPretrageSaveDialog(false);
       await fetchPretrage();
     } catch (error) {
+      // TODO: show error snackbar or toast
       console.error("Failed to save pretraga:", error);
     }
   };
@@ -58,9 +59,11 @@ export default function PredefinedPretrage() {
         // Optionally, you can update the state or UI to reflect the deletion
         await fetchPretrage(); // Fetch updated pretrage data
       } catch (error) {
+        // TODO: show error snackbar or toast
         console.error("Failed to delete pretraga:", error);
       }
     } else {
+      // TODO: show error snackbar or toast
       console.error("No option selected for deletion");
     }
   };

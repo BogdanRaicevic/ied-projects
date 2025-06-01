@@ -53,6 +53,7 @@ export default function SeminarForm({
   const [alertSeverity, setAlertSeverity] = React.useState<"success" | "error">("success");
   const [alertMessage, setAlertMessage] = React.useState("");
 
+  // TODO: refactor error handling, show snackbar on error
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
