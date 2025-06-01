@@ -5,29 +5,26 @@ import {
   MaterialReactTable,
   type MRT_ColumnDef,
   useMaterialReactTable,
-  type MRT_PaginationState,
 } from "material-react-table";
 import { fetchFirmaPretrage } from "../../api/firma.api";
 import { FirmaQueryParams } from "@ied-shared/types/firmaQueryParams";
+import { usePretragaStore } from "../../store/pretragaParameters.store";
 
 export default memo(function MyTable(queryParameters: FirmaQueryParams) {
   const [data, setData] = useState<FirmaType[]>([]);
   const [documents, setDocuments] = useState(1000);
 
-  const [pagination, setPagination] = useState<MRT_PaginationState>({
-    pageIndex: 0,
-    pageSize: 50,
-  });
+  const { pagination, setPaginationParameters } = usePretragaStore();
 
   useEffect(() => {
     const loadData = async () => {
-      const { pageIndex, pageSize } = table.getState().pagination;
+      const { pageIndex, pageSize } = pagination;
       const res = await fetchFirmaPretrage(pageSize, pageIndex, queryParameters);
       setData(res.firmas);
       setDocuments(res.totalDocuments);
     };
     loadData();
-  }, [pagination, documents, queryParameters]);
+  }, [pagination.pageIndex, pagination.pageSize, queryParameters]);
 
   const table = useMaterialReactTable({
     columns: useMemo<MRT_ColumnDef<FirmaType>[]>(() => myCompanyColumns, []),
@@ -38,7 +35,14 @@ export default memo(function MyTable(queryParameters: FirmaQueryParams) {
     paginationDisplayMode: "default",
     positionToolbarAlertBanner: "bottom",
     manualPagination: true,
-    onPaginationChange: setPagination,
+    onPaginationChange: (updater) => {
+      if (typeof updater === "function") {
+        const newPagination = updater(pagination);
+        setPaginationParameters(newPagination);
+      } else {
+        setPaginationParameters(updater);
+      }
+    },
     enablePagination: true,
     state: {
       pagination,
