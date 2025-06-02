@@ -6,6 +6,7 @@ import SeminarForm from "../components/Seminari/SeminarForm";
 import { UnfoldLess } from "@mui/icons-material";
 import SeminariTable from "../components/Seminari/SeminariTable";
 import { SeminarQueryParamsZodType } from "@ied-shared/index";
+import { ParametriPretrageSeminara } from "../components/Seminari/ParametriPretrageSeminara";
 
 export default function Seminari() {
   const [queryParameters, setQueryParameters] = useState<SeminarQueryParamsZodType>({
@@ -51,7 +52,7 @@ export default function Seminari() {
   const parametriPretrage = () => (
     <>
       <h1>Parametri Pretrage</h1>
-      <Box>
+      <Box component="form">
         <TextField
           sx={{ m: 1 }}
           id="naziv"
@@ -111,7 +112,9 @@ export default function Seminari() {
 
   return (
     <>
-      {parametriPretrage()}
+      {/* {parametriPretrage()} */}
+
+      <ParametriPretrageSeminara />
 
       <SeminariTable queryParameters={tableInputParameters} updateCounter={seminariUpdateCounter} />
 

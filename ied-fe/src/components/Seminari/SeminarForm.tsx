@@ -66,6 +66,7 @@ export default function SeminarForm({
       setAlertSeverity("success");
       setAlertMessage(seminar?._id ? "Uspešno izmenjen seminar" : "Uspešno kreiran seminar");
       setAlertOpen(true);
+      // TODO: Fix missing snackbar because of dialog unmount
       onDialogClose?.();
       onSuccess?.();
     } catch (_error) {
