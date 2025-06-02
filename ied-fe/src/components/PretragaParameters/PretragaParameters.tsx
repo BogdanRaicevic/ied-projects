@@ -60,6 +60,14 @@ export default function PretragaParameters() {
     setAppliedParameters();
   };
 
+  const toggleNegation = (field: any, val: string) => {
+    if (field.value?.includes(val)) {
+      field.onChange(field.value.filter((v: string) => v !== val));
+    } else {
+      field.onChange([...(field.value || []), val]);
+    }
+  };
+
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <Grid container spacing={2} marginTop={2}>
@@ -91,14 +99,7 @@ export default function PretragaParameters() {
                       key="negate-radno-mesto"
                       value="negate-radno-mesto"
                       negationChecked={field.value?.includes("negate-radno-mesto") || false}
-                      onNegationChange={(val) => {
-                        // Toggle logic for negation
-                        if (field.value?.includes(val)) {
-                          field.onChange(field.value.filter((v: string) => v !== val));
-                        } else {
-                          field.onChange([...(field.value || []), val]);
-                        }
-                      }}
+                      onNegationChange={(val) => toggleNegation(field, val)}
                     />
                   )}
                 />
@@ -130,13 +131,7 @@ export default function PretragaParameters() {
                       key="negate-tip-firme"
                       value="negate-tip-firme"
                       negationChecked={field.value?.includes("negate-tip-firme") || false}
-                      onNegationChange={(val) => {
-                        if (field.value?.includes(val)) {
-                          field.onChange(field.value.filter((v: string) => v !== val));
-                        } else {
-                          field.onChange([...(field.value || []), val]);
-                        }
-                      }}
+                      onNegationChange={(val) => toggleNegation(field, val)}
                     />
                   )}
                 />
@@ -168,13 +163,7 @@ export default function PretragaParameters() {
                       key="negate-delatnost"
                       value="negate-delatnost"
                       negationChecked={field.value?.includes("negate-delatnost") || false}
-                      onNegationChange={(val) => {
-                        if (field.value?.includes(val)) {
-                          field.onChange(field.value.filter((v: string) => v !== val));
-                        } else {
-                          field.onChange([...(field.value || []), val]);
-                        }
-                      }}
+                      onNegationChange={(val) => toggleNegation(field, val)}
                     />
                   )}
                 />
@@ -206,13 +195,7 @@ export default function PretragaParameters() {
                       key="negate-mesto"
                       value="negate-mesto"
                       negationChecked={field.value?.includes("negate-mesto") || false}
-                      onNegationChange={(val) => {
-                        if (field.value?.includes(val)) {
-                          field.onChange(field.value.filter((v: string) => v !== val));
-                        } else {
-                          field.onChange([...(field.value || []), val]);
-                        }
-                      }}
+                      onNegationChange={(val) => toggleNegation(field, val)}
                     />
                   )}
                 />
@@ -258,13 +241,7 @@ export default function PretragaParameters() {
                       key="negate-seminar"
                       value="negate-seminar"
                       negationChecked={field.value?.includes("negate-seminar") || false}
-                      onNegationChange={(val) => {
-                        if (field.value?.includes(val)) {
-                          field.onChange(field.value.filter((v: string) => v !== val));
-                        } else {
-                          field.onChange([...(field.value || []), val]);
-                        }
-                      }}
+                      onNegationChange={(val) => toggleNegation(field, val)}
                     />
                   )}
                 />
