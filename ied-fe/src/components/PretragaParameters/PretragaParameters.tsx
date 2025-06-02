@@ -19,7 +19,7 @@ export default function PretragaParameters() {
   const {
     setPretragaParameters,
     setPaginationParameters,
-    setAppliedParameters: applyParameters,
+    setAppliedParameters,
     appliedParameters,
     loadFromStorage,
   } = usePretragaStore();
@@ -57,7 +57,7 @@ export default function PretragaParameters() {
   const onSubmit = (data: FirmaQueryParams) => {
     setPretragaParameters(data);
     setPaginationParameters({ pageIndex: 0, pageSize: 50 });
-    applyParameters();
+    setAppliedParameters();
   };
 
   return (
