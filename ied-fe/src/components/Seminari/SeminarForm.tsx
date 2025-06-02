@@ -63,7 +63,6 @@ export default function SeminarForm({
       // Include _id if it's an existing seminar being edited
       const payload = seminar?._id ? { ...data, _id: seminar._id } : data;
       await saveSeminar(payload);
-
       setAlertSeverity("success");
       setAlertMessage(seminar?._id ? "Uspešno izmenjen seminar" : "Uspešno kreiran seminar");
       setAlertOpen(true);
@@ -209,7 +208,12 @@ export default function SeminarForm({
         <Button sx={{ m: 1 }} size="large" variant="contained" color="primary" type="submit">
           {seminar?._id ? "Izmeni" : "Kreiraj"} seminar
         </Button>
-        <Snackbar open={alertOpen} autoHideDuration={6000} onClose={() => setAlertOpen(false)}>
+        <Snackbar
+          anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+          open={alertOpen}
+          autoHideDuration={6000}
+          onClose={() => setAlertOpen(false)}
+        >
           <Alert severity={alertSeverity} onClose={() => setAlertOpen(false)}>
             {alertMessage}
           </Alert>
