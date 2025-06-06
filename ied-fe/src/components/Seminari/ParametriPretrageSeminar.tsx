@@ -49,8 +49,8 @@ export function ParametriPretrageSeminar({
               id="predavac"
               label="Predavac"
               variant="outlined"
-              error={!!errors.naziv}
-              helperText={errors.naziv?.message}
+              error={!!errors.predavac}
+              helperText={errors.predavac?.message}
             />
           )}
         />
@@ -65,8 +65,8 @@ export function ParametriPretrageSeminar({
               id="lokacija"
               label="Lokacija"
               variant="outlined"
-              error={!!errors.naziv}
-              helperText={errors.naziv?.message}
+              error={!!errors.lokacija}
+              helperText={errors.lokacija?.message}
             />
           )}
         />
