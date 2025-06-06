@@ -1,20 +1,12 @@
-import { Box, Button, FormControl, TextField } from "@mui/material";
-import { DatePicker } from "@mui/x-date-pickers";
 import { useState } from "react";
-import { addMonths, subMonths } from "date-fns";
 import SeminarForm from "../components/Seminari/SeminarForm";
-import { UnfoldLess } from "@mui/icons-material";
 import SeminariTable from "../components/Seminari/SeminariTable";
 import { SeminarQueryParamsZodType } from "@ied-shared/index";
+import { ParametriPretrageSeminar } from "../components/Seminari/ParametriPretrageSeminar";
+import { addMonths, subMonths } from "date-fns";
 
 export default function Seminari() {
-  const [queryParameters, setQueryParameters] = useState<SeminarQueryParamsZodType>({
-    naziv: "",
-    predavac: "",
-    lokacija: "",
-    datumOd: subMonths(new Date(), 3),
-    datumDo: addMonths(new Date(), 3),
-  });
+  const [seminariUpdateCounter, setSeminarUpdateCounter] = useState(0);
   const [tableInputParameters, setTableInputParameters] = useState<SeminarQueryParamsZodType>({
     naziv: "",
     predavac: "",
@@ -23,95 +15,17 @@ export default function Seminari() {
     datumDo: addMonths(new Date(), 3),
   });
 
-  const [seminariUpdateCounter, setSeminarUpdateCounter] = useState(0);
   const handleSeminarUpdate = () => {
     setSeminarUpdateCounter((prev) => prev + 1);
   };
-  const handlePretraziSeminare = () => {
-    setTableInputParameters(queryParameters);
+
+  const handlePretraziSeminare = (values: SeminarQueryParamsZodType) => {
+    setTableInputParameters(values);
   };
-
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { id, value } = e.target;
-    setQueryParameters((prev) => ({
-      ...prev,
-      [id]: value,
-    }));
-  };
-
-  const handleDateChange = (filedName: string, date: Date | null) => {
-    setQueryParameters((prev) => ({
-      ...prev,
-      [filedName]: date || new Date(),
-    }));
-
-    console.log("queryParameters", queryParameters);
-  };
-
-  const parametriPretrage = () => (
-    <>
-      <h1>Parametri Pretrage</h1>
-      <Box>
-        <TextField
-          sx={{ m: 1 }}
-          id="naziv"
-          label="Naziv seminara"
-          variant="outlined"
-          defaultValue={queryParameters.naziv}
-          onChange={handleInputChange}
-        />
-        <TextField
-          sx={{ m: 1 }}
-          id="predavac"
-          label="Predavac"
-          variant="outlined"
-          defaultValue={queryParameters.predavac}
-          onChange={handleInputChange}
-        />
-        <TextField
-          sx={{ m: 1 }}
-          id="lokacija"
-          label="Lokacija"
-          variant="outlined"
-          defaultValue={queryParameters.lokacija}
-          onChange={handleInputChange}
-        />
-        <FormControl sx={{ m: 1 }}>
-          <DatePicker
-            format="yyyy/MM/dd"
-            label="Početni datum"
-            name="datumOd"
-            defaultValue={queryParameters.datumOd}
-            onChange={(date) => handleDateChange("datumOd", date)}
-          />
-          <Box display="flex" alignItems="center" justifyContent="center">
-            <UnfoldLess />
-          </Box>
-          <DatePicker
-            format="yyyy/MM/dd"
-            label="Kranji datum"
-            name="datumDo"
-            defaultValue={queryParameters.datumDo}
-            onChange={(date) => handleDateChange("datumDo", date)}
-          />
-        </FormControl>
-        <Button
-          onClick={handlePretraziSeminare}
-          sx={{ m: 1 }}
-          size="large"
-          variant="contained"
-          color="info"
-          type="submit"
-        >
-          Pretrazi
-        </Button>
-      </Box>
-    </>
-  );
 
   return (
     <>
-      {parametriPretrage()}
+      <ParametriPretrageSeminar onSubmit={handlePretraziSeminare} />
 
       <SeminariTable queryParameters={tableInputParameters} updateCounter={seminariUpdateCounter} />
 
