@@ -124,7 +124,7 @@ importers:
         specifier: ^7.1.0
         version: 7.1.0(@emotion/react@11.14.0(@types/react@19.1.6)(react@19.1.0))(@emotion/styled@11.14.0(@emotion/react@11.14.0(@types/react@19.1.6)(react@19.1.0))(@types/react@19.1.6)(react@19.1.0))(@types/react@19.1.6)(react@19.1.0)
       '@mui/x-date-pickers':
-        specifier: ^8.0.0
+        specifier: ^8.5.0
         version: 8.5.0(@emotion/react@11.14.0(@types/react@19.1.6)(react@19.1.0))(@emotion/styled@11.14.0(@emotion/react@11.14.0(@types/react@19.1.6)(react@19.1.0))(@types/react@19.1.6)(react@19.1.0))(@mui/material@7.1.0(@emotion/react@11.14.0(@types/react@19.1.6)(react@19.1.0))(@emotion/styled@11.14.0(@emotion/react@11.14.0(@types/react@19.1.6)(react@19.1.0))(@types/react@19.1.6)(react@19.1.0))(@types/react@19.1.6)(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(@mui/system@7.1.0(@emotion/react@11.14.0(@types/react@19.1.6)(react@19.1.0))(@emotion/styled@11.14.0(@emotion/react@11.14.0(@types/react@19.1.6)(react@19.1.0))(@types/react@19.1.6)(react@19.1.0))(@types/react@19.1.6)(react@19.1.0))(@types/react@19.1.6)(date-fns@4.1.0)(luxon@3.6.1)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       '@tanstack/react-query':
         specifier: ^5.79.0
