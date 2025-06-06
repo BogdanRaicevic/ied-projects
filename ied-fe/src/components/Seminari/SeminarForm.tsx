@@ -132,6 +132,7 @@ export default function SeminarForm({
           control={control}
           render={({ field }) => (
             <TextField
+              {...field}
               label="Offline cena"
               id="offlineCena"
               name="offlineCena"
@@ -153,6 +154,7 @@ export default function SeminarForm({
           control={control}
           render={({ field }) => (
             <TextField
+              {...field}
               label="Online cena"
               id="onlineCena"
               name="onlineCena"
