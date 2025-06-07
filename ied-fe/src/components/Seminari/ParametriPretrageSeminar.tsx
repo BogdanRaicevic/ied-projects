@@ -47,7 +47,7 @@ export function ParametriPretrageSeminar({
               {...field}
               sx={{ m: 1 }}
               id="predavac"
-              label="Predavac"
+              label="Predavač"
               variant="outlined"
               error={!!errors.predavac}
               helperText={errors.predavac?.message}
@@ -104,6 +104,7 @@ export function ParametriPretrageSeminar({
             )}
           />
         </FormControl>
+
         <Button sx={{ m: 1 }} size="large" variant="contained" color="info" type="submit">
           Pretrazi
         </Button>
