@@ -1,23 +1,35 @@
-import { IzdavacRacuna, PretrageRacunaZodType, TipRacuna } from "@ied-shared/index";
+import { zodResolver } from "@hookform/resolvers/zod";
+import {
+  IzdavacRacuna,
+  PretrageRacunaSchma,
+  PretrageRacunaZodType,
+  TipRacuna,
+} from "@ied-shared/index";
 import { Button, Chip, InputLabel, MenuItem, Select, TextField, Box } from "@mui/material";
 import { blue, green, grey, purple, red } from "@mui/material/colors";
 import { DatePicker } from "@mui/x-date-pickers";
 import { subMonths } from "date-fns";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
+import { Controller, useForm } from "react-hook-form";
 
 interface ParametriPretrageRacunaProps {
   onSearch: (filters: PretrageRacunaZodType) => void;
 }
 
 export const ParametriPretrageRacuna = ({ onSearch }: ParametriPretrageRacunaProps) => {
-  const [pozivNaBroj, setPozivNaBroj] = useState<number>();
-  const [datumOd, setDatumOd] = useState<Date | null>(subMonths(new Date(), 3));
-  const [datumDo, setDatumDo] = useState<Date | null>(new Date());
-  const [selectedIzdavac, setSelectedIzdavac] = useState<IzdavacRacuna[]>([]);
-  const [selectedTipRacuna, setSelectedTipRacuna] = useState<TipRacuna[]>([]);
-  const [imeFirme, setImeFirme] = useState<string>("");
-  const [pibFirme, setPibFirme] = useState<number>();
-  const [nazivSeminara, setNazivSeminara] = useState<string>("");
+  const { control, handleSubmit } = useForm({
+    defaultValues: {
+      pozivNaBroj: undefined,
+      tipRacuna: [],
+      datumOd: subMonths(new Date(), 3),
+      datumDo: new Date(),
+      izdavacRacuna: [],
+      nazivSeminara: "",
+      imeFirme: "",
+      pibFirme: undefined,
+    },
+    resolver: zodResolver(PretrageRacunaSchma),
+  });
 
   const tipRacunaChips: Record<string, { label: string; color: string }> = {
     avansniRacun: { label: "Avans", color: green[200] },
@@ -32,18 +44,7 @@ export const ParametriPretrageRacuna = ({ onSearch }: ParametriPretrageRacunaPro
     permanent: { label: "Permanent", color: purple[500] },
   };
 
-  const handlePretraziClick = () => {
-    const filters: PretrageRacunaZodType = {
-      pozivNaBroj: pozivNaBroj || undefined,
-      datumOd: datumOd || undefined,
-      datumDo: datumDo || undefined,
-      izdavacRacuna: selectedIzdavac || undefined,
-      tipRacuna: selectedTipRacuna || undefined,
-      imeFirme: imeFirme || undefined,
-      pibFirme: pibFirme || undefined,
-      nazivSeminara: nazivSeminara || undefined,
-    };
-
+  const handlePretraziClick = (filters: PretrageRacunaZodType) => {
     onSearch(filters);
   };
 
@@ -52,7 +53,7 @@ export const ParametriPretrageRacuna = ({ onSearch }: ParametriPretrageRacunaPro
       if (event.key === "Enter") {
         // Prevent default form submission if this component is part of a <form>
         // event.preventDefault();
-        handlePretraziClick();
+        handleSubmit(handlePretraziClick)();
       }
     };
 
@@ -67,129 +68,184 @@ export const ParametriPretrageRacuna = ({ onSearch }: ParametriPretrageRacunaPro
 
   return (
     <>
-      <Box sx={{ display: "grid", gridTemplateColumns: "repeat(4, minmax(0,1fr))", gap: 2 }}>
-        <TextField
-          label="Poziv na Broj"
-          placeholder="Poziv na Broj"
-          value={pozivNaBroj === undefined ? "" : pozivNaBroj} // Display empty string when undefined
-          type="number"
-          onChange={(e) => {
-            const value = e.target.value;
-            // If empty, set to undefined, otherwise convert to number
-            setPozivNaBroj(value === "" ? undefined : Number(value));
-          }}
-        />
-        <Select
-          displayEmpty
-          multiple
-          value={selectedTipRacuna}
-          onChange={(e) => setSelectedTipRacuna(e.target.value as TipRacuna[])}
-          renderValue={(selected) => {
-            if ((selected as string[]).length === 0) {
-              return <InputLabel>Tip Računa</InputLabel>;
-            }
-
-            return (
-              <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
-                {(selected as string[]).map((val) => {
-                  const cfg = tipRacunaChips[val];
-                  return (
-                    <Chip
-                      key={val}
-                      label={cfg?.label ?? val}
-                      size="small"
-                      sx={{ bgcolor: cfg?.color, color: "#fff" }}
-                    />
-                  );
-                })}
-              </Box>
-            );
-          }}
-        >
-          {Object.entries(tipRacunaChips).map(([value, cfg]) => (
-            <MenuItem key={value} value={value}>
-              <Chip label={cfg.label} size="small" sx={{ bgcolor: cfg.color, color: "#fff" }} />
-            </MenuItem>
-          ))}
-        </Select>
-        <DatePicker
-          label="Datum od"
-          format="yyyy.MM.dd"
-          value={datumOd}
-          onChange={(e) => setDatumOd(e)}
-        />
-        <DatePicker
-          label="Datum do"
-          format="yyyy.MM.dd"
-          value={datumDo}
-          disableFuture
-          onChange={(e) => setDatumDo(e)}
-        />
-        <Select
-          displayEmpty
-          multiple
-          value={selectedIzdavac}
-          onChange={(e) => setSelectedIzdavac(e.target.value as IzdavacRacuna[])}
-          renderValue={(selected) => {
-            if ((selected as string[]).length === 0) {
-              return <InputLabel>Izdavač računa</InputLabel>;
-            }
-
-            return (
-              <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
-                {(selected as string[]).map((val) => {
-                  const cfg = izdavacRacunaChips[val];
-                  return (
-                    <Chip
-                      key={val}
-                      label={cfg?.label ?? val}
-                      size="small"
-                      sx={{ bgcolor: cfg?.color, color: "#fff" }}
-                    />
-                  );
-                })}
-              </Box>
-            );
-          }}
-        >
-          {Object.entries(izdavacRacunaChips).map(([value, cfg]) => (
-            <MenuItem key={value} value={value}>
-              <Chip label={cfg.label} size="small" sx={{ bgcolor: cfg.color, color: "#fff" }} />
-            </MenuItem>
-          ))}
-        </Select>
-        <TextField
-          label="Naziv Seminara"
-          placeholder="nazivSeminara"
-          value={nazivSeminara}
-          onChange={(e) => setNazivSeminara(e.target.value)}
-        />
-        <TextField
-          placeholder="Ime Firme"
-          label="Ime Firme"
-          value={imeFirme}
-          onChange={(e) => setImeFirme(e.target.value)}
-        />
-        <TextField
-          placeholder="PIB Firme"
-          label="PIB Firme"
-          value={pibFirme === undefined ? "" : pibFirme} // Display empty string when undefined
-          type="number"
-          onChange={(e) => {
-            const value = e.target.value;
-            // If empty, set to undefined, otherwise convert to number
-            setPibFirme(value === "" ? undefined : Number(value));
-          }}
-        />
-      </Box>
-      <Button
-        variant="contained"
-        color="primary"
-        sx={{ marginTop: 2, marginBottom: 2 }}
-        onClick={handlePretraziClick}
+      <Box
+        component="form"
+        onSubmit={handleSubmit(handlePretraziClick)}
+        sx={{ display: "grid", gridTemplateColumns: "repeat(4, minmax(0,1fr))", gap: 2 }}
       >
-        Pretraži
-      </Button>
+        <Controller
+          name="pozivNaBroj"
+          control={control}
+          render={({ field }) => (
+            <TextField
+              {...field}
+              label="Poziv na Broj"
+              placeholder="Poziv na Broj"
+              type="number"
+              onChange={(e) => {
+                const value = e.target.value;
+                // If empty, set to undefined, otherwise convert to number
+                field.onChange(value === "" ? undefined : Number(value));
+              }}
+            />
+          )}
+        />
+
+        <Controller
+          name="tipRacuna"
+          control={control}
+          render={({ field }) => (
+            <Select
+              {...field}
+              displayEmpty
+              multiple
+              onChange={(e) => field.onChange(e.target.value as TipRacuna[])}
+              renderValue={(selected = []) => {
+                if ((selected as string[]).length === 0) {
+                  return <InputLabel>Tip Računa</InputLabel>;
+                }
+
+                return (
+                  <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
+                    {(selected as string[]).map((val) => {
+                      const cfg = tipRacunaChips[val];
+                      return (
+                        <Chip
+                          key={val}
+                          label={cfg?.label ?? val}
+                          size="small"
+                          sx={{ bgcolor: cfg?.color, color: "#fff" }}
+                        />
+                      );
+                    })}
+                  </Box>
+                );
+              }}
+            >
+              {Object.entries(tipRacunaChips).map(([value, cfg]) => (
+                <MenuItem key={value} value={value}>
+                  <Chip label={cfg.label} size="small" sx={{ bgcolor: cfg.color, color: "#fff" }} />
+                </MenuItem>
+              ))}
+            </Select>
+          )}
+        />
+        <Controller
+          name="datumOd"
+          control={control}
+          render={({ field }) => (
+            <DatePicker
+              label="Datum od"
+              format="yyyy.MM.dd"
+              value={field.value}
+              disableFuture
+              onChange={(e) => field.onChange(e)}
+            />
+          )}
+        />
+        <Controller
+          name="datumDo"
+          control={control}
+          render={({ field }) => (
+            <DatePicker
+              label="Datum do"
+              format="yyyy.MM.dd"
+              value={field.value}
+              disableFuture
+              onChange={(e) => field.onChange(e)}
+            />
+          )}
+        />
+
+        <Controller
+          name="izdavacRacuna"
+          control={control}
+          render={({ field }) => (
+            <Select
+              {...field}
+              displayEmpty
+              multiple
+              onChange={(e) => field.onChange(e.target.value as IzdavacRacuna[])}
+              renderValue={(selected = []) => {
+                if ((selected as string[]).length === 0) {
+                  return <InputLabel>Izdavač računa</InputLabel>;
+                }
+
+                return (
+                  <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
+                    {(selected as string[]).map((val) => {
+                      const cfg = izdavacRacunaChips[val];
+                      return (
+                        <Chip
+                          key={val}
+                          label={cfg?.label ?? val}
+                          size="small"
+                          sx={{ bgcolor: cfg?.color, color: "#fff" }}
+                        />
+                      );
+                    })}
+                  </Box>
+                );
+              }}
+            >
+              {Object.entries(izdavacRacunaChips).map(([value, cfg]) => (
+                <MenuItem key={value} value={value}>
+                  <Chip label={cfg.label} size="small" sx={{ bgcolor: cfg.color, color: "#fff" }} />
+                </MenuItem>
+              ))}
+            </Select>
+          )}
+        />
+        <Controller
+          name="nazivSeminara"
+          control={control}
+          render={({ field }) => (
+            <TextField
+              {...field}
+              label="Naziv Seminara"
+              placeholder="Naziv Seminara"
+              onChange={(e) => {
+                field.onChange(e.target.value);
+              }}
+            />
+          )}
+        />
+
+        <Controller
+          name="imeFirme"
+          control={control}
+          render={({ field }) => (
+            <TextField
+              {...field}
+              label="Ime Firme"
+              placeholder="Ime Firme"
+              onChange={(e) => {
+                field.onChange(e.target.value);
+              }}
+            />
+          )}
+        />
+
+        <Controller
+          name="pibFirme"
+          control={control}
+          render={({ field }) => (
+            <TextField
+              {...field}
+              placeholder="PIB Firme"
+              label="PIB Firme"
+              type="number"
+              onChange={(e) => {
+                const value = e.target.value;
+                field.onChange(value === "" ? undefined : Number(value));
+              }}
+            />
+          )}
+        />
+        <Button variant="contained" color="primary" sx={{ marginBottom: 2 }} type="submit">
+          Pretraži
+        </Button>
+      </Box>
     </>
   );
 };
