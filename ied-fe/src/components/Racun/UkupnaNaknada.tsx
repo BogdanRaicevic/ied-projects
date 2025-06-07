@@ -57,7 +57,6 @@ export const UkupnaNaknada = () => {
           <TextField
             placeholder="Iznos uplaćen na račun"
             label="Iznos uplaćen na račun"
-            type="number"
             name="placeno"
             variant="filled"
             value={racunData.calculations.placeno || 0}
