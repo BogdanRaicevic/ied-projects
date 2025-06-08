@@ -64,7 +64,7 @@ export const ParametriPretrageRacuna = ({ onSearch }: ParametriPretrageRacunaPro
     return () => {
       document.removeEventListener("keydown", handleKeyPress);
     };
-  }, [handlePretraziClick]); // Re-run effect if handlePretraziClick changes (though it's stable here)
+  }, [handleSubmit]);
 
   return (
     <>
@@ -77,17 +77,7 @@ export const ParametriPretrageRacuna = ({ onSearch }: ParametriPretrageRacunaPro
           name="pozivNaBroj"
           control={control}
           render={({ field }) => (
-            <TextField
-              {...field}
-              label="Poziv na Broj"
-              placeholder="Poziv na Broj"
-              type="number"
-              onChange={(e) => {
-                const value = e.target.value;
-                // If empty, set to undefined, otherwise convert to number
-                field.onChange(value === "" ? undefined : Number(value));
-              }}
-            />
+            <TextField {...field} label="Poziv na Broj" placeholder="Poziv na Broj" />
           )}
         />
 
@@ -200,47 +190,20 @@ export const ParametriPretrageRacuna = ({ onSearch }: ParametriPretrageRacunaPro
           name="nazivSeminara"
           control={control}
           render={({ field }) => (
-            <TextField
-              {...field}
-              label="Naziv Seminara"
-              placeholder="Naziv Seminara"
-              onChange={(e) => {
-                field.onChange(e.target.value);
-              }}
-            />
+            <TextField {...field} label="Naziv Seminara" placeholder="Naziv Seminara" />
           )}
         />
 
         <Controller
           name="imeFirme"
           control={control}
-          render={({ field }) => (
-            <TextField
-              {...field}
-              label="Ime Firme"
-              placeholder="Ime Firme"
-              onChange={(e) => {
-                field.onChange(e.target.value);
-              }}
-            />
-          )}
+          render={({ field }) => <TextField {...field} label="Ime Firme" placeholder="Ime Firme" />}
         />
 
         <Controller
           name="pibFirme"
           control={control}
-          render={({ field }) => (
-            <TextField
-              {...field}
-              placeholder="PIB Firme"
-              label="PIB Firme"
-              type="number"
-              onChange={(e) => {
-                const value = e.target.value;
-                field.onChange(value === "" ? undefined : Number(value));
-              }}
-            />
-          )}
+          render={({ field }) => <TextField {...field} placeholder="PIB Firme" label="PIB Firme" />}
         />
         <Button variant="contained" color="primary" sx={{ marginBottom: 2 }} type="submit">
           Pretraži
