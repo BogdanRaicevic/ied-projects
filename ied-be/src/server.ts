@@ -18,9 +18,10 @@ import { errorWrapper } from "./middleware/errorWrapper";
 import { clerkMiddleware, requireAuth } from "@clerk/express";
 import { hasPermission } from "./middleware/hasPermission";
 import "./database/cron";
+import { RacunBaseModel } from "./models/racun.model"; // import to sync indexes
 
 const app = express();
-const allowedOrigins = env.fe.allowedPorts.map(port => `${env.fe.appUrl}:${port}`);
+const allowedOrigins = env.fe.allowedPorts.map((port) => `${env.fe.appUrl}:${port}`);
 console.log("Allowed Origins:", allowedOrigins);
 app.use(
   cors({
@@ -58,6 +59,9 @@ app.use(errorWrapper);
 async function initServer() {
   try {
     await connectDB();
+    // TODO: right now this won't hurt performance, but in the future we might want to remove this
+    // Sync Mongoose indexes (drops old and creates schema-defined ones)
+    await RacunBaseModel.syncIndexes();
     app.listen({ port: Number(env.be.appPort) });
   } catch (error) {
     console.error("Error starting server:", error);

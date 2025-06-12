@@ -97,7 +97,9 @@ export default memo(function SeminariTable(props: {
     csvData: string
   ) => {
     try {
-      const blob = new Blob([csvData], { type: "text/csv" });
+      // Prepend BOM for Excel to recognize UTF-8 encoding of special Serbian characters
+      const bom = "\uFEFF";
+      const blob = new Blob([bom + csvData], { type: "text/csv;charset=utf-8;" });
       const url = URL.createObjectURL(blob);
 
       const a = document.createElement("a");
