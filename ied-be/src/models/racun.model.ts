@@ -14,7 +14,7 @@ const racunBaseSchema = new Schema(
       type: String,
       enum: ["predracun", "racun", "avansniRacun", "konacniRacun"],
       required: true,
-      imutable: true,
+      immutable: true,
     },
     tekuciRacun: {
       type: String,
