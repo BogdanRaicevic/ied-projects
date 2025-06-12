@@ -78,7 +78,7 @@ export const searchRacuni = async (
 
     const [totalDocuments, racuni] = await Promise.all([
       RacunBaseModel.countDocuments(mongoQuery),
-      RacunBaseModel.find(mongoQuery).sort({ pozivNaBroj: -1 }).skip(skip).limit(pageSize).lean(),
+      RacunBaseModel.find(mongoQuery).sort({ dateCreatedAt: -1 }).skip(skip).limit(pageSize).lean(),
     ]);
 
     const totalPages = Math.ceil(totalDocuments / pageSize);

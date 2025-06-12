@@ -53,7 +53,7 @@ const racunBaseSchema = new Schema(
 );
 
 // --- COMPOUND UNIQUE INDEX ---
-racunBaseSchema.index({ izdavacRacuna: 1, pozivNaBroj: 1 }, { unique: true });
+racunBaseSchema.index({ izdavacRacuna: 1, tipRacuna: 1, pozivNaBroj: 1 }, { unique: true });
 
 // --- PRE-SAVE HOOK FOR pozivNaBroj ---
 racunBaseSchema.pre("save", async function (next) {
