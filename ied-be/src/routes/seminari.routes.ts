@@ -2,7 +2,7 @@ import { Router, type Request, type Response, type NextFunction } from "express"
 import {
   deletePrijava,
   deleteSeminar,
-  getSeminarById,
+  findById,
   getAllSeminars,
   savePrijava,
   saveSeminar,
@@ -89,7 +89,7 @@ router.get("/all-seminars", async (_req: Request, res: Response, next: NextFunct
 
 router.get("/:id", async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const seminar = await getSeminarById(req.params.id);
+    const seminar = await findById(req.params.id);
     res.status(200).json(seminar);
   } catch (error) {
     next(error);

@@ -5,9 +5,10 @@ import {
   RacunZod,
   TipRacuna,
 } from "@ied-shared/index";
-import { RacunBaseModel } from "../models/racun.model";
+import { AllRacuni, RacunBaseModel } from "../models/racun.model";
 import { createRacunQuery } from "../utils/racuniQueryBuilder";
 import { isEqual } from "es-toolkit";
+import { BaseService } from "./base";
 
 export const saveRacun = async (racun: RacunZod) => {
   const DiscriminatorModel = RacunBaseModel.discriminators?.[racun.tipRacuna];
@@ -28,11 +29,11 @@ export const saveRacun = async (racun: RacunZod) => {
   }
 };
 
-export const getRacunById = async (id: string) => {
+export const getRacunById = async (id: string): Promise<AllRacuni | null> => {
   try {
-    const racun = await RacunBaseModel.findById(id).lean();
+    const racun = await RacunBaseModel.findById(id).lean<AllRacuni>();
     if (!racun) {
-      throw new Error(`Racun with ID ${id} not found.`);
+      return null;
     }
     return racun;
   } catch (error) {
@@ -163,18 +164,18 @@ const calculateRacunFields = (racun: RacunZod) => {
       tipRacuna === TipRacuna.KONACNI_RACUN
         ? roundToTwoDecimals(onlineUkupnaNaknada + offlineUkupnaNaknada - avans)
         : roundToTwoDecimals(
-            onlineUkupnaNaknada +
-              offlineUkupnaNaknada -
-              (tipRacuna === TipRacuna.RACUN ? placeno : 0)
-          ),
+          onlineUkupnaNaknada +
+          offlineUkupnaNaknada -
+          (tipRacuna === TipRacuna.RACUN ? placeno : 0)
+        ),
     ukupanPdv:
       tipRacuna === TipRacuna.AVANSNI_RACUN
         ? roundToTwoDecimals(avansPdv)
         : roundToTwoDecimals(
-            (offlinePoreskaOsnovica * stopaPdv) / 100 +
-              (onlinePoreskaOsnovica * stopaPdv) / 100 -
-              (tipRacuna === TipRacuna.KONACNI_RACUN ? avansPdv : 0)
-          ),
+          (offlinePoreskaOsnovica * stopaPdv) / 100 +
+          (onlinePoreskaOsnovica * stopaPdv) / 100 -
+          (tipRacuna === TipRacuna.KONACNI_RACUN ? avansPdv : 0)
+        ),
     avansPdv: roundToTwoDecimals(avansPdv),
     avans: roundToTwoDecimals(avans),
     avansBezPdv: roundToTwoDecimals(avansBezPdv),
@@ -189,4 +190,8 @@ const calculateRacunFields = (racun: RacunZod) => {
 
 const roundToTwoDecimals = (num: number): number => {
   return Math.round((num + Number.EPSILON) * 100) / 100;
+};
+
+export const racuniService: BaseService<AllRacuni> = {
+  findById: getRacunById
 };

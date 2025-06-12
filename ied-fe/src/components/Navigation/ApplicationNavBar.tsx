@@ -11,6 +11,7 @@ export default function ApplicationNavBar() {
     { text: "Pretrage", linkPath: "/pretrage" },
     { text: "Seminari", linkPath: "/seminari" },
     { text: "Računi", linkPath: "/racuni" },
+    { text: "Audit", linkPath: "/audit" },
   ];
 
   return (
@@ -29,7 +30,7 @@ export default function ApplicationNavBar() {
               </Link>
             ))}
           </Box>
-          <Link component={RouteLink} to={"/prijava"} sx={{ color: "white" }}>
+          <Link component={RouteLink} to={"/pretrage"} sx={{ color: "white" }}>
             <SignedOut>
               <SignInButton />
             </SignedOut>

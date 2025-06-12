@@ -1,7 +1,7 @@
 import Container from "@mui/material/Container";
 import { Navigate, Route, Routes } from "react-router-dom";
 import Navigation from "./components/Navigation";
-import { Pretrage, Zaposleni, Seminari, Racuni } from "./pages";
+import { Pretrage, Zaposleni, Seminari, Racuni, Audit } from "./pages";
 import Firma from "./pages/Firma";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { RedirectToSignIn, SignedIn, SignedOut } from "@clerk/clerk-react";
@@ -54,6 +54,7 @@ function App() {
               </SignedIn>
             }
           />
+          <Route path="/audit" element={<Audit />} />
         </Routes>
       </Container>
     </QueryClientProvider>

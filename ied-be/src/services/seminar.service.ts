@@ -9,6 +9,7 @@ import type {
 import { ErrorWithCause } from "../utils/customErrors";
 import { validateMongoId } from "../utils/utils";
 import { Firma } from "../models/firma.model";
+import { BaseService } from "./base";
 
 export const saveSeminar = async (seminarData: SeminarZodType): Promise<SeminarType> => {
   if (seminarData._id) {
@@ -53,15 +54,10 @@ export const searchSeminars = async (
   };
 };
 
-export const getSeminarById = async (id: string) => {
+export const findById = async (id: string): Promise<SeminarType | null> => {
   validateMongoId(id);
 
-  const seminar = await Seminar.findById(id);
-  if (!seminar) {
-    throw new Error("Seminar not found");
-  }
-
-  return seminar;
+  return await Seminar.findById(id).lean<SeminarType>().exec();
 };
 
 export const getAllSeminars = async () => {
@@ -142,3 +138,7 @@ const transformPrijavaToDb = (prijava: PrijavaZodType): PrijavaType => {
     _id: prijava._id ? new Types.ObjectId(prijava._id) : undefined,
   } as PrijavaType;
 };
+
+export const seminarService: BaseService<SeminarType> = {
+  findById
+}

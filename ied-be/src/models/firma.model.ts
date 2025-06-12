@@ -48,13 +48,13 @@ const firmaSchema = new Schema<FirmaType>({
   provereno: Number,
   RB: Number,
   stanje_firme: String,
-  created_at: { type: Date, default: Date.now },
-  updated_at: { type: Date, default: Date.now },
   created_by: { type: Number, default: null },
   updated_by: Number,
   zaposleni: [zaposleniSchema],
   jbkjs: String,
   maticni_broj: String,
+}, {
+  timestamps: { createdAt: "created_at", updatedAt: "updated_at" },
 });
 
 firmaSchema.pre("save", function (next) {

@@ -3,10 +3,12 @@ import { type FirmaType, Firma } from "../models/firma.model";
 import { createFirmaQuery } from "../utils/firmaQueryBuilder";
 import { FirmaQueryParams } from "@ied-shared/types/firma.zod";
 import { getZaposleniIdsFromSeminars } from "./seminar.service";
-import { ExportFirma, ExportZaposlenih } from "@ied-shared/index";
+import { ExportFirma, ExportZaposlenih } from "@ied-shared/types/firma.zod";
+import { BaseService } from "./base";
+
 export const findById = async (id: string): Promise<FirmaType | null> => {
   try {
-    return await Firma.findById(id);
+    return await Firma.findById(id).lean<FirmaType>();
   } catch (error) {
     console.log("Error finding firma by od firma id:", error);
     throw new Error("Error finding firma by od firma id");
@@ -165,3 +167,7 @@ export const exportSearchedZaposleniData = async (
     });
   });
 };
+
+export const firmaService: BaseService<FirmaType> = {
+  findById,
+}

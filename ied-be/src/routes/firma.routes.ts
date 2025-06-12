@@ -7,9 +7,11 @@ import {
   exportSearchedFirmaData,
   exportSearchedZaposleniData,
   findById,
+  firmaService,
 } from "../services/firma.service";
-import type { FirmaType } from "../models/firma.model";
 import { FirmaQueryParams } from "@ied-shared/types/firma.zod";
+import { auditBeforeChange } from "../middleware/auditLog";
+import { FirmaType } from "../models/firma.model";
 
 const router = Router();
 
@@ -88,7 +90,7 @@ router.get("/:id", async (req: Request, res: Response, next: NextFunction) => {
   }
 });
 
-router.delete("/:id", async (req: Request, res: Response, next: NextFunction) => {
+router.delete("/:id", auditBeforeChange(firmaService), async (req: Request, res: Response, next: NextFunction) => {
   try {
     const firma = await deleteById(req.params.id);
     if (firma) {
@@ -110,7 +112,7 @@ router.post("/", async (req: Request, res: Response, next: NextFunction) => {
   }
 });
 
-router.post("/:id", async (req: Request, res: Response, next: NextFunction) => {
+router.post("/:id", auditBeforeChange(firmaService), async (req: Request, res: Response, next: NextFunction) => {
   try {
     const firma = await updateById(req.params.id, req.body);
     if (firma) {
