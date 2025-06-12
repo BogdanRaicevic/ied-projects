@@ -19,6 +19,7 @@ import { clerkMiddleware, requireAuth } from "@clerk/express";
 import { hasPermission } from "./middleware/hasPermission";
 import "./database/cron";
 import { RacunBaseModel } from "./models/racun.model"; // import to sync indexes
+import { auditLogMiddleware } from "./middleware/auditLog";
 
 const app = express();
 const allowedOrigins = env.fe.allowedPorts.map((port) => `${env.fe.appUrl}:${port}`);
@@ -41,17 +42,23 @@ app.use(
 
 app.use(express.json());
 
-app.use("/api/firma", requireAuth(), hasPermission, firmaRoutes);
-app.use("/api/velicine-firmi", requireAuth(), hasPermission, velicineFirmiRoutes);
+app.use("/api/firma", requireAuth(), hasPermission, auditLogMiddleware, firmaRoutes);
+app.use(
+  "/api/velicine-firmi",
+  requireAuth(),
+  hasPermission,
+  auditLogMiddleware,
+  velicineFirmiRoutes
+);
 app.use("/api/radna-mesta", requireAuth(), hasPermission, radnaMestaRoutes);
-app.use("/api/tip-firme", requireAuth(), hasPermission, tipFirmeRoutes);
-app.use("/api/delatnost", requireAuth(), hasPermission, delatnostiRoutes);
-app.use("/api/mesto", requireAuth(), hasPermission, mestoRoutes);
-app.use("/api/pretrage", requireAuth(), hasPermission, pretrageRoutes);
-app.use("/api/stanja-firmi", requireAuth(), hasPermission, stanjaFirmeRoutes);
-app.use("/api/seminari", requireAuth(), hasPermission, seminarRoutes);
-app.use("/api/docx", requireAuth(), hasPermission, docxRoutes);
-app.use("/api/racuni", requireAuth(), hasPermission, racuniRoutes);
+app.use("/api/tip-firme", requireAuth(), hasPermission, auditLogMiddleware, tipFirmeRoutes);
+app.use("/api/delatnost", requireAuth(), hasPermission, auditLogMiddleware, delatnostiRoutes);
+app.use("/api/mesto", requireAuth(), hasPermission, auditLogMiddleware, mestoRoutes);
+app.use("/api/pretrage", requireAuth(), hasPermission, auditLogMiddleware, pretrageRoutes);
+app.use("/api/stanja-firmi", requireAuth(), hasPermission, auditLogMiddleware, stanjaFirmeRoutes);
+app.use("/api/seminari", requireAuth(), hasPermission, auditLogMiddleware, seminarRoutes);
+app.use("/api/docx", requireAuth(), hasPermission, auditLogMiddleware, docxRoutes);
+app.use("/api/racuni", requireAuth(), hasPermission, auditLogMiddleware, racuniRoutes);
 app.use("/api/test", testRoutes);
 
 app.use(errorWrapper);
