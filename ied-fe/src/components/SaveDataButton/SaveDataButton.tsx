@@ -12,7 +12,9 @@ export default function ExportDataButton({ queryParameters, fileName, exportSubj
   const handleExport = async () => {
     try {
       const data = await exportData(queryParameters, exportSubject);
-      const blob = new Blob([data], { type: "text/csv" });
+      // Prepend BOM to preserve Serbian Latin characters in Windows
+      const bom = "\uFEFF";
+      const blob = new Blob([bom + data], { type: "text/csv;charset=utf-8;" });
       const url = URL.createObjectURL(blob);
 
       const a = document.createElement("a");
