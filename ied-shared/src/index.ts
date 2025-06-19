@@ -1,4 +1,3 @@
-export * from "./types/firmaQueryParams";
-export * from "./types/seminar";
+export * from "./types/seminar.zod";
 export * from "./types/racuni.zod";
-// Add other exports as needed
+export * from "./types/firma.zod";

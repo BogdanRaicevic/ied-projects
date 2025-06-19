@@ -1,4 +1,4 @@
-import { FirmaQueryParams } from "@ied-shared/types/firmaQueryParams";
+import { FirmaQueryParams } from "@ied-shared/types/firma.zod";
 import { create } from "zustand";
 
 type PretragaStore = {

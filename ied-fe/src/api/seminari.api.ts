@@ -3,7 +3,7 @@ import type {
   PrijavaZodType,
   SeminarQueryParamsZodType,
   SeminarZodType,
-} from "@ied-shared/types/seminar";
+} from "@ied-shared/types/seminar.zod";
 
 export const saveSeminar = async (seminarData: SeminarZodType) => {
   try {
