@@ -37,4 +37,4 @@ export const SeminarQueryParamsSchema = z.object({
 
 export type PrijavaZodType = z.infer<typeof PrijavaSchema>;
 export type SeminarZodType = z.infer<typeof SeminarSchema>;
-export type SeminarQueryParamsZodType = z.infer<typeof SeminarQueryParamsSchema>;
+export type SeminarQueryParams = z.infer<typeof SeminarQueryParamsSchema>;

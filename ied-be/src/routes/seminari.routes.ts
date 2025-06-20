@@ -12,7 +12,7 @@ import type { FilterQuery } from "mongoose";
 import type { SeminarType } from "../models/seminar.model";
 import { ErrorWithCause } from "../utils/customErrors";
 import { validate } from "../middleware/validateSchema";
-import { PrijavaSchema, SeminarQueryParamsSchema, SeminarSchema, SeminarQueryParamsZodType } from "@ied-shared/types/seminar.zod";
+import { PrijavaSchema, SeminarQueryParamsSchema, SeminarSchema, SeminarQueryParams } from "@ied-shared/types/seminar.zod";
 import { z } from "zod";
 
 const router = Router();
@@ -42,7 +42,7 @@ router.post(
   async (req: Request, res: Response, next: NextFunction) => {
     const { pageIndex = 1, pageSize = 10, ...query } = req.body;
     console.log("req body", req.body);
-    const { datumOd, datumDo, ...rest } = query as SeminarQueryParamsZodType;
+    const { datumOd, datumDo, ...rest } = query as SeminarQueryParams;
 
     try {
       const paginationResult = await searchSeminars(

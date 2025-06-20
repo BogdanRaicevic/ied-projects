@@ -6,7 +6,7 @@ import {
   type MRT_PaginationState,
 } from "material-react-table";
 import { deleteSeminar, fetchSeminari } from "../../api/seminari.api";
-import type { SeminarQueryParamsZodType, SeminarZodType } from "@ied-shared/types/seminar.zod";
+import type { SeminarQueryParams, SeminarZodType } from "@ied-shared/types/seminar.zod";
 import {
   Box,
   Dialog,
@@ -30,7 +30,7 @@ import TableViewIcon from "@mui/icons-material/TableView";
 import { format } from "date-fns";
 
 export default memo(function SeminariTable(props: {
-  queryParameters: SeminarQueryParamsZodType;
+  queryParameters: SeminarQueryParams;
   updateCounter: number;
 }) {
   const [data, setData] = useState<SeminarZodType[]>([]);
