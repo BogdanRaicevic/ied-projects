@@ -1,6 +1,6 @@
 import type { FilterQuery } from "mongoose";
 import type { SeminarType } from "../models/seminar.model";
-import type { SeminarQueryParamsZodType } from "@ied-shared/types/seminar";
+import type { SeminarQueryParamsZodType } from "@ied-shared/types/seminar.zod";
 
 export function createSeminarQuery(params: SeminarQueryParamsZodType): FilterQuery<SeminarType> {
   const query: FilterQuery<SeminarType> = {};

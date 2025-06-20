@@ -5,7 +5,7 @@ import type {
   PrijavaZodType,
   SeminarQueryParamsZodType,
   SeminarZodType,
-} from "@ied-shared/types/seminar";
+} from "@ied-shared/types/seminar.zod";
 import { ErrorWithCause } from "../utils/customErrors";
 import { validateMongoId } from "../utils/utils";
 import { Firma } from "../models/firma.model";

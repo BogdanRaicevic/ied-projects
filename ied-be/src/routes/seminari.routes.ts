@@ -10,10 +10,9 @@ import {
 } from "../services/seminar.service";
 import type { FilterQuery } from "mongoose";
 import type { SeminarType } from "../models/seminar.model";
-import type { SeminarQueryParamsZodType } from "@ied-shared/types/seminar";
 import { ErrorWithCause } from "../utils/customErrors";
 import { validate } from "../middleware/validateSchema";
-import { PrijavaSchema, SeminarQueryParamsSchema, SeminarSchema } from "@ied-shared/types/seminar";
+import { PrijavaSchema, SeminarQueryParamsSchema, SeminarSchema, SeminarQueryParamsZodType } from "@ied-shared/types/seminar.zod";
 import { z } from "zod";
 
 const router = Router();
