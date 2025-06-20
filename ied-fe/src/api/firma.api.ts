@@ -35,7 +35,7 @@ export const fetchSingleFirma = async (id: string): Promise<FirmaType | null> =>
   }
 };
 
-export const exportFirmaData = async (queryParameters: any): Promise<{
+export const exportFirmaData = async (queryParameters: FirmaQueryParams): Promise<{
   data: ExportFirma;
   duplicates: string[];
 }> => {
@@ -75,7 +75,7 @@ export const exportFirmaData = async (queryParameters: any): Promise<{
   }
 };
 
-export const exportZaposleniData = async (queryParameters: any): Promise<{
+export const exportZaposleniData = async (queryParameters: FirmaQueryParams): Promise<{
   data: ExportZaposlenih;
   duplicates: string[];
 }> => {

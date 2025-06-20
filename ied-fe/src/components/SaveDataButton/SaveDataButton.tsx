@@ -60,11 +60,9 @@ export default function ExportDataButton({ queryParameters, fileName, exportSubj
           ? await exportFirmaData(queryParameters)
           : await exportZaposleniData(queryParameters);
 
-      console.log("Exported data:", data);
-
       const csvData = exportSubject === "firma" ? firmaData(data) : zaposleniData(data);
 
-      const blob = new Blob([bom + csvData], { type: "text/csv;charset=utf-8;" });
+      const blob = new Blob([csvData], { type: "text/csv;charset=utf-8;" });
       const url = URL.createObjectURL(blob);
 
       const a = document.createElement("a");
