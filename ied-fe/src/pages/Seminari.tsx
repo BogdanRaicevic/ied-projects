@@ -1,13 +1,13 @@
 import { useState } from "react";
 import SeminarForm from "../components/Seminari/SeminarForm";
 import SeminariTable from "../components/Seminari/SeminariTable";
-import { SeminarQueryParamsZodType } from "@ied-shared/index";
+import { SeminarQueryParams } from "@ied-shared/types/seminar.zod";
 import { ParametriPretrageSeminar } from "../components/Seminari/ParametriPretrageSeminar";
 import { addMonths, subMonths } from "date-fns";
 
 export default function Seminari() {
   const [seminariUpdateCounter, setSeminarUpdateCounter] = useState(0);
-  const [tableInputParameters, setTableInputParameters] = useState<SeminarQueryParamsZodType>({
+  const [tableInputParameters, setTableInputParameters] = useState<SeminarQueryParams>({
     naziv: "",
     predavac: "",
     lokacija: "",
@@ -19,7 +19,7 @@ export default function Seminari() {
     setSeminarUpdateCounter((prev) => prev + 1);
   };
 
-  const handlePretraziSeminare = (values: SeminarQueryParamsZodType) => {
+  const handlePretraziSeminare = (values: SeminarQueryParams) => {
     setTableInputParameters(values);
   };
 

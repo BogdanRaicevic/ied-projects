@@ -9,7 +9,7 @@ import {
   findById,
 } from "../services/firma.service";
 import type { FirmaType } from "../models/firma.model";
-import type { FirmaQueryParams } from "@ied-shared/types/firmaQueryParams";
+import { FirmaQueryParams } from "@ied-shared/types/firma.zod";
 
 const router = Router();
 

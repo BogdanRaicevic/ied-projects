@@ -4,7 +4,7 @@ import CheckboxList from "../CheckboxList";
 import NegationCheckbox from "../NegationCheckbox";
 import { defaultPretrageParameters, usePretragaStore } from "../../store/pretragaParameters.store";
 import { useFetchData } from "../../hooks/useFetchData";
-import { FirmaQueryParams } from "@ied-shared/types/firmaQueryParams";
+import { FirmaQueryParams } from "@ied-shared/types/firma.zod";
 import { format } from "date-fns";
 import { useEffect } from "react";
 import AddBoxIcon from "@mui/icons-material/AddBox";

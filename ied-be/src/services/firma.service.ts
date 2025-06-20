@@ -1,8 +1,9 @@
 import { sanitizeFilter, type FilterQuery } from "mongoose";
 import { type FirmaType, Firma } from "../models/firma.model";
 import { createFirmaQuery } from "../utils/firmaQueryBuilder";
-import type { FirmaQueryParams } from "@ied-shared/types/firmaQueryParams";
+import { FirmaQueryParams } from "@ied-shared/types/firma.zod";
 import { getZaposleniIdsFromSeminars } from "./seminar.service";
+import { ExportFirma, ExportZaposlenih } from "@ied-shared/index";
 export const findById = async (id: string): Promise<FirmaType | null> => {
   try {
     return await Firma.findById(id);
@@ -59,7 +60,7 @@ export const search = async (queryParameters: FirmaQueryParams, pageIndex = 1, p
   };
 };
 
-export const exportSearchedFirmaData = async (queryParameters: FilterQuery<FirmaQueryParams>) => {
+export const exportSearchedFirmaData = async (queryParameters: FilterQuery<FirmaQueryParams>): Promise<ExportFirma> => {
   const mongoQuery = await createFirmaQuery(queryParameters);
 
   const cursor = Firma.find(mongoQuery, {
@@ -70,13 +71,18 @@ export const exportSearchedFirmaData = async (queryParameters: FilterQuery<Firma
     _id: 0,
   }).cursor();
 
-  let res = "naziv_firme, e_mail, delatnost, tip_firme\n";
+  const res: ExportFirma = [];
   cursor.on("data", (doc) => {
     const plainObject = doc.toObject();
-    res += `${plainObject.naziv_firme},${plainObject.e_mail},${plainObject.delatnost},${plainObject.tip_firme}\n`;
+    res.push({
+      naziv_firme: plainObject.naziv_firme,
+      e_mail: plainObject.e_mail,
+      delatnost: plainObject.delatnost,
+      tip_firme: plainObject.tip_firme,
+    });
   });
 
-  return new Promise<string>((resolve, reject) => {
+  return new Promise((resolve, reject) => {
     cursor.on("end", () => {
       resolve(res);
     });
@@ -90,7 +96,7 @@ export const exportSearchedFirmaData = async (queryParameters: FilterQuery<Firma
 
 export const exportSearchedZaposleniData = async (
   queryParameters: FilterQuery<FirmaQueryParams>
-) => {
+): Promise<ExportZaposlenih> => {
   const mongoQuery = await createFirmaQuery(queryParameters);
 
   const seminarAttendees: string[] = await getZaposleniIdsFromSeminars(
@@ -104,11 +110,12 @@ export const exportSearchedZaposleniData = async (
   }
 
   const cursor = Firma.find(mongoQuery, {
+    naziv_firme: 1,
     zaposleni: 1,
     _id: 0,
   }).cursor();
 
-  let res = "ime i prezime, e_mail, radno mesto\n";
+  const res: ExportZaposlenih = []
 
   // Write the data to the writable stream
   cursor.on("data", (doc) => {
@@ -117,7 +124,6 @@ export const exportSearchedZaposleniData = async (
     if (plainObject.zaposleni) {
       for (const z of plainObject.zaposleni) {
         const isZaposleniInSeminar = seminarAttendees?.includes(z._id.toString());
-
         const isRadnoMestoNegated = queryParameters.negacije?.includes("negate-radno-mesto");
         const isRadnoMestoIncluded = queryParameters.radnaMesta.includes(z.radno_mesto);
         const hasNoRadnaMestaFilter = queryParameters.radnaMesta.length === 0;
@@ -127,20 +133,28 @@ export const exportSearchedZaposleniData = async (
           continue;
         }
 
-        // Handle negated radno mesto case
+        let shouldAdd = false;
         if (isRadnoMestoNegated && !isRadnoMestoIncluded) {
-          res += `${z.ime} ${z.prezime},${z.e_mail}, ${z.radno_mesto}\n`;
-          continue;
+          shouldAdd = true;
         }
 
         if (hasNoRadnaMestaFilter || isRadnoMestoIncluded) {
-          res += `${z.ime} ${z.prezime},${z.e_mail}, ${z.radno_mesto}\n`;
+          shouldAdd = true;
+        }
+
+        if (shouldAdd) {
+          res.push({
+            naziv_firme: plainObject.naziv_firme,
+            imePrezime: `${z.ime} ${z.prezime}`,
+            e_mail: z.e_mail,
+            radno_mesto: z.radno_mesto,
+          });
         }
       }
     }
   });
 
-  return new Promise<string>((resolve, reject) => {
+  return new Promise((resolve, reject) => {
     cursor.on("end", () => {
       resolve(res);
     });

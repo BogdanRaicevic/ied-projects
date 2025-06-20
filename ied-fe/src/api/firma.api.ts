@@ -1,6 +1,7 @@
+import { ExportFirma, ExportZaposlenih } from "@ied-shared/index";
 import type { FirmaType } from "../schemas/firmaSchemas";
 import axiosInstanceWithAuth from "./interceptors/auth";
-import type { FirmaQueryParams } from "@ied-shared/types/firmaQueryParams";
+import { FirmaQueryParams } from "@ied-shared/types/firma.zod";
 
 export const fetchFirmaPretrage = async (
   pageSize: number,
@@ -34,19 +35,83 @@ export const fetchSingleFirma = async (id: string): Promise<FirmaType | null> =>
   }
 };
 
-export const exportData = async (queryParameters: any, exportSubject: "firma" | "zaposleni") => {
+export const exportFirmaData = async (queryParameters: FirmaQueryParams): Promise<{
+  data: ExportFirma;
+  duplicates: string[];
+}> => {
   try {
     const body = {
       queryParameters,
     };
 
     const response = await axiosInstanceWithAuth.post(
-      `/api/firma/export-${exportSubject}-data`,
+      `/api/firma/export-firma-data`,
       body
     );
-    return response.data;
+
+    const firmeMap = new Map<string, number>();
+    for (const element of response.data) {
+      if (!element.e_mail) {
+        continue; // Skip if e_mail is not present
+      }
+      if (firmeMap.has(element.e_mail)) {
+        firmeMap.set(element.e_mail, firmeMap.get(element.e_mail)! + 1);
+      } else {
+        firmeMap.set(element.e_mail, 1);
+      }
+    }
+
+    const duplicates = Array.from(firmeMap.entries())
+      .filter(([_, count]) => count > 1)
+      .map(([e_mail]) => (e_mail));
+
+    return {
+      data: response.data,
+      duplicates,
+    };
   } catch (error) {
     console.error("Error exporting firma data:", error);
+    throw error;
+  }
+};
+
+export const exportZaposleniData = async (queryParameters: FirmaQueryParams): Promise<{
+  data: ExportZaposlenih;
+  duplicates: string[];
+}> => {
+  try {
+    const body = {
+      queryParameters,
+    };
+
+    const response = await axiosInstanceWithAuth.post(
+      `/api/firma/export-zaposleni-data`,
+      body
+    );
+
+    const zaposleniMap = new Map<string, number>();
+    for (const element of response.data) {
+      if (!element.e_mail) {
+        continue; // Skip if e_mail is not present
+      }
+      if (zaposleniMap.has(element.e_mail)) {
+        zaposleniMap.set(element.e_mail, zaposleniMap.get(element.e_mail)! + 1);
+      } else {
+        zaposleniMap.set(element.e_mail, 1);
+      }
+    }
+
+    const duplicates = Array.from(zaposleniMap.entries())
+      .filter(([_, count]) => count > 1)
+      .map(([e_mail]) => (e_mail));
+
+    return {
+      data: response.data,
+      duplicates,
+    };
+
+  } catch (error) {
+    console.error("Error exporting zaposleni data:", error);
     throw error;
   }
 };

@@ -3,9 +3,9 @@ import { createSeminarQuery } from "../utils/seminariQueryBuilder";
 import { PrijavaType, Seminar, type SeminarType } from "./../models/seminar.model";
 import type {
   PrijavaZodType,
-  SeminarQueryParamsZodType,
+  SeminarQueryParams,
   SeminarZodType,
-} from "@ied-shared/types/seminar";
+} from "@ied-shared/types/seminar.zod";
 import { ErrorWithCause } from "../utils/customErrors";
 import { validateMongoId } from "../utils/utils";
 import { Firma } from "../models/firma.model";
@@ -33,7 +33,7 @@ export const saveSeminar = async (seminarData: SeminarZodType): Promise<SeminarT
 };
 
 export const searchSeminars = async (
-  queryParameters: FilterQuery<SeminarQueryParamsZodType>,
+  queryParameters: FilterQuery<SeminarQueryParams>,
   pageIndex = 1,
   pageSize = 50
 ) => {

@@ -1,9 +1,9 @@
 import axiosInstanceWithAuth from "./interceptors/auth";
 import type {
   PrijavaZodType,
-  SeminarQueryParamsZodType,
+  SeminarQueryParams,
   SeminarZodType,
-} from "@ied-shared/types/seminar";
+} from "@ied-shared/types/seminar.zod";
 
 export const saveSeminar = async (seminarData: SeminarZodType) => {
   try {
@@ -24,7 +24,7 @@ export const saveSeminar = async (seminarData: SeminarZodType) => {
 export const fetchSeminari = async (
   pageSize: number,
   pageIndex: number,
-  queryParameters: SeminarQueryParamsZodType
+  queryParameters: SeminarQueryParams
 ) => {
   try {
     const body = {
