@@ -8,7 +8,6 @@ export type AuditLogType = Document & {
   requestQuery?: object;
   requestBody?: object;
   beforeChanges?: object;
-  statusCode: number;
   timestamp: Date;
 };
 
@@ -20,7 +19,6 @@ const audtiLogSchema = new Schema<AuditLogType>({
   requestQuery: { type: Object, required: false },
   requestBody: { type: Object, required: false },
   beforeChanges: { type: Object, required: false },
-  statusCode: { type: Number, required: true },
   timestamp: { type: Date, default: Date.now, required: true },
 });
 

@@ -10,7 +10,7 @@ import {
   firmaService,
 } from "../services/firma.service";
 import { FirmaQueryParams } from "@ied-shared/types/firma.zod";
-import { auditBeforeChange } from "../middleware/auditLog";
+import { auditBeforeChange } from "../middleware/audit_log";
 import { FirmaType } from "../models/firma.model";
 
 const router = Router();

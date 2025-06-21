@@ -20,9 +20,6 @@ async function getUserEmail(userId: string): Promise<string> {
     return email;
   } catch (error) {
     console.error(`Failed to fetch email for user ${userId} from Clerk:`, error);
-    // Try to get from existing req.user if populated by another middleware (like hasPermission)
-    // This part is speculative and depends on how `hasPermission` might evolve.
-    // For now, we rely on a direct fetch or cache.
     return "unknown-email-fetch-failed";
   }
 }
@@ -54,22 +51,14 @@ export const auditLogMiddleware = async (req: Request, res: Response, next: Next
     try {
       const userEmail = await getUserEmail(userId);
 
-      // Redact sensitive fields from the request body
-      let requestBodyToLog: Record<string, unknown> = {};
-      if (req.body && typeof req.body === "object") {
-        requestBodyToLog = { ...req.body };
-      }
-
       const logEntry = {
-        userId,
         userEmail,
         method: req.method,
         path: req.originalUrl,
         requestParams: req.params,
         requestQuery: req.query,
-        requestBody: Object.keys(requestBodyToLog).length > 0 ? requestBodyToLog : undefined,
+        requestBody: req.body,
         beforeChanges: res.locals.beforeChanges || undefined,
-        statusCode: res.statusCode,
         timestamp: new Date(),
       };
 

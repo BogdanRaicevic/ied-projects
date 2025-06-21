@@ -20,7 +20,7 @@ import { clerkMiddleware, requireAuth } from "@clerk/express";
 import { hasPermission } from "./middleware/hasPermission";
 import "./database/cron";
 import { RacunBaseModel } from "./models/racun.model"; // import to sync indexes
-import { auditLogMiddleware } from "./middleware/auditLog";
+import { auditLogMiddleware } from "./middleware/audit_log";
 
 const app = express();
 const allowedOrigins = env.fe.allowedPorts.map((port) => `${env.fe.appUrl}:${port}`);

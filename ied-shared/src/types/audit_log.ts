@@ -1,7 +1,6 @@
 import { z } from "zod";
 
 export const auditLogSchema = z.object({
-    userId: z.string(),
     userEmail: z.string(),
     method: z.string(),
     path: z.string(),
@@ -9,7 +8,6 @@ export const auditLogSchema = z.object({
     requestQuery: z.object({}).optional(),
     requestBody: z.object({}).optional(),
     beforeChanges: z.object({}).optional(),
-    statusCode: z.number(),
     timestamp: z.date(),
 });
 
