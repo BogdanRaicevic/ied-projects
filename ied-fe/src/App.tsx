@@ -34,26 +34,12 @@ function App() {
               </>
             }
           />
-          <Route
-            path="/pretrage"
-            element={
-              <SignedIn>
-                <Pretrage />
-              </SignedIn>
-            }
-          />
+          <Route path="/pretrage" element={<Pretrage />} />
           <Route path="/racuni" element={<Racuni />} />
           <Route path="/firma" element={<Firma />} />
           <Route path="/firma/:id" element={<Firma />} />
           <Route path="/zaposleni" element={<Zaposleni />} />
-          <Route
-            path="/seminari"
-            element={
-              <SignedIn>
-                <Seminari />
-              </SignedIn>
-            }
-          />
+          <Route path="/seminari" element={<Seminari />} />
           <Route path="/audit" element={<Audit />} />
         </Routes>
       </Container>
