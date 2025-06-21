@@ -42,7 +42,7 @@ export default function Audit() {
                 (filtered, key) => {
                   // Only copy fields that exist in requestBody
                   if (key in beforeChanges) {
-                    filtered[key] = beforeChanges[key];
+                    filtered[key] = beforeChanges[key as keyof typeof beforeChanges];
                   }
                   return filtered;
                 },
@@ -50,7 +50,7 @@ export default function Audit() {
               )
             : beforeChanges;
 
-          const differences = diffJson(filteredBeforeChanges, requestBody);
+          const differences = diffJson(filteredBeforeChanges || "", requestBody || "");
 
           return (
             <pre style={{ margin: 0, whiteSpace: "pre-wrap", wordBreak: "break-all" }}>

@@ -73,8 +73,6 @@ router.post(
       sanitizedTemplateName.concat(".docx")
     );
 
-    console.log("templatePath", templatePath);
-
     // Additional check to ensure the resolved path is within the templates directory
     const templatesDir = path.resolve(__dirname, "../../src/templates");
     if (!templatePath.startsWith(templatesDir)) {
@@ -116,7 +114,6 @@ router.post(
       const fileName = sanitizeFilename(
         `${racunData.pozivNaBroj}_${dataForDocumentRednering.primalacRacuna?.naziv}.docx`
       );
-      console.log("fileName", fileName);
       res.setHeader(`Content-Disposition`, `attachment; filename=${fileName}`);
 
       res.send(buf);

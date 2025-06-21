@@ -1,11 +1,6 @@
-// import SelectSeminar from "../components/SelectSeminar";
 import { Box, Button, Grid, TextField } from "@mui/material";
 import PaginatedList from "../components/PaginatedList/PaginatedList";
 export default function Zaposleni() {
-  // const handleSeminarSelect = (seminarId: string) => {
-  //   console.log("zaposleni seminarId: ", seminarId);
-  // };
-
   return (
     <div>
       <h1>Zaposleni</h1>

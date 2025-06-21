@@ -5,7 +5,7 @@ export const getAllDelatnosti = async () => {
     const result = await Delatnost.find({}).sort({ delatnost: 1 }).exec();
     return result.map((item) => item.delatnost);
   } catch (error) {
-    console.log("Error finding delatnosti", error);
+    console.error("Error finding delatnosti", error);
     throw new Error("Error finding delatnosti");
   }
 };

@@ -82,7 +82,6 @@ export const saveNewRacun = async (racun: RacunZod): Promise<RacunZod> => {
       return racun; // or handle as needed
     }
     const response = await axiosInstanceWithAuth.post(`/api/racuni/save`, racun);
-    console.log("Racun saved:", response.data);
     return response.data;
   } catch (error) {
     console.error("Error saving new racun:", error);
