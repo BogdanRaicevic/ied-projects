@@ -1,28 +1,59 @@
 import { MaterialReactTable, MRT_ColumnDef, useMaterialReactTable } from "material-react-table";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { useAuditLogs } from "../hooks/fetchAuditLog";
-import { AuditLogType } from "@ied-shared/types/audit_log";
+import { AuditLogQueryParams, AuditLogType } from "@ied-shared/types/audit_log";
 import { diffJson } from "diff";
+import { Controller, useForm } from "react-hook-form";
+import { Paper, Grid, TextField, Box, Button } from "@mui/material";
+import { DatePicker } from "@mui/x-date-pickers";
+import { subDays } from "date-fns";
 
 export default function Audit() {
-  const { data: auditLogs, isLoading } = useAuditLogs();
+  const [pagination, setPagination] = useState({ pageIndex: 0, pageSize: 50 });
+  const [filterParams, setFilterParams] = useState<AuditLogQueryParams>({});
+  const { control, handleSubmit } = useForm<AuditLogQueryParams>({
+    defaultValues: {
+      userEmail: "",
+      datumDo: new Date(),
+      datumOd: subDays(new Date(), 7),
+    },
+  });
+
+  const { data, isLoading } = useAuditLogs({
+    pageIndex: pagination.pageIndex,
+    pageSize: pagination.pageSize,
+    filterParams,
+  });
+
+  console.log("Audit logs data:", data);
+  const auditLogs = data?.data || [];
+  const totalDocuments = data?.totalDocuments || 0;
 
   const auditLogsColumns = useMemo<MRT_ColumnDef<AuditLogType>[]>(
     () => [
       {
         accessorKey: "timestamp",
-        header: "Timestamp",
+        header: "Datum",
+        Cell: ({ cell }) => {
+          const date = cell.getValue<string>();
+          return date ? date.slice(0, 10) : "";
+        },
+        filterFn: (row, columnId, filterValue) => {
+          const value = row.getValue<string>(columnId);
+          return value?.slice(0, 10) === filterValue;
+        },
+        filterVariant: "text",
       },
       {
         accessorKey: "userEmail",
-        header: "User",
+        header: "Korisnik",
       },
       {
         accessorKey: "path",
-        header: "Path",
+        header: "Putanja",
       },
       {
-        header: "Changes",
+        header: "Evidencije promena",
         Cell: ({ row }) => {
           const { beforeChanges, requestBody } = row.original;
 
@@ -35,8 +66,6 @@ export default function Audit() {
             );
           }
 
-          // Create a filtered version of beforeChanges that only includes
-          // keys that are present in the requestBody
           const filteredBeforeChanges = requestBody
             ? Object.keys(requestBody).reduce(
                 (filtered, key) => {
@@ -79,18 +108,102 @@ export default function Audit() {
     data: auditLogs || [],
     state: {
       isLoading,
+      pagination,
     },
-    enableColumnFilterModes: true,
     enableColumnOrdering: true,
     enableColumnPinning: true,
     paginationDisplayMode: "default",
     positionToolbarAlertBanner: "bottom",
     manualPagination: true,
+    onPaginationChange: setPagination,
+    rowCount: totalDocuments,
   });
+
+  const onSearch = (formData: AuditLogQueryParams) => {
+    // Reset to first page when searching
+    setPagination((prev) => ({ ...prev, pageIndex: 0 }));
+
+    const newFilterParams: AuditLogQueryParams = {};
+
+    if (formData.userEmail) {
+      newFilterParams.userEmail = formData.userEmail;
+    }
+
+    if (formData.datumOd) {
+      newFilterParams.datumOd = formData.datumOd;
+    }
+
+    if (formData.datumDo) {
+      newFilterParams.datumDo = formData.datumDo;
+    }
+
+    // Update filter params to trigger a new query
+    setFilterParams(newFilterParams);
+  };
 
   return (
     <div>
       <h1>Audit</h1>
+
+      <Paper sx={{ p: 2, mb: 3 }}>
+        <Box component="form" onSubmit={handleSubmit(onSearch)}>
+          <Grid container spacing={2} alignItems="center">
+            <Grid size={4}>
+              <Controller
+                name="userEmail"
+                control={control}
+                render={({ field }) => (
+                  <TextField
+                    {...field}
+                    label="Email korisnika"
+                    variant="outlined"
+                    fullWidth
+                    placeholder="Pretraga po email adresi..."
+                  />
+                )}
+              />
+            </Grid>
+
+            <Grid size={4}>
+              <Controller
+                name="datumOd"
+                control={control}
+                render={({ field }) => (
+                  <DatePicker
+                    label="Datum od"
+                    value={field.value}
+                    onChange={(date) => field.onChange(date)}
+                    format="yyyy-MM-dd"
+                    slotProps={{ textField: { fullWidth: true } }}
+                  />
+                )}
+              />
+            </Grid>
+
+            <Grid size={4}>
+              <Controller
+                name="datumDo"
+                control={control}
+                render={({ field }) => (
+                  <DatePicker
+                    label="Datum do"
+                    value={field.value}
+                    onChange={(date) => field.onChange(date)}
+                    format="yyyy-MM-dd"
+                    slotProps={{ textField: { fullWidth: true } }}
+                  />
+                )}
+              />
+            </Grid>
+
+            <Box display="flex" justifyContent="flex-end">
+              <Button type="submit" variant="contained" color="primary" fullWidth>
+                Pretraga
+              </Button>
+            </Box>
+          </Grid>
+        </Box>
+      </Paper>
 
       <MaterialReactTable table={auditLogsTable} />
     </div>
