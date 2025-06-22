@@ -26,7 +26,7 @@ async function getUserEmail(userId: string): Promise<string> {
 
 export const auditLogMiddleware = async (req: Request, res: Response, next: NextFunction) => {
   const methodsToLog = ["POST", "PUT", "DELETE", "PATCH"];
-  const pathsToIgnore = [/search/i, /export/i];
+  const pathsToIgnore = [/search/i, /export/i, /health/i, /audit-logs/i];
 
   // Call next() early for methods we don't want to log
   if (!methodsToLog.includes(req.method)) {
@@ -96,4 +96,32 @@ export const auditBeforeChange = <T extends Document>(service: BaseService<T>) =
 
     next();
   };
+};
+
+
+export const userTrackerMiddleware = async (req: Request, res: Response, next: NextFunction) => {
+  const auth = getAuth(req);
+  const userId = auth.userId;
+
+  if (!userId) {
+    return next();
+  }
+
+  try {
+    const userEmail = await getUserEmail(userId);
+
+    // Store user info in locals for other middleware to use
+    res.locals.userId = userId;
+    res.locals.userEmail = userEmail;
+
+    // Add user tracking fields to request body
+    if (req.body && typeof req.body === 'object') {
+      req.body.created_by = userEmail;
+      req.body.updated_by = userEmail;
+    }
+  } catch (error) {
+    console.error("Error in user tracker middleware:", error);
+  }
+
+  next();
 };

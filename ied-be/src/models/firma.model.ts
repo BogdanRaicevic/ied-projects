@@ -19,8 +19,8 @@ type FirmaType = Document & {
   RB: number;
   created_at: Date | null;
   updated_at: Date;
-  created_by: number | null;
-  updated_by: number;
+  created_by: string;
+  updated_by: string;
   stanje_firme: string;
   zaposleni: Zaposleni[];
   mesto: string;
@@ -29,33 +29,36 @@ type FirmaType = Document & {
   maticni_broj: string;
 };
 
-const firmaSchema = new Schema<FirmaType>({
-  ID_firma: Number,
-  naziv_firme: { type: String, required: true },
-  adresa: String,
-  PIB: String,
-  telefon: String,
-  e_mail: String,
-  mesto: String,
-  velicina_firme: String,
-  faks: String,
-  tip_firme: String,
-  delatnost: String,
-  ucesce_na_seminarima: Number,
-  FK_VELICINA_FIRME_ID_velicina_firme: Number,
-  FK_MESTO_ID_mesto: Number,
-  komentar: String,
-  provereno: Number,
-  RB: Number,
-  stanje_firme: String,
-  created_by: { type: Number, default: null },
-  updated_by: Number,
-  zaposleni: [zaposleniSchema],
-  jbkjs: String,
-  maticni_broj: String,
-}, {
-  timestamps: { createdAt: "created_at", updatedAt: "updated_at" },
-});
+const firmaSchema = new Schema<FirmaType>(
+  {
+    ID_firma: Number,
+    naziv_firme: { type: String, required: true },
+    adresa: String,
+    PIB: String,
+    telefon: String,
+    e_mail: String,
+    mesto: String,
+    velicina_firme: String,
+    faks: String,
+    tip_firme: String,
+    delatnost: String,
+    ucesce_na_seminarima: Number,
+    FK_VELICINA_FIRME_ID_velicina_firme: Number,
+    FK_MESTO_ID_mesto: Number,
+    komentar: String,
+    provereno: Number,
+    RB: Number,
+    stanje_firme: String,
+    created_by: { type: String, immutable: true },
+    updated_by: String,
+    zaposleni: [zaposleniSchema],
+    jbkjs: String,
+    maticni_broj: String,
+  },
+  {
+    timestamps: { createdAt: "created_at", updatedAt: "updated_at" },
+  }
+);
 
 firmaSchema.pre("save", function (next) {
   if (this.zaposleni && Array.isArray(this.zaposleni)) {
@@ -77,6 +80,7 @@ firmaSchema.pre("findOneAndUpdate", function (next) {
       z.radno_mesto = "nema";
     }
   }
+
   next();
 });
 
