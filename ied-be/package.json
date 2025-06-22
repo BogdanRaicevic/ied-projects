@@ -18,7 +18,6 @@
     "node": ">=20.0.0"
   },
   "devDependencies": {
-    "@biomejs/biome": "^1.9.4",
     "@types/cors": "^2.8.18",
     "@types/express": "^5.0.2",
     "@types/node": "^22.15.21",
