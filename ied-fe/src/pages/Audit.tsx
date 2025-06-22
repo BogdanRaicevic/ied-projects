@@ -14,8 +14,8 @@ export default function Audit() {
   const { control, handleSubmit } = useForm<AuditLogQueryParams>({
     defaultValues: {
       userEmail: "",
-      datumDo: new Date(),
-      datumOd: subDays(new Date(), 7),
+      datumDo: new Date(new Date().setHours(23, 59, 59, 999)),
+      datumOd: new Date(subDays(new Date(), 7).setHours(0, 0, 0, 0)),
     },
   });
 
