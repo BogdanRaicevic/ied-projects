@@ -1,10 +1,5 @@
 {
   "root": false,
   "$schema": "https://biomejs.dev/schemas/2.0.4/schema.json",
-
-  "extends": ["../biome.json"],
-  "files": {
-    "ignoreUnknown": false,
-    "includes": ["src/*.ts"]
-  }
+  "extends": ["../biome.json"]
 }
