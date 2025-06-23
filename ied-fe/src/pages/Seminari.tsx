@@ -6,30 +6,34 @@ import { ParametriPretrageSeminar } from "../components/Seminari/ParametriPretra
 import { addMonths, subMonths } from "date-fns";
 
 export default function Seminari() {
-  const [seminariUpdateCounter, setSeminarUpdateCounter] = useState(0);
-  const [tableInputParameters, setTableInputParameters] = useState<SeminarQueryParams>({
-    naziv: "",
-    predavac: "",
-    lokacija: "",
-    datumOd: subMonths(new Date(), 3),
-    datumDo: addMonths(new Date(), 3),
-  });
+	const [seminariUpdateCounter, setSeminarUpdateCounter] = useState(0);
+	const [tableInputParameters, setTableInputParameters] =
+		useState<SeminarQueryParams>({
+			naziv: "",
+			predavac: "",
+			lokacija: "",
+			datumOd: subMonths(new Date(), 3),
+			datumDo: addMonths(new Date(), 3),
+		});
 
-  const handleSeminarUpdate = () => {
-    setSeminarUpdateCounter((prev) => prev + 1);
-  };
+	const handleSeminarUpdate = () => {
+		setSeminarUpdateCounter((prev) => prev + 1);
+	};
 
-  const handlePretraziSeminare = (values: SeminarQueryParams) => {
-    setTableInputParameters(values);
-  };
+	const handlePretraziSeminare = (values: SeminarQueryParams) => {
+		setTableInputParameters(values);
+	};
 
-  return (
-    <>
-      <ParametriPretrageSeminar onSubmit={handlePretraziSeminare} />
+	return (
+		<>
+			<ParametriPretrageSeminar onSubmit={handlePretraziSeminare} />
 
-      <SeminariTable queryParameters={tableInputParameters} updateCounter={seminariUpdateCounter} />
+			<SeminariTable
+				queryParameters={tableInputParameters}
+				updateCounter={seminariUpdateCounter}
+			/>
 
-      <SeminarForm onSuccess={handleSeminarUpdate} />
-    </>
-  );
+			<SeminarForm onSuccess={handleSeminarUpdate} />
+		</>
+	);
 }

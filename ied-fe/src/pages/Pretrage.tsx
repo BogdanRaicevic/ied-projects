@@ -7,21 +7,21 @@ import PretragaParameters from "../components/PretragaParameters/PretragaParamet
 const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
 
 if (!PUBLISHABLE_KEY) {
-  throw new Error("Missing Publishable Key");
+	throw new Error("Missing Publishable Key");
 }
 
 export default function Pretrage() {
-  return (
-    <>
-      <PageTitle title={"Pretrage"} />
+	return (
+		<>
+			<PageTitle title={"Pretrage"} />
 
-      <PredefinedPretrage />
+			<PredefinedPretrage />
 
-      <Divider />
+			<Divider />
 
-      <PretragaParameters />
+			<PretragaParameters />
 
-      <MyTable />
-    </>
-  );
+			<MyTable />
+		</>
+	);
 }
