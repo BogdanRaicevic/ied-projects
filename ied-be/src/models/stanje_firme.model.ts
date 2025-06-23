@@ -1,14 +1,17 @@
 import { Document, Schema, model } from "mongoose";
 
 type StanjeFirmeType = Document & {
-  stanje_firme: string;
+	stanje_firme: string;
 };
 
 const stanjeFirmeSchema = new Schema<StanjeFirmeType>(
-  {
-    stanje_firme: { type: String, required: true },
-  },
-  { collection: "stanja_firme" }
+	{
+		stanje_firme: { type: String, required: true },
+	},
+	{ collection: "stanja_firme" },
 );
 
-export const StanjeFirme = model<StanjeFirmeType>("StanjeFirme", stanjeFirmeSchema);
+export const StanjeFirme = model<StanjeFirmeType>(
+	"StanjeFirme",
+	stanjeFirmeSchema,
+);

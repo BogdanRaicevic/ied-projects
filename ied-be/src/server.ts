@@ -21,28 +21,35 @@ import "./database/cron";
 import { RacunBaseModel } from "./models/racun.model"; // import to sync indexes
 
 const app = express();
-const allowedOrigins = env.fe.allowedPorts.map((port) => `${env.fe.appUrl}:${port}`);
+const allowedOrigins = env.fe.allowedPorts.map(
+	(port) => `${env.fe.appUrl}:${port}`,
+);
 console.log("Allowed Origins:", allowedOrigins);
 app.use(
-  cors({
-    origin: allowedOrigins,
-    credentials: true,
-    allowedHeaders: ["Authorization", "Content-Type"],
-    exposedHeaders: ["Authorization"],
-  })
+	cors({
+		origin: allowedOrigins,
+		credentials: true,
+		allowedHeaders: ["Authorization", "Content-Type"],
+		exposedHeaders: ["Authorization"],
+	}),
 );
 
 app.use(
-  clerkMiddleware({
-    publishableKey: env.clerk.publishableKey,
-    secretKey: env.clerk.secretKey,
-  })
+	clerkMiddleware({
+		publishableKey: env.clerk.publishableKey,
+		secretKey: env.clerk.secretKey,
+	}),
 );
 
 app.use(express.json());
 
 app.use("/api/firma", requireAuth(), hasPermission, firmaRoutes);
-app.use("/api/velicine-firmi", requireAuth(), hasPermission, velicineFirmiRoutes);
+app.use(
+	"/api/velicine-firmi",
+	requireAuth(),
+	hasPermission,
+	velicineFirmiRoutes,
+);
 app.use("/api/radna-mesta", requireAuth(), hasPermission, radnaMestaRoutes);
 app.use("/api/tip-firme", requireAuth(), hasPermission, tipFirmeRoutes);
 app.use("/api/delatnost", requireAuth(), hasPermission, delatnostiRoutes);
@@ -57,17 +64,17 @@ app.use("/api/test", testRoutes);
 app.use(errorWrapper);
 
 async function initServer() {
-  try {
-    await connectDB();
-    // TODO: right now this won't hurt performance, but in the future we might want to remove this
-    // Sync Mongoose indexes (drops old and creates schema-defined ones)
-    await RacunBaseModel.syncIndexes();
-    app.listen({ port: Number(env.be.appPort) });
-  } catch (error) {
-    console.error("Error starting server:", error);
-  }
+	try {
+		await connectDB();
+		// TODO: right now this won't hurt performance, but in the future we might want to remove this
+		// Sync Mongoose indexes (drops old and creates schema-defined ones)
+		await RacunBaseModel.syncIndexes();
+		app.listen({ port: Number(env.be.appPort) });
+	} catch (error) {
+		console.error("Error starting server:", error);
+	}
 }
 
 initServer()
-  .then(() => console.log("Server is up"))
-  .catch(console.error);
+	.then(() => console.log("Server is up"))
+	.catch(console.error);
