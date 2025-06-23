@@ -4,125 +4,125 @@ import { DatePicker } from "@mui/x-date-pickers";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
-	SeminarQueryParamsSchema,
-	SeminarQueryParams,
+  SeminarQueryParamsSchema,
+  SeminarQueryParams,
 } from "@ied-shared/types/seminar.zod";
 
 export function ParametriPretrageSeminar({
-	onSubmit,
+  onSubmit,
 }: {
-	onSubmit: (data: SeminarQueryParams) => void;
+  onSubmit: (data: SeminarQueryParams) => void;
 }) {
-	const {
-		control,
-		handleSubmit,
-		formState: { errors },
-	} = useForm({
-		resolver: zodResolver(SeminarQueryParamsSchema),
-	});
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    resolver: zodResolver(SeminarQueryParamsSchema),
+  });
 
-	const handleFormSubmit = (data: SeminarQueryParams) => {
-		onSubmit(data);
-	};
-	return (
-		<>
-			<h1>Parametri Pretrage</h1>
-			<Box
-				component="form"
-				onSubmit={handleSubmit((data) => handleFormSubmit(data))}
-			>
-				<Controller
-					name="naziv"
-					control={control}
-					render={({ field }) => (
-						<TextField
-							{...field}
-							sx={{ m: 1 }}
-							id="naziv"
-							label="Naziv seminara"
-							variant="outlined"
-							error={!!errors.naziv}
-							helperText={errors.naziv?.message}
-						/>
-					)}
-				/>
+  const handleFormSubmit = (data: SeminarQueryParams) => {
+    onSubmit(data);
+  };
+  return (
+    <>
+      <h1>Parametri Pretrage</h1>
+      <Box
+        component="form"
+        onSubmit={handleSubmit((data) => handleFormSubmit(data))}
+      >
+        <Controller
+          name="naziv"
+          control={control}
+          render={({ field }) => (
+            <TextField
+              {...field}
+              sx={{ m: 1 }}
+              id="naziv"
+              label="Naziv seminara"
+              variant="outlined"
+              error={!!errors.naziv}
+              helperText={errors.naziv?.message}
+            />
+          )}
+        />
 
-				<Controller
-					name="predavac"
-					control={control}
-					render={({ field }) => (
-						<TextField
-							{...field}
-							sx={{ m: 1 }}
-							id="predavac"
-							label="Predavač"
-							variant="outlined"
-							error={!!errors.predavac}
-							helperText={errors.predavac?.message}
-						/>
-					)}
-				/>
+        <Controller
+          name="predavac"
+          control={control}
+          render={({ field }) => (
+            <TextField
+              {...field}
+              sx={{ m: 1 }}
+              id="predavac"
+              label="Predavač"
+              variant="outlined"
+              error={!!errors.predavac}
+              helperText={errors.predavac?.message}
+            />
+          )}
+        />
 
-				<Controller
-					name="lokacija"
-					control={control}
-					render={({ field }) => (
-						<TextField
-							{...field}
-							sx={{ m: 1 }}
-							id="lokacija"
-							label="Lokacija"
-							variant="outlined"
-							error={!!errors.lokacija}
-							helperText={errors.lokacija?.message}
-						/>
-					)}
-				/>
+        <Controller
+          name="lokacija"
+          control={control}
+          render={({ field }) => (
+            <TextField
+              {...field}
+              sx={{ m: 1 }}
+              id="lokacija"
+              label="Lokacija"
+              variant="outlined"
+              error={!!errors.lokacija}
+              helperText={errors.lokacija?.message}
+            />
+          )}
+        />
 
-				<FormControl sx={{ m: 1 }}>
-					<Controller
-						name="datumOd"
-						control={control}
-						render={({ field }) => (
-							<DatePicker
-								{...field}
-								format="yyyy/MM/dd"
-								label="Početni datum"
-								name="datumOd"
-								value={field.value ? new Date(field.value) : null}
-								onChange={(date) => field.onChange(date)}
-							/>
-						)}
-					/>
-					<Box display="flex" alignItems="center" justifyContent="center">
-						<UnfoldLess />
-					</Box>
-					<Controller
-						name="datumDo"
-						control={control}
-						render={({ field }) => (
-							<DatePicker
-								{...field}
-								format="yyyy/MM/dd"
-								label="Kranji datum"
-								name="datumDo"
-								value={field.value ? new Date(field.value) : null}
-								onChange={(date) => field.onChange(date)}
-							/>
-						)}
-					/>
-				</FormControl>
+        <FormControl sx={{ m: 1 }}>
+          <Controller
+            name="datumOd"
+            control={control}
+            render={({ field }) => (
+              <DatePicker
+                {...field}
+                format="yyyy/MM/dd"
+                label="Početni datum"
+                name="datumOd"
+                value={field.value ? new Date(field.value) : null}
+                onChange={(date) => field.onChange(date)}
+              />
+            )}
+          />
+          <Box display="flex" alignItems="center" justifyContent="center">
+            <UnfoldLess />
+          </Box>
+          <Controller
+            name="datumDo"
+            control={control}
+            render={({ field }) => (
+              <DatePicker
+                {...field}
+                format="yyyy/MM/dd"
+                label="Kranji datum"
+                name="datumDo"
+                value={field.value ? new Date(field.value) : null}
+                onChange={(date) => field.onChange(date)}
+              />
+            )}
+          />
+        </FormControl>
 
-				<Button
-					sx={{ m: 1 }}
-					size="large"
-					variant="contained"
-					color="info"
-					type="submit"
-				>
-					Pretrazi
-				</Button>
-			</Box>
-		</>
-	);
+        <Button
+          sx={{ m: 1 }}
+          size="large"
+          variant="contained"
+          color="info"
+          type="submit"
+        >
+          Pretrazi
+        </Button>
+      </Box>
+    </>
+  );
 }

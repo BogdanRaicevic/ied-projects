@@ -17,25 +17,25 @@ import { setGetTokenFn } from "./utils/clerkClient";
 const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
 
 if (!PUBLISHABLE_KEY) {
-	throw new Error("Missing Publishable Key");
+  throw new Error("Missing Publishable Key");
 }
 
 function TokenProviderInitializer() {
-	const { getToken } = useAuth();
-	setGetTokenFn(() => getToken());
-	return null;
+  const { getToken } = useAuth();
+  setGetTokenFn(() => getToken());
+  return null;
 }
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
-	<React.StrictMode>
-		<CssBaseline />
-		<ClerkProvider publishableKey={PUBLISHABLE_KEY} afterSignOutUrl="/">
-			<BrowserRouter>
-				<LocalizationProvider dateAdapter={AdapterDateFns}>
-					<TokenProviderInitializer />
-					<App />
-				</LocalizationProvider>
-			</BrowserRouter>
-		</ClerkProvider>
-	</React.StrictMode>,
+  <React.StrictMode>
+    <CssBaseline />
+    <ClerkProvider publishableKey={PUBLISHABLE_KEY} afterSignOutUrl="/">
+      <BrowserRouter>
+        <LocalizationProvider dateAdapter={AdapterDateFns}>
+          <TokenProviderInitializer />
+          <App />
+        </LocalizationProvider>
+      </BrowserRouter>
+    </ClerkProvider>
+  </React.StrictMode>,
 );

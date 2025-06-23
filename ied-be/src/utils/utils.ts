@@ -4,7 +4,7 @@ import mongoose from "mongoose";
 export type TODO_ANY = any;
 
 export const validateMongoId = (id: string) => {
-	if (!mongoose.Types.ObjectId.isValid(id)) {
-		throw new Error("Invalid ID: " + id);
-	}
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    throw new Error("Invalid ID: " + id);
+  }
 };
