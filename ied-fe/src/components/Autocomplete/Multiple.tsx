@@ -1,71 +1,71 @@
 import { Autocomplete, Chip, TextField } from "@mui/material";
-import { useState, memo, useEffect } from "react";
+import { memo, useEffect, useState } from "react";
 
 interface AutocompleteMultipleProps {
-	data: string[];
-	onCheckedChange: (checked: string[]) => void;
-	placeholder: string;
-	id: string;
-	checkedValues: any[];
-	getOptionLabel?: (option: any) => string; // Optional custom render
-	renderTag?: (
-		getTagProps: (props: { index: number }) => any,
-		index: number,
-		option: any,
-	) => React.ReactNode; // Optional custom render
+  data: string[];
+  onCheckedChange: (checked: string[]) => void;
+  placeholder: string;
+  id: string;
+  checkedValues: any[];
+  getOptionLabel?: (option: any) => string; // Optional custom render
+  renderTag?: (
+    getTagProps: (props: { index: number }) => any,
+    index: number,
+    option: any,
+  ) => React.ReactNode; // Optional custom render
 }
 
 export default memo(function AutocompleteCheckbox({
-	data,
-	onCheckedChange,
-	placeholder,
-	id,
-	checkedValues,
-	getOptionLabel,
-	renderTag,
+  data,
+  onCheckedChange,
+  placeholder,
+  id,
+  checkedValues,
+  getOptionLabel,
+  renderTag,
 }: AutocompleteMultipleProps) {
-	const [selectedOptions, setSelectedOptions] =
-		useState<string[]>(checkedValues);
+  const [selectedOptions, setSelectedOptions] =
+    useState<string[]>(checkedValues);
 
-	useEffect(() => {
-		setSelectedOptions(checkedValues);
-	}, [checkedValues]);
+  useEffect(() => {
+    setSelectedOptions(checkedValues);
+  }, [checkedValues]);
 
-	const handleChange = (_event: any, value: string[]) => {
-		setSelectedOptions(value);
-		onCheckedChange(value);
-	};
+  const handleChange = (_event: any, value: string[]) => {
+    setSelectedOptions(value);
+    onCheckedChange(value);
+  };
 
-	const defaultGetOptionLabel = (option: any): string => {
-		return typeof option === "string" ? option : String(option);
-	};
+  const defaultGetOptionLabel = (option: any): string => {
+    return typeof option === "string" ? option : String(option);
+  };
 
-	const defaultRenderTag = (
-		getTagProps: (props: { index: number }) => any,
-		index: number,
-		option: string,
-	): React.ReactNode => {
-		const { key, ...tagProps } = getTagProps({ index });
-		return <Chip variant="outlined" label={option} key={key} {...tagProps} />;
-	};
+  const defaultRenderTag = (
+    getTagProps: (props: { index: number }) => any,
+    index: number,
+    option: string,
+  ): React.ReactNode => {
+    const { key, ...tagProps } = getTagProps({ index });
+    return <Chip variant="outlined" label={option} key={key} {...tagProps} />;
+  };
 
-	return (
-		<Autocomplete
-			multiple
-			id={`autocomplete-${id}`}
-			disableCloseOnSelect
-			getOptionLabel={getOptionLabel || defaultGetOptionLabel} // Use the getOptionLabel prop or default
-			options={(data || []).map((option) => option)}
-			renderTags={(value: readonly string[], getTagProps) =>
-				value.map((option: string, index: number) => {
-					return (renderTag || defaultRenderTag)(getTagProps, index, option);
-				})
-			}
-			renderInput={(params) => (
-				<TextField {...params} placeholder={placeholder} />
-			)}
-			onChange={handleChange}
-			value={selectedOptions}
-		/>
-	);
+  return (
+    <Autocomplete
+      multiple
+      id={`autocomplete-${id}`}
+      disableCloseOnSelect
+      getOptionLabel={getOptionLabel || defaultGetOptionLabel} // Use the getOptionLabel prop or default
+      options={(data || []).map((option) => option)}
+      renderTags={(value: readonly string[], getTagProps) =>
+        value.map((option: string, index: number) => {
+          return (renderTag || defaultRenderTag)(getTagProps, index, option);
+        })
+      }
+      renderInput={(params) => (
+        <TextField {...params} placeholder={placeholder} />
+      )}
+      onChange={handleChange}
+      value={selectedOptions}
+    />
+  );
 });
