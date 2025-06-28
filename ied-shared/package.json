@@ -20,7 +20,8 @@
     }
   },
   "scripts": {
-    "build": "tsc"
+    "build": "tsc",
+    "format": "npx biome check --write ."
   },
   "keywords": [],
   "author": "",
@@ -29,7 +30,7 @@
     "node": ">=20.0.0"
   },
   "devDependencies": {
-    "@biomejs/biome": "^1.9.4",
+    "@biomejs/biome": "latest",
     "@types/node": "^22.15.21",
     "tsx": "^4.20.1",
     "typescript": "^5.8.3"
