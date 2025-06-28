@@ -199,13 +199,13 @@ importers:
 
   ied-shared:
     dependencies:
+      '@biomejs/biome':
+        specifier: latest
+        version: 2.0.6
       zod:
         specifier: ^3.25.17
         version: 3.25.17
     devDependencies:
-      '@biomejs/biome':
-        specifier: latest
-        version: 2.0.6
       '@types/node':
         specifier: ^22.15.21
         version: 22.15.21
@@ -231,6 +231,9 @@ importers:
         specifier: ^10.9.2
         version: 10.9.2(@swc/core@1.11.21(@swc/helpers@0.5.17))(@types/node@22.15.21)(typescript@5.8.3)
     devDependencies:
+      '@biomejs/biome':
+        specifier: latest
+        version: 2.0.6
       typescript:
         specifier: ^5.8.3
         version: 5.8.3
