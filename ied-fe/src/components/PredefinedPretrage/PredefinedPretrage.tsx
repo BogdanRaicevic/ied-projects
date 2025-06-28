@@ -1,17 +1,17 @@
-import VirtualizedAutocomplete from "../Autocomplete/Virtualized";
+import { RestartAltOutlined } from "@mui/icons-material";
+import ZoomInIcon from "@mui/icons-material/ZoomIn";
+import ZoomOutIcon from "@mui/icons-material/ZoomOut";
 import { Button, Grid } from "@mui/material";
-import PretragaSaveDialog from "../Dialogs/PretragaSaveDialog";
 import { useEffect, useState } from "react";
+import type { TODO_ANY } from "../../../../ied-be/src/utils/utils";
 import {
   deletePretraga,
   fetchAllPretrage,
   savePretraga,
 } from "../../api/pretrage.api";
-import type { TODO_ANY } from "../../../../ied-be/src/utils/utils";
 import { usePretragaStore } from "../../store/pretragaParameters.store";
-import ZoomInIcon from "@mui/icons-material/ZoomIn";
-import ZoomOutIcon from "@mui/icons-material/ZoomOut";
-import { RestartAltOutlined } from "@mui/icons-material";
+import VirtualizedAutocomplete from "../Autocomplete/Virtualized";
+import PretragaSaveDialog from "../Dialogs/PretragaSaveDialog";
 
 export default function PredefinedPretrage() {
   const [pretrage, setPretrage] = useState<TODO_ANY[]>([]);

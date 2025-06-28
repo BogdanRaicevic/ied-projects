@@ -1,10 +1,10 @@
-import { create } from "zustand";
 import {
-  CalculationsRacunZod,
+  type CalculationsRacunZod,
   IzdavacRacuna,
-  RacunZod,
+  type RacunZod,
   TipRacuna,
 } from "@ied-shared/types/racuni.zod";
+import { create } from "zustand";
 
 const updateNestedProperty = (obj: any, path: string[], value: any): any => {
   if (path.length === 0) return value;

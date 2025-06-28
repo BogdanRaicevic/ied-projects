@@ -1,21 +1,21 @@
-import {
-  type MRT_ColumnDef,
-  type MRT_Row,
-  MaterialReactTable,
-  useMaterialReactTable,
-} from "material-react-table";
-import { useParams } from "react-router-dom";
-import { myZaposleniColumns } from "../components/MyTable/myCompanyColumns";
-import FirmaForm from "../components/Forms/FirmaForm";
-import type { FirmaType, Zaposleni } from "../schemas/firmaSchemas";
-import { useEffect, useState, useMemo } from "react";
-import { Tooltip, IconButton, Button, Alert, Box } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
-import ZaposleniDialog from "../components/Dialogs/ZaposleniDialog";
+import { Alert, Box, Button, IconButton, Tooltip } from "@mui/material";
+import {
+  MaterialReactTable,
+  type MRT_ColumnDef,
+  type MRT_Row,
+  useMaterialReactTable,
+} from "material-react-table";
+import { useEffect, useMemo, useState } from "react";
+import { useParams } from "react-router-dom";
 import { fetchSingleFirma, saveFirma } from "../api/firma.api";
 import PrijavaNaSeminarDialog from "../components/Dialogs/PrijaviZaposlenogNaSeminar";
+import ZaposleniDialog from "../components/Dialogs/ZaposleniDialog";
+import FirmaForm from "../components/Forms/FirmaForm";
+import { myZaposleniColumns } from "../components/MyTable/myCompanyColumns";
+import type { FirmaType, Zaposleni } from "../schemas/firmaSchemas";
 
 const defaultCompanyData: FirmaType = {
   ID_firma: 0,

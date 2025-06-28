@@ -1,15 +1,15 @@
-import { SetStateAction, useState } from "react";
-import List from "@mui/material/List";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import Pagination from "@mui/material/Pagination";
 import {
-  Card,
-  CardContent,
-  Typography,
   Accordion,
   AccordionDetails,
   AccordionSummary,
+  Card,
+  CardContent,
+  Typography,
 } from "@mui/material";
+import List from "@mui/material/List";
+import Pagination from "@mui/material/Pagination";
+import { type SetStateAction, useState } from "react";
 import { fakeZaposleni } from "../../fakeData/zaposleniPretraga";
 import { SingleZaposleni } from "../Zaposleni/SingleZaposleni";
 

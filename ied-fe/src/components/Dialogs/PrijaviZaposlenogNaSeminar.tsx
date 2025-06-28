@@ -1,27 +1,27 @@
+import type { PrijavaZodType } from "@ied-shared/index";
 import {
-  Dialog,
-  DialogTitle,
-  DialogContent,
+  Alert,
+  Autocomplete,
+  Box,
   Button,
-  TextField,
+  Dialog,
   DialogActions,
+  DialogContent,
+  DialogTitle,
   FormControl,
   FormControlLabel,
   FormLabel,
+  Grid,
   Radio,
   RadioGroup,
-  Autocomplete,
+  TextField,
   Typography,
-  Box,
-  Alert,
-  Grid,
 } from "@mui/material";
+import { format } from "date-fns";
+import { useEffect, useState } from "react";
+import { savePrijava } from "../../api/seminari.api";
 import { useFetchSeminari } from "../../hooks/useFetchData";
 import type { FirmaType, Zaposleni } from "../../schemas/firmaSchemas";
-import { savePrijava } from "../../api/seminari.api";
-import { useEffect, useState } from "react";
-import { format } from "date-fns";
-import { PrijavaZodType } from "@ied-shared/index";
 
 export default function PrijavaNaSeminarDialog({
   open,

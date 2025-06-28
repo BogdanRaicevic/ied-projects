@@ -1,10 +1,10 @@
-import * as React from "react";
-import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
-import useMediaQuery from "@mui/material/useMediaQuery";
 import { useTheme } from "@mui/material/styles";
-import { VariableSizeList, type ListChildComponentProps } from "react-window";
+import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
+import useMediaQuery from "@mui/material/useMediaQuery";
+import * as React from "react";
+import { type ListChildComponentProps, VariableSizeList } from "react-window";
 import type { TODO_ANY } from "../../../../ied-be/src/utils/utils";
 
 const LISTBOX_PADDING = 8; // px

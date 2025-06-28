@@ -1,9 +1,9 @@
-import axiosInstanceWithAuth from "./interceptors/auth";
 import type {
   PrijavaZodType,
   SeminarQueryParams,
   SeminarZodType,
 } from "@ied-shared/types/seminar.zod";
+import axiosInstanceWithAuth from "./interceptors/auth";
 
 export const saveSeminar = async (seminarData: SeminarZodType) => {
   try {

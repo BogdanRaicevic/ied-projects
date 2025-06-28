@@ -1,6 +1,6 @@
+import path from "node:path";
 import react from "@vitejs/plugin-react-swc";
 import { defineConfig, searchForWorkspaceRoot } from "vite";
-import path from "path";
 
 // https://vitejs.dev/config/
 export default defineConfig({

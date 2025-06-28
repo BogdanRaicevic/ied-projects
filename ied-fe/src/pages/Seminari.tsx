@@ -1,9 +1,9 @@
+import type { SeminarQueryParams } from "@ied-shared/types/seminar.zod";
+import { addMonths, subMonths } from "date-fns";
 import { useState } from "react";
+import { ParametriPretrageSeminar } from "../components/Seminari/ParametriPretrageSeminar";
 import SeminarForm from "../components/Seminari/SeminarForm";
 import SeminariTable from "../components/Seminari/SeminariTable";
-import { SeminarQueryParams } from "@ied-shared/types/seminar.zod";
-import { ParametriPretrageSeminar } from "../components/Seminari/ParametriPretrageSeminar";
-import { addMonths, subMonths } from "date-fns";
 
 export default function Seminari() {
   const [seminariUpdateCounter, setSeminarUpdateCounter] = useState(0);

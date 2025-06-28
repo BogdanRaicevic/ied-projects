@@ -1,31 +1,30 @@
+import { zodResolver } from "@hookform/resolvers/zod";
 import {
-  FormControl,
-  TextField,
-  InputAdornment,
+  Alert,
+  Box,
   Button,
   Divider,
-  Alert,
-  Typography,
+  FormControl,
   Grid,
-  Box,
+  InputAdornment,
+  TextField,
+  Typography,
 } from "@mui/material";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
 import type React from "react";
 import { useEffect, useState } from "react";
-import {
-  type Metadata,
-  FirmaSchema,
-  InputTypesSchema,
-  type FirmaType,
-  Zaposleni,
-} from "../../../schemas/firmaSchemas";
+import { useForm } from "react-hook-form";
 import type { z } from "zod";
-
-import AutocompleteSingle from "../../Autocomplete/Single";
-import { useFetchData } from "../../../hooks/useFetchData";
-import { firmaFormMetadata } from "./metadata";
 import { deleteFirma, saveFirma } from "../../../api/firma.api";
+import { useFetchData } from "../../../hooks/useFetchData";
+import {
+  FirmaSchema,
+  type FirmaType,
+  InputTypesSchema,
+  type Metadata,
+  type Zaposleni,
+} from "../../../schemas/firmaSchemas";
+import AutocompleteSingle from "../../Autocomplete/Single";
+import { firmaFormMetadata } from "./metadata";
 
 type FirmaFormProps = {
   inputCompany: FirmaType;

@@ -1,18 +1,18 @@
-import * as React from "react";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { SeminarSchema, type SeminarZodType } from "@ied-shared/index";
 import {
-  TextField,
+  Alert,
   Box,
   Button,
   FormControl,
-  Alert,
   Snackbar,
+  TextField,
 } from "@mui/material";
 import InputAdornment from "@mui/material/InputAdornment";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-import { saveSeminar } from "../../api/seminari.api";
-import { SeminarSchema, SeminarZodType } from "@ied-shared/index";
+import * as React from "react";
 import { Controller, useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
+import { saveSeminar } from "../../api/seminari.api";
 
 export default function SeminarForm({
   seminar,

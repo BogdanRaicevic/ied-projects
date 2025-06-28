@@ -8,7 +8,7 @@ import {
   TextField,
 } from "@mui/material";
 import { useEffect, useState } from "react";
-import { TODO_ANY } from "../../../../ied-be/src/utils/utils";
+import type { TODO_ANY } from "../../../../ied-be/src/utils/utils";
 
 interface PretrageSaveDialogProps {
   open: boolean;

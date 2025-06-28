@@ -1,8 +1,8 @@
-import * as React from "react";
+import { IndeterminateCheckBox } from "@mui/icons-material";
 import Box from "@mui/material/Box";
 import Checkbox from "@mui/material/Checkbox";
 import FormControlLabel from "@mui/material/FormControlLabel";
-import { IndeterminateCheckBox } from "@mui/icons-material";
+import * as React from "react";
 
 interface IndeterminateCheckboxProps {
   options: {

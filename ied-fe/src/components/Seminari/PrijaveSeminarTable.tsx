@@ -1,23 +1,23 @@
-import {
-  TableRow,
-  TableCell,
-  IconButton,
-  Collapse,
-  Typography,
-  Table,
-  TableHead,
-  TableBody,
-  Tooltip,
-  Box,
-} from "@mui/material";
+import type { PrijavaZodType } from "@ied-shared/index";
+import DeleteIcon from "@mui/icons-material/Delete";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
-import { useState } from "react";
-import DeleteIcon from "@mui/icons-material/Delete";
-import { deletePrijava } from "../../api/seminari.api";
 import MonetizationOnIcon from "@mui/icons-material/MonetizationOn";
+import {
+  Box,
+  Collapse,
+  IconButton,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableRow,
+  Tooltip,
+  Typography,
+} from "@mui/material";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { PrijavaZodType } from "@ied-shared/index";
+import { deletePrijava } from "../../api/seminari.api";
 
 export default function PrijaveSeminarTable({
   seminarId,

@@ -1,12 +1,12 @@
-import { UnfoldLess } from "@mui/icons-material";
-import { TextField, FormControl, Button, Box } from "@mui/material";
-import { DatePicker } from "@mui/x-date-pickers";
-import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
+  type SeminarQueryParams,
   SeminarQueryParamsSchema,
-  SeminarQueryParams,
 } from "@ied-shared/types/seminar.zod";
+import { UnfoldLess } from "@mui/icons-material";
+import { Box, Button, FormControl, TextField } from "@mui/material";
+import { DatePicker } from "@mui/x-date-pickers";
+import { Controller, useForm } from "react-hook-form";
 
 export function ParametriPretrageSeminar({
   onSubmit,

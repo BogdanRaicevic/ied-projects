@@ -1,5 +1,5 @@
 import { Autocomplete, Chip, TextField } from "@mui/material";
-import { useState, memo, useEffect } from "react";
+import { memo, useEffect, useState } from "react";
 
 interface AutocompleteMultipleProps {
   data: string[];

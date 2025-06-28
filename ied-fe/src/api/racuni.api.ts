@@ -1,12 +1,12 @@
-import axiosInstanceWithAuth from "./interceptors/auth";
 import {
-  IzdavacRacuna,
-  PretrageRacunaZodType,
+  type IzdavacRacuna,
+  type PretrageRacunaZodType,
   RacunSchema,
-  RacunZod,
-  TipRacuna,
+  type RacunZod,
+  type TipRacuna,
 } from "@ied-shared/index";
 import { validateOrThrow } from "../utils/zodErrorHelper";
+import axiosInstanceWithAuth from "./interceptors/auth";
 
 export const getIzdavaciRacuna = async () => {
   try {

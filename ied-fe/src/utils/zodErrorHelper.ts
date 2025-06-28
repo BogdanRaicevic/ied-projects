@@ -1,4 +1,4 @@
-import { ZodSchema } from "zod";
+import type { ZodSchema } from "zod";
 
 export function validateOrThrow<T>(
   schema: ZodSchema<T>,

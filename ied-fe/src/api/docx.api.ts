@@ -1,6 +1,10 @@
-import axiosInstanceWithAuth from "./interceptors/auth";
-import { RacunZod, RacunSchema, TipRacuna } from "@ied-shared/types/racuni.zod";
+import {
+  RacunSchema,
+  type RacunZod,
+  TipRacuna,
+} from "@ied-shared/types/racuni.zod";
 import { validateOrThrow } from "../utils/zodErrorHelper";
+import axiosInstanceWithAuth from "./interceptors/auth";
 
 export const generateRacunDocument = async (racunData: RacunZod) => {
   const tipRacuna = racunData.tipRacuna;
@@ -35,9 +39,9 @@ export const generateRacunDocument = async (racunData: RacunZod) => {
     // Try to get filename from Content-Disposition header
     let fileName = "document.docx";
     const disposition = response.headers["content-disposition"];
-    if (disposition && disposition.includes("filename=")) {
+    if (disposition?.includes("filename=")) {
       const match = disposition.match(/filename=["']?([^"';\n]+)["']?/);
-      if (match && match[1]) {
+      if (match?.[1]) {
         fileName = match[1];
       }
     } else {

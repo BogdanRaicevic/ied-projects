@@ -1,7 +1,7 @@
-import { ExportFirma, ExportZaposlenih } from "@ied-shared/index";
+import type { ExportFirma, ExportZaposlenih } from "@ied-shared/index";
+import type { FirmaQueryParams } from "@ied-shared/types/firma.zod";
 import type { FirmaType } from "../schemas/firmaSchemas";
 import axiosInstanceWithAuth from "./interceptors/auth";
-import { FirmaQueryParams } from "@ied-shared/types/firma.zod";
 
 export const fetchFirmaPretrage = async (
   pageSize: number,
@@ -25,9 +25,7 @@ export const fetchFirmaPretrage = async (
   }
 };
 
-export const fetchSingleFirma = async (
-  id: string,
-): Promise<FirmaType | null> => {
+export const fetchSingleFirma = async (id: string): Promise<FirmaType> => {
   try {
     const response = await axiosInstanceWithAuth.get(`/api/firma/${id}`);
     return response.data;

@@ -1,5 +1,5 @@
-import { Close, CancelPresentation } from "@mui/icons-material";
-import { Checkbox, FormControlLabel, Box } from "@mui/material";
+import { CancelPresentation, Close } from "@mui/icons-material";
+import { Box, Checkbox, FormControlLabel } from "@mui/material";
 
 interface CustomCheckboxProps {
   negationChecked: boolean;

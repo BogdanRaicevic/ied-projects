@@ -1,9 +1,9 @@
-import { Divider, Typography, TextField, Box } from "@mui/material";
-import { PrimalacRacunaSection } from "./components/PrimalacRacunaSection";
+import { Box, Divider, TextField, Typography } from "@mui/material";
 import { OfflinePrisustvaSection } from "./components/OfflinePrisustvaSection";
 import { OnlinePrisustvaSection } from "./components/OnlinePrisustvaSection";
-import { UkupnaNaknada } from "./UkupnaNaknada";
+import { PrimalacRacunaSection } from "./components/PrimalacRacunaSection";
 import { useRacunStore } from "./store/useRacunStore";
+import { UkupnaNaknada } from "./UkupnaNaknada";
 
 export const CreateRacunForm = () => {
   const racunData = useRacunStore((state) => state.racunData);

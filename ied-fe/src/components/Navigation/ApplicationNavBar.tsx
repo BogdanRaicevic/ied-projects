@@ -1,15 +1,15 @@
-import AppBar from "@mui/material/AppBar";
-import Box from "@mui/material/Box";
-import Toolbar from "@mui/material/Toolbar";
-import Button from "@mui/material/Button";
-import { Link as RouteLink } from "react-router-dom";
-import Link from "@mui/material/Link";
 import {
+  SignedIn,
   SignedOut,
   SignInButton,
-  SignedIn,
   UserButton,
 } from "@clerk/clerk-react";
+import AppBar from "@mui/material/AppBar";
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
+import Link from "@mui/material/Link";
+import Toolbar from "@mui/material/Toolbar";
+import { Link as RouteLink } from "react-router-dom";
 
 export default function ApplicationNavBar() {
   const navItems = [

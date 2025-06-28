@@ -1,15 +1,11 @@
-import { useEffect, useMemo, useState, memo } from "react";
-import {
-  MaterialReactTable,
-  type MRT_ColumnDef,
-  useMaterialReactTable,
-  type MRT_PaginationState,
-} from "material-react-table";
-import { deleteSeminar, fetchSeminari } from "../../api/seminari.api";
 import type {
   SeminarQueryParams,
   SeminarZodType,
 } from "@ied-shared/types/seminar.zod";
+import DeleteIcon from "@mui/icons-material/Delete";
+import EditIcon from "@mui/icons-material/Edit";
+import ForwardToInboxIcon from "@mui/icons-material/ForwardToInbox";
+import TableViewIcon from "@mui/icons-material/TableView";
 import {
   Box,
   Dialog,
@@ -24,13 +20,17 @@ import {
   TableRow,
   Tooltip,
 } from "@mui/material";
-import DeleteIcon from "@mui/icons-material/Delete";
-import EditIcon from "@mui/icons-material/Edit";
+import { format } from "date-fns";
+import {
+  MaterialReactTable,
+  type MRT_ColumnDef,
+  type MRT_PaginationState,
+  useMaterialReactTable,
+} from "material-react-table";
+import { memo, useEffect, useMemo, useState } from "react";
+import { deleteSeminar, fetchSeminari } from "../../api/seminari.api";
 import PrijaveSeminarTable from "./PrijaveSeminarTable";
 import SeminarForm from "./SeminarForm";
-import ForwardToInboxIcon from "@mui/icons-material/ForwardToInbox";
-import TableViewIcon from "@mui/icons-material/TableView";
-import { format } from "date-fns";
 
 export default memo(function SeminariTable(props: {
   queryParameters: SeminarQueryParams;
