@@ -15,9 +15,9 @@ export const SeminarRacunSchema = z.object({
   // Use preprocess to handle date strings from forms/JSON
   datum: z.preprocess(
     (arg) => {
-      if (typeof arg == "string" || arg instanceof Date) return new Date(arg);
+      if (typeof arg === "string" || arg instanceof Date) return new Date(arg);
     },
-    z.date({ required_error: "Datum seminara je obavezan" })
+    z.date({ required_error: "Datum seminara je obavezan" }),
   ),
   lokacija: z.string().optional(),
   jedinicaMere: z.string().optional(),

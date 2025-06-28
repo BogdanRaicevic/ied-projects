@@ -1,10 +1,10 @@
-import { Divider, Typography, TextField, Box } from "@mui/material";
-import { PrimalacRacunaSection } from "./components/PrimalacRacunaSection";
+import { Box, Divider, TextField, Typography } from "@mui/material";
 import { AvansSection } from "./components/AvansSection";
 import { OfflinePrisustvaSection } from "./components/OfflinePrisustvaSection";
 import { OnlinePrisustvaSection } from "./components/OnlinePrisustvaSection";
-import { UkupnaNaknada } from "./UkupnaNaknada";
+import { PrimalacRacunaSection } from "./components/PrimalacRacunaSection";
 import { useRacunStore } from "./store/useRacunStore";
+import { UkupnaNaknada } from "./UkupnaNaknada";
 
 export const CreateKonacniRacunForm = () => {
   const racunData = useRacunStore((state) => state.racunData);
@@ -24,7 +24,15 @@ export const CreateKonacniRacunForm = () => {
 
   return (
     <Box>
-      <Box sx={{ display: "flex", alignItems: "center", justifyContent: "center", mb: 3, gap: 2 }}>
+      <Box
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          mb: 3,
+          gap: 2,
+        }}
+      >
         <Typography variant="h4">Konačni račun</Typography>
         {pozivNaBroj}
       </Box>

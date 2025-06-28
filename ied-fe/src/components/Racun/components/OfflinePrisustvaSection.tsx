@@ -1,12 +1,12 @@
 import {
   Box,
-  TableContainer,
   Paper,
   Table,
+  TableBody,
+  TableCell,
+  TableContainer,
   TableHead,
   TableRow,
-  TableCell,
-  TableBody,
   TextField,
   Typography,
 } from "@mui/material";
@@ -49,7 +49,9 @@ export const OfflinePrisustvaSection = () => {
                     variant="filled"
                     name="naziv"
                     value={racunData.seminar.naziv ?? ""}
-                    onChange={(e) => updateNestedField("seminar.naziv", e.target.value)}
+                    onChange={(e) =>
+                      updateNestedField("seminar.naziv", e.target.value)
+                    }
                   />
                 </TableCell>
                 <TableCell align="left">
@@ -57,7 +59,9 @@ export const OfflinePrisustvaSection = () => {
                     variant="filled"
                     name="jedinicaMere"
                     value={racunData.seminar.jedinicaMere || ""}
-                    onChange={(e) => updateNestedField("seminar.jedinicaMere", e.target.value)}
+                    onChange={(e) =>
+                      updateNestedField("seminar.jedinicaMere", e.target.value)
+                    }
                   />
                 </TableCell>
                 <TableCell align="left">
@@ -66,7 +70,10 @@ export const OfflinePrisustvaSection = () => {
                     name="brojUcesnikaOffline"
                     value={racunData.seminar.brojUcesnikaOffline || 0}
                     onChange={(e) =>
-                      updateNestedField("seminar.brojUcesnikaOffline", Number(e.target.value))
+                      updateNestedField(
+                        "seminar.brojUcesnikaOffline",
+                        Number(e.target.value),
+                      )
                     }
                   />
                 </TableCell>
@@ -96,7 +103,10 @@ export const OfflinePrisustvaSection = () => {
                     variant="filled"
                     value={racunData.seminar.offlineCena || 0}
                     onChange={(e) =>
-                      updateNestedField("seminar.offlineCena", Number(e.target.value))
+                      updateNestedField(
+                        "seminar.offlineCena",
+                        Number(e.target.value),
+                      )
                     }
                   />
                 </TableCell>
@@ -116,7 +126,7 @@ export const OfflinePrisustvaSection = () => {
                         ) {
                           updateNestedField(
                             "calculations.popustOffline",
-                            value === "" ? 0 : numValue
+                            value === "" ? 0 : numValue,
                           );
                         }
                       }
@@ -125,7 +135,9 @@ export const OfflinePrisustvaSection = () => {
                 </TableCell>
                 <TableCell align="left">
                   <Typography>
-                    {Number(racunData.calculations.offlinePoreskaOsnovica).toLocaleString("sr-RS", {
+                    {Number(
+                      racunData.calculations.offlinePoreskaOsnovica,
+                    ).toLocaleString("sr-RS", {
                       style: "currency",
                       currency: "RSD",
                       minimumFractionDigits: 2,
@@ -137,16 +149,21 @@ export const OfflinePrisustvaSection = () => {
                 </TableCell>
                 <TableCell align="left">
                   <Typography>
-                    {Number(racunData.calculations.pdvOffline).toLocaleString("sr-RS", {
-                      style: "currency",
-                      currency: "RSD",
-                      minimumFractionDigits: 2,
-                    })}
+                    {Number(racunData.calculations.pdvOffline).toLocaleString(
+                      "sr-RS",
+                      {
+                        style: "currency",
+                        currency: "RSD",
+                        minimumFractionDigits: 2,
+                      },
+                    )}
                   </Typography>
                 </TableCell>
                 <TableCell align="left">
                   <Typography>
-                    {Number(racunData.calculations.offlineUkupnaNaknada).toLocaleString("sr-RS", {
+                    {Number(
+                      racunData.calculations.offlineUkupnaNaknada,
+                    ).toLocaleString("sr-RS", {
                       style: "currency",
                       currency: "RSD",
                       minimumFractionDigits: 2,

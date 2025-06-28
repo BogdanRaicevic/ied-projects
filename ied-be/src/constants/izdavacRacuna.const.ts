@@ -18,13 +18,15 @@ const permanent = {
   kontaktTelefoni: [],
   pib: 109282264,
   maticniBroj: 64066030,
-  brojResenjaOEvidencijiZaPDV: "Oslobođeno PDV-a prema članu 33. Zakona o PDV-u",
+  brojResenjaOEvidencijiZaPDV:
+    "Oslobođeno PDV-a prema članu 33. Zakona o PDV-u",
   tekuciRacuni: ["205-0000000227245-69 (Komercijalna banka)"],
 };
 
 const bs = {
   id: "bs",
-  naziv: "Balkanski savet za održivi razvoj i edukaciju, 11080 Zemun, Bezanijska 30",
+  naziv:
+    "Balkanski savet za održivi razvoj i edukaciju, 11080 Zemun, Bezanijska 30",
   kontaktTelefoni: ["011/655-83-05", "064/821-33-22"],
   pib: 108935581,
   maticniBroj: 28170866,

@@ -1,7 +1,7 @@
 import {
   Autocomplete,
-  AutocompleteChangeDetails,
-  AutocompleteChangeReason,
+  type AutocompleteChangeDetails,
+  type AutocompleteChangeReason,
   TextField,
 } from "@mui/material";
 import { memo, useEffect, useState } from "react";
@@ -31,7 +31,7 @@ export default memo(function SingleAutocomplete({
     _event: React.SyntheticEvent<Element, Event>,
     newValue: string | null,
     _reason: AutocompleteChangeReason,
-    _details?: AutocompleteChangeDetails<string>
+    _details?: AutocompleteChangeDetails<string>,
   ) => {
     setSelected(newValue ?? "");
     onChange(newValue ?? "");
@@ -39,7 +39,7 @@ export default memo(function SingleAutocomplete({
 
   return (
     <Autocomplete
-      id={"single-autocomplete-" + id}
+      id={`single-autocomplete-${id}`}
       disablePortal
       options={data}
       renderInput={(params) => (

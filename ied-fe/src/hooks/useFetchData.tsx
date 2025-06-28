@@ -1,13 +1,13 @@
 import { useQuery } from "@tanstack/react-query";
+import { addMonths, subMonths } from "date-fns";
 import { fetchAllDelatnosti } from "../api/delatnosti.api";
 import { fetchAllMesta } from "../api/mesta.api";
+import { getIzdavaciRacuna } from "../api/racuni.api";
 import { fetchAllRadnaMesta } from "../api/radna_mesto.api";
+import { fetchAllSeminars, fetchSeminari } from "../api/seminari.api";
+import { fetchAllStanjaFirme } from "../api/stanja_firme.api";
 import { fetchAllTipoviFirme } from "../api/tip_firme.api";
 import { fetchAllVelicineFirme } from "../api/velicina_firme.api";
-import { fetchAllStanjaFirme } from "../api/stanja_firme.api";
-import { fetchAllSeminars, fetchSeminari } from "../api/seminari.api";
-import { addMonths, subMonths } from "date-fns";
-import { getIzdavaciRacuna } from "../api/racuni.api";
 
 export function useFetchData() {
   const { data: delatnosti } = useQuery({

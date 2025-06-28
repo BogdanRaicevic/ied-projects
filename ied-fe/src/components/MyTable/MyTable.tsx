@@ -1,24 +1,29 @@
-import { useEffect, useMemo, useState, memo } from "react";
-import type { FirmaType } from "../../schemas/firmaSchemas";
-import { myCompanyColumns } from "./myCompanyColumns";
 import {
   MaterialReactTable,
   type MRT_ColumnDef,
   useMaterialReactTable,
 } from "material-react-table";
+import { memo, useEffect, useMemo, useState } from "react";
 import { fetchFirmaPretrage } from "../../api/firma.api";
+import type { FirmaType } from "../../schemas/firmaSchemas";
 import { usePretragaStore } from "../../store/pretragaParameters.store";
+import { myCompanyColumns } from "./myCompanyColumns";
 
 export default memo(function MyTable() {
   const [data, setData] = useState<FirmaType[]>([]);
   const [documents, setDocuments] = useState(1000);
 
-  const { pagination, setPaginationParameters, appliedParameters } = usePretragaStore();
+  const { pagination, setPaginationParameters, appliedParameters } =
+    usePretragaStore();
 
   useEffect(() => {
     const loadData = async () => {
       const { pageIndex, pageSize } = pagination;
-      const res = await fetchFirmaPretrage(pageSize, pageIndex, appliedParameters);
+      const res = await fetchFirmaPretrage(
+        pageSize,
+        pageIndex,
+        appliedParameters,
+      );
       setData(res.firmas);
       setDocuments(res.totalDocuments);
     };

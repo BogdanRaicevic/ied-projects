@@ -1,23 +1,23 @@
-import {
-  TableRow,
-  TableCell,
-  IconButton,
-  Collapse,
-  Typography,
-  Table,
-  TableHead,
-  TableBody,
-  Tooltip,
-  Box,
-} from "@mui/material";
+import type { PrijavaZodType } from "@ied-shared/index";
+import DeleteIcon from "@mui/icons-material/Delete";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
-import { useState } from "react";
-import DeleteIcon from "@mui/icons-material/Delete";
-import { deletePrijava } from "../../api/seminari.api";
 import MonetizationOnIcon from "@mui/icons-material/MonetizationOn";
+import {
+  Box,
+  Collapse,
+  IconButton,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableRow,
+  Tooltip,
+  Typography,
+} from "@mui/material";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { PrijavaZodType } from "@ied-shared/index";
+import { deletePrijava } from "../../api/seminari.api";
 
 export default function PrijaveSeminarTable({
   seminarId,
@@ -31,7 +31,9 @@ export default function PrijaveSeminarTable({
   const [open, setOpen] = useState(false);
 
   const onePrijavaDelete = async (zaposleni_id: string, seminar_id: string) => {
-    const confirmed = window.confirm("Da li ste sigurni da želite da obrišete prijavu?");
+    const confirmed = window.confirm(
+      "Da li ste sigurni da želite da obrišete prijavu?",
+    );
     if (confirmed) {
       await deletePrijava(zaposleni_id, seminar_id);
       onDelete?.();
@@ -97,7 +99,9 @@ export default function PrijaveSeminarTable({
                       <TableCell>
                         <IconButton
                           color="error"
-                          onClick={() => onePrijavaDelete(prijava.zaposleni_id, seminarId)}
+                          onClick={() =>
+                            onePrijavaDelete(prijava.zaposleni_id, seminarId)
+                          }
                         >
                           <DeleteIcon />
                         </IconButton>

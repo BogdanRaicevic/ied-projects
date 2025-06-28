@@ -1,4 +1,4 @@
-import { Control, useWatch } from "react-hook-form";
+import { type Control, useWatch } from "react-hook-form";
 import ExportDataButton from "../SaveDataButton";
 
 export function ExportButtons({ control }: { control: Control }) {

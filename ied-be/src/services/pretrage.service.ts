@@ -1,4 +1,4 @@
-import { FirmaQueryParams } from "@ied-shared/types/firma.zod";
+import type { FirmaQueryParams } from "@ied-shared/types/firma.zod";
 import { Pretrage, type PretrageType } from "../models/pretrage.model";
 import { validateMongoId } from "../utils/utils";
 
@@ -14,7 +14,7 @@ export const getAllPretrage = async () => {
 
 export const savePretraga = async (
   queryParameters: FirmaQueryParams,
-  pretraga: { id?: string; naziv: string }
+  pretraga: { id?: string; naziv: string },
 ) => {
   try {
     const pretragaData: Partial<PretrageType> = {};
@@ -41,7 +41,7 @@ export const savePretraga = async (
     const p = await Pretrage.findOneAndUpdate(
       { _id: pretraga.id },
       { $set: pretragaData },
-      { new: true, runValidators: true }
+      { new: true, runValidators: true },
     );
 
     if (!p) {

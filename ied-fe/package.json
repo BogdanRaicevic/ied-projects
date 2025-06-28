@@ -7,7 +7,8 @@
     "dev": "vite",
     "build": "tsc && vite build",
     "preview": "vite preview",
-    "format": "npx biome format --write ./src",
+    "biome:format": "npx biome format --write ./src",
+    "biome:check": "npx biome check --write ./src",
     "lint:all": "npx biome lint",
     "lint:error": "npx biome lint --diagnostic-level error"
   },
@@ -37,7 +38,7 @@
     "zustand": "^5.0.5"
   },
   "devDependencies": {
-    "@biomejs/biome": "^1.9.4",
+    "@biomejs/biome": "latest",
     "@types/react": "19.1.8",
     "@types/react-dom": "19.1.6",
     "@types/react-router-dom": "^5.3.3",

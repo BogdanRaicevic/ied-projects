@@ -1,11 +1,18 @@
-import * as React from "react";
-import { TextField, Box, Button, FormControl, Alert, Snackbar } from "@mui/material";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { SeminarSchema, type SeminarZodType } from "@ied-shared/index";
+import {
+  Alert,
+  Box,
+  Button,
+  FormControl,
+  Snackbar,
+  TextField,
+} from "@mui/material";
 import InputAdornment from "@mui/material/InputAdornment";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-import { saveSeminar } from "../../api/seminari.api";
-import { SeminarSchema, SeminarZodType } from "@ied-shared/index";
+import * as React from "react";
 import { Controller, useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
+import { saveSeminar } from "../../api/seminari.api";
 
 export default function SeminarForm({
   seminar,
@@ -42,7 +49,9 @@ export default function SeminarForm({
   });
 
   const [alertOpen, setAlertOpen] = React.useState(false);
-  const [alertSeverity, setAlertSeverity] = React.useState<"success" | "error">("success");
+  const [alertSeverity, setAlertSeverity] = React.useState<"success" | "error">(
+    "success",
+  );
   const [alertMessage, setAlertMessage] = React.useState("");
 
   React.useEffect(() => {
@@ -51,7 +60,9 @@ export default function SeminarForm({
       reset({
         ...defaultSeminarData,
         ...seminar,
-        datum: seminar.datum ? new Date(seminar.datum) : defaultSeminarData.datum,
+        datum: seminar.datum
+          ? new Date(seminar.datum)
+          : defaultSeminarData.datum,
       });
     } else {
       reset(defaultSeminarData);
@@ -64,7 +75,9 @@ export default function SeminarForm({
       const payload = seminar?._id ? { ...data, _id: seminar._id } : data;
       await saveSeminar(payload);
       setAlertSeverity("success");
-      setAlertMessage(seminar?._id ? "Uspešno izmenjen seminar" : "Uspešno kreiran seminar");
+      setAlertMessage(
+        seminar?._id ? "Uspešno izmenjen seminar" : "Uspešno kreiran seminar",
+      );
       setAlertOpen(true);
       // TODO: Fix missing snackbar because of dialog unmount
       onDialogClose?.();
@@ -139,7 +152,9 @@ export default function SeminarForm({
               sx={{ m: 1 }}
               slotProps={{
                 input: {
-                  startAdornment: <InputAdornment position="start">RSD</InputAdornment>,
+                  startAdornment: (
+                    <InputAdornment position="start">RSD</InputAdornment>
+                  ),
                 },
               }}
               onChange={(e) => field.onChange(parseFloat(e.target.value) || 0)} // Parse to number
@@ -161,7 +176,9 @@ export default function SeminarForm({
               sx={{ m: 1 }}
               slotProps={{
                 input: {
-                  startAdornment: <InputAdornment position="start">RSD</InputAdornment>,
+                  startAdornment: (
+                    <InputAdornment position="start">RSD</InputAdornment>
+                  ),
                 },
               }}
               onChange={(e) => field.onChange(parseFloat(e.target.value) || 0)} // Parse to number
@@ -208,7 +225,13 @@ export default function SeminarForm({
           )}
         />
 
-        <Button sx={{ m: 1 }} size="large" variant="contained" color="primary" type="submit">
+        <Button
+          sx={{ m: 1 }}
+          size="large"
+          variant="contained"
+          color="primary"
+          type="submit"
+        >
           {seminar?._id ? "Izmeni" : "Kreiraj"} seminar
         </Button>
         <Snackbar

@@ -1,11 +1,11 @@
 import {
-  TableContainer,
   Paper,
   Table,
+  TableBody,
+  TableCell,
+  TableContainer,
   TableHead,
   TableRow,
-  TableCell,
-  TableBody,
   TextField,
 } from "@mui/material";
 import { useRacunStore } from "../store/useRacunStore";
@@ -23,7 +23,10 @@ export const PrimalacRacunaSection = () => {
           </TableRow>
         </TableHead>
         <TableBody>
-          <TableRow key="naziv-firme" sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
+          <TableRow
+            key="naziv-firme"
+            sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+          >
             <TableCell align="left">
               <TextField
                 name="naziv"
@@ -32,7 +35,9 @@ export const PrimalacRacunaSection = () => {
                 label="Naziv"
                 value={racun.primalacRacuna.naziv || ""}
                 sx={{ mb: 2 }}
-                onChange={(e) => updateNestedField("primalacRacuna.naziv", e.target.value)}
+                onChange={(e) =>
+                  updateNestedField("primalacRacuna.naziv", e.target.value)
+                }
               />
               <TextField
                 name="mesto"
@@ -41,7 +46,9 @@ export const PrimalacRacunaSection = () => {
                 label="Mesto"
                 value={racun.primalacRacuna.mesto || ""}
                 sx={{ mb: 2 }}
-                onChange={(e) => updateNestedField("primalacRacuna.mesto", e.target.value)}
+                onChange={(e) =>
+                  updateNestedField("primalacRacuna.mesto", e.target.value)
+                }
               />
               <TextField
                 name="adresa"
@@ -50,7 +57,9 @@ export const PrimalacRacunaSection = () => {
                 label="Adresa"
                 value={racun.primalacRacuna.adresa || ""}
                 sx={{ mb: 2 }}
-                onChange={(e) => updateNestedField("primalacRacuna.adresa", e.target.value)}
+                onChange={(e) =>
+                  updateNestedField("primalacRacuna.adresa", e.target.value)
+                }
               />
               <TextField
                 name="pib"
@@ -59,7 +68,9 @@ export const PrimalacRacunaSection = () => {
                 label="PIB"
                 value={racun.primalacRacuna.pib || ""}
                 sx={{ mb: 2 }}
-                onChange={(e) => updateNestedField("primalacRacuna.pib", e.target.value)}
+                onChange={(e) =>
+                  updateNestedField("primalacRacuna.pib", e.target.value)
+                }
               />
               <TextField
                 name="maticniBroj"
@@ -68,7 +79,12 @@ export const PrimalacRacunaSection = () => {
                 label="Matični broj"
                 value={racun.primalacRacuna.maticniBroj || ""}
                 sx={{ mb: 2 }}
-                onChange={(e) => updateNestedField("primalacRacuna.maticniBroj", e.target.value)}
+                onChange={(e) =>
+                  updateNestedField(
+                    "primalacRacuna.maticniBroj",
+                    e.target.value,
+                  )
+                }
               />
             </TableCell>
           </TableRow>

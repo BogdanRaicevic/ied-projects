@@ -1,7 +1,11 @@
-import Button from "@mui/material/Button";
-import { exportZaposleniData, exportFirmaData } from "../../api/firma.api";
+import type {
+  ExportFirma,
+  ExportZaposlenih,
+  FirmaQueryParams,
+} from "@ied-shared/index";
 import DownloadIcon from "@mui/icons-material/Download";
-import { ExportFirma, ExportZaposlenih, FirmaQueryParams } from "@ied-shared/index";
+import Button from "@mui/material/Button";
+import { exportFirmaData, exportZaposleniData } from "../../api/firma.api";
 
 type SaveButton = {
   queryParameters: FirmaQueryParams;
@@ -9,7 +13,11 @@ type SaveButton = {
   exportSubject: "firma" | "zaposleni";
 };
 
-export default function ExportDataButton({ queryParameters, fileName, exportSubject }: SaveButton) {
+export default function ExportDataButton({
+  queryParameters,
+  fileName,
+  exportSubject,
+}: SaveButton) {
   // Prepend BOM to preserve Serbian Latin characters in Windows
   const bom = "\uFEFF";
 
@@ -33,7 +41,10 @@ export default function ExportDataButton({ queryParameters, fileName, exportSubj
     return bom + csvContent + "\n\n" + duplicatesContent;
   };
 
-  const zaposleniData = (someData: { data: ExportZaposlenih; duplicates: string[] }) => {
+  const zaposleniData = (someData: {
+    data: ExportZaposlenih;
+    duplicates: string[];
+  }) => {
     const headers = ["Naziv firme", "E-mail", "Ime i prezime", "Radno mesto"];
 
     const rows = someData.data.map((item) => [
@@ -60,7 +71,8 @@ export default function ExportDataButton({ queryParameters, fileName, exportSubj
           ? await exportFirmaData(queryParameters)
           : await exportZaposleniData(queryParameters);
 
-      const csvData = exportSubject === "firma" ? firmaData(data) : zaposleniData(data);
+      const csvData =
+        exportSubject === "firma" ? firmaData(data) : zaposleniData(data);
 
       const blob = new Blob([csvData], { type: "text/csv;charset=utf-8;" });
       const url = URL.createObjectURL(blob);

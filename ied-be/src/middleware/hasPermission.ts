@@ -1,11 +1,15 @@
 import { clerkClient, getAuth } from "@clerk/express";
-import type { Response, Request, NextFunction } from "express";
+import type { NextFunction, Request, Response } from "express";
 import NodeCache from "node-cache";
 
 const myCache = new NodeCache();
 const CACHE_TTL = 60 * 60 * 3; // 3 hours in seconds
 
-export const hasPermission = async (req: Request, res: Response, next: NextFunction) => {
+export const hasPermission = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
   try {
     const auth = getAuth(req);
 
@@ -21,7 +25,9 @@ export const hasPermission = async (req: Request, res: Response, next: NextFunct
 
       if (!currentUser) {
         console.error("Clerk API is unavailable. Skipping user store update.");
-        res.status(503).json({ error: "Service Unavailable. Please try again later." });
+        res
+          .status(503)
+          .json({ error: "Service Unavailable. Please try again later." });
         return;
       }
 
@@ -39,7 +45,7 @@ export const hasPermission = async (req: Request, res: Response, next: NextFunct
 const getUserWithRetry = async (
   userId: string,
   retries = 3,
-  delay = 1000
+  delay = 1000,
 ): Promise<string | null> => {
   console.log(`Fetching user data for ${userId} from Clerk API`);
   for (let attempt = 1; attempt <= retries; attempt++) {

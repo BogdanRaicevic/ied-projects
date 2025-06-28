@@ -1,10 +1,10 @@
-import { TextField, Button, Box } from "@mui/material";
-import { Zaposleni, ZaposleniSchema } from "../../schemas/firmaSchemas";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Box, Button, TextField } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import Single from "../Autocomplete/Single";
 import { useFetchData } from "../../hooks/useFetchData";
+import { type Zaposleni, ZaposleniSchema } from "../../schemas/firmaSchemas";
+import Single from "../Autocomplete/Single";
 
 type ZaposleniFormProps = {
   zaposleni?: Zaposleni;
@@ -21,7 +21,9 @@ export function ZaposleniForm({ zaposleni, onSubmit }: ZaposleniFormProps) {
     resolver: zodResolver(ZaposleniSchema),
   });
 
-  const [selectedRadnoMesto, setSelectedRadnoMesto] = useState(zaposleni?.radno_mesto || "");
+  const [selectedRadnoMesto, setSelectedRadnoMesto] = useState(
+    zaposleni?.radno_mesto || "",
+  );
   let zaposleniData: Zaposleni;
 
   const handleDodajZaposlenog = (data: Zaposleni) => {

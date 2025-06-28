@@ -1,27 +1,27 @@
+import type { PrijavaZodType } from "@ied-shared/index";
 import {
-  Dialog,
-  DialogTitle,
-  DialogContent,
+  Alert,
+  Autocomplete,
+  Box,
   Button,
-  TextField,
+  Dialog,
   DialogActions,
+  DialogContent,
+  DialogTitle,
   FormControl,
   FormControlLabel,
   FormLabel,
+  Grid,
   Radio,
   RadioGroup,
-  Autocomplete,
+  TextField,
   Typography,
-  Box,
-  Alert,
-  Grid,
 } from "@mui/material";
+import { format } from "date-fns";
+import { useEffect, useState } from "react";
+import { savePrijava } from "../../api/seminari.api";
 import { useFetchSeminari } from "../../hooks/useFetchData";
 import type { FirmaType, Zaposleni } from "../../schemas/firmaSchemas";
-import { savePrijava } from "../../api/seminari.api";
-import { useEffect, useState } from "react";
-import { format } from "date-fns";
-import { PrijavaZodType } from "@ied-shared/index";
 
 export default function PrijavaNaSeminarDialog({
   open,
@@ -34,7 +34,9 @@ export default function PrijavaNaSeminarDialog({
   companyData: FirmaType;
   zaposleniData: Zaposleni;
 }) {
-  const [prijavaState, setPrijavaState] = useState<"success" | "warning" | "error" | "">("");
+  const [prijavaState, setPrijavaState] = useState<
+    "success" | "warning" | "error" | ""
+  >("");
   const [selectedSeminar, setSelectedSeminar] = useState<string>("");
   const [prisustvo, setPrisustvo] = useState<"online" | "offline">("online");
 
@@ -82,7 +84,9 @@ export default function PrijavaNaSeminarDialog({
 
   return (
     <Dialog open={open} onClose={onClose} maxWidth="lg">
-      <DialogTitle id="prijavi-na-seminar-dialog-title">{"Prijavi osobu na seminar"}</DialogTitle>
+      <DialogTitle id="prijavi-na-seminar-dialog-title">
+        {"Prijavi osobu na seminar"}
+      </DialogTitle>
       <DialogContent>
         <Grid container spacing={2} alignItems="center">
           <Grid size={12}>
@@ -141,20 +145,34 @@ export default function PrijavaNaSeminarDialog({
 
           <Grid size={12}>
             <FormControl sx={{ m: 2 }}>
-              <FormLabel id="demo-radio-buttons-group-label">Prisustvo</FormLabel>
+              <FormLabel id="demo-radio-buttons-group-label">
+                Prisustvo
+              </FormLabel>
               <RadioGroup
                 aria-labelledby="demo-radio-buttons-group-label"
                 defaultValue="online"
                 name="radio-buttons-group"
-                onChange={(e) => setPrisustvo(e.target.value as "online" | "offline")}
+                onChange={(e) =>
+                  setPrisustvo(e.target.value as "online" | "offline")
+                }
               >
-                <FormControlLabel value="online" control={<Radio />} label="Online" />
-                <FormControlLabel value="offline" control={<Radio />} label="Offline" />
+                <FormControlLabel
+                  value="online"
+                  control={<Radio />}
+                  label="Online"
+                />
+                <FormControlLabel
+                  value="offline"
+                  control={<Radio />}
+                  label="Offline"
+                />
               </RadioGroup>
             </FormControl>
             <Autocomplete
               options={seminari || []}
-              getOptionLabel={(option) => `${format(option.datum, "dd.MM.yyyy")} - ${option.naziv}`}
+              getOptionLabel={(option) =>
+                `${format(option.datum, "dd.MM.yyyy")} - ${option.naziv}`
+              }
               renderOption={(params, option) => (
                 <Box component="li" {...params} key={option._id}>
                   <Box>
@@ -167,7 +185,9 @@ export default function PrijavaNaSeminarDialog({
                   </Box>
                 </Box>
               )}
-              renderInput={(params) => <TextField {...params} label="Seminar" />}
+              renderInput={(params) => (
+                <TextField {...params} label="Seminar" />
+              )}
               onChange={(_, value) => setSelectedSeminar(value?._id || "")}
             />
           </Grid>

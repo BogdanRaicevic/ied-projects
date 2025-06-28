@@ -1,10 +1,10 @@
-import { create } from "zustand";
 import {
-  CalculationsRacunZod,
+  type CalculationsRacunZod,
   IzdavacRacuna,
-  RacunZod,
+  type RacunZod,
   TipRacuna,
 } from "@ied-shared/types/racuni.zod";
+import { create } from "zustand";
 
 const updateNestedProperty = (obj: any, path: string[], value: any): any => {
   if (path.length === 0) return value;
@@ -12,7 +12,10 @@ const updateNestedProperty = (obj: any, path: string[], value: any): any => {
   const [current, ...rest] = path;
   return {
     ...obj,
-    [current]: rest.length === 0 ? value : updateNestedProperty(obj[current] || {}, rest, value),
+    [current]:
+      rest.length === 0
+        ? value
+        : updateNestedProperty(obj[current] || {}, rest, value),
   };
 };
 

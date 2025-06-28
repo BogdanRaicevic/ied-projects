@@ -1,20 +1,20 @@
+import { TipRacuna } from "@ied-shared/types/racuni.zod";
 import {
   Box,
-  TableContainer,
+  Chip,
   Paper,
   Table,
+  TableBody,
+  TableCell,
+  TableContainer,
   TableHead,
   TableRow,
-  TableCell,
-  TableBody,
   TextField,
   Typography,
-  Chip,
 } from "@mui/material";
+import { getRacunByPozivNaBrojAndIzdavac } from "../../../api/racuni.api";
 import { formatToRSDNumber } from "../../../utils/helpers";
 import { useRacunStore } from "../store/useRacunStore";
-import { getRacunByPozivNaBrojAndIzdavac } from "../../../api/racuni.api";
-import { TipRacuna } from "@ied-shared/types/racuni.zod";
 
 export const AvansSection = () => {
   const racunData = useRacunStore((state) => state.racunData);
@@ -22,10 +22,14 @@ export const AvansSection = () => {
   const updateField = useRacunStore((state) => state.updateField);
 
   const avansPdv =
-    (Number(racunData.calculations.avansBezPdv ?? 0) * Number(racunData.stopaPdv)) / 100;
+    (Number(racunData.calculations.avansBezPdv ?? 0) *
+      Number(racunData.stopaPdv)) /
+    100;
   const avans = Number(racunData.calculations.avansBezPdv) + Number(avansPdv);
 
-  const handleSearchAvansniRacun = async (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleSearchAvansniRacun = async (
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) => {
     let value = event.target.value;
 
     value = value.replace(/[^0-9]/g, "");
@@ -40,9 +44,12 @@ export const AvansSection = () => {
       const avansniRacun = await getRacunByPozivNaBrojAndIzdavac(
         value,
         racunData.izdavacRacuna,
-        TipRacuna.AVANSNI_RACUN
+        TipRacuna.AVANSNI_RACUN,
       );
-      updateNestedField("calculations.avansBezPdv", avansniRacun.calculations.avansBezPdv);
+      updateNestedField(
+        "calculations.avansBezPdv",
+        avansniRacun.calculations.avansBezPdv,
+      );
       updateNestedField("seminar.naziv", avansniRacun.seminar.naziv);
     } else {
       updateNestedField("calculations.avansBezPdv", 0);
@@ -74,14 +81,19 @@ export const AvansSection = () => {
                     label={racunData.izdavacRacuna}
                     size="small"
                   />
-                  <Chip sx={{ padding: 1, margin: 1 }} label={"AVANSNI RAČUN"} size="small" />
+                  <Chip
+                    sx={{ padding: 1, margin: 1 }}
+                    label={"AVANSNI RAČUN"}
+                    size="small"
+                  />
                 </>
               ),
             },
           }}
         />
       )}
-      {(racunData.linkedPozivNaBroj || racunData.tipRacuna === TipRacuna.AVANSNI_RACUN) && (
+      {(racunData.linkedPozivNaBroj ||
+        racunData.tipRacuna === TipRacuna.AVANSNI_RACUN) && (
         <TableContainer component={Paper}>
           <Table
             sx={{
@@ -111,7 +123,9 @@ export const AvansSection = () => {
                     variant="filled"
                     name="naziv"
                     value={racunData.seminar.naziv ?? ""}
-                    onChange={(e) => updateNestedField("seminar.naziv", e.target.value)}
+                    onChange={(e) =>
+                      updateNestedField("seminar.naziv", e.target.value)
+                    }
                   />
                 </TableCell>
                 <TableCell align="left">
@@ -120,7 +134,10 @@ export const AvansSection = () => {
                     name="avansBezPdv"
                     value={racunData.calculations.avansBezPdv ?? 0}
                     onChange={(e) =>
-                      updateNestedField("calculations.avansBezPdv", Number(e.target.value) || 0)
+                      updateNestedField(
+                        "calculations.avansBezPdv",
+                        Number(e.target.value) || 0,
+                      )
                     }
                   />
                 </TableCell>

@@ -1,6 +1,6 @@
+import Divider from "@mui/material/Divider";
 import MyTable from "../components/MyTable";
 import PageTitle from "../components/PageTitle";
-import Divider from "@mui/material/Divider";
 import PredefinedPretrage from "../components/PredefinedPretrage/PredefinedPretrage";
 import PretragaParameters from "../components/PretragaParameters/PretragaParameters";
 

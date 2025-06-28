@@ -1,9 +1,9 @@
-import { sanitizeFilter, type FilterQuery } from "mongoose";
-import { type FirmaType, Firma } from "../models/firma.model";
+import type { ExportFirma, ExportZaposlenih } from "@ied-shared/index";
+import type { FirmaQueryParams } from "@ied-shared/types/firma.zod";
+import { type FilterQuery, sanitizeFilter } from "mongoose";
+import { Firma, type FirmaType } from "../models/firma.model";
 import { createFirmaQuery } from "../utils/firmaQueryBuilder";
-import { FirmaQueryParams } from "@ied-shared/types/firma.zod";
 import { getZaposleniIdsFromSeminars } from "./seminar.service";
-import { ExportFirma, ExportZaposlenih } from "@ied-shared/index";
 export const findById = async (id: string): Promise<FirmaType | null> => {
   try {
     return await Firma.findById(id);
@@ -17,14 +17,16 @@ export const deleteById = async (id: string): Promise<FirmaType | null> => {
   return await Firma.findByIdAndDelete(id).exec();
 };
 
-export const create = async (firmaData: Partial<FirmaType>): Promise<FirmaType> => {
+export const create = async (
+  firmaData: Partial<FirmaType>,
+): Promise<FirmaType> => {
   const firma = new Firma(firmaData);
   return await firma.save();
 };
 
 export const updateById = async (
   id: string,
-  firmaData: Partial<FirmaType>
+  firmaData: Partial<FirmaType>,
 ): Promise<FirmaType | null> => {
   try {
     const sanitizedData = sanitizeFilter(firmaData as FilterQuery<FirmaType>);
@@ -35,7 +37,7 @@ export const updateById = async (
     return await Firma.findOneAndUpdate(
       { _id: id },
       { $set: sanitizedData },
-      { new: true, runValidators: true }
+      { new: true, runValidators: true },
     );
   } catch (error) {
     console.error("Error updating firma:", error);
@@ -43,7 +45,11 @@ export const updateById = async (
   }
 };
 
-export const search = async (queryParameters: FirmaQueryParams, pageIndex = 1, pageSize = 50) => {
+export const search = async (
+  queryParameters: FirmaQueryParams,
+  pageIndex = 1,
+  pageSize = 50,
+) => {
   const skip = (pageIndex - 1) * pageSize;
   const mongoQuery = await createFirmaQuery(queryParameters);
 
@@ -60,7 +66,9 @@ export const search = async (queryParameters: FirmaQueryParams, pageIndex = 1, p
   };
 };
 
-export const exportSearchedFirmaData = async (queryParameters: FilterQuery<FirmaQueryParams>): Promise<ExportFirma> => {
+export const exportSearchedFirmaData = async (
+  queryParameters: FilterQuery<FirmaQueryParams>,
+): Promise<ExportFirma> => {
   const mongoQuery = await createFirmaQuery(queryParameters);
 
   const cursor = Firma.find(mongoQuery, {
@@ -95,12 +103,12 @@ export const exportSearchedFirmaData = async (queryParameters: FilterQuery<Firma
 };
 
 export const exportSearchedZaposleniData = async (
-  queryParameters: FilterQuery<FirmaQueryParams>
+  queryParameters: FilterQuery<FirmaQueryParams>,
 ): Promise<ExportZaposlenih> => {
   const mongoQuery = await createFirmaQuery(queryParameters);
 
   const seminarAttendees: string[] = await getZaposleniIdsFromSeminars(
-    queryParameters.seminari || []
+    queryParameters.seminari || [],
   );
 
   if (queryParameters.negacije?.includes("negate-radno-mesto")) {
@@ -115,7 +123,7 @@ export const exportSearchedZaposleniData = async (
     _id: 0,
   }).cursor();
 
-  const res: ExportZaposlenih = []
+  const res: ExportZaposlenih = [];
 
   // Write the data to the writable stream
   cursor.on("data", (doc) => {
@@ -123,9 +131,14 @@ export const exportSearchedZaposleniData = async (
 
     if (plainObject.zaposleni) {
       for (const z of plainObject.zaposleni) {
-        const isZaposleniInSeminar = seminarAttendees?.includes(z._id.toString());
-        const isRadnoMestoNegated = queryParameters.negacije?.includes("negate-radno-mesto");
-        const isRadnoMestoIncluded = queryParameters.radnaMesta.includes(z.radno_mesto);
+        const isZaposleniInSeminar = seminarAttendees?.includes(
+          z._id.toString(),
+        );
+        const isRadnoMestoNegated =
+          queryParameters.negacije?.includes("negate-radno-mesto");
+        const isRadnoMestoIncluded = queryParameters.radnaMesta.includes(
+          z.radno_mesto,
+        );
         const hasNoRadnaMestaFilter = queryParameters.radnaMesta.length === 0;
 
         // Skip if zaposleni is not in the specified seminars

@@ -1,5 +1,14 @@
-import { deletePretraga, getAllPretrage, savePretraga } from "./../services/pretrage.service";
-import { Router, type Request, type Response, type NextFunction } from "express";
+import {
+  type NextFunction,
+  type Request,
+  type Response,
+  Router,
+} from "express";
+import {
+  deletePretraga,
+  getAllPretrage,
+  savePretraga,
+} from "./../services/pretrage.service";
 
 const router = Router();
 

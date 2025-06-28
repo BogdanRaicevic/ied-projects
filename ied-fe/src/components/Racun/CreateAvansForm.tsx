@@ -1,8 +1,8 @@
-import { Divider, Typography, TextField, Box } from "@mui/material";
-import { PrimalacRacunaSection } from "./components/PrimalacRacunaSection";
-import { AvansSection } from "./components/AvansSection";
-import { useRacunStore } from "./store/useRacunStore";
+import { Box, Divider, TextField, Typography } from "@mui/material";
 import { DatePicker } from "@mui/x-date-pickers";
+import { AvansSection } from "./components/AvansSection";
+import { PrimalacRacunaSection } from "./components/PrimalacRacunaSection";
+import { useRacunStore } from "./store/useRacunStore";
 
 export const CreateAvansForm = () => {
   const racunData = useRacunStore((state) => state.racunData);
@@ -22,7 +22,15 @@ export const CreateAvansForm = () => {
 
   return (
     <Box>
-      <Box sx={{ display: "flex", alignItems: "center", justifyContent: "center", mb: 3, gap: 2 }}>
+      <Box
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          mb: 3,
+          gap: 2,
+        }}
+      >
         <Typography variant="h4">Avansni račun</Typography>
         {pozivNaBroj}
       </Box>

@@ -1,9 +1,9 @@
-import axiosInstanceWithAuth from "./interceptors/auth";
 import type {
   PrijavaZodType,
   SeminarQueryParams,
   SeminarZodType,
 } from "@ied-shared/types/seminar.zod";
+import axiosInstanceWithAuth from "./interceptors/auth";
 
 export const saveSeminar = async (seminarData: SeminarZodType) => {
   try {
@@ -12,7 +12,10 @@ export const saveSeminar = async (seminarData: SeminarZodType) => {
       return;
     }
 
-    const response = await axiosInstanceWithAuth.post(`/api/seminari/save`, seminarData);
+    const response = await axiosInstanceWithAuth.post(
+      `/api/seminari/save`,
+      seminarData,
+    );
 
     return response.data;
   } catch (error) {
@@ -24,7 +27,7 @@ export const saveSeminar = async (seminarData: SeminarZodType) => {
 export const fetchSeminari = async (
   pageSize: number,
   pageIndex: number,
-  queryParameters: SeminarQueryParams
+  queryParameters: SeminarQueryParams,
 ) => {
   try {
     const body = {
@@ -59,13 +62,19 @@ export const fetchSeminarById = async (id: string) => {
   }
 };
 
-export const savePrijava = async (seminar_id: string, prijava: PrijavaZodType) => {
+export const savePrijava = async (
+  seminar_id: string,
+  prijava: PrijavaZodType,
+) => {
   const payload = {
     ...prijava,
     seminar_id,
   };
   try {
-    const response = await axiosInstanceWithAuth.post(`/api/seminari/save-prijava`, payload);
+    const response = await axiosInstanceWithAuth.post(
+      `/api/seminari/save-prijava`,
+      payload,
+    );
 
     return response.data;
   } catch (error: any) {
@@ -78,10 +87,13 @@ export const savePrijava = async (seminar_id: string, prijava: PrijavaZodType) =
   }
 };
 
-export const deletePrijava = async (zaposleni_id: string, seminar_id: string) => {
+export const deletePrijava = async (
+  zaposleni_id: string,
+  seminar_id: string,
+) => {
   try {
     const response = await axiosInstanceWithAuth.delete(
-      `/api/seminari/delete-prijava/?zaposleni_id=${zaposleni_id}&seminar_id=${seminar_id}`
+      `/api/seminari/delete-prijava/?zaposleni_id=${zaposleni_id}&seminar_id=${seminar_id}`,
     );
 
     return response.data;
@@ -93,7 +105,9 @@ export const deletePrijava = async (zaposleni_id: string, seminar_id: string) =>
 
 export const deleteSeminar = async (id: string) => {
   try {
-    const response = await axiosInstanceWithAuth.delete(`/api/seminari/delete/${id}`);
+    const response = await axiosInstanceWithAuth.delete(
+      `/api/seminari/delete/${id}`,
+    );
 
     return response.data;
   } catch (error) {
@@ -104,7 +118,9 @@ export const deleteSeminar = async (id: string) => {
 
 export const fetchAllSeminars = async () => {
   try {
-    const response = await axiosInstanceWithAuth.get(`/api/seminari/all-seminars`);
+    const response = await axiosInstanceWithAuth.get(
+      `/api/seminari/all-seminars`,
+    );
 
     return response.data;
   } catch (error) {

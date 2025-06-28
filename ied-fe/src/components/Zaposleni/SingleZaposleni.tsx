@@ -1,8 +1,15 @@
-import { Card, CardContent, Typography, List, ListItem, Box } from "@mui/material";
-import { ZaposleniForm } from "./ZaposleniFrom";
-import PrijavaOdjava from "../PrijavaOdjava";
+import {
+  Box,
+  Card,
+  CardContent,
+  List,
+  ListItem,
+  Typography,
+} from "@mui/material";
 import { useState } from "react";
 import type { TODO_ANY } from "../../../../ied-be/src/utils/utils";
+import PrijavaOdjava from "../PrijavaOdjava";
+import { ZaposleniForm } from "./ZaposleniFrom";
 
 type Seminar_Zaposleni = {
   naziv: string;
@@ -35,7 +42,8 @@ export function SingleZaposleni(zaposleni: Zaposleni) {
     );
   };
 
-  const [zaposleniPrijava, setZaposleniPrijava] = useState<Zaposleni>(zaposleni);
+  const [zaposleniPrijava, setZaposleniPrijava] =
+    useState<Zaposleni>(zaposleni);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setZaposleniPrijava({

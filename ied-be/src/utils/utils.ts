@@ -5,6 +5,6 @@ export type TODO_ANY = any;
 
 export const validateMongoId = (id: string) => {
   if (!mongoose.Types.ObjectId.isValid(id)) {
-    throw new Error("Invalid ID: " + id);
+    throw new Error(`Invalid ID: ${id}`);
   }
 };
