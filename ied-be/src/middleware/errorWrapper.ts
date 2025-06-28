@@ -1,7 +1,12 @@
 import type { Request, Response, NextFunction } from "express";
 import { ErrorWithCause } from "../utils/customErrors";
 
-export function errorWrapper(err: unknown, _req: Request, res: Response, next: NextFunction) {
+export function errorWrapper(
+  err: unknown,
+  _req: Request,
+  res: Response,
+  next: NextFunction,
+) {
   if (err instanceof ErrorWithCause) {
     res.status(400).json({
       status: "error",

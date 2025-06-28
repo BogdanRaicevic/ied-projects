@@ -11,20 +11,23 @@ interface IndeterminateCheckboxProps {
   };
 }
 
-export default function IndeterminateCheckbox({ options }: IndeterminateCheckboxProps) {
+export default function IndeterminateCheckbox({
+  options,
+}: IndeterminateCheckboxProps) {
   const [checked, setChecked] = React.useState(() =>
-    new Array(options.children?.length).fill(false)
+    new Array(options.children?.length).fill(false),
   );
 
   const handleChangeParent = (event: React.ChangeEvent<HTMLInputElement>) => {
     setChecked(new Array(options.children?.length).fill(event.target.checked));
   };
 
-  const handleChangeChild = (index: number) => (event: React.ChangeEvent<HTMLInputElement>) => {
-    const newChecked = [...checked];
-    newChecked[index] = event.target.checked;
-    setChecked(newChecked);
-  };
+  const handleChangeChild =
+    (index: number) => (event: React.ChangeEvent<HTMLInputElement>) => {
+      const newChecked = [...checked];
+      newChecked[index] = event.target.checked;
+      setChecked(newChecked);
+    };
 
   const childrenCheckboxes = (
     <Box sx={{ display: "flex", flexDirection: "column", ml: 3 }}>
@@ -32,7 +35,12 @@ export default function IndeterminateCheckbox({ options }: IndeterminateCheckbox
         <FormControlLabel
           key={index}
           label={child}
-          control={<Checkbox checked={checked[index]} onChange={handleChangeChild(index)} />}
+          control={
+            <Checkbox
+              checked={checked[index]}
+              onChange={handleChangeChild(index)}
+            />
+          }
         />
       ))}
     </Box>
@@ -45,9 +53,13 @@ export default function IndeterminateCheckbox({ options }: IndeterminateCheckbox
         control={
           <Checkbox
             checked={checked.every((value) => value)}
-            indeterminate={checked.some((value) => value) && !checked.every((value) => value)}
+            indeterminate={
+              checked.some((value) => value) && !checked.every((value) => value)
+            }
             onChange={handleChangeParent}
-            indeterminateIcon={<IndeterminateCheckBox style={{ color: "orange" }} />}
+            indeterminateIcon={
+              <IndeterminateCheckBox style={{ color: "orange" }} />
+            }
           />
         }
       />

@@ -49,11 +49,14 @@ const racunBaseSchema = new Schema(
   {
     collection: "racuni",
     timestamps: { createdAt: "dateCreatedAt", updatedAt: "dateUpdatedAt" },
-  }
+  },
 );
 
 // --- COMPOUND UNIQUE INDEX ---
-racunBaseSchema.index({ izdavacRacuna: 1, tipRacuna: 1, pozivNaBroj: 1 }, { unique: true });
+racunBaseSchema.index(
+  { izdavacRacuna: 1, tipRacuna: 1, pozivNaBroj: 1 },
+  { unique: true },
+);
 
 // --- PRE-SAVE HOOK FOR pozivNaBroj ---
 racunBaseSchema.pre("save", async function (next) {
@@ -75,7 +78,7 @@ racunBaseSchema.pre("save", async function (next) {
         new: true,
         upsert: true,
         setDefaultsOnInsert: true,
-      }
+      },
     ).exec();
 
     const sequenceNumber = sequenceDoc ? sequenceDoc.sequenceNumber : 1;
@@ -110,7 +113,7 @@ RacunBaseModel.discriminator(
       ukupanPdv: { type: Number, default: 0, min: 0 },
     },
     rokZaUplatu: { type: Number, default: 0, min: 0 },
-  })
+  }),
 );
 
 RacunBaseModel.discriminator(
@@ -122,7 +125,7 @@ RacunBaseModel.discriminator(
       avans: { type: Number, default: 0, min: 0 },
     },
     datumUplateAvansa: { type: Date, required: false, default: Date.now },
-  })
+  }),
 );
 
 RacunBaseModel.discriminator(
@@ -144,7 +147,7 @@ RacunBaseModel.discriminator(
       avans: { type: Number, default: 0, min: 0 },
     },
     linkedPozivNaBroj: { type: String, required: true },
-  })
+  }),
 );
 
 RacunBaseModel.discriminator(
@@ -163,7 +166,7 @@ RacunBaseModel.discriminator(
       ukupanPdv: { type: Number, default: 0, min: 0 },
       placeno: { type: Number, default: 0, min: 0 },
     },
-  })
+  }),
 );
 
 export type RacunBaseModel = Document & {
@@ -252,4 +255,8 @@ export type RacunModel = RacunBaseModel & {
   };
 };
 
-export type AllRacuni = PredracunModel | AvansniRacunModel | KonacniRacunModel | RacunModel;
+export type AllRacuni =
+  | PredracunModel
+  | AvansniRacunModel
+  | KonacniRacunModel
+  | RacunModel;

@@ -9,7 +9,10 @@ type PretragaStore = {
     pageSize: number;
   };
   setPretragaParameters: (params: Partial<FirmaQueryParams>) => void;
-  setPaginationParameters: (pagination: { pageIndex: number; pageSize: number }) => void;
+  setPaginationParameters: (pagination: {
+    pageIndex: number;
+    pageSize: number;
+  }) => void;
   toggleNegation: (value: string) => void;
   setAppliedParameters: () => void;
   loadFromStorage: () => void;

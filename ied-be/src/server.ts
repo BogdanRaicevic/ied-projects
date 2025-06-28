@@ -21,7 +21,9 @@ import "./database/cron";
 import { RacunBaseModel } from "./models/racun.model"; // import to sync indexes
 
 const app = express();
-const allowedOrigins = env.fe.allowedPorts.map((port) => `${env.fe.appUrl}:${port}`);
+const allowedOrigins = env.fe.allowedPorts.map(
+  (port) => `${env.fe.appUrl}:${port}`,
+);
 console.log("Allowed Origins:", allowedOrigins);
 app.use(
   cors({
@@ -29,20 +31,25 @@ app.use(
     credentials: true,
     allowedHeaders: ["Authorization", "Content-Type"],
     exposedHeaders: ["Authorization"],
-  })
+  }),
 );
 
 app.use(
   clerkMiddleware({
     publishableKey: env.clerk.publishableKey,
     secretKey: env.clerk.secretKey,
-  })
+  }),
 );
 
 app.use(express.json());
 
 app.use("/api/firma", requireAuth(), hasPermission, firmaRoutes);
-app.use("/api/velicine-firmi", requireAuth(), hasPermission, velicineFirmiRoutes);
+app.use(
+  "/api/velicine-firmi",
+  requireAuth(),
+  hasPermission,
+  velicineFirmiRoutes,
+);
 app.use("/api/radna-mesta", requireAuth(), hasPermission, radnaMestaRoutes);
 app.use("/api/tip-firme", requireAuth(), hasPermission, tipFirmeRoutes);
 app.use("/api/delatnost", requireAuth(), hasPermission, delatnostiRoutes);

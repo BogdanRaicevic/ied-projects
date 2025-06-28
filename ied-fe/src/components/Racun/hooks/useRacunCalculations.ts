@@ -1,11 +1,16 @@
+import { TipRacuna } from "@ied-shared/index";
 import { useEffect } from "react";
 import { useRacunStore } from "../store/useRacunStore";
-import { TipRacuna } from "@ied-shared/index";
 
 // TODO: move billing calculations to the backend
 export const useRacunCalculations = () => {
   const {
-    seminar: { onlineCena, offlineCena, brojUcesnikaOnline, brojUcesnikaOffline },
+    seminar: {
+      onlineCena,
+      offlineCena,
+      brojUcesnikaOnline,
+      brojUcesnikaOffline,
+    },
     calculations: { avansBezPdv, popustOnline, popustOffline, placeno },
     tipRacuna,
     stopaPdv,
@@ -23,7 +28,10 @@ export const useRacunCalculations = () => {
     const avansBezPdvNum = avansBezPdv || 0;
 
     const onlineUkupnaNaknada =
-      onlineCenaNum * brojUcesnikaOnlineNum * (1 - popustOnlineNum / 100) * (1 + stopaPdvNum / 100);
+      onlineCenaNum *
+      brojUcesnikaOnlineNum *
+      (1 - popustOnlineNum / 100) *
+      (1 + stopaPdvNum / 100);
 
     const offlineUkupnaNaknada =
       offlineCenaNum *
@@ -45,15 +53,21 @@ export const useRacunCalculations = () => {
       offlinePoreskaOsnovica: roundToTwoDecimals(offlinePoreskaOsnovica),
       popustOnline: popustOnlineNum,
       popustOffline: popustOfflineNum,
-      pdvOnline: roundToTwoDecimals((onlinePoreskaOsnovica * stopaPdvNum) / 100),
-      pdvOffline: roundToTwoDecimals((offlinePoreskaOsnovica * stopaPdvNum) / 100),
+      pdvOnline: roundToTwoDecimals(
+        (onlinePoreskaOsnovica * stopaPdvNum) / 100,
+      ),
+      pdvOffline: roundToTwoDecimals(
+        (offlinePoreskaOsnovica * stopaPdvNum) / 100,
+      ),
       ukupnaNaknada:
         tipRacuna === TipRacuna.KONACNI_RACUN
-          ? roundToTwoDecimals(onlineUkupnaNaknada + offlineUkupnaNaknada - avans)
+          ? roundToTwoDecimals(
+              onlineUkupnaNaknada + offlineUkupnaNaknada - avans,
+            )
           : roundToTwoDecimals(
               onlineUkupnaNaknada +
                 offlineUkupnaNaknada -
-                (tipRacuna === TipRacuna.RACUN ? placeno : 0)
+                (tipRacuna === TipRacuna.RACUN ? placeno : 0),
             ),
       ukupanPdv:
         tipRacuna === TipRacuna.AVANSNI_RACUN
@@ -61,7 +75,7 @@ export const useRacunCalculations = () => {
           : roundToTwoDecimals(
               (offlinePoreskaOsnovica * stopaPdvNum) / 100 +
                 (onlinePoreskaOsnovica * stopaPdvNum) / 100 -
-                (tipRacuna === TipRacuna.KONACNI_RACUN ? avansPdv : 0)
+                (tipRacuna === TipRacuna.KONACNI_RACUN ? avansPdv : 0),
             ),
       avansPdv: roundToTwoDecimals(avansPdv),
       avans: roundToTwoDecimals(avans),

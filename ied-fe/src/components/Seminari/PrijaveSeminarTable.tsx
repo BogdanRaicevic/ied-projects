@@ -31,7 +31,9 @@ export default function PrijaveSeminarTable({
   const [open, setOpen] = useState(false);
 
   const onePrijavaDelete = async (zaposleni_id: string, seminar_id: string) => {
-    const confirmed = window.confirm("Da li ste sigurni da želite da obrišete prijavu?");
+    const confirmed = window.confirm(
+      "Da li ste sigurni da želite da obrišete prijavu?",
+    );
     if (confirmed) {
       await deletePrijava(zaposleni_id, seminar_id);
       onDelete?.();
@@ -97,7 +99,9 @@ export default function PrijaveSeminarTable({
                       <TableCell>
                         <IconButton
                           color="error"
-                          onClick={() => onePrijavaDelete(prijava.zaposleni_id, seminarId)}
+                          onClick={() =>
+                            onePrijavaDelete(prijava.zaposleni_id, seminarId)
+                          }
                         >
                           <DeleteIcon />
                         </IconButton>

@@ -10,4 +10,7 @@ const sequenceSchema = new Schema({
   sequenceNumber: { type: Number, default: 0 },
 });
 
-export const SequenceModel = model<SequenceModelType>("Sequence", sequenceSchema);
+export const SequenceModel = model<SequenceModelType>(
+  "Sequence",
+  sequenceSchema,
+);

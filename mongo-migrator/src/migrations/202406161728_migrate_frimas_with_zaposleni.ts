@@ -2,24 +2,24 @@ import type { RowDataPacket } from "mysql2/promise";
 import { mongoDbConnection, mysqlConnection } from "../config";
 
 export const up = async () => {
-	const monogDb = await mongoDbConnection();
-	const mysqlDb = await mysqlConnection();
-	const mongoCollectionName = "firmas";
+  const monogDb = await mongoDbConnection();
+  const mysqlDb = await mysqlConnection();
+  const mongoCollectionName = "firmas";
 
-	try {
-		// Check if the collection exists
-		const collections = await monogDb.listCollections();
-		const collectionNames = collections.map((col) => col.name);
+  try {
+    // Check if the collection exists
+    const collections = await monogDb.listCollections();
+    const collectionNames = collections.map((col) => col.name);
 
-		if (!collectionNames.includes(mongoCollectionName)) {
-			await (await mongoDbConnection()).createCollection(mongoCollectionName);
-			console.log(`Collection '${mongoCollectionName}' created`);
-		}
+    if (!collectionNames.includes(mongoCollectionName)) {
+      await (await mongoDbConnection()).createCollection(mongoCollectionName);
+      console.log(`Collection '${mongoCollectionName}' created`);
+    }
 
-		const mongoCollection = monogDb.collection(mongoCollectionName);
+    const mongoCollection = monogDb.collection(mongoCollectionName);
 
-		// Fetch data from MySQL
-		const d1 = `
+    // Fetch data from MySQL
+    const d1 = `
     SELECT 
       f.*,
       ko.ID_kontakt_osoba AS ko_ID_kontakt_osoba,
@@ -69,89 +69,89 @@ export const up = async () => {
       velicina_firme vf ON f.FK_VELICINA_FIRME_ID_velicina_firme = vf.ID_velicina_firme
     `;
 
-		const [rows] = await mysqlDb.execute<RowDataPacket[]>(d1);
+    const [rows] = await mysqlDb.execute<RowDataPacket[]>(d1);
 
-		const processedFirmaIds = new Set<number>();
-		const groupedFirmas = new Map<number, any>();
+    const processedFirmaIds = new Set<number>();
+    const groupedFirmas = new Map<number, any>();
 
-		for (const row of rows) {
-			delete row.FK_MESTO_ID_mesto;
-			delete row.FK_VELICINA_FIRME_ID_velicina_firme;
+    for (const row of rows) {
+      delete row.FK_MESTO_ID_mesto;
+      delete row.FK_VELICINA_FIRME_ID_velicina_firme;
 
-			if (processedFirmaIds.has(row.ID_firma)) {
-				const zaposleniData = extractZaposleniData(row);
-				const b = groupedFirmas.get(row.ID_firma);
+      if (processedFirmaIds.has(row.ID_firma)) {
+        const zaposleniData = extractZaposleniData(row);
+        const b = groupedFirmas.get(row.ID_firma);
 
-				b.zaposleni.push(zaposleniData);
+        b.zaposleni.push(zaposleniData);
 
-				if (Boolean(b.naziv_firme) === false || b.naziv_firme?.trim() === "") {
-					b.naziv_firme = "Bez Naziva";
-				}
+        if (Boolean(b.naziv_firme) === false || b.naziv_firme?.trim() === "") {
+          b.naziv_firme = "Bez Naziva";
+        }
 
-				groupedFirmas.set(row.ID_firma, b);
-			} else {
-				processedFirmaIds.add(row.ID_firma);
-				groupedFirmas.set(row.ID_firma, moveZaposleniToArray(row));
-			}
-		}
+        groupedFirmas.set(row.ID_firma, b);
+      } else {
+        processedFirmaIds.add(row.ID_firma);
+        groupedFirmas.set(row.ID_firma, moveZaposleniToArray(row));
+      }
+    }
 
-		const dataToSave = Array.from(groupedFirmas.values());
+    const dataToSave = Array.from(groupedFirmas.values());
 
-		await mongoCollection.insertMany(dataToSave);
-	} catch (error) {
-		console.error("Error during migration:", error);
-		throw error;
-	}
+    await mongoCollection.insertMany(dataToSave);
+  } catch (error) {
+    console.error("Error during migration:", error);
+    throw error;
+  }
 };
 
 const extractZaposleniData = (
-	row: RowDataPacket,
+  row: RowDataPacket,
 ): {
-	ID_kontakt_osoba: any;
-	ime: any;
-	prezime: any;
-	radno_mesto: any;
-	telefon: any;
-	faks: any;
-	e_mail: any;
-	kontaktiran_puta: any;
-	ucesce_na_seminarima: any;
-	komentar: any;
-	created_at: any;
-	updated_at: any;
-	created_by: any;
-	updated_by: any;
+  ID_kontakt_osoba: any;
+  ime: any;
+  prezime: any;
+  radno_mesto: any;
+  telefon: any;
+  faks: any;
+  e_mail: any;
+  kontaktiran_puta: any;
+  ucesce_na_seminarima: any;
+  komentar: any;
+  created_at: any;
+  updated_at: any;
+  created_by: any;
+  updated_by: any;
 } => ({
-	ID_kontakt_osoba: row.ko_ID_kontakt_osoba,
-	ime: row.ko_ime,
-	prezime: row.ko_prezime,
-	radno_mesto: row.ko_radno_mesto,
-	telefon: row.ko_telefon,
-	faks: row.ko_faks,
-	e_mail: row.ko_e_mail,
-	kontaktiran_puta: row.ko_kontaktiran_puta,
-	ucesce_na_seminarima: row.ko_ucesce_na_seminarima,
-	komentar: row.ko_komentar,
-	created_at: row.ko_created_at,
-	updated_at: row.ko_updated_at,
-	created_by: row.ko_created_by,
-	updated_by: row.ko_updated_by,
+  ID_kontakt_osoba: row.ko_ID_kontakt_osoba,
+  ime: row.ko_ime,
+  prezime: row.ko_prezime,
+  radno_mesto: row.ko_radno_mesto,
+  telefon: row.ko_telefon,
+  faks: row.ko_faks,
+  e_mail: row.ko_e_mail,
+  kontaktiran_puta: row.ko_kontaktiran_puta,
+  ucesce_na_seminarima: row.ko_ucesce_na_seminarima,
+  komentar: row.ko_komentar,
+  created_at: row.ko_created_at,
+  updated_at: row.ko_updated_at,
+  created_by: row.ko_created_by,
+  updated_by: row.ko_updated_by,
 });
 
 function moveZaposleniToArray(firma: RowDataPacket) {
-	const kontanktOsoba: any = {};
-	firma.zaposleni = [];
+  const kontanktOsoba: any = {};
+  firma.zaposleni = [];
 
-	Object.keys(firma).forEach((key) => {
-		if (key.startsWith("ko_")) {
-			const keyNameWithout_ko_ = key.slice(3);
-			kontanktOsoba[keyNameWithout_ko_] = firma[key];
+  Object.keys(firma).forEach((key) => {
+    if (key.startsWith("ko_")) {
+      const keyNameWithout_ko_ = key.slice(3);
+      kontanktOsoba[keyNameWithout_ko_] = firma[key];
 
-			delete firma[key];
-		}
-	});
+      delete firma[key];
+    }
+  });
 
-	firma.zaposleni.push(kontanktOsoba);
+  firma.zaposleni.push(kontanktOsoba);
 
-	return firma;
+  return firma;
 }

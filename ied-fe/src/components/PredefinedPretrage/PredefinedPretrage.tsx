@@ -2,7 +2,11 @@ import VirtualizedAutocomplete from "../Autocomplete/Virtualized";
 import { Button, Grid } from "@mui/material";
 import PretragaSaveDialog from "../Dialogs/PretragaSaveDialog";
 import { useEffect, useState } from "react";
-import { deletePretraga, fetchAllPretrage, savePretraga } from "../../api/pretrage.api";
+import {
+  deletePretraga,
+  fetchAllPretrage,
+  savePretraga,
+} from "../../api/pretrage.api";
 import type { TODO_ANY } from "../../../../ied-be/src/utils/utils";
 import { usePretragaStore } from "../../store/pretragaParameters.store";
 import ZoomInIcon from "@mui/icons-material/ZoomIn";
@@ -35,8 +39,12 @@ export default function PredefinedPretrage() {
     setOpenPretrageSaveDialog(true);
   };
 
-  const { pretragaParameters, setPretragaParameters, resetParameters, setAppliedParameters } =
-    usePretragaStore();
+  const {
+    pretragaParameters,
+    setPretragaParameters,
+    resetParameters,
+    setAppliedParameters,
+  } = usePretragaStore();
 
   const handleSavePretraga = async (nazivPretrage: string, isNew: boolean) => {
     try {
@@ -55,7 +63,10 @@ export default function PredefinedPretrage() {
   const handlePretrageSaveClose = () => setOpenPretrageSaveDialog(false);
 
   const handleDeletePretraga = async () => {
-    if (window.confirm("Da li ste sigurni da zelite da obriste pretragu?") && selectedPretraga) {
+    if (
+      window.confirm("Da li ste sigurni da zelite da obriste pretragu?") &&
+      selectedPretraga
+    ) {
       try {
         await deletePretraga({ id: selectedPretraga.id });
         // Optionally, you can update the state or UI to reflect the deletion
@@ -96,7 +107,10 @@ export default function PredefinedPretrage() {
   return (
     <Grid container spacing={2} mb={2}>
       <Grid size={7}>
-        <VirtualizedAutocomplete data={pretrage || []} onOptionSelect={handleOptionSelect} />
+        <VirtualizedAutocomplete
+          data={pretrage || []}
+          onOptionSelect={handleOptionSelect}
+        />
       </Grid>
       <Grid size={5} display="flex" justifyContent="flex-end" gap={2}>
         <Button

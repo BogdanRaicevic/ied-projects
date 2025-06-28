@@ -1,18 +1,18 @@
 import {
-  Business,
-  Home,
-  LocationCity,
-  ConfirmationNumber,
-  Phone,
-  Email,
-  SwitchAccount,
-  Height,
-  Comment,
-  Filter1,
-  LocalPolice,
   BuildCircle,
+  Business,
+  Comment,
+  ConfirmationNumber,
+  Email,
+  Filter1,
+  Height,
+  Home,
+  LocalPolice,
+  LocationCity,
+  Phone,
+  SwitchAccount,
 } from "@mui/icons-material";
-import { type Metadata, InputTypesSchema } from "../../../schemas/firmaSchemas";
+import { InputTypesSchema, type Metadata } from "../../../schemas/firmaSchemas";
 
 export const firmaFormMetadata: Metadata[] = [
   {

@@ -1,6 +1,10 @@
 import { Types, type FilterQuery } from "mongoose";
 import { createSeminarQuery } from "../utils/seminariQueryBuilder";
-import { PrijavaType, Seminar, type SeminarType } from "./../models/seminar.model";
+import {
+  PrijavaType,
+  Seminar,
+  type SeminarType,
+} from "./../models/seminar.model";
 import type {
   PrijavaZodType,
   SeminarQueryParams,
@@ -10,7 +14,9 @@ import { ErrorWithCause } from "../utils/customErrors";
 import { validateMongoId } from "../utils/utils";
 import { Firma } from "../models/firma.model";
 
-export const saveSeminar = async (seminarData: SeminarZodType): Promise<SeminarType> => {
+export const saveSeminar = async (
+  seminarData: SeminarZodType,
+): Promise<SeminarType> => {
   if (seminarData._id) {
     validateMongoId(seminarData._id);
 
@@ -18,9 +24,13 @@ export const saveSeminar = async (seminarData: SeminarZodType): Promise<SeminarT
       transformPrijavaToDb(prijava);
     });
 
-    const updatedSeminar = await Seminar.findByIdAndUpdate(seminarData._id, seminarData, {
-      new: true,
-    });
+    const updatedSeminar = await Seminar.findByIdAndUpdate(
+      seminarData._id,
+      seminarData,
+      {
+        new: true,
+      },
+    );
 
     if (!updatedSeminar) {
       throw new Error("Seminar not found");
@@ -35,7 +45,7 @@ export const saveSeminar = async (seminarData: SeminarZodType): Promise<SeminarT
 export const searchSeminars = async (
   queryParameters: FilterQuery<SeminarQueryParams>,
   pageIndex = 1,
-  pageSize = 50
+  pageSize = 50,
 ) => {
   const skip = (pageIndex - 1) * pageSize;
   const mongoQuery = createSeminarQuery(queryParameters.queryParameters);
@@ -68,7 +78,10 @@ export const getAllSeminars = async () => {
   return await Seminar.find({}, { naziv: 1, datum: 1, _id: 1 }).exec();
 };
 
-export const savePrijava = async (seminar_id: string, prijava: PrijavaZodType) => {
+export const savePrijava = async (
+  seminar_id: string,
+  prijava: PrijavaZodType,
+) => {
   validateMongoId(seminar_id);
   validateMongoId(prijava.zaposleni_id);
   validateMongoId(prijava.firma_id);
@@ -90,24 +103,34 @@ export const savePrijava = async (seminar_id: string, prijava: PrijavaZodType) =
 
   if (
     seminar.prijave.some(
-      (p) => p.zaposleni_id.toString() === trasnformedPrijava.zaposleni_id.toString()
+      (p) =>
+        p.zaposleni_id.toString() ===
+        trasnformedPrijava.zaposleni_id.toString(),
     )
   ) {
-    throw new ErrorWithCause("Zaposleni je već prijavljen na seminar", "duplicate");
+    throw new ErrorWithCause(
+      "Zaposleni je već prijavljen na seminar",
+      "duplicate",
+    );
   }
 
   seminar.prijave.push(trasnformedPrijava);
   return await seminar.save();
 };
 
-export const deletePrijava = async (zaposleni_id: string, seminar_id: string) => {
+export const deletePrijava = async (
+  zaposleni_id: string,
+  seminar_id: string,
+) => {
   validateMongoId(seminar_id);
   const seminar = await Seminar.findById(seminar_id);
   if (!seminar) {
     throw new Error("Seminar not found");
   }
 
-  seminar.prijave = seminar.prijave.filter((p) => p.zaposleni_id.toString() !== zaposleni_id);
+  seminar.prijave = seminar.prijave.filter(
+    (p) => p.zaposleni_id.toString() !== zaposleni_id,
+  );
   return await seminar.save();
 };
 
@@ -122,14 +145,18 @@ export const deleteSeminar = async (id: string) => {
   return seminar;
 };
 
-export const getZaposleniIdsFromSeminars = async (seminarIds: string[]): Promise<string[]> => {
+export const getZaposleniIdsFromSeminars = async (
+  seminarIds: string[],
+): Promise<string[]> => {
   if (seminarIds.length > 0) {
     const seminars = await Seminar.find(
       { _id: { $in: seminarIds } },
-      { "prijave.zaposleni_id": 1 }
+      { "prijave.zaposleni_id": 1 },
     );
 
-    return seminars.flatMap((s) => s.prijave.map((p) => p.zaposleni_id.toString()));
+    return seminars.flatMap((s) =>
+      s.prijave.map((p) => p.zaposleni_id.toString()),
+    );
   }
   return [];
 };

@@ -1,12 +1,12 @@
-import axiosInstanceWithAuth from "./interceptors/auth";
 import {
-  IzdavacRacuna,
-  PretrageRacunaZodType,
+  type IzdavacRacuna,
+  type PretrageRacunaZodType,
   RacunSchema,
-  RacunZod,
-  TipRacuna,
+  type RacunZod,
+  type TipRacuna,
 } from "@ied-shared/index";
 import { validateOrThrow } from "../utils/zodErrorHelper";
+import axiosInstanceWithAuth from "./interceptors/auth";
 
 export const getIzdavaciRacuna = async () => {
   try {
@@ -21,17 +21,26 @@ export const getIzdavaciRacuna = async () => {
 export const searchRacuni = async (
   pageIndex: number,
   pageSize: number,
-  queryParameters: PretrageRacunaZodType
-): Promise<{ totalDocuments: number; totalPages: number; racuni: RacunZod[] }> => {
+  queryParameters: PretrageRacunaZodType,
+): Promise<{
+  totalDocuments: number;
+  totalPages: number;
+  racuni: RacunZod[];
+}> => {
   const searchParams = {
     ...queryParameters,
     pageIndex: pageIndex,
     pageSize: pageSize,
   };
   try {
-    const response = await axiosInstanceWithAuth.post(`/api/racuni/search`, searchParams);
+    const response = await axiosInstanceWithAuth.post(
+      `/api/racuni/search`,
+      searchParams,
+    );
     const rawData = response.data;
-    const parsedData = rawData.racuni.map((racun: any) => RacunSchema.parse(racun));
+    const parsedData = rawData.racuni.map((racun: any) =>
+      RacunSchema.parse(racun),
+    );
 
     return {
       totalDocuments: rawData.totalDocuments,
@@ -57,7 +66,7 @@ export const fetchRacunById = async (id: string): Promise<RacunZod> => {
 export const getRacunByPozivNaBrojAndIzdavac = async (
   pozivNaBroj: string,
   izdavacRacuna: IzdavacRacuna,
-  tipRacuna?: TipRacuna
+  tipRacuna?: TipRacuna,
 ): Promise<RacunZod> => {
   try {
     const params = new URLSearchParams({
@@ -66,7 +75,9 @@ export const getRacunByPozivNaBrojAndIzdavac = async (
       ...(tipRacuna && { tipRacuna: tipRacuna }),
     });
 
-    const response = await axiosInstanceWithAuth.get(`/api/racuni?${params.toString()}`);
+    const response = await axiosInstanceWithAuth.get(
+      `/api/racuni?${params.toString()}`,
+    );
     return response.data;
   } catch (error) {
     console.error("Error fetching racun by poziv na broj and izdavac:", error);
@@ -78,10 +89,15 @@ export const saveNewRacun = async (racun: RacunZod): Promise<RacunZod> => {
   try {
     validateOrThrow(RacunSchema, racun);
     if (racun._id || racun.pozivNaBroj) {
-      console.log("Racun already has an ID or pozivNaBroj, skipping save operation.");
+      console.log(
+        "Racun already has an ID or pozivNaBroj, skipping save operation.",
+      );
       return racun; // or handle as needed
     }
-    const response = await axiosInstanceWithAuth.post(`/api/racuni/save`, racun);
+    const response = await axiosInstanceWithAuth.post(
+      `/api/racuni/save`,
+      racun,
+    );
     console.log("Racun saved:", response.data);
     return response.data;
   } catch (error) {
@@ -90,11 +106,13 @@ export const saveNewRacun = async (racun: RacunZod): Promise<RacunZod> => {
   }
 };
 
-export const updateRacunById = async (updatedRacun: RacunZod): Promise<RacunZod> => {
+export const updateRacunById = async (
+  updatedRacun: RacunZod,
+): Promise<RacunZod> => {
   try {
     const response = await axiosInstanceWithAuth.put(
       `/api/racuni/update/${updatedRacun._id}`,
-      updatedRacun
+      updatedRacun,
     );
     return response.data;
   } catch (error) {

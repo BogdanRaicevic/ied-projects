@@ -1,14 +1,24 @@
-import { PretrageRacunaZodType, RacunQueryZod, RacunZod } from "@ied-shared/index";
+import {
+  PretrageRacunaZodType,
+  RacunQueryZod,
+  RacunZod,
+} from "@ied-shared/index";
 import { FilterQuery } from "mongoose";
 
-export function createRacunQuery(params: PretrageRacunaZodType): FilterQuery<RacunZod> {
+export function createRacunQuery(
+  params: PretrageRacunaZodType,
+): FilterQuery<RacunZod> {
   const query: FilterQuery<RacunZod> = {};
 
   if (params?.pozivNaBroj) {
     query.pozivNaBroj = { $regex: params.pozivNaBroj, $options: "i" }; // Case-insensitive partial match
   }
 
-  if (params?.tipRacuna && Array.isArray(params.tipRacuna) && params.tipRacuna.length > 0) {
+  if (
+    params?.tipRacuna &&
+    Array.isArray(params.tipRacuna) &&
+    params.tipRacuna.length > 0
+  ) {
     query.tipRacuna = { $in: params.tipRacuna }; // Match any of the values
   }
 

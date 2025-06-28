@@ -12,7 +12,10 @@ const updateNestedProperty = (obj: any, path: string[], value: any): any => {
   const [current, ...rest] = path;
   return {
     ...obj,
-    [current]: rest.length === 0 ? value : updateNestedProperty(obj[current] || {}, rest, value),
+    [current]:
+      rest.length === 0
+        ? value
+        : updateNestedProperty(obj[current] || {}, rest, value),
   };
 };
 

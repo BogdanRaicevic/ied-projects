@@ -10,7 +10,10 @@ const velicineFirmeSchema = new Schema<VelicineFirmiType>(
     ID_velicina_firme: { type: Number, required: true },
     velicina_firme: { type: String, required: true },
   },
-  { collection: "velicine_firmi" }
+  { collection: "velicine_firmi" },
 );
 
-export const VelicineFirmi = model<VelicineFirmiType>("VelicineFirmi", velicineFirmeSchema);
+export const VelicineFirmi = model<VelicineFirmiType>(
+  "VelicineFirmi",
+  velicineFirmeSchema,
+);

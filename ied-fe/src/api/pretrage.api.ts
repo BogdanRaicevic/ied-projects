@@ -3,7 +3,7 @@ import axiosInstanceWithAuth from "./interceptors/auth";
 
 export const savePretraga = async (
   queryParameters: TODO_ANY,
-  pretraga: { id?: string; naziv: string }
+  pretraga: { id?: string; naziv: string },
 ) => {
   try {
     const body = {
@@ -11,7 +11,10 @@ export const savePretraga = async (
       pretraga,
     };
 
-    const response = await axiosInstanceWithAuth.post(`/api/pretrage/save`, body);
+    const response = await axiosInstanceWithAuth.post(
+      `/api/pretrage/save`,
+      body,
+    );
     return response.data;
   } catch (error) {
     console.error("Error saving pretraga:", error);
@@ -37,7 +40,10 @@ export const deletePretraga = async ({ id }: { id: string }) => {
 
     console.log("the body", body);
 
-    const response = await axiosInstanceWithAuth.post(`/api/pretrage/delete`, body);
+    const response = await axiosInstanceWithAuth.post(
+      `/api/pretrage/delete`,
+      body,
+    );
     return response.data;
   } catch (error) {
     console.error("Error deleting pretraga:", error);

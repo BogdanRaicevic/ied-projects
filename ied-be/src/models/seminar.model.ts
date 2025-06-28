@@ -51,7 +51,7 @@ const seminarSchema = new Schema<SeminarType>(
     detalji: { type: String, required: false },
     prijave: [prijavaSchema],
   },
-  { collection: "seminari" }
+  { collection: "seminari" },
 );
 
 export const Seminar = model<SeminarType>("Seminar", seminarSchema);

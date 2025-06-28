@@ -12,7 +12,7 @@ const mestoSchema = new Schema<MestoType>(
     postanski_broj: { type: String, required: true },
     ID_mesto: { type: Number, required: false },
   },
-  { collection: "mesta" }
+  { collection: "mesta" },
 );
 
 export const Mesto = model<MestoType>("Mesto", mestoSchema);

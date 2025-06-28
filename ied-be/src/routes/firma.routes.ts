@@ -1,4 +1,9 @@
-import { Router, type Request, type Response, type NextFunction } from "express";
+import {
+  Router,
+  type Request,
+  type Response,
+  type NextFunction,
+} from "express";
 import {
   deleteById,
   create,
@@ -21,33 +26,40 @@ interface SearchRequest extends Request {
   };
 }
 
-router.post("/search", async (req: SearchRequest, res: Response, next: NextFunction) => {
-  try {
-    const { pageIndex = 1, pageSize = 10, ...query } = req.body;
-    const { queryParameters } = query;
-    const paginationResult = await search(queryParameters, Number(pageIndex), Number(pageSize));
+router.post(
+  "/search",
+  async (req: SearchRequest, res: Response, next: NextFunction) => {
+    try {
+      const { pageIndex = 1, pageSize = 10, ...query } = req.body;
+      const { queryParameters } = query;
+      const paginationResult = await search(
+        queryParameters,
+        Number(pageIndex),
+        Number(pageSize),
+      );
 
-    const results: FirmaType[] = [];
-    paginationResult.courser.on("data", (doc) => {
-      results.push(doc);
-    });
-
-    paginationResult.courser.on("end", () => {
-      res.json({
-        firmas: results,
-        totalPages: paginationResult.totalPages,
-        totalDocuments: paginationResult.totalDocuments,
+      const results: FirmaType[] = [];
+      paginationResult.courser.on("data", (doc) => {
+        results.push(doc);
       });
-    });
 
-    paginationResult.courser.on("error", (error) => {
-      console.error(error);
-      res.status(500).json({ message: "Internal server error" });
-    });
-  } catch (error) {
-    next(error);
-  }
-});
+      paginationResult.courser.on("end", () => {
+        res.json({
+          firmas: results,
+          totalPages: paginationResult.totalPages,
+          totalDocuments: paginationResult.totalDocuments,
+        });
+      });
+
+      paginationResult.courser.on("error", (error) => {
+        console.error(error);
+        res.status(500).json({ message: "Internal server error" });
+      });
+    } catch (error) {
+      next(error);
+    }
+  },
+);
 
 router.post("/export-firma-data", async (req, res) => {
   const { queryParameters } = req.body;
@@ -88,18 +100,21 @@ router.get("/:id", async (req: Request, res: Response, next: NextFunction) => {
   }
 });
 
-router.delete("/:id", async (req: Request, res: Response, next: NextFunction) => {
-  try {
-    const firma = await deleteById(req.params.id);
-    if (firma) {
-      res.json(firma);
-    } else {
-      res.status(404).send("Firma not found");
+router.delete(
+  "/:id",
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const firma = await deleteById(req.params.id);
+      if (firma) {
+        res.json(firma);
+      } else {
+        res.status(404).send("Firma not found");
+      }
+    } catch (error) {
+      next(error);
     }
-  } catch (error) {
-    next(error);
-  }
-});
+  },
+);
 
 router.post("/", async (req: Request, res: Response, next: NextFunction) => {
   try {

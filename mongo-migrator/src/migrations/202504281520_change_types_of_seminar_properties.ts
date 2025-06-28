@@ -36,7 +36,7 @@ export const up = async () => {
           needsUpdate = true;
         } else {
           console.warn(
-            `Could not parse datum "${document.datum}" for doc ${document._id}. Skipping datum update.`
+            `Could not parse datum "${document.datum}" for doc ${document._id}. Skipping datum update.`,
           );
           errorCount++;
         }
@@ -55,7 +55,7 @@ export const up = async () => {
             needsUpdate = true;
           } else {
             console.warn(
-              `Could not parse onlineCena "${document.onlineCena}" to a valid number for doc ${document._id}. Skipping onlineCena update.`
+              `Could not parse onlineCena "${document.onlineCena}" to a valid number for doc ${document._id}. Skipping onlineCena update.`,
             );
             errorCount++;
           }
@@ -75,7 +75,7 @@ export const up = async () => {
             needsUpdate = true;
           } else {
             console.warn(
-              `Could not parse offlineCena "${document.offlineCena}" to a valid number for doc ${document._id}. Skipping offlineCena update.`
+              `Could not parse offlineCena "${document.offlineCena}" to a valid number for doc ${document._id}. Skipping offlineCena update.`,
             );
             errorCount++;
           }
@@ -99,10 +99,12 @@ export const up = async () => {
     if (bulkOps.length > 0) {
       await mongoCollection.bulkWrite(bulkOps, { ordered: false });
       console.log(
-        `Migration finished. Documents targeted for update: ${bulkOps.length}. Parse/Skip errors: ${errorCount}`
+        `Migration finished. Documents targeted for update: ${bulkOps.length}. Parse/Skip errors: ${errorCount}`,
       );
     } else {
-      console.log("Migration finished. No documents required updates based on query and parsing.");
+      console.log(
+        "Migration finished. No documents required updates based on query and parsing.",
+      );
     }
   } catch (error) {
     console.error("Error during migration of fix bad emails:", error);

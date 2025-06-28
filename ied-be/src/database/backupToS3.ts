@@ -41,21 +41,27 @@ const backupMongoDB = async () => {
   const fileName = getBackupFilename();
   const filePath = path.join(BACKUP_DIR, fileName);
 
-  return new Promise<{ fileName: string; filePath: string }>((resolve, reject) => {
-    const command = `mongodump --uri=${MONGO_URI} --archive=${filePath} --gzip`;
+  return new Promise<{ fileName: string; filePath: string }>(
+    (resolve, reject) => {
+      const command = `mongodump --uri=${MONGO_URI} --archive=${filePath} --gzip`;
 
-    exec(command, (error, _stdout, stderr) => {
-      if (error) {
-        console.error(`[${new Date().toISOString()}] Backup Creation Failed:`);
-        console.error(`Command: ${command}`);
-        console.error(`Error: ${error.message}`);
-        console.error(`stderr: ${stderr}`);
-        return reject(error);
-      }
-      console.log(`[${new Date().toISOString()}] Backup created successfully`);
-      resolve({ fileName, filePath });
-    });
-  });
+      exec(command, (error, _stdout, stderr) => {
+        if (error) {
+          console.error(
+            `[${new Date().toISOString()}] Backup Creation Failed:`,
+          );
+          console.error(`Command: ${command}`);
+          console.error(`Error: ${error.message}`);
+          console.error(`stderr: ${stderr}`);
+          return reject(error);
+        }
+        console.log(
+          `[${new Date().toISOString()}] Backup created successfully`,
+        );
+        resolve({ fileName, filePath });
+      });
+    },
+  );
 };
 
 const uploadToS3 = async (fileName: string, filePath: string) => {
@@ -75,7 +81,9 @@ const uploadToS3 = async (fileName: string, filePath: string) => {
     });
 
     await upload.done();
-    console.log(`[${new Date().toISOString()}] Upload to S3 completed: ${fileName}`);
+    console.log(
+      `[${new Date().toISOString()}] Upload to S3 completed: ${fileName}`,
+    );
     unlinkSync(filePath); // Delete backup after upload
   } catch (error) {
     console.error(`[${new Date().toISOString()}] S3 Upload Failed:`);
@@ -89,7 +97,9 @@ const runBackup = async () => {
   try {
     const { fileName, filePath } = await backupMongoDB();
     await uploadToS3(fileName, filePath);
-    console.log(`[${new Date().toISOString()}] Backup process completed successfully`);
+    console.log(
+      `[${new Date().toISOString()}] Backup process completed successfully`,
+    );
   } catch (error) {
     console.error(`[${new Date().toISOString()}] Backup process failed:`);
     console.error(error);

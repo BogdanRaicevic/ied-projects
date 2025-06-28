@@ -14,8 +14,12 @@ export const myCompanyColumns: MRT_ColumnDef<FirmaType>[] = [
     enableColumnFilter: false,
     enableColumnOrdering: false,
     enableHiding: false,
-    muiTableHeadCellProps: { sx: { position: "sticky", left: 0, zIndex: 2, background: "#fff" } },
-    muiTableBodyCellProps: { sx: { position: "sticky", left: 0, zIndex: 1, background: "#fff" } },
+    muiTableHeadCellProps: {
+      sx: { position: "sticky", left: 0, zIndex: 2, background: "#fff" },
+    },
+    muiTableBodyCellProps: {
+      sx: { position: "sticky", left: 0, zIndex: 1, background: "#fff" },
+    },
 
     Cell: ({ row, table }) => {
       const pageIndex = table.getState().pagination.pageIndex;
@@ -35,7 +39,10 @@ export const myCompanyColumns: MRT_ColumnDef<FirmaType>[] = [
           rel="noopener noreferrer"
           sx={{ display: "inline-flex", alignItems: "center" }}
         >
-          <Icon component={BusinessIcon} sx={{ fontSize: 20, marginRight: 0.5 }} />
+          <Icon
+            component={BusinessIcon}
+            sx={{ fontSize: 20, marginRight: 0.5 }}
+          />
           {firma.naziv_firme}
         </Link>
       );

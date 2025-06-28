@@ -6,7 +6,12 @@ import PizZip from "pizzip";
 import Docxtemplater from "docxtemplater";
 import { izdavacRacuna } from "../constants/izdavacRacuna.const";
 import { validate } from "../middleware/validateSchema";
-import { RacunZod, RacunSchema, TipRacuna, IzdavacRacuna } from "@ied-shared/types/racuni.zod";
+import {
+  RacunZod,
+  RacunSchema,
+  TipRacuna,
+  IzdavacRacuna,
+} from "@ied-shared/types/racuni.zod";
 import { formatDate } from "date-fns";
 
 const __filename = fileURLToPath(import.meta.url);
@@ -31,7 +36,10 @@ const sanitizeFilename = (str: string): string => {
     Ž: "Z",
   };
   // Replace Serbian characters
-  let sanitized = str.replace(/[šŠđĐčČćĆžŽ]/g, (char) => serbianChars[char] || char);
+  let sanitized = str.replace(
+    /[šŠđĐčČćĆžŽ]/g,
+    (char) => serbianChars[char] || char,
+  );
   // Remove or replace problematic characters (except underscore, dash, and dot for extension)
   sanitized = sanitized.replace(/[^a-zA-Z0-9-_\.]/g, "_");
   // Replace multiple underscores with a single underscore
@@ -41,7 +49,8 @@ const sanitizeFilename = (str: string): string => {
   return sanitized;
 };
 
-const formatToLocalDate = (date: Date): string => formatDate(date, "dd.MM.yyyy");
+const formatToLocalDate = (date: Date): string =>
+  formatDate(date, "dd.MM.yyyy");
 
 router.post(
   "/modify-template",
@@ -70,7 +79,7 @@ router.post(
     const templatePath = path.resolve(
       __dirname,
       "../../src/templates",
-      sanitizedTemplateName.concat(".docx")
+      sanitizedTemplateName.concat(".docx"),
     );
 
     console.log("templatePath", templatePath);
@@ -89,18 +98,23 @@ router.post(
 
       const dataForDocumentRednering = {
         ...racunData,
-        izdavacRacuna: { ...izdavacRacuna.find((d) => d.id === req.body.izdavacRacuna) },
+        izdavacRacuna: {
+          ...izdavacRacuna.find((d) => d.id === req.body.izdavacRacuna),
+        },
         datumIzdavanjaRacuna: formatToLocalDate(new Date()),
         hasOnline: (req.body.seminar.brojUcesnikaOnline || 0) > 0,
         hasOffline: (req.body.seminar.brojUcesnikaOffline || 0) > 0,
-        shouldRenderPdvBlock: racunData.izdavacRacuna !== IzdavacRacuna.PERMANENT,
+        shouldRenderPdvBlock:
+          racunData.izdavacRacuna !== IzdavacRacuna.PERMANENT,
         seminar: {
           ...(racunData.seminar ?? {}),
           datum: racunData.seminar?.datum
             ? formatToLocalDate(new Date(racunData.seminar.datum))
             : undefined,
         },
-        datumUplateAvansa: formatToLocalDate(racunData.datumUplateAvansa || new Date()),
+        datumUplateAvansa: formatToLocalDate(
+          racunData.datumUplateAvansa || new Date(),
+        ),
       };
 
       doc.render(dataForDocumentRednering);
@@ -110,11 +124,11 @@ router.post(
       // Set appropriate headers
       res.setHeader(
         "Content-Type",
-        "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+        "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
       );
 
       const fileName = sanitizeFilename(
-        `${racunData.pozivNaBroj}_${dataForDocumentRednering.primalacRacuna?.naziv}.docx`
+        `${racunData.pozivNaBroj}_${dataForDocumentRednering.primalacRacuna?.naziv}.docx`,
       );
       console.log("fileName", fileName);
       res.setHeader(`Content-Disposition`, `attachment; filename=${fileName}`);
@@ -127,7 +141,7 @@ router.post(
         details: error instanceof Error ? error.message : "Unknown error",
       });
     }
-  }
+  },
 );
 
 export default router;

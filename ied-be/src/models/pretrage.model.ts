@@ -38,7 +38,7 @@ const pretrageSchema = new Schema<PretrageType>(
     imePrezime: { type: String },
     emailZaposlenog: { type: String },
   },
-  { collection: "pretrage" }
+  { collection: "pretrage" },
 );
 
 export const Pretrage = model<PretrageType>("Pretrage", pretrageSchema);

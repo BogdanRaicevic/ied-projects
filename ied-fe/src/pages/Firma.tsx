@@ -62,7 +62,9 @@ export default function Firma() {
     }
   }, [id]);
 
-  const [selectedRow, setSelectedRow] = useState<MRT_Row<Zaposleni> | null>(null);
+  const [selectedRow, setSelectedRow] = useState<MRT_Row<Zaposleni> | null>(
+    null,
+  );
 
   const handleEdit = (row: MRT_Row<Zaposleni>) => {
     setSelectedRow(row);
@@ -73,7 +75,9 @@ export default function Firma() {
     const emailsMap = new Map<string, number>();
     zaposleni
       .map((z: Zaposleni) => z.e_mail)
-      .filter((email: string | undefined): email is string => email !== undefined)
+      .filter(
+        (email: string | undefined): email is string => email !== undefined,
+      )
       .forEach((email: string) => {
         if (email && emailsMap.has(email)) {
           emailsMap.set(email, (emailsMap.get(email) || 0) + 1);
@@ -82,13 +86,15 @@ export default function Firma() {
         }
       });
 
-    const duplicates = new Map(Array.from(emailsMap).filter(([_key, value]) => value >= 1));
+    const duplicates = new Map(
+      Array.from(emailsMap).filter(([_key, value]) => value >= 1),
+    );
 
     if (duplicates.size > 0) {
       setWarningAlert(
         "Postoje zaposleni sa istom email adresom. ".concat(
-          Array.from(duplicates.keys()).join(", ")
-        )
+          Array.from(duplicates.keys()).join(", "),
+        ),
       );
       setTimeout(() => {
         setWarningAlert(null);
@@ -101,7 +107,7 @@ export default function Firma() {
     if (!latestData) return;
 
     const filteredZaposleni = latestData.zaposleni.filter(
-      (zaposleni: Zaposleni) => zaposleni._id !== row.original._id
+      (zaposleni: Zaposleni) => zaposleni._id !== row.original._id,
     );
 
     checkDuplicateEmails(filteredZaposleni);
@@ -115,7 +121,8 @@ export default function Firma() {
   };
 
   const [openZaposleniDialog, setOpenZaposelniDialog] = useState(false);
-  const [openPrijavaNaSeminarDialog, setOpenPrijavaNaSeminarDialog] = useState(false);
+  const [openPrijavaNaSeminarDialog, setOpenPrijavaNaSeminarDialog] =
+    useState(false);
   const handleClosePrijavaDialog = () => setOpenPrijavaNaSeminarDialog(false);
   const handleClose = () => setOpenZaposelniDialog(false);
 
@@ -127,14 +134,14 @@ export default function Firma() {
       : { ...zaposleniData, _id: `temp_${Date.now()}_${Math.random()}` };
 
     const existingZaposleni = company?.zaposleni.find(
-      (zaposleni: Zaposleni) => zaposleni._id === employeeToAdd._id
+      (zaposleni: Zaposleni) => zaposleni._id === employeeToAdd._id,
     );
 
     let updatedZaposleni: any;
 
     if (existingZaposleni) {
       updatedZaposleni = company?.zaposleni.map((zaposleni: TODO_ANY_TYPE) =>
-        zaposleni._id === employeeToAdd._id ? employeeToAdd : zaposleni
+        zaposleni._id === employeeToAdd._id ? employeeToAdd : zaposleni,
       );
     } else {
       updatedZaposleni = [...(company?.zaposleni || []), employeeToAdd];
@@ -199,7 +206,11 @@ export default function Firma() {
             <IconButton
               color="error"
               onClick={() => {
-                if (window.confirm("Da li ste sigurni da želite da obrišete zaposlenog?")) {
+                if (
+                  window.confirm(
+                    "Da li ste sigurni da želite da obrišete zaposlenog?",
+                  )
+                ) {
                   handleDelete(row);
                 }
               }}
@@ -248,12 +259,20 @@ export default function Firma() {
             Dodaj zaposlenog
           </Button>
           {errorAlert && (
-            <Alert severity="error" sx={{ mb: 2 }} onClose={() => setErrorAlert(null)}>
+            <Alert
+              severity="error"
+              sx={{ mb: 2 }}
+              onClose={() => setErrorAlert(null)}
+            >
               {errorAlert}
             </Alert>
           )}
           {warningAlert && (
-            <Alert severity="warning" sx={{ mb: 2 }} onClose={() => setWarningAlert(null)}>
+            <Alert
+              severity="warning"
+              sx={{ mb: 2 }}
+              onClose={() => setWarningAlert(null)}
+            >
               {warningAlert}
             </Alert>
           )}

@@ -8,7 +8,9 @@ export const UkupnaNaknada = () => {
   const updateField = useRacunStore((state) => state.updateField);
   const updateNestedField = useRacunStore((state) => state.updateNestedField);
 
-  const handleNumericalChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleNumericalChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) => {
     const value = e.target.value === "" ? 0 : Number(e.target.value);
     updateField("rokZaUplatu", value);
   };
@@ -22,7 +24,8 @@ export const UkupnaNaknada = () => {
         </Typography>
         {racunData.izdavacRacuna !== IzdavacRacuna.PERMANENT && (
           <Typography variant="h6" sx={{ mr: 1 }}>
-            Ukupni PDV po svim stavkama: {formatToRSDNumber(racunData.calculations.ukupanPdv ?? 0)}
+            Ukupni PDV po svim stavkama:{" "}
+            {formatToRSDNumber(racunData.calculations.ukupanPdv ?? 0)}
           </Typography>
         )}
       </Box>
@@ -63,7 +66,7 @@ export const UkupnaNaknada = () => {
             onChange={(e) => {
               updateNestedField(
                 "calculations.placeno",
-                e.target.value === "" ? 0 : Number(e.target.value)
+                e.target.value === "" ? 0 : Number(e.target.value),
               );
             }}
           ></TextField>

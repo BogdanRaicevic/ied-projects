@@ -43,7 +43,8 @@ export const getRacunById = async (id: string) => {
 
 export const updateRacunById = async (id: string, updatedRacun: RacunZod) => {
   try {
-    const DiscriminatorModel = RacunBaseModel.discriminators?.[updatedRacun.tipRacuna];
+    const DiscriminatorModel =
+      RacunBaseModel.discriminators?.[updatedRacun.tipRacuna];
 
     if (!DiscriminatorModel) {
       throw new Error(`Unknown racun type: ${updatedRacun.tipRacuna}`);
@@ -55,7 +56,7 @@ export const updateRacunById = async (id: string, updatedRacun: RacunZod) => {
       {
         new: true,
         runValidators: true,
-      }
+      },
     );
     if (!racun) {
       throw new Error(`Racun with ID ${id} not found for update.`);
@@ -70,7 +71,7 @@ export const updateRacunById = async (id: string, updatedRacun: RacunZod) => {
 export const searchRacuni = async (
   pageIndex = 0,
   pageSize = 50,
-  queryParameters: PretrageRacunaZodType
+  queryParameters: PretrageRacunaZodType,
 ) => {
   try {
     const skip = pageIndex * pageSize;
@@ -78,7 +79,11 @@ export const searchRacuni = async (
 
     const [totalDocuments, racuni] = await Promise.all([
       RacunBaseModel.countDocuments(mongoQuery),
-      RacunBaseModel.find(mongoQuery).sort({ dateCreatedAt: -1 }).skip(skip).limit(pageSize).lean(),
+      RacunBaseModel.find(mongoQuery)
+        .sort({ dateCreatedAt: -1 })
+        .skip(skip)
+        .limit(pageSize)
+        .lean(),
     ]);
 
     const totalPages = Math.ceil(totalDocuments / pageSize);
@@ -97,7 +102,7 @@ export const searchRacuni = async (
 export const getRacunByPozivNaBrojAndIzdavac = async (
   pozivNaBroj: string,
   izdavacRacuna: IzdavacRacuna,
-  tipRacuna?: TipRacuna
+  tipRacuna?: TipRacuna,
 ) => {
   try {
     const racun = await RacunBaseModel.findOne({
@@ -108,14 +113,14 @@ export const getRacunByPozivNaBrojAndIzdavac = async (
 
     if (!racun) {
       throw new Error(
-        `Racun with PozivNaBroj ${pozivNaBroj}, IzdavacRacuna ${izdavacRacuna} and Tip Racuna ${tipRacuna} not found.`
+        `Racun with PozivNaBroj ${pozivNaBroj}, IzdavacRacuna ${izdavacRacuna} and Tip Racuna ${tipRacuna} not found.`,
       );
     }
     return racun;
   } catch (error) {
     console.error(
       `Error getting Racun by PozivNaBroj ${pozivNaBroj}, IzdavacRacuna ${izdavacRacuna} and Tip Racuna ${tipRacuna}:`,
-      error
+      error,
     );
     throw error;
   }
@@ -134,19 +139,29 @@ export const validateAndCalculateRacun = (racun: RacunZod): RacunZod => {
 
 const calculateRacunFields = (racun: RacunZod) => {
   const racunParsed = RacunSchema.parse(racun);
-  const { popustOnline, popustOffline, avansBezPdv, placeno } = racunParsed.calculations;
-  const { onlineCena, offlineCena, brojUcesnikaOnline, brojUcesnikaOffline } = racunParsed.seminar;
+  const { popustOnline, popustOffline, avansBezPdv, placeno } =
+    racunParsed.calculations;
+  const { onlineCena, offlineCena, brojUcesnikaOnline, brojUcesnikaOffline } =
+    racunParsed.seminar;
   const tipRacuna = racunParsed.tipRacuna;
   const stopaPdv = racunParsed.stopaPdv;
 
   const onlineUkupnaNaknada =
-    onlineCena * brojUcesnikaOnline * (1 - popustOnline / 100) * (1 + stopaPdv / 100);
+    onlineCena *
+    brojUcesnikaOnline *
+    (1 - popustOnline / 100) *
+    (1 + stopaPdv / 100);
 
   const offlineUkupnaNaknada =
-    offlineCena * brojUcesnikaOffline * (1 - popustOffline / 100) * (1 + stopaPdv / 100);
+    offlineCena *
+    brojUcesnikaOffline *
+    (1 - popustOffline / 100) *
+    (1 + stopaPdv / 100);
 
-  const onlinePoreskaOsnovica = onlineCena * brojUcesnikaOnline * (1 - popustOnline / 100);
-  const offlinePoreskaOsnovica = offlineCena * brojUcesnikaOffline * (1 - popustOffline / 100);
+  const onlinePoreskaOsnovica =
+    onlineCena * brojUcesnikaOnline * (1 - popustOnline / 100);
+  const offlinePoreskaOsnovica =
+    offlineCena * brojUcesnikaOffline * (1 - popustOffline / 100);
   const avansPdv = (avansBezPdv * stopaPdv) / 100;
   const avans = avansBezPdv + avansPdv;
 
@@ -165,7 +180,7 @@ const calculateRacunFields = (racun: RacunZod) => {
         : roundToTwoDecimals(
             onlineUkupnaNaknada +
               offlineUkupnaNaknada -
-              (tipRacuna === TipRacuna.RACUN ? placeno : 0)
+              (tipRacuna === TipRacuna.RACUN ? placeno : 0),
           ),
     ukupanPdv:
       tipRacuna === TipRacuna.AVANSNI_RACUN
@@ -173,7 +188,7 @@ const calculateRacunFields = (racun: RacunZod) => {
         : roundToTwoDecimals(
             (offlinePoreskaOsnovica * stopaPdv) / 100 +
               (onlinePoreskaOsnovica * stopaPdv) / 100 -
-              (tipRacuna === TipRacuna.KONACNI_RACUN ? avansPdv : 0)
+              (tipRacuna === TipRacuna.KONACNI_RACUN ? avansPdv : 0),
           ),
     avansPdv: roundToTwoDecimals(avansPdv),
     avans: roundToTwoDecimals(avans),
