@@ -8,8 +8,8 @@
     "build": "tsc",
     "start": "cross-env NODE_ENV=production tsx src/server.ts",
     "dev": "cross-env NODE_ENV=development tsx watch src/server.ts",
-    "format": "npx biome format --write ./src",
-    "check": "npx biome check --write ./src",
+    "biome:format": "npx biome format --write ./src",
+    "biome:check": "npx biome check --write ./src",
     "lint:all": "npx biome lint",
     "lint:error": "npx biome lint --diagnostic-level error"
   },

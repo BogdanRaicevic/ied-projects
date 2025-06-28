@@ -5,8 +5,8 @@
   "scripts": {
     "build": "tsc",
     "dev": "tsc && ts-node src/main.ts",
-    "format": "npx biome format --write ./src",
-    "check": "npx biome check --write ./src"
+    "biome:format": "npx biome format --write ./src",
+    "biome:check": "npx biome check --write ./src"
   },
   "keywords": [],
   "author": "",
