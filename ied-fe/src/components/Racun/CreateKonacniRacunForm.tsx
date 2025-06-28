@@ -24,7 +24,15 @@ export const CreateKonacniRacunForm = () => {
 
   return (
     <Box>
-      <Box sx={{ display: "flex", alignItems: "center", justifyContent: "center", mb: 3, gap: 2 }}>
+      <Box
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          mb: 3,
+          gap: 2,
+        }}
+      >
         <Typography variant="h4">Konačni račun</Typography>
         {pozivNaBroj}
       </Box>

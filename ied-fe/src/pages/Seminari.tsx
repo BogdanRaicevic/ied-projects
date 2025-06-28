@@ -7,13 +7,14 @@ import { addMonths, subMonths } from "date-fns";
 
 export default function Seminari() {
   const [seminariUpdateCounter, setSeminarUpdateCounter] = useState(0);
-  const [tableInputParameters, setTableInputParameters] = useState<SeminarQueryParams>({
-    naziv: "",
-    predavac: "",
-    lokacija: "",
-    datumOd: subMonths(new Date(), 3),
-    datumDo: addMonths(new Date(), 3),
-  });
+  const [tableInputParameters, setTableInputParameters] =
+    useState<SeminarQueryParams>({
+      naziv: "",
+      predavac: "",
+      lokacija: "",
+      datumOd: subMonths(new Date(), 3),
+      datumDo: addMonths(new Date(), 3),
+    });
 
   const handleSeminarUpdate = () => {
     setSeminarUpdateCounter((prev) => prev + 1);
@@ -27,7 +28,10 @@ export default function Seminari() {
     <>
       <ParametriPretrageSeminar onSubmit={handlePretraziSeminare} />
 
-      <SeminariTable queryParameters={tableInputParameters} updateCounter={seminariUpdateCounter} />
+      <SeminariTable
+        queryParameters={tableInputParameters}
+        updateCounter={seminariUpdateCounter}
+      />
 
       <SeminarForm onSuccess={handleSeminarUpdate} />
     </>

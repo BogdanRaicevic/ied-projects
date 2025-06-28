@@ -13,12 +13,17 @@ export default memo(function MyTable() {
   const [data, setData] = useState<FirmaType[]>([]);
   const [documents, setDocuments] = useState(1000);
 
-  const { pagination, setPaginationParameters, appliedParameters } = usePretragaStore();
+  const { pagination, setPaginationParameters, appliedParameters } =
+    usePretragaStore();
 
   useEffect(() => {
     const loadData = async () => {
       const { pageIndex, pageSize } = pagination;
-      const res = await fetchFirmaPretrage(pageSize, pageIndex, appliedParameters);
+      const res = await fetchFirmaPretrage(
+        pageSize,
+        pageIndex,
+        appliedParameters,
+      );
       setData(res.firmas);
       setDocuments(res.totalDocuments);
     };

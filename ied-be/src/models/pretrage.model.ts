@@ -1,4 +1,4 @@
-import { Document, Schema, model } from "mongoose";
+import { type Document, model, Schema } from "mongoose";
 
 export type PretrageType = Document & {
   naziv_pretrage: string;
@@ -38,7 +38,7 @@ const pretrageSchema = new Schema<PretrageType>(
     imePrezime: { type: String },
     emailZaposlenog: { type: String },
   },
-  { collection: "pretrage" }
+  { collection: "pretrage" },
 );
 
 export const Pretrage = model<PretrageType>("Pretrage", pretrageSchema);

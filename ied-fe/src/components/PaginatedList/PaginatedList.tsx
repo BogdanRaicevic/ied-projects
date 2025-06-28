@@ -43,34 +43,44 @@ function PaginatedList() {
   };
 
   const renderZaposleni = (zaposleni: Zaposleni[]) => {
-    return zaposleni.map((z: Zaposleni, index: number) => <SingleZaposleni key={index} {...z} />);
+    return zaposleni.map((z: Zaposleni, index: number) => (
+      <SingleZaposleni key={index} {...z} />
+    ));
   };
 
   return (
     <div>
       <List>
-        {fakeZaposleni.slice((page - 1) * itemsPerPage, page * itemsPerPage).map((item, index) => (
-          <Card key={index} sx={{ mb: 1 }}>
-            <CardContent sx={{ backgroundColor: "#ead5d3" }}>
-              <Typography variant="h6" component="div">
-                {item.firma.naziv} {/* Replace with your company name variable */}
-              </Typography>
-              <Typography variant="body2" color="text.secondary">
-                {"PIB: " + item.firma.pib} {/* Replace with your company id variable */}
-              </Typography>
-              <Accordion>
-                <AccordionSummary
-                  expandIcon={<ExpandMoreIcon />}
-                  aria-controls="panel1a-content"
-                  id="panel1a-header"
-                >
-                  <Typography>Broj zaposlenih: {item.firma.zaposleni.length}</Typography>
-                </AccordionSummary>
-                <AccordionDetails>{renderZaposleni(item.firma.zaposleni)}</AccordionDetails>
-              </Accordion>
-            </CardContent>
-          </Card>
-        ))}
+        {fakeZaposleni
+          .slice((page - 1) * itemsPerPage, page * itemsPerPage)
+          .map((item, index) => (
+            <Card key={index} sx={{ mb: 1 }}>
+              <CardContent sx={{ backgroundColor: "#ead5d3" }}>
+                <Typography variant="h6" component="div">
+                  {item.firma.naziv}{" "}
+                  {/* Replace with your company name variable */}
+                </Typography>
+                <Typography variant="body2" color="text.secondary">
+                  {"PIB: " + item.firma.pib}{" "}
+                  {/* Replace with your company id variable */}
+                </Typography>
+                <Accordion>
+                  <AccordionSummary
+                    expandIcon={<ExpandMoreIcon />}
+                    aria-controls="panel1a-content"
+                    id="panel1a-header"
+                  >
+                    <Typography>
+                      Broj zaposlenih: {item.firma.zaposleni.length}
+                    </Typography>
+                  </AccordionSummary>
+                  <AccordionDetails>
+                    {renderZaposleni(item.firma.zaposleni)}
+                  </AccordionDetails>
+                </Accordion>
+              </CardContent>
+            </Card>
+          ))}
       </List>
       <Pagination
         sx={{ mb: 5 }}

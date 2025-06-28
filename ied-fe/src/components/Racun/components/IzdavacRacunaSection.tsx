@@ -1,15 +1,28 @@
-import { Grid, Paper, TextField, Box, Autocomplete, Alert } from "@mui/material";
+import {
+  Grid,
+  Paper,
+  TextField,
+  Box,
+  Autocomplete,
+  Alert,
+} from "@mui/material";
 import SelectIzdavacRacuna from "../SelectIzdavacRacuna";
 import { useRacunStore } from "../store/useRacunStore";
 import { useFetchIzdavaciRacuna } from "../../../hooks/useFetchData";
 import { useMemo } from "react";
 
 export const IzdavacRacunaSection = () => {
-  const selectedIzdavac = useRacunStore((state) => state.racunData.izdavacRacuna);
+  const selectedIzdavac = useRacunStore(
+    (state) => state.racunData.izdavacRacuna,
+  );
   const tekuciRacun = useRacunStore((state) => state.racunData.tekuciRacun);
   const updateField = useRacunStore((state) => state.updateField);
 
-  const { data: allIzdavaciData, isLoading, isError } = useFetchIzdavaciRacuna();
+  const {
+    data: allIzdavaciData,
+    isLoading,
+    isError,
+  } = useFetchIzdavaciRacuna();
 
   const currentIzdavacData = useMemo(() => {
     if (isLoading || !allIzdavaciData || !selectedIzdavac) {
@@ -17,7 +30,7 @@ export const IzdavacRacunaSection = () => {
     }
 
     return allIzdavaciData?.find(
-      (f: { id: string; tekuciRacuni: string[] }) => f.id === selectedIzdavac
+      (f: { id: string; tekuciRacuni: string[] }) => f.id === selectedIzdavac,
     );
   }, [selectedIzdavac, isLoading, allIzdavaciData]);
 
@@ -28,7 +41,9 @@ export const IzdavacRacunaSection = () => {
   }
 
   if (isError) {
-    return <Alert severity="error">Greška pri učitavanju izdavača računa</Alert>;
+    return (
+      <Alert severity="error">Greška pri učitavanju izdavača računa</Alert>
+    );
   }
 
   return (
@@ -40,7 +55,12 @@ export const IzdavacRacunaSection = () => {
             options={tekuciRacuniOptions}
             value={tekuciRacun || null}
             renderInput={(params) => (
-              <TextField {...params} variant="filled" label="Tekući račun" sx={{ mb: 2 }} />
+              <TextField
+                {...params}
+                variant="filled"
+                label="Tekući račun"
+                sx={{ mb: 2 }}
+              />
             )}
             onChange={(_, newValue) => {
               updateField("tekuciRacun", newValue || "");

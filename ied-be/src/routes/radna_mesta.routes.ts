@@ -1,4 +1,9 @@
-import { Router, type Request, type Response, type NextFunction } from "express";
+import {
+  type NextFunction,
+  type Request,
+  type Response,
+  Router,
+} from "express";
 import { getAllRadnaMesta } from "../services/radna_mesta.service";
 
 const router = Router();

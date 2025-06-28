@@ -3,11 +3,16 @@ import { TextField, FormControl, Button, Box } from "@mui/material";
 import { DatePicker } from "@mui/x-date-pickers";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { SeminarQueryParamsSchema, SeminarQueryParams } from "@ied-shared/types/seminar.zod";
+import {
+  SeminarQueryParamsSchema,
+  SeminarQueryParams,
+} from "@ied-shared/types/seminar.zod";
 
 export function ParametriPretrageSeminar({
   onSubmit,
-}: { onSubmit: (data: SeminarQueryParams) => void }) {
+}: {
+  onSubmit: (data: SeminarQueryParams) => void;
+}) {
   const {
     control,
     handleSubmit,
@@ -22,7 +27,10 @@ export function ParametriPretrageSeminar({
   return (
     <>
       <h1>Parametri Pretrage</h1>
-      <Box component="form" onSubmit={handleSubmit((data) => handleFormSubmit(data))}>
+      <Box
+        component="form"
+        onSubmit={handleSubmit((data) => handleFormSubmit(data))}
+      >
         <Controller
           name="naziv"
           control={control}
@@ -105,7 +113,13 @@ export function ParametriPretrageSeminar({
           />
         </FormControl>
 
-        <Button sx={{ m: 1 }} size="large" variant="contained" color="info" type="submit">
+        <Button
+          sx={{ m: 1 }}
+          size="large"
+          variant="contained"
+          color="info"
+          type="submit"
+        >
           Pretrazi
         </Button>
       </Box>

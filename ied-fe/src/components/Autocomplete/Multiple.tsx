@@ -11,7 +11,7 @@ interface AutocompleteMultipleProps {
   renderTag?: (
     getTagProps: (props: { index: number }) => any,
     index: number,
-    option: any
+    option: any,
   ) => React.ReactNode; // Optional custom render
 }
 
@@ -24,7 +24,8 @@ export default memo(function AutocompleteCheckbox({
   getOptionLabel,
   renderTag,
 }: AutocompleteMultipleProps) {
-  const [selectedOptions, setSelectedOptions] = useState<string[]>(checkedValues);
+  const [selectedOptions, setSelectedOptions] =
+    useState<string[]>(checkedValues);
 
   useEffect(() => {
     setSelectedOptions(checkedValues);
@@ -42,7 +43,7 @@ export default memo(function AutocompleteCheckbox({
   const defaultRenderTag = (
     getTagProps: (props: { index: number }) => any,
     index: number,
-    option: string
+    option: string,
   ): React.ReactNode => {
     const { key, ...tagProps } = getTagProps({ index });
     return <Chip variant="outlined" label={option} key={key} {...tagProps} />;
@@ -60,7 +61,9 @@ export default memo(function AutocompleteCheckbox({
           return (renderTag || defaultRenderTag)(getTagProps, index, option);
         })
       }
-      renderInput={(params) => <TextField {...params} placeholder={placeholder} />}
+      renderInput={(params) => (
+        <TextField {...params} placeholder={placeholder} />
+      )}
       onChange={handleChange}
       value={selectedOptions}
     />

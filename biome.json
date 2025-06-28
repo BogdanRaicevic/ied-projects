@@ -19,7 +19,7 @@
       "recommended": true,
       "a11y": "off",
       "suspicious": {
-        "noExplicitAny": "warn",
+        "noExplicitAny": "info",
         "noArrayIndexKey": "warn"
       },
       "nursery": {
@@ -28,6 +28,9 @@
       },
       "correctness": {
         "useExhaustiveDependencies": "warn"
+      },
+      "complexity": {
+        "noBannedTypes": "info"
       }
     }
   },

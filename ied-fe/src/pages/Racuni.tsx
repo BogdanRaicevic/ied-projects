@@ -17,7 +17,11 @@ import { useRacunCalculations } from "../components/Racun/hooks/useRacunCalculat
 import { PrijavaZodType, SeminarZodType, TipRacuna } from "@ied-shared/index";
 import handlePromiseError from "../utils/helpers";
 import { PretrageRacuna } from "../components/Racun/PretrageRacuna";
-import { fetchRacunById, saveNewRacun, updateRacunById } from "../api/racuni.api";
+import {
+  fetchRacunById,
+  saveNewRacun,
+  updateRacunById,
+} from "../api/racuni.api";
 
 export default function Racuni() {
   const [firma, setFirma] = useState<FirmaType | null>(null);
@@ -25,25 +29,31 @@ export default function Racuni() {
   const [apiError, setApiError] = useState<string | null>(null); // Keep this for persistent errors if needed
   const [alertOpen, setAlertOpen] = useState(false);
   const [alertMessage, setAlertMessage] = useState("");
-  const [alertSeverity, setAlertSeverity] = useState<"success" | "error">("success");
+  const [alertSeverity, setAlertSeverity] = useState<"success" | "error">(
+    "success",
+  );
 
   // Get store actions
   const updateNestedField = useRacunStore((state) => state.updateNestedField);
   const updateField = useRacunStore((state) => state.updateField);
-  const getCompleteRacunData = useRacunStore((state) => state.getCompleteRacunData);
+  const getCompleteRacunData = useRacunStore(
+    (state) => state.getCompleteRacunData,
+  );
   const setRacunData = useRacunStore((state) => state.updateRacunData);
   const reset = useRacunStore((state) => state.reset);
-  const resetSeminarCalculationData = useRacunStore((state) => state.resetSeminarCalculationData);
+  const resetSeminarCalculationData = useRacunStore(
+    (state) => state.resetSeminarCalculationData,
+  );
   const racunData = useRacunStore((state) => state.racunData);
 
   const location = useLocation();
   const prijave: PrijavaZodType[] = useMemo(
     () => location.state?.prijave || [],
-    [location.state?.prijave]
+    [location.state?.prijave],
   );
   const seminarId: string = useMemo(
     () => location.state?.seminarId || "",
-    [location.state?.seminarId]
+    [location.state?.seminarId],
   );
 
   const initialTab = seminarId ? TipRacuna.PREDRACUN : "pretrage";
@@ -121,8 +131,10 @@ export default function Racuni() {
   const firmaMesto = firma?.mesto;
   const firmaMaticniBroj = firma?.maticni_broj;
 
-  const onlineCount = prijave.filter((p) => p.prisustvo === "online").length || 0;
-  const offlineCount = prijave.filter((p) => p.prisustvo === "offline").length || 0;
+  const onlineCount =
+    prijave.filter((p) => p.prisustvo === "online").length || 0;
+  const offlineCount =
+    prijave.filter((p) => p.prisustvo === "offline").length || 0;
   // --- End Primitives Extraction ---
 
   useEffect(() => {
@@ -208,9 +220,15 @@ export default function Racuni() {
     setAlertOpen(true);
   };
 
-  const handleTabChange = (_event: React.SyntheticEvent, newValue: TipRacuna | "pretrage") => {
+  const handleTabChange = (
+    _event: React.SyntheticEvent,
+    newValue: TipRacuna | "pretrage",
+  ) => {
     setTabValue(newValue);
-    updateField("tipRacuna", newValue === "pretrage" ? TipRacuna.PREDRACUN : newValue);
+    updateField(
+      "tipRacuna",
+      newValue === "pretrage" ? TipRacuna.PREDRACUN : newValue,
+    );
     if (newValue === "pretrage") {
       reset();
     } else {
@@ -239,7 +257,10 @@ export default function Racuni() {
   useRacunCalculations();
 
   // Add this function to handle closing the Snackbar
-  const handleAlertClose = (_event?: React.SyntheticEvent | Event, reason?: string) => {
+  const handleAlertClose = (
+    _event?: React.SyntheticEvent | Event,
+    reason?: string,
+  ) => {
     if (reason === "clickaway") {
       return;
     }
@@ -251,7 +272,11 @@ export default function Racuni() {
       <PageTitle title={"Racuni"} />
 
       <Box sx={{ borderBottom: 1, borderColor: "divider", mt: 3, mb: 3 }}>
-        <Tabs value={tabValue} onChange={handleTabChange} aria-label="basic tabs">
+        <Tabs
+          value={tabValue}
+          onChange={handleTabChange}
+          aria-label="basic tabs"
+        >
           <Tab label="Pretrage" value="pretrage" />
           <Tab label="Predračun" value={TipRacuna.PREDRACUN} />
           <Tab label="Avansni račun" value={TipRacuna.AVANSNI_RACUN} />
@@ -269,7 +294,14 @@ export default function Racuni() {
         </Alert>
       )}
       {tabValue !== "pretrage" && (
-        <Box sx={{ display: "flex", justifyContent: "space-between", mt: 3, mb: 3 }}>
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            mt: 3,
+            mb: 3,
+          }}
+        >
           {!racunData._id && (
             <Button variant="outlined" onClick={handleSaveRacun}>
               Sačuvaj račun

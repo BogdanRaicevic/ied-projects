@@ -6,7 +6,7 @@ import { FirmaQueryParams } from "@ied-shared/types/firma.zod";
 export const fetchFirmaPretrage = async (
   pageSize: number,
   pageIndex: number,
-  queryParameters: FirmaQueryParams
+  queryParameters: FirmaQueryParams,
 ) => {
   try {
     const body = {
@@ -25,7 +25,9 @@ export const fetchFirmaPretrage = async (
   }
 };
 
-export const fetchSingleFirma = async (id: string): Promise<FirmaType | null> => {
+export const fetchSingleFirma = async (
+  id: string,
+): Promise<FirmaType | null> => {
   try {
     const response = await axiosInstanceWithAuth.get(`/api/firma/${id}`);
     return response.data;
@@ -35,7 +37,9 @@ export const fetchSingleFirma = async (id: string): Promise<FirmaType | null> =>
   }
 };
 
-export const exportFirmaData = async (queryParameters: FirmaQueryParams): Promise<{
+export const exportFirmaData = async (
+  queryParameters: FirmaQueryParams,
+): Promise<{
   data: ExportFirma;
   duplicates: string[];
 }> => {
@@ -46,7 +50,7 @@ export const exportFirmaData = async (queryParameters: FirmaQueryParams): Promis
 
     const response = await axiosInstanceWithAuth.post(
       `/api/firma/export-firma-data`,
-      body
+      body,
     );
 
     const firmeMap = new Map<string, number>();
@@ -63,7 +67,7 @@ export const exportFirmaData = async (queryParameters: FirmaQueryParams): Promis
 
     const duplicates = Array.from(firmeMap.entries())
       .filter(([_, count]) => count > 1)
-      .map(([e_mail]) => (e_mail));
+      .map(([e_mail]) => e_mail);
 
     return {
       data: response.data,
@@ -75,7 +79,9 @@ export const exportFirmaData = async (queryParameters: FirmaQueryParams): Promis
   }
 };
 
-export const exportZaposleniData = async (queryParameters: FirmaQueryParams): Promise<{
+export const exportZaposleniData = async (
+  queryParameters: FirmaQueryParams,
+): Promise<{
   data: ExportZaposlenih;
   duplicates: string[];
 }> => {
@@ -86,7 +92,7 @@ export const exportZaposleniData = async (queryParameters: FirmaQueryParams): Pr
 
     const response = await axiosInstanceWithAuth.post(
       `/api/firma/export-zaposleni-data`,
-      body
+      body,
     );
 
     const zaposleniMap = new Map<string, number>();
@@ -103,13 +109,12 @@ export const exportZaposleniData = async (queryParameters: FirmaQueryParams): Pr
 
     const duplicates = Array.from(zaposleniMap.entries())
       .filter(([_, count]) => count > 1)
-      .map(([e_mail]) => (e_mail));
+      .map(([e_mail]) => e_mail);
 
     return {
       data: response.data,
       duplicates,
     };
-
   } catch (error) {
     console.error("Error exporting zaposleni data:", error);
     throw error;
@@ -125,7 +130,10 @@ export const saveFirma = async (company: Partial<FirmaType>) => {
 
   try {
     if (company._id) {
-      const response = await axiosInstanceWithAuth.post(`/api/firma/${company._id}`, company);
+      const response = await axiosInstanceWithAuth.post(
+        `/api/firma/${company._id}`,
+        company,
+      );
       return {
         data: response.data,
         status: response.status,

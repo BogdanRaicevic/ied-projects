@@ -37,5 +37,5 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
         </LocalizationProvider>
       </BrowserRouter>
     </ClerkProvider>
-  </React.StrictMode>
+  </React.StrictMode>,
 );

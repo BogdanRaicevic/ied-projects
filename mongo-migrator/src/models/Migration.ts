@@ -1,4 +1,4 @@
-import mongoose, { Schema, Document } from 'mongoose';
+import mongoose, { Schema, Document } from "mongoose";
 
 interface IMigration extends Document {
   timestamp: number;
@@ -13,6 +13,6 @@ const MigrationSchema: Schema = new Schema({
 });
 
 export const Migration = mongoose.model<IMigration>(
-  'Migration',
-  MigrationSchema
+  "Migration",
+  MigrationSchema,
 );

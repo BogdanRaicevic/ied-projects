@@ -3,7 +3,13 @@ import permanentLogo from "../../images/permanent-logo.png";
 import bsLogo from "../../images/bs-logo.png";
 import { useRacunStore } from "./store/useRacunStore";
 import { IzdavacRacuna } from "@ied-shared/index";
-import { FormControl, MenuItem, Select, SelectChangeEvent, Tooltip } from "@mui/material";
+import {
+  FormControl,
+  MenuItem,
+  Select,
+  SelectChangeEvent,
+  Tooltip,
+} from "@mui/material";
 
 export default function SelectIzdavacRacuna() {
   const options = [
@@ -12,7 +18,9 @@ export default function SelectIzdavacRacuna() {
     { id: "bs", logo: bsLogo },
   ];
 
-  const selectedIzdavac = useRacunStore((state) => state.racunData.izdavacRacuna);
+  const selectedIzdavac = useRacunStore(
+    (state) => state.racunData.izdavacRacuna,
+  );
   const pozivNaBroj = useRacunStore((state) => state.racunData.pozivNaBroj);
   const updateField = useRacunStore((state) => state.updateField);
 
@@ -29,7 +37,9 @@ export default function SelectIzdavacRacuna() {
     <FormControl fullWidth sx={{ mb: 2 }}>
       <Tooltip
         title={
-          isDisabled ? "Izdavač se ne može promeniti nakon što je poziv na broj generisan" : ""
+          isDisabled
+            ? "Izdavač se ne može promeniti nakon što je poziv na broj generisan"
+            : ""
         }
         arrow
         placement="top"
@@ -43,7 +53,10 @@ export default function SelectIzdavacRacuna() {
         >
           {options.map((opt) => (
             <MenuItem key={opt.id} value={opt.id}>
-              <img src={opt.logo} style={{ maxWidth: "200px", width: "100%" }} />
+              <img
+                src={opt.logo}
+                style={{ maxWidth: "200px", width: "100%" }}
+              />
             </MenuItem>
           ))}
         </Select>

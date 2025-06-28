@@ -21,7 +21,9 @@ export function ZaposleniForm({ zaposleni, onSubmit }: ZaposleniFormProps) {
     resolver: zodResolver(ZaposleniSchema),
   });
 
-  const [selectedRadnoMesto, setSelectedRadnoMesto] = useState(zaposleni?.radno_mesto || "");
+  const [selectedRadnoMesto, setSelectedRadnoMesto] = useState(
+    zaposleni?.radno_mesto || "",
+  );
   let zaposleniData: Zaposleni;
 
   const handleDodajZaposlenog = (data: Zaposleni) => {

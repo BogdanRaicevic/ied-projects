@@ -19,8 +19,16 @@ export const SeminarSchema = z.object({
   naziv: z.string().min(1, "Naziv seminara je obavezan"),
   predavac: z.string().optional(),
   lokacija: z.string().optional(),
-  offlineCena: z.coerce.number().min(0).nonnegative("Cena ne može biti negativna").default(0),
-  onlineCena: z.coerce.number().min(0).nonnegative("Cena ne može biti negativna").default(0),
+  offlineCena: z.coerce
+    .number()
+    .min(0)
+    .nonnegative("Cena ne može biti negativna")
+    .default(0),
+  onlineCena: z.coerce
+    .number()
+    .min(0)
+    .nonnegative("Cena ne može biti negativna")
+    .default(0),
   datum: z.coerce.date(),
   detalji: z.string().optional(),
   prijave: z.array(PrijavaSchema).default([]),

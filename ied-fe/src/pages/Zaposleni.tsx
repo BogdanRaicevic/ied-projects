@@ -14,7 +14,13 @@ export default function Zaposleni() {
       <Box sx={{ m: 1 }}>
         <Grid container spacing={3}>
           <Grid size={4}>
-            <TextField fullWidth sx={{ m: 1 }} id="email" label="Email" variant="outlined" />
+            <TextField
+              fullWidth
+              sx={{ m: 1 }}
+              id="email"
+              label="Email"
+              variant="outlined"
+            />
             <TextField
               fullWidth
               sx={{ m: 1 }}
@@ -29,8 +35,20 @@ export default function Zaposleni() {
               label="ID sertifikata"
               variant="outlined"
             />
-            <TextField fullWidth sx={{ m: 1 }} id="ime" label="Ime" variant="outlined" />
-            <TextField fullWidth sx={{ m: 1 }} id="prezime" label="Prezime" variant="outlined" />
+            <TextField
+              fullWidth
+              sx={{ m: 1 }}
+              id="ime"
+              label="Ime"
+              variant="outlined"
+            />
+            <TextField
+              fullWidth
+              sx={{ m: 1 }}
+              id="prezime"
+              label="Prezime"
+              variant="outlined"
+            />
           </Grid>
           {/* <Grid size={4}>
             {fakeRadnaMesta.map((item, index) => (

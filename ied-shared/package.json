@@ -21,7 +21,8 @@
   },
   "scripts": {
     "build": "tsc",
-    "format": "npx biome check --write ."
+    "format": "npx biome format --write ./src",
+    "check": "npx biome check --write ./src"
   },
   "keywords": [],
   "author": "",
@@ -30,12 +31,12 @@
     "node": ">=20.0.0"
   },
   "devDependencies": {
-    "@biomejs/biome": "latest",
     "@types/node": "^22.15.21",
     "tsx": "^4.20.1",
     "typescript": "^5.8.3"
   },
   "dependencies": {
+    "@biomejs/biome": "latest",
     "zod": "^3.25.17"
   }
 }

@@ -31,7 +31,7 @@ export default memo(function SingleAutocomplete({
     _event: React.SyntheticEvent<Element, Event>,
     newValue: string | null,
     _reason: AutocompleteChangeReason,
-    _details?: AutocompleteChangeDetails<string>
+    _details?: AutocompleteChangeDetails<string>,
   ) => {
     setSelected(newValue ?? "");
     onChange(newValue ?? "");

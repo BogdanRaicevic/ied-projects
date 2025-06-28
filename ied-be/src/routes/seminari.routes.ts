@@ -1,19 +1,29 @@
-import { Router, type Request, type Response, type NextFunction } from "express";
+import {
+  PrijavaSchema,
+  type SeminarQueryParams,
+  SeminarQueryParamsSchema,
+  SeminarSchema,
+} from "@ied-shared/types/seminar.zod";
+import {
+  type NextFunction,
+  type Request,
+  type Response,
+  Router,
+} from "express";
+import type { FilterQuery } from "mongoose";
+import { z } from "zod";
+import { validate } from "../middleware/validateSchema";
+import type { SeminarType } from "../models/seminar.model";
 import {
   deletePrijava,
   deleteSeminar,
-  getSeminarById,
   getAllSeminars,
+  getSeminarById,
   savePrijava,
   saveSeminar,
   searchSeminars,
 } from "../services/seminar.service";
-import type { FilterQuery } from "mongoose";
-import type { SeminarType } from "../models/seminar.model";
 import { ErrorWithCause } from "../utils/customErrors";
-import { validate } from "../middleware/validateSchema";
-import { PrijavaSchema, SeminarQueryParamsSchema, SeminarSchema, SeminarQueryParams } from "@ied-shared/types/seminar.zod";
-import { z } from "zod";
 
 const router = Router();
 
@@ -27,7 +37,7 @@ router.post(
     } catch (error) {
       next(error);
     }
-  }
+  },
 );
 
 const ExtendedSearchSeminarType = z.object({
@@ -52,7 +62,7 @@ router.post(
           datumDo,
         } as FilterQuery<SeminarType>,
         Number(pageIndex),
-        Number(pageSize)
+        Number(pageSize),
       );
 
       const results: SeminarType[] = [];
@@ -75,17 +85,20 @@ router.post(
     } catch (error) {
       next(error);
     }
-  }
+  },
 );
 
-router.get("/all-seminars", async (_req: Request, res: Response, next: NextFunction) => {
-  try {
-    const allSeminars = await getAllSeminars();
-    res.status(200).json(allSeminars);
-  } catch (error) {
-    next(error);
-  }
-});
+router.get(
+  "/all-seminars",
+  async (_req: Request, res: Response, next: NextFunction) => {
+    try {
+      const allSeminars = await getAllSeminars();
+      res.status(200).json(allSeminars);
+    } catch (error) {
+      next(error);
+    }
+  },
+);
 
 router.get("/:id", async (req: Request, res: Response, next: NextFunction) => {
   try {
@@ -104,7 +117,9 @@ router.post(
   "/save-prijava",
   validate(SavePrijavaInputSchema),
   async (req: Request, res: Response, next: NextFunction) => {
-    const { seminar_id, ...prijava } = req.body as z.infer<typeof SavePrijavaInputSchema>;
+    const { seminar_id, ...prijava } = req.body as z.infer<
+      typeof SavePrijavaInputSchema
+    >;
     try {
       const seminar = await savePrijava(seminar_id, prijava);
       res.status(201).json(seminar);
@@ -115,26 +130,35 @@ router.post(
         next(error);
       }
     }
-  }
+  },
 );
 
-router.delete("/delete-prijava", async (req: Request, res: Response, next: NextFunction) => {
-  const { zaposleni_id, seminar_id } = req.query;
-  try {
-    const seminar = await deletePrijava(zaposleni_id as string, seminar_id as string);
-    res.status(200).json(seminar);
-  } catch (error) {
-    next(error);
-  }
-});
+router.delete(
+  "/delete-prijava",
+  async (req: Request, res: Response, next: NextFunction) => {
+    const { zaposleni_id, seminar_id } = req.query;
+    try {
+      const seminar = await deletePrijava(
+        zaposleni_id as string,
+        seminar_id as string,
+      );
+      res.status(200).json(seminar);
+    } catch (error) {
+      next(error);
+    }
+  },
+);
 
-router.delete("/delete/:id", async (req: Request, res: Response, next: NextFunction) => {
-  try {
-    const deletedSeminar = await deleteSeminar(req.params.id);
-    res.status(201).json(deletedSeminar);
-  } catch (error) {
-    next(error);
-  }
-});
+router.delete(
+  "/delete/:id",
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const deletedSeminar = await deleteSeminar(req.params.id);
+      res.status(201).json(deletedSeminar);
+    } catch (error) {
+      next(error);
+    }
+  },
+);
 
 export default router;

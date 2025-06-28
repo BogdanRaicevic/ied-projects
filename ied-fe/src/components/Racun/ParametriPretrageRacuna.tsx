@@ -5,7 +5,15 @@ import {
   PretrageRacunaZodType,
   TipRacuna,
 } from "@ied-shared/index";
-import { Button, Chip, InputLabel, MenuItem, Select, TextField, Box } from "@mui/material";
+import {
+  Button,
+  Chip,
+  InputLabel,
+  MenuItem,
+  Select,
+  TextField,
+  Box,
+} from "@mui/material";
 import { blue, green, grey, purple, red } from "@mui/material/colors";
 import { DatePicker } from "@mui/x-date-pickers";
 import { subMonths } from "date-fns";
@@ -16,7 +24,9 @@ interface ParametriPretrageRacunaProps {
   onSearch: (filters: PretrageRacunaZodType) => void;
 }
 
-export const ParametriPretrageRacuna = ({ onSearch }: ParametriPretrageRacunaProps) => {
+export const ParametriPretrageRacuna = ({
+  onSearch,
+}: ParametriPretrageRacunaProps) => {
   const { control, handleSubmit } = useForm({
     defaultValues: {
       pozivNaBroj: undefined,
@@ -71,13 +81,21 @@ export const ParametriPretrageRacuna = ({ onSearch }: ParametriPretrageRacunaPro
       <Box
         component="form"
         onSubmit={handleSubmit(handlePretraziClick)}
-        sx={{ display: "grid", gridTemplateColumns: "repeat(4, minmax(0,1fr))", gap: 2 }}
+        sx={{
+          display: "grid",
+          gridTemplateColumns: "repeat(4, minmax(0,1fr))",
+          gap: 2,
+        }}
       >
         <Controller
           name="pozivNaBroj"
           control={control}
           render={({ field }) => (
-            <TextField {...field} label="Poziv na Broj" placeholder="Poziv na Broj" />
+            <TextField
+              {...field}
+              label="Poziv na Broj"
+              placeholder="Poziv na Broj"
+            />
           )}
         />
 
@@ -114,7 +132,11 @@ export const ParametriPretrageRacuna = ({ onSearch }: ParametriPretrageRacunaPro
             >
               {Object.entries(tipRacunaChips).map(([value, cfg]) => (
                 <MenuItem key={value} value={value}>
-                  <Chip label={cfg.label} size="small" sx={{ bgcolor: cfg.color, color: "#fff" }} />
+                  <Chip
+                    label={cfg.label}
+                    size="small"
+                    sx={{ bgcolor: cfg.color, color: "#fff" }}
+                  />
                 </MenuItem>
               ))}
             </Select>
@@ -155,7 +177,9 @@ export const ParametriPretrageRacuna = ({ onSearch }: ParametriPretrageRacunaPro
               {...field}
               displayEmpty
               multiple
-              onChange={(e) => field.onChange(e.target.value as IzdavacRacuna[])}
+              onChange={(e) =>
+                field.onChange(e.target.value as IzdavacRacuna[])
+              }
               renderValue={(selected = []) => {
                 if ((selected as string[]).length === 0) {
                   return <InputLabel>Izdavač računa</InputLabel>;
@@ -180,7 +204,11 @@ export const ParametriPretrageRacuna = ({ onSearch }: ParametriPretrageRacunaPro
             >
               {Object.entries(izdavacRacunaChips).map(([value, cfg]) => (
                 <MenuItem key={value} value={value}>
-                  <Chip label={cfg.label} size="small" sx={{ bgcolor: cfg.color, color: "#fff" }} />
+                  <Chip
+                    label={cfg.label}
+                    size="small"
+                    sx={{ bgcolor: cfg.color, color: "#fff" }}
+                  />
                 </MenuItem>
               ))}
             </Select>
@@ -190,22 +218,35 @@ export const ParametriPretrageRacuna = ({ onSearch }: ParametriPretrageRacunaPro
           name="nazivSeminara"
           control={control}
           render={({ field }) => (
-            <TextField {...field} label="Naziv Seminara" placeholder="Naziv Seminara" />
+            <TextField
+              {...field}
+              label="Naziv Seminara"
+              placeholder="Naziv Seminara"
+            />
           )}
         />
 
         <Controller
           name="imeFirme"
           control={control}
-          render={({ field }) => <TextField {...field} label="Ime Firme" placeholder="Ime Firme" />}
+          render={({ field }) => (
+            <TextField {...field} label="Ime Firme" placeholder="Ime Firme" />
+          )}
         />
 
         <Controller
           name="pibFirme"
           control={control}
-          render={({ field }) => <TextField {...field} placeholder="PIB Firme" label="PIB Firme" />}
+          render={({ field }) => (
+            <TextField {...field} placeholder="PIB Firme" label="PIB Firme" />
+          )}
         />
-        <Button variant="contained" color="primary" sx={{ marginBottom: 2 }} type="submit">
+        <Button
+          variant="contained"
+          color="primary"
+          sx={{ marginBottom: 2 }}
+          type="submit"
+        >
           Pretraži
         </Button>
       </Box>

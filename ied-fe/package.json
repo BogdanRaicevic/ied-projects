@@ -7,7 +7,8 @@
     "dev": "vite",
     "build": "tsc && vite build",
     "preview": "vite preview",
-    "format": "npx biome format --check ./src",
+    "format": "npx biome format --write ./src",
+    "check": "npx biome check --write ./src",
     "lint:all": "npx biome lint",
     "lint:error": "npx biome lint --diagnostic-level error"
   },

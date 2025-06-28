@@ -1,4 +1,4 @@
-import { Document, Schema, Types, model } from "mongoose";
+import { type Document, model, Schema, Types } from "mongoose";
 
 export type SeminarType = Document & {
   naziv: string;
@@ -51,7 +51,7 @@ const seminarSchema = new Schema<SeminarType>(
     detalji: { type: String, required: false },
     prijave: [prijavaSchema],
   },
-  { collection: "seminari" }
+  { collection: "seminari" },
 );
 
 export const Seminar = model<SeminarType>("Seminar", seminarSchema);

@@ -4,7 +4,12 @@ import Toolbar from "@mui/material/Toolbar";
 import Button from "@mui/material/Button";
 import { Link as RouteLink } from "react-router-dom";
 import Link from "@mui/material/Link";
-import { SignedOut, SignInButton, SignedIn, UserButton } from "@clerk/clerk-react";
+import {
+  SignedOut,
+  SignInButton,
+  SignedIn,
+  UserButton,
+} from "@clerk/clerk-react";
 
 export default function ApplicationNavBar() {
   const navItems = [

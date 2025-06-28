@@ -3,7 +3,7 @@ import { ZodSchema } from "zod";
 export function validateOrThrow<T>(
   schema: ZodSchema<T>,
   data: unknown,
-  context = "data validation"
+  context = "data validation",
 ): T {
   console.log(`Validating ${context}:`, data); // Log context
   const result = schema.safeParse(data);

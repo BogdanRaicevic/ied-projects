@@ -49,7 +49,9 @@ export const OnlinePrisustvaSection = () => {
                     variant="filled"
                     name="naziv"
                     value={racunData.seminar.naziv ?? ""}
-                    onChange={(e) => updateNestedField("seminar.naziv", e.target.value)}
+                    onChange={(e) =>
+                      updateNestedField("seminar.naziv", e.target.value)
+                    }
                   />
                 </TableCell>
                 <TableCell align="left">
@@ -57,7 +59,9 @@ export const OnlinePrisustvaSection = () => {
                     variant="filled"
                     name="jedinicaMere"
                     value={racunData.seminar.jedinicaMere || ""}
-                    onChange={(e) => updateNestedField("seminar.jedinicaMere", e.target.value)}
+                    onChange={(e) =>
+                      updateNestedField("seminar.jedinicaMere", e.target.value)
+                    }
                   />
                 </TableCell>
                 <TableCell align="left">
@@ -66,7 +70,10 @@ export const OnlinePrisustvaSection = () => {
                     name="brojUcesnikaOnline"
                     value={racunData.seminar.brojUcesnikaOnline || 0}
                     onChange={(e) =>
-                      updateNestedField("seminar.brojUcesnikaOnline", Number(e.target.value))
+                      updateNestedField(
+                        "seminar.brojUcesnikaOnline",
+                        Number(e.target.value),
+                      )
                     }
                   />
                 </TableCell>
@@ -96,7 +103,10 @@ export const OnlinePrisustvaSection = () => {
                     variant="filled"
                     value={racunData.seminar.onlineCena || 0}
                     onChange={(e) =>
-                      updateNestedField("seminar.onlineCena", Number(e.target.value))
+                      updateNestedField(
+                        "seminar.onlineCena",
+                        Number(e.target.value),
+                      )
                     }
                   />
                 </TableCell>
@@ -116,7 +126,7 @@ export const OnlinePrisustvaSection = () => {
                         ) {
                           updateNestedField(
                             "calculations.popustOnline",
-                            value === "" ? 0 : numValue
+                            value === "" ? 0 : numValue,
                           );
                         }
                       }
@@ -125,7 +135,9 @@ export const OnlinePrisustvaSection = () => {
                 </TableCell>
                 <TableCell align="left">
                   <Typography>
-                    {Number(racunData.calculations.onlinePoreskaOsnovica).toLocaleString("sr-RS", {
+                    {Number(
+                      racunData.calculations.onlinePoreskaOsnovica,
+                    ).toLocaleString("sr-RS", {
                       style: "currency",
                       currency: "RSD",
                       minimumFractionDigits: 2,
@@ -137,16 +149,21 @@ export const OnlinePrisustvaSection = () => {
                 </TableCell>
                 <TableCell align="left">
                   <Typography>
-                    {Number(racunData.calculations.pdvOnline).toLocaleString("sr-RS", {
-                      style: "currency",
-                      currency: "RSD",
-                      minimumFractionDigits: 2,
-                    })}
+                    {Number(racunData.calculations.pdvOnline).toLocaleString(
+                      "sr-RS",
+                      {
+                        style: "currency",
+                        currency: "RSD",
+                        minimumFractionDigits: 2,
+                      },
+                    )}
                   </Typography>
                 </TableCell>
                 <TableCell align="left">
                   <Typography>
-                    {Number(racunData.calculations.onlineUkupnaNaknada).toLocaleString("sr-RS", {
+                    {Number(
+                      racunData.calculations.onlineUkupnaNaknada,
+                    ).toLocaleString("sr-RS", {
                       style: "currency",
                       currency: "RSD",
                       minimumFractionDigits: 2,

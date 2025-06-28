@@ -1,4 +1,11 @@
-import { Card, CardContent, Typography, List, ListItem, Box } from "@mui/material";
+import {
+  Card,
+  CardContent,
+  Typography,
+  List,
+  ListItem,
+  Box,
+} from "@mui/material";
 import { ZaposleniForm } from "./ZaposleniFrom";
 import PrijavaOdjava from "../PrijavaOdjava";
 import { useState } from "react";
@@ -35,7 +42,8 @@ export function SingleZaposleni(zaposleni: Zaposleni) {
     );
   };
 
-  const [zaposleniPrijava, setZaposleniPrijava] = useState<Zaposleni>(zaposleni);
+  const [zaposleniPrijava, setZaposleniPrijava] =
+    useState<Zaposleni>(zaposleni);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setZaposleniPrijava({

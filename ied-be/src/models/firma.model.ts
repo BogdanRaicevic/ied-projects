@@ -1,4 +1,4 @@
-import { Document, Schema, model } from "mongoose";
+import { type Document, model, Schema } from "mongoose";
 import { type Zaposleni, zaposleniSchema } from "./zaposleni.model";
 
 type FirmaType = Document & {

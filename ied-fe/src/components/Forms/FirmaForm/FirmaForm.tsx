@@ -32,7 +32,10 @@ type FirmaFormProps = {
   onSubmit?: (data: FirmaType) => void;
 };
 
-export const FirmaForm: React.FC<FirmaFormProps> = ({ inputCompany, onSubmit: parentOnSubmit }) => {
+export const FirmaForm: React.FC<FirmaFormProps> = ({
+  inputCompany,
+  onSubmit: parentOnSubmit,
+}) => {
   const {
     register,
     formState: { errors },
@@ -45,11 +48,14 @@ export const FirmaForm: React.FC<FirmaFormProps> = ({ inputCompany, onSubmit: pa
     defaultValues: inputCompany,
   });
 
-  const { tipoviFirme, velicineFirme, stanjaFirme, mesta, delatnosti } = useFetchData();
+  const { tipoviFirme, velicineFirme, stanjaFirme, mesta, delatnosti } =
+    useFetchData();
 
   const [alert, setAlert] = useState<any>(null);
   const [errorAlert, setErrorAlert] = useState<string | null>(null);
-  const [currentFirmaId, setCurrentFirmaId] = useState<string | null>(inputCompany?._id || null);
+  const [currentFirmaId, setCurrentFirmaId] = useState<string | null>(
+    inputCompany?._id || null,
+  );
 
   // Update form values when inputCompany changes
   useEffect(() => {
@@ -62,7 +68,9 @@ export const FirmaForm: React.FC<FirmaFormProps> = ({ inputCompany, onSubmit: pa
   const onSubmit = async (data: FirmaType) => {
     try {
       // If we have an _id, we're updating an existing firma
-      const firmaData = currentFirmaId ? { ...data, _id: currentFirmaId } : data;
+      const firmaData = currentFirmaId
+        ? { ...data, _id: currentFirmaId }
+        : data;
       const savedCompany = await saveFirma(firmaData);
 
       // Update the current firma ID if this was a new creation
@@ -78,11 +86,15 @@ export const FirmaForm: React.FC<FirmaFormProps> = ({ inputCompany, onSubmit: pa
       reset(savedCompany.data);
       setAlert({
         type: "success",
-        message: currentFirmaId ? "Firma uspešno ažurirana!" : "Firma uspešno sačuvana!",
+        message: currentFirmaId
+          ? "Firma uspešno ažurirana!"
+          : "Firma uspešno sačuvana!",
         errors: null,
       });
     } catch (error: any) {
-      setErrorAlert(`Firma nije sačuvana. Došlo je do greške! ${error?.response?.data?.message}`);
+      setErrorAlert(
+        `Firma nije sačuvana. Došlo je do greške! ${error?.response?.data?.message}`,
+      );
       setTimeout(() => {
         setErrorAlert(null);
       }, 5000);
@@ -106,7 +118,9 @@ export const FirmaForm: React.FC<FirmaFormProps> = ({ inputCompany, onSubmit: pa
 
   const handleDelete = async (id: string) => {
     try {
-      const confirmed = window.confirm("Da li ste sigurni da želite da obrišete firmu?");
+      const confirmed = window.confirm(
+        "Da li ste sigurni da želite da obrišete firmu?",
+      );
       if (confirmed) {
         await deleteFirma(id);
         setAlert({
@@ -117,7 +131,9 @@ export const FirmaForm: React.FC<FirmaFormProps> = ({ inputCompany, onSubmit: pa
         window.close();
       }
     } catch (error: any) {
-      setErrorAlert(`Greška prilikom brisanja firme: ${error?.response?.data?.message}`);
+      setErrorAlert(
+        `Greška prilikom brisanja firme: ${error?.response?.data?.message}`,
+      );
       setTimeout(() => {
         setErrorAlert(null);
       }, 5000);
@@ -133,7 +149,9 @@ export const FirmaForm: React.FC<FirmaFormProps> = ({ inputCompany, onSubmit: pa
           slotProps={{
             input: {
               startAdornment: (
-                <InputAdornment position="start">{item.inputAdornment}</InputAdornment>
+                <InputAdornment position="start">
+                  {item.inputAdornment}
+                </InputAdornment>
               ),
             },
           }}
@@ -243,7 +261,12 @@ export const FirmaForm: React.FC<FirmaFormProps> = ({ inputCompany, onSubmit: pa
           );
         })}
 
-        <Grid size={{ xs: 12 }} display="flex" justifyContent="space-between" alignItems="center">
+        <Grid
+          size={{ xs: 12 }}
+          display="flex"
+          justifyContent="space-between"
+          alignItems="center"
+        >
           <Box>
             <Button
               sx={{ my: 2 }}
@@ -275,12 +298,20 @@ export const FirmaForm: React.FC<FirmaFormProps> = ({ inputCompany, onSubmit: pa
         </Grid>
 
         {alert && (
-          <Alert severity={alert.type} sx={{ width: "100%", mt: 2 }} onClose={() => setAlert(null)}>
+          <Alert
+            severity={alert.type}
+            sx={{ width: "100%", mt: 2 }}
+            onClose={() => setAlert(null)}
+          >
             {alert.message}
           </Alert>
         )}
         {errorAlert && (
-          <Alert severity="error" sx={{ width: "100%", mt: 2 }} onClose={() => setErrorAlert(null)}>
+          <Alert
+            severity="error"
+            sx={{ width: "100%", mt: 2 }}
+            onClose={() => setErrorAlert(null)}
+          >
             {errorAlert}
           </Alert>
         )}
@@ -292,20 +323,27 @@ export const FirmaForm: React.FC<FirmaFormProps> = ({ inputCompany, onSubmit: pa
                 zErr
                   ? Object.entries(zErr).map(([field, errObj]) => {
                       // Get the problematic value if available
-                      const value = inputCompany.zaposleni?.[idx]?.[field as keyof Zaposleni];
+                      const value =
+                        inputCompany.zaposleni?.[idx]?.[
+                          field as keyof Zaposleni
+                        ];
                       return (
                         <li key={field + idx}>
                           Zaposleni #{idx + 1} - <b>{field}</b>
                           {value !== undefined && (
                             <>
-                              (<span style={{ color: "#d32f2f" }}>{String(value)}</span>)
+                              (
+                              <span style={{ color: "#d32f2f" }}>
+                                {String(value)}
+                              </span>
+                              )
                             </>
                           )}
                           : {(errObj as any)?.message}
                         </li>
                       );
                     })
-                  : null
+                  : null,
               )}
             </ul>
           </Alert>
