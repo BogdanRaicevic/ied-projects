@@ -18,7 +18,6 @@ import tipFirmeRoutes from "./routes/tip_firme.routes";
 import velicineFirmiRoutes from "./routes/velicina_firme.routes";
 import { env } from "./utils/envVariables";
 import "./database/cron";
-import { RacunBaseModel } from "./models/racun.model"; // import to sync indexes
 
 const app = express();
 const allowedOrigins = env.fe.allowedPorts.map(
@@ -66,9 +65,6 @@ app.use(errorWrapper);
 async function initServer() {
   try {
     await connectDB();
-    // TODO: right now this won't hurt performance, but in the future we might want to remove this
-    // Sync Mongoose indexes (drops old and creates schema-defined ones)
-    await RacunBaseModel.syncIndexes();
     app.listen({ port: Number(env.be.appPort) });
   } catch (error) {
     console.error("Error starting server:", error);
