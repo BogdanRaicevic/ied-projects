@@ -22,7 +22,7 @@
     "@biomejs/biome": "latest",
     "@types/cors": "^2.8.18",
     "@types/express": "^5.0.2",
-    "@types/node": "^22.15.21",
+    "@types/node": "^22.16.5",
     "cross-env": "^7.0.3",
     "globals": "^16.1.0",
     "tsx": "^4.20.1",
