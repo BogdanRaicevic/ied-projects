@@ -18,6 +18,8 @@ import tipFirmeRoutes from "./routes/tip_firme.routes";
 import velicineFirmiRoutes from "./routes/velicina_firme.routes";
 import { env } from "./utils/envVariables";
 import "./database/cron";
+import { createAuditMiddleware } from "./middleware/audit";
+import { Firma } from "./models/firma.model";
 
 const app = express();
 const allowedOrigins = env.fe.allowedPorts.map(
@@ -42,7 +44,9 @@ app.use(
 
 app.use(express.json());
 
-app.use("/api/firma", requireAuth(), hasPermission, firmaRoutes);
+const auditFirma = createAuditMiddleware(Firma);
+
+app.use("/api/firma", requireAuth(), hasPermission, auditFirma, firmaRoutes);
 app.use(
   "/api/velicine-firmi",
   requireAuth(),
