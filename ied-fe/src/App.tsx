@@ -3,7 +3,7 @@ import Container from "@mui/material/Container";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Navigate, Route, Routes } from "react-router-dom";
 import Navigation from "./components/Navigation";
-import { Pretrage, Racuni, Seminari, Zaposleni } from "./pages";
+import { AuditLog, Pretrage, Racuni, Seminari, Zaposleni } from "./pages";
 import Firma from "./pages/Firma";
 
 const queryClient = new QueryClient({
@@ -55,6 +55,7 @@ function App() {
               </SignedIn>
             }
           />
+          <Route path="/audit-log" element={<AuditLog />} />
         </Routes>
       </Container>
     </QueryClientProvider>
