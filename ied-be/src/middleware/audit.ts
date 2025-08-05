@@ -11,9 +11,9 @@ export const createAuditMiddleware = (Model: Model<any>) => {
         if (method === "GET") {
             return next(); // Skip GET requests
         }
-        // const auth = getAuth(req);
+        const auth = getAuth(req);
 
-        // const user = (await clerkClient.users.getUser(auth.userId || "")).primaryEmailAddress?.emailAddress || "system";
+        const userEmail = (await clerkClient.users.getUser(auth.userId || "")).primaryEmailAddress?.emailAddress || "system";
 
         // Check for an ID in route parameters first, then in the request body.
         const id = params.id || body._id;
@@ -64,7 +64,7 @@ export const createAuditMiddleware = (Model: Model<any>) => {
                 }
 
                 const auditLog = new AuditLog({
-                    userEmail: 'test',
+                    userEmail,
                     method,
                     route: originalUrl,
                     resource: {

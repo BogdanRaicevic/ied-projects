@@ -1,6 +1,6 @@
 import z from "zod";
 
-export const AuditLogZod = z.array(
+export const AuditLogZod =
     z.object({
         userEmail: z.string(),
         method: z.string(),
@@ -12,7 +12,16 @@ export const AuditLogZod = z.array(
             model: z.string(),
             id: z.string().optional(),
         }),
-    }),
-);
+    });
+
+export const AuditLogQueryParamsZod = z.object({
+    userEmail: z.string().optional(),
+    method: z.string().optional(),
+    dateFrom: z.string().optional(),
+    dateTo: z.string().optional(),
+    model: z.string().optional(),
+    resourceId: z.string().optional(),
+});
 
 export type AuditLogType = z.infer<typeof AuditLogZod>;
+export type AuditLogQueryParams = z.infer<typeof AuditLogQueryParamsZod>;
