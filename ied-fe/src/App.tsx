@@ -21,42 +21,21 @@ function App() {
     <QueryClientProvider client={queryClient}>
       <Container component="main" maxWidth="lg">
         <Navigation />
-        <Routes>
-          <Route
-            path="/"
-            element={
-              <>
-                <SignedOut>
-                  <RedirectToSignIn />
-                </SignedOut>
-                <SignedIn>
-                  <Navigate to="/pretrage" />
-                </SignedIn>
-              </>
-            }
-          />
-          <Route
-            path="/pretrage"
-            element={
-              <SignedIn>
-                <Pretrage />
-              </SignedIn>
-            }
-          />
-          <Route path="/racuni" element={<Racuni />} />
-          <Route path="/firma" element={<Firma />} />
-          <Route path="/firma/:id" element={<Firma />} />
-          <Route path="/zaposleni" element={<Zaposleni />} />
-          <Route
-            path="/seminari"
-            element={
-              <SignedIn>
-                <Seminari />
-              </SignedIn>
-            }
-          />
-          <Route path="/audit-log" element={<AuditLog />} />
-        </Routes>
+        <SignedOut>
+          <RedirectToSignIn />
+        </SignedOut>
+        <SignedIn>
+          <Routes>
+            <Route path="/" element={<Navigate to="/pretrage" />} />
+            <Route path="/pretrage" element={<Pretrage />} />
+            <Route path="/racuni" element={<Racuni />} />
+            <Route path="/firma" element={<Firma />} />
+            <Route path="/firma/:id" element={<Firma />} />
+            <Route path="/zaposleni" element={<Zaposleni />} />
+            <Route path="/seminari" element={<Seminari />} />
+            <Route path="/audit-log" element={<AuditLog />} />
+          </Routes>
+        </SignedIn>
       </Container>
     </QueryClientProvider>
   );
