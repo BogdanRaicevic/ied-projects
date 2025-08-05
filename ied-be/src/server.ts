@@ -21,6 +21,7 @@ import "./database/cron";
 import { createAuditMiddleware } from "./middleware/audit";
 import { Firma } from "./models/firma.model";
 import { Seminar } from "./models/seminar.model";
+import auditLogRoutes from "./routes/audit_log.routes";
 
 const app = express();
 const allowedOrigins = env.fe.allowedPorts.map(
@@ -64,6 +65,7 @@ app.use("/api/stanja-firmi", requireAuth(), hasPermission, stanjaFirmeRoutes);
 app.use("/api/seminari", requireAuth(), hasPermission, seminariAudit, seminarRoutes);
 app.use("/api/docx", requireAuth(), hasPermission, docxRoutes);
 app.use("/api/racuni", requireAuth(), hasPermission, racuniRoutes);
+app.use("/api/audit-log", requireAuth(), hasPermission, auditLogRoutes);
 app.use("/api/test", testRoutes);
 
 app.use(errorWrapper);

@@ -6,9 +6,11 @@ import {
   useMaterialReactTable,
 } from "material-react-table";
 import { useMemo } from "react";
+import { useAuditLogs } from "../hooks/useAuditLogs";
 
 export default function AuditLog() {
-  //   const { data: auditLogs, isLoading } = useAuditLogs();
+  const { data: auditLogs, isLoading } = useAuditLogs();
+  console.log("Audit Logs:", auditLogs);
 
   const auditLogsColumns = useMemo<MRT_ColumnDef<AuditLogType>[]>(
     () => [
@@ -25,7 +27,7 @@ export default function AuditLog() {
         header: "Tip resursa",
       },
       {
-        acccessorKey: "resource.id",
+        accessorFn: (row) => row.resource?.id,
         header: "ID resursa",
       },
       {
@@ -83,10 +85,9 @@ export default function AuditLog() {
 
   const auditLogsTable = useMaterialReactTable({
     columns: auditLogsColumns,
-    // data: auditLogs || [],
-    data: [], // Replace with actual data
+    data: auditLogs || [],
     state: {
-      //   isLoading,
+      isLoading,
     },
     enableColumnFilterModes: true,
     enableColumnOrdering: true,
