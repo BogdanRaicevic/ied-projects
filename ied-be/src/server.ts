@@ -20,6 +20,7 @@ import { env } from "./utils/envVariables";
 import "./database/cron";
 import { createAuditMiddleware } from "./middleware/audit";
 import { Firma } from "./models/firma.model";
+import { Seminar } from "./models/seminar.model";
 
 const app = express();
 const allowedOrigins = env.fe.allowedPorts.map(
@@ -45,6 +46,7 @@ app.use(
 app.use(express.json());
 
 const auditFirma = createAuditMiddleware(Firma);
+const seminariAudit = createAuditMiddleware(Seminar);
 
 app.use("/api/firma", requireAuth(), hasPermission, auditFirma, firmaRoutes);
 app.use(
@@ -59,7 +61,7 @@ app.use("/api/delatnost", requireAuth(), hasPermission, delatnostiRoutes);
 app.use("/api/mesto", requireAuth(), hasPermission, mestoRoutes);
 app.use("/api/pretrage", requireAuth(), hasPermission, pretrageRoutes);
 app.use("/api/stanja-firmi", requireAuth(), hasPermission, stanjaFirmeRoutes);
-app.use("/api/seminari", requireAuth(), hasPermission, seminarRoutes);
+app.use("/api/seminari", requireAuth(), hasPermission, seminariAudit, seminarRoutes);
 app.use("/api/docx", requireAuth(), hasPermission, docxRoutes);
 app.use("/api/racuni", requireAuth(), hasPermission, racuniRoutes);
 app.use("/api/test", testRoutes);
