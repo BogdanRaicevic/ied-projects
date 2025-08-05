@@ -11,7 +11,7 @@ export const AuditLogZod = z.array(
         resource: z.object({
             model: z.string(),
             id: z.string().optional(),
-        }).optional(),
+        }),
     }),
 );
 
