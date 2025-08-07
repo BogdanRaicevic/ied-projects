@@ -104,6 +104,7 @@ router.delete("/:id", async (req: Request, res: Response, next: NextFunction) =>
 router.post("/", async (req: Request, res: Response, next: NextFunction) => {
   try {
     const firma = await create(req.body);
+    res.locals.updatedDocument = firma; // Store updated document for audit middleware
     res.status(201).json(firma);
   } catch (error) {
     next(error);

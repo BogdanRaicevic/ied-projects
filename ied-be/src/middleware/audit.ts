@@ -17,11 +17,10 @@ export const createAuditMiddleware = (Model: Model<any>) => {
       "system";
 
     // Check for an ID in route parameters first, then in the request body.
-    const id = params.id || body._id;
+    const id = params?.id || body?._id || body?.id;
+
     let documentBefore: any = null;
 
-    // If an ID is found, fetch the document's state *before* the handler runs.
-    // This now uses the generic 'Model' passed into the factory.
     if (id) {
       try {
         documentBefore = await Model.findById(id).lean();
@@ -43,7 +42,9 @@ export const createAuditMiddleware = (Model: Model<any>) => {
       let documentAfter: any = null;
 
       try {
-        if (method === "DELETE" && id) {
+        if (res.locals.updatedDocument) {
+          documentAfter = res.locals.updatedDocument;
+        } else if (method === "DELETE" && id) {
           documentAfter = null;
         } else if (method === "POST" && !id) {
           documentAfter = res.locals.newDocument || null;

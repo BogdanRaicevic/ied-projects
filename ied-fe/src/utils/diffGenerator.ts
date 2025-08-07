@@ -34,7 +34,11 @@ export const generateStructuredDiff = (before: any, after: any): IChange[] | nul
       } else if (!Object.hasOwn(afterObj, key)) {
         changes.push({ kind: "D", property: key, oldValue });
       } else {
-        if (key === "zaposleni" && Array.isArray(oldValue) && Array.isArray(newValue)) {
+        if (
+          (key === "zaposleni" || key === "prijave") &&
+          Array.isArray(oldValue) &&
+          Array.isArray(newValue)
+        ) {
           const arrayChanges: IArrayChange[] = [];
           const uniqueKey = "_id";
 

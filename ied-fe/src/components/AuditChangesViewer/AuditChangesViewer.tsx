@@ -77,13 +77,29 @@ export const AuditChangesViewer: React.FC<Props> = ({ changes }) => {
                         <div key={arrayChange.id}>
                           {arrayChange.type === "added" && (
                             <p>
-                              Dodato:
+                              <span
+                                style={{
+                                  backgroundColor: "#d4edda",
+                                  color: "#155724",
+                                  padding: "2px 4px",
+                                }}
+                              >
+                                Dodato:
+                              </span>{" "}
                               <strong> {JSON.stringify(arrayChange.item)}</strong>
                             </p>
                           )}
                           {arrayChange.type === "removed" && (
                             <p>
-                              Obrisano:{" "}
+                              <span
+                                style={{
+                                  backgroundColor: "#f8d7da",
+                                  color: "#721c24",
+                                  padding: "2px 4px",
+                                }}
+                              >
+                                Obrisano:
+                              </span>{" "}
                               <strong>
                                 <strong> {JSON.stringify(arrayChange.item)}</strong>
                               </strong>
