@@ -17,11 +17,9 @@ export const deleteById = async (id: string): Promise<FirmaType | null> => {
   return await Firma.findByIdAndDelete(id).exec();
 };
 
-export const create = async (
-  firmaData: Partial<FirmaType>,
-): Promise<FirmaType> => {
+export const create = async (firmaData: Partial<FirmaType>): Promise<FirmaType> => {
   const firma = new Firma(firmaData);
-  return await firma.save();
+  return (await firma.save()).toObject();
 };
 
 export const updateById = async (
@@ -45,11 +43,7 @@ export const updateById = async (
   }
 };
 
-export const search = async (
-  queryParameters: FirmaQueryParams,
-  pageIndex = 1,
-  pageSize = 50,
-) => {
+export const search = async (queryParameters: FirmaQueryParams, pageIndex = 1, pageSize = 50) => {
   const skip = (pageIndex - 1) * pageSize;
   const mongoQuery = await createFirmaQuery(queryParameters);
 
@@ -131,14 +125,9 @@ export const exportSearchedZaposleniData = async (
 
     if (plainObject.zaposleni) {
       for (const z of plainObject.zaposleni) {
-        const isZaposleniInSeminar = seminarAttendees?.includes(
-          z._id.toString(),
-        );
-        const isRadnoMestoNegated =
-          queryParameters.negacije?.includes("negate-radno-mesto");
-        const isRadnoMestoIncluded = queryParameters.radnaMesta.includes(
-          z.radno_mesto,
-        );
+        const isZaposleniInSeminar = seminarAttendees?.includes(z._id.toString());
+        const isRadnoMestoNegated = queryParameters.negacije?.includes("negate-radno-mesto");
+        const isRadnoMestoIncluded = queryParameters.radnaMesta.includes(z.radno_mesto);
         const hasNoRadnaMestaFilter = queryParameters.radnaMesta.length === 0;
 
         // Skip if zaposleni is not in the specified seminars

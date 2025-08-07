@@ -5,18 +5,12 @@ import type {
 } from "@ied-shared/types/seminar.zod";
 import { type FilterQuery, Types } from "mongoose";
 import { Firma } from "../models/firma.model";
-import {
-  type PrijavaType,
-  Seminar,
-  type SeminarType,
-} from "./../models/seminar.model";
+import { type PrijavaType, Seminar, type SeminarType } from "./../models/seminar.model";
 import { ErrorWithCause } from "../utils/customErrors";
 import { createSeminarQuery } from "../utils/seminariQueryBuilder";
 import { validateMongoId } from "../utils/utils";
 
-export const saveSeminar = async (
-  seminarData: SeminarZodType,
-): Promise<SeminarType> => {
+export const saveSeminar = async (seminarData: SeminarZodType): Promise<SeminarType> => {
   if (seminarData._id) {
     validateMongoId(seminarData._id);
 
@@ -24,13 +18,9 @@ export const saveSeminar = async (
       transformPrijavaToDb(prijava);
     });
 
-    const updatedSeminar = await Seminar.findByIdAndUpdate(
-      seminarData._id,
-      seminarData,
-      {
-        new: true,
-      },
-    );
+    const updatedSeminar = await Seminar.findByIdAndUpdate(seminarData._id, seminarData, {
+      new: true,
+    }).lean();
 
     if (!updatedSeminar) {
       throw new Error("Seminar not found");
@@ -39,7 +29,7 @@ export const saveSeminar = async (
   }
 
   const seminar = new Seminar(seminarData);
-  return await seminar.save();
+  return (await seminar.save()).toObject();
 };
 
 export const searchSeminars = async (
@@ -66,7 +56,7 @@ export const searchSeminars = async (
 export const getSeminarById = async (id: string) => {
   validateMongoId(id);
 
-  const seminar = await Seminar.findById(id);
+  const seminar = await Seminar.findById(id).lean();
   if (!seminar) {
     throw new Error("Seminar not found");
   }
@@ -75,13 +65,10 @@ export const getSeminarById = async (id: string) => {
 };
 
 export const getAllSeminars = async () => {
-  return await Seminar.find({}, { naziv: 1, datum: 1, _id: 1 }).exec();
+  return await Seminar.find({}, { naziv: 1, datum: 1, _id: 1 }).lean();
 };
 
-export const savePrijava = async (
-  seminar_id: string,
-  prijava: PrijavaZodType,
-) => {
+export const savePrijava = async (seminar_id: string, prijava: PrijavaZodType) => {
   validateMongoId(seminar_id);
   validateMongoId(prijava.zaposleni_id);
   validateMongoId(prijava.firma_id);
@@ -96,47 +83,40 @@ export const savePrijava = async (
   // Verify zaposleni exists in firma
   const firma = await Firma.findOne({
     "zaposleni._id": trasnformedPrijava.zaposleni_id,
-  });
+  }).lean();
   if (!firma) {
     throw new Error("Zaposleni not found in any firma");
   }
 
   if (
     seminar.prijave.some(
-      (p) =>
-        p.zaposleni_id.toString() ===
-        trasnformedPrijava.zaposleni_id.toString(),
+      (p) => p.zaposleni_id.toString() === trasnformedPrijava.zaposleni_id.toString(),
     )
   ) {
-    throw new ErrorWithCause(
-      "Zaposleni je već prijavljen na seminar",
-      "duplicate",
-    );
+    throw new ErrorWithCause("Zaposleni je već prijavljen na seminar", "duplicate");
   }
 
   seminar.prijave.push(trasnformedPrijava);
-  return await seminar.save();
+  return (await seminar.save()).toObject();
 };
 
-export const deletePrijava = async (
-  zaposleni_id: string,
-  seminar_id: string,
-) => {
-  validateMongoId(seminar_id);
-  const seminar = await Seminar.findById(seminar_id);
-  if (!seminar) {
-    throw new Error("Seminar not found");
+export const deletePrijava = async (zaposleni_id: string, seminar_id: string) => {
+  const updatedSeminar = await Seminar.findByIdAndUpdate(
+    seminar_id,
+    { $pull: { prijave: { zaposleni_id: zaposleni_id } } },
+    { new: true },
+  ).lean();
+
+  if (!updatedSeminar) {
+    throw new Error("Seminar not found or prijava could not be deleted.");
   }
 
-  seminar.prijave = seminar.prijave.filter(
-    (p) => p.zaposleni_id.toString() !== zaposleni_id,
-  );
-  return await seminar.save();
+  return updatedSeminar;
 };
 
 export const deleteSeminar = async (id: string) => {
   validateMongoId(id);
-  const seminar = await Seminar.findOneAndDelete({ _id: id });
+  const seminar = await Seminar.findOneAndDelete({ _id: id }).lean();
 
   if (!seminar) {
     throw new Error("Seminar not found");
@@ -145,18 +125,14 @@ export const deleteSeminar = async (id: string) => {
   return seminar;
 };
 
-export const getZaposleniIdsFromSeminars = async (
-  seminarIds: string[],
-): Promise<string[]> => {
+export const getZaposleniIdsFromSeminars = async (seminarIds: string[]): Promise<string[]> => {
   if (seminarIds.length > 0) {
     const seminars = await Seminar.find(
       { _id: { $in: seminarIds } },
       { "prijave.zaposleni_id": 1 },
-    );
+    ).lean();
 
-    return seminars.flatMap((s) =>
-      s.prijave.map((p) => p.zaposleni_id.toString()),
-    );
+    return seminars.flatMap((s) => s.prijave.map((p) => p.zaposleni_id.toString()));
   }
   return [];
 };
