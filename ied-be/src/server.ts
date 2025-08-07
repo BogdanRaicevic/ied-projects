@@ -24,9 +24,7 @@ import { Seminar } from "./models/seminar.model";
 import auditLogRoutes from "./routes/audit_log.routes";
 
 const app = express();
-const allowedOrigins = env.fe.allowedPorts.map(
-  (port) => `${env.fe.appUrl}:${port}`,
-);
+const allowedOrigins = env.fe.allowedPorts.map((port) => `${env.fe.appUrl}:${port}`);
 console.log("Allowed Origins:", allowedOrigins);
 app.use(
   cors({
@@ -50,12 +48,7 @@ const auditFirma = createAuditMiddleware(Firma);
 const seminariAudit = createAuditMiddleware(Seminar);
 
 app.use("/api/firma", requireAuth(), hasPermission, auditFirma, firmaRoutes);
-app.use(
-  "/api/velicine-firmi",
-  requireAuth(),
-  hasPermission,
-  velicineFirmiRoutes,
-);
+app.use("/api/velicine-firmi", requireAuth(), hasPermission, velicineFirmiRoutes);
 app.use("/api/radna-mesta", requireAuth(), hasPermission, radnaMestaRoutes);
 app.use("/api/tip-firme", requireAuth(), hasPermission, tipFirmeRoutes);
 app.use("/api/delatnost", requireAuth(), hasPermission, delatnostiRoutes);

@@ -32,10 +32,7 @@ export default function AuditLog() {
         accessorKey: "resource.model",
         header: "Tip resursa",
       },
-      {
-        accessorKey: "resource.id",
-        header: "ID resursa",
-      },
+
       {
         header: "Promene",
         minSize: 500,
@@ -71,7 +68,7 @@ export default function AuditLog() {
 
   return (
     <div>
-      <h1>Audit</h1>
+      <h1>Evidencija Promena</h1>
 
       <MaterialReactTable table={auditLogsTable} />
     </div>
