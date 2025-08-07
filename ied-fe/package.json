@@ -47,7 +47,7 @@
     "@vitejs/plugin-react-swc": "^3.9.0",
     "globals": "^16.1.0",
     "ied-shared": "workspace:^",
-    "typescript": "^5.8.3",
+    "typescript": "^5.9.2",
     "vite": "^7.0.0"
   }
 }
