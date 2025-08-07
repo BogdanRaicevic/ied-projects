@@ -1,5 +1,5 @@
 interface IChange {
-  kind: "N" | "D" | "E" | "T"; // New, Deleted, Edited, Text
+  kind: "N" | "D" | "E" | "T" | "A";
   property: string;
   oldValue?: any;
   newValue?: any;
@@ -66,7 +66,45 @@ export const AuditChangesViewer: React.FC<Props> = ({ changes }) => {
                     </div>
                   </div>
                 );
-
+              case "A":
+                return (
+                  <div>
+                    <p style={{ margin: 0 }}>
+                      U listi <strong>{change.property}</strong> desile su se sledeće promene:
+                    </p>
+                    <div style={{ paddingLeft: "20px", borderLeft: "2px solid #eee" }}>
+                      {change.arrayChanges?.map((arrayChange) => (
+                        <div key={arrayChange.id}>
+                          {arrayChange.type === "added" && (
+                            <p>
+                              Dodato:
+                              <strong> {JSON.stringify(arrayChange.item)}</strong>
+                            </p>
+                          )}
+                          {arrayChange.type === "removed" && (
+                            <p>
+                              Obrisano:{" "}
+                              <strong>
+                                <strong> {JSON.stringify(arrayChange.item)}</strong>
+                              </strong>
+                            </p>
+                          )}
+                          {arrayChange.type === "modified" && (
+                            <div>
+                              <p>
+                                ✏️ Izmenjeno: {arrayChange.item._id} {arrayChange.item.ime}{" "}
+                                {arrayChange.item.prezime}
+                              </p>
+                              <div style={{ paddingLeft: "20px" }}>
+                                <AuditChangesViewer changes={arrayChange.changes!} />
+                              </div>
+                            </div>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                );
               case "E":
                 return (
                   <div>

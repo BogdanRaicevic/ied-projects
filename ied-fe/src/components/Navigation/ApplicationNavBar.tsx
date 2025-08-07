@@ -11,7 +11,7 @@ export default function ApplicationNavBar() {
     { text: "Pretrage", linkPath: "/pretrage" },
     { text: "Seminari", linkPath: "/seminari" },
     { text: "Računi", linkPath: "/racuni" },
-    { text: "Audit Log", linkPath: "/audit-log" },
+    { text: "Evidencija Promena", linkPath: "/audit-log" },
   ];
 
   return (
