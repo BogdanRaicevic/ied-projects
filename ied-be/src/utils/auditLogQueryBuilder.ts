@@ -31,7 +31,5 @@ export function createAuditLogQuery(params: AuditLogQueryParams) {
     query.timestamp = { $lte: params.dateTo };
   }
 
-  console.log("Audit Log Query:", query);
-
   return query;
 }
