@@ -11,7 +11,7 @@ export const fetchFirmaPretrage = async (
   try {
     const body = {
       pageSize: pageSize || 50,
-      pageIndex: pageIndex + 1, // becuase MRT is zero based
+      pageIndex: pageIndex || 0,
       queryParameters,
     };
 
@@ -46,10 +46,7 @@ export const exportFirmaData = async (
       queryParameters,
     };
 
-    const response = await axiosInstanceWithAuth.post(
-      `/api/firma/export-firma-data`,
-      body,
-    );
+    const response = await axiosInstanceWithAuth.post(`/api/firma/export-firma-data`, body);
 
     const firmeMap = new Map<string, number>();
     for (const element of response.data) {
@@ -88,10 +85,7 @@ export const exportZaposleniData = async (
       queryParameters,
     };
 
-    const response = await axiosInstanceWithAuth.post(
-      `/api/firma/export-zaposleni-data`,
-      body,
-    );
+    const response = await axiosInstanceWithAuth.post(`/api/firma/export-zaposleni-data`, body);
 
     const zaposleniMap = new Map<string, number>();
     for (const element of response.data) {
@@ -128,10 +122,7 @@ export const saveFirma = async (company: Partial<FirmaType>) => {
 
   try {
     if (company._id) {
-      const response = await axiosInstanceWithAuth.post(
-        `/api/firma/${company._id}`,
-        company,
-      );
+      const response = await axiosInstanceWithAuth.post(`/api/firma/${company._id}`, company);
       return {
         data: response.data,
         status: response.status,

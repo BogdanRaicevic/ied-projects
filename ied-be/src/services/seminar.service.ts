@@ -1,9 +1,9 @@
 import type {
+  ExtendedSearchSeminarType,
   PrijavaZodType,
-  SeminarQueryParams,
   SeminarZodType,
 } from "@ied-shared/types/seminar.zod";
-import { type FilterQuery, Types } from "mongoose";
+import { Types } from "mongoose";
 import { Firma } from "../models/firma.model";
 import { type PrijavaType, Seminar, type SeminarType } from "./../models/seminar.model";
 import { ErrorWithCause } from "../utils/customErrors";
@@ -18,9 +18,11 @@ export const saveSeminar = async (seminarData: SeminarZodType): Promise<SeminarT
       transformPrijavaToDb(prijava);
     });
 
-    const updatedSeminar = await Seminar.findByIdAndUpdate(seminarData._id, seminarData, {
-      new: true,
-    }).lean();
+    const updatedSeminar = await Seminar.findOneAndUpdate(
+      { _id: { $eq: seminarData._id } },
+      seminarData,
+      { new: true },
+    ).lean();
 
     if (!updatedSeminar) {
       throw new Error("Seminar not found");
@@ -32,13 +34,11 @@ export const saveSeminar = async (seminarData: SeminarZodType): Promise<SeminarT
   return (await seminar.save()).toObject();
 };
 
-export const searchSeminars = async (
-  queryParameters: FilterQuery<SeminarQueryParams>,
-  pageIndex = 1,
-  pageSize = 50,
-) => {
-  const skip = (pageIndex - 1) * pageSize;
-  const mongoQuery = createSeminarQuery(queryParameters.queryParameters);
+export const searchSeminars = async (qq: ExtendedSearchSeminarType) => {
+  const { pageIndex = 0, pageSize = 50, ...filters } = qq;
+
+  const skip = pageIndex * pageSize;
+  const mongoQuery = createSeminarQuery(filters);
 
   const totalDocuments = await Seminar.countDocuments(mongoQuery);
 
@@ -82,8 +82,9 @@ export const savePrijava = async (seminar_id: string, prijava: PrijavaZodType) =
 
   // Verify zaposleni exists in firma
   const firma = await Firma.findOne({
-    "zaposleni._id": trasnformedPrijava.zaposleni_id,
+    "zaposleni._id": { $eq: trasnformedPrijava.zaposleni_id },
   }).lean();
+
   if (!firma) {
     throw new Error("Zaposleni not found in any firma");
   }
@@ -101,8 +102,8 @@ export const savePrijava = async (seminar_id: string, prijava: PrijavaZodType) =
 };
 
 export const deletePrijava = async (zaposleni_id: string, seminar_id: string) => {
-  const updatedSeminar = await Seminar.findByIdAndUpdate(
-    seminar_id,
+  const updatedSeminar = await Seminar.findOneAndUpdate(
+    { _id: { $eq: seminar_id } },
     { $pull: { prijave: { zaposleni_id: zaposleni_id } } },
     { new: true },
   ).lean();

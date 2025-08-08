@@ -1,21 +1,6 @@
-import { type Change, diffWordsWithSpace } from "diff";
+import type { IArrayChange, IChange } from "@ied-shared/types/diff";
+import { diffWordsWithSpace } from "diff";
 import { isEqual } from "es-toolkit";
-
-export interface IChange {
-  kind: "N" | "D" | "E" | "T" | "A"; // New, Deleted, Edited, Text, Array
-  property: string;
-  oldValue?: any;
-  newValue?: any;
-  diff?: Change[];
-  arrayChanges?: IArrayChange[]; // For array changes
-}
-
-export interface IArrayChange {
-  type: "added" | "removed" | "modified";
-  id: string | number;
-  item?: any;
-  changes?: IChange[] | null;
-}
 
 export const generateStructuredDiff = (before: any, after: any): IChange[] | null => {
   const changes: IChange[] = [];
@@ -73,7 +58,7 @@ export const generateStructuredDiff = (before: any, after: any): IChange[] | nul
           changes.push({
             kind: "T",
             property: key,
-            diff: diffWordsWithSpace(oldValue, newValue),
+            diff: diffWordsWithSpace(oldValue ?? "", newValue ?? ""),
           });
         } else {
           changes.push({

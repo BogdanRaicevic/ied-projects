@@ -35,11 +35,7 @@ export default function AuditLog() {
     defaultValues: queryParams,
   });
 
-  const {
-    data: auditLogs,
-    totalDocuments,
-    totalPages,
-  } = data || { auditLogs: [], totalDocuments: 0, totalPages: 0 };
+  const { data: auditLogs, totalDocuments } = data || { auditLogs: [], totalDocuments: 0 };
 
   const auditLogsColumns = useMemo<MRT_ColumnDef<AuditLogType>[]>(
     () => [

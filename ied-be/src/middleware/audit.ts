@@ -1,6 +1,6 @@
 import { clerkClient, getAuth } from "@clerk/express";
 import type { NextFunction, Request, Response } from "express";
-import type { Model } from "mongoose";
+import { type Model, Types } from "mongoose";
 import { AuditLog } from "../models/audit_log.model";
 
 export const createAuditMiddleware = (Model: Model<any>) => {
@@ -12,25 +12,36 @@ export const createAuditMiddleware = (Model: Model<any>) => {
     }
     const auth = getAuth(req);
 
-    const userEmail =
-      (await clerkClient.users.getUser(auth.userId || "")).primaryEmailAddress?.emailAddress ||
-      "system";
+    let userEmail = "system";
+    if (auth?.userId) {
+      try {
+        const user = await clerkClient.users.getUser(auth.userId);
+        userEmail = user.primaryEmailAddress?.emailAddress ?? "system";
+      } catch (e) {
+        console.warn("Audit: unable to resolve user email for audit; defaulting to 'system'", e);
+      }
+    }
 
     // Check for an ID in route parameters first, then in the request body.
-    const id = params?.id || body?._id || body?.id;
+    const id: string = params?.id || body?._id || body?.id;
 
     let documentBefore: any = null;
-
-    if (id) {
+    if (id && Types.ObjectId.isValid(id)) {
       try {
         documentBefore = await Model.findById(id).lean();
       } catch (error) {
         console.error(
           `Audit middleware could not find document in ${Model.modelName} with id: ${id}`,
+          error,
         );
         // We can choose to continue or stop. Let's continue but the 'before' state will be null.
         documentBefore = null;
       }
+    } else if (id) {
+      console.warn(
+        `Audit middleware received an invalid ID: ${id} for model ${Model.modelName}.
+        This might be due to a malformed request or an incorrect route.`,
+      );
     }
 
     res.on("finish", async () => {

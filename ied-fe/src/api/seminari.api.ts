@@ -29,8 +29,8 @@ export const fetchSeminari = async (
   try {
     const body = {
       pageSize: pageSize || 50,
-      pageIndex: pageIndex + 1, // becuase MRT is zero based
-      queryParameters,
+      pageIndex: pageIndex || 0,
+      ...queryParameters,
     };
 
     const response: {
@@ -64,8 +64,6 @@ export const savePrijava = async (seminar_id: string, prijava: PrijavaZodType) =
     ...prijava,
   };
   try {
-    console.log("Saving prijava with payload:", payload);
-
     const response = await axiosInstanceWithAuth.post(
       `/api/seminari/save-prijava/${seminar_id}`,
       payload,

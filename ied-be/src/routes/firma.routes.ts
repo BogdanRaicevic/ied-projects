@@ -23,7 +23,7 @@ interface SearchRequest extends Request {
 
 router.post("/search", async (req: SearchRequest, res: Response, next: NextFunction) => {
   try {
-    const { pageIndex = 1, pageSize = 10, ...query } = req.body;
+    const { pageIndex = 0, pageSize = 10, ...query } = req.body;
     const { queryParameters } = query;
     const paginationResult = await search(queryParameters, Number(pageIndex), Number(pageSize));
 
@@ -32,7 +32,8 @@ router.post("/search", async (req: SearchRequest, res: Response, next: NextFunct
       results.push(doc);
     });
 
-    paginationResult.courser.on("end", () => {
+    paginationResult.courser.on("end", async () => {
+      await paginationResult.courser.close();
       res.json({
         firmas: results,
         totalPages: paginationResult.totalPages,
@@ -40,7 +41,8 @@ router.post("/search", async (req: SearchRequest, res: Response, next: NextFunct
       });
     });
 
-    paginationResult.courser.on("error", (error) => {
+    paginationResult.courser.on("error", async (error) => {
+      await paginationResult.courser.close();
       console.error(error);
       res.status(500).json({ message: "Internal server error" });
     });
@@ -92,6 +94,7 @@ router.delete("/:id", async (req: Request, res: Response, next: NextFunction) =>
   try {
     const firma = await deleteById(req.params.id);
     if (firma) {
+      res.locals.originalDocument = firma;
       res.json(firma);
     } else {
       res.status(404).send("Firma not found");
@@ -115,6 +118,7 @@ router.post("/:id", async (req: Request, res: Response, next: NextFunction) => {
   try {
     const firma = await updateById(req.params.id, req.body);
     if (firma) {
+      res.locals.updatedDocument = firma;
       res.json(firma);
     } else {
       res.status(404).send("Firma not found");

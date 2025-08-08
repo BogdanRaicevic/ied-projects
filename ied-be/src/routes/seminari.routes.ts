@@ -1,12 +1,11 @@
 import {
+  type ExtendedSearchSeminarType,
+  ExtendedSearchSeminarZod,
   PrijavaSchema,
-  type SeminarQueryParams,
-  SeminarQueryParamsSchema,
   SeminarSchema,
 } from "@ied-shared/types/seminar.zod";
 import { type NextFunction, type Request, type Response, Router } from "express";
-import type { FilterQuery } from "mongoose";
-import { z } from "zod";
+import type { z } from "zod";
 import { createAuditMiddleware } from "../middleware/audit";
 import { validate } from "../middleware/validateSchema";
 import { Seminar, type SeminarType } from "../models/seminar.model";
@@ -39,37 +38,20 @@ router.post(
   },
 );
 
-const ExtendedSearchSeminarType = z.object({
-  pageIndex: z.coerce.number().optional(),
-  pageSize: z.coerce.number().optional(),
-  queryParameters: SeminarQueryParamsSchema,
-});
-
 router.post(
   "/search",
-  validate(ExtendedSearchSeminarType),
+  validate(ExtendedSearchSeminarZod),
   async (req: Request, res: Response, next: NextFunction) => {
-    const { pageIndex = 1, pageSize = 10, ...query } = req.body;
-    console.log("req body", req.body);
-    const { datumOd, datumDo, ...rest } = query as SeminarQueryParams;
-
     try {
-      const paginationResult = await searchSeminars(
-        {
-          ...rest,
-          datumOd,
-          datumDo,
-        } as FilterQuery<SeminarType>,
-        Number(pageIndex),
-        Number(pageSize),
-      );
+      const paginationResult = await searchSeminars(req.body as ExtendedSearchSeminarType);
 
       const results: SeminarType[] = [];
       paginationResult.courser.on("data", (doc) => {
         results.push(doc);
       });
 
-      paginationResult.courser.on("end", () => {
+      paginationResult.courser.on("end", async () => {
+        await paginationResult.courser.close();
         res.json({
           seminari: results,
           totalPages: paginationResult.totalPages,
@@ -77,7 +59,8 @@ router.post(
         });
       });
 
-      paginationResult.courser.on("error", (error) => {
+      paginationResult.courser.on("error", async (error) => {
+        await paginationResult.courser.close();
         console.error(error);
         res.status(500).json({ message: "Internal server error" });
       });
@@ -149,7 +132,7 @@ router.delete(
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       const deletedSeminar = await deleteSeminar(req.params.id);
-      res.status(201).json(deletedSeminar);
+      res.status(200).json(deletedSeminar);
     } catch (error) {
       next(error);
     }

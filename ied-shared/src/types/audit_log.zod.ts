@@ -4,9 +4,9 @@ export const AuditLogZod = z.object({
   userEmail: z.string(),
   method: z.string(),
   route: z.string(),
-  before: z.object({}).optional(),
-  after: z.object({}).optional(),
-  timestamp: z.date(),
+  before: z.object({}).nullable().optional(),
+  after: z.object({}).nullable().optional(),
+  timestamp: z.coerce.date(),
   resource: z.object({
     model: z.string(),
     id: z.string().optional(),
