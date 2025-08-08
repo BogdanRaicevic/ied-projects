@@ -1,10 +1,4 @@
-interface IChange {
-  kind: "N" | "D" | "E" | "T" | "A";
-  property: string;
-  oldValue?: any;
-  newValue?: any;
-  diff?: { value: string; added?: boolean; removed?: boolean }[];
-}
+import type { IChange } from "@ied-shared/types/diff";
 
 interface Props {
   changes: IChange[];
