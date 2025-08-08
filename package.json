@@ -19,7 +19,7 @@
   },
   "devDependencies": {
     "@biomejs/biome": "latest",
-    "@types/node": "^22.16.5",
+    "@types/node": "^22.17.1",
     "knip": "^5.59.0",
     "typescript": "^5.9.2"
   },
