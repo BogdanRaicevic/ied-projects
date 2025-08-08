@@ -2,11 +2,13 @@ import type { AuditLogQueryParams } from "@ied-shared/types/audit_log.zod";
 import { AuditLog } from "./../models/audit_log.model";
 import { createAuditLogQuery } from "../utils/auditLogQueryBuilder";
 
-export const getAuditLogs = async (
-  pageIndex: number = 0,
-  pageSize: number = 50,
-  filterParams: AuditLogQueryParams = {},
-) => {
+type AuditQuery = {
+  pageIndex: number;
+  pageSize: number;
+  filterParams: AuditLogQueryParams;
+};
+
+export const getAuditLogs = async ({ pageIndex = 0, pageSize = 50, filterParams }: AuditQuery) => {
   try {
     const auditQuery = createAuditLogQuery(filterParams);
 
