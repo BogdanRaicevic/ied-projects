@@ -58,7 +58,7 @@ export const generateStructuredDiff = (before: any, after: any): IChange[] | nul
           changes.push({
             kind: "T",
             property: key,
-            diff: diffWordsWithSpace(oldValue, newValue),
+            diff: diffWordsWithSpace(oldValue ?? "", newValue ?? ""),
           });
         } else {
           changes.push({

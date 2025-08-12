@@ -37,7 +37,9 @@
   },
   "dependencies": {
     "@biomejs/biome": "latest",
-    "diff": "^8.0.2",
     "zod": "^3.25.17"
+  },
+  "peerDependencies": {
+    "diff": "^8.0.2"
   }
 }
