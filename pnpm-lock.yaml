@@ -128,6 +128,9 @@ importers:
       "@tanstack/react-query":
         specifier: ^5.79.0
         version: 5.79.0(react@19.1.0)
+      '@types/diff':
+        specifier: ^8.0.0
+        version: 8.0.0
       axios:
         specifier: ^1.9.0
         version: 1.9.0

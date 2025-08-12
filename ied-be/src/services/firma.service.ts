@@ -43,8 +43,8 @@ export const updateById = async (
   }
 };
 
-export const search = async (queryParameters: FirmaQueryParams, pageIndex = 1, pageSize = 50) => {
-  const skip = (pageIndex - 1) * pageSize;
+export const search = async (queryParameters: FirmaQueryParams, pageIndex = 0, pageSize = 50) => {
+  const skip = pageIndex * pageSize;
   const mongoQuery = await createFirmaQuery(queryParameters);
 
   const totalDocuments = await Firma.countDocuments(mongoQuery);
@@ -107,7 +107,7 @@ export const exportSearchedZaposleniData = async (
 
   if (queryParameters.negacije?.includes("negate-radno-mesto")) {
     mongoQuery.zaposleni = {
-      $elemMatch: { radno_mesto: { $nin: queryParameters.radnaMesta } },
+      $elemMatch: { radno_mesto: { $nin: queryParameters.radnaMesta } }, // TODO: investigate do i need ?? []
     };
   }
 
@@ -125,9 +125,10 @@ export const exportSearchedZaposleniData = async (
 
     if (plainObject.zaposleni) {
       for (const z of plainObject.zaposleni) {
-        const isZaposleniInSeminar = seminarAttendees?.includes(z._id.toString());
-        const isRadnoMestoNegated = queryParameters.negacije?.includes("negate-radno-mesto");
-        const isRadnoMestoIncluded = queryParameters.radnaMesta.includes(z.radno_mesto);
+        const isZaposleniInSeminar = seminarAttendees?.includes(z._id.toString()) ?? false;
+        const isRadnoMestoNegated =
+          queryParameters.negacije?.includes("negate-radno-mesto") ?? false;
+        const isRadnoMestoIncluded = queryParameters.radnaMesta.includes(z.radno_mesto) ?? false;
         const hasNoRadnaMestaFilter = queryParameters.radnaMesta.length === 0;
 
         // Skip if zaposleni is not in the specified seminars

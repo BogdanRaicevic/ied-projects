@@ -23,7 +23,7 @@ interface SearchRequest extends Request {
 
 router.post("/search", async (req: SearchRequest, res: Response, next: NextFunction) => {
   try {
-    const { pageIndex = 1, pageSize = 10, ...query } = req.body;
+    const { pageIndex = 0, pageSize = 10, ...query } = req.body;
     const { queryParameters } = query;
     const paginationResult = await search(queryParameters, Number(pageIndex), Number(pageSize));
 

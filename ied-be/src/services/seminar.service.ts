@@ -34,10 +34,10 @@ export const saveSeminar = async (seminarData: SeminarZodType): Promise<SeminarT
 
 export const searchSeminars = async (
   queryParameters: FilterQuery<SeminarQueryParams>,
-  pageIndex = 1,
+  pageIndex = 0,
   pageSize = 50,
 ) => {
-  const skip = (pageIndex - 1) * pageSize;
+  const skip = pageIndex * pageSize;
   const mongoQuery = createSeminarQuery(queryParameters.queryParameters);
 
   const totalDocuments = await Seminar.countDocuments(mongoQuery);

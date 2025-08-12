@@ -49,7 +49,7 @@ router.post(
   "/search",
   validate(ExtendedSearchSeminarType),
   async (req: Request, res: Response, next: NextFunction) => {
-    const { pageIndex = 1, pageSize = 10, ...query } = req.body;
+    const { pageIndex = 0, pageSize = 10, ...query } = req.body;
     console.log("req body", req.body);
     const { datumOd, datumDo, ...rest } = query as SeminarQueryParams;
 
