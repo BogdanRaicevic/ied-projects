@@ -183,7 +183,7 @@ importers:
         version: 1.8.8
       '@vitejs/plugin-react-swc':
         specifier: ^3.9.0
-        version: 3.9.0(@swc/helpers@0.5.17)(vite@7.0.5(@types/node@22.17.1)(jiti@2.4.2)(tsx@4.20.1))
+        version: 3.9.0(@swc/helpers@0.5.17)(vite@7.1.2(@types/node@22.17.1)(jiti@2.4.2)(tsx@4.20.1))
       globals:
         specifier: ^16.1.0
         version: 16.1.0
@@ -194,8 +194,8 @@ importers:
         specifier: ^5.9.2
         version: 5.9.2
       vite:
-        specifier: ^7.0.0
-        version: 7.0.5(@types/node@22.17.1)(jiti@2.4.2)(tsx@4.20.1)
+        specifier: ^7.1.2
+        version: 7.1.2(@types/node@22.17.1)(jiti@2.4.2)(tsx@4.20.1)
 
   ied-shared:
     dependencies:
@@ -2242,6 +2242,10 @@ packages:
     resolution: {integrity: sha512-M7BAV6Rlcy5u+m6oPhAPFgJTzAioX/6B0DxyvDlo9l8+T3nLKbrczg2WLUyzd45L8RqfUMyGPzekbMvX2Ldkwg==}
     engines: {node: '>=12'}
 
+  picomatch@4.0.3:
+    resolution: {integrity: sha512-5gTmgEY/sqK6gFXLIsQNH19lWb4ebPDLA4SdLP7dsWkIXHWlG66oPuVvXSGFPppYZz8ZDZq0dYYrbHfBCVUb1Q==}
+    engines: {node: '>=12'}
+
   pizzip@3.2.0:
     resolution: {integrity: sha512-X4NPNICxCfIK8VYhF6wbksn81vTiziyLbvKuORVAmolvnUzl1A1xmz9DAWKxPRq9lZg84pJOOAMq3OE61bD8IQ==}
 
@@ -2578,8 +2582,8 @@ packages:
     resolution: {integrity: sha512-BNGbWLfd0eUPabhkXUVm0j8uuvREyTh5ovRa/dyow/BqAbZJyC+5fU+IzQOzmAKzYqYRAISoRhdQr3eIZ/PXqg==}
     engines: {node: '>= 0.8'}
 
-  vite@7.0.5:
-    resolution: {integrity: sha512-1mncVwJxy2C9ThLwz0+2GKZyEXuC3MyWtAAlNftlZZXZDP3AJt5FmwcMit/IGGaNZ8ZOB2BNO/HFUB+CpN0NQw==}
+  vite@7.1.2:
+    resolution: {integrity: sha512-J0SQBPlQiEXAF7tajiH+rUooJPo0l8KQgyg4/aMunNtrOa7bwuZJsJbDWzeljqQpgftxuq5yNJxQ91O9ts29UQ==}
     engines: {node: ^20.19.0 || >=22.12.0}
     hasBin: true
     peerDependencies:
@@ -4303,10 +4307,10 @@ snapshots:
     dependencies:
       '@types/webidl-conversions': 7.0.3
 
-  '@vitejs/plugin-react-swc@3.9.0(@swc/helpers@0.5.17)(vite@7.0.5(@types/node@22.17.1)(jiti@2.4.2)(tsx@4.20.1))':
+  '@vitejs/plugin-react-swc@3.9.0(@swc/helpers@0.5.17)(vite@7.1.2(@types/node@22.17.1)(jiti@2.4.2)(tsx@4.20.1))':
     dependencies:
       '@swc/core': 1.11.21(@swc/helpers@0.5.17)
-      vite: 7.0.5(@types/node@22.17.1)(jiti@2.4.2)(tsx@4.20.1)
+      vite: 7.1.2(@types/node@22.17.1)(jiti@2.4.2)(tsx@4.20.1)
     transitivePeerDependencies:
       - '@swc/helpers'
 
@@ -4604,9 +4608,9 @@ snapshots:
     dependencies:
       walk-up-path: 3.0.1
 
-  fdir@6.4.6(picomatch@4.0.2):
+  fdir@6.4.6(picomatch@4.0.3):
     optionalDependencies:
-      picomatch: 4.0.2
+      picomatch: 4.0.3
 
   fill-range@7.1.1:
     dependencies:
@@ -4973,6 +4977,8 @@ snapshots:
 
   picomatch@4.0.2: {}
 
+  picomatch@4.0.3: {}
+
   pizzip@3.2.0:
     dependencies:
       pako: 2.1.0
@@ -5271,8 +5277,8 @@ snapshots:
 
   tinyglobby@0.2.14:
     dependencies:
-      fdir: 6.4.6(picomatch@4.0.2)
-      picomatch: 4.0.2
+      fdir: 6.4.6(picomatch@4.0.3)
+      picomatch: 4.0.3
 
   to-regex-range@5.0.1:
     dependencies:
@@ -5341,11 +5347,11 @@ snapshots:
 
   vary@1.1.2: {}
 
-  vite@7.0.5(@types/node@22.17.1)(jiti@2.4.2)(tsx@4.20.1):
+  vite@7.1.2(@types/node@22.17.1)(jiti@2.4.2)(tsx@4.20.1):
     dependencies:
       esbuild: 0.25.1
-      fdir: 6.4.6(picomatch@4.0.2)
-      picomatch: 4.0.2
+      fdir: 6.4.6(picomatch@4.0.3)
+      picomatch: 4.0.3
       postcss: 8.5.6
       rollup: 4.45.1
       tinyglobby: 0.2.14
