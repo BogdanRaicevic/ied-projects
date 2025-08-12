@@ -69,7 +69,8 @@ router.post(
         results.push(doc);
       });
 
-      paginationResult.courser.on("end", () => {
+      paginationResult.courser.on("end", async () => {
+        await paginationResult.courser.close();
         res.json({
           seminari: results,
           totalPages: paginationResult.totalPages,
@@ -77,7 +78,8 @@ router.post(
         });
       });
 
-      paginationResult.courser.on("error", (error) => {
+      paginationResult.courser.on("error", async (error) => {
+        await paginationResult.courser.close();
         console.error(error);
         res.status(500).json({ message: "Internal server error" });
       });

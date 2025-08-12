@@ -16,10 +16,7 @@ router.get("/", async (req: Request, res: Response, next: NextFunction) => {
       pageSize: size,
       filterParams: params,
     });
-    if (!result) {
-      res.status(404).send("Audit log not found");
-      return;
-    }
+
     res.json(result);
   } catch (error) {
     next(error);
