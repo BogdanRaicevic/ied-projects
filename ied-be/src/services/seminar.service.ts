@@ -18,9 +18,11 @@ export const saveSeminar = async (seminarData: SeminarZodType): Promise<SeminarT
       transformPrijavaToDb(prijava);
     });
 
-    const updatedSeminar = await Seminar.findByIdAndUpdate(seminarData._id, seminarData, {
-      new: true,
-    }).lean();
+    const updatedSeminar = await Seminar.findOneAndUpdate(
+      { _id: { $eq: seminarData._id } },
+      seminarData,
+      { new: true },
+    ).lean();
 
     if (!updatedSeminar) {
       throw new Error("Seminar not found");
@@ -82,8 +84,9 @@ export const savePrijava = async (seminar_id: string, prijava: PrijavaZodType) =
 
   // Verify zaposleni exists in firma
   const firma = await Firma.findOne({
-    "zaposleni._id": trasnformedPrijava.zaposleni_id,
+    "zaposleni._id": { $eq: trasnformedPrijava.zaposleni_id },
   }).lean();
+
   if (!firma) {
     throw new Error("Zaposleni not found in any firma");
   }
@@ -101,8 +104,8 @@ export const savePrijava = async (seminar_id: string, prijava: PrijavaZodType) =
 };
 
 export const deletePrijava = async (zaposleni_id: string, seminar_id: string) => {
-  const updatedSeminar = await Seminar.findByIdAndUpdate(
-    seminar_id,
+  const updatedSeminar = await Seminar.findOneAndUpdate(
+    { _id: { $eq: seminar_id } },
     { $pull: { prijave: { zaposleni_id: zaposleni_id } } },
     { new: true },
   ).lean();
