@@ -17,7 +17,7 @@ export const createAuditMiddleware = (Model: Model<any>) => {
       "system";
 
     // Check for an ID in route parameters first, then in the request body.
-    const id = params?.id || body?._id || body?.id;
+    const id: string = params?.id || body?._id || body?.id;
 
     let documentBefore: any = null;
 

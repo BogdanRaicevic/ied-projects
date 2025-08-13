@@ -4,9 +4,10 @@ import { type FilterQuery, sanitizeFilter } from "mongoose";
 import { Firma, type FirmaType } from "../models/firma.model";
 import { createFirmaQuery } from "../utils/firmaQueryBuilder";
 import { getZaposleniIdsFromSeminars } from "./seminar.service";
+
 export const findById = async (id: string): Promise<FirmaType | null> => {
   try {
-    return await Firma.findById(id);
+    return await Firma.findById(id).lean();
   } catch (error) {
     console.log("Error finding firma by od firma id:", error);
     throw new Error("Error finding firma by od firma id");
@@ -19,7 +20,11 @@ export const deleteById = async (id: string): Promise<FirmaType | null> => {
 
 export const create = async (firmaData: Partial<FirmaType>): Promise<FirmaType> => {
   const firma = new Firma(firmaData);
-  return (await firma.save()).toObject();
+  const doc = await firma.save();
+  return doc.toObject({
+    virtuals: true,
+    versionKey: false,
+  });
 };
 
 export const updateById = async (
@@ -36,7 +41,7 @@ export const updateById = async (
       { _id: id },
       { $set: sanitizedData },
       { new: true, runValidators: true },
-    );
+    ).lean();
   } catch (error) {
     console.error("Error updating firma:", error);
     throw error;
@@ -71,7 +76,9 @@ export const exportSearchedFirmaData = async (
     delatnost: 1,
     tip_firme: 1,
     _id: 0,
-  }).cursor();
+  })
+    .lean()
+    .cursor();
 
   const res: ExportFirma = [];
   cursor.on("data", (doc) => {
@@ -85,11 +92,13 @@ export const exportSearchedFirmaData = async (
   });
 
   return new Promise((resolve, reject) => {
-    cursor.on("end", () => {
+    cursor.once("end", async () => {
+      await cursor.close();
       resolve(res);
     });
 
-    cursor.on("error", (err) => {
+    cursor.once("error", async (err) => {
+      await cursor.close();
       console.error("Error reading data from the database:", err);
       reject(err);
     });
@@ -115,7 +124,9 @@ export const exportSearchedZaposleniData = async (
     naziv_firme: 1,
     zaposleni: 1,
     _id: 0,
-  }).cursor();
+  })
+    .lean()
+    .cursor();
 
   const res: ExportZaposlenih = [];
 
@@ -158,11 +169,13 @@ export const exportSearchedZaposleniData = async (
   });
 
   return new Promise((resolve, reject) => {
-    cursor.on("end", () => {
+    cursor.once("end", async () => {
+      await cursor.close();
       resolve(res);
     });
 
-    cursor.on("error", (err) => {
+    cursor.once("error", async (err) => {
+      await cursor.close();
       console.error("Error reading data from the database:", err);
       reject(err);
     });

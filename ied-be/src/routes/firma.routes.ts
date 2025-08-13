@@ -118,6 +118,7 @@ router.post("/:id", async (req: Request, res: Response, next: NextFunction) => {
   try {
     const firma = await updateById(req.params.id, req.body);
     if (firma) {
+      res.locals.updatedDocument = firma;
       res.json(firma);
     } else {
       res.status(404).send("Firma not found");

@@ -151,7 +151,7 @@ router.delete(
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       const deletedSeminar = await deleteSeminar(req.params.id);
-      res.status(201).json(deletedSeminar);
+      res.status(200).json(deletedSeminar);
     } catch (error) {
       next(error);
     }
