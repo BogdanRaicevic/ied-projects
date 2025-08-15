@@ -62,7 +62,6 @@ export function useFetchSeminari() {
     queryFn: () => {
       // TODO: use variables for pageSize and pageIndex
       return fetchSeminari(50, 0, {
-        // TODO: need to use only subDays(-7) to allow late registration
         datumOd: subMonths(new Date(), 3),
         datumDo: addMonths(new Date(), 3),
       });

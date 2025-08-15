@@ -1,9 +1,4 @@
-import {
-  SignedIn,
-  SignedOut,
-  SignInButton,
-  UserButton,
-} from "@clerk/clerk-react";
+import { SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/clerk-react";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
@@ -16,6 +11,7 @@ export default function ApplicationNavBar() {
     { text: "Pretrage", linkPath: "/pretrage" },
     { text: "Seminari", linkPath: "/seminari" },
     { text: "Računi", linkPath: "/racuni" },
+    { text: "Evidencija Promena", linkPath: "/audit-log" },
   ];
 
   return (
@@ -34,7 +30,7 @@ export default function ApplicationNavBar() {
               </Link>
             ))}
           </Box>
-          <Link component={RouteLink} to={"/prijava"} sx={{ color: "white" }}>
+          <Link component={RouteLink} to={"/pretrage"} sx={{ color: "white" }}>
             <SignedOut>
               <SignInButton />
             </SignedOut>
