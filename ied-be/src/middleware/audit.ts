@@ -1,6 +1,6 @@
 import { clerkClient, getAuth } from "@clerk/express";
 import type { NextFunction, Request, Response } from "express";
-import type { Model } from "mongoose";
+import { type Model, Types } from "mongoose";
 import { AuditLog } from "../models/audit_log.model";
 
 export const createAuditMiddleware = (Model: Model<any>) => {
@@ -20,13 +20,13 @@ export const createAuditMiddleware = (Model: Model<any>) => {
     const id: string = params?.id || body?._id || body?.id;
 
     let documentBefore: any = null;
-
-    if (id) {
+    if (id && Types.ObjectId.isValid(id)) {
       try {
         documentBefore = await Model.findById(id).lean();
       } catch (error) {
         console.error(
           `Audit middleware could not find document in ${Model.modelName} with id: ${id}`,
+          error,
         );
         // We can choose to continue or stop. Let's continue but the 'before' state will be null.
         documentBefore = null;
