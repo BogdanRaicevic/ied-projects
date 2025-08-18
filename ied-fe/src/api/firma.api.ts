@@ -114,7 +114,7 @@ export const exportZaposleniData = async (
 };
 
 export const saveFirma = async (company: Partial<FirmaType>) => {
-  company.zaposleni?.map((z) => {
+  company.zaposleni?.forEach((z) => {
     if (z._id?.startsWith("temp")) {
       delete z._id;
     }

@@ -14,8 +14,8 @@ export const saveSeminar = async (seminarData: SeminarZodType): Promise<SeminarT
   if (seminarData._id) {
     validateMongoId(seminarData._id);
 
-    seminarData.prijave.map((prijava) => {
-      transformPrijavaToDb(prijava);
+    seminarData.prijave.forEach((prijava) => {
+      transformPrijavaToDb(prijava as PrijavaZodType);
     });
 
     const updatedSeminar = await Seminar.findOneAndUpdate(
