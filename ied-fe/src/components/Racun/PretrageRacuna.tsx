@@ -1,4 +1,4 @@
-import type { PretrageRacunaZodType, RacunZod } from "@ied-shared/index";
+import type { PretrageRacunaType, RacunType } from "@ied-shared/index";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import {
   Box,
@@ -25,7 +25,7 @@ import { searchRacuni } from "../../api/racuni.api";
 import { ParametriPretrageRacuna } from "./ParametriPretrageRacuna";
 
 type SearchState = {
-  filterValues: PretrageRacunaZodType;
+  filterValues: PretrageRacunaType;
   pagination: MRT_PaginationState;
 };
 
@@ -34,10 +34,10 @@ export const PretrageRacuna = () => {
   const [racuniData, setRacuniData] = useState<{
     totalDocuments: number;
     totalPages: number;
-    racuni: RacunZod[];
+    racuni: RacunType[];
   }>();
 
-  const racuniColumns = useMemo<MRT_ColumnDef<RacunZod>[]>(
+  const racuniColumns = useMemo<MRT_ColumnDef<RacunType>[]>(
     () => [
       {
         accessorKey: "pozivNaBroj",
@@ -69,11 +69,7 @@ export const PretrageRacuna = () => {
                 {value}
               </Link>
               <Tooltip title="Kopiraj poziv na broj" arrow>
-                <IconButton
-                  sx={{ marginLeft: 1 }}
-                  size="small"
-                  onClick={handleCopyClick}
-                >
+                <IconButton sx={{ marginLeft: 1 }} size="small" onClick={handleCopyClick}>
                   <ContentCopyIcon />
                 </IconButton>
               </Tooltip>
@@ -114,13 +110,7 @@ export const PretrageRacuna = () => {
               color = "default";
           }
 
-          return (
-            <Chip
-              label={label}
-              sx={{ backgroundColor: color, color: "#fff" }}
-              size="small"
-            />
-          );
+          return <Chip label={label} sx={{ backgroundColor: color, color: "#fff" }} size="small" />;
         },
       },
       {
@@ -164,13 +154,7 @@ export const PretrageRacuna = () => {
               color = "default";
           }
 
-          return (
-            <Chip
-              label={label}
-              sx={{ backgroundColor: color, color: "#fff" }}
-              size="small"
-            />
-          );
+          return <Chip label={label} sx={{ backgroundColor: color, color: "#fff" }} size="small" />;
         },
       },
       {
@@ -197,11 +181,7 @@ export const PretrageRacuna = () => {
           return (
             <div>
               <div style={{ fontWeight: "bold" }}>{naziv}</div>
-              {datum && (
-                <div style={{ fontSize: "0.85rem", color: "#666" }}>
-                  {datum}
-                </div>
-              )}
+              {datum && <div style={{ fontSize: "0.85rem", color: "#666" }}>{datum}</div>}
             </div>
           );
         },
@@ -226,7 +206,7 @@ export const PretrageRacuna = () => {
     },
   });
 
-  const handleSearch = (newFilters: PretrageRacunaZodType) => {
+  const handleSearch = (newFilters: PretrageRacunaType) => {
     setSearchState((prev) => ({
       filterValues: newFilters,
       pagination: { ...prev.pagination, pageIndex: 0 },
@@ -234,14 +214,8 @@ export const PretrageRacuna = () => {
   };
 
   const racuniTable = useMaterialReactTable({
-    columns: useMemo<MRT_ColumnDef<RacunZod>[]>(
-      () => racuniColumns,
-      [racuniColumns],
-    ),
-    data: useMemo<RacunZod[]>(
-      () => racuniData?.racuni || [],
-      [racuniData?.racuni],
-    ),
+    columns: useMemo<MRT_ColumnDef<RacunType>[]>(() => racuniColumns, [racuniColumns]),
+    data: useMemo<RacunType[]>(() => racuniData?.racuni || [], [racuniData?.racuni]),
     enableFilters: true,
     enableColumnFilters: true,
     enableSorting: true,
@@ -266,8 +240,7 @@ export const PretrageRacuna = () => {
     onPaginationChange: (updater) => {
       setSearchState((prev) => ({
         ...prev,
-        pagination:
-          typeof updater === "function" ? updater(prev.pagination) : updater,
+        pagination: typeof updater === "function" ? updater(prev.pagination) : updater,
       }));
     },
   });
@@ -314,26 +287,13 @@ const IzdavacFilterHeader = ({ column }: { column: any }) => {
     <Box>
       <Box mb={1}>Izdavač računa</Box>
       <FormControl fullWidth size="small">
-        <Select
-          value={value}
-          onChange={handleChange}
-          displayEmpty
-          variant="outlined"
-        >
+        <Select value={value} onChange={handleChange} displayEmpty variant="outlined">
           <MenuItem value="">Svi izdavači</MenuItem>
           <MenuItem value="ied">
-            <Chip
-              label="IED"
-              size="small"
-              sx={{ backgroundColor: blue[500], color: "#fff" }}
-            />
+            <Chip label="IED" size="small" sx={{ backgroundColor: blue[500], color: "#fff" }} />
           </MenuItem>
           <MenuItem value="bs">
-            <Chip
-              label="BS"
-              size="small"
-              sx={{ backgroundColor: green[500], color: "#fff" }}
-            />
+            <Chip label="BS" size="small" sx={{ backgroundColor: green[500], color: "#fff" }} />
           </MenuItem>
           <MenuItem value="permanent">
             <Chip
@@ -361,19 +321,10 @@ const TipRacunaFilterHeader = ({ column }: { column: any }) => {
     <Box>
       <Box mb={1}>Tip računa</Box>
       <FormControl fullWidth size="small">
-        <Select
-          value={value}
-          onChange={handleChange}
-          displayEmpty
-          variant="outlined"
-        >
+        <Select value={value} onChange={handleChange} displayEmpty variant="outlined">
           <MenuItem value="">Svi tipovi</MenuItem>
           <MenuItem value="konacniRacun">
-            <Chip
-              label="Konačni"
-              size="small"
-              sx={{ backgroundColor: blue[200], color: "#fff" }}
-            />
+            <Chip label="Konačni" size="small" sx={{ backgroundColor: blue[200], color: "#fff" }} />
           </MenuItem>
           <MenuItem value="avansniRacun">
             <Chip

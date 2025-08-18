@@ -1,8 +1,8 @@
 import {
   type IzdavacRacuna,
-  type PretrageRacunaZodType,
-  RacunSchema,
-  type RacunZod,
+  type PretrageRacunaType,
+  type RacunType,
+  RacunZod,
   type TipRacuna,
 } from "@ied-shared/index";
 import { validateOrThrow } from "../utils/zodErrorHelper";
@@ -21,11 +21,11 @@ export const getIzdavaciRacuna = async () => {
 export const searchRacuni = async (
   pageIndex: number,
   pageSize: number,
-  queryParameters: PretrageRacunaZodType,
+  queryParameters: PretrageRacunaType,
 ): Promise<{
   totalDocuments: number;
   totalPages: number;
-  racuni: RacunZod[];
+  racuni: RacunType[];
 }> => {
   const searchParams = {
     ...queryParameters,
@@ -35,7 +35,7 @@ export const searchRacuni = async (
   try {
     const response = await axiosInstanceWithAuth.post(`/api/racuni/search`, searchParams);
     const rawData = response.data;
-    const parsedData = rawData.racuni.map((racun: any) => RacunSchema.parse(racun));
+    const parsedData = rawData.racuni.map((racun: any) => RacunZod.parse(racun));
 
     return {
       totalDocuments: rawData.totalDocuments,
@@ -48,10 +48,10 @@ export const searchRacuni = async (
   }
 };
 
-export const fetchRacunById = async (id: string): Promise<RacunZod> => {
+export const fetchRacunById = async (id: string): Promise<RacunType> => {
   try {
     const response = await axiosInstanceWithAuth.get(`/api/racuni/${id}`);
-    return RacunSchema.parse(response.data);
+    return RacunZod.parse(response.data);
   } catch (error) {
     console.error("Error fetching racun by ID:", error);
     throw error;
@@ -62,7 +62,7 @@ export const getRacunByPozivNaBrojAndIzdavac = async (
   pozivNaBroj: string,
   izdavacRacuna: IzdavacRacuna,
   tipRacuna?: TipRacuna,
-): Promise<RacunZod> => {
+): Promise<RacunType> => {
   try {
     const params = new URLSearchParams({
       pozivNaBroj: pozivNaBroj,
@@ -78,9 +78,9 @@ export const getRacunByPozivNaBrojAndIzdavac = async (
   }
 };
 
-export const saveNewRacun = async (racun: RacunZod): Promise<RacunZod> => {
+export const saveNewRacun = async (racun: RacunType): Promise<RacunType> => {
   try {
-    validateOrThrow(RacunSchema, racun);
+    validateOrThrow(RacunZod, racun);
     if (racun._id || racun.pozivNaBroj) {
       console.log("Racun already has an ID or pozivNaBroj, skipping save operation.");
       return racun; // or handle as needed
@@ -94,7 +94,7 @@ export const saveNewRacun = async (racun: RacunZod): Promise<RacunZod> => {
   }
 };
 
-export const updateRacunById = async (updatedRacun: RacunZod): Promise<RacunZod> => {
+export const updateRacunById = async (updatedRacun: RacunType): Promise<RacunType> => {
   try {
     const response = await axiosInstanceWithAuth.put(
       `/api/racuni/update/${updatedRacun._id}`,

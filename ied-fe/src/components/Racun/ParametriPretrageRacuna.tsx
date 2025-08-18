@@ -1,8 +1,8 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   type IzdavacRacuna,
-  PretrageRacunaSchma,
-  type PretrageRacunaZodType,
+  type PretrageRacunaType,
+  PretrageRacunaZod,
   type TipRacuna,
 } from "@ied-shared/index";
 import { Box, Button, Chip, InputLabel, MenuItem, Select, TextField } from "@mui/material";
@@ -13,7 +13,7 @@ import { useEffect } from "react";
 import { Controller, useForm } from "react-hook-form";
 
 interface ParametriPretrageRacunaProps {
-  onSearch: (filters: PretrageRacunaZodType) => void;
+  onSearch: (filters: PretrageRacunaType) => void;
 }
 
 export const ParametriPretrageRacuna = ({ onSearch }: ParametriPretrageRacunaProps) => {
@@ -28,7 +28,7 @@ export const ParametriPretrageRacuna = ({ onSearch }: ParametriPretrageRacunaPro
       imeFirme: "",
       pibFirme: undefined,
     },
-    resolver: zodResolver(PretrageRacunaSchma),
+    resolver: zodResolver(PretrageRacunaZod),
   });
 
   const tipRacunaChips: Record<string, { label: string; color: string }> = {
@@ -44,7 +44,7 @@ export const ParametriPretrageRacuna = ({ onSearch }: ParametriPretrageRacunaPro
     permanent: { label: "Permanent", color: purple[500] },
   };
 
-  const handlePretraziClick = (filters: PretrageRacunaZodType) => {
+  const handlePretraziClick = (filters: PretrageRacunaType) => {
     onSearch(filters);
   };
 
@@ -130,9 +130,9 @@ export const ParametriPretrageRacuna = ({ onSearch }: ParametriPretrageRacunaPro
           <DatePicker
             label="Datum od"
             format="yyyy.MM.dd"
-            value={field.value}
+            value={field.value ?? null}
             disableFuture
-            onChange={(e) => field.onChange(e)}
+            onChange={(e) => field.onChange(e ?? undefined)}
           />
         )}
       />
@@ -143,9 +143,9 @@ export const ParametriPretrageRacuna = ({ onSearch }: ParametriPretrageRacunaPro
           <DatePicker
             label="Datum do"
             format="yyyy.MM.dd"
-            value={field.value}
+            value={field.value ?? null}
             disableFuture
-            onChange={(e) => field.onChange(e)}
+            onChange={(e) => field.onChange(e ?? undefined)}
           />
         )}
       />
