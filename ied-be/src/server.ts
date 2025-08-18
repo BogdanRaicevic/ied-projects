@@ -18,11 +18,12 @@ import tipFirmeRoutes from "./routes/tip_firme.routes";
 import velicineFirmiRoutes from "./routes/velicina_firme.routes";
 import { env } from "./utils/envVariables";
 import "./database/cron";
+import { createAuditMiddleware } from "./middleware/audit";
+import { Firma } from "./models/firma.model";
+import auditLogRoutes from "./routes/audit_log.routes";
 
 const app = express();
-const allowedOrigins = env.fe.allowedPorts.map(
-  (port) => `${env.fe.appUrl}:${port}`,
-);
+const allowedOrigins = env.fe.allowedPorts.map((port) => `${env.fe.appUrl}:${port}`);
 console.log("Allowed Origins:", allowedOrigins);
 app.use(
   cors({
@@ -42,13 +43,10 @@ app.use(
 
 app.use(express.json());
 
-app.use("/api/firma", requireAuth(), hasPermission, firmaRoutes);
-app.use(
-  "/api/velicine-firmi",
-  requireAuth(),
-  hasPermission,
-  velicineFirmiRoutes,
-);
+const auditFirma = createAuditMiddleware(Firma);
+
+app.use("/api/firma", requireAuth(), hasPermission, auditFirma, firmaRoutes);
+app.use("/api/velicine-firmi", requireAuth(), hasPermission, velicineFirmiRoutes);
 app.use("/api/radna-mesta", requireAuth(), hasPermission, radnaMestaRoutes);
 app.use("/api/tip-firme", requireAuth(), hasPermission, tipFirmeRoutes);
 app.use("/api/delatnost", requireAuth(), hasPermission, delatnostiRoutes);
@@ -58,6 +56,7 @@ app.use("/api/stanja-firmi", requireAuth(), hasPermission, stanjaFirmeRoutes);
 app.use("/api/seminari", requireAuth(), hasPermission, seminarRoutes);
 app.use("/api/docx", requireAuth(), hasPermission, docxRoutes);
 app.use("/api/racuni", requireAuth(), hasPermission, racuniRoutes);
+app.use("/api/audit-log", requireAuth(), hasPermission, auditLogRoutes);
 app.use("/api/test", testRoutes);
 
 app.use(errorWrapper);

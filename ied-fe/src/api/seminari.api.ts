@@ -12,10 +12,7 @@ export const saveSeminar = async (seminarData: SeminarZodType) => {
       return;
     }
 
-    const response = await axiosInstanceWithAuth.post(
-      `/api/seminari/save`,
-      seminarData,
-    );
+    const response = await axiosInstanceWithAuth.post(`/api/seminari/save`, seminarData);
 
     return response.data;
   } catch (error) {
@@ -32,8 +29,8 @@ export const fetchSeminari = async (
   try {
     const body = {
       pageSize: pageSize || 50,
-      pageIndex: pageIndex + 1, // becuase MRT is zero based
-      queryParameters,
+      pageIndex: pageIndex || 0,
+      ...queryParameters,
     };
 
     const response: {
@@ -62,17 +59,13 @@ export const fetchSeminarById = async (id: string) => {
   }
 };
 
-export const savePrijava = async (
-  seminar_id: string,
-  prijava: PrijavaZodType,
-) => {
+export const savePrijava = async (seminar_id: string, prijava: PrijavaZodType) => {
   const payload = {
     ...prijava,
-    seminar_id,
   };
   try {
     const response = await axiosInstanceWithAuth.post(
-      `/api/seminari/save-prijava`,
+      `/api/seminari/save-prijava/${seminar_id}`,
       payload,
     );
 
@@ -87,13 +80,10 @@ export const savePrijava = async (
   }
 };
 
-export const deletePrijava = async (
-  zaposleni_id: string,
-  seminar_id: string,
-) => {
+export const deletePrijava = async (zaposleni_id: string, seminar_id: string) => {
   try {
     const response = await axiosInstanceWithAuth.delete(
-      `/api/seminari/delete-prijava/?zaposleni_id=${zaposleni_id}&seminar_id=${seminar_id}`,
+      `/api/seminari/delete-prijava/${seminar_id}/${zaposleni_id}`,
     );
 
     return response.data;
@@ -105,9 +95,7 @@ export const deletePrijava = async (
 
 export const deleteSeminar = async (id: string) => {
   try {
-    const response = await axiosInstanceWithAuth.delete(
-      `/api/seminari/delete/${id}`,
-    );
+    const response = await axiosInstanceWithAuth.delete(`/api/seminari/delete/${id}`);
 
     return response.data;
   } catch (error) {
@@ -118,9 +106,7 @@ export const deleteSeminar = async (id: string) => {
 
 export const fetchAllSeminars = async () => {
   try {
-    const response = await axiosInstanceWithAuth.get(
-      `/api/seminari/all-seminars`,
-    );
+    const response = await axiosInstanceWithAuth.get(`/api/seminari/all-seminars`);
 
     return response.data;
   } catch (error) {
