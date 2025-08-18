@@ -1,13 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { SeminarSchema, type SeminarZodType } from "@ied-shared/index";
-import {
-  Alert,
-  Box,
-  Button,
-  FormControl,
-  Snackbar,
-  TextField,
-} from "@mui/material";
+import { Alert, Box, Button, FormControl, Snackbar, TextField } from "@mui/material";
 import InputAdornment from "@mui/material/InputAdornment";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import * as React from "react";
@@ -39,7 +32,7 @@ export default function SeminarForm({
     handleSubmit,
     reset,
     formState: { errors },
-  } = useForm({
+  } = useForm<SeminarZodType>({
     defaultValues: {
       ...defaultSeminarData,
       ...seminar, // Merge with existing seminar data if provided
@@ -49,9 +42,7 @@ export default function SeminarForm({
   });
 
   const [alertOpen, setAlertOpen] = React.useState(false);
-  const [alertSeverity, setAlertSeverity] = React.useState<"success" | "error">(
-    "success",
-  );
+  const [alertSeverity, setAlertSeverity] = React.useState<"success" | "error">("success");
   const [alertMessage, setAlertMessage] = React.useState("");
 
   React.useEffect(() => {
@@ -60,9 +51,7 @@ export default function SeminarForm({
       reset({
         ...defaultSeminarData,
         ...seminar,
-        datum: seminar.datum
-          ? new Date(seminar.datum)
-          : defaultSeminarData.datum,
+        datum: seminar.datum ? new Date(seminar.datum) : defaultSeminarData.datum,
       });
     } else {
       reset(defaultSeminarData);
@@ -75,9 +64,7 @@ export default function SeminarForm({
       const payload = seminar?._id ? { ...data, _id: seminar._id } : data;
       await saveSeminar(payload);
       setAlertSeverity("success");
-      setAlertMessage(
-        seminar?._id ? "Uspešno izmenjen seminar" : "Uspešno kreiran seminar",
-      );
+      setAlertMessage(seminar?._id ? "Uspešno izmenjen seminar" : "Uspešno kreiran seminar");
       setAlertOpen(true);
       // TODO: Fix missing snackbar because of dialog unmount
       onDialogClose?.();
@@ -152,9 +139,7 @@ export default function SeminarForm({
               sx={{ m: 1 }}
               slotProps={{
                 input: {
-                  startAdornment: (
-                    <InputAdornment position="start">RSD</InputAdornment>
-                  ),
+                  startAdornment: <InputAdornment position="start">RSD</InputAdornment>,
                 },
               }}
               onChange={(e) => field.onChange(parseFloat(e.target.value) || 0)} // Parse to number
@@ -176,9 +161,7 @@ export default function SeminarForm({
               sx={{ m: 1 }}
               slotProps={{
                 input: {
-                  startAdornment: (
-                    <InputAdornment position="start">RSD</InputAdornment>
-                  ),
+                  startAdornment: <InputAdornment position="start">RSD</InputAdornment>,
                 },
               }}
               onChange={(e) => field.onChange(parseFloat(e.target.value) || 0)} // Parse to number
@@ -192,16 +175,12 @@ export default function SeminarForm({
           <Controller
             name="datum"
             control={control}
-            render={({ field: { onChange, value, ref } }) => (
+            render={({ field }) => (
               <DatePicker
                 format="yyyy-MM-dd"
                 label="Datum održavanja"
-                name="datum"
-                value={value ? new Date(value) : null}
-                onChange={(newValue) => {
-                  onChange(newValue);
-                }}
-                inputRef={ref}
+                value={field.value ?? null}
+                onChange={(date) => field.onChange(date)}
               />
             )}
           />
@@ -225,13 +204,7 @@ export default function SeminarForm({
           )}
         />
 
-        <Button
-          sx={{ m: 1 }}
-          size="large"
-          variant="contained"
-          color="primary"
-          type="submit"
-        >
+        <Button sx={{ m: 1 }} size="large" variant="contained" color="primary" type="submit">
           {seminar?._id ? "Izmeni" : "Kreiraj"} seminar
         </Button>
         <Snackbar
