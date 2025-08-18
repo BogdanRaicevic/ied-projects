@@ -1,6 +1,5 @@
 {
   "root": true,
-  "$schema": "https://biomejs.dev/schemas/2.1.2/schema.json",
   "vcs": {
     "enabled": false,
     "clientKind": "git",
@@ -12,7 +11,7 @@
   "formatter": {
     "enabled": true,
     "indentStyle": "space",
-    "lineWidth":100,
+    "lineWidth": 100,
     "lineEnding": "lf"
   },
   "linter": {
@@ -24,12 +23,10 @@
         "noExplicitAny": "info",
         "noArrayIndexKey": "warn"
       },
-      "nursery": {
-        "useUniqueElementIds": "warn",
-        "noNestedComponentDefinitions": "warn"
-      },
       "correctness": {
-        "useExhaustiveDependencies": "warn"
+        "useExhaustiveDependencies": "warn",
+        "noNestedComponentDefinitions": "warn",
+        "useUniqueElementIds": "warn"
       },
       "complexity": {
         "noBannedTypes": "info"
