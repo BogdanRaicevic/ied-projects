@@ -4,7 +4,7 @@ import { Alert, Box, Button, FormControl, Snackbar, TextField } from "@mui/mater
 import InputAdornment from "@mui/material/InputAdornment";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import * as React from "react";
-import { Controller, useForm } from "react-hook-form";
+import { Controller, type Resolver, type SubmitHandler, useForm } from "react-hook-form";
 import { saveSeminar } from "../../api/seminari.api";
 
 export default function SeminarForm({
@@ -38,7 +38,7 @@ export default function SeminarForm({
       ...seminar, // Merge with existing seminar data if provided
       datum: seminar?.datum ? new Date(seminar.datum) : new Date(), // Ensure date is a Date object
     },
-    resolver: zodResolver(SeminarSchema),
+    resolver: zodResolver(SeminarSchema) as Resolver<SeminarZodType>,
   });
 
   const [alertOpen, setAlertOpen] = React.useState(false);
@@ -58,7 +58,7 @@ export default function SeminarForm({
     }
   }, [seminar, reset]);
 
-  const onSubmit = async (data: SeminarZodType) => {
+  const onSubmit: SubmitHandler<SeminarZodType> = async (data) => {
     try {
       // Include _id if it's an existing seminar being edited
       const payload = seminar?._id ? { ...data, _id: seminar._id } : data;
