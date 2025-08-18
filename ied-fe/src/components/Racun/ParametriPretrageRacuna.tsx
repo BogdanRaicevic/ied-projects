@@ -5,15 +5,7 @@ import {
   type PretrageRacunaZodType,
   type TipRacuna,
 } from "@ied-shared/index";
-import {
-  Box,
-  Button,
-  Chip,
-  InputLabel,
-  MenuItem,
-  Select,
-  TextField,
-} from "@mui/material";
+import { Box, Button, Chip, InputLabel, MenuItem, Select, TextField } from "@mui/material";
 import { blue, green, grey, purple, red } from "@mui/material/colors";
 import { DatePicker } from "@mui/x-date-pickers";
 import { subMonths } from "date-fns";
@@ -24,9 +16,7 @@ interface ParametriPretrageRacunaProps {
   onSearch: (filters: PretrageRacunaZodType) => void;
 }
 
-export const ParametriPretrageRacuna = ({
-  onSearch,
-}: ParametriPretrageRacunaProps) => {
+export const ParametriPretrageRacuna = ({ onSearch }: ParametriPretrageRacunaProps) => {
   const { control, handleSubmit } = useForm({
     defaultValues: {
       pozivNaBroj: undefined,
@@ -77,179 +67,150 @@ export const ParametriPretrageRacuna = ({
   }, [handleSubmit]);
 
   return (
-    <>
-      <Box
-        component="form"
-        onSubmit={handleSubmit(handlePretraziClick)}
-        sx={{
-          display: "grid",
-          gridTemplateColumns: "repeat(4, minmax(0,1fr))",
-          gap: 2,
-        }}
-      >
-        <Controller
-          name="pozivNaBroj"
-          control={control}
-          render={({ field }) => (
-            <TextField
-              {...field}
-              label="Poziv na Broj"
-              placeholder="Poziv na Broj"
-            />
-          )}
-        />
+    <Box
+      component="form"
+      onSubmit={handleSubmit(handlePretraziClick)}
+      sx={{
+        display: "grid",
+        gridTemplateColumns: "repeat(4, minmax(0,1fr))",
+        gap: 2,
+      }}
+    >
+      <Controller
+        name="pozivNaBroj"
+        control={control}
+        render={({ field }) => (
+          <TextField {...field} label="Poziv na Broj" placeholder="Poziv na Broj" />
+        )}
+      />
 
-        <Controller
-          name="tipRacuna"
-          control={control}
-          render={({ field }) => (
-            <Select
-              {...field}
-              displayEmpty
-              multiple
-              onChange={(e) => field.onChange(e.target.value as TipRacuna[])}
-              renderValue={(selected = []) => {
-                if ((selected as string[]).length === 0) {
-                  return <InputLabel>Tip Računa</InputLabel>;
-                }
-
-                return (
-                  <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
-                    {(selected as string[]).map((val) => {
-                      const cfg = tipRacunaChips[val];
-                      return (
-                        <Chip
-                          key={val}
-                          label={cfg?.label ?? val}
-                          size="small"
-                          sx={{ bgcolor: cfg?.color, color: "#fff" }}
-                        />
-                      );
-                    })}
-                  </Box>
-                );
-              }}
-            >
-              {Object.entries(tipRacunaChips).map(([value, cfg]) => (
-                <MenuItem key={value} value={value}>
-                  <Chip
-                    label={cfg.label}
-                    size="small"
-                    sx={{ bgcolor: cfg.color, color: "#fff" }}
-                  />
-                </MenuItem>
-              ))}
-            </Select>
-          )}
-        />
-        <Controller
-          name="datumOd"
-          control={control}
-          render={({ field }) => (
-            <DatePicker
-              label="Datum od"
-              format="yyyy.MM.dd"
-              value={field.value}
-              disableFuture
-              onChange={(e) => field.onChange(e)}
-            />
-          )}
-        />
-        <Controller
-          name="datumDo"
-          control={control}
-          render={({ field }) => (
-            <DatePicker
-              label="Datum do"
-              format="yyyy.MM.dd"
-              value={field.value}
-              disableFuture
-              onChange={(e) => field.onChange(e)}
-            />
-          )}
-        />
-
-        <Controller
-          name="izdavacRacuna"
-          control={control}
-          render={({ field }) => (
-            <Select
-              {...field}
-              displayEmpty
-              multiple
-              onChange={(e) =>
-                field.onChange(e.target.value as IzdavacRacuna[])
+      <Controller
+        name="tipRacuna"
+        control={control}
+        render={({ field }) => (
+          <Select
+            {...field}
+            displayEmpty
+            multiple
+            onChange={(e) => field.onChange(e.target.value as TipRacuna[])}
+            renderValue={(selected = []) => {
+              if ((selected as string[]).length === 0) {
+                return <InputLabel>Tip Računa</InputLabel>;
               }
-              renderValue={(selected = []) => {
-                if ((selected as string[]).length === 0) {
-                  return <InputLabel>Izdavač računa</InputLabel>;
-                }
 
-                return (
-                  <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
-                    {(selected as string[]).map((val) => {
-                      const cfg = izdavacRacunaChips[val];
-                      return (
-                        <Chip
-                          key={val}
-                          label={cfg?.label ?? val}
-                          size="small"
-                          sx={{ bgcolor: cfg?.color, color: "#fff" }}
-                        />
-                      );
-                    })}
-                  </Box>
-                );
-              }}
-            >
-              {Object.entries(izdavacRacunaChips).map(([value, cfg]) => (
-                <MenuItem key={value} value={value}>
-                  <Chip
-                    label={cfg.label}
-                    size="small"
-                    sx={{ bgcolor: cfg.color, color: "#fff" }}
-                  />
-                </MenuItem>
-              ))}
-            </Select>
-          )}
-        />
-        <Controller
-          name="nazivSeminara"
-          control={control}
-          render={({ field }) => (
-            <TextField
-              {...field}
-              label="Naziv Seminara"
-              placeholder="Naziv Seminara"
-            />
-          )}
-        />
+              return (
+                <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
+                  {(selected as string[]).map((val) => {
+                    const cfg = tipRacunaChips[val];
+                    return (
+                      <Chip
+                        key={val}
+                        label={cfg?.label ?? val}
+                        size="small"
+                        sx={{ bgcolor: cfg?.color, color: "#fff" }}
+                      />
+                    );
+                  })}
+                </Box>
+              );
+            }}
+          >
+            {Object.entries(tipRacunaChips).map(([value, cfg]) => (
+              <MenuItem key={value} value={value}>
+                <Chip label={cfg.label} size="small" sx={{ bgcolor: cfg.color, color: "#fff" }} />
+              </MenuItem>
+            ))}
+          </Select>
+        )}
+      />
+      <Controller
+        name="datumOd"
+        control={control}
+        render={({ field }) => (
+          <DatePicker
+            label="Datum od"
+            format="yyyy.MM.dd"
+            value={field.value}
+            disableFuture
+            onChange={(e) => field.onChange(e)}
+          />
+        )}
+      />
+      <Controller
+        name="datumDo"
+        control={control}
+        render={({ field }) => (
+          <DatePicker
+            label="Datum do"
+            format="yyyy.MM.dd"
+            value={field.value}
+            disableFuture
+            onChange={(e) => field.onChange(e)}
+          />
+        )}
+      />
 
-        <Controller
-          name="imeFirme"
-          control={control}
-          render={({ field }) => (
-            <TextField {...field} label="Ime Firme" placeholder="Ime Firme" />
-          )}
-        />
+      <Controller
+        name="izdavacRacuna"
+        control={control}
+        render={({ field }) => (
+          <Select
+            {...field}
+            displayEmpty
+            multiple
+            onChange={(e) => field.onChange(e.target.value as IzdavacRacuna[])}
+            renderValue={(selected = []) => {
+              if ((selected as string[]).length === 0) {
+                return <InputLabel>Izdavač računa</InputLabel>;
+              }
 
-        <Controller
-          name="pibFirme"
-          control={control}
-          render={({ field }) => (
-            <TextField {...field} placeholder="PIB Firme" label="PIB Firme" />
-          )}
-        />
-        <Button
-          variant="contained"
-          color="primary"
-          sx={{ marginBottom: 2 }}
-          type="submit"
-        >
-          Pretraži
-        </Button>
-      </Box>
-    </>
+              return (
+                <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
+                  {(selected as string[]).map((val) => {
+                    const cfg = izdavacRacunaChips[val];
+                    return (
+                      <Chip
+                        key={val}
+                        label={cfg?.label ?? val}
+                        size="small"
+                        sx={{ bgcolor: cfg?.color, color: "#fff" }}
+                      />
+                    );
+                  })}
+                </Box>
+              );
+            }}
+          >
+            {Object.entries(izdavacRacunaChips).map(([value, cfg]) => (
+              <MenuItem key={value} value={value}>
+                <Chip label={cfg.label} size="small" sx={{ bgcolor: cfg.color, color: "#fff" }} />
+              </MenuItem>
+            ))}
+          </Select>
+        )}
+      />
+      <Controller
+        name="nazivSeminara"
+        control={control}
+        render={({ field }) => (
+          <TextField {...field} label="Naziv Seminara" placeholder="Naziv Seminara" />
+        )}
+      />
+
+      <Controller
+        name="imeFirme"
+        control={control}
+        render={({ field }) => <TextField {...field} label="Ime Firme" placeholder="Ime Firme" />}
+      />
+
+      <Controller
+        name="pibFirme"
+        control={control}
+        render={({ field }) => <TextField {...field} placeholder="PIB Firme" label="PIB Firme" />}
+      />
+      <Button variant="contained" color="primary" sx={{ marginBottom: 2 }} type="submit">
+        Pretraži
+      </Button>
+    </Box>
   );
 };
