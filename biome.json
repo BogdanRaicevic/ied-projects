@@ -23,12 +23,10 @@
         "noExplicitAny": "info",
         "noArrayIndexKey": "warn"
       },
-      "nursery": {
-        "useUniqueElementIds": "warn",
-        "noNestedComponentDefinitions": "warn"
-      },
       "correctness": {
-        "useExhaustiveDependencies": "warn"
+        "useExhaustiveDependencies": "warn",
+        "noNestedComponentDefinitions": "warn",
+        "useUniqueElementIds": "warn"
       },
       "complexity": {
         "noBannedTypes": "info"
