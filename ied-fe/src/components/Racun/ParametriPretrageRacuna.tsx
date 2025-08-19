@@ -130,7 +130,7 @@ export const ParametriPretrageRacuna = ({ onSearch }: ParametriPretrageRacunaPro
           <DatePicker
             label="Datum od"
             format="yyyy.MM.dd"
-            value={field.value ?? null}
+            value={field.value as Date | null}
             disableFuture
             onChange={(e) => field.onChange(e ?? undefined)}
           />
@@ -143,7 +143,7 @@ export const ParametriPretrageRacuna = ({ onSearch }: ParametriPretrageRacunaPro
           <DatePicker
             label="Datum do"
             format="yyyy.MM.dd"
-            value={field.value ?? null}
+            value={field.value as Date | null}
             disableFuture
             onChange={(e) => field.onChange(e ?? undefined)}
           />
