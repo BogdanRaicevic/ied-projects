@@ -1,8 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import {
-  type SeminarQueryParams,
-  SeminarQueryParamsSchema,
-} from "@ied-shared/types/seminar.zod";
+import { type SeminarQueryParams, SeminarQueryParamsSchema } from "@ied-shared/types/seminar.zod";
 import { UnfoldLess } from "@mui/icons-material";
 import { Box, Button, FormControl, TextField } from "@mui/material";
 import { DatePicker } from "@mui/x-date-pickers";
@@ -27,10 +24,7 @@ export function ParametriPretrageSeminar({
   return (
     <>
       <h1>Parametri Pretrage</h1>
-      <Box
-        component="form"
-        onSubmit={handleSubmit((data) => handleFormSubmit(data))}
-      >
+      <Box component="form" onSubmit={handleSubmit((data) => handleFormSubmit(data))}>
         <Controller
           name="naziv"
           control={control}
@@ -89,7 +83,7 @@ export function ParametriPretrageSeminar({
                 format="yyyy/MM/dd"
                 label="Početni datum"
                 name="datumOd"
-                value={field.value ? new Date(field.value) : null}
+                value={field.value as Date | null}
                 onChange={(date) => field.onChange(date)}
               />
             )}
@@ -106,20 +100,14 @@ export function ParametriPretrageSeminar({
                 format="yyyy/MM/dd"
                 label="Kranji datum"
                 name="datumDo"
-                value={field.value ? new Date(field.value) : null}
+                value={field.value as Date | null}
                 onChange={(date) => field.onChange(date)}
               />
             )}
           />
         </FormControl>
 
-        <Button
-          sx={{ m: 1 }}
-          size="large"
-          variant="contained"
-          color="info"
-          type="submit"
-        >
+        <Button sx={{ m: 1 }} size="large" variant="contained" color="info" type="submit">
           Pretrazi
         </Button>
       </Box>

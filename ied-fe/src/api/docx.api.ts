@@ -1,29 +1,19 @@
-import {
-  RacunSchema,
-  type RacunZod,
-  TipRacuna,
-} from "@ied-shared/types/racuni.zod";
+import { type RacunType, RacunZod, TipRacuna } from "@ied-shared/types/racuni.zod";
 import { validateOrThrow } from "../utils/zodErrorHelper";
 import axiosInstanceWithAuth from "./interceptors/auth";
 
-export const generateRacunDocument = async (racunData: RacunZod) => {
+export const generateRacunDocument = async (racunData: RacunType) => {
   const tipRacuna = racunData.tipRacuna;
   if (!Object.values(TipRacuna).includes(tipRacuna)) {
-    throw new Error(
-      `Tip računa ${racunData.tipRacuna} nije podržan za generisanje dokumenata.`,
-    );
+    throw new Error(`Tip računa ${racunData.tipRacuna} nije podržan za generisanje dokumenata.`);
   }
 
   try {
-    validateOrThrow(RacunSchema, racunData);
+    validateOrThrow(RacunZod, racunData);
 
-    const response = await axiosInstanceWithAuth.post(
-      `/api/docx/modify-template`,
-      racunData,
-      {
-        responseType: "blob",
-      },
-    );
+    const response = await axiosInstanceWithAuth.post(`/api/docx/modify-template`, racunData, {
+      responseType: "blob",
+    });
 
     // Check if the response is an error message
     if (response.headers["content-type"]?.includes("application/json")) {

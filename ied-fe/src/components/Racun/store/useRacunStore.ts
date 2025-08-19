@@ -1,7 +1,7 @@
 import {
-  type CalculationsRacunZod,
+  type CalculationsRacunType,
   IzdavacRacuna,
-  type RacunZod,
+  type RacunType,
   TipRacuna,
 } from "@ied-shared/types/racuni.zod";
 import { create } from "zustand";
@@ -12,28 +12,25 @@ const updateNestedProperty = (obj: any, path: string[], value: any): any => {
   const [current, ...rest] = path;
   return {
     ...obj,
-    [current]:
-      rest.length === 0
-        ? value
-        : updateNestedProperty(obj[current] || {}, rest, value),
+    [current]: rest.length === 0 ? value : updateNestedProperty(obj[current] || {}, rest, value),
   };
 };
 
 interface RacunState {
-  racunData: RacunZod;
+  racunData: RacunType;
 
   // Actions
-  updateRacunData: (data: RacunZod) => void;
+  updateRacunData: (data: RacunType) => void;
   updateNestedField: (fieldPath: string, value: any) => void;
-  updateCalculations: (calculations: CalculationsRacunZod) => void;
-  updateField: <K extends keyof RacunZod>(field: K, value: RacunZod[K]) => void;
+  updateCalculations: (calculations: CalculationsRacunType) => void;
+  updateField: <K extends keyof RacunType>(field: K, value: RacunType[K]) => void;
 
-  getCompleteRacunData: () => RacunZod;
+  getCompleteRacunData: () => RacunType;
   reset: () => void;
   resetSeminarCalculationData: () => void;
 }
 
-const initialCalculations: CalculationsRacunZod = {
+const initialCalculations: CalculationsRacunType = {
   onlineUkupnaNaknada: 0,
   offlineUkupnaNaknada: 0,
   onlinePoreskaOsnovica: 0,
@@ -50,7 +47,7 @@ const initialCalculations: CalculationsRacunZod = {
   placeno: 0,
 };
 
-const initialRacunData: RacunZod = {
+const initialRacunData: RacunType = {
   seminar: {
     seminar_id: "",
     naziv: "",

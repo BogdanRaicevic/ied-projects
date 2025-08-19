@@ -1,15 +1,15 @@
 import {
   type IzdavacRacuna,
-  type PretrageRacunaZodType,
-  RacunSchema,
-  type RacunZod,
+  type PretrageRacunaType,
+  type RacunType,
+  RacunZod,
   TipRacuna,
 } from "@ied-shared/index";
 import { isEqual } from "es-toolkit";
 import { RacunBaseModel } from "../models/racun.model";
 import { createRacunQuery } from "../utils/racuniQueryBuilder";
 
-export const saveRacun = async (racun: RacunZod) => {
+export const saveRacun = async (racun: RacunType) => {
   const DiscriminatorModel = RacunBaseModel.discriminators?.[racun.tipRacuna];
 
   if (!DiscriminatorModel) {
@@ -41,10 +41,9 @@ export const getRacunById = async (id: string) => {
   }
 };
 
-export const updateRacunById = async (id: string, updatedRacun: RacunZod) => {
+export const updateRacunById = async (id: string, updatedRacun: RacunType) => {
   try {
-    const DiscriminatorModel =
-      RacunBaseModel.discriminators?.[updatedRacun.tipRacuna];
+    const DiscriminatorModel = RacunBaseModel.discriminators?.[updatedRacun.tipRacuna];
 
     if (!DiscriminatorModel) {
       throw new Error(`Unknown racun type: ${updatedRacun.tipRacuna}`);
@@ -71,7 +70,7 @@ export const updateRacunById = async (id: string, updatedRacun: RacunZod) => {
 export const searchRacuni = async (
   pageIndex = 0,
   pageSize = 50,
-  queryParameters: PretrageRacunaZodType,
+  queryParameters: PretrageRacunaType,
 ) => {
   try {
     const skip = pageIndex * pageSize;
@@ -79,11 +78,7 @@ export const searchRacuni = async (
 
     const [totalDocuments, racuni] = await Promise.all([
       RacunBaseModel.countDocuments(mongoQuery),
-      RacunBaseModel.find(mongoQuery)
-        .sort({ dateCreatedAt: -1 })
-        .skip(skip)
-        .limit(pageSize)
-        .lean(),
+      RacunBaseModel.find(mongoQuery).sort({ dateCreatedAt: -1 }).skip(skip).limit(pageSize).lean(),
     ]);
 
     const totalPages = Math.ceil(totalDocuments / pageSize);
@@ -126,7 +121,7 @@ export const getRacunByPozivNaBrojAndIzdavac = async (
   }
 };
 
-export const validateAndCalculateRacun = (racun: RacunZod): RacunZod => {
+export const validateAndCalculateRacun = (racun: RacunType): RacunType => {
   const calculatedRacun = calculateRacunFields(racun); // same logic on FE
 
   // Validate that frontend calculations match backend
@@ -137,31 +132,21 @@ export const validateAndCalculateRacun = (racun: RacunZod): RacunZod => {
   return calculatedRacun;
 };
 
-const calculateRacunFields = (racun: RacunZod) => {
-  const racunParsed = RacunSchema.parse(racun);
-  const { popustOnline, popustOffline, avansBezPdv, placeno } =
-    racunParsed.calculations;
-  const { onlineCena, offlineCena, brojUcesnikaOnline, brojUcesnikaOffline } =
-    racunParsed.seminar;
+const calculateRacunFields = (racun: RacunType) => {
+  const racunParsed = RacunZod.parse(racun);
+  const { popustOnline, popustOffline, avansBezPdv, placeno } = racunParsed.calculations;
+  const { onlineCena, offlineCena, brojUcesnikaOnline, brojUcesnikaOffline } = racunParsed.seminar;
   const tipRacuna = racunParsed.tipRacuna;
   const stopaPdv = racunParsed.stopaPdv;
 
   const onlineUkupnaNaknada =
-    onlineCena *
-    brojUcesnikaOnline *
-    (1 - popustOnline / 100) *
-    (1 + stopaPdv / 100);
+    onlineCena * brojUcesnikaOnline * (1 - popustOnline / 100) * (1 + stopaPdv / 100);
 
   const offlineUkupnaNaknada =
-    offlineCena *
-    brojUcesnikaOffline *
-    (1 - popustOffline / 100) *
-    (1 + stopaPdv / 100);
+    offlineCena * brojUcesnikaOffline * (1 - popustOffline / 100) * (1 + stopaPdv / 100);
 
-  const onlinePoreskaOsnovica =
-    onlineCena * brojUcesnikaOnline * (1 - popustOnline / 100);
-  const offlinePoreskaOsnovica =
-    offlineCena * brojUcesnikaOffline * (1 - popustOffline / 100);
+  const onlinePoreskaOsnovica = onlineCena * brojUcesnikaOnline * (1 - popustOnline / 100);
+  const offlinePoreskaOsnovica = offlineCena * brojUcesnikaOffline * (1 - popustOffline / 100);
   const avansPdv = (avansBezPdv * stopaPdv) / 100;
   const avans = avansBezPdv + avansPdv;
 

@@ -8,7 +8,7 @@ export function validateOrThrow<T>(
   console.log(`Validating ${context}:`, data); // Log context
   const result = schema.safeParse(data);
   if (!result.success) {
-    console.error(`Validation failed (${context}):`, result.error.errors);
+    console.error(`Validation failed (${context}):`, result.error.issues);
     // --- Throw the original ZodError ---
     throw result.error;
   }

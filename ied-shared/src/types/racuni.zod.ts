@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const PrimalacRacunaSchema = z.object({
+export const PrimalacRacunaZod = z.object({
   firma_id: z.string(),
   naziv: z.string().min(1, { message: "Naziv primaoca je obavezan" }),
   adresa: z.string().optional(),
@@ -9,7 +9,7 @@ export const PrimalacRacunaSchema = z.object({
   mesto: z.string().optional(),
 });
 
-export const SeminarRacunSchema = z.object({
+export const SeminarRacunZod = z.object({
   seminar_id: z.string(),
   naziv: z.string().min(1, { message: "Naziv seminara je obavezan" }),
   // Use preprocess to handle date strings from forms/JSON
@@ -27,7 +27,7 @@ export const SeminarRacunSchema = z.object({
   offlineCena: z.coerce.number().min(0).default(0),
 });
 
-export const CalculationsRacunSchema = z.object({
+export const CalculationsRacunZod = z.object({
   onlineUkupnaNaknada: z.coerce.number().min(0).default(0),
   offlineUkupnaNaknada: z.coerce.number().min(0).default(0),
   onlinePoreskaOsnovica: z.coerce.number().min(0).default(0),
@@ -65,13 +65,13 @@ export enum IzdavacRacuna {
   BS = "bs",
 }
 
-export const RacunSchema = z.object({
-  izdavacRacuna: z.nativeEnum(IzdavacRacuna),
-  tipRacuna: z.nativeEnum(TipRacuna),
+export const RacunZod = z.object({
+  izdavacRacuna: z.enum(IzdavacRacuna),
+  tipRacuna: z.enum(TipRacuna),
   tekuciRacun: z.string().min(1, { message: "Tekući račun je obavezan" }),
-  primalacRacuna: PrimalacRacunaSchema,
-  seminar: SeminarRacunSchema,
-  calculations: CalculationsRacunSchema,
+  primalacRacuna: PrimalacRacunaZod,
+  seminar: SeminarRacunZod,
+  calculations: CalculationsRacunZod,
   rokZaUplatu: z.coerce.number().default(0),
   datumUplateAvansa: z.coerce.date().optional(),
   pozivNaBroj: z.string().optional(),
@@ -82,27 +82,27 @@ export const RacunSchema = z.object({
   _id: z.string().optional(),
 });
 
-export const RacunQuerySchema = z.object({
+export const RacunQueryZod = z.object({
   pozivNaBroj: z.string().min(1, "pozivNaBroj is required"),
-  izdavacRacuna: z.nativeEnum(IzdavacRacuna),
-  tipRacuna: z.nativeEnum(TipRacuna).optional(),
+  izdavacRacuna: z.enum(IzdavacRacuna),
+  tipRacuna: z.enum(TipRacuna).optional(),
 });
 
-export const PretrageRacunaSchma = z.object({
+export const PretrageRacunaZod = z.object({
   pozivNaBroj: z.coerce.number().nonnegative().optional(),
   datumOd: z.coerce.date().optional(),
   datumDo: z.coerce.date().optional(),
-  izdavacRacuna: z.array(z.nativeEnum(IzdavacRacuna)).optional(),
-  tipRacuna: z.array(z.nativeEnum(TipRacuna)).optional(),
+  izdavacRacuna: z.array(z.enum(IzdavacRacuna)).optional(),
+  tipRacuna: z.array(z.enum(TipRacuna)).optional(),
   imeFirme: z.string().optional(),
   pibFirme: z.coerce.number().nonnegative().optional(),
   nazivSeminara: z.string().optional(),
 });
 
 // Inferred Types
-export type RacunZod = z.infer<typeof RacunSchema>;
-export type PrimalacRacunaZod = z.infer<typeof PrimalacRacunaSchema>;
-export type SeminarRacunZod = z.infer<typeof SeminarRacunSchema>;
-export type CalculationsRacunZod = z.infer<typeof CalculationsRacunSchema>;
-export type RacunQueryZod = z.infer<typeof RacunQuerySchema>;
-export type PretrageRacunaZodType = z.infer<typeof PretrageRacunaSchma>;
+export type RacunType = z.infer<typeof RacunZod>;
+export type PrimalacRacunaType = z.infer<typeof PrimalacRacunaZod>;
+export type SeminarRacunType = z.infer<typeof SeminarRacunZod>;
+export type CalculationsRacunType = z.infer<typeof CalculationsRacunZod>;
+export type RacunQueryType = z.infer<typeof RacunQueryZod>;
+export type PretrageRacunaType = z.infer<typeof PretrageRacunaZod>;
