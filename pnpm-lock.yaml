@@ -129,9 +129,6 @@ importers:
       '@tanstack/react-query':
         specifier: ^5.79.0
         version: 5.79.0(react@19.1.0)
-      '@types/diff':
-        specifier: ^8.0.0
-        version: 8.0.0
       axios:
         specifier: ^1.9.0
         version: 1.9.0
@@ -1497,10 +1494,6 @@ packages:
 
   '@types/cors@2.8.18':
     resolution: {integrity: sha512-nX3d0sxJW41CqQvfOzVG1NCTXfFDrDWIghCZncpHeWlVFd81zxB/DLhg7avFg6eHLCRX7ckBmoIIcqa++upvJA==}
-
-  '@types/diff@8.0.0':
-    resolution: {integrity: sha512-o7jqJM04gfaYrdCecCVMbZhNdG6T1MHg/oQoRFdERLV+4d+V7FijhiEAbFu0Usww84Yijk9yH58U4Jk4HbtzZw==}
-    deprecated: This is a stub types definition. diff provides its own type definitions, so you do not need this installed.
 
   '@types/estree@1.0.8':
     resolution: {integrity: sha512-dWHzHa2WqEXI/O1E9OjrocMTKJl2mSrEolh1Iomrv6U+JuNwaHXsXx9bLu5gG7BUWFIN0skIQJQ/L1rIex4X6w==}
@@ -4245,10 +4238,6 @@ snapshots:
   '@types/cors@2.8.18':
     dependencies:
       '@types/node': 22.17.1
-
-  '@types/diff@8.0.0':
-    dependencies:
-      diff: 8.0.2
 
   '@types/estree@1.0.8': {}
 
