@@ -1,14 +1,9 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": ["config:base", "config:js-app", ":dependencyDashboard"],
+  "extends": ["config:recommended"],
   "commitMessagePrefix": "chore: (renovate): ",
   "enabledManagers": ["npm", "github-actions"],
   "updateLockFiles": true,
   "schedule": ["at any time"],
-  "packageRules": [
-    {
-      "matchUpdateTypes": ["pin"],
-      "enabled": false
-    }
-  ]
+  "rangeStrategy": "bump"
 }
