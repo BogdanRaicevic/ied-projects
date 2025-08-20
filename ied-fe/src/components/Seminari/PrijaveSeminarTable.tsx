@@ -1,5 +1,6 @@
 import type { PrijavaZodType } from "@ied-shared/index";
 import DeleteIcon from "@mui/icons-material/Delete";
+import HistoryEduIcon from "@mui/icons-material/HistoryEdu";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import MonetizationOnIcon from "@mui/icons-material/MonetizationOn";
@@ -31,9 +32,7 @@ export default function PrijaveSeminarTable({
   const [open, setOpen] = useState(false);
 
   const onePrijavaDelete = async (zaposleni_id: string, seminar_id: string) => {
-    const confirmed = window.confirm(
-      "Da li ste sigurni da želite da obrišete prijavu?",
-    );
+    const confirmed = window.confirm("Da li ste sigurni da želite da obrišete prijavu?");
     if (confirmed) {
       await deletePrijava(zaposleni_id, seminar_id);
       onDelete?.();
@@ -97,14 +96,23 @@ export default function PrijaveSeminarTable({
                   {prijave.map((prijava) => (
                     <TableRow key={prijava.zaposleni_id}>
                       <TableCell>
-                        <IconButton
-                          color="error"
-                          onClick={() =>
-                            onePrijavaDelete(prijava.zaposleni_id, seminarId)
-                          }
-                        >
-                          <DeleteIcon />
-                        </IconButton>
+                        <Tooltip title="Obriši prijavu">
+                          <IconButton
+                            color="error"
+                            onClick={() => onePrijavaDelete(prijava.zaposleni_id, seminarId)}
+                          >
+                            <DeleteIcon />
+                          </IconButton>
+                        </Tooltip>
+
+                        <Tooltip title="Kreiraj sertifikat">
+                          <IconButton
+                            color="secondary"
+                            onClick={() => console.log("Edit functionality not implemented yet")}
+                          >
+                            <HistoryEduIcon />
+                          </IconButton>
+                        </Tooltip>
                       </TableCell>
                       <TableCell>{prijava.zaposleni_ime}</TableCell>
                       <TableCell>{prijava.zaposleni_prezime}</TableCell>
