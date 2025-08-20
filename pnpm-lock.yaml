@@ -130,7 +130,7 @@ importers:
         specifier: ^5.79.0
         version: 5.79.0(react@19.1.0)
       axios:
-        specifier: ^1.10.0
+        specifier: ^1.11.0
         version: 1.11.0
       date-fns:
         specifier: ^4.1.0
