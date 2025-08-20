@@ -272,10 +272,14 @@ export default memo(function SeminariTable(props: {
                   return (
                     <PrijaveSeminarTable
                       key={naziv_firme}
-                      seminarId={row.row.original._id || ""}
                       prijave={prijave}
                       onDelete={() => {
                         setDeletePrijavaCounter((prev) => prev + 1);
+                      }}
+                      seminar={{
+                        id: row.row.original._id || "",
+                        naziv: row.row.original.naziv,
+                        datum: row.row.original.datum,
                       }}
                     />
                   );

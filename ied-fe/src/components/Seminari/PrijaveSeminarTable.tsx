@@ -16,18 +16,24 @@ import {
   Tooltip,
   Typography,
 } from "@mui/material";
+import { formatDate } from "date-fns";
+import { srLatn } from "date-fns/locale";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { deletePrijava } from "../../api/seminari.api";
 
 export default function PrijaveSeminarTable({
-  seminarId,
   prijave,
   onDelete,
+  seminar,
 }: {
-  seminarId: string;
   prijave: PrijavaZodType[];
   onDelete?: () => void;
+  seminar: {
+    id: string;
+    naziv: string;
+    datum: Date;
+  };
 }) {
   const [open, setOpen] = useState(false);
 
@@ -41,7 +47,19 @@ export default function PrijaveSeminarTable({
 
   const navigate = useNavigate();
   const handleCreateRacun = () => {
-    navigate("/racuni", { state: { prijave, seminarId } });
+    navigate("/racuni", { state: { prijave, seminarId: seminar.id } });
+  };
+
+  const generateCertificate = (d: any) => {
+    console.log(
+      "Generating certificate for: ",
+      d.ime,
+      d.prezime,
+      d.seminar_naziv,
+      formatDate(d.seminar_datum, "dd. MMM yyyy", {
+        locale: srLatn,
+      }),
+    );
   };
 
   return (
@@ -99,7 +117,7 @@ export default function PrijaveSeminarTable({
                         <Tooltip title="Obriši prijavu">
                           <IconButton
                             color="error"
-                            onClick={() => onePrijavaDelete(prijava.zaposleni_id, seminarId)}
+                            onClick={() => onePrijavaDelete(prijava.zaposleni_id, seminar.id)}
                           >
                             <DeleteIcon />
                           </IconButton>
@@ -108,7 +126,14 @@ export default function PrijaveSeminarTable({
                         <Tooltip title="Kreiraj sertifikat">
                           <IconButton
                             color="secondary"
-                            onClick={() => console.log("Edit functionality not implemented yet")}
+                            onClick={() =>
+                              generateCertificate({
+                                ime: prijava.zaposleni_ime,
+                                prezime: prijava.zaposleni_prezime,
+                                seminar_naziv: seminar.naziv,
+                                seminar_datum: seminar.datum,
+                              })
+                            }
                           >
                             <HistoryEduIcon />
                           </IconButton>
