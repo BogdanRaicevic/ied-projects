@@ -5,10 +5,5 @@
   "enabledManagers": ["npm", "github-actions"],
   "updateLockFiles": true,
   "schedule": ["at any time"],
-  "packageRules": [
-    {
-      "matchUpdateTypes": ["pin"],
-      "enabled": false
-    }
-  ]
+  "rangeStrategy": "bump"
 }
