@@ -141,6 +141,9 @@ importers:
       es-toolkit:
         specifier: ^1.39.10
         version: 1.39.10
+      ied-shared:
+        specifier: workspace:^
+        version: link:../ied-shared
       material-react-table:
         specifier: ^3.0.1
         version: 3.2.1(0cbb7982160fa74ff7467338e8dce36f)
@@ -172,6 +175,9 @@ importers:
       '@biomejs/biome':
         specifier: ^2.2.0
         version: 2.2.0
+      '@types/node':
+        specifier: ^22.17.1
+        version: 22.17.1
       '@types/react':
         specifier: 19.1.10
         version: 19.1.10
@@ -193,9 +199,6 @@ importers:
       globals:
         specifier: ^16.3.0
         version: 16.3.0
-      ied-shared:
-        specifier: workspace:^
-        version: link:../ied-shared
       typescript:
         specifier: ^5.9.2
         version: 5.9.2
@@ -205,9 +208,6 @@ importers:
 
   ied-shared:
     dependencies:
-      '@biomejs/biome':
-        specifier: ^2.2.0
-        version: 2.2.0
       diff:
         specifier: ^8.0.2
         version: 8.0.2
@@ -215,6 +215,9 @@ importers:
         specifier: ^4.0.17
         version: 4.0.17
     devDependencies:
+      '@biomejs/biome':
+        specifier: ^2.2.0
+        version: 2.2.0
       '@types/node':
         specifier: ^22.17.1
         version: 22.17.1
@@ -227,22 +230,22 @@ importers:
 
   mongo-migrator:
     dependencies:
-      '@types/node':
-        specifier: ^22.17.1
-        version: 22.17.1
       mongoose:
         specifier: ^8.15.0
         version: 8.15.0
       mysql2:
         specifier: ^3.14.3
         version: 3.14.3
-      ts-node:
-        specifier: ^10.9.2
-        version: 10.9.2(@swc/core@1.13.3(@swc/helpers@0.5.17))(@types/node@22.17.1)(typescript@5.9.2)
     devDependencies:
       '@biomejs/biome':
         specifier: ^2.2.0
         version: 2.2.0
+      '@types/node':
+        specifier: ^22.17.1
+        version: 22.17.1
+      ts-node:
+        specifier: ^10.9.2
+        version: 10.9.2(@swc/core@1.13.3(@swc/helpers@0.5.17))(@types/node@22.17.1)(typescript@5.9.2)
       typescript:
         specifier: ^5.9.2
         version: 5.9.2
