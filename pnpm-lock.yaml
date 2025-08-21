@@ -109,8 +109,8 @@ importers:
         specifier: ^5.2.5
         version: 5.2.5
       '@hookform/resolvers':
-        specifier: ^5.1.0
-        version: 5.1.0(react-hook-form@7.57.0(react@19.1.0))
+        specifier: ^5.2.1
+        version: 5.2.1(react-hook-form@7.57.0(react@19.1.0))
       '@mui/icons-material':
         specifier: ^7.1.0
         version: 7.1.0(@mui/material@7.1.0(@emotion/react@11.14.0(@types/react@19.1.10)(react@19.1.0))(@emotion/styled@11.14.0(@emotion/react@11.14.0(@types/react@19.1.10)(react@19.1.0))(@types/react@19.1.10)(react@19.1.0))(@types/react@19.1.10)(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(@types/react@19.1.10)(react@19.1.0)
@@ -790,8 +790,8 @@ packages:
   '@fontsource/roboto@5.2.5':
     resolution: {integrity: sha512-70r2UZ0raqLn5W+sPeKhqlf8wGvUXFWlofaDlcbt/S3d06+17gXKr3VNqDODB0I1ASme3dGT5OJj9NABt7OTZQ==}
 
-  '@hookform/resolvers@5.1.0':
-    resolution: {integrity: sha512-A5tY8gxqvvR0lFfropqpy/gUDOxjwT7LZCxJ8lNA9puK7nFNRl/O0egGKxzdF4JSz/pnnT1O8g76P/YMyTBEFw==}
+  '@hookform/resolvers@5.2.1':
+    resolution: {integrity: sha512-u0+6X58gkjMcxur1wRWokA7XsiiBJ6aK17aPZxhkoYiK5J+HcTx0Vhu9ovXe6H+dVpO6cjrn2FkJTryXEMlryQ==}
     peerDependencies:
       react-hook-form: ^7.55.0
 
@@ -3545,7 +3545,7 @@ snapshots:
 
   '@fontsource/roboto@5.2.5': {}
 
-  '@hookform/resolvers@5.1.0(react-hook-form@7.57.0(react@19.1.0))':
+  '@hookform/resolvers@5.2.1(react-hook-form@7.57.0(react@19.1.0))':
     dependencies:
       '@standard-schema/utils': 0.3.0
       react-hook-form: 7.57.0(react@19.1.0)
