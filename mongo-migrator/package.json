@@ -15,7 +15,7 @@
     "node": ">=22.0.0"
   },
   "dependencies": {
-    "mongoose": "^8.15.0",
+    "mongoose": "^8.17.2",
     "mysql2": "^3.14.3"
   },
   "devDependencies": {
