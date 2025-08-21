@@ -145,7 +145,7 @@ importers:
         specifier: workspace:^
         version: link:../ied-shared
       material-react-table:
-        specifier: ^3.0.1
+        specifier: ^3.2.1
         version: 3.2.1(e39692907e9342ca83496617dd0cb184)
       react:
         specifier: ^19.1.0
