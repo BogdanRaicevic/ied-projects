@@ -160,7 +160,7 @@ importers:
         specifier: ^7.8.1
         version: 7.8.1(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       react-window:
-        specifier: ^1.8.10
+        specifier: ^1.8.11
         version: 1.8.11(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       styled-components:
         specifier: ^6.1.19
@@ -4396,7 +4396,7 @@ snapshots:
 
   babel-plugin-macros@3.1.0:
     dependencies:
-      '@babel/runtime': 7.27.1
+      '@babel/runtime': 7.28.3
       cosmiconfig: 7.1.0
       resolve: 1.22.10
 
@@ -5111,7 +5111,7 @@ snapshots:
 
   react-window@1.8.11(react-dom@19.1.0(react@19.1.0))(react@19.1.0):
     dependencies:
-      '@babel/runtime': 7.26.10
+      '@babel/runtime': 7.28.3
       memoize-one: 5.2.1
       react: 19.1.0
       react-dom: 19.1.0(react@19.1.0)
