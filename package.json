@@ -20,7 +20,7 @@
   "devDependencies": {
     "@biomejs/biome": "^2.2.0",
     "@types/node": "^22.17.1",
-    "knip": "^5.59.0",
+    "knip": "^5.63.0",
     "typescript": "^5.9.2"
   },
   "engines": {
