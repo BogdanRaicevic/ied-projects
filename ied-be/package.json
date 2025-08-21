@@ -36,7 +36,7 @@
     "cron": "^4.3.0",
     "date-fns": "^4.1.0",
     "docxtemplater": "^3.65.3",
-    "dotenv": "^17.0.0",
+    "dotenv": "^17.2.1",
     "es-toolkit": "^1.39.10",
     "express": "^5.0.0",
     "ied-shared": "workspace:^",
