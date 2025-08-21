@@ -11,13 +11,16 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
+  "engines": {
+    "node": ">=22.0.0"
+  },
   "dependencies": {
-    "@types/node": "^22.17.1",
     "mongoose": "^8.15.0",
     "mysql2": "^3.14.3",
     "ts-node": "^10.9.2"
   },
   "devDependencies": {
+    "@types/node": "^22.17.1",
     "typescript": "^5.9.2",
     "@biomejs/biome": "^2.2.0"
   }

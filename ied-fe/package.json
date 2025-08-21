@@ -50,6 +50,10 @@
     "globals": "^16.3.0",
     "ied-shared": "workspace:^",
     "typescript": "^5.9.2",
-    "vite": "^7.1.2"
+    "vite": "^7.1.2",
+    "@types/node": "^22.17.1"
+  },
+  "engines": {
+    "node": ">=22.0.0"
   }
 }
