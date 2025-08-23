@@ -137,7 +137,7 @@
 **/.pnp.*
 
 # ignore DB backup folder
-**/ied-be/backup
+**/backup
 
 # ignore storage template folder
 **/ied-be/storage/templates
