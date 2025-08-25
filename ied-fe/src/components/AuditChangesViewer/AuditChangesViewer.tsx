@@ -2,11 +2,16 @@ import type { IChange } from "@ied-shared/types/diff";
 
 interface Props {
   changes: IChange[];
+  rootId?: string;
 }
 
 const renderValue = (value: any) => {
   if (typeof value === "object" && value !== null) {
-    return <pre style={{ margin: 0, display: "inline" }}>{JSON.stringify(value)}</pre>;
+    return (
+      <pre style={{ margin: 0, display: "inline" }}>
+        {JSON.stringify(value)}
+      </pre>
+    );
   }
   if (value === undefined || value === null || value === "") {
     return <em>(prazno)</em>;
@@ -14,7 +19,7 @@ const renderValue = (value: any) => {
   return <strong>{String(value)}</strong>;
 };
 
-export const AuditChangesViewer: React.FC<Props> = ({ changes }) => {
+export const AuditChangesViewer: React.FC<Props> = ({ changes, rootId }) => {
   if (!changes || changes.length === 0) {
     return <span>Nema promena.</span>;
   }
@@ -30,7 +35,9 @@ export const AuditChangesViewer: React.FC<Props> = ({ changes }) => {
               case "T":
                 return (
                   <div>
-                    <p style={{ margin: 0, fontWeight: "bold" }}>Komentar je izmenjen:</p>
+                    <p style={{ margin: 0, fontWeight: "bold" }}>
+                      Komentar je izmenjen:
+                    </p>
                     <div
                       style={{
                         border: "1px solid #e0e0e0",
@@ -48,8 +55,14 @@ export const AuditChangesViewer: React.FC<Props> = ({ changes }) => {
                             : part.removed
                               ? "#f8d7da"
                               : "transparent",
-                          color: part.added ? "#155724" : part.removed ? "#721c24" : "inherit",
-                          textDecoration: part.removed ? "line-through" : "none",
+                          color: part.added
+                            ? "#155724"
+                            : part.removed
+                              ? "#721c24"
+                              : "inherit",
+                          textDecoration: part.removed
+                            ? "line-through"
+                            : "none",
                         };
                         return (
                           <span key={i} style={style}>
@@ -64,9 +77,16 @@ export const AuditChangesViewer: React.FC<Props> = ({ changes }) => {
                 return (
                   <div>
                     <p style={{ margin: 0 }}>
-                      U listi <strong>{change.property}</strong> desile su se sledeće promene:
+                      U listi <strong>{change.property}</strong>{" "}
+                      {rootId && `objekta sa _id ${rootId} `}
+                      desile su se sledeće promene:
                     </p>
-                    <div style={{ paddingLeft: "20px", borderLeft: "2px solid #eee" }}>
+                    <div
+                      style={{
+                        paddingLeft: "20px",
+                        borderLeft: "2px solid #eee",
+                      }}
+                    >
                       {change.arrayChanges?.map((arrayChange) => (
                         <div key={arrayChange.id}>
                           {arrayChange.type === "added" && (
@@ -80,7 +100,10 @@ export const AuditChangesViewer: React.FC<Props> = ({ changes }) => {
                               >
                                 Dodato:
                               </span>{" "}
-                              <strong> {JSON.stringify(arrayChange.item)}</strong>
+                              <strong>
+                                {" "}
+                                {JSON.stringify(arrayChange.item)}
+                              </strong>
                             </p>
                           )}
                           {arrayChange.type === "removed" && (
@@ -95,18 +118,24 @@ export const AuditChangesViewer: React.FC<Props> = ({ changes }) => {
                                 Obrisano:
                               </span>{" "}
                               <strong>
-                                <strong> {JSON.stringify(arrayChange.item)}</strong>
+                                <strong>
+                                  {" "}
+                                  {JSON.stringify(arrayChange.item)}
+                                </strong>
                               </strong>
                             </p>
                           )}
                           {arrayChange.type === "modified" && (
                             <div>
                               <p>
-                                ✏️ Izmenjeno: {arrayChange.item._id} {arrayChange.item.ime}{" "}
+                                ✏️ Izmenjeno: {arrayChange.item._id}{" "}
+                                {arrayChange.item.ime}{" "}
                                 {arrayChange.item.prezime}
                               </p>
                               <div style={{ paddingLeft: "20px" }}>
-                                <AuditChangesViewer changes={arrayChange.changes!} />
+                                <AuditChangesViewer
+                                  changes={arrayChange.changes!}
+                                />
                               </div>
                             </div>
                           )}

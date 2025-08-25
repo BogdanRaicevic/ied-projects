@@ -1,4 +1,7 @@
-import type { AuditLogQueryParams, AuditLogType } from "@ied-shared/types/audit_log.zod";
+import type {
+  AuditLogQueryParams,
+  AuditLogType,
+} from "@ied-shared/types/audit_log.zod";
 import { Button, Paper, TextField } from "@mui/material";
 import { Box, Grid } from "@mui/system";
 import { DatePicker } from "@mui/x-date-pickers";
@@ -35,7 +38,10 @@ export default function AuditLog() {
     defaultValues: queryParams,
   });
 
-  const { data: auditLogs, totalDocuments } = data || { auditLogs: [], totalDocuments: 0 };
+  const { data: auditLogs, totalDocuments } = data || {
+    auditLogs: [],
+    totalDocuments: 0,
+  };
 
   const auditLogsColumns = useMemo<MRT_ColumnDef<AuditLogType>[]>(
     () => [
@@ -62,13 +68,21 @@ export default function AuditLog() {
         Cell: ({ row }) => {
           const { before, after } = row.original;
 
-          const changes = useMemo(() => generateStructuredDiff(before, after), [before, after]);
+          const changes = useMemo(
+            () => generateStructuredDiff(before, after),
+            [before, after],
+          );
 
           if (!changes) {
             return null;
           }
 
-          return <AuditChangesViewer changes={changes} />;
+          return (
+            <AuditChangesViewer
+              changes={changes}
+              rootId={after?._id || before?._id}
+            />
+          );
         },
       },
     ],
@@ -147,7 +161,9 @@ export default function AuditLog() {
                   <DatePicker
                     label="Datum od"
                     value={field.value}
-                    onChange={(date) => field.onChange(date ? startOfDay(date) : null)}
+                    onChange={(date) =>
+                      field.onChange(date ? startOfDay(date) : null)
+                    }
                     format="yyyy-MM-dd"
                     slotProps={{ textField: { fullWidth: true } }}
                   />
@@ -163,7 +179,9 @@ export default function AuditLog() {
                   <DatePicker
                     label="Datum do"
                     value={field.value}
-                    onChange={(date) => field.onChange(date ? endOfDay(date) : null)}
+                    onChange={(date) =>
+                      field.onChange(date ? endOfDay(date) : null)
+                    }
                     format="yyyy-MM-dd"
                     slotProps={{ textField: { fullWidth: true } }}
                     disableFuture={true}
@@ -173,7 +191,12 @@ export default function AuditLog() {
             </Grid>
 
             <Box display="flex" justifyContent="flex-end">
-              <Button type="submit" variant="contained" color="primary" fullWidth>
+              <Button
+                type="submit"
+                variant="contained"
+                color="primary"
+                fullWidth
+              >
                 Pretraga
               </Button>
             </Box>
