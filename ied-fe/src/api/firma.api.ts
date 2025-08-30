@@ -1,6 +1,6 @@
 import type { ExportFirma, ExportZaposlenih } from "@ied-shared/index";
 import type { FirmaQueryParams } from "@ied-shared/types/firma.zod";
-import type { FirmaType } from "../schemas/firmaSchemas";
+import type { FirmaType, Zaposleni } from "../schemas/firmaSchemas";
 import axiosInstanceWithAuth from "./interceptors/auth";
 
 export const fetchFirmaPretrage = async (
@@ -46,7 +46,10 @@ export const exportFirmaData = async (
       queryParameters,
     };
 
-    const response = await axiosInstanceWithAuth.post(`/api/firma/export-firma-data`, body);
+    const response = await axiosInstanceWithAuth.post(
+      `/api/firma/export-firma-data`,
+      body,
+    );
 
     const firmeMap = new Map<string, number>();
     for (const element of response.data) {
@@ -85,7 +88,10 @@ export const exportZaposleniData = async (
       queryParameters,
     };
 
-    const response = await axiosInstanceWithAuth.post(`/api/firma/export-zaposleni-data`, body);
+    const response = await axiosInstanceWithAuth.post(
+      `/api/firma/export-zaposleni-data`,
+      body,
+    );
 
     const zaposleniMap = new Map<string, number>();
     for (const element of response.data) {
@@ -122,7 +128,10 @@ export const saveFirma = async (company: Partial<FirmaType>) => {
 
   try {
     if (company._id) {
-      const response = await axiosInstanceWithAuth.post(`/api/firma/${company._id}`, company);
+      const response = await axiosInstanceWithAuth.post(
+        `/api/firma/${company._id}`,
+        company,
+      );
       return {
         data: response.data,
         status: response.status,
@@ -148,6 +157,63 @@ export const deleteFirma = async (id: string) => {
     };
   } catch (error) {
     console.error("Error deleting firma: ", error);
+    throw error;
+  }
+};
+
+export const addZaposleniToFirma = async (
+  firmaId: string,
+  zaposleni: Partial<Zaposleni>,
+) => {
+  try {
+    const response = await axiosInstanceWithAuth.post(
+      `/api/firma/${firmaId}/zaposleni`,
+      zaposleni,
+    );
+    return {
+      data: response.data,
+      status: response.status,
+    };
+  } catch (error) {
+    console.error("Error adding zaposleni to firma: ", error);
+    throw error;
+  }
+};
+
+export const updateZaposleniInFirma = async (
+  firmaId: string,
+  zaposleniId: string,
+  zaposleni: Partial<Zaposleni>,
+) => {
+  try {
+    const response = await axiosInstanceWithAuth.put(
+      `/api/firma/${firmaId}/zaposleni/${zaposleniId}`,
+      zaposleni,
+    );
+    return {
+      data: response.data,
+      status: response.status,
+    };
+  } catch (error) {
+    console.error("Error updating zaposleni in firma: ", error);
+    throw error;
+  }
+};
+
+export const deleteZaposleniFromFirma = async (
+  firmaId: string,
+  zaposleniId: string,
+) => {
+  try {
+    const response = await axiosInstanceWithAuth.delete(
+      `/api/firma/${firmaId}/zaposleni/${zaposleniId}`,
+    );
+    return {
+      data: response.data,
+      status: response.status,
+    };
+  } catch (error) {
+    console.error("Error deleting zaposleni from firma: ", error);
     throw error;
   }
 };

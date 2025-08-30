@@ -2,6 +2,7 @@ import type { ExportFirma, ExportZaposlenih } from "@ied-shared/index";
 import type { FirmaQueryParams } from "@ied-shared/types/firma.zod";
 import { type FilterQuery, sanitizeFilter } from "mongoose";
 import { Firma, type FirmaType } from "../models/firma.model";
+import type { Zaposleni } from "../models/zaposleni.model";
 import { createFirmaQuery } from "../utils/firmaQueryBuilder";
 import { getZaposleniIdsFromSeminars } from "./seminar.service";
 
@@ -18,7 +19,9 @@ export const deleteById = async (id: string): Promise<FirmaType | null> => {
   return await Firma.findByIdAndDelete(id).exec();
 };
 
-export const create = async (firmaData: Partial<FirmaType>): Promise<FirmaType> => {
+export const create = async (
+  firmaData: Partial<FirmaType>,
+): Promise<FirmaType> => {
   const firma = new Firma(firmaData);
   const doc = await firma.save();
   return doc.toObject({
@@ -48,7 +51,11 @@ export const updateById = async (
   }
 };
 
-export const search = async (queryParameters: FirmaQueryParams, pageIndex = 0, pageSize = 50) => {
+export const search = async (
+  queryParameters: FirmaQueryParams,
+  pageIndex = 0,
+  pageSize = 50,
+) => {
   const skip = pageIndex * pageSize;
   const mongoQuery = await createFirmaQuery(queryParameters);
 
@@ -136,10 +143,12 @@ export const exportSearchedZaposleniData = async (
 
     if (plainObject.zaposleni) {
       for (const z of plainObject.zaposleni) {
-        const isZaposleniInSeminar = seminarAttendees?.includes(z._id.toString()) ?? false;
+        const isZaposleniInSeminar =
+          seminarAttendees?.includes(z._id.toString()) ?? false;
         const isRadnoMestoNegated =
           queryParameters.negacije?.includes("negate-radno-mesto") ?? false;
-        const isRadnoMestoIncluded = queryParameters.radnaMesta.includes(z.radno_mesto) ?? false;
+        const isRadnoMestoIncluded =
+          queryParameters.radnaMesta.includes(z.radno_mesto) ?? false;
         const hasNoRadnaMestaFilter = queryParameters.radnaMesta.length === 0;
 
         // Skip if zaposleni is not in the specified seminars
@@ -180,4 +189,78 @@ export const exportSearchedZaposleniData = async (
       reject(err);
     });
   });
+};
+
+export const createZaposleni = async (
+  firmaId: string,
+  zaposleniData: Zaposleni,
+) => {
+  try {
+    const updatedFirma = await Firma.findByIdAndUpdate(
+      firmaId,
+      { $push: { zaposleni: zaposleniData } },
+      { new: true, runValidators: true },
+    ).lean();
+
+    if (!updatedFirma) {
+      throw new Error(`Firma with id ${firmaId} not found.`);
+    }
+
+    const newZaposleni =
+      updatedFirma.zaposleni[updatedFirma.zaposleni.length - 1];
+    return newZaposleni;
+  } catch (error) {
+    console.error("Error creating zaposleni:", error);
+    throw error;
+  }
+};
+
+export const updateZaposleni = async (
+  firmaId: string,
+  zaposleniId: string,
+  zaposleniData: Partial<Zaposleni>,
+) => {
+  try {
+    const updatedFirma = await Firma.findByIdAndUpdate(
+      firmaId,
+      { $set: { "zaposleni.$[elem]": zaposleniData } },
+      { new: true, arrayFilters: [{ "elem._id": zaposleniId }] },
+    ).lean();
+
+    if (!updatedFirma) {
+      throw new Error(`Firma with id ${firmaId} not found.`);
+    }
+
+    const updatedZaposleni = updatedFirma.zaposleni.find(
+      (z) => z._id.toString() === zaposleniId,
+    );
+
+    if (!updatedZaposleni) {
+      throw new Error(`Zaposleni with id ${zaposleniId} not found.`);
+    }
+
+    return updatedZaposleni;
+  } catch (error) {
+    console.error("Error updating zaposleni:", error);
+    throw error;
+  }
+};
+
+export const deleteZaposleni = async (firmaId: string, zaposleniId: string) => {
+  try {
+    const updatedFirma = await Firma.findByIdAndUpdate(
+      firmaId,
+      { $pull: { zaposleni: { _id: zaposleniId } } },
+      { new: true },
+    ).lean();
+
+    if (!updatedFirma) {
+      throw new Error(`Firma with id ${firmaId} not found.`);
+    }
+
+    return { deletedId: zaposleniId };
+  } catch (error) {
+    console.error("Error deleting zaposleni:", error);
+    throw error;
+  }
 };
