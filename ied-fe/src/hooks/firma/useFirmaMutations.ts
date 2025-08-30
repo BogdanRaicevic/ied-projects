@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import {
   addZaposleniToFirma,
   createNewFirma,
+  deleteFirma,
   deleteZaposleniFromFirma,
   updateFirma,
   updateZaposleniInFirma,
@@ -47,7 +48,7 @@ export const useCreateNewFirma = () => {
   });
 };
 
-export const useUpdateFirma = (firmaId: string) => {
+export const useUpdateFirma = (firmaId: string | null) => {
   const queryClient = useQueryClient();
 
   return useMutation({
@@ -55,9 +56,13 @@ export const useUpdateFirma = (firmaId: string) => {
       if (!firmaId) {
         throw new Error("Firma ID is required for update");
       }
-      return await updateFirma(firmaId, firmaData);
+      const updatedFirma = await updateFirma(firmaId, firmaData);
+      return updatedFirma.data; // Ensure this matches Partial<FirmaType>
     },
     onMutate: async (updatedFirma) => {
+      if (!firmaId) {
+        return;
+      }
       await queryClient.cancelQueries({ queryKey: firmaQueryKey(firmaId) });
       const previousFirma = queryClient.getQueryData<FirmaType>(
         firmaQueryKey(firmaId),
@@ -72,6 +77,9 @@ export const useUpdateFirma = (firmaId: string) => {
       return { previousFirma };
     },
     onError: (_err, _updatedFirma, context) => {
+      if (!firmaId) {
+        return;
+      }
       if (context?.previousFirma) {
         queryClient.setQueryData<FirmaType>(
           firmaQueryKey(firmaId),
@@ -80,7 +88,33 @@ export const useUpdateFirma = (firmaId: string) => {
       }
     },
     onSettled: () => {
+      if (!firmaId) {
+        return;
+      }
       queryClient.invalidateQueries({ queryKey: firmaQueryKey(firmaId) });
+    },
+  });
+};
+
+export const useDeleteFirma = (firmaId: string | null) => {
+  const queryClient = useQueryClient();
+  const navigate = useNavigate(); // Initialize navigate
+
+  return useMutation({
+    mutationFn: async () => {
+      if (!firmaId) {
+        throw new Error("Firma ID is required for deletion");
+      }
+      return await deleteFirma(firmaId);
+    },
+    onSuccess: () => {
+      // 1. Invalidate the list of firms so it refetches on the next page.
+      queryClient.invalidateQueries({ queryKey: ["firme-pretrage"] });
+      // 2. Navigate the user away from the page of the deleted item.
+      navigate("/pretrage"); // Or your main list route
+    },
+    onError: (error) => {
+      console.error("Error deleting firma:", error);
     },
   });
 };
