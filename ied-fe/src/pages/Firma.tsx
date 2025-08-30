@@ -53,7 +53,7 @@ export default function Firma() {
 
   const addZaposleniMutation = useAddZaposleni(id!);
   const updateZaposleniMutation = useUpdateZaposleni(id!);
-  const deleteZaposleniMutation = useDeleteZaposleni(id!);
+  const deleteZaposleniMutation = useDeleteZaposleni(id);
 
   const [errorAlert, setErrorAlert] = useState<string | null>(null);
   const [warningAlert, setWarningAlert] = useState<string | null>(null);

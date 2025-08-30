@@ -201,15 +201,28 @@ export const useUpdateZaposleni = (firmaId: string) => {
   });
 };
 
-export const useDeleteZaposleni = (firmaId: string) => {
+export const useDeleteZaposleni = (firmaId?: string) => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async (zaposleniId: string) => {
+    mutationFn: async (zaposleniId?: string) => {
+      if (!firmaId) {
+        throw new Error("Firma ID is required for update");
+      }
+
+      if (!zaposleniId) {
+        throw new Error("Zaposleni ID is required");
+      }
       const response = await deleteZaposleniFromFirma(firmaId, zaposleniId);
       return response.data;
     },
     onMutate: async (zaposleniId) => {
+      if (!firmaId) {
+        throw new Error("Firma ID is required for update");
+      }
+      if (!zaposleniId) {
+        throw new Error("Zaposleni ID is required");
+      }
       await queryClient.cancelQueries({ queryKey: firmaQueryKey(firmaId) });
       const previousFirma = queryClient.getQueryData<FirmaType>(
         firmaQueryKey(firmaId),
@@ -226,6 +239,9 @@ export const useDeleteZaposleni = (firmaId: string) => {
       return { previousFirma };
     },
     onError: (_err, _zaposleniId, context) => {
+      if (!firmaId) {
+        throw new Error("Firma ID is required for update");
+      }
       if (context?.previousFirma) {
         queryClient.setQueryData<FirmaType>(
           firmaQueryKey(firmaId),
@@ -234,6 +250,9 @@ export const useDeleteZaposleni = (firmaId: string) => {
       }
     },
     onSettled: () => {
+      if (!firmaId) {
+        throw new Error("Firma ID is required for update");
+      }
       queryClient.invalidateQueries({ queryKey: firmaQueryKey(firmaId) });
     },
   });
