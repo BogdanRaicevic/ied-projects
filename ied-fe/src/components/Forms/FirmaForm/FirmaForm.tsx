@@ -11,7 +11,7 @@ import {
   Typography,
 } from "@mui/material";
 import type React from "react";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import type { z } from "zod";
 import {
@@ -54,9 +54,8 @@ export const FirmaForm: React.FC<FirmaFormProps> = ({
   const { tipoviFirme, velicineFirme, stanjaFirme, mesta, delatnosti } =
     useFetchData();
 
-  const [currentFirmaId, setCurrentFirmaId] = useState<string | null>(
-    inputCompany?._id || null,
-  );
+  const isEditing = !!inputCompany?._id;
+  const currentFirmaId = inputCompany?._id || null;
 
   const createFirmaMutation = useCreateNewFirma();
   const updateFirmaMutation = useUpdateFirma(currentFirmaId);
@@ -65,15 +64,10 @@ export const FirmaForm: React.FC<FirmaFormProps> = ({
   const isSubmitting =
     createFirmaMutation.isPending || updateFirmaMutation.isPending;
 
-  // Update form values when inputCompany changes
   useEffect(() => {
-    if (inputCompany) {
-      reset(inputCompany);
-      setCurrentFirmaId(inputCompany._id || null);
-    }
+    reset(inputCompany);
   }, [inputCompany, reset]);
 
-  // The new onSubmit function that uses our mutation hooks
   const onSubmit = (data: FirmaType) => {
     const cleanData = {
       ...data,
@@ -87,7 +81,7 @@ export const FirmaForm: React.FC<FirmaFormProps> = ({
         }) || [],
     };
 
-    if (currentFirmaId) {
+    if (isEditing) {
       // We have an ID, so we are updating
       updateFirmaMutation.mutate(cleanData, {
         onSuccess: (savedCompany) => {
@@ -116,8 +110,15 @@ export const FirmaForm: React.FC<FirmaFormProps> = ({
       "Da li ste sigurni da želite da obrišete firmu?",
     );
     if (confirmed) {
-      deleteFirmaMutation.mutate();
-      window.close();
+      deleteFirmaMutation.mutate(undefined, {
+        onSuccess: () => {
+          console.log("Firma successfully deleted and navigated.");
+        },
+        onError: (error) => {
+          // The component's main error alert will already show this.
+          console.error("Failed to delete firma:", error);
+        },
+      });
     }
   };
 
