@@ -78,8 +78,9 @@ export const FirmaForm: React.FC<FirmaFormProps> = ({ inputCompany }) => {
     };
 
     if (isEditing) {
-      // We have an ID, so we are updating
-      updateFirmaMutation.mutate(cleanData, {
+      // We have an ID, so we are updating (exclude zaposleni; use dedicated mutations)
+      const { zaposleni: _omit, ...firmaOnly } = cleanData;
+      updateFirmaMutation.mutate(firmaOnly, {
         onSuccess: (savedCompany) => {
           reset(savedCompany);
         },
