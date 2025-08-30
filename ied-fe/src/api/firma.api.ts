@@ -119,35 +119,6 @@ export const exportZaposleniData = async (
   }
 };
 
-export const saveFirma = async (company: Partial<FirmaType>) => {
-  company.zaposleni?.forEach((z) => {
-    if (z._id?.startsWith("temp")) {
-      delete z._id;
-    }
-  });
-
-  try {
-    if (company._id) {
-      const response = await axiosInstanceWithAuth.put<Partial<FirmaType>>(
-        `/api/firma/${company._id}`,
-        company,
-      );
-      return {
-        data: response.data,
-        status: response.status,
-      };
-    }
-    const response = await axiosInstanceWithAuth.post(`/api/firma`, company);
-    return {
-      data: response.data,
-      status: response.status,
-    };
-  } catch (error: any) {
-    console.error("Error saving firma: ", error);
-    throw error;
-  }
-};
-
 export const createNewFirma = async (company: Partial<FirmaType>) => {
   try {
     const response = await axiosInstanceWithAuth.post(`/api/firma`, company);
