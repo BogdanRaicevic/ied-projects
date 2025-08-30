@@ -42,8 +42,8 @@
   },
   "devDependencies": {
     "@biomejs/biome": "^2.2.2",
-    "@types/react": "19.1.11",
-    "@types/react-dom": "19.1.7",
+    "@types/react": "19.1.12",
+    "@types/react-dom": "19.1.9",
     "@types/react-router-dom": "^5.3.3",
     "@types/react-table": "^7.7.20",
     "@types/react-window": "^1.8.8",
