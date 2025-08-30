@@ -15,7 +15,7 @@ import {
   type MRT_Row,
   useMaterialReactTable,
 } from "material-react-table";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useParams } from "react-router-dom";
 import PrijavaNaSeminarDialog from "../components/Dialogs/PrijaviZaposlenogNaSeminar";
 import ZaposleniDialog from "../components/Dialogs/ZaposleniDialog";
@@ -62,40 +62,37 @@ export default function Firma() {
     null,
   );
 
+  useEffect(() => {
+    // Only run the check if we have employee data
+    if (firmaData?.zaposleni && firmaData.zaposleni.length > 0) {
+      const emailsMap = new Map<string, number>();
+      firmaData.zaposleni
+        .map((z: Zaposleni) => z.e_mail)
+        .filter((email): email is string => !!email) // More concise filter
+        .forEach((email: string) => {
+          emailsMap.set(email, (emailsMap.get(email) || 0) + 1);
+        });
+
+      const duplicates = Array.from(emailsMap.entries())
+        .filter(([, count]) => count > 1)
+        .map(([email]) => email);
+
+      if (duplicates.length > 0) {
+        setWarningAlert(
+          "Postoje zaposleni sa istom email adresom: ".concat(
+            duplicates.join(", "),
+          ),
+        );
+      } else {
+        // Clear the warning if no duplicates are found
+        setWarningAlert(null);
+      }
+    }
+  }, [firmaData?.zaposleni]);
+
   const handleEdit = (row: MRT_Row<Zaposleni>) => {
     setSelectedRow(row);
     setOpenZaposelniDialog(true);
-  };
-
-  const checkDuplicateEmails = (zaposleni: Zaposleni[]) => {
-    const emailsMap = new Map<string, number>();
-    zaposleni
-      .map((z: Zaposleni) => z.e_mail)
-      .filter(
-        (email: string | undefined): email is string => email !== undefined,
-      )
-      .forEach((email: string) => {
-        if (email && emailsMap.has(email)) {
-          emailsMap.set(email, (emailsMap.get(email) || 0) + 1);
-        } else if (email) {
-          emailsMap.set(email, 0);
-        }
-      });
-
-    const duplicates = new Map(
-      Array.from(emailsMap).filter(([_key, value]) => value >= 1),
-    );
-
-    if (duplicates.size > 0) {
-      setWarningAlert(
-        "Postoje zaposleni sa istom email adresom. ".concat(
-          Array.from(duplicates.keys()).join(", "),
-        ),
-      );
-      setTimeout(() => {
-        setWarningAlert(null);
-      }, 5000);
-    }
   };
 
   const handleDeleteZaposleni = async (row: MRT_Row<Zaposleni>) => {
@@ -108,7 +105,7 @@ export default function Firma() {
   const handleClosePrijavaDialog = () => setOpenPrijavaNaSeminarDialog(false);
   const handleClose = () => setOpenZaposelniDialog(false);
 
-  const handleZaposleniSubmit = async (zaposleniData: Zaposleni) => {
+  const handleZaposleniSubmit = (zaposleniData: Zaposleni) => {
     const isEditing = !!zaposleniData._id;
 
     if (isEditing) {
@@ -139,53 +136,6 @@ export default function Firma() {
         },
       });
     }
-
-    // if (!firmaData) {
-    //   return;
-    // }
-    // const isExistingCompany = !!firmaData?._id;
-
-    // const employeeToAdd = zaposleniData._id
-    //   ? zaposleniData
-    //   : { ...zaposleniData, _id: `temp_${Date.now()}_${Math.random()}` };
-
-    // const existingZaposleni = firmaData?.zaposleni.find(
-    //   (zaposleni: Zaposleni) => zaposleni._id === employeeToAdd._id,
-    // );
-
-    // let updatedZaposleni: any; // TODO: Define the type for updatedZaposleni
-
-    // if (existingZaposleni) {
-    //   updatedZaposleni = firmaData?.zaposleni.map((zaposleni: TODO_ANY) =>
-    //     zaposleni._id === employeeToAdd._id ? employeeToAdd : zaposleni,
-    //   );
-    // } else {
-    //   updatedZaposleni = [...(firmaData?.zaposleni || []), employeeToAdd];
-    // }
-
-    // checkDuplicateEmails(updatedZaposleni);
-
-    // const updatedCompany: FirmaType = {
-    //   ...firmaData,
-    //   zaposleni: updatedZaposleni || [],
-    // };
-
-    // // setCompany(updatedCompany);
-
-    // if (isExistingCompany) {
-    //   try {
-    //     const savedCompany = await saveFirma(updatedCompany);
-    //     // setCompany(savedCompany.data);
-    //     setErrorAlert(null);
-    //   } catch (error: any) {
-    //     // setCompany(firmaData);
-    //     setErrorAlert("Greška prilikom dodavanja zaposlenog. " + error.message);
-
-    //     setTimeout(() => {
-    //       setErrorAlert(null);
-    //     }, 5000);
-    //   }
-    // }
 
     setOpenZaposelniDialog(false);
   };
