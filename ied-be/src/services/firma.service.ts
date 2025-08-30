@@ -62,7 +62,7 @@ export const search = async (
   const totalDocuments = await Firma.countDocuments(mongoQuery);
 
   return {
-    courser: Firma.find(mongoQuery, { zaposleni: 0 })
+    cursor: Firma.find(mongoQuery, { zaposleni: 0 })
       .sort({ naziv_firme: 1 })
       .skip(skip)
       .limit(pageSize)
@@ -222,9 +222,12 @@ export const updateZaposleni = async (
 ) => {
   try {
     const updatedFirma = await Firma.findByIdAndUpdate(
-      firmaId,
-      { $set: { "zaposleni.$[elem]": zaposleniData } },
-      { new: true, arrayFilters: [{ "elem._id": zaposleniId }] },
+      { _id: firmaId, "zaposleni._id": zaposleniId },
+      { $set: { "zaposleni.$": zaposleniData } },
+      {
+        new: true,
+        runValidators: true,
+      },
     ).lean();
 
     if (!updatedFirma) {
@@ -248,14 +251,16 @@ export const updateZaposleni = async (
 
 export const deleteZaposleni = async (firmaId: string, zaposleniId: string) => {
   try {
-    const updatedFirma = await Firma.findByIdAndUpdate(
-      firmaId,
+    const updatedFirma = await Firma.findOneAndUpdate(
+      { _id: firmaId, "zaposleni._id": zaposleniId },
       { $pull: { zaposleni: { _id: zaposleniId } } },
       { new: true },
     ).lean();
 
     if (!updatedFirma) {
-      throw new Error(`Firma with id ${firmaId} not found.`);
+      throw new Error(
+        `Zaposleni with id ${zaposleniId} not found in firma ${firmaId}.`,
+      );
     }
 
     return { deletedId: zaposleniId };

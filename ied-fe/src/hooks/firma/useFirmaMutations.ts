@@ -13,7 +13,7 @@ export const useAddZaposleni = (firmaId: string) => {
 
   return useMutation({
     mutationFn: async (zaposleniData: Partial<Zaposleni>) => {
-      addZaposleniToFirma(firmaId, zaposleniData);
+      return await addZaposleniToFirma(firmaId, zaposleniData);
     },
     onMutate: async (newZaposleni) => {
       // Cancel any outgoing refetches so they don't overwrite our optimistic update
@@ -55,10 +55,10 @@ export const useUpdateZaposleni = (firmaId: string) => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (zaposleni: Partial<Zaposleni>) => {
+    mutationFn: async (zaposleni: Partial<Zaposleni>) => {
       if (!zaposleni._id)
         throw new Error("Zaposleni ID is required for update");
-      return updateZaposleniInFirma(firmaId, zaposleni._id, zaposleni);
+      return await updateZaposleniInFirma(firmaId, zaposleni._id, zaposleni);
     },
     onMutate: async (updatedZaposleni) => {
       await queryClient.cancelQueries({ queryKey: firmaQueryKey(firmaId) });
@@ -94,8 +94,9 @@ export const useDeleteZaposleni = (firmaId: string) => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (zaposleniId: string) =>
-      deleteZaposleniFromFirma(firmaId, zaposleniId),
+    mutationFn: async (zaposleniId: string) => {
+      return await deleteZaposleniFromFirma(firmaId, zaposleniId);
+    },
     onMutate: async (zaposleniId) => {
       await queryClient.cancelQueries({ queryKey: firmaQueryKey(firmaId) });
       const previousFirma = queryClient.getQueryData<FirmaType>(

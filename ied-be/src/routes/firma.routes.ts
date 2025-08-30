@@ -42,12 +42,12 @@ router.post(
       );
 
       const results: FirmaType[] = [];
-      paginationResult.courser.on("data", (doc) => {
+      paginationResult.cursor.on("data", (doc) => {
         results.push(doc);
       });
 
-      paginationResult.courser.on("end", async () => {
-        await paginationResult.courser.close();
+      paginationResult.cursor.on("end", async () => {
+        await paginationResult.cursor.close();
         res.json({
           firmas: results,
           totalPages: paginationResult.totalPages,
@@ -55,8 +55,8 @@ router.post(
         });
       });
 
-      paginationResult.courser.on("error", async (error) => {
-        await paginationResult.courser.close();
+      paginationResult.cursor.on("error", async (error) => {
+        await paginationResult.cursor.close();
         console.error(error);
         res.status(500).json({ message: "Internal server error" });
       });
@@ -92,7 +92,7 @@ router.post("/export-zaposleni-data", async (req, res) => {
 });
 
 router.post(
-  ":firmaId/zaposleni",
+  "/:firmaId/zaposleni",
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { firmaId } = req.params;
@@ -105,7 +105,7 @@ router.post(
 );
 
 router.put(
-  ":firmaId/zaposleni/:zaposleniId",
+  "/:firmaId/zaposleni/:zaposleniId",
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { firmaId, zaposleniId } = req.params;
@@ -122,7 +122,7 @@ router.put(
 );
 
 router.delete(
-  ":firmaId/zaposleni/:zaposleniId",
+  "/:firmaId/zaposleni/:zaposleniId",
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { firmaId, zaposleniId } = req.params;
