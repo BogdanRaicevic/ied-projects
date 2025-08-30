@@ -196,6 +196,10 @@ export const createZaposleni = async (
   zaposleniData: Zaposleni,
 ) => {
   try {
+    if (zaposleniData.radno_mesto === "") {
+      zaposleniData.radno_mesto = "nema";
+    }
+
     const updatedFirma = await Firma.findByIdAndUpdate(
       firmaId,
       { $push: { zaposleni: zaposleniData } },
@@ -221,7 +225,11 @@ export const updateZaposleni = async (
   zaposleniData: Partial<Zaposleni>,
 ) => {
   try {
-    const updatedFirma = await Firma.findByIdAndUpdate(
+    if (zaposleniData.radno_mesto === "") {
+      zaposleniData.radno_mesto = "nema";
+    }
+
+    const updatedFirma = await Firma.findOneAndUpdate(
       { _id: firmaId, "zaposleni._id": zaposleniId },
       { $set: { "zaposleni.$": zaposleniData } },
       {

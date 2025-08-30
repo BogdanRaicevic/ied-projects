@@ -206,7 +206,8 @@ export const useDeleteZaposleni = (firmaId: string) => {
 
   return useMutation({
     mutationFn: async (zaposleniId: string) => {
-      return await deleteZaposleniFromFirma(firmaId, zaposleniId);
+      const response = await deleteZaposleniFromFirma(firmaId, zaposleniId);
+      return response.data;
     },
     onMutate: async (zaposleniId) => {
       await queryClient.cancelQueries({ queryKey: firmaQueryKey(firmaId) });

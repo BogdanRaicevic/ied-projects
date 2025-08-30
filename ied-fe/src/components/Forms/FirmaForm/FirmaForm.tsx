@@ -32,13 +32,9 @@ import { firmaFormMetadata } from "./metadata";
 
 type FirmaFormProps = {
   inputCompany: FirmaType;
-  onSubmit?: (data: FirmaType) => void;
 };
 
-export const FirmaForm: React.FC<FirmaFormProps> = ({
-  inputCompany,
-  onSubmit: parentOnSubmit,
-}) => {
+export const FirmaForm: React.FC<FirmaFormProps> = ({ inputCompany }) => {
   const {
     register,
     formState: { errors },
@@ -85,9 +81,6 @@ export const FirmaForm: React.FC<FirmaFormProps> = ({
       // We have an ID, so we are updating
       updateFirmaMutation.mutate(cleanData, {
         onSuccess: (savedCompany) => {
-          if (parentOnSubmit) {
-            parentOnSubmit(savedCompany);
-          }
           reset(savedCompany);
         },
       });
@@ -95,10 +88,6 @@ export const FirmaForm: React.FC<FirmaFormProps> = ({
       // No ID, so we are creating a new firma
       createFirmaMutation.mutate(cleanData, {
         onSuccess: (savedCompany) => {
-          // The hook handles navigation, but we can still update the form
-          if (parentOnSubmit) {
-            parentOnSubmit(savedCompany);
-          }
           reset(savedCompany);
         },
       });
