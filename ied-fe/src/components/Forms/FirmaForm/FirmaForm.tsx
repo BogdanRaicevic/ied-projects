@@ -11,10 +11,14 @@ import {
   Typography,
 } from "@mui/material";
 import type React from "react";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import type { z } from "zod";
-import { deleteFirma, saveFirma } from "../../../api/firma.api";
+import {
+  useCreateNewFirma,
+  useDeleteFirma,
+  useUpdateFirma,
+} from "../../../hooks/firma/useFirmaMutations";
 import { useFetchData } from "../../../hooks/useFetchData";
 import {
   FirmaSchema,
@@ -28,10 +32,9 @@ import { firmaFormMetadata } from "./metadata";
 
 type FirmaFormProps = {
   inputCompany: FirmaType;
-  onSubmit?: (data: FirmaType) => void;
 };
 
-export const FirmaForm: React.FC<FirmaFormProps> = ({ inputCompany, onSubmit: parentOnSubmit }) => {
+export const FirmaForm: React.FC<FirmaFormProps> = ({ inputCompany }) => {
   const {
     register,
     formState: { errors },
@@ -44,82 +47,67 @@ export const FirmaForm: React.FC<FirmaFormProps> = ({ inputCompany, onSubmit: pa
     defaultValues: inputCompany,
   });
 
-  const { tipoviFirme, velicineFirme, stanjaFirme, mesta, delatnosti } = useFetchData();
+  const { tipoviFirme, velicineFirme, stanjaFirme, mesta, delatnosti } =
+    useFetchData();
 
-  const [alert, setAlert] = useState<any>(null);
-  const [errorAlert, setErrorAlert] = useState<string | null>(null);
-  const [currentFirmaId, setCurrentFirmaId] = useState<string | null>(inputCompany?._id || null);
+  const isEditing = !!inputCompany?._id;
+  const currentFirmaId = inputCompany?._id || null;
 
-  // Update form values when inputCompany changes
+  const createFirmaMutation = useCreateNewFirma();
+  const updateFirmaMutation = useUpdateFirma(currentFirmaId);
+  const deleteFirmaMutation = useDeleteFirma(currentFirmaId);
+
+  const isSubmitting =
+    createFirmaMutation.isPending || updateFirmaMutation.isPending;
+
   useEffect(() => {
-    if (inputCompany) {
-      reset(inputCompany);
-      setCurrentFirmaId(inputCompany._id || null);
-    }
+    reset(inputCompany);
   }, [inputCompany, reset]);
 
-  const onSubmit = async (data: FirmaType) => {
-    try {
-      // If we have an _id, we're updating an existing firma
-      const firmaData = currentFirmaId ? { ...data, _id: currentFirmaId } : data;
-      const savedCompany = await saveFirma(firmaData);
+  const onSubmit = (data: FirmaType) => {
+    const cleanData = {
+      ...data,
+      zaposleni:
+        data.zaposleni?.map((z) => {
+          if (z._id?.startsWith("temp")) {
+            const { _id, ...rest } = z;
+            return rest;
+          }
+          return z;
+        }) || [],
+    };
 
-      // Update the current firma ID if this was a new creation
-      if (!currentFirmaId) {
-        setCurrentFirmaId(savedCompany.data._id);
-      }
-
-      // Call parent onSubmit if provided
-      if (parentOnSubmit) {
-        parentOnSubmit(savedCompany.data);
-      }
-
-      reset(savedCompany.data);
-      setAlert({
-        type: "success",
-        message: currentFirmaId ? "Firma uspešno ažurirana!" : "Firma uspešno sačuvana!",
-        errors: null,
+    if (isEditing) {
+      // We have an ID, so we are updating
+      updateFirmaMutation.mutate(cleanData, {
+        onSuccess: (savedCompany) => {
+          reset(savedCompany);
+        },
       });
-    } catch (error: any) {
-      setErrorAlert(`Firma nije sačuvana. Došlo je do greške! ${error?.response?.data?.message}`);
-      setTimeout(() => {
-        setErrorAlert(null);
-      }, 5000);
-    } finally {
-      const alertTimeout = setTimeout(() => {
-        setAlert(null);
-      }, 5000);
-
-      const errorTimeout = setTimeout(() => {
-        setAlert(null);
-      }, 5000);
-
-      const cleanup = () => {
-        clearTimeout(alertTimeout);
-        clearTimeout(errorTimeout);
-      };
-
-      cleanup();
+    } else {
+      // No ID, so we are creating a new firma
+      createFirmaMutation.mutate(cleanData, {
+        onSuccess: (savedCompany) => {
+          reset(savedCompany);
+        },
+      });
     }
   };
 
-  const handleDelete = async (id: string) => {
-    try {
-      const confirmed = window.confirm("Da li ste sigurni da želite da obrišete firmu?");
-      if (confirmed) {
-        await deleteFirma(id);
-        setAlert({
-          type: "success",
-          message: "Firma uspešno obrisana!",
-          errors: null,
-        });
-        window.close();
-      }
-    } catch (error: any) {
-      setErrorAlert(`Greška prilikom brisanja firme: ${error?.response?.data?.message}`);
-      setTimeout(() => {
-        setErrorAlert(null);
-      }, 5000);
+  const handleDelete = async () => {
+    const confirmed = window.confirm(
+      "Da li ste sigurni da želite da obrišete firmu?",
+    );
+    if (confirmed) {
+      deleteFirmaMutation.mutate(undefined, {
+        onSuccess: () => {
+          console.log("Firma successfully deleted and navigated.");
+        },
+        onError: (error) => {
+          // The component's main error alert will already show this.
+          console.error("Failed to delete firma:", error);
+        },
+      });
     }
   };
 
@@ -132,7 +120,9 @@ export const FirmaForm: React.FC<FirmaFormProps> = ({ inputCompany, onSubmit: pa
           slotProps={{
             input: {
               startAdornment: (
-                <InputAdornment position="start">{item.inputAdornment}</InputAdornment>
+                <InputAdornment position="start">
+                  {item.inputAdornment}
+                </InputAdornment>
               ),
             },
           }}
@@ -242,7 +232,12 @@ export const FirmaForm: React.FC<FirmaFormProps> = ({ inputCompany, onSubmit: pa
           );
         })}
 
-        <Grid size={{ xs: 12 }} display="flex" justifyContent="space-between" alignItems="center">
+        <Grid
+          size={{ xs: 12 }}
+          display="flex"
+          justifyContent="space-between"
+          alignItems="center"
+        >
           <Box>
             <Button
               sx={{ my: 2 }}
@@ -250,7 +245,7 @@ export const FirmaForm: React.FC<FirmaFormProps> = ({ inputCompany, onSubmit: pa
               variant="contained"
               color="success"
               type="submit"
-              disabled={!watch("naziv_firme")}
+              disabled={!watch("naziv_firme") || isSubmitting}
             >
               Sačuvaj
             </Button>
@@ -266,23 +261,40 @@ export const FirmaForm: React.FC<FirmaFormProps> = ({ inputCompany, onSubmit: pa
               size="large"
               variant="contained"
               color="error"
-              onClick={() => handleDelete(inputCompany._id || "")}
+              onClick={handleDelete}
             >
               Obriši firmu
             </Button>
           )}
         </Grid>
 
-        {alert && (
-          <Alert severity={alert.type} sx={{ width: "100%", mt: 2 }} onClose={() => setAlert(null)}>
-            {alert.message}
+        {/* Displaying errors from the mutation hooks */}
+        {(createFirmaMutation.isError ||
+          updateFirmaMutation.isError ||
+          deleteFirmaMutation.isError) && ( // Include delete error
+          <Alert severity="error" sx={{ width: "100%", mt: 2 }}>
+            Greška:{" "}
+            {createFirmaMutation.error?.message ||
+              updateFirmaMutation.error?.message ||
+              deleteFirmaMutation.error?.message}
           </Alert>
         )}
-        {errorAlert && (
-          <Alert severity="error" sx={{ width: "100%", mt: 2 }} onClose={() => setErrorAlert(null)}>
-            {errorAlert}
+
+        {/* Displaying success messages from the mutation hooks */}
+        {(createFirmaMutation.isSuccess ||
+          updateFirmaMutation.isSuccess ||
+          deleteFirmaMutation.isSuccess) && (
+          <Alert severity="success" sx={{ width: "100%", mt: 2 }}>
+            {createFirmaMutation.isSuccess
+              ? "Firma uspešno sačuvana!"
+              : updateFirmaMutation.isSuccess
+                ? "Firma uspešno ažurirana!"
+                : deleteFirmaMutation.isSuccess
+                  ? "Firma uspešno obrisana!"
+                  : null}
           </Alert>
         )}
+
         {/* TODO: Remove this and substitute with a more generic error handling */}
         {Array.isArray(errors.zaposleni) && errors.zaposleni.some(Boolean) && (
           <Alert severity="error" sx={{ width: "100%", mb: 2 }}>
@@ -291,13 +303,20 @@ export const FirmaForm: React.FC<FirmaFormProps> = ({ inputCompany, onSubmit: pa
                 zErr
                   ? Object.entries(zErr).map(([field, errObj]) => {
                       // Get the problematic value if available
-                      const value = inputCompany.zaposleni?.[idx]?.[field as keyof Zaposleni];
+                      const value =
+                        inputCompany.zaposleni?.[idx]?.[
+                          field as keyof Zaposleni
+                        ];
                       return (
                         <li key={field + idx}>
                           Zaposleni #{idx + 1} - <b>{field}</b>
                           {value !== undefined && (
                             <>
-                              (<span style={{ color: "#d32f2f" }}>{String(value)}</span>)
+                              (
+                              <span style={{ color: "#d32f2f" }}>
+                                {String(value)}
+                              </span>
+                              )
                             </>
                           )}
                           : {(errObj as any)?.message}

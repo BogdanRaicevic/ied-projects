@@ -1,7 +1,14 @@
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
-import { Alert, Box, Button, IconButton, Tooltip } from "@mui/material";
+import {
+  Alert,
+  Box,
+  Button,
+  CircularProgress,
+  IconButton,
+  Tooltip,
+} from "@mui/material";
 import {
   MaterialReactTable,
   type MRT_ColumnDef,
@@ -10,11 +17,16 @@ import {
 } from "material-react-table";
 import { useEffect, useMemo, useState } from "react";
 import { useParams } from "react-router-dom";
-import { fetchSingleFirma, saveFirma } from "../api/firma.api";
 import PrijavaNaSeminarDialog from "../components/Dialogs/PrijaviZaposlenogNaSeminar";
 import ZaposleniDialog from "../components/Dialogs/ZaposleniDialog";
 import FirmaForm from "../components/Forms/FirmaForm";
 import { myZaposleniColumns } from "../components/MyTable/myCompanyColumns";
+import {
+  useAddZaposleni,
+  useDeleteZaposleni,
+  useUpdateZaposleni,
+} from "../hooks/firma/useFirmaMutations";
+import { useGetFirma } from "../hooks/firma/useFirmaQueries";
 import type { FirmaType, Zaposleni } from "../schemas/firmaSchemas";
 
 const defaultCompanyData: FirmaType = {
@@ -35,89 +47,56 @@ const defaultCompanyData: FirmaType = {
   delatnost: "",
 };
 
-type TODO_ANY_TYPE = any;
-
 export default function Firma() {
   const { id } = useParams();
-  const [company, setCompany] = useState(defaultCompanyData);
+  const { data: firmaData, isLoading, isError, error } = useGetFirma(id);
+
+  const addZaposleniMutation = useAddZaposleni(id!);
+  const updateZaposleniMutation = useUpdateZaposleni(id!);
+  const deleteZaposleniMutation = useDeleteZaposleni(id);
+
   const [errorAlert, setErrorAlert] = useState<string | null>(null);
   const [warningAlert, setWarningAlert] = useState<string | null>(null);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const data = await fetchSingleFirma(String(id));
-        if (data) {
-          setCompany(data);
-        }
-      } catch (error) {
-        // TODO: show error snackbar or toast
-        setErrorAlert("Greška prilikom učitavanja podataka o firmi.");
-        console.error("Error fetching company data:", error);
-      }
-    };
-
-    if (id) {
-      fetchData();
-    }
-  }, [id]);
 
   const [selectedRow, setSelectedRow] = useState<MRT_Row<Zaposleni> | null>(
     null,
   );
+
+  useEffect(() => {
+    // Only run the check if we have employee data
+    if (firmaData?.zaposleni && firmaData.zaposleni.length > 0) {
+      const emailsMap = new Map<string, number>();
+      firmaData.zaposleni
+        .map((z: Zaposleni) => z.e_mail)
+        .filter((email): email is string => !!email) // More concise filter
+        .forEach((email: string) => {
+          emailsMap.set(email, (emailsMap.get(email) || 0) + 1);
+        });
+
+      const duplicates = Array.from(emailsMap.entries())
+        .filter(([, count]) => count > 1)
+        .map(([email]) => email);
+
+      if (duplicates.length > 0) {
+        setWarningAlert(
+          "Postoje zaposleni sa istom email adresom: ".concat(
+            duplicates.join(", "),
+          ),
+        );
+      } else {
+        // Clear the warning if no duplicates are found
+        setWarningAlert(null);
+      }
+    }
+  }, [firmaData?.zaposleni]);
 
   const handleEdit = (row: MRT_Row<Zaposleni>) => {
     setSelectedRow(row);
     setOpenZaposelniDialog(true);
   };
 
-  const checkDuplicateEmails = (zaposleni: Zaposleni[]) => {
-    const emailsMap = new Map<string, number>();
-    zaposleni
-      .map((z: Zaposleni) => z.e_mail)
-      .filter(
-        (email: string | undefined): email is string => email !== undefined,
-      )
-      .forEach((email: string) => {
-        if (email && emailsMap.has(email)) {
-          emailsMap.set(email, (emailsMap.get(email) || 0) + 1);
-        } else if (email) {
-          emailsMap.set(email, 0);
-        }
-      });
-
-    const duplicates = new Map(
-      Array.from(emailsMap).filter(([_key, value]) => value >= 1),
-    );
-
-    if (duplicates.size > 0) {
-      setWarningAlert(
-        "Postoje zaposleni sa istom email adresom. ".concat(
-          Array.from(duplicates.keys()).join(", "),
-        ),
-      );
-      setTimeout(() => {
-        setWarningAlert(null);
-      }, 5000);
-    }
-  };
-
-  const handleDelete = async (row: MRT_Row<Zaposleni>) => {
-    const latestData = await fetchSingleFirma(String(id));
-    if (!latestData) return;
-
-    const filteredZaposleni = latestData.zaposleni.filter(
-      (zaposleni: Zaposleni) => zaposleni._id !== row.original._id,
-    );
-
-    checkDuplicateEmails(filteredZaposleni);
-
-    const updatedCompany: FirmaType = {
-      ...latestData,
-      zaposleni: filteredZaposleni,
-    };
-    setCompany(updatedCompany);
-    saveFirma({ _id: company?._id, zaposleni: filteredZaposleni });
+  const handleDeleteZaposleni = async (row: MRT_Row<Zaposleni>) => {
+    deleteZaposleniMutation.mutate(row.original._id);
   };
 
   const [openZaposleniDialog, setOpenZaposelniDialog] = useState(false);
@@ -126,49 +105,36 @@ export default function Firma() {
   const handleClosePrijavaDialog = () => setOpenPrijavaNaSeminarDialog(false);
   const handleClose = () => setOpenZaposelniDialog(false);
 
-  const handleZaposleniSubmit = async (zaposleniData: Zaposleni) => {
-    const isExistingCompany = !!company?._id;
+  const handleZaposleniSubmit = (zaposleniData: Zaposleni) => {
+    const isEditing = !!zaposleniData._id;
 
-    const employeeToAdd = zaposleniData._id
-      ? zaposleniData
-      : { ...zaposleniData, _id: `temp_${Date.now()}_${Math.random()}` };
-
-    const existingZaposleni = company?.zaposleni.find(
-      (zaposleni: Zaposleni) => zaposleni._id === employeeToAdd._id,
-    );
-
-    let updatedZaposleni: any;
-
-    if (existingZaposleni) {
-      updatedZaposleni = company?.zaposleni.map((zaposleni: TODO_ANY_TYPE) =>
-        zaposleni._id === employeeToAdd._id ? employeeToAdd : zaposleni,
-      );
+    if (isEditing) {
+      // We are updating an existing employee
+      updateZaposleniMutation.mutate(zaposleniData, {
+        onSuccess: () => {
+          setOpenZaposelniDialog(false); // Close dialog on success
+        },
+        onError: (error) => {
+          // The hook handles the optimistic rollback. We can show an alert.
+          setErrorAlert(
+            `Greška prilikom ažuriranja zaposlenog: ${error.message}`,
+          );
+        },
+      });
     } else {
-      updatedZaposleni = [...(company?.zaposleni || []), employeeToAdd];
-    }
-
-    checkDuplicateEmails(updatedZaposleni);
-
-    const updatedCompany: FirmaType = {
-      ...company,
-      zaposleni: updatedZaposleni || [],
-    };
-
-    setCompany(updatedCompany);
-
-    if (isExistingCompany) {
-      try {
-        const savedCompany = await saveFirma(updatedCompany);
-        setCompany(savedCompany.data);
-        setErrorAlert(null);
-      } catch (error: any) {
-        setCompany(company);
-        setErrorAlert("Greška prilikom dodavanja zaposlenog. " + error.message);
-
-        setTimeout(() => {
-          setErrorAlert(null);
-        }, 5000);
-      }
+      // We are adding a new employee
+      // The backend will assign the _id, so we don't send one.
+      const { _id, ...newZaposleniData } = zaposleniData;
+      addZaposleniMutation.mutate(newZaposleniData, {
+        onSuccess: () => {
+          setOpenZaposelniDialog(false); // Close dialog on success
+        },
+        onError: (error) => {
+          setErrorAlert(
+            `Greška prilikom dodavanja zaposlenog: ${error.message}`,
+          );
+        },
+      });
     }
 
     setOpenZaposelniDialog(false);
@@ -180,7 +146,7 @@ export default function Firma() {
 
   const zapTable = useMaterialReactTable({
     columns: useMemo<MRT_ColumnDef<Zaposleni>[]>(() => myZaposleniColumns, []),
-    data: company?.zaposleni || [],
+    data: firmaData?.zaposleni || [],
     enableColumnOrdering: true,
     enableGlobalFilter: true,
     enableEditing: true,
@@ -211,9 +177,13 @@ export default function Firma() {
                     "Da li ste sigurni da želite da obrišete zaposlenog?",
                   )
                 ) {
-                  handleDelete(row);
+                  handleDeleteZaposleni(row);
                 }
               }}
+              disabled={
+                deleteZaposleniMutation.isPending &&
+                deleteZaposleniMutation.variables === row.original._id
+              }
             >
               <DeleteIcon />
             </IconButton>
@@ -232,18 +202,30 @@ export default function Firma() {
     },
   });
 
+  if (isLoading) {
+    return (
+      <Box sx={{ display: "flex", justifyContent: "center", mt: 4 }}>
+        <CircularProgress />
+      </Box>
+    );
+  }
+
+  if (isError) {
+    return (
+      <Alert severity="error" sx={{ mt: 4 }}>
+        Greška prilikom učitavanja podataka o firmi: {error.message}
+      </Alert>
+    );
+  }
+
   return (
     <>
-      <h1>Firma: {company?.naziv_firme}</h1>
+      <h1>Firma: {firmaData?.naziv_firme}</h1>
 
       <FirmaForm
-        inputCompany={company}
-        onSubmit={(updatedCompany) => {
-          checkDuplicateEmails(updatedCompany.zaposleni);
-          setCompany(updatedCompany);
-        }}
+        inputCompany={firmaData || defaultCompanyData} // do we need default company data
       />
-      {company?._id && (
+      {firmaData?._id && (
         <>
           <Button
             sx={{ my: 2 }}
@@ -286,7 +268,7 @@ export default function Firma() {
           <PrijavaNaSeminarDialog
             open={openPrijavaNaSeminarDialog}
             onClose={handleClosePrijavaDialog}
-            companyData={company}
+            companyData={firmaData}
             zaposleniData={selectedRow?.original ?? {}}
           />
         </>

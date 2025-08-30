@@ -57,29 +57,6 @@ const firmaSchema = new Schema<FirmaType>({
   maticni_broj: String,
 });
 
-firmaSchema.pre("save", function (next) {
-  if (this.zaposleni && Array.isArray(this.zaposleni)) {
-    for (const zaposleni of this.zaposleni) {
-      if (zaposleni.radno_mesto === "") {
-        zaposleni.radno_mesto = "nema";
-      }
-    }
-  }
-  next();
-});
-
-firmaSchema.pre("findOneAndUpdate", function (next) {
-  const update = this.getUpdate() as unknown as { $set: FirmaType };
-  const zaposleni = update.$set?.zaposleni;
-
-  for (const z of zaposleni) {
-    if (z.radno_mesto === "") {
-      z.radno_mesto = "nema";
-    }
-  }
-  next();
-});
-
 const Firma = model<FirmaType>("Firma", firmaSchema);
 
 export { type FirmaType, Firma };
