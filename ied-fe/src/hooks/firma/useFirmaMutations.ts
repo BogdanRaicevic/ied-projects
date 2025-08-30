@@ -1,12 +1,89 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useNavigate } from "react-router-dom";
 import {
   addZaposleniToFirma,
+  createNewFirma,
   deleteZaposleniFromFirma,
+  updateFirma,
   updateZaposleniInFirma,
 } from "../../api/firma.api";
 import type { FirmaType, Zaposleni } from "../../schemas/firmaSchemas";
 
 const firmaQueryKey = (firmaId: string) => ["firma", firmaId];
+
+/**
+ * Mutation to CREATE a new Firma.
+ * On success, it invalidates the list of firms to trigger a refetch
+ * and navigates to the new firma's detail page.
+ */
+export const useCreateNewFirma = () => {
+  // const queryClient = useQueryClient();
+  const navigate = useNavigate();
+
+  return useMutation({
+    mutationFn: async (firmaData: Partial<FirmaType>) => {
+      const response = await createNewFirma(firmaData);
+      return response.data; // Ensure this matches Partial<FirmaType>
+    },
+
+    onSuccess: (data: Partial<FirmaType>) => {
+      // `data` is the new Firma object returned from the API, including its new _id.
+
+      // 1. Invalidate any queries related to the list of firms.
+      //    This will cause any component using `useQuery` with this key to refetch.
+      //    You need to match this key to the one you use for fetching the firm list (e.g., in your search page).
+      // queryClient.invalidateQueries({ queryKey: ["firme-pretrage"] });
+
+      // 2. (Optional but good UX) Navigate to the new firma's page.
+      if (data?._id) {
+        navigate(`/firma/${data._id}`);
+      }
+    },
+
+    onError: (error) => {
+      // Handle any creation errors, e.g., show a toast notification.
+      console.error("Error creating new firma:", error);
+    },
+  });
+};
+
+export const useUpdateFirma = (firmaId: string) => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (firmaData: Partial<FirmaType>) => {
+      if (!firmaId) {
+        throw new Error("Firma ID is required for update");
+      }
+      return await updateFirma(firmaId, firmaData);
+    },
+    onMutate: async (updatedFirma) => {
+      await queryClient.cancelQueries({ queryKey: firmaQueryKey(firmaId) });
+      const previousFirma = queryClient.getQueryData<FirmaType>(
+        firmaQueryKey(firmaId),
+      );
+
+      if (previousFirma) {
+        queryClient.setQueryData<FirmaType>(firmaQueryKey(firmaId), {
+          ...previousFirma,
+          ...updatedFirma,
+        });
+      }
+      return { previousFirma };
+    },
+    onError: (_err, _updatedFirma, context) => {
+      if (context?.previousFirma) {
+        queryClient.setQueryData<FirmaType>(
+          firmaQueryKey(firmaId),
+          context.previousFirma,
+        );
+      }
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: firmaQueryKey(firmaId) });
+    },
+  });
+};
 
 export const useAddZaposleni = (firmaId: string) => {
   const queryClient = useQueryClient();

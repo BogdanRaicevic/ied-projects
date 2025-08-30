@@ -128,7 +128,7 @@ export const saveFirma = async (company: Partial<FirmaType>) => {
 
   try {
     if (company._id) {
-      const response = await axiosInstanceWithAuth.post(
+      const response = await axiosInstanceWithAuth.put<Partial<FirmaType>>(
         `/api/firma/${company._id}`,
         company,
       );
@@ -144,6 +144,42 @@ export const saveFirma = async (company: Partial<FirmaType>) => {
     };
   } catch (error: any) {
     console.error("Error saving firma: ", error);
+    throw error;
+  }
+};
+
+export const createNewFirma = async (company: Partial<FirmaType>) => {
+  try {
+    const response = await axiosInstanceWithAuth.post(`/api/firma`, company);
+    return {
+      data: response.data,
+      status: response.status,
+    };
+  } catch (error: any) {
+    console.error("Error creating new firma: ", error);
+    throw error;
+  }
+};
+
+export const updateFirma = async (
+  firmaId: string,
+  firma: Partial<FirmaType>,
+) => {
+  if (!firmaId) {
+    throw new Error("Firma ID is required for update");
+  }
+
+  try {
+    const response = await axiosInstanceWithAuth.put<Partial<FirmaType>>(
+      `/api/firma/${firmaId}`,
+      firma,
+    );
+    return {
+      data: response.data,
+      status: response.status,
+    };
+  } catch (error: any) {
+    console.error("Error updating firma: ", error);
     throw error;
   }
 };

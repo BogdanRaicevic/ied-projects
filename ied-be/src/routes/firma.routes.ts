@@ -29,6 +29,7 @@ interface SearchRequest extends Request {
   };
 }
 
+// table search
 router.post(
   "/search",
   async (req: SearchRequest, res: Response, next: NextFunction) => {
@@ -91,6 +92,7 @@ router.post("/export-zaposleni-data", async (req, res) => {
   }
 });
 
+// create new zapolseni
 router.post(
   "/:firmaId/zaposleni",
   async (req: Request, res: Response, next: NextFunction) => {
@@ -104,6 +106,7 @@ router.post(
   },
 );
 
+// update zaposleni
 router.put(
   "/:firmaId/zaposleni/:zaposleniId",
   async (req: Request, res: Response, next: NextFunction) => {
@@ -134,6 +137,7 @@ router.delete(
   },
 );
 
+// Get firma
 router.get("/:id", async (req: Request, res: Response, next: NextFunction) => {
   const { id } = req.params;
   try {
@@ -148,6 +152,7 @@ router.get("/:id", async (req: Request, res: Response, next: NextFunction) => {
   }
 });
 
+// Delete firma
 router.delete(
   "/:id",
   async (req: Request, res: Response, next: NextFunction) => {
@@ -165,6 +170,7 @@ router.delete(
   },
 );
 
+// Create new firma
 router.post("/", async (req: Request, res: Response, next: NextFunction) => {
   try {
     const firma = await create(req.body);
@@ -175,7 +181,8 @@ router.post("/", async (req: Request, res: Response, next: NextFunction) => {
   }
 });
 
-router.post("/:id", async (req: Request, res: Response, next: NextFunction) => {
+// Update firma
+router.put("/:id", async (req: Request, res: Response, next: NextFunction) => {
   try {
     const firma = await updateById(req.params.id, req.body);
     if (firma) {
