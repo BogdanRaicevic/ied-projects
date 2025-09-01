@@ -1,18 +1,17 @@
-import { mongoDbConnection } from "../config";
+import type { Connection } from "mongoose";
 
-const stanja = ["stecaj", "likvidacija", "blokada"] as const;
+export const up = async (db: Connection) => {
+  const stanja = ["stecaj", "likvidacija", "blokada"] as const;
 
-const propertyMap = {
-  stecaj: "Stečaj",
-  likvidacija: "Likvidacija",
-  blokada: "Blokada",
-  neZnam: "Ne znam",
-  aktivna: "Aktivna",
-};
+  const propertyMap = {
+    stecaj: "Stečaj",
+    likvidacija: "Likvidacija",
+    blokada: "Blokada",
+    neZnam: "Ne znam",
+    aktivna: "Aktivna",
+  };
 
-export const up = async () => {
-  const mongoDb = await mongoDbConnection();
-  const firmasCollection = mongoDb.collection("firmas");
+  const firmasCollection = db.collection("firmas");
 
   try {
     const firmasCursor = firmasCollection.find({});

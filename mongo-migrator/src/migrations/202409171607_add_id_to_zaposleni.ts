@@ -1,12 +1,10 @@
-import { Types } from "mongoose";
-import { mongoDbConnection } from "../config";
+import { type Connection, Types } from "mongoose";
 
-export const up = async () => {
-  const mongoDb = await mongoDbConnection();
+export const up = async (db: Connection) => {
   const mongoCollectionName = "firmas";
 
   try {
-    const mongoCollection = mongoDb.collection(mongoCollectionName);
+    const mongoCollection = db.collection(mongoCollectionName);
 
     const cursor = mongoCollection.find();
 

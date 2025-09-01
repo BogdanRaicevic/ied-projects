@@ -1,10 +1,9 @@
-import { mongoDbConnection } from "../config";
+import type { Connection } from "mongoose";
 
-const odjava = "odjava";
+export const up = async (db: Connection) => {
+  const odjava = "odjava";
 
-export const up = async () => {
-  const mongoDb = await mongoDbConnection();
-  const firmasCollection = mongoDb.collection("firmas");
+  const firmasCollection = db.collection("firmas");
 
   try {
     const firmasCursor = firmasCollection.find({});

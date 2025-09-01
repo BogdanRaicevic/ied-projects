@@ -1,4 +1,4 @@
-import { RowDataPacket } from "mysql2/promise";
+import type { RowDataPacket } from "mysql2/promise";
 import { mongoDbConnection, mysqlConnection } from "../config";
 
 export const up = async () => {

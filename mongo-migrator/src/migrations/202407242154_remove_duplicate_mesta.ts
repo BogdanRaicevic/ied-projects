@@ -1,12 +1,10 @@
-import type { AnyObject, Collection } from "mongoose";
-import { mongoDbConnection } from "../config";
+import type { AnyObject, Collection, Connection } from "mongoose";
 
-export const up = async () => {
-  const mongoDb = await mongoDbConnection();
+export const up = async (db: Connection) => {
   const mongoCollectionName = "mesta";
 
   try {
-    const mongoCollection = mongoDb.collection(mongoCollectionName);
+    const mongoCollection = db.collection(mongoCollectionName);
 
     await findDuplicates(mongoCollection);
     await removeDuplicates(mongoCollection);
