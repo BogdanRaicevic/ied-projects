@@ -27,7 +27,7 @@ export const up = async () => {
     });
 
     if (bulkOps.length > 0) {
-      await firmasCollection.bulkWrite(bulkOps);
+      await firmasCollection.bulkWrite(bulkOps, { ordered: false });
     }
   } catch (error) {
     console.error(
