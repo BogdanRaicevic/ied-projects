@@ -1,12 +1,11 @@
-import { mongoDbConnection } from "../config";
+import type { Connection } from "mongoose";
 
-export const up = async () => {
-  const mongoDb = await mongoDbConnection();
+export const up = async (db: Connection) => {
   const collectionsToUpdate = ["firmas", "velicine_firmi"];
 
   try {
     for (const collectionName of collectionsToUpdate) {
-      const mongoCollection = mongoDb.collection(collectionName);
+      const mongoCollection = db.collection(collectionName);
       const cursor = mongoCollection.find();
 
       while (await cursor.hasNext()) {

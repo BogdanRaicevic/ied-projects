@@ -1,11 +1,10 @@
-import { mongoDbConnection } from "../config";
+import type { Connection } from "mongoose";
 
-export const up = async () => {
-  const mongoDb = await mongoDbConnection();
+export const up = async (db: Connection) => {
   const mongoCollectionName = "firmas";
 
   try {
-    const mongoCollection = mongoDb.collection(mongoCollectionName);
+    const mongoCollection = db.collection(mongoCollectionName);
 
     // Update documents where velicina is "neznam" to "Mikro"
     const updateResult = await mongoCollection.updateMany(

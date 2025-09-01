@@ -230,6 +230,9 @@ importers:
 
   mongo-migrator:
     dependencies:
+      dotenv:
+        specifier: ^17.2.1
+        version: 17.2.1
       ied-shared:
         specifier: workspace:^
         version: link:../ied-shared

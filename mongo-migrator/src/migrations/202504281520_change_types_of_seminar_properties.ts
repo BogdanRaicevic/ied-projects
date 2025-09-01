@@ -1,10 +1,8 @@
-import { mongoDbConnection } from "../config";
+import type { Connection } from "mongoose";
 
-export const up = async () => {
-  const mongoDb = await mongoDbConnection();
-
+export const up = async (db: Connection) => {
   try {
-    const mongoCollection = mongoDb.collection("seminari");
+    const mongoCollection = db.collection("seminari");
 
     // Find documents that need updating
     const cursor = mongoCollection.find({
