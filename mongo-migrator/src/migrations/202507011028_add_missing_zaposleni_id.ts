@@ -4,11 +4,14 @@ export const up = async (db: Connection) => {
   try {
     const firmasCollection = db.collection("firmas");
 
-    const firms = await firmasCollection.find().toArray();
+    const cursor = firmasCollection.find({}, { projection: { zaposleni: 1 } });
+    const bulkOps: any[] = [];
 
-    const bulkOps = [];
-
-    for (const firma of firms) {
+    while (await cursor.hasNext()) {
+      const firma: any = await cursor.next();
+      if (!firma) continue;
+      if (!Array.isArray(firma.zaposleni) || firma.zaposleni.length === 0)
+        continue;
       let changed = false;
 
       const updatedZaposleni = firma.zaposleni.map((z: any) => {
@@ -30,10 +33,12 @@ export const up = async (db: Connection) => {
     }
 
     if (bulkOps.length > 0) {
-      await firmasCollection.bulkWrite(bulkOps);
-      console.log(`Updated ${bulkOps.length} firms.`);
+      const res = await firmasCollection.bulkWrite(bulkOps, { ordered: false });
+      console.log(
+        `[MIGRATION] Updated ${res.modifiedCount} firms (matched: ${res.matchedCount}).`,
+      );
     } else {
-      console.log("No firms needed updates.");
+      console.log("[MIGRATION] No firms needed updates.");
     }
   } catch (error) {
     console.error(

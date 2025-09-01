@@ -20,7 +20,7 @@ const mysqlConnection = async () => {
 
 // Connect to MongoDB
 const mongoDbConnection = async () => {
-  console.log(`[CONFIG] Attempting to connect to MongoDB at: ${mongoUrl}`);
+  console.log(`[CONFIG] Attempting to connect to MongoDB`);
   await mongoose.connect(mongoUrl, {});
   return mongoose.connection;
 };
