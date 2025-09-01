@@ -9,13 +9,13 @@ const migrationsDir = path.join(__dirname, "migrations");
 interface MigrationFile {
   timestamp: number;
   name: string;
-  up: () => Promise<void>;
+  up: (db: Connection) => Promise<void>;
 }
 
-const executeMigration = async (migration: MigrationFile) => {
+const executeMigration = async (migration: MigrationFile, db: Connection) => {
   console.log(`[MIGRATION] ==> Executing: ${migration.name}`);
   try {
-    await migration.up();
+    await migration.up(db);
     await Migration.create({
       timestamp: migration.timestamp,
       name: migration.name,
@@ -60,7 +60,7 @@ const runMigrations = async () => {
 
     for (const migration of migrations) {
       if (!executedTimestamps.includes(migration.timestamp)) {
-        await executeMigration(migration);
+        await executeMigration(migration, mongoConnection);
       }
     }
 
