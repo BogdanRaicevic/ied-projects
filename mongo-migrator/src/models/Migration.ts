@@ -1,4 +1,4 @@
-import mongoose, { Schema, Document } from "mongoose";
+import mongoose, { type Document, Schema } from "mongoose";
 
 interface IMigration extends Document {
   timestamp: number;
