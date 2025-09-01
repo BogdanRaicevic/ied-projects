@@ -16,7 +16,8 @@
   },
   "dependencies": {
     "mongoose": "^8.18.0",
-    "mysql2": "^3.14.3"
+    "mysql2": "^3.14.3",
+    "ied-shared": "workspace:^"
   },
   "devDependencies": {
     "@types/node": "^22.17.2",

@@ -230,6 +230,9 @@ importers:
 
   mongo-migrator:
     dependencies:
+      ied-shared:
+        specifier: workspace:^
+        version: link:../ied-shared
       mongoose:
         specifier: ^8.18.0
         version: 8.18.0
