@@ -89,12 +89,11 @@ export const exportSearchedFirmaData = async (
 
   const res: ExportFirma = [];
   cursor.on("data", (doc) => {
-    const plainObject = doc.toObject();
     res.push({
-      naziv_firme: plainObject.naziv_firme,
-      e_mail: plainObject.e_mail,
-      delatnost: plainObject.delatnost,
-      tip_firme: plainObject.tip_firme,
+      naziv_firme: doc.naziv_firme,
+      e_mail: doc.e_mail,
+      delatnost: doc.delatnost,
+      tip_firme: doc.tip_firme,
     });
   });
 
@@ -139,10 +138,12 @@ export const exportSearchedZaposleniData = async (
 
   // Write the data to the writable stream
   cursor.on("data", (doc) => {
-    const plainObject = doc.toObject();
-
-    if (plainObject.zaposleni) {
-      for (const z of plainObject.zaposleni) {
+    if (doc.zaposleni) {
+      for (const z of doc.zaposleni) {
+        if (!z._id?.toString()) {
+          console.warn("Zaposleni missing _id:", z);
+          continue;
+        }
         const isZaposleniInSeminar =
           seminarAttendees?.includes(z._id.toString()) ?? false;
         const isRadnoMestoNegated =
@@ -167,7 +168,7 @@ export const exportSearchedZaposleniData = async (
 
         if (shouldAdd) {
           res.push({
-            naziv_firme: plainObject.naziv_firme,
+            naziv_firme: doc.naziv_firme,
             imePrezime: `${z.ime} ${z.prezime}`,
             e_mail: z.e_mail,
             radno_mesto: z.radno_mesto,
@@ -249,7 +250,7 @@ export const updateZaposleni = async (
     }
 
     const updatedZaposleni = updatedFirma.zaposleni.find(
-      (z) => z._id.toString() === zaposleniId,
+      (z) => z._id?.toString() === zaposleniId,
     );
 
     if (!updatedZaposleni) {
