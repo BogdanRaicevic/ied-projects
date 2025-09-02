@@ -5,7 +5,8 @@ import {
   type Response,
   Router,
 } from "express";
-import type { FirmaType } from "../models/firma.model";
+import { createAuditMiddleware } from "../middleware/audit";
+import { Firma, type FirmaType } from "../models/firma.model";
 import {
   create,
   createZaposleni,
@@ -20,6 +21,7 @@ import {
 } from "../services/firma.service";
 
 const router = Router();
+const firmaAudit = createAuditMiddleware(Firma);
 
 interface SearchRequest extends Request {
   body: {
@@ -95,6 +97,7 @@ router.post("/export-zaposleni-data", async (req, res) => {
 // create new zapolseni
 router.post(
   "/:firmaId/zaposleni",
+  firmaAudit,
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { firmaId } = req.params;
@@ -109,6 +112,7 @@ router.post(
 // update zaposleni
 router.put(
   "/:firmaId/zaposleni/:zaposleniId",
+  firmaAudit,
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { firmaId, zaposleniId } = req.params;
@@ -126,6 +130,7 @@ router.put(
 
 router.delete(
   "/:firmaId/zaposleni/:zaposleniId",
+  firmaAudit,
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { firmaId, zaposleniId } = req.params;
@@ -155,11 +160,11 @@ router.get("/:id", async (req: Request, res: Response, next: NextFunction) => {
 // Delete firma
 router.delete(
   "/:id",
+  firmaAudit,
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       const firma = await deleteById(req.params.id);
       if (firma) {
-        res.locals.originalDocument = firma;
         res.json(firma);
       } else {
         res.status(404).send("Firma not found");
@@ -171,29 +176,35 @@ router.delete(
 );
 
 // Create new firma
-router.post("/", async (req: Request, res: Response, next: NextFunction) => {
-  try {
-    const firma = await create(req.body);
-    res.locals.updatedDocument = firma; // Store updated document for audit middleware
-    res.status(201).json(firma);
-  } catch (error) {
-    next(error);
-  }
-});
+router.post(
+  "/",
+  firmaAudit,
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const firma = await create(req.body);
+      res.status(201).json(firma);
+    } catch (error) {
+      next(error);
+    }
+  },
+);
 
 // Update firma
-router.put("/:id", async (req: Request, res: Response, next: NextFunction) => {
-  try {
-    const firma = await updateById(req.params.id, req.body);
-    if (firma) {
-      res.locals.updatedDocument = firma;
-      res.json(firma);
-    } else {
-      res.status(404).send("Firma not found");
+router.put(
+  "/:id",
+  firmaAudit,
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const firma = await updateById(req.params.id, req.body);
+      if (firma) {
+        res.json(firma);
+      } else {
+        res.status(404).send("Firma not found");
+      }
+    } catch (error) {
+      next(error);
     }
-  } catch (error) {
-    next(error);
-  }
-});
+  },
+);
 
 export default router;

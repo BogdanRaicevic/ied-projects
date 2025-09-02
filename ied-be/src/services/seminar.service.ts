@@ -5,12 +5,18 @@ import type {
 } from "@ied-shared/types/seminar.zod";
 import { Types } from "mongoose";
 import { Firma } from "../models/firma.model";
-import { type PrijavaType, Seminar, type SeminarType } from "./../models/seminar.model";
+import {
+  type PrijavaType,
+  Seminar,
+  type SeminarType,
+} from "./../models/seminar.model";
 import { ErrorWithCause } from "../utils/customErrors";
 import { createSeminarQuery } from "../utils/seminariQueryBuilder";
 import { validateMongoId } from "../utils/utils";
 
-export const saveSeminar = async (seminarData: SeminarZodType): Promise<SeminarType> => {
+export const saveSeminar = async (
+  seminarData: SeminarZodType,
+): Promise<SeminarType> => {
   if (seminarData._id) {
     validateMongoId(seminarData._id);
 
@@ -68,7 +74,10 @@ export const getAllSeminars = async () => {
   return await Seminar.find({}, { naziv: 1, datum: 1, _id: 1 }).lean();
 };
 
-export const savePrijava = async (seminar_id: string, prijava: PrijavaZodType) => {
+export const createPrijava = async (
+  seminar_id: string,
+  prijava: PrijavaZodType,
+) => {
   validateMongoId(seminar_id);
   validateMongoId(prijava.zaposleni_id);
   validateMongoId(prijava.firma_id);
@@ -89,30 +98,85 @@ export const savePrijava = async (seminar_id: string, prijava: PrijavaZodType) =
     throw new Error("Zaposleni not found in any firma");
   }
 
-  if (
-    seminar.prijave.some(
-      (p) => p.zaposleni_id.toString() === trasnformedPrijava.zaposleni_id.toString(),
-    )
-  ) {
-    throw new ErrorWithCause("Zaposleni je već prijavljen na seminar", "duplicate");
+  // Atomically find the seminar and push the new prijava if the zaposleni is not already registered
+  const updatedSeminar = await Seminar.findOneAndUpdate(
+    {
+      _id: seminar_id,
+      "prijave.zaposleni_id": { $ne: trasnformedPrijava.zaposleni_id },
+    },
+    { $push: { prijave: trasnformedPrijava } },
+    { new: true },
+  ).lean();
+
+  // If updatedSeminar is null, it means either the seminar doesn't exist
+  // or the zaposleni is already registered.
+  if (!updatedSeminar) {
+    const seminarExists = await Seminar.findById(seminar_id, { _id: 1 }).lean();
+    if (!seminarExists) {
+      throw new Error("Seminar not found");
+    }
+    // If the seminar exists, the only other reason for failure is a duplicate prijava
+    throw new ErrorWithCause(
+      "Zaposleni je već prijavljen na seminar",
+      "duplicate",
+    );
   }
 
-  seminar.prijave.push(trasnformedPrijava);
-  return (await seminar.save()).toObject();
+  const newPrijava = updatedSeminar.prijave[updatedSeminar.prijave.length - 1];
+  console.log("newPrijava", newPrijava);
+  return newPrijava;
 };
 
-export const deletePrijava = async (zaposleni_id: string, seminar_id: string) => {
+export const updatePrijava = async (
+  seminar_id: string,
+  prijava: PrijavaZodType,
+) => {
+  if (!prijava._id) {
+    throw new Error("Prijava ID is required for an update.");
+  }
+  validateMongoId(seminar_id);
+  validateMongoId(prijava._id);
+
+  const trasnformedPrijava = transformPrijavaToDb(prijava as PrijavaZodType);
+
   const updatedSeminar = await Seminar.findOneAndUpdate(
-    { _id: { $eq: seminar_id } },
-    { $pull: { prijave: { zaposleni_id: zaposleni_id } } },
+    { _id: seminar_id, "prijave._id": trasnformedPrijava._id },
+    { $set: { "prijave.$": trasnformedPrijava } },
+    { new: true },
+  ).lean();
+
+  const newPrijava =
+    updatedSeminar?.prijave[updatedSeminar?.prijave.length - 1];
+
+  console.log("updatedPrijava", newPrijava);
+  return newPrijava;
+};
+
+export const deletePrijava = async (
+  zaposleni_id: string,
+  seminar_id: string,
+) => {
+  const seminar = await Seminar.findOne(
+    { _id: seminar_id, "prijave.zaposleni_id": zaposleni_id },
+    { "prijave.$": 1 },
+  ).lean();
+  const removedPrijava = seminar?.prijave?.[0]; // This is the object to be removed
+
+  const updatedSeminar = await Seminar.findOneAndUpdate(
+    { _id: seminar_id, "prijave.zaposleni_id": zaposleni_id },
+    { $pull: { prijave: { zaposleni_id } } },
     { new: true },
   ).lean();
 
   if (!updatedSeminar) {
-    throw new Error("Seminar not found or prijava could not be deleted.");
+    throw new Error(
+      `Prijava with zaposleni_id ${zaposleni_id} not found in seminar ${seminar_id}.`,
+    );
   }
 
-  return updatedSeminar;
+  console.log("removedPrijava", removedPrijava);
+
+  return removedPrijava;
 };
 
 export const deleteSeminar = async (id: string) => {
@@ -126,14 +190,18 @@ export const deleteSeminar = async (id: string) => {
   return seminar;
 };
 
-export const getZaposleniIdsFromSeminars = async (seminarIds: string[]): Promise<string[]> => {
+export const getZaposleniIdsFromSeminars = async (
+  seminarIds: string[],
+): Promise<string[]> => {
   if (seminarIds.length > 0) {
     const seminars = await Seminar.find(
       { _id: { $in: seminarIds } },
       { "prijave.zaposleni_id": 1 },
     ).lean();
 
-    return seminars.flatMap((s) => s.prijave.map((p) => p.zaposleni_id.toString()));
+    return seminars.flatMap((s) =>
+      s.prijave.map((p) => p.zaposleni_id.toString()),
+    );
   }
   return [];
 };
