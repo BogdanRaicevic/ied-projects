@@ -47,7 +47,7 @@ const firmaSchema = new Schema<FirmaType>(
     provereno: Number,
     RB: Number,
     stanje_firme: String,
-    zaposleni: [zaposleniSchema],
+    zaposleni: { type: [zaposleniSchema], default: [] },
     jbkjs: String,
     maticni_broj: String,
   },
