@@ -14,17 +14,20 @@ export type Zaposleni = {
   komentar: string;
   created_at: Date;
   updated_at: Date;
-  created_by: string;
-  updated_by: string;
 };
 
-export const zaposleniSchema = new Schema<Zaposleni>({
-  _id: { type: Schema.Types.ObjectId, default: () => new Types.ObjectId() },
-  ID_kontakt_osoba: Number,
-  ime: String,
-  prezime: String,
-  radno_mesto: { type: String, default: "nema" },
-  telefon: String,
-  e_mail: String,
-  komentar: String,
-});
+export const zaposleniSchema = new Schema<Zaposleni>(
+  {
+    _id: { type: Schema.Types.ObjectId, default: () => new Types.ObjectId() },
+    ID_kontakt_osoba: Number,
+    ime: String,
+    prezime: String,
+    radno_mesto: { type: String, default: "nema" },
+    telefon: String,
+    e_mail: String,
+    komentar: String,
+  },
+  {
+    timestamps: { createdAt: "created_at", updatedAt: "updated_at" },
+  },
+);
