@@ -235,6 +235,7 @@ export const updateZaposleni = async (
     for (const key in zaposleniData) {
       updateObject[`zaposleni.$.${key}`] = zaposleniData[key];
     }
+    updateObject[`zaposleni.$.updated_at`] = new Date();
 
     const updatedFirma = await Firma.findOneAndUpdate(
       { _id: firmaId, "zaposleni._id": zaposleniId },
