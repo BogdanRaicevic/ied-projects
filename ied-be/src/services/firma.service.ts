@@ -229,9 +229,15 @@ export const updateZaposleni = async (
       zaposleniData.radno_mesto = "nema";
     }
 
+    // Prepare the update object to set specific fields
+    const updateObject = {};
+    for (const key in zaposleniData) {
+      updateObject[`zaposleni.$.${key}`] = zaposleniData[key];
+    }
+
     const updatedFirma = await Firma.findOneAndUpdate(
       { _id: firmaId, "zaposleni._id": zaposleniId },
-      { $set: { "zaposleni.$": zaposleniData } },
+      { $set: updateObject }, // Use the new update object
       {
         new: true,
         runValidators: true,
