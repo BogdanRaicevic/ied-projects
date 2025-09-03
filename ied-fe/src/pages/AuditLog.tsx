@@ -3,7 +3,7 @@ import type {
   AuditLogType,
 } from "@ied-shared/types/audit_log.zod";
 import { Button, Paper, TextField } from "@mui/material";
-import { grey, red } from "@mui/material/colors";
+import { green, grey, red } from "@mui/material/colors";
 import { Box, Grid } from "@mui/system";
 import { DatePicker } from "@mui/x-date-pickers";
 import { endOfDay, formatDate, startOfDay, subDays } from "date-fns";
@@ -106,6 +106,7 @@ export default function AuditLog() {
             [before, after],
           );
 
+          // Handle root document deletion
           if (before && !after) {
             return (
               <Box>
@@ -119,6 +120,25 @@ export default function AuditLog() {
                   }}
                 >
                   OBRISANO
+                </span>
+              </Box>
+            );
+          }
+
+          // Handle root document creation
+          if (!before && after) {
+            return (
+              <Box>
+                <span
+                  style={{
+                    backgroundColor: green[100],
+                    color: green[900],
+                    padding: "4px 8px",
+                    borderRadius: "4px",
+                    fontWeight: "bold",
+                  }}
+                >
+                  NOVO
                 </span>
               </Box>
             );
