@@ -2,7 +2,6 @@ import type { IChange } from "@ied-shared/types/diff";
 
 interface Props {
   changes: IChange[];
-  rootId?: string;
 }
 
 const renderValue = (value: any) => {
@@ -19,7 +18,7 @@ const renderValue = (value: any) => {
   return <strong>{String(value)}</strong>;
 };
 
-export const AuditChangesViewer: React.FC<Props> = ({ changes, rootId }) => {
+export const AuditChangesViewer: React.FC<Props> = ({ changes }) => {
   if (!changes || changes.length === 0) {
     return <span>Nema promena.</span>;
   }
@@ -77,9 +76,8 @@ export const AuditChangesViewer: React.FC<Props> = ({ changes, rootId }) => {
                 return (
                   <div>
                     <p style={{ margin: 0 }}>
-                      U listi <strong>{change.property}</strong>{" "}
-                      {rootId && `objekta sa _id ${rootId} `}
-                      desile su se sledeće promene:
+                      U listi <strong>{change.property}</strong> desile su se
+                      sledeće promene:
                     </p>
                     <div
                       style={{

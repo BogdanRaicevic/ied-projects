@@ -3,6 +3,7 @@ import type {
   AuditLogType,
 } from "@ied-shared/types/audit_log.zod";
 import { Button, Paper, TextField } from "@mui/material";
+import { grey } from "@mui/material/colors";
 import { Box, Grid } from "@mui/system";
 import { DatePicker } from "@mui/x-date-pickers";
 import { endOfDay, formatDate, startOfDay, subDays } from "date-fns";
@@ -60,6 +61,38 @@ export default function AuditLog() {
       {
         accessorKey: "resource.model",
         header: "Tip resursa",
+        Cell: ({ row }) => {
+          const { resource, before, after } = row.original;
+          const doc = after || before;
+          const model = resource.model;
+          if (!doc) {
+            return "N/A";
+          }
+          const id = doc._id;
+          let name = "";
+
+          if (model === "Firma") {
+            name = doc.naziv_firme || "Nema naziv";
+          } else if (model === "Seminar") {
+            name = doc.naziv || "Nema naziv";
+          }
+
+          return (
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                justifyContent: "center",
+                height: "100%",
+              }}
+            >
+              {model}
+              <div>{name}</div>
+              <small style={{ color: grey[500] }}>ID: {id}</small>
+            </Box>
+          );
+        },
       },
 
       {
@@ -77,12 +110,7 @@ export default function AuditLog() {
             return null;
           }
 
-          return (
-            <AuditChangesViewer
-              changes={changes}
-              rootId={after?._id || before?._id}
-            />
-          );
+          return <AuditChangesViewer changes={changes} />;
         },
       },
     ],
