@@ -3,7 +3,7 @@ import type {
   AuditLogType,
 } from "@ied-shared/types/audit_log.zod";
 import { Button, Paper, TextField } from "@mui/material";
-import { grey } from "@mui/material/colors";
+import { grey, red } from "@mui/material/colors";
 import { Box, Grid } from "@mui/system";
 import { DatePicker } from "@mui/x-date-pickers";
 import { endOfDay, formatDate, startOfDay, subDays } from "date-fns";
@@ -105,6 +105,24 @@ export default function AuditLog() {
             () => generateStructuredDiff(before, after),
             [before, after],
           );
+
+          if (before && !after) {
+            return (
+              <Box>
+                <span
+                  style={{
+                    backgroundColor: red[100],
+                    color: red[900],
+                    padding: "4px 8px",
+                    borderRadius: "4px",
+                    fontWeight: "bold",
+                  }}
+                >
+                  OBRISANO
+                </span>
+              </Box>
+            );
+          }
 
           if (!changes) {
             return null;

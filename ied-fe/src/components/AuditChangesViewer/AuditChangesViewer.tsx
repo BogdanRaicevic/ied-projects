@@ -1,4 +1,5 @@
 import type { IChange } from "@ied-shared/types/diff";
+import { common, green, grey, red } from "@mui/material/colors";
 
 interface Props {
   changes: IChange[];
@@ -39,10 +40,10 @@ export const AuditChangesViewer: React.FC<Props> = ({ changes }) => {
                     </p>
                     <div
                       style={{
-                        border: "1px solid #e0e0e0",
+                        border: `1px solid ${grey[300]}`,
                         padding: "8px",
                         borderRadius: "4px",
-                        backgroundColor: "#f9f9f9",
+                        backgroundColor: common.white,
                         whiteSpace: "pre-wrap", // This preserves newlines and spaces
                         wordBreak: "break-word",
                       }}
@@ -50,14 +51,14 @@ export const AuditChangesViewer: React.FC<Props> = ({ changes }) => {
                       {change.diff?.map((part, i) => {
                         const style = {
                           backgroundColor: part.added
-                            ? "#d4edda"
+                            ? green[100]
                             : part.removed
-                              ? "#f8d7da"
+                              ? red[100]
                               : "transparent",
                           color: part.added
-                            ? "#155724"
+                            ? green[900]
                             : part.removed
-                              ? "#721c24"
+                              ? red[900]
                               : "inherit",
                           textDecoration: part.removed
                             ? "line-through"
@@ -82,7 +83,7 @@ export const AuditChangesViewer: React.FC<Props> = ({ changes }) => {
                     <div
                       style={{
                         paddingLeft: "20px",
-                        borderLeft: "2px solid #eee",
+                        borderLeft: `2px solid ${grey[300]}`,
                       }}
                     >
                       {change.arrayChanges?.map((arrayChange) => (
@@ -91,8 +92,8 @@ export const AuditChangesViewer: React.FC<Props> = ({ changes }) => {
                             <p>
                               <span
                                 style={{
-                                  backgroundColor: "#d4edda",
-                                  color: "#155724",
+                                  backgroundColor: green[100],
+                                  color: green[900],
                                   padding: "2px 4px",
                                 }}
                               >
@@ -108,8 +109,8 @@ export const AuditChangesViewer: React.FC<Props> = ({ changes }) => {
                             <p>
                               <span
                                 style={{
-                                  backgroundColor: "#f8d7da",
-                                  color: "#721c24",
+                                  backgroundColor: red[100],
+                                  color: red[900],
                                   padding: "2px 4px",
                                 }}
                               >
@@ -148,8 +149,8 @@ export const AuditChangesViewer: React.FC<Props> = ({ changes }) => {
                     <strong>{change.property}</strong>{" "}
                     <span
                       style={{
-                        backgroundColor: "#f8d7da",
-                        color: "#721c24",
+                        backgroundColor: red[100],
+                        color: red[900],
                         textDecoration: "line-through",
                         padding: "2px 4px",
                         borderRadius: "2px",
@@ -160,8 +161,8 @@ export const AuditChangesViewer: React.FC<Props> = ({ changes }) => {
                     {" → "}
                     <span
                       style={{
-                        backgroundColor: "#d4edda",
-                        color: "#155724",
+                        backgroundColor: green[100],
+                        color: green[900],
                         padding: "2px 4px",
                         borderRadius: "2px",
                       }}
@@ -176,8 +177,8 @@ export const AuditChangesViewer: React.FC<Props> = ({ changes }) => {
                     <strong>{change.property}</strong>{" "}
                     <span
                       style={{
-                        backgroundColor: "#d4edda",
-                        color: "#155724",
+                        backgroundColor: green[100],
+                        color: green[900],
                         padding: "2px 4px",
                         borderRadius: "2px",
                       }}
@@ -192,8 +193,8 @@ export const AuditChangesViewer: React.FC<Props> = ({ changes }) => {
                     <strong>{change.property}</strong>{" "}
                     <span
                       style={{
-                        backgroundColor: "#f8d7da",
-                        color: "#721c24",
+                        backgroundColor: red[100],
+                        color: red[900],
                         textDecoration: "line-through",
                         padding: "2px 4px",
                         borderRadius: "2px",
