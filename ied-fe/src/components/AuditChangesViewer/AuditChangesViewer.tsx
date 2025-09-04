@@ -1,5 +1,7 @@
 import type { IChange } from "@ied-shared/types/diff";
 import { common, green, grey, red } from "@mui/material/colors";
+import AddedChip from "../styled/AddedChip";
+import RemovedChip from "../styled/RemovedChip";
 
 interface Props {
   changes: IChange[];
@@ -90,32 +92,16 @@ export const AuditChangesViewer: React.FC<Props> = ({ changes }) => {
                         <div key={arrayChange.id}>
                           {arrayChange.type === "added" && (
                             <p>
-                              <span
-                                style={{
-                                  backgroundColor: green[100],
-                                  color: green[900],
-                                  padding: "2px 4px",
-                                }}
-                              >
-                                Dodato:
-                              </span>{" "}
+                              <AddedChip label="dodato" />
                               <strong>
-                                {" "}
+                                {/* {" "} */}
                                 {JSON.stringify(arrayChange.item)}
                               </strong>
                             </p>
                           )}
                           {arrayChange.type === "removed" && (
                             <p>
-                              <span
-                                style={{
-                                  backgroundColor: red[100],
-                                  color: red[900],
-                                  padding: "2px 4px",
-                                }}
-                              >
-                                Obrisano:
-                              </span>{" "}
+                              <RemovedChip label="obrisano" />
                               <strong>
                                 <strong>
                                   {" "}
