@@ -2,8 +2,9 @@ import { clerkClient, getAuth } from "@clerk/express";
 import type { NextFunction, Request, Response } from "express";
 import { type Model, Types } from "mongoose";
 import { AuditLog } from "../models/audit_log.model";
+import type { TODO_ANY } from "../utils/utils";
 
-export const createAuditMiddleware = (Model: Model<any>) => {
+export const createAuditMiddleware = (Model: Model<TODO_ANY>) => {
   return async (req: Request, res: Response, next: NextFunction) => {
     const { method, originalUrl, params, body } = req;
     if (method === "GET") {
@@ -26,6 +27,20 @@ export const createAuditMiddleware = (Model: Model<any>) => {
       params.seminar_id;
     const documentBefore = await fetchDocumentBefore(Model, id);
 
+    // Intercept response body
+    let responseBody: TODO_ANY = null;
+    const originalSend = res.send;
+    res.send = function (data: TODO_ANY) {
+      if (res.statusCode >= 200 && res.statusCode < 300) {
+        try {
+          responseBody = typeof data === "string" ? JSON.parse(data) : data;
+        } catch (e) {
+          responseBody = data;
+        }
+      }
+      return originalSend.call(this, data);
+    };
+
     res.on("finish", async () => {
       if (res.statusCode < 200 || res.statusCode >= 300) {
         return; // Only log successful operations
@@ -35,7 +50,7 @@ export const createAuditMiddleware = (Model: Model<any>) => {
         Model,
         method,
         id,
-        req.body,
+        responseBody,
       );
 
       if (!shouldLogChange(documentBefore, documentAfter)) {
@@ -79,9 +94,9 @@ const resolveUserEmail = async (userId: string): Promise<string> => {
 };
 
 const fetchDocumentBefore = async (
-  Model: Model<any>,
+  Model: Model<TODO_ANY>,
   id: string,
-): Promise<any> => {
+): Promise<TODO_ANY> => {
   if (id && Types.ObjectId.isValid(id)) {
     try {
       return await Model.findById(id).lean();
@@ -96,11 +111,11 @@ const fetchDocumentBefore = async (
 };
 
 const fetchDocumentAfter = async (
-  Model: Model<any>,
+  Model: Model<TODO_ANY>,
   method: string,
   id: string,
-  body: any,
-): Promise<any> => {
+  responseBody?: TODO_ANY,
+): Promise<TODO_ANY> => {
   if (method === "DELETE") {
     // If there's no parent ID, we can't fetch anything.
     if (!id) {
@@ -117,8 +132,9 @@ const fetchDocumentAfter = async (
     }
   }
 
-  if (!id) {
-    return body;
+  if (method === "POST" && responseBody) {
+    console.log("Using response body for POST audit log.", responseBody);
+    return responseBody;
   }
 
   if (id) {
@@ -135,7 +151,7 @@ const fetchDocumentAfter = async (
   return null;
 };
 
-const shouldLogChange = (before: any, after: any): boolean => {
+const shouldLogChange = (before: TODO_ANY, after: TODO_ANY): boolean => {
   if (!before && !after) {
     return false; // Nothing to log
   }
