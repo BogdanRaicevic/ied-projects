@@ -2,6 +2,7 @@ import type { IChange } from "@ied-shared/types/diff";
 import { common, green, grey, red } from "@mui/material/colors";
 import AddedChip from "../styled/AddedChip";
 import RemovedChip from "../styled/RemovedChip";
+import UpdatedChip from "../styled/UpdatedChip";
 
 interface Props {
   changes: IChange[];
@@ -36,44 +37,47 @@ export const AuditChangesViewer: React.FC<Props> = ({ changes }) => {
               // This is the special case for your 'komentar' field
               case "T":
                 return (
-                  <div>
-                    <p style={{ margin: 0, fontWeight: "bold" }}>
-                      Komentar je izmenjen:
-                    </p>
-                    <div
-                      style={{
-                        border: `1px solid ${grey[300]}`,
-                        padding: "8px",
-                        borderRadius: "4px",
-                        backgroundColor: common.white,
-                        whiteSpace: "pre-wrap", // This preserves newlines and spaces
-                        wordBreak: "break-word",
-                      }}
-                    >
-                      {change.diff?.map((part, i) => {
-                        const style = {
-                          backgroundColor: part.added
-                            ? green[100]
-                            : part.removed
-                              ? red[100]
-                              : "transparent",
-                          color: part.added
-                            ? green[900]
-                            : part.removed
-                              ? red[900]
-                              : "inherit",
-                          textDecoration: part.removed
-                            ? "line-through"
-                            : "none",
-                        };
-                        return (
-                          <span key={i} style={style}>
-                            {part.value}
-                          </span>
-                        );
-                      })}
+                  <>
+                    <UpdatedChip label="izmenjeno" />
+                    <div>
+                      <p style={{ margin: 0, fontWeight: "bold" }}>
+                        Komentar je izmenjen:
+                      </p>
+                      <div
+                        style={{
+                          border: `1px solid ${grey[300]}`,
+                          padding: "8px",
+                          borderRadius: "4px",
+                          backgroundColor: common.white,
+                          whiteSpace: "pre-wrap", // This preserves newlines and spaces
+                          wordBreak: "break-word",
+                        }}
+                      >
+                        {change.diff?.map((part, i) => {
+                          const style = {
+                            backgroundColor: part.added
+                              ? green[100]
+                              : part.removed
+                                ? red[100]
+                                : "transparent",
+                            color: part.added
+                              ? green[900]
+                              : part.removed
+                                ? red[900]
+                                : "inherit",
+                            textDecoration: part.removed
+                              ? "line-through"
+                              : "none",
+                          };
+                          return (
+                            <span key={i} style={style}>
+                              {part.value}
+                            </span>
+                          );
+                        })}
+                      </div>
                     </div>
-                  </div>
+                  </>
                 );
               case "A":
                 return (
@@ -91,29 +95,32 @@ export const AuditChangesViewer: React.FC<Props> = ({ changes }) => {
                       {change.arrayChanges?.map((arrayChange) => (
                         <div key={arrayChange.id}>
                           {arrayChange.type === "added" && (
-                            <p>
+                            <>
                               <AddedChip label="dodato" />
-                              <strong>
-                                {/* {" "} */}
-                                {JSON.stringify(arrayChange.item)}
-                              </strong>
-                            </p>
-                          )}
-                          {arrayChange.type === "removed" && (
-                            <p>
-                              <RemovedChip label="obrisano" />
-                              <strong>
+                              <p>
                                 <strong>
-                                  {" "}
+                                  {/* {" "} */}
                                   {JSON.stringify(arrayChange.item)}
                                 </strong>
-                              </strong>
-                            </p>
+                              </p>
+                            </>
+                          )}
+                          {arrayChange.type === "removed" && (
+                            <>
+                              <RemovedChip label="obrisano" />
+                              <p>
+                                <strong>
+                                  <strong>
+                                    {" "}
+                                    {JSON.stringify(arrayChange.item)}
+                                  </strong>
+                                </strong>
+                              </p>
+                            </>
                           )}
                           {arrayChange.type === "modified" && (
                             <div>
                               <p>
-                                Izmenjeno:{" "}
                                 <b>
                                   {arrayChange.item.ime}{" "}
                                   {arrayChange.item.prezime}
@@ -136,64 +143,73 @@ export const AuditChangesViewer: React.FC<Props> = ({ changes }) => {
                 );
               case "E":
                 return (
-                  <div>
-                    <strong>{change.property}</strong>{" "}
-                    <span
-                      style={{
-                        backgroundColor: red[100],
-                        color: red[900],
-                        textDecoration: "line-through",
-                        padding: "2px 4px",
-                        borderRadius: "2px",
-                      }}
-                    >
-                      {renderValue(change.oldValue)}
-                    </span>
-                    {" → "}
-                    <span
-                      style={{
-                        backgroundColor: green[100],
-                        color: green[900],
-                        padding: "2px 4px",
-                        borderRadius: "2px",
-                      }}
-                    >
-                      {renderValue(change.newValue)}
-                    </span>
-                  </div>
+                  <>
+                    <UpdatedChip label="izmenjeno" />
+                    <div>
+                      <strong>{change.property}</strong>{" "}
+                      <span
+                        style={{
+                          backgroundColor: red[100],
+                          color: red[900],
+                          textDecoration: "line-through",
+                          padding: "2px 4px",
+                          borderRadius: "2px",
+                        }}
+                      >
+                        {renderValue(change.oldValue)}
+                      </span>
+                      {" → "}
+                      <span
+                        style={{
+                          backgroundColor: green[100],
+                          color: green[900],
+                          padding: "2px 4px",
+                          borderRadius: "2px",
+                        }}
+                      >
+                        {renderValue(change.newValue)}
+                      </span>
+                    </div>
+                  </>
                 );
               case "N":
                 return (
-                  <div>
-                    <strong>{change.property}</strong>{" "}
-                    <span
-                      style={{
-                        backgroundColor: green[100],
-                        color: green[900],
-                        padding: "2px 4px",
-                        borderRadius: "2px",
-                      }}
-                    >
-                      {renderValue(change.newValue)}
-                    </span>
-                  </div>
+                  <>
+                    {/* <AddedChip label="dodato" /> */}
+                    <div>
+                      <strong>{change.property}</strong>{" "}
+                      <span
+                        style={{
+                          backgroundColor: green[100],
+                          color: green[900],
+                          padding: "2px 4px",
+                          borderRadius: "2px",
+                        }}
+                      >
+                        {renderValue(change.newValue)}
+                      </span>
+                    </div>
+                  </>
                 );
               case "D":
                 return (
-                  <div>
-                    <strong>{change.property}</strong>{" "}
-                    <span
-                      style={{
-                        backgroundColor: red[100],
-                        color: red[900],
-                        textDecoration: "line-through",
-                        padding: "2px 4px",
-                        borderRadius: "2px",
-                      }}
-                    >
-                      {renderValue(change.oldValue)}
-                    </span>
-                  </div>
+                  <>
+                    {/* <RemovedChip label="obrisano" /> */}
+                    <div>
+                      <strong>{change.property}</strong>{" "}
+                      <span
+                        style={{
+                          backgroundColor: red[100],
+                          color: red[900],
+                          textDecoration: "line-through",
+                          padding: "2px 4px",
+                          borderRadius: "2px",
+                        }}
+                      >
+                        {renderValue(change.oldValue)}
+                      </span>
+                    </div>
+                  </>
                 );
 
               default:
