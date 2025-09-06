@@ -28,17 +28,17 @@ export const AuditChangesViewer: React.FC<Props> = ({ changes }) => {
   }
 
   return (
-    <div>
-      {changes.map((change, index) => (
-        <div key={index} style={{ marginBottom: "10px" }}>
-          {(() => {
-            // Check the 'kind' of change to decide how to render it
-            switch (change.kind) {
-              // This is the special case for your 'komentar' field
-              case "T":
-                return (
-                  <>
-                    <UpdatedChip label="izmenjeno" />
+    <>
+      <UpdatedChip label="izmenjeno" />
+      <div>
+        {changes.map((change, index) => (
+          <div key={index} style={{ marginBottom: "10px" }}>
+            {(() => {
+              // Check the 'kind' of change to decide how to render it
+              switch (change.kind) {
+                // This is the special case for your 'komentar' field
+                case "T":
+                  return (
                     <div>
                       <p style={{ margin: 0, fontWeight: "bold" }}>
                         Komentar je izmenjen:
@@ -77,74 +77,71 @@ export const AuditChangesViewer: React.FC<Props> = ({ changes }) => {
                         })}
                       </div>
                     </div>
-                  </>
-                );
-              case "A":
-                return (
-                  <div>
-                    <p style={{ margin: 0 }}>
-                      U listi <strong>{change.property}</strong> desile su se
-                      sledeće promene:
-                    </p>
-                    <div
-                      style={{
-                        paddingLeft: "20px",
-                        borderLeft: `2px solid ${grey[300]}`,
-                      }}
-                    >
-                      {change.arrayChanges?.map((arrayChange) => (
-                        <div key={arrayChange.id}>
-                          {arrayChange.type === "added" && (
-                            <>
-                              <AddedChip label="dodato" />
-                              <p>
-                                <strong>
-                                  {/* {" "} */}
-                                  {JSON.stringify(arrayChange.item)}
-                                </strong>
-                              </p>
-                            </>
-                          )}
-                          {arrayChange.type === "removed" && (
-                            <>
-                              <RemovedChip label="obrisano" />
-                              <p>
-                                <strong>
+                  );
+                case "A":
+                  return (
+                    <div>
+                      <p style={{ margin: 0 }}>
+                        U listi <strong>{change.property}</strong> desile su se
+                        sledeće promene:
+                      </p>
+                      <div
+                        style={{
+                          paddingLeft: "20px",
+                          borderLeft: `2px solid ${grey[300]}`,
+                        }}
+                      >
+                        {change.arrayChanges?.map((arrayChange) => (
+                          <div key={arrayChange.id}>
+                            {arrayChange.type === "added" && (
+                              <>
+                                <AddedChip label="dodato" />
+                                <p>
                                   <strong>
-                                    {" "}
+                                    {/* {" "} */}
                                     {JSON.stringify(arrayChange.item)}
                                   </strong>
-                                </strong>
-                              </p>
-                            </>
-                          )}
-                          {arrayChange.type === "modified" && (
-                            <div>
-                              <p>
-                                <b>
-                                  {arrayChange.item.ime}{" "}
-                                  {arrayChange.item.prezime}
-                                </b>{" "}
-                                <small style={{ color: grey[500] }}>
-                                  ID: {arrayChange.item._id}{" "}
-                                </small>
-                              </p>
-                              <div style={{ paddingLeft: "20px" }}>
-                                <AuditChangesViewer
-                                  changes={arrayChange.changes!}
-                                />
+                                </p>
+                              </>
+                            )}
+                            {arrayChange.type === "removed" && (
+                              <>
+                                <RemovedChip label="obrisano" />
+                                <p>
+                                  <strong>
+                                    <strong>
+                                      {" "}
+                                      {JSON.stringify(arrayChange.item)}
+                                    </strong>
+                                  </strong>
+                                </p>
+                              </>
+                            )}
+                            {arrayChange.type === "modified" && (
+                              <div>
+                                <p>
+                                  <b>
+                                    {arrayChange.item.ime}{" "}
+                                    {arrayChange.item.prezime}
+                                  </b>{" "}
+                                  <small style={{ color: grey[500] }}>
+                                    ID: {arrayChange.item._id}{" "}
+                                  </small>
+                                </p>
+                                <div style={{ paddingLeft: "20px" }}>
+                                  <AuditChangesViewer
+                                    changes={arrayChange.changes!}
+                                  />
+                                </div>
                               </div>
-                            </div>
-                          )}
-                        </div>
-                      ))}
+                            )}
+                          </div>
+                        ))}
+                      </div>
                     </div>
-                  </div>
-                );
-              case "E":
-                return (
-                  <>
-                    <UpdatedChip label="izmenjeno" />
+                  );
+                case "E":
+                  return (
                     <div>
                       <strong>{change.property}</strong>{" "}
                       <span
@@ -170,54 +167,54 @@ export const AuditChangesViewer: React.FC<Props> = ({ changes }) => {
                         {renderValue(change.newValue)}
                       </span>
                     </div>
-                  </>
-                );
-              case "N":
-                return (
-                  <>
-                    {/* <AddedChip label="dodato" /> */}
-                    <div>
-                      <strong>{change.property}</strong>{" "}
-                      <span
-                        style={{
-                          backgroundColor: green[100],
-                          color: green[900],
-                          padding: "2px 4px",
-                          borderRadius: "2px",
-                        }}
-                      >
-                        {renderValue(change.newValue)}
-                      </span>
-                    </div>
-                  </>
-                );
-              case "D":
-                return (
-                  <>
-                    {/* <RemovedChip label="obrisano" /> */}
-                    <div>
-                      <strong>{change.property}</strong>{" "}
-                      <span
-                        style={{
-                          backgroundColor: red[100],
-                          color: red[900],
-                          textDecoration: "line-through",
-                          padding: "2px 4px",
-                          borderRadius: "2px",
-                        }}
-                      >
-                        {renderValue(change.oldValue)}
-                      </span>
-                    </div>
-                  </>
-                );
+                  );
+                case "N":
+                  return (
+                    <>
+                      {/* <AddedChip label="dodato" /> */}
+                      <div>
+                        <strong>{change.property}</strong>{" "}
+                        <span
+                          style={{
+                            backgroundColor: green[100],
+                            color: green[900],
+                            padding: "2px 4px",
+                            borderRadius: "2px",
+                          }}
+                        >
+                          {renderValue(change.newValue)}
+                        </span>
+                      </div>
+                    </>
+                  );
+                case "D":
+                  return (
+                    <>
+                      {/* <RemovedChip label="obrisano" /> */}
+                      <div>
+                        <strong>{change.property}</strong>{" "}
+                        <span
+                          style={{
+                            backgroundColor: red[100],
+                            color: red[900],
+                            textDecoration: "line-through",
+                            padding: "2px 4px",
+                            borderRadius: "2px",
+                          }}
+                        >
+                          {renderValue(change.oldValue)}
+                        </span>
+                      </div>
+                    </>
+                  );
 
-              default:
-                return null;
-            }
-          })()}
-        </div>
-      ))}
-    </div>
+                default:
+                  return null;
+              }
+            })()}
+          </div>
+        ))}
+      </div>
+    </>
   );
 };

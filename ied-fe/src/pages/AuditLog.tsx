@@ -103,10 +103,7 @@ export default function AuditLog() {
         Cell: ({ row }) => {
           const { before, after } = row.original;
 
-          const changes = useMemo(
-            () => generateStructuredDiff(before, after),
-            [before, after],
-          );
+          const changes = generateStructuredDiff(before, after);
 
           // Handle root document deletion
           if (before && !after) {
