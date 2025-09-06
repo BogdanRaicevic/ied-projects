@@ -108,23 +108,7 @@ export const createPrijava = async (
     { new: true },
   ).lean();
 
-  // If updatedSeminar is null, it means either the seminar doesn't exist
-  // or the zaposleni is already registered.
-  if (!updatedSeminar) {
-    const seminarExists = await Seminar.findById(seminar_id, { _id: 1 }).lean();
-    if (!seminarExists) {
-      throw new Error("Seminar not found");
-    }
-    // If the seminar exists, the only other reason for failure is a duplicate prijava
-    throw new ErrorWithCause(
-      "Zaposleni je već prijavljen na seminar",
-      "duplicate",
-    );
-  }
-
-  const newPrijava = updatedSeminar.prijave[updatedSeminar.prijave.length - 1];
-  console.log("newPrijava", newPrijava);
-  return newPrijava;
+  return updatedSeminar;
 };
 
 export const updatePrijava = async (
@@ -145,47 +129,25 @@ export const updatePrijava = async (
     { new: true },
   ).lean();
 
-  const newPrijava =
-    updatedSeminar?.prijave[updatedSeminar?.prijave.length - 1];
-
-  console.log("updatedPrijava", newPrijava);
-  return newPrijava;
+  return updatedSeminar;
 };
 
 export const deletePrijava = async (
   zaposleni_id: string,
   seminar_id: string,
 ) => {
-  const seminar = await Seminar.findOne(
-    { _id: seminar_id, "prijave.zaposleni_id": zaposleni_id },
-    { "prijave.$": 1 },
-  ).lean();
-  const removedPrijava = seminar?.prijave?.[0]; // This is the object to be removed
-
   const updatedSeminar = await Seminar.findOneAndUpdate(
     { _id: seminar_id, "prijave.zaposleni_id": zaposleni_id },
     { $pull: { prijave: { zaposleni_id } } },
     { new: true },
   ).lean();
 
-  if (!updatedSeminar) {
-    throw new Error(
-      `Prijava with zaposleni_id ${zaposleni_id} not found in seminar ${seminar_id}.`,
-    );
-  }
-
-  console.log("removedPrijava", removedPrijava);
-
-  return removedPrijava;
+  return updatedSeminar;
 };
 
 export const deleteSeminar = async (id: string) => {
   validateMongoId(id);
   const seminar = await Seminar.findOneAndDelete({ _id: id }).lean();
-
-  if (!seminar) {
-    throw new Error("Seminar not found");
-  }
 
   return seminar;
 };

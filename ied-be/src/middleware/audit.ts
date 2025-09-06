@@ -21,10 +21,11 @@ export const createAuditMiddleware = (Model: Model<TODO_ANY>) => {
     // This is necessary to update when creating new audit middlewares for new models
     const id: string =
       params?.id ||
-      body?._id ||
-      body?.id ||
       params.firmaId ||
-      params.seminar_id;
+      params.seminar_id ||
+      body?._id ||
+      body?.id;
+
     const documentBefore = await fetchDocumentBefore(Model, id);
 
     // Intercept response body

@@ -206,13 +206,7 @@ export const createZaposleni = async (
       { new: true, runValidators: true },
     ).lean();
 
-    if (!updatedFirma) {
-      throw new Error(`Firma with id ${firmaId} not found.`);
-    }
-
-    const newZaposleni =
-      updatedFirma.zaposleni[updatedFirma.zaposleni.length - 1];
-    return newZaposleni;
+    return updatedFirma;
   } catch (error) {
     console.error("Error creating zaposleni:", error);
     throw error;
@@ -238,19 +232,7 @@ export const updateZaposleni = async (
       },
     ).lean();
 
-    if (!updatedFirma) {
-      throw new Error(`Firma with id ${firmaId} not found.`);
-    }
-
-    const updatedZaposleni = updatedFirma.zaposleni.find(
-      (z) => z._id.toString() === zaposleniId,
-    );
-
-    if (!updatedZaposleni) {
-      throw new Error(`Zaposleni with id ${zaposleniId} not found.`);
-    }
-
-    return updatedZaposleni;
+    return updatedFirma;
   } catch (error) {
     console.error("Error updating zaposleni:", error);
     throw error;
@@ -259,25 +241,13 @@ export const updateZaposleni = async (
 
 export const deleteZaposleni = async (firmaId: string, zaposleniId: string) => {
   try {
-    const firma = await Firma.findOne(
-      { _id: firmaId, "zaposleni._id": zaposleniId },
-      { "zaposleni.$": 1 },
-    ).lean();
-    const removedZaposleni = firma?.zaposleni?.[0]; // This is the object to be removed
-
     const updatedFirma = await Firma.findOneAndUpdate(
       { _id: firmaId, "zaposleni._id": zaposleniId },
       { $pull: { zaposleni: { _id: zaposleniId } } },
       { new: true },
     ).lean();
 
-    if (!updatedFirma) {
-      throw new Error(
-        `Zaposleni with id ${zaposleniId} not found in firma ${firmaId}.`,
-      );
-    }
-
-    return removedZaposleni;
+    return updatedFirma;
   } catch (error) {
     console.error("Error deleting zaposleni:", error);
     throw error;

@@ -101,8 +101,8 @@ router.post(
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { firmaId } = req.params;
-      const zaposleni = await createZaposleni(firmaId, req.body);
-      res.status(201).json(zaposleni);
+      const updatedFirma = await createZaposleni(firmaId, req.body);
+      res.status(201).json(updatedFirma);
     } catch (error) {
       next(error);
     }
@@ -116,12 +116,12 @@ router.put(
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { firmaId, zaposleniId } = req.params;
-      const updatedZaposleni = await updateZaposleni(
+      const updatedFirma = await updateZaposleni(
         firmaId,
         zaposleniId,
         req.body,
       );
-      res.json(updatedZaposleni);
+      res.status(201).json(updatedFirma);
     } catch (error) {
       next(error);
     }

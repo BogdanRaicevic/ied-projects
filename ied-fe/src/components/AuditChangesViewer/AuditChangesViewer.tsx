@@ -113,9 +113,14 @@ export const AuditChangesViewer: React.FC<Props> = ({ changes }) => {
                           {arrayChange.type === "modified" && (
                             <div>
                               <p>
-                                ✏️ Izmenjeno: {arrayChange.item._id}{" "}
-                                {arrayChange.item.ime}{" "}
-                                {arrayChange.item.prezime}
+                                Izmenjeno:{" "}
+                                <b>
+                                  {arrayChange.item.ime}{" "}
+                                  {arrayChange.item.prezime}
+                                </b>{" "}
+                                <small style={{ color: grey[500] }}>
+                                  ID: {arrayChange.item._id}{" "}
+                                </small>
                               </p>
                               <div style={{ paddingLeft: "20px" }}>
                                 <AuditChangesViewer
