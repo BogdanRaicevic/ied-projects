@@ -10,7 +10,7 @@ export const findById = async (id: string): Promise<FirmaType | null> => {
   try {
     return await Firma.findById(id).lean();
   } catch (error) {
-    console.log("Error finding firma by od firma id:", error);
+    console.error("Error finding firma by od firma id:", error);
     throw new Error("Error finding firma by od firma id");
   }
 };
@@ -207,13 +207,7 @@ export const createZaposleni = async (
       { new: true, runValidators: true },
     ).lean();
 
-    if (!updatedFirma) {
-      throw new Error(`Firma with id ${firmaId} not found.`);
-    }
-
-    const newZaposleni =
-      updatedFirma.zaposleni[updatedFirma.zaposleni.length - 1];
-    return newZaposleni;
+    return updatedFirma;
   } catch (error) {
     console.error("Error creating zaposleni:", error);
     throw error;
@@ -244,19 +238,7 @@ export const updateZaposleni = async (
       },
     ).lean();
 
-    if (!updatedFirma) {
-      throw new Error(`Firma with id ${firmaId} not found.`);
-    }
-
-    const updatedZaposleni = updatedFirma.zaposleni.find(
-      (z) => z._id?.toString() === zaposleniId,
-    );
-
-    if (!updatedZaposleni) {
-      throw new Error(`Zaposleni with id ${zaposleniId} not found.`);
-    }
-
-    return updatedZaposleni;
+    return updatedFirma;
   } catch (error) {
     console.error("Error updating zaposleni:", error);
     throw error;
@@ -271,13 +253,7 @@ export const deleteZaposleni = async (firmaId: string, zaposleniId: string) => {
       { new: true },
     ).lean();
 
-    if (!updatedFirma) {
-      throw new Error(
-        `Zaposleni with id ${zaposleniId} not found in firma ${firmaId}.`,
-      );
-    }
-
-    return { deletedId: zaposleniId };
+    return updatedFirma;
   } catch (error) {
     console.error("Error deleting zaposleni:", error);
     throw error;

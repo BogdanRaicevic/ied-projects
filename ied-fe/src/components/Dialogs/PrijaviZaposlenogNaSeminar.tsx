@@ -19,7 +19,7 @@ import {
 } from "@mui/material";
 import { format } from "date-fns";
 import { useEffect, useState } from "react";
-import { savePrijava } from "../../api/seminari.api";
+import { createPrijava } from "../../api/seminari.api";
 import { useFetchSeminari } from "../../hooks/useFetchData";
 import type { FirmaType, Zaposleni } from "../../schemas/firmaSchemas";
 
@@ -67,7 +67,7 @@ export default function PrijavaNaSeminarDialog({
     };
 
     try {
-      await savePrijava(selectedSeminar, prijava);
+      await createPrijava(selectedSeminar, prijava);
       onClose();
     } catch (error: any) {
       if (error.cause === "duplicate") {
@@ -84,9 +84,7 @@ export default function PrijavaNaSeminarDialog({
 
   return (
     <Dialog open={open} onClose={onClose} maxWidth="lg">
-      <DialogTitle id="prijavi-na-seminar-dialog-title">
-        {"Prijavi osobu na seminar"}
-      </DialogTitle>
+      <DialogTitle>{"Prijavi osobu na seminar"}</DialogTitle>
       <DialogContent>
         <Grid container spacing={2} alignItems="center">
           <Grid size={12}>
@@ -145,9 +143,7 @@ export default function PrijavaNaSeminarDialog({
 
           <Grid size={12}>
             <FormControl sx={{ m: 2 }}>
-              <FormLabel id="demo-radio-buttons-group-label">
-                Prisustvo
-              </FormLabel>
+              <FormLabel>Prisustvo</FormLabel>
               <RadioGroup
                 aria-labelledby="demo-radio-buttons-group-label"
                 defaultValue="online"

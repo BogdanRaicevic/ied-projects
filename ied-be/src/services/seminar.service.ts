@@ -5,12 +5,18 @@ import type {
 } from "@ied-shared/types/seminar.zod";
 import { Types } from "mongoose";
 import { Firma } from "../models/firma.model";
-import { type PrijavaType, Seminar, type SeminarType } from "./../models/seminar.model";
+import {
+  type PrijavaType,
+  Seminar,
+  type SeminarType,
+} from "./../models/seminar.model";
 import { ErrorWithCause } from "../utils/customErrors";
 import { createSeminarQuery } from "../utils/seminariQueryBuilder";
 import { validateMongoId } from "../utils/utils";
 
-export const saveSeminar = async (seminarData: SeminarZodType): Promise<SeminarType> => {
+export const saveSeminar = async (
+  seminarData: SeminarZodType,
+): Promise<SeminarType> => {
   if (seminarData._id) {
     validateMongoId(seminarData._id);
 
@@ -68,7 +74,10 @@ export const getAllSeminars = async () => {
   return await Seminar.find({}, { naziv: 1, datum: 1, _id: 1 }).lean();
 };
 
-export const savePrijava = async (seminar_id: string, prijava: PrijavaZodType) => {
+export const createPrijava = async (
+  seminar_id: string,
+  prijava: PrijavaZodType,
+) => {
   validateMongoId(seminar_id);
   validateMongoId(prijava.zaposleni_id);
   validateMongoId(prijava.firma_id);
@@ -89,28 +98,49 @@ export const savePrijava = async (seminar_id: string, prijava: PrijavaZodType) =
     throw new Error("Zaposleni not found in any firma");
   }
 
-  if (
-    seminar.prijave.some(
-      (p) => p.zaposleni_id.toString() === trasnformedPrijava.zaposleni_id.toString(),
-    )
-  ) {
-    throw new ErrorWithCause("Zaposleni je već prijavljen na seminar", "duplicate");
-  }
-
-  seminar.prijave.push(trasnformedPrijava);
-  return (await seminar.save()).toObject();
-};
-
-export const deletePrijava = async (zaposleni_id: string, seminar_id: string) => {
+  // Atomically find the seminar and push the new prijava if the zaposleni is not already registered
   const updatedSeminar = await Seminar.findOneAndUpdate(
-    { _id: { $eq: seminar_id } },
-    { $pull: { prijave: { zaposleni_id: zaposleni_id } } },
+    {
+      _id: seminar_id,
+      "prijave.zaposleni_id": { $ne: trasnformedPrijava.zaposleni_id },
+    },
+    { $push: { prijave: trasnformedPrijava } },
     { new: true },
   ).lean();
 
-  if (!updatedSeminar) {
-    throw new Error("Seminar not found or prijava could not be deleted.");
+  return updatedSeminar;
+};
+
+export const updatePrijava = async (
+  seminar_id: string,
+  prijava: PrijavaZodType,
+) => {
+  if (!prijava._id) {
+    throw new Error("Prijava ID is required for an update.");
   }
+  validateMongoId(seminar_id);
+  validateMongoId(prijava._id);
+
+  const trasnformedPrijava = transformPrijavaToDb(prijava as PrijavaZodType);
+
+  const updatedSeminar = await Seminar.findOneAndUpdate(
+    { _id: seminar_id, "prijave._id": trasnformedPrijava._id },
+    { $set: { "prijave.$": trasnformedPrijava } },
+    { new: true },
+  ).lean();
+
+  return updatedSeminar;
+};
+
+export const deletePrijava = async (
+  zaposleni_id: string,
+  seminar_id: string,
+) => {
+  const updatedSeminar = await Seminar.findOneAndUpdate(
+    { _id: seminar_id, "prijave.zaposleni_id": zaposleni_id },
+    { $pull: { prijave: { zaposleni_id } } },
+    { new: true },
+  ).lean();
 
   return updatedSeminar;
 };
@@ -119,21 +149,21 @@ export const deleteSeminar = async (id: string) => {
   validateMongoId(id);
   const seminar = await Seminar.findOneAndDelete({ _id: id }).lean();
 
-  if (!seminar) {
-    throw new Error("Seminar not found");
-  }
-
   return seminar;
 };
 
-export const getZaposleniIdsFromSeminars = async (seminarIds: string[]): Promise<string[]> => {
+export const getZaposleniIdsFromSeminars = async (
+  seminarIds: string[],
+): Promise<string[]> => {
   if (seminarIds.length > 0) {
     const seminars = await Seminar.find(
       { _id: { $in: seminarIds } },
       { "prijave.zaposleni_id": 1 },
     ).lean();
 
-    return seminars.flatMap((s) => s.prijave.map((p) => p.zaposleni_id.toString()));
+    return seminars.flatMap((s) =>
+      s.prijave.map((p) => p.zaposleni_id.toString()),
+    );
   }
   return [];
 };

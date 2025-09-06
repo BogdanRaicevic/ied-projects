@@ -1,7 +1,12 @@
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { IzdavacRacuna, type RacunType, RacunZod, TipRacuna } from "@ied-shared/types/racuni.zod";
+import {
+  IzdavacRacuna,
+  type RacunType,
+  RacunZod,
+  TipRacuna,
+} from "@ied-shared/types/racuni.zod";
 import { formatDate } from "date-fns";
 import Docxtemplater from "docxtemplater";
 import { type Request, Router } from "express";
@@ -31,7 +36,10 @@ const sanitizeFilename = (str: string): string => {
     Ž: "Z",
   };
   // Replace Serbian characters
-  let sanitized = str.replace(/[šŠđĐčČćĆžŽ]/g, (char) => serbianChars[char] || char);
+  let sanitized = str.replace(
+    /[šŠđĐčČćĆžŽ]/g,
+    (char) => serbianChars[char] || char,
+  );
   // Remove or replace problematic characters (except underscore, dash, and dot for extension)
   sanitized = sanitized.replace(/[^a-zA-Z0-9-_.]/g, "_");
   // Replace multiple underscores with a single underscore
@@ -41,7 +49,8 @@ const sanitizeFilename = (str: string): string => {
   return sanitized;
 };
 
-const formatToLocalDate = (date: Date): string => formatDate(date, "dd.MM.yyyy");
+const formatToLocalDate = (date: Date): string =>
+  formatDate(date, "dd.MM.yyyy");
 
 router.post(
   "/modify-template",
@@ -73,8 +82,6 @@ router.post(
       sanitizedTemplateName.concat(".docx"),
     );
 
-    console.log("templatePath", templatePath);
-
     // Additional check to ensure the resolved path is within the templates directory
     const templatesDir = path.resolve(__dirname, "../../src/templates");
     if (!templatePath.startsWith(templatesDir)) {
@@ -95,14 +102,17 @@ router.post(
         datumIzdavanjaRacuna: formatToLocalDate(new Date()),
         hasOnline: (req.body.seminar.brojUcesnikaOnline || 0) > 0,
         hasOffline: (req.body.seminar.brojUcesnikaOffline || 0) > 0,
-        shouldRenderPdvBlock: racunData.izdavacRacuna !== IzdavacRacuna.PERMANENT,
+        shouldRenderPdvBlock:
+          racunData.izdavacRacuna !== IzdavacRacuna.PERMANENT,
         seminar: {
           ...(racunData.seminar ?? {}),
           datum: racunData.seminar?.datum
             ? formatToLocalDate(new Date(racunData.seminar.datum))
             : undefined,
         },
-        datumUplateAvansa: formatToLocalDate(racunData.datumUplateAvansa || new Date()),
+        datumUplateAvansa: formatToLocalDate(
+          racunData.datumUplateAvansa || new Date(),
+        ),
       };
 
       doc.render(dataForDocumentRednering);
@@ -118,7 +128,6 @@ router.post(
       const fileName = sanitizeFilename(
         `${racunData.pozivNaBroj}_${dataForDocumentRednering.primalacRacuna?.naziv}.docx`,
       );
-      console.log("fileName", fileName);
       res.setHeader(`Content-Disposition`, `attachment; filename=${fileName}`);
 
       res.send(buf);
