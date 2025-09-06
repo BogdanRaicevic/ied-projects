@@ -7,7 +7,7 @@ export const getAllPretrage = async () => {
     const result = await Pretrage.find({}).exec();
     return result.map((item) => item);
   } catch (error) {
-    console.log("Error finding pretrage", error);
+    console.error("Error finding pretrage", error);
     throw new Error("Error finding pretrage");
   }
 };
@@ -47,9 +47,8 @@ export const savePretraga = async (
     if (!p) {
       await Pretrage.create(pretragaData);
     }
-    console.log("Pretraga saved successfully");
   } catch (error) {
-    console.log("Error saving pratraga", error);
+    console.error("Error saving pretraga", error);
     throw new Error("Error saving pretraga");
   }
 };
@@ -59,7 +58,7 @@ export const deletePretraga = async (id: string) => {
     validateMongoId(id);
     await Pretrage.findByIdAndDelete({ _id: id });
   } catch (error) {
-    console.log("Error deleting pretraga", error);
+    console.error("Error deleting pretraga", error);
     throw new Error("Error deleting pretraga");
   }
 };

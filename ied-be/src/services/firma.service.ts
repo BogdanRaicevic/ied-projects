@@ -10,7 +10,7 @@ export const findById = async (id: string): Promise<FirmaType | null> => {
   try {
     return await Firma.findById(id).lean();
   } catch (error) {
-    console.log("Error finding firma by od firma id:", error);
+    console.error("Error finding firma by od firma id:", error);
     throw new Error("Error finding firma by od firma id");
   }
 };

@@ -27,7 +27,7 @@ export const fetchAllPretrage = async () => {
     const r = await axiosInstanceWithAuth.get(`/api/pretrage`);
     return r.data;
   } catch (error) {
-    console.log("Error fetching pregrage", error);
+    console.error("Error fetching pregrage", error);
     throw error;
   }
 };
@@ -37,8 +37,6 @@ export const deletePretraga = async ({ id }: { id: string }) => {
     const body = {
       id,
     };
-
-    console.log("the body", body);
 
     const response = await axiosInstanceWithAuth.post(
       `/api/pretrage/delete`,

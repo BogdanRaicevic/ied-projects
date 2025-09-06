@@ -134,7 +134,6 @@ const fetchDocumentAfter = async (
   }
 
   if (method === "POST" && responseBody) {
-    console.log("Using response body for POST audit log.", responseBody);
     return responseBody;
   }
 

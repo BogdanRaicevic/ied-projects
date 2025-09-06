@@ -5,7 +5,7 @@ export const getAllStanjaFirmi = async () => {
     const result = await StanjeFirme.find({}, { _id: 0 }).exec();
     return result.map((item) => item.stanje_firme);
   } catch (error) {
-    console.log("Error finding stanje_firme", error);
+    console.error("Error finding stanje_firme", error);
     throw new Error("Error finding stanje_firme");
   }
 };

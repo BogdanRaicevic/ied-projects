@@ -33,9 +33,14 @@ export const searchRacuni = async (
     pageSize,
   };
   try {
-    const response = await axiosInstanceWithAuth.post(`/api/racuni/search`, searchParams);
+    const response = await axiosInstanceWithAuth.post(
+      `/api/racuni/search`,
+      searchParams,
+    );
     const rawData = response.data;
-    const parsedData = rawData.racuni.map((racun: any) => RacunZod.parse(racun));
+    const parsedData = rawData.racuni.map((racun: any) =>
+      RacunZod.parse(racun),
+    );
 
     return {
       totalDocuments: rawData.totalDocuments,
@@ -70,7 +75,9 @@ export const getRacunByPozivNaBrojAndIzdavac = async (
       ...(tipRacuna && { tipRacuna: tipRacuna }),
     });
 
-    const response = await axiosInstanceWithAuth.get(`/api/racuni?${params.toString()}`);
+    const response = await axiosInstanceWithAuth.get(
+      `/api/racuni?${params.toString()}`,
+    );
     return response.data;
   } catch (error) {
     console.error("Error fetching racun by poziv na broj and izdavac:", error);
@@ -82,11 +89,12 @@ export const saveNewRacun = async (racun: RacunType): Promise<RacunType> => {
   try {
     validateOrThrow(RacunZod, racun);
     if (racun._id || racun.pozivNaBroj) {
-      console.log("Racun already has an ID or pozivNaBroj, skipping save operation.");
       return racun; // or handle as needed
     }
-    const response = await axiosInstanceWithAuth.post(`/api/racuni/save`, racun);
-    console.log("Racun saved:", response.data);
+    const response = await axiosInstanceWithAuth.post(
+      `/api/racuni/save`,
+      racun,
+    );
     return response.data;
   } catch (error) {
     console.error("Error saving new racun:", error);
@@ -94,7 +102,9 @@ export const saveNewRacun = async (racun: RacunType): Promise<RacunType> => {
   }
 };
 
-export const updateRacunById = async (updatedRacun: RacunType): Promise<RacunType> => {
+export const updateRacunById = async (
+  updatedRacun: RacunType,
+): Promise<RacunType> => {
   try {
     const response = await axiosInstanceWithAuth.put(
       `/api/racuni/update/${updatedRacun._id}`,

@@ -7,7 +7,7 @@ export const getAllVelicineFirmi = async () => {
       .exec();
     return result.map((item) => item.velicina_firme);
   } catch (error) {
-    console.log("Error finding velicine_firmi", error);
+    console.error("Error finding velicine_firmi", error);
     throw new Error("Error finding velicine_firmi");
   }
 };

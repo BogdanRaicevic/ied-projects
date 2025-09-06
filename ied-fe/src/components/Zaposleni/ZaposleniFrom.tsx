@@ -36,7 +36,7 @@ export function ZaposleniForm({ zaposleni, onSubmit }: ZaposleniFormProps) {
   };
 
   const onError = (errors: any, e: any) => {
-    console.log("Zaposleni form errors: ", errors, e);
+    console.error("Zaposleni form errors: ", errors, e);
   };
 
   useEffect(() => {
