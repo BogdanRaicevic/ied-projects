@@ -97,8 +97,8 @@ importers:
   ied-fe:
     dependencies:
       '@clerk/clerk-react':
-        specifier: ^5.46.1
-        version: 5.46.1(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
+        specifier: ^5.46.2
+        version: 5.46.2(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
       '@emotion/react':
         specifier: ^11.14.0
         version: 11.14.0(@types/react@19.1.12)(react@19.1.1)
@@ -517,8 +517,8 @@ packages:
     resolution: {integrity: sha512-MjEeDjlteMcEC+RUmrtlwkrJ+1Zv7Gb+atCg6mD+1N8/01v66LjYWKk2eQ+T0v+znQkSiFS8JPQ8yqaLH2sbqg==}
     engines: {node: '>=18.17.0'}
 
-  '@clerk/clerk-react@5.46.1':
-    resolution: {integrity: sha512-vKtIU3SHfIfsPFcLlw+I+El3VxN/io2aekGzAP7cKoClRPB4bE8GKsLvLIA326ff7yTDnvyrdxfEFY4ieyq5zg==}
+  '@clerk/clerk-react@5.46.2':
+    resolution: {integrity: sha512-Gk2YVg4k72ZSCJu/fYw5GQuku1vwfHrMmYRt1/2+vyDdotZsFjKA0AcH3cPkzHlVBuCwYonN+7BfQBBq3HzX9g==}
     engines: {node: '>=18.17.0'}
     peerDependencies:
       react: ^18.0.0 || ^19.0.0 || ^19.0.0-0
@@ -3288,7 +3288,7 @@ snapshots:
       - react
       - react-dom
 
-  '@clerk/clerk-react@5.46.1(react-dom@19.1.1(react@19.1.1))(react@19.1.1)':
+  '@clerk/clerk-react@5.46.2(react-dom@19.1.1(react@19.1.1))(react@19.1.1)':
     dependencies:
       '@clerk/shared': 3.24.2(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
       '@clerk/types': 4.85.0
