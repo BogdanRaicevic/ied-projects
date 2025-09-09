@@ -30,7 +30,7 @@ importers:
         specifier: ^3.884.0
         version: 3.884.0(@aws-sdk/client-s3@3.884.0)
       '@clerk/express':
-        specifier: ^1.7.29
+        specifier: ^1.7.30
         version: 1.7.30(express@5.1.0)(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
       cors:
         specifier: ^2.8.5
