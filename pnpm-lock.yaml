@@ -203,7 +203,7 @@ importers:
         specifier: ^5.9.2
         version: 5.9.2
       vite:
-        specifier: ^7.1.4
+        specifier: ^7.1.5
         version: 7.1.5(@types/node@22.18.1)(jiti@2.5.1)(tsx@4.20.5)
 
   ied-shared:
