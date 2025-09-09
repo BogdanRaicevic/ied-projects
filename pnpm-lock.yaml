@@ -24,10 +24,10 @@ importers:
   ied-be:
     dependencies:
       '@aws-sdk/client-s3':
-        specifier: ^3.883.0
+        specifier: ^3.884.0
         version: 3.884.0
       '@aws-sdk/lib-storage':
-        specifier: ^3.883.0
+        specifier: ^3.884.0
         version: 3.884.0(@aws-sdk/client-s3@3.884.0)
       '@clerk/express':
         specifier: ^1.7.29
@@ -203,7 +203,7 @@ importers:
         specifier: ^5.9.2
         version: 5.9.2
       vite:
-        specifier: ^7.1.4
+        specifier: ^7.1.5
         version: 7.1.5(@types/node@22.18.1)(jiti@2.5.1)(tsx@4.20.5)
 
   ied-shared:
@@ -240,7 +240,7 @@ importers:
         specifier: ^8.18.1
         version: 8.18.1
       mysql2:
-        specifier: ^3.14.4
+        specifier: ^3.14.5
         version: 3.14.5
     devDependencies:
       '@biomejs/biome':
