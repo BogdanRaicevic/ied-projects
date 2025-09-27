@@ -106,8 +106,8 @@ importers:
         specifier: ^11.14.1
         version: 11.14.1(@emotion/react@11.14.0(@types/react@19.1.12)(react@19.1.1))(@types/react@19.1.12)(react@19.1.1)
       '@fontsource/roboto':
-        specifier: ^5.2.6
-        version: 5.2.6
+        specifier: ^5.2.8
+        version: 5.2.8
       '@hookform/resolvers':
         specifier: ^5.2.1
         version: 5.2.1(react-hook-form@7.62.0(react@19.1.1))
@@ -785,8 +785,8 @@ packages:
     cpu: [x64]
     os: [win32]
 
-  '@fontsource/roboto@5.2.6':
-    resolution: {integrity: sha512-hzarG7yAhMoP418smNgfY4fO7UmuUEm5JUtbxCoCcFHT0hOJB+d/qAEyoNjz7YkPU5OjM2LM8rJnW8hfm0JLaA==}
+  '@fontsource/roboto@5.2.8':
+    resolution: {integrity: sha512-oh9g4Cg3loVMz9MWeKWfDI+ooxxG1aRVetkiKIb2ESS2rrryGecQ/y4pAj4z5A5ebyw450dYRi/c4k/I3UBhHA==}
 
   '@hookform/resolvers@5.2.1':
     resolution: {integrity: sha512-u0+6X58gkjMcxur1wRWokA7XsiiBJ6aK17aPZxhkoYiK5J+HcTx0Vhu9ovXe6H+dVpO6cjrn2FkJTryXEMlryQ==}
@@ -3517,7 +3517,7 @@ snapshots:
   '@esbuild/win32-x64@0.25.9':
     optional: true
 
-  '@fontsource/roboto@5.2.6': {}
+  '@fontsource/roboto@5.2.8': {}
 
   '@hookform/resolvers@5.2.1(react-hook-form@7.62.0(react@19.1.1))':
     dependencies:
