@@ -6,7 +6,6 @@ export const ZaposleniSchema = z.object({
   ime: z.string().optional(),
   prezime: z.string().optional(),
   e_mail: z
-    .string()
     .email("Neispravna email adresa")
     .max(100, "Predugacka email adresa")
     .or(z.literal(""))
@@ -25,7 +24,6 @@ export const FirmaSchema = z.object({
   PIB: z.string().or(z.literal("")).default(""),
   telefon: z.string().default(""),
   e_mail: z
-    .string()
     .email("Neispravna email adresa")
     .max(100, "Predugacka email adresa")
     .or(z.literal(""))
