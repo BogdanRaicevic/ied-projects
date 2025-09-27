@@ -11,50 +11,38 @@ on:
 
 
 jobs:
-  lint-ied-fe:
+  lint-errors:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
         uses: actions/checkout@v5
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v5
-        with:
-          node-version: '22.19.0'
-
       - name: Install pnpm
         uses: pnpm/action-setup@v4
         with:
-          version: 10.15.1
+          version: 10.17.1
 
-      - name: Install dependencies
-        working-directory: ied-fe
-        run: pnpm install
-
-      - name: Run Biome
-        working-directory: ied-fe
-        run: pnpm run lint:error
-
-  lint-ied-be:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v5
-
-      - name: Set up Node.js
+      - name: Set up Node.js and cache pnpm dependencies
         uses: actions/setup-node@v5
         with:
           node-version: '22.19.0'
+          cache: 'pnpm'
 
-      - name: Install pnpm
-        uses: pnpm/action-setup@v4
+      - name: Get pnpm store directory
+        shell: bash
+        run: |
+          echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
+
+      - name: Setup pnpm cache
+        uses: actions/cache@v4
         with:
-          version: 10.15.1
+          path: ${{ env.STORE_PATH }}
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-store-
 
       - name: Install dependencies
-        working-directory: ied-be
-        run: pnpm install
+        run: pnpm install --frozen-lockfile
 
-      - name: Run Biome
-        working-directory: ied-be
+      - name: Run Lint across all packages
         run: pnpm run lint:error

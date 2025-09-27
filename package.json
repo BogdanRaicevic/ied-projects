@@ -10,11 +10,12 @@
     "mongo-migrator"
   ],
   "scripts": {
-    "build": "turbo build",
-    "dev": "turbo dev",
-    "lint": "turbo lint",
-    "biome:format": "turbo biome:format",
-    "biome:check": "turbo biome:check",
+    "build": "turbo run build",
+    "dev": "turbo run dev",
+    "lint": "turbo run lint",
+    "lint:error": "turbo run lint:error",
+    "biome:format": "turbo run biome:format",
+    "biome:check": "turbo run biome:check",
     "knip": "knip"
   },
   "devDependencies": {
