@@ -9,8 +9,8 @@
     "preview": "vite preview",
     "biome:format": "npx biome format --write ./src",
     "biome:check": "npx biome check --write ./src",
-    "lint:all": "npx biome lint",
-    "lint:error": "npx biome lint --diagnostic-level error"
+    "lint": "npx biome lint ./src",
+    "lint:error": "npx biome lint --diagnostic-level error ./src"
   },
   "homepage": "http://BogdanRaicevic.github.io/ied-fe",
   "dependencies": {

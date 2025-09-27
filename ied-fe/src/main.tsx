@@ -13,8 +13,9 @@ import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { BrowserRouter } from "react-router-dom";
 import { setGetTokenFn } from "./utils/clerkClient";
+import { env } from "./utils/envVariables";
 
-const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
+const PUBLISHABLE_KEY = env.clerkPublishableKey;
 
 if (!PUBLISHABLE_KEY) {
   throw new Error("Missing Publishable Key");

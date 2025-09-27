@@ -141,3 +141,6 @@
 
 # ignore storage template folder
 **/ied-be/storage/templates
+
+# turbo pack files
+**/.turbo
