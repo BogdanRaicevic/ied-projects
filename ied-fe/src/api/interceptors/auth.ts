@@ -1,8 +1,9 @@
 import axios from "axios";
 import { getClerkToken } from "../../utils/clerkClient";
+import { env } from "../../utils/envVariables";
 
 const axiosInstanceWithAuth = axios.create({
-  baseURL: import.meta.env.VITE_BE_URL,
+  baseURL: env.beURL,
 });
 
 axiosInstanceWithAuth.interceptors.request.use(

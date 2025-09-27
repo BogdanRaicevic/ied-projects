@@ -3,8 +3,9 @@ import MyTable from "../components/MyTable";
 import PageTitle from "../components/PageTitle";
 import PredefinedPretrage from "../components/PredefinedPretrage/PredefinedPretrage";
 import PretragaParameters from "../components/PretragaParameters/PretragaParameters";
+import { env } from "../utils/envVariables";
 
-const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
+const PUBLISHABLE_KEY = env.clerkPublishableKey;
 
 if (!PUBLISHABLE_KEY) {
   throw new Error("Missing Publishable Key");
