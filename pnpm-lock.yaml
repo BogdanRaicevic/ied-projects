@@ -45,8 +45,8 @@ importers:
         specifier: ^4.1.0
         version: 4.1.0
       docxtemplater:
-        specifier: ^3.66.3
-        version: 3.66.4
+        specifier: ^3.66.5
+        version: 3.66.5
       dotenv:
         specifier: ^17.2.2
         version: 17.2.2
@@ -327,6 +327,7 @@ packages:
   '@aws-sdk/lib-storage@3.896.0':
     resolution: {integrity: sha512-EJWXL/5LxBJFujsOud3+EfRbIwy/SZiWy5ld70RdoqLS/RsfZh9+mZMJGvd3hewy7xHgDYVbxZfDh14bsvfYIQ==}
     engines: {node: '>=18.0.0'}
+    deprecated: This version ignores user provided partSize. Please update to >=3.899.0. Details https://github.com/aws/aws-sdk-js-v3/issues/7379
     peerDependencies:
       '@aws-sdk/client-s3': ^3.896.0
 
@@ -1814,8 +1815,8 @@ packages:
     resolution: {integrity: sha512-sSuxWU5j5SR9QQji/o2qMvqRNYRDOcBTgsJ/DeCf4iSN4gW+gNMXM7wFIP+fdXZxoNiAnHUTGjCr+TSWXdRDKg==}
     engines: {node: '>=0.3.1'}
 
-  docxtemplater@3.66.4:
-    resolution: {integrity: sha512-TzkSgWiZpisMvMyfT1wGDLVR4YsMxqg7jxdfKo7Cs76+XfwcyOgFKz7HOO0NyYVVZG2MOoTvhr6o7u6YnpPn1w==}
+  docxtemplater@3.66.5:
+    resolution: {integrity: sha512-IgeY13fNJEPmI1XZT3dksHhwg9RfmNBmvIMDQIr9KYAYNW9Dnwyk/GIQfHPj4rV+ecrF/4QztWMxHBuCjjNlGw==}
     engines: {node: '>=0.10'}
 
   dom-helpers@5.2.1:
@@ -4587,7 +4588,7 @@ snapshots:
 
   diff@8.0.2: {}
 
-  docxtemplater@3.66.4:
+  docxtemplater@3.66.5:
     dependencies:
       '@xmldom/xmldom': 0.9.8
 
