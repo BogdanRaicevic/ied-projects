@@ -28,16 +28,18 @@ export default function PrijavaNaSeminarDialog({
   onClose,
   companyData,
   zaposleniData,
+  onSuccess,
 }: {
   open: boolean;
   onClose: () => void;
   companyData: FirmaType;
   zaposleniData: Zaposleni;
+  onSuccess: (seminar: string) => void;
 }) {
   const [prijavaState, setPrijavaState] = useState<
     "success" | "warning" | "error" | ""
   >("");
-  const [selectedSeminar, setSelectedSeminar] = useState<string>("");
+  const [selectedSeminarId, setSelectedSeminarId] = useState<string>("");
   const [prisustvo, setPrisustvo] = useState<"online" | "offline">("online");
   const [vrstaPrijave, setVrstaPrijave] = useState<
     "telefon" | "email" | "drustvene_mreze"
@@ -46,14 +48,14 @@ export default function PrijavaNaSeminarDialog({
   useEffect(() => {
     if (open) {
       setPrijavaState("");
-      setSelectedSeminar("");
+      setSelectedSeminarId("");
       setPrisustvo("online");
       setVrstaPrijave("email");
     }
   }, [open]);
 
   const handleSavePrijava = async () => {
-    if (!companyData?._id || !zaposleniData?._id || !selectedSeminar) {
+    if (!companyData?._id || !zaposleniData?._id || !selectedSeminarId) {
       throw new Error("Nedostaju podaci o firmi, zaposlenom ili seminaru");
     }
 
@@ -72,8 +74,11 @@ export default function PrijavaNaSeminarDialog({
     };
 
     try {
-      await createPrijava(selectedSeminar, prijava);
-      onClose();
+      await createPrijava(selectedSeminarId, prijava);
+      onSuccess(
+        fetchedSeminars?.seminari.find((s) => s._id === selectedSeminarId)
+          ?.naziv || "",
+      );
     } catch (error: any) {
       if (error.cause === "duplicate") {
         setPrijavaState("warning");
@@ -218,7 +223,7 @@ export default function PrijavaNaSeminarDialog({
               renderInput={(params) => (
                 <TextField {...params} label="Seminar" />
               )}
-              onChange={(_, value) => setSelectedSeminar(value?._id || "")}
+              onChange={(_, value) => setSelectedSeminarId(value?._id || "")}
             />
           </Grid>
         </Grid>
@@ -235,7 +240,7 @@ export default function PrijavaNaSeminarDialog({
       )}
       <DialogActions>
         <Button
-          disabled={!selectedSeminar}
+          disabled={!selectedSeminarId}
           variant="contained"
           color="success"
           onClick={handleSavePrijava}
