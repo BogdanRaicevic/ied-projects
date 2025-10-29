@@ -45,12 +45,12 @@ export default function ExportDataButton({
     data: ExportZaposlenih;
     duplicates: string[];
   }) => {
-    const headers = ["Naziv firme", "E-mail", "Ime i prezime", "Radno mesto"];
+    const headers = ["Ime i prezime", "E-mail", "Naziv firme", "Radno mesto"];
 
     const rows = someData.data.map((item) => [
-      item.naziv_firme || "",
-      item.e_mail || "",
       item.imePrezime || "",
+      item.e_mail || "",
+      item.naziv_firme || "",
       item.radno_mesto || "",
     ]);
 
