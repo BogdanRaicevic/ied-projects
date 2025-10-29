@@ -112,6 +112,10 @@ export default function Firma() {
       const zaposleni = selectedRow.original;
       const newKomentar = `${firmaData?.komentar || ""}\n${format(Date(), "dd.MM.yyyy")} - ${zaposleni.ime} ${zaposleni.prezime} - ${seminar}`;
       updateFirmaMutation.mutate({ ...firmaData, komentar: `${newKomentar}` });
+      updateZaposleniMutation.mutate({
+        ...zaposleni,
+        komentar: `${zaposleni.komentar || ""}\n${format(Date(), "dd.MM.yyyy")} - ${seminar}`,
+      });
     }
     handleClosePrijavaDialog();
   };
