@@ -9,6 +9,7 @@ import {
   IconButton,
   Tooltip,
 } from "@mui/material";
+import { format } from "date-fns/format";
 import {
   MaterialReactTable,
   type MRT_ColumnDef,
@@ -24,6 +25,7 @@ import { myZaposleniColumns } from "../components/MyTable/myCompanyColumns";
 import {
   useAddZaposleni,
   useDeleteZaposleni,
+  useUpdateFirma,
   useUpdateZaposleni,
 } from "../hooks/firma/useFirmaMutations";
 import { useGetFirma } from "../hooks/firma/useFirmaQueries";
@@ -53,7 +55,8 @@ export default function Firma() {
 
   const addZaposleniMutation = useAddZaposleni(id!);
   const updateZaposleniMutation = useUpdateZaposleni(id!);
-  const deleteZaposleniMutation = useDeleteZaposleni(id);
+  const deleteZaposleniMutation = useDeleteZaposleni(id!);
+  const updateFirmaMutation = useUpdateFirma(id!);
 
   const [errorAlert, setErrorAlert] = useState<string | null>(null);
   const [warningAlert, setWarningAlert] = useState<string | null>(null);
@@ -104,6 +107,18 @@ export default function Firma() {
     useState(false);
   const handleClosePrijavaDialog = () => setOpenPrijavaNaSeminarDialog(false);
   const handleClose = () => setOpenZaposelniDialog(false);
+  const handlePrijavaSuccess = (seminar: string) => {
+    if (selectedRow) {
+      const zaposleni = selectedRow.original;
+      const newKomentar = `${firmaData?.komentar || ""}\n${format(Date(), "dd.MM.yyyy")} - ${zaposleni.ime} ${zaposleni.prezime} - ${seminar}`;
+      updateFirmaMutation.mutate({ ...firmaData, komentar: `${newKomentar}` });
+      updateZaposleniMutation.mutate({
+        ...zaposleni,
+        komentar: `${zaposleni.komentar || ""}\n${format(Date(), "dd.MM.yyyy")} - ${seminar}`,
+      });
+    }
+    handleClosePrijavaDialog();
+  };
 
   const handleZaposleniSubmit = (zaposleniData: Zaposleni) => {
     const isEditing = !!zaposleniData._id;
@@ -270,6 +285,7 @@ export default function Firma() {
             onClose={handleClosePrijavaDialog}
             companyData={firmaData}
             zaposleniData={selectedRow?.original ?? {}}
+            onSuccess={handlePrijavaSuccess}
           />
         </>
       )}
