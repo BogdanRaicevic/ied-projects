@@ -38,7 +38,7 @@ export default function ExportDataButton({
       ? [headersForDuplicates, ...someData.duplicates].join("\n")
       : "";
 
-    return bom + csvContent + "\n\n" + duplicatesContent;
+    return `${bom + csvContent}\n\n${duplicatesContent}`;
   };
 
   const zaposleniData = (someData: {
@@ -61,7 +61,7 @@ export default function ExportDataButton({
       ? [headersForDuplicates, ...someData.duplicates].join("\n")
       : "";
 
-    return bom + csvContent + "\n\n" + duplicatesContent;
+    return `${bom + csvContent}\n\n${duplicatesContent}`;
   };
 
   const handleExport = async () => {
