@@ -39,12 +39,16 @@ export default function PrijavaNaSeminarDialog({
   >("");
   const [selectedSeminar, setSelectedSeminar] = useState<string>("");
   const [prisustvo, setPrisustvo] = useState<"online" | "offline">("online");
+  const [vrstaPrijave, setVrstaPrijave] = useState<
+    "telefon" | "email" | "drustvene_mreze"
+  >("email");
 
   useEffect(() => {
     if (open) {
       setPrijavaState("");
       setSelectedSeminar("");
       setPrisustvo("online");
+      setVrstaPrijave("email");
     }
   }, [open]);
 
@@ -64,6 +68,7 @@ export default function PrijavaNaSeminarDialog({
       zaposleni_email: zaposleniData.e_mail,
       zaposleni_telefon: zaposleniData.telefon,
       prisustvo,
+      vrsta_prijave: vrstaPrijave,
     };
 
     try {
@@ -145,7 +150,7 @@ export default function PrijavaNaSeminarDialog({
             <FormControl sx={{ m: 2 }}>
               <FormLabel>Prisustvo</FormLabel>
               <RadioGroup
-                aria-labelledby="demo-radio-buttons-group-label"
+                aria-labelledby="prisustvo-radio-buttons-group-label"
                 defaultValue="online"
                 name="radio-buttons-group"
                 onChange={(e) =>
@@ -161,6 +166,35 @@ export default function PrijavaNaSeminarDialog({
                   value="offline"
                   control={<Radio />}
                   label="Offline"
+                />
+              </RadioGroup>
+            </FormControl>
+            <FormControl sx={{ m: 2 }}>
+              <FormLabel>Vrsta Prijave</FormLabel>
+              <RadioGroup
+                aria-labelledby="vrsta-prijave-radio-buttons-group-label"
+                defaultValue="email"
+                name="vrsta-prijave-radio-buttons-group"
+                onChange={(e) =>
+                  setVrstaPrijave(
+                    e.target.value as "telefon" | "email" | "drustvene_mreze",
+                  )
+                }
+              >
+                <FormControlLabel
+                  value="email"
+                  control={<Radio />}
+                  label="Email"
+                />
+                <FormControlLabel
+                  value="telefon"
+                  control={<Radio />}
+                  label="Telefon"
+                />
+                <FormControlLabel
+                  value="drustvene_mreze"
+                  control={<Radio />}
+                  label="Društvene mreže"
                 />
               </RadioGroup>
             </FormControl>

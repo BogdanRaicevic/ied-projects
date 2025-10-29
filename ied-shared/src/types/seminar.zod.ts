@@ -12,6 +12,7 @@ export const PrijavaSchema = z.object({
   zaposleni_email: z.string().optional(),
   zaposleni_telefon: z.string().optional(),
   prisustvo: z.enum(["online", "offline"]),
+  vrsta_prijave: z.enum(["telefon", "email", "drustvene_mreze"]),
 });
 
 export const SeminarSchema = z.object({
@@ -19,8 +20,16 @@ export const SeminarSchema = z.object({
   naziv: z.string().min(1, "Naziv seminara je obavezan"),
   predavac: z.string().optional(),
   lokacija: z.string().optional(),
-  offlineCena: z.coerce.number().min(0).nonnegative("Cena ne može biti negativna").default(0),
-  onlineCena: z.coerce.number().min(0).nonnegative("Cena ne može biti negativna").default(0),
+  offlineCena: z.coerce
+    .number()
+    .min(0)
+    .nonnegative("Cena ne može biti negativna")
+    .default(0),
+  onlineCena: z.coerce
+    .number()
+    .min(0)
+    .nonnegative("Cena ne može biti negativna")
+    .default(0),
   datum: z.coerce.date(),
   detalji: z.string().optional(),
   prijave: z.array(PrijavaSchema).default([]),
@@ -44,4 +53,6 @@ export const ExtendedSearchSeminarZod = SeminarQueryParamsSchema.extend({
   pageSize: z.coerce.number().default(50),
 });
 
-export type ExtendedSearchSeminarType = z.infer<typeof ExtendedSearchSeminarZod>;
+export type ExtendedSearchSeminarType = z.infer<
+  typeof ExtendedSearchSeminarZod
+>;
