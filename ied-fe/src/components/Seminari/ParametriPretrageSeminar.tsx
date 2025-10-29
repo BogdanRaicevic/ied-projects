@@ -1,8 +1,12 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { type SeminarQueryParams, SeminarQueryParamsSchema } from "@ied-shared/types/seminar.zod";
+import {
+  type SeminarQueryParams,
+  SeminarQueryParamsSchema,
+} from "@ied-shared/types/seminar.zod";
 import { UnfoldLess } from "@mui/icons-material";
 import { Box, Button, FormControl, TextField } from "@mui/material";
 import { DatePicker } from "@mui/x-date-pickers";
+import { addMonths, subMonths } from "date-fns";
 import { Controller, useForm } from "react-hook-form";
 
 export function ParametriPretrageSeminar({
@@ -24,7 +28,10 @@ export function ParametriPretrageSeminar({
   return (
     <>
       <h1>Parametri Pretrage</h1>
-      <Box component="form" onSubmit={handleSubmit((data) => handleFormSubmit(data))}>
+      <Box
+        component="form"
+        onSubmit={handleSubmit((data) => handleFormSubmit(data))}
+      >
         <Controller
           name="naziv"
           control={control}
@@ -32,7 +39,6 @@ export function ParametriPretrageSeminar({
             <TextField
               {...field}
               sx={{ m: 1 }}
-              id="naziv"
               label="Naziv seminara"
               variant="outlined"
               error={!!errors.naziv}
@@ -48,7 +54,6 @@ export function ParametriPretrageSeminar({
             <TextField
               {...field}
               sx={{ m: 1 }}
-              id="predavac"
               label="Predavač"
               variant="outlined"
               error={!!errors.predavac}
@@ -64,7 +69,6 @@ export function ParametriPretrageSeminar({
             <TextField
               {...field}
               sx={{ m: 1 }}
-              id="lokacija"
               label="Lokacija"
               variant="outlined"
               error={!!errors.lokacija}
@@ -83,6 +87,7 @@ export function ParametriPretrageSeminar({
                 format="yyyy/MM/dd"
                 label="Početni datum"
                 name="datumOd"
+                defaultValue={subMonths(new Date(), 3)}
                 value={field.value as Date | null}
                 onChange={(date) => field.onChange(date)}
               />
@@ -98,8 +103,9 @@ export function ParametriPretrageSeminar({
               <DatePicker
                 {...field}
                 format="yyyy/MM/dd"
-                label="Kranji datum"
+                label="Krajnji datum"
                 name="datumDo"
+                defaultValue={addMonths(new Date(), 3)}
                 value={field.value as Date | null}
                 onChange={(date) => field.onChange(date)}
               />
@@ -107,7 +113,13 @@ export function ParametriPretrageSeminar({
           />
         </FormControl>
 
-        <Button sx={{ m: 1 }} size="large" variant="contained" color="info" type="submit">
+        <Button
+          sx={{ m: 1 }}
+          size="large"
+          variant="contained"
+          color="info"
+          type="submit"
+        >
           Pretrazi
         </Button>
       </Box>

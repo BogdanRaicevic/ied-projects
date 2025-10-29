@@ -1,8 +1,9 @@
 import type { NextFunction, Request, Response } from "express";
-import type { ZodTypeAny } from "zod";
+import type { ZodType } from "zod";
 
 export const validate =
-  (schema: ZodTypeAny) => async (req: Request, res: Response, next: NextFunction) => {
+  (schema: ZodType) =>
+  async (req: Request, res: Response, next: NextFunction) => {
     try {
       const result = await schema.safeParseAsync(req.body);
 
@@ -19,6 +20,8 @@ export const validate =
       next();
     } catch (error) {
       console.error("Unexpected Error during Validation Process:", error);
-      res.status(500).json({ message: "Internal server error during validation process" });
+      res
+        .status(500)
+        .json({ message: "Internal server error during validation process" });
     }
   };
