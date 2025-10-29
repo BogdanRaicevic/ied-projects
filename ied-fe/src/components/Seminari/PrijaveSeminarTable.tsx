@@ -91,6 +91,7 @@ export default function PrijaveSeminarTable({
                     <TableCell>Email</TableCell>
                     <TableCell>Telefon</TableCell>
                     <TableCell>Prisustvo</TableCell>
+                    <TableCell>Vrsta prijave</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
@@ -111,6 +112,7 @@ export default function PrijaveSeminarTable({
                       <TableCell>{prijava.zaposleni_email}</TableCell>
                       <TableCell>{prijava.zaposleni_telefon}</TableCell>
                       <TableCell>{prijava.prisustvo}</TableCell>
+                      <TableCell>{prijava.vrsta_prijave}</TableCell>
                     </TableRow>
                   ))}
                 </TableBody>
