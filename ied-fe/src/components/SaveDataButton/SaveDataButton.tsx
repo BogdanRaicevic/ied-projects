@@ -38,19 +38,19 @@ export default function ExportDataButton({
       ? [headersForDuplicates, ...someData.duplicates].join("\n")
       : "";
 
-    return bom + csvContent + "\n\n" + duplicatesContent;
+    return `${bom + csvContent}\n\n${duplicatesContent}`;
   };
 
   const zaposleniData = (someData: {
     data: ExportZaposlenih;
     duplicates: string[];
   }) => {
-    const headers = ["Naziv firme", "E-mail", "Ime i prezime", "Radno mesto"];
+    const headers = ["Ime i prezime", "E-mail", "Naziv firme", "Radno mesto"];
 
     const rows = someData.data.map((item) => [
-      item.naziv_firme || "",
-      item.e_mail || "",
       item.imePrezime || "",
+      item.e_mail || "",
+      item.naziv_firme || "",
       item.radno_mesto || "",
     ]);
 
@@ -61,7 +61,7 @@ export default function ExportDataButton({
       ? [headersForDuplicates, ...someData.duplicates].join("\n")
       : "";
 
-    return bom + csvContent + "\n\n" + duplicatesContent;
+    return `${bom + csvContent}\n\n${duplicatesContent}`;
   };
 
   const handleExport = async () => {
