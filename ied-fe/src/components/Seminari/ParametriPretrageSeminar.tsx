@@ -87,7 +87,7 @@ export function ParametriPretrageSeminar({
                 format="yyyy/MM/dd"
                 label="Početni datum"
                 name="datumOd"
-                defaultValue={subMonths(Date(), 3)}
+                defaultValue={subMonths(new Date(), 3)}
                 value={field.value as Date | null}
                 onChange={(date) => field.onChange(date)}
               />
@@ -105,7 +105,7 @@ export function ParametriPretrageSeminar({
                 format="yyyy/MM/dd"
                 label="Krajnji datum"
                 name="datumDo"
-                defaultValue={addMonths(Date(), 3)}
+                defaultValue={addMonths(new Date(), 3)}
                 value={field.value as Date | null}
                 onChange={(date) => field.onChange(date)}
               />
