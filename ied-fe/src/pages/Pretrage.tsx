@@ -1,5 +1,5 @@
 import Divider from "@mui/material/Divider";
-import MyTable from "../components/MyTable";
+import FirmasTable from "../components/FirmasTable";
 import PageTitle from "../components/PageTitle";
 import PredefinedPretrage from "../components/PredefinedPretrage/PredefinedPretrage";
 import PretragaParameters from "../components/PretragaParameters/PretragaParameters";
@@ -22,7 +22,7 @@ export default function Pretrage() {
 
       <PretragaParameters />
 
-      <MyTable />
+      <FirmasTable />
     </>
   );
 }

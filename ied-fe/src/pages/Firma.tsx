@@ -20,8 +20,8 @@ import { useEffect, useMemo, useState } from "react";
 import { useParams } from "react-router-dom";
 import PrijavaNaSeminarDialog from "../components/Dialogs/PrijaviZaposlenogNaSeminar";
 import ZaposleniDialog from "../components/Dialogs/ZaposleniDialog";
+import { myZaposleniColumns } from "../components/FirmasTable/myCompanyColumns";
 import FirmaForm from "../components/Forms/FirmaForm";
-import { myZaposleniColumns } from "../components/MyTable/myCompanyColumns";
 import {
   useAddZaposleni,
   useDeleteZaposleni,

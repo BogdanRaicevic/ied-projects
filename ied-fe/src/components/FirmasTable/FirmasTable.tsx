@@ -3,13 +3,13 @@ import {
   type MRT_ColumnDef,
   useMaterialReactTable,
 } from "material-react-table";
-import { memo, useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { fetchFirmaPretrage } from "../../api/firma.api";
 import type { FirmaType } from "../../schemas/firmaSchemas";
 import { usePretragaStore } from "../../store/pretragaParameters.store";
 import { myCompanyColumns } from "./myCompanyColumns";
 
-export default memo(function MyTable() {
+export default function FirmasTable() {
   const [data, setData] = useState<FirmaType[]>([]);
   const [documents, setDocuments] = useState(1000);
 
@@ -59,4 +59,4 @@ export default memo(function MyTable() {
     },
   });
   return <MaterialReactTable table={table} />;
-});
+}
