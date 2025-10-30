@@ -105,7 +105,9 @@ export function ZaposleniForm({ zaposleni, onSubmit }: ZaposleniFormProps) {
         <Single
           data={radnaMesta}
           placeholder="Radno mesto"
-          preselected={zaposleni?.radno_mesto || ""}
+          preselected={
+            radnaMesta.length > 0 ? zaposleni?.radno_mesto || "" : ""
+          }
           onChange={(newValue) => {
             setSelectedRadnoMesto(newValue);
           }}
