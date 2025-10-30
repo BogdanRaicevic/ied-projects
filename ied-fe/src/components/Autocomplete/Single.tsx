@@ -9,7 +9,6 @@ import { memo, useEffect, useState } from "react";
 interface AutocompleteSingleProps {
   data: string[];
   placeholder: string;
-  id: string;
   preselected: string;
   onChange: (newValue: string) => void;
 }
@@ -17,7 +16,6 @@ interface AutocompleteSingleProps {
 export default memo(function SingleAutocomplete({
   data,
   placeholder,
-  id,
   preselected,
   onChange,
 }: AutocompleteSingleProps) {
@@ -39,7 +37,6 @@ export default memo(function SingleAutocomplete({
 
   return (
     <Autocomplete
-      id={`single-autocomplete-${id}`}
       disablePortal
       options={data}
       renderInput={(params) => (

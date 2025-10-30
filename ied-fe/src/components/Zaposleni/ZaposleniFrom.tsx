@@ -61,7 +61,6 @@ export function ZaposleniForm({ zaposleni, onSubmit }: ZaposleniFormProps) {
       <TextField
         {...register("ime")}
         sx={{ m: 1 }}
-        id="ime"
         label="Ime"
         variant="outlined"
         error={Boolean(errors.ime)}
@@ -70,7 +69,6 @@ export function ZaposleniForm({ zaposleni, onSubmit }: ZaposleniFormProps) {
       <TextField
         {...register("prezime")}
         sx={{ m: 1 }}
-        id="prezime"
         label="Prezime"
         variant="outlined"
         error={Boolean(errors.prezime)}
@@ -79,7 +77,6 @@ export function ZaposleniForm({ zaposleni, onSubmit }: ZaposleniFormProps) {
       <TextField
         {...register("e_mail")}
         sx={{ m: 1 }}
-        id="email"
         label="Email"
         variant="outlined"
         error={Boolean(errors.e_mail)}
@@ -88,7 +85,6 @@ export function ZaposleniForm({ zaposleni, onSubmit }: ZaposleniFormProps) {
       <TextField
         {...register("telefon")}
         sx={{ m: 1 }}
-        id="telefon"
         label="Telefon"
         variant="outlined"
         error={Boolean(errors.telefon)}
@@ -98,7 +94,6 @@ export function ZaposleniForm({ zaposleni, onSubmit }: ZaposleniFormProps) {
       <TextField
         {...register("komentar")}
         sx={{ m: 1, width: "100%" }}
-        id="outlined-multiline-static"
         label="Komentari"
         multiline
         rows={4}
@@ -109,7 +104,6 @@ export function ZaposleniForm({ zaposleni, onSubmit }: ZaposleniFormProps) {
       <Box sx={{ m: 1, width: "100%" }}>
         <Single
           data={radnaMesta}
-          id="radna_mesta_zaposleni"
           placeholder="Radno mesto"
           preselected={zaposleni?.radno_mesto || ""}
           onChange={(newValue) => {
