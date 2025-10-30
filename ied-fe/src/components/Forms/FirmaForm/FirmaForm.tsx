@@ -183,7 +183,6 @@ export const FirmaForm: React.FC<FirmaFormProps> = ({ inputCompany }) => {
       return (
         <AutocompleteSingle
           data={optionsData}
-          id={item.key}
           placeholder={item.label}
           preselected={watch(item.key as keyof FirmaType) as string}
           onChange={(newValue) => {
