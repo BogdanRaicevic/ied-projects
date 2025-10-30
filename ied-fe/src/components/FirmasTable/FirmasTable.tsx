@@ -7,7 +7,7 @@ import { useEffect, useMemo, useState } from "react";
 import { fetchFirmaPretrage } from "../../api/firma.api";
 import type { FirmaType } from "../../schemas/firmaSchemas";
 import { usePretragaStore } from "../../store/pretragaParameters.store";
-import { myCompanyColumns } from "./myCompanyColumns";
+import { firmaColumns } from "./firmaColumns";
 
 export default function FirmasTable() {
   const [data, setData] = useState<FirmaType[]>([]);
@@ -31,7 +31,7 @@ export default function FirmasTable() {
   }, [pagination.pageIndex, pagination.pageSize, appliedParameters]);
 
   const table = useMaterialReactTable({
-    columns: useMemo<MRT_ColumnDef<FirmaType>[]>(() => myCompanyColumns, []),
+    columns: useMemo<MRT_ColumnDef<FirmaType>[]>(() => firmaColumns, []),
     data: useMemo<FirmaType[]>(() => data, [data]),
     enableColumnFilterModes: true,
     enableColumnOrdering: true,

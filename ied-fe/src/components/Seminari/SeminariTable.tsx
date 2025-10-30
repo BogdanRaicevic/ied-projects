@@ -32,7 +32,10 @@ import { deleteSeminar, fetchSeminari } from "../../api/seminari.api";
 import PrijaveSeminarTable from "./PrijaveSeminarTable";
 import SeminarForm from "./SeminarForm";
 
-export default function SeminariTable(props: {
+export default function SeminariTable({
+  queryParameters,
+  updateCounter,
+}: {
   queryParameters: SeminarQueryParams;
   updateCounter: number;
 }) {
@@ -53,21 +56,17 @@ export default function SeminariTable(props: {
   useEffect(() => {
     const loadData = async () => {
       const { pageIndex, pageSize } = table.getState().pagination;
-      const res = await fetchSeminari(
-        pageSize,
-        pageIndex,
-        props.queryParameters,
-      );
+      const res = await fetchSeminari(pageSize, pageIndex, queryParameters);
       setData(res.seminari);
       setDocuments(res.totalDocuments);
     };
     loadData();
   }, [
     pagination,
-    props,
     deletePrijavaCounter,
     seminarChangesCounter,
-    props.updateCounter,
+    updateCounter,
+    queryParameters,
   ]);
 
   const handleDelete = async (id: string) => {

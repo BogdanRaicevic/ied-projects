@@ -20,7 +20,7 @@ import { useEffect, useMemo, useState } from "react";
 import { useParams } from "react-router-dom";
 import PrijavaNaSeminarDialog from "../components/Dialogs/PrijaviZaposlenogNaSeminar";
 import ZaposleniDialog from "../components/Dialogs/ZaposleniDialog";
-import { myZaposleniColumns } from "../components/FirmasTable/myCompanyColumns";
+import { zaposleniColumns } from "../components/FirmasTable/zaposleniColumns";
 import FirmaForm from "../components/Forms/FirmaForm";
 import {
   useAddZaposleni,
@@ -169,7 +169,7 @@ export default function Firma() {
   };
 
   const zapTable = useMaterialReactTable({
-    columns: useMemo<MRT_ColumnDef<Zaposleni>[]>(() => myZaposleniColumns, []),
+    columns: useMemo<MRT_ColumnDef<Zaposleni>[]>(() => zaposleniColumns, []),
     data: firmaData?.zaposleni || [],
     enableColumnOrdering: true,
     enableGlobalFilter: true,
