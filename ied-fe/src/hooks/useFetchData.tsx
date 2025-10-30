@@ -20,7 +20,7 @@ export function useFetchData() {
     queryFn: fetchAllMesta,
   });
 
-  const { data: radnaMesta } = useQuery({
+  const { data: radnaMesta, isLoading: isRadnaMestaLoading } = useQuery({
     queryKey: ["radnaMesta"],
     queryFn: fetchAllRadnaMesta,
   });
@@ -49,6 +49,7 @@ export function useFetchData() {
     delatnosti,
     mesta,
     radnaMesta,
+    isRadnaMestaLoading,
     tipoviFirme,
     velicineFirme,
     stanjaFirme,

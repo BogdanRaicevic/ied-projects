@@ -55,7 +55,8 @@ export function ZaposleniForm({ zaposleni, onSubmit }: ZaposleniFormProps) {
     }
   }, [zaposleni, setValue]);
 
-  const { radnaMesta } = useFetchData();
+  const { radnaMesta, isRadnaMestaLoading } = useFetchData();
+
   return (
     <Box component="form">
       <TextField
@@ -102,16 +103,23 @@ export function ZaposleniForm({ zaposleni, onSubmit }: ZaposleniFormProps) {
       ></TextField>
 
       <Box sx={{ m: 1, width: "100%" }}>
-        <Single
-          data={radnaMesta}
-          placeholder="Radno mesto"
-          preselected={
-            radnaMesta.length > 0 ? zaposleni?.radno_mesto || "" : ""
-          }
-          onChange={(newValue) => {
-            setSelectedRadnoMesto(newValue);
-          }}
-        ></Single>
+        {isRadnaMestaLoading ? (
+          <TextField
+            disabled
+            fullWidth
+            label="Radno mesto"
+            value="Učitavanje..."
+          />
+        ) : (
+          <Single
+            data={radnaMesta || []}
+            placeholder="Radno mesto"
+            preselected={zaposleni?.radno_mesto || ""}
+            onChange={(newValue) => {
+              setSelectedRadnoMesto(newValue);
+            }}
+          ></Single>
+        )}
       </Box>
       <Button
         onClick={handleSubmit(handleDodajZaposlenog, onError)}
