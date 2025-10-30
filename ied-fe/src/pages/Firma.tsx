@@ -110,11 +110,20 @@ export default function Firma() {
   const handlePrijavaSuccess = (seminar: string) => {
     if (selectedRow) {
       const zaposleni = selectedRow.original;
-      const newKomentar = `${firmaData?.komentar || ""}\n${format(Date(), "dd.MM.yyyy")} - ${zaposleni.ime} ${zaposleni.prezime} - ${seminar}`;
-      updateFirmaMutation.mutate({ ...firmaData, komentar: `${newKomentar}` });
+
+      const imePrezime =
+        `${zaposleni.ime || ""} ${zaposleni.prezime || ""}`.trim();
+      const prijavaKomentar = `\n${format(Date(), "dd.MM.yyyy")} - ${imePrezime} - ${seminar} - PRIJAVA`;
+      const newFirmaKomentar = `${firmaData?.komentar || ""}${prijavaKomentar}`;
+      updateFirmaMutation.mutate({
+        ...firmaData,
+        komentar: `${newFirmaKomentar}`,
+      });
+
+      const newZaposleniKomentar = `${zaposleni.komentar || ""}${prijavaKomentar}`;
       updateZaposleniMutation.mutate({
         ...zaposleni,
-        komentar: `${zaposleni.komentar || ""}\n${format(Date(), "dd.MM.yyyy")} - ${seminar}`,
+        komentar: `${newZaposleniKomentar}`,
       });
     }
     handleClosePrijavaDialog();
