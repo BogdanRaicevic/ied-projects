@@ -1,4 +1,7 @@
-import type { SeminarQueryParams, SeminarZodType } from "@ied-shared/types/seminar.zod";
+import type {
+  SeminarQueryParams,
+  SeminarZodType,
+} from "@ied-shared/types/seminar.zod";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import ForwardToInboxIcon from "@mui/icons-material/ForwardToInbox";
@@ -24,12 +27,15 @@ import {
   type MRT_PaginationState,
   useMaterialReactTable,
 } from "material-react-table";
-import { memo, useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { deleteSeminar, fetchSeminari } from "../../api/seminari.api";
 import PrijaveSeminarTable from "./PrijaveSeminarTable";
 import SeminarForm from "./SeminarForm";
 
-export default memo(function SeminariTable(props: {
+export default function SeminariTable({
+  queryParameters,
+  updateCounter,
+}: {
   queryParameters: SeminarQueryParams;
   updateCounter: number;
 }) {
@@ -38,7 +44,9 @@ export default memo(function SeminariTable(props: {
   const [deletePrijavaCounter, setDeletePrijavaCounter] = useState(0);
   const [seminarChangesCounter, setSeminarChangesCount] = useState(0);
   const [editSeminar, setEditSeminar] = useState(false);
-  const [selectedSeminar, setSelectedSeminar] = useState<Partial<SeminarZodType>>({});
+  const [selectedSeminar, setSelectedSeminar] = useState<
+    Partial<SeminarZodType>
+  >({});
 
   const [pagination, setPagination] = useState<MRT_PaginationState>({
     pageIndex: 0,
@@ -48,12 +56,18 @@ export default memo(function SeminariTable(props: {
   useEffect(() => {
     const loadData = async () => {
       const { pageIndex, pageSize } = table.getState().pagination;
-      const res = await fetchSeminari(pageSize, pageIndex, props.queryParameters);
+      const res = await fetchSeminari(pageSize, pageIndex, queryParameters);
       setData(res.seminari);
       setDocuments(res.totalDocuments);
     };
     loadData();
-  }, [pagination, props, deletePrijavaCounter, seminarChangesCounter, props.updateCounter]);
+  }, [
+    pagination,
+    deletePrijavaCounter,
+    seminarChangesCounter,
+    updateCounter,
+    queryParameters,
+  ]);
 
   const handleDelete = async (id: string) => {
     await deleteSeminar(id);
@@ -166,7 +180,11 @@ export default memo(function SeminariTable(props: {
               <IconButton
                 color="error"
                 onClick={() => {
-                  if (window.confirm("Da li ste sigurni da želite da obrišete seminar?")) {
+                  if (
+                    window.confirm(
+                      "Da li ste sigurni da želite da obrišete seminar?",
+                    )
+                  ) {
                     if (seminar._id) {
                       handleDelete(seminar._id);
                       setSeminarChangesCount((prev) => prev + 1);
@@ -214,7 +232,10 @@ export default memo(function SeminariTable(props: {
   ];
 
   const table = useMaterialReactTable({
-    columns: useMemo<MRT_ColumnDef<SeminarZodType>[]>(() => seminariTableColumns, []),
+    columns: useMemo<MRT_ColumnDef<SeminarZodType>[]>(
+      () => seminariTableColumns,
+      [],
+    ),
     data: useMemo<SeminarZodType[]>(() => data, [data]),
     enableColumnFilterModes: true,
     enableColumnOrdering: true,
@@ -268,18 +289,20 @@ export default memo(function SeminariTable(props: {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {Object.entries(groupedParticipants).map(([naziv_firme, prijave]) => {
-                  return (
-                    <PrijaveSeminarTable
-                      key={naziv_firme}
-                      seminarId={row.row.original._id || ""}
-                      prijave={prijave}
-                      onDelete={() => {
-                        setDeletePrijavaCounter((prev) => prev + 1);
-                      }}
-                    />
-                  );
-                })}
+                {Object.entries(groupedParticipants).map(
+                  ([naziv_firme, prijave]) => {
+                    return (
+                      <PrijaveSeminarTable
+                        key={naziv_firme}
+                        seminarId={row.row.original._id || ""}
+                        prijave={prijave}
+                        onDelete={() => {
+                          setDeletePrijavaCounter((prev) => prev + 1);
+                        }}
+                      />
+                    );
+                  },
+                )}
               </TableBody>
             </Table>
           </TableContainer>
@@ -296,13 +319,20 @@ export default memo(function SeminariTable(props: {
   return (
     <>
       <MaterialReactTable table={table} />
-      <Dialog open={editSeminar} onClose={() => setEditSeminar(false)} maxWidth="lg">
+      <Dialog
+        open={editSeminar}
+        onClose={() => setEditSeminar(false)}
+        maxWidth="lg"
+      >
         <DialogContent>
           <Box sx={{ p: 2 }}>
-            <SeminarForm onDialogClose={handleSubmitSuccess} seminar={selectedSeminar} />
+            <SeminarForm
+              onDialogClose={handleSubmitSuccess}
+              seminar={selectedSeminar}
+            />
           </Box>
         </DialogContent>
       </Dialog>
     </>
   );
-});
+}

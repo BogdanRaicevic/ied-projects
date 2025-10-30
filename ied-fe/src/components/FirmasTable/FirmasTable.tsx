@@ -3,13 +3,13 @@ import {
   type MRT_ColumnDef,
   useMaterialReactTable,
 } from "material-react-table";
-import { memo, useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { fetchFirmaPretrage } from "../../api/firma.api";
 import type { FirmaType } from "../../schemas/firmaSchemas";
 import { usePretragaStore } from "../../store/pretragaParameters.store";
-import { myCompanyColumns } from "./myCompanyColumns";
+import { firmaColumns } from "./firmaColumns";
 
-export default memo(function MyTable() {
+export default function FirmasTable() {
   const [data, setData] = useState<FirmaType[]>([]);
   const [documents, setDocuments] = useState(1000);
 
@@ -31,7 +31,7 @@ export default memo(function MyTable() {
   }, [pagination.pageIndex, pagination.pageSize, appliedParameters]);
 
   const table = useMaterialReactTable({
-    columns: useMemo<MRT_ColumnDef<FirmaType>[]>(() => myCompanyColumns, []),
+    columns: useMemo<MRT_ColumnDef<FirmaType>[]>(() => firmaColumns, []),
     data: useMemo<FirmaType[]>(() => data, [data]),
     enableColumnFilterModes: true,
     enableColumnOrdering: true,
@@ -59,4 +59,4 @@ export default memo(function MyTable() {
     },
   });
   return <MaterialReactTable table={table} />;
-});
+}

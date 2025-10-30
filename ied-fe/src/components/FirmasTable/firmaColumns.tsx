@@ -2,9 +2,9 @@ import { ContentCopy } from "@mui/icons-material";
 import BusinessIcon from "@mui/icons-material/Business";
 import { Icon, Link } from "@mui/material";
 import type { MRT_ColumnDef } from "material-react-table";
-import type { FirmaType, Zaposleni } from "../../schemas/firmaSchemas";
+import type { FirmaType } from "../../schemas/firmaSchemas";
 
-export const myCompanyColumns: MRT_ColumnDef<FirmaType>[] = [
+export const firmaColumns: MRT_ColumnDef<FirmaType>[] = [
   {
     header: "R. BR.",
     accessorKey: "rowNumber",
@@ -82,61 +82,6 @@ export const myCompanyColumns: MRT_ColumnDef<FirmaType>[] = [
   {
     header: "Velicina firme",
     accessorKey: "velicina_firme",
-  },
-  {
-    header: "Komentari",
-    accessorKey: "komentar",
-    muiTableHeadCellProps: {
-      sx: {
-        minWidth: "400px",
-      },
-    },
-    muiTableBodyCellProps: {
-      sx: {
-        whiteSpace: "pre-wrap", // Preserve line breaks and whitespace
-      },
-    },
-  },
-];
-
-export const myZaposleniColumns: MRT_ColumnDef<Zaposleni>[] = [
-  {
-    header: "R. BR.",
-    accessorKey: "rowNumber",
-    size: 20,
-    enableSorting: false,
-    enableColumnActions: false,
-    enableColumnFilter: false,
-    enableColumnOrdering: false,
-    enableHiding: false,
-    Cell: ({ row, table }) => {
-      const pageIndex = table.getState().pagination.pageIndex;
-      const pageSize = table.getState().pagination.pageSize;
-      return pageIndex * pageSize + row.index + 1;
-    },
-  },
-  {
-    header: "Ime i Prezime",
-    accessorFn: (row) => `${row.ime} ${row.prezime}`,
-  },
-  {
-    header: "Email",
-    accessorKey: "e_mail",
-    enableClickToCopy: true,
-    muiCopyButtonProps: {
-      fullWidth: true,
-      startIcon: <ContentCopy />,
-      sx: { justifyContent: "flex-start" },
-    },
-  },
-  {
-    header: "Telefon",
-    accessorKey: "telefon",
-  },
-  {
-    header: "Radna mesta",
-    accessorKey: "radno_mesto",
-    accessorFn: (row) => row.radno_mesto,
   },
   {
     header: "Komentari",
