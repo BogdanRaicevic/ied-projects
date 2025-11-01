@@ -49,9 +49,24 @@ export function ZaposleniForm({ zaposleni, onSubmit }: ZaposleniFormProps) {
   };
 
   const { radnaMesta, isRadnaMestaLoading } = useFetchData();
+  const isPrijavljen = watch("prijavljeni");
+
+  const odjavaColor = isPrijavljen ? "gray" : "darkred";
+  const odjavaText = isPrijavljen ? "odjavljeni" : "ODJAVLJENI";
+  const prijavaColor = isPrijavljen ? "green" : "gray";
+  const prijavaText = isPrijavljen ? "PRIJAVLJENI" : "prijavljeni";
 
   return (
     <Box component="form">
+      <Box sx={{ m: 1, display: "flex", alignItems: "center" }}>
+        <FormLabel sx={{ m: 1, color: odjavaColor }}>{odjavaText}</FormLabel>
+        <Switch
+          {...register("prijavljeni")}
+          checked={watch("prijavljeni") || false}
+          color="success"
+        />
+        <FormLabel sx={{ m: 1, color: prijavaColor }}>{prijavaText}</FormLabel>
+      </Box>
       <TextField
         {...register("ime")}
         sx={{ m: 1 }}
@@ -76,12 +91,7 @@ export function ZaposleniForm({ zaposleni, onSubmit }: ZaposleniFormProps) {
         error={Boolean(errors.e_mail)}
         helperText={errors.e_mail?.message}
       />
-      <FormLabel sx={{ m: 1 }}>Odjava</FormLabel>
-      <Switch
-        {...register("prijavljeni")}
-        checked={watch("prijavljeni") || false}
-      />
-      <FormLabel sx={{ m: 1 }}>Prijava</FormLabel>
+
       <TextField
         {...register("telefon")}
         sx={{ m: 1 }}
