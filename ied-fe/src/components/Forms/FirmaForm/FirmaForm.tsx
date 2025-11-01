@@ -41,11 +41,7 @@ export const FirmaForm: React.FC<FirmaFormProps> = ({ inputCompany }) => {
     setValue,
   } = useForm<z.input<typeof FirmaSchema>, any, z.output<typeof FirmaSchema>>({
     resolver: zodResolver(FirmaSchema), // find a way to pull error from this
-    defaultValues: {
-      ...inputCompany,
-      // TODO: remove after migration
-      prijavljeni: inputCompany?.prijavljeni ?? true,
-    },
+    defaultValues: inputCompany,
   });
 
   const { tipoviFirme, velicineFirme, stanjaFirme, mesta, delatnosti } =
