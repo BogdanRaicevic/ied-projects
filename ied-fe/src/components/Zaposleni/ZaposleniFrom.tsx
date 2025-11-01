@@ -52,20 +52,42 @@ export function ZaposleniForm({ zaposleni, onSubmit }: ZaposleniFormProps) {
   const isPrijavljen = watch("prijavljeni");
 
   const odjavaColor = isPrijavljen ? "gray" : "darkred";
-  const odjavaText = isPrijavljen ? "odjavljeni" : "ODJAVLJENI";
+  const odjavaText = isPrijavljen ? "odjavljeni" : "odjavljeni".toUpperCase();
   const prijavaColor = isPrijavljen ? "green" : "gray";
-  const prijavaText = isPrijavljen ? "PRIJAVLJENI" : "prijavljeni";
+  const prijavaText = isPrijavljen
+    ? "prijavljeni".toUpperCase()
+    : "prijavljeni";
 
   return (
     <Box component="form">
       <Box sx={{ m: 1, display: "flex", alignItems: "center" }}>
-        <FormLabel sx={{ m: 1, color: odjavaColor }}>{odjavaText}</FormLabel>
+        <FormLabel
+          sx={{
+            m: 1,
+            color: odjavaColor,
+            width: 100,
+            textAlign: "right",
+            fontWeight: !isPrijavljen ? "bold" : "normal",
+          }}
+        >
+          {odjavaText}
+        </FormLabel>
         <Switch
           {...register("prijavljeni")}
           checked={watch("prijavljeni") || false}
           color="success"
         />
-        <FormLabel sx={{ m: 1, color: prijavaColor }}>{prijavaText}</FormLabel>
+        <FormLabel
+          sx={{
+            m: 1,
+            color: prijavaColor,
+            width: 100,
+            textAlign: "left",
+            fontWeight: isPrijavljen ? "bold" : "normal",
+          }}
+        >
+          {prijavaText}
+        </FormLabel>
       </Box>
       <TextField
         {...register("ime")}

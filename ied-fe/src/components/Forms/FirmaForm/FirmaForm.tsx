@@ -5,8 +5,10 @@ import {
   Button,
   Divider,
   FormControl,
+  FormLabel,
   Grid,
   InputAdornment,
+  Switch,
   TextField,
   Typography,
 } from "@mui/material";
@@ -200,8 +202,46 @@ export const FirmaForm: React.FC<FirmaFormProps> = ({ inputCompany }) => {
       });
   };
 
+  const isPrijavljen = watch("prijavljeni");
+
+  const odjavaColor = isPrijavljen ? "gray" : "darkred";
+  const odjavaText = isPrijavljen ? "odjavljeni" : "odjavljeni".toUpperCase();
+  const prijavaColor = isPrijavljen ? "green" : "gray";
+  const prijavaText = isPrijavljen
+    ? "prijavljeni".toUpperCase()
+    : "prijavljeni";
+
   return (
     <Box onSubmit={handleSubmit(onSubmit)} component="form" sx={{ mt: 4 }}>
+      <Box sx={{ m: 1, display: "flex", alignItems: "center" }}>
+        <FormLabel
+          sx={{
+            m: 1,
+            color: odjavaColor,
+            width: 100,
+            textAlign: "right",
+            fontWeight: !isPrijavljen ? "bold" : "normal",
+          }}
+        >
+          {odjavaText}
+        </FormLabel>
+        <Switch
+          {...register("prijavljeni")}
+          checked={watch("prijavljeni") || false}
+          color="success"
+        />
+        <FormLabel
+          sx={{
+            m: 1,
+            color: prijavaColor,
+            width: 100,
+            textAlign: "left",
+            fontWeight: isPrijavljen ? "bold" : "normal",
+          }}
+        >
+          {prijavaText}
+        </FormLabel>
+      </Box>
       <Grid container m={0} spacing={2}>
         {inputItems(InputTypesSchema.enum.Text).map((item) => {
           return (
