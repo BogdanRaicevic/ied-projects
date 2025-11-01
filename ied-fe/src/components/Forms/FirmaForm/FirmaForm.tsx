@@ -21,7 +21,7 @@ import {
   useUpdateFirma,
 } from "../../../hooks/firma/useFirmaMutations";
 import { useFetchData } from "../../../hooks/useFetchData";
-import { InputTypesSchema, type Metadata } from "../../../schemas/firmaSchemas";
+import { InputTypesSchema, type Metadata } from "../../../schemas/metadata";
 import AutocompleteSingle from "../../Autocomplete/Single";
 import { firmaFormMetadata } from "./metadata";
 

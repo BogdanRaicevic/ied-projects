@@ -12,7 +12,7 @@ import {
   Phone,
   SwitchAccount,
 } from "@mui/icons-material";
-import { InputTypesSchema, type Metadata } from "../../../schemas/firmaSchemas";
+import { InputTypesSchema, type Metadata } from "../../../schemas/metadata";
 
 export const firmaFormMetadata: Metadata[] = [
   {

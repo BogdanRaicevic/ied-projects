@@ -31,7 +31,7 @@ export const ZaposleniSchema = z.object({
   telefon: z.string().optional(),
   komentar: z.string().max(10000).optional(),
   radno_mesto: z.string().optional(),
-  prijavljeni: z.boolean().default(true),
+  prijavljeni: z.boolean(),
 });
 
 export const FirmaSchema = z.object({

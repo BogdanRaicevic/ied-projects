@@ -31,7 +31,7 @@ import {
 } from "../hooks/firma/useFirmaMutations";
 import { useGetFirma } from "../hooks/firma/useFirmaQueries";
 
-const defaultCompanyData: FirmaType = {
+const defaultFirmaData: FirmaType = {
   ID_firma: 0,
   naziv_firme: "",
   adresa: "",
@@ -47,6 +47,16 @@ const defaultCompanyData: FirmaType = {
   jbkjs: "",
   maticni_broj: "",
   delatnost: "",
+  prijavljeni: true,
+};
+
+const defaultZaposleniData: ZaposleniType = {
+  ime: "",
+  prezime: "",
+  e_mail: "",
+  telefon: "",
+  komentar: "",
+  radno_mesto: "",
   prijavljeni: true,
 };
 
@@ -251,7 +261,7 @@ export default function Firma() {
       <h1>Firma: {firmaData?.naziv_firme}</h1>
 
       <FirmaForm
-        inputCompany={firmaData || defaultCompanyData} // do we need default company data
+        inputCompany={firmaData || defaultFirmaData} // do we need default company data
       />
       {firmaData?._id && (
         <>
@@ -297,7 +307,7 @@ export default function Firma() {
             open={openPrijavaNaSeminarDialog}
             onClose={handleClosePrijavaDialog}
             companyData={firmaData}
-            zaposleniData={selectedRow?.original ?? {}}
+            zaposleniData={selectedRow?.original ?? defaultZaposleniData}
             onSuccess={handlePrijavaSuccess}
           />
         </>
