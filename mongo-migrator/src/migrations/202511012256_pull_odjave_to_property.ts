@@ -14,12 +14,26 @@ export const up = async (db: Connection) => {
         typeof document.komentar === "string" &&
         /odjava/i.test(document.komentar);
 
-      if (document?.komentar.includes("odjava")) {
+      if (document?.komentar?.includes("odjava")) {
         await mongoCollection.updateOne(
           { _id: document._id },
           { $set: { prijavljeni: !isOdjavljen } },
         );
       }
+
+      document?.zaposleni.forEach((z: any) => {
+        const isZaposleniOdjavljen =
+          z.komentar &&
+          typeof z.komentar === "string" &&
+          /odjava/i.test(z.komentar);
+
+        if (z.komentar?.includes("odjava")) {
+          mongoCollection.updateOne(
+            { _id: document._id, "zaposleni._id": z._id },
+            { $set: { "zaposleni.$.prijavljeni": !isZaposleniOdjavljen } },
+          );
+        }
+      });
     }
   } catch (error) {
     console.error(
