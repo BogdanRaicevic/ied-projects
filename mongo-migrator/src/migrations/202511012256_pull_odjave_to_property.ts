@@ -9,31 +9,30 @@ export const up = async (db: Connection) => {
       const document = await cursor.next();
       if (!document) continue;
 
-      const isOdjavljen =
+      const isFirmaOdjavljen =
         document.komentar &&
         typeof document.komentar === "string" &&
-        /odjava/i.test(document.komentar);
+        /odjav/i.test(document.komentar);
 
-      if (document?.komentar?.includes("odjava")) {
-        await mongoCollection.updateOne(
-          { _id: document._id },
-          { $set: { prijavljeni: !isOdjavljen } },
-        );
-      }
+      await mongoCollection.updateOne(
+        { _id: document._id },
+        { $set: { prijavljeni: !isFirmaOdjavljen } },
+      );
 
-      document?.zaposleni.forEach((z: any) => {
+      for (const z of document.zaposleni) {
+        if (!z._id) continue; // Skip if zaposleni has no _id
+
         const isZaposleniOdjavljen =
           z.komentar &&
           typeof z.komentar === "string" &&
-          /odjava/i.test(z.komentar);
+          /odjav/i.test(z.komentar);
 
-        if (z.komentar?.includes("odjava")) {
-          mongoCollection.updateOne(
-            { _id: document._id, "zaposleni._id": z._id },
-            { $set: { "zaposleni.$.prijavljeni": !isZaposleniOdjavljen } },
-          );
-        }
-      });
+        // Update the specific zaposleni sub-document
+        await mongoCollection.updateOne(
+          { _id: document._id, "zaposleni._id": z._id },
+          { $set: { "zaposleni.$.prijavljeni": !isZaposleniOdjavljen } },
+        );
+      }
     }
   } catch (error) {
     console.error(

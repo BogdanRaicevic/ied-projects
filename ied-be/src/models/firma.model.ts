@@ -12,8 +12,6 @@ type FirmaType = Document & {
   tip_firme: string;
   delatnost: string;
   ucesce_na_seminarima: number;
-  FK_VELICINA_FIRME_ID_velicina_firme: number;
-  FK_MESTO_ID_mesto: number;
   komentar: string;
   provereno: number;
   RB: number;
@@ -42,8 +40,6 @@ const firmaSchema = new Schema<FirmaType>(
     tip_firme: String,
     delatnost: String,
     ucesce_na_seminarima: Number,
-    FK_VELICINA_FIRME_ID_velicina_firme: Number,
-    FK_MESTO_ID_mesto: Number,
     komentar: String,
     provereno: Number,
     RB: Number,
