@@ -1,14 +1,14 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Box, Button, TextField } from "@mui/material";
+import { ZaposleniSchema, type ZaposleniType } from "ied-shared";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useFetchData } from "../../hooks/useFetchData";
-import { type Zaposleni, ZaposleniSchema } from "../../schemas/firmaSchemas";
 import Single from "../Autocomplete/Single";
 
 type ZaposleniFormProps = {
-  zaposleni?: Zaposleni;
-  onSubmit: (zaposleniData: Zaposleni) => void;
+  zaposleni?: ZaposleniType;
+  onSubmit: (zaposleniData: ZaposleniType) => void;
 };
 
 export function ZaposleniForm({ zaposleni, onSubmit }: ZaposleniFormProps) {
@@ -17,16 +17,16 @@ export function ZaposleniForm({ zaposleni, onSubmit }: ZaposleniFormProps) {
     handleSubmit,
     setValue,
     formState: { errors },
-  } = useForm<Zaposleni>({
+  } = useForm<ZaposleniType>({
     resolver: zodResolver(ZaposleniSchema),
   });
 
   const [selectedRadnoMesto, setSelectedRadnoMesto] = useState(
     zaposleni?.radno_mesto || "",
   );
-  let zaposleniData: Zaposleni;
+  let zaposleniData: ZaposleniType;
 
-  const handleDodajZaposlenog = (data: Zaposleni) => {
+  const handleDodajZaposlenog = (data: ZaposleniType) => {
     zaposleniData = {
       ...data,
       radno_mesto: selectedRadnoMesto || "",

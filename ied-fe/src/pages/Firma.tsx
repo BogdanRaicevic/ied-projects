@@ -10,6 +10,7 @@ import {
   Tooltip,
 } from "@mui/material";
 import { format } from "date-fns/format";
+import type { FirmaType, ZaposleniType } from "ied-shared";
 import {
   MaterialReactTable,
   type MRT_ColumnDef,
@@ -29,7 +30,6 @@ import {
   useUpdateZaposleni,
 } from "../hooks/firma/useFirmaMutations";
 import { useGetFirma } from "../hooks/firma/useFirmaQueries";
-import type { FirmaType, Zaposleni } from "../schemas/firmaSchemas";
 
 const defaultCompanyData: FirmaType = {
   ID_firma: 0,
@@ -47,6 +47,7 @@ const defaultCompanyData: FirmaType = {
   jbkjs: "",
   maticni_broj: "",
   delatnost: "",
+  prijavljeni: true,
 };
 
 export default function Firma() {
@@ -61,7 +62,7 @@ export default function Firma() {
   const [errorAlert, setErrorAlert] = useState<string | null>(null);
   const [warningAlert, setWarningAlert] = useState<string | null>(null);
 
-  const [selectedRow, setSelectedRow] = useState<MRT_Row<Zaposleni> | null>(
+  const [selectedRow, setSelectedRow] = useState<MRT_Row<ZaposleniType> | null>(
     null,
   );
 
@@ -70,7 +71,7 @@ export default function Firma() {
     if (firmaData?.zaposleni && firmaData.zaposleni.length > 0) {
       const emailsMap = new Map<string, number>();
       firmaData.zaposleni
-        .map((z: Zaposleni) => z.e_mail)
+        .map((z: ZaposleniType) => z.e_mail)
         .filter((email): email is string => !!email) // More concise filter
         .forEach((email: string) => {
           emailsMap.set(email, (emailsMap.get(email) || 0) + 1);
@@ -93,12 +94,12 @@ export default function Firma() {
     }
   }, [firmaData?.zaposleni]);
 
-  const handleEdit = (row: MRT_Row<Zaposleni>) => {
+  const handleEdit = (row: MRT_Row<ZaposleniType>) => {
     setSelectedRow(row);
     setOpenZaposelniDialog(true);
   };
 
-  const handleDeleteZaposleni = async (row: MRT_Row<Zaposleni>) => {
+  const handleDeleteZaposleni = async (row: MRT_Row<ZaposleniType>) => {
     deleteZaposleniMutation.mutate(row.original._id);
   };
 
@@ -129,7 +130,7 @@ export default function Firma() {
     handleClosePrijavaDialog();
   };
 
-  const handleZaposleniSubmit = (zaposleniData: Zaposleni) => {
+  const handleZaposleniSubmit = (zaposleniData: ZaposleniType) => {
     const isEditing = !!zaposleniData._id;
 
     if (isEditing) {
@@ -169,7 +170,10 @@ export default function Firma() {
   };
 
   const zapTable = useMaterialReactTable({
-    columns: useMemo<MRT_ColumnDef<Zaposleni>[]>(() => zaposleniColumns, []),
+    columns: useMemo<MRT_ColumnDef<ZaposleniType>[]>(
+      () => zaposleniColumns,
+      [],
+    ),
     data: firmaData?.zaposleni || [],
     enableColumnOrdering: true,
     enableGlobalFilter: true,

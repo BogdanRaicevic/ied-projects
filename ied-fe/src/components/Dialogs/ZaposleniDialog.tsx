@@ -1,12 +1,12 @@
 import { Box, Dialog, DialogContent, DialogTitle } from "@mui/material";
-import type { Zaposleni } from "../../schemas/firmaSchemas";
+import type { ZaposleniType } from "ied-shared";
 import { ZaposleniForm } from "../Zaposleni/ZaposleniFrom";
 
 type ZaposleniDialogProps = {
-  zaposleni?: Zaposleni;
+  zaposleni?: ZaposleniType;
   open: boolean;
   onClose: () => void;
-  onSubmit: (data: Zaposleni) => void;
+  onSubmit: (data: ZaposleniType) => void;
 };
 
 const ZaposleniDialog: React.FC<ZaposleniDialogProps> = ({

@@ -1,4 +1,5 @@
 import {
+  type FirmaType,
   type PrijavaZodType,
   type SeminarZodType,
   TipRacuna,
@@ -24,7 +25,6 @@ import { IzdavacRacunaSection } from "../components/Racun/components/IzdavacRacu
 import { useRacunCalculations } from "../components/Racun/hooks/useRacunCalculations";
 import { PretrageRacuna } from "../components/Racun/PretrageRacuna";
 import { useRacunStore } from "../components/Racun/store/useRacunStore";
-import type { FirmaType } from "../schemas/firmaSchemas";
 import handlePromiseError from "../utils/helpers";
 
 export default function Racuni() {

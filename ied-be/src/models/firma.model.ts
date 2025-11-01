@@ -25,6 +25,7 @@ type FirmaType = Document & {
   velicina_firme: string;
   jbkjs: string;
   maticni_broj: string;
+  prijavljeni: boolean;
 };
 
 const firmaSchema = new Schema<FirmaType>(
@@ -50,6 +51,7 @@ const firmaSchema = new Schema<FirmaType>(
     zaposleni: { type: [zaposleniSchema], default: [] },
     jbkjs: String,
     maticni_broj: String,
+    prijavljeni: { type: Boolean, default: true },
   },
   {
     timestamps: { createdAt: "created_at", updatedAt: "updated_at" },

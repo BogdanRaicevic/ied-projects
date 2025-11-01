@@ -10,6 +10,7 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
+import { FirmaSchema, type FirmaType, type ZaposleniType } from "ied-shared";
 import type React from "react";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
@@ -20,13 +21,7 @@ import {
   useUpdateFirma,
 } from "../../../hooks/firma/useFirmaMutations";
 import { useFetchData } from "../../../hooks/useFetchData";
-import {
-  FirmaSchema,
-  type FirmaType,
-  InputTypesSchema,
-  type Metadata,
-  type Zaposleni,
-} from "../../../schemas/firmaSchemas";
+import { InputTypesSchema, type Metadata } from "../../../schemas/firmaSchemas";
 import AutocompleteSingle from "../../Autocomplete/Single";
 import { firmaFormMetadata } from "./metadata";
 
@@ -305,7 +300,7 @@ export const FirmaForm: React.FC<FirmaFormProps> = ({ inputCompany }) => {
                       // Get the problematic value if available
                       const value =
                         inputCompany.zaposleni?.[idx]?.[
-                          field as keyof Zaposleni
+                          field as keyof ZaposleniType
                         ];
                       return (
                         <li key={field + idx}>

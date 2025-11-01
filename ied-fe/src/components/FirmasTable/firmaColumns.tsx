@@ -1,8 +1,8 @@
 import { ContentCopy } from "@mui/icons-material";
 import BusinessIcon from "@mui/icons-material/Business";
 import { Icon, Link } from "@mui/material";
+import type { FirmaType } from "ied-shared";
 import type { MRT_ColumnDef } from "material-react-table";
-import type { FirmaType } from "../../schemas/firmaSchemas";
 
 export const firmaColumns: MRT_ColumnDef<FirmaType>[] = [
   {

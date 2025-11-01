@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
+import type { FirmaType } from "ied-shared";
 import { fetchSingleFirma } from "../../api/firma.api";
-import type { FirmaType } from "../../schemas/firmaSchemas";
 
 const firmaQueryKey = (firmaId?: string) => ["firma", firmaId];
 

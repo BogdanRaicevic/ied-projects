@@ -12,6 +12,7 @@ export type Zaposleni = {
   kontaktiran_puta: number;
   ucesce_na_seminarima: number;
   komentar: string;
+  prijavljeni: boolean;
   created_at: Date;
   updated_at: Date;
 };
@@ -26,6 +27,7 @@ export const zaposleniSchema = new Schema<Zaposleni>(
     telefon: String,
     e_mail: String,
     komentar: String,
+    prijavljeni: { type: Boolean, default: true },
   },
   {
     timestamps: { createdAt: "created_at", updatedAt: "updated_at" },
