@@ -1,7 +1,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Box, Button, TextField } from "@mui/material";
+import { Box, Button, FormLabel, Switch, TextField } from "@mui/material";
 import { ZaposleniSchema, type ZaposleniType } from "ied-shared";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useFetchData } from "../../hooks/useFetchData";
 import Single from "../Autocomplete/Single";
@@ -15,10 +15,19 @@ export function ZaposleniForm({ zaposleni, onSubmit }: ZaposleniFormProps) {
   const {
     register,
     handleSubmit,
-    setValue,
+    watch,
     formState: { errors },
   } = useForm<ZaposleniType>({
     resolver: zodResolver(ZaposleniSchema),
+    defaultValues: zaposleni || {
+      ime: "",
+      prezime: "",
+      e_mail: "",
+      telefon: "",
+      radno_mesto: "",
+      komentar: "",
+      prijavljeni: true,
+    },
   });
 
   const [selectedRadnoMesto, setSelectedRadnoMesto] = useState(
@@ -38,22 +47,6 @@ export function ZaposleniForm({ zaposleni, onSubmit }: ZaposleniFormProps) {
   const onError = (errors: any, e: any) => {
     console.error("Zaposleni form errors: ", errors, e);
   };
-
-  useEffect(() => {
-    if (zaposleni) {
-      for (const [key, value] of Object.entries(zaposleni)) {
-        setValue(key as keyof Zaposleni, value);
-      }
-    } else {
-      // Reset form values when zaposleni is undefined
-      setValue("ime", "");
-      setValue("prezime", "");
-      setValue("e_mail", "");
-      setValue("telefon", "");
-      setValue("radno_mesto", "");
-      setValue("komentar", "");
-    }
-  }, [zaposleni, setValue]);
 
   const { radnaMesta, isRadnaMestaLoading } = useFetchData();
 
@@ -83,6 +76,12 @@ export function ZaposleniForm({ zaposleni, onSubmit }: ZaposleniFormProps) {
         error={Boolean(errors.e_mail)}
         helperText={errors.e_mail?.message}
       />
+      <FormLabel sx={{ m: 1 }}>Odjava</FormLabel>
+      <Switch
+        {...register("prijavljeni")}
+        checked={watch("prijavljeni") || false}
+      />
+      <FormLabel sx={{ m: 1 }}>Prijava</FormLabel>
       <TextField
         {...register("telefon")}
         sx={{ m: 1 }}
