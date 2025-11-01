@@ -19,14 +19,15 @@ export function ZaposleniForm({ zaposleni, onSubmit }: ZaposleniFormProps) {
     formState: { errors },
   } = useForm<ZaposleniType>({
     resolver: zodResolver(ZaposleniSchema),
-    defaultValues: zaposleni || {
+    defaultValues: {
       ime: "",
       prezime: "",
       e_mail: "",
       telefon: "",
       radno_mesto: "",
       komentar: "",
-      prijavljeni: true,
+      ...zaposleni,
+      prijavljeni: zaposleni?.prijavljeni ?? true,
     },
   });
 

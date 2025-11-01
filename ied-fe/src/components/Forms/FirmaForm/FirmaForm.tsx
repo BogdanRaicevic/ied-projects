@@ -41,7 +41,11 @@ export const FirmaForm: React.FC<FirmaFormProps> = ({ inputCompany }) => {
     setValue,
   } = useForm<z.input<typeof FirmaSchema>, any, z.output<typeof FirmaSchema>>({
     resolver: zodResolver(FirmaSchema), // find a way to pull error from this
-    defaultValues: inputCompany,
+    defaultValues: {
+      ...inputCompany,
+      // TODO: remove after migration
+      prijavljeni: inputCompany?.prijavljeni ?? true,
+    },
   });
 
   const { tipoviFirme, velicineFirme, stanjaFirme, mesta, delatnosti } =
@@ -60,6 +64,10 @@ export const FirmaForm: React.FC<FirmaFormProps> = ({ inputCompany }) => {
   useEffect(() => {
     reset(inputCompany);
   }, [inputCompany, reset]);
+
+  const onError = (errors: any) => {
+    console.error("Form validation errors:", errors);
+  };
 
   const onSubmit = (data: FirmaType) => {
     const cleanData = {
@@ -212,7 +220,11 @@ export const FirmaForm: React.FC<FirmaFormProps> = ({ inputCompany }) => {
     : "prijavljeni";
 
   return (
-    <Box onSubmit={handleSubmit(onSubmit)} component="form" sx={{ mt: 4 }}>
+    <Box
+      onSubmit={handleSubmit(onSubmit, onError)}
+      component="form"
+      sx={{ mt: 4 }}
+    >
       <Box sx={{ m: 1, display: "flex", alignItems: "center" }}>
         <FormLabel
           sx={{
