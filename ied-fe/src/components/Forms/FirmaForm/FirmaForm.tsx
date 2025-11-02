@@ -234,8 +234,8 @@ export const FirmaForm: React.FC<FirmaFormProps> = ({ inputCompany }) => {
           {odjavaText}
         </FormLabel>
         <Switch
-          {...register("prijavljeni")}
-          checked={watch("prijavljeni") || false}
+          checked={isPrijavljen || false}
+          onChange={(e) => setValue("prijavljeni", e.target.checked)}
           color="success"
         />
         <FormLabel

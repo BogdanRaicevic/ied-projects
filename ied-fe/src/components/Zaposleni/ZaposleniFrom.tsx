@@ -2,7 +2,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Box, Button, FormLabel, Switch, TextField } from "@mui/material";
 import { ZaposleniSchema, type ZaposleniType } from "ied-shared";
 import { useState } from "react";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import { useFetchData } from "../../hooks/useFetchData";
 import Single from "../Autocomplete/Single";
 
@@ -16,6 +16,7 @@ export function ZaposleniForm({ zaposleni, onSubmit }: ZaposleniFormProps) {
     register,
     handleSubmit,
     watch,
+    control,
     formState: { errors },
   } = useForm<ZaposleniType>({
     resolver: zodResolver(ZaposleniSchema),
@@ -73,10 +74,12 @@ export function ZaposleniForm({ zaposleni, onSubmit }: ZaposleniFormProps) {
         >
           {odjavaText}
         </FormLabel>
-        <Switch
-          {...register("prijavljeni")}
-          checked={watch("prijavljeni") || false}
-          color="success"
+        <Controller
+          name="prijavljeni"
+          control={control}
+          render={({ field }) => (
+            <Switch {...field} checked={field.value} color="success" />
+          )}
         />
         <FormLabel
           sx={{
