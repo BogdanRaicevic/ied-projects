@@ -4,7 +4,7 @@ import {
   type MRT_ColumnDef,
   useMaterialReactTable,
 } from "material-react-table";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { fetchFirmaPretrage } from "../../api/firma.api";
 import { usePretragaStore } from "../../store/pretragaParameters.store";
 import { firmaColumns } from "./firmaColumns";
@@ -12,6 +12,9 @@ import { firmaColumns } from "./firmaColumns";
 export default function FirmasTable() {
   const [data, setData] = useState<FirmaType[]>([]);
   const [documents, setDocuments] = useState(1000);
+  const tableContainerRef = useRef<HTMLDivElement>(null);
+  const topToolbarRef = useRef<HTMLDivElement>(null);
+  const isSyncingScroll = useRef(false);
 
   const { pagination, setPaginationParameters, appliedParameters } =
     usePretragaStore();
@@ -39,6 +42,34 @@ export default function FirmasTable() {
     paginationDisplayMode: "default",
     positionToolbarAlertBanner: "bottom",
     manualPagination: true,
+    renderTopToolbar: () => (
+      <div
+        ref={topToolbarRef}
+        style={{
+          overflowX: "auto",
+          width: "100%",
+        }}
+        onScroll={(e) => {
+          if (tableContainerRef.current && !isSyncingScroll.current) {
+            isSyncingScroll.current = true;
+            tableContainerRef.current.scrollLeft = e.currentTarget.scrollLeft;
+            requestAnimationFrame(() => {
+              isSyncingScroll.current = false;
+            });
+          }
+        }}
+      >
+        <div style={{ width: `${table.getTotalSize()}px`, height: "1px" }} />
+      </div>
+    ),
+    muiTableContainerProps: {
+      ref: tableContainerRef,
+      onScroll: (e) => {
+        if (topToolbarRef.current) {
+          topToolbarRef.current.scrollLeft = e.currentTarget.scrollLeft;
+        }
+      },
+    },
     onPaginationChange: (updater) => {
       if (typeof updater === "function") {
         const newPagination = updater(pagination);
