@@ -1,8 +1,8 @@
 import { ContentCopy } from "@mui/icons-material";
+import type { ZaposleniType } from "ied-shared";
 import type { MRT_ColumnDef } from "material-react-table";
-import type { Zaposleni } from "../../schemas/firmaSchemas";
 
-export const zaposleniColumns: MRT_ColumnDef<Zaposleni>[] = [
+export const zaposleniColumns: MRT_ColumnDef<ZaposleniType>[] = [
   {
     header: "R. BR.",
     accessorKey: "rowNumber",

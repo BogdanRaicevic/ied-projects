@@ -1,4 +1,8 @@
-import type { PrijavaZodType } from "@ied-shared/index";
+import type {
+  FirmaType,
+  PrijavaZodType,
+  ZaposleniType,
+} from "@ied-shared/index";
 import {
   Alert,
   Autocomplete,
@@ -21,7 +25,6 @@ import { format } from "date-fns";
 import { useEffect, useState } from "react";
 import { createPrijava } from "../../api/seminari.api";
 import { useFetchSeminari } from "../../hooks/useFetchData";
-import type { FirmaType, Zaposleni } from "../../schemas/firmaSchemas";
 
 export default function PrijavaNaSeminarDialog({
   open,
@@ -33,7 +36,7 @@ export default function PrijavaNaSeminarDialog({
   open: boolean;
   onClose: () => void;
   companyData: FirmaType;
-  zaposleniData: Zaposleni;
+  zaposleniData: ZaposleniType;
   onSuccess: (seminar: string) => void;
 }) {
   const [prijavaState, setPrijavaState] = useState<

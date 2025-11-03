@@ -1,4 +1,5 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import type { FirmaType, ZaposleniType } from "ied-shared";
 import { useNavigate } from "react-router-dom";
 import {
   addZaposleniToFirma,
@@ -8,7 +9,6 @@ import {
   updateFirma,
   updateZaposleniInFirma,
 } from "../../api/firma.api";
-import type { FirmaType, Zaposleni } from "../../schemas/firmaSchemas";
 
 const firmaQueryKey = (firmaId: string) => ["firma", firmaId];
 
@@ -123,7 +123,7 @@ export const useAddZaposleni = (firmaId: string) => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async (zaposleniData: Partial<Zaposleni>) => {
+    mutationFn: async (zaposleniData: Partial<ZaposleniType>) => {
       return await addZaposleniToFirma(firmaId, zaposleniData);
     },
     onMutate: async (newZaposleni) => {
@@ -139,7 +139,10 @@ export const useAddZaposleni = (firmaId: string) => {
       if (previousFirma) {
         queryClient.setQueryData<FirmaType>(firmaQueryKey(firmaId), {
           ...previousFirma,
-          zaposleni: [...previousFirma.zaposleni, newZaposleni as Zaposleni],
+          zaposleni: [
+            ...previousFirma.zaposleni,
+            newZaposleni as ZaposleniType,
+          ],
         });
       }
 
@@ -166,7 +169,7 @@ export const useUpdateZaposleni = (firmaId: string) => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async (zaposleni: Partial<Zaposleni>) => {
+    mutationFn: async (zaposleni: Partial<ZaposleniType>) => {
       if (!zaposleni._id)
         throw new Error("Zaposleni ID is required for update");
       return await updateZaposleniInFirma(firmaId, zaposleni._id, zaposleni);

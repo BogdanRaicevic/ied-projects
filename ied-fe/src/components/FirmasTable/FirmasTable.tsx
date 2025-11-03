@@ -1,3 +1,4 @@
+import type { FirmaType } from "ied-shared";
 import {
   MaterialReactTable,
   type MRT_ColumnDef,
@@ -5,7 +6,6 @@ import {
 } from "material-react-table";
 import { useEffect, useMemo, useState } from "react";
 import { fetchFirmaPretrage } from "../../api/firma.api";
-import type { FirmaType } from "../../schemas/firmaSchemas";
 import { usePretragaStore } from "../../store/pretragaParameters.store";
 import { firmaColumns } from "./firmaColumns";
 

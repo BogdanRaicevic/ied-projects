@@ -1,32 +1,43 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Box, Button, TextField } from "@mui/material";
-import { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
+import { Box, Button, FormLabel, Switch, TextField } from "@mui/material";
+import { ZaposleniSchema, type ZaposleniType } from "ied-shared";
+import { useState } from "react";
+import { Controller, useForm } from "react-hook-form";
 import { useFetchData } from "../../hooks/useFetchData";
-import { type Zaposleni, ZaposleniSchema } from "../../schemas/firmaSchemas";
 import Single from "../Autocomplete/Single";
 
 type ZaposleniFormProps = {
-  zaposleni?: Zaposleni;
-  onSubmit: (zaposleniData: Zaposleni) => void;
+  zaposleni?: ZaposleniType;
+  onSubmit: (zaposleniData: ZaposleniType) => void;
 };
 
 export function ZaposleniForm({ zaposleni, onSubmit }: ZaposleniFormProps) {
   const {
     register,
     handleSubmit,
-    setValue,
+    watch,
+    control,
     formState: { errors },
-  } = useForm<Zaposleni>({
+  } = useForm<ZaposleniType>({
     resolver: zodResolver(ZaposleniSchema),
+    defaultValues: {
+      ime: "",
+      prezime: "",
+      e_mail: "",
+      telefon: "",
+      radno_mesto: "",
+      komentar: "",
+      ...zaposleni,
+      prijavljeni: zaposleni?.prijavljeni ?? true,
+    },
   });
 
   const [selectedRadnoMesto, setSelectedRadnoMesto] = useState(
     zaposleni?.radno_mesto || "",
   );
-  let zaposleniData: Zaposleni;
+  let zaposleniData: ZaposleniType;
 
-  const handleDodajZaposlenog = (data: Zaposleni) => {
+  const handleDodajZaposlenog = (data: ZaposleniType) => {
     zaposleniData = {
       ...data,
       radno_mesto: selectedRadnoMesto || "",
@@ -39,26 +50,49 @@ export function ZaposleniForm({ zaposleni, onSubmit }: ZaposleniFormProps) {
     console.error("Zaposleni form errors: ", errors, e);
   };
 
-  useEffect(() => {
-    if (zaposleni) {
-      for (const [key, value] of Object.entries(zaposleni)) {
-        setValue(key as keyof Zaposleni, value);
-      }
-    } else {
-      // Reset form values when zaposleni is undefined
-      setValue("ime", "");
-      setValue("prezime", "");
-      setValue("e_mail", "");
-      setValue("telefon", "");
-      setValue("radno_mesto", "");
-      setValue("komentar", "");
-    }
-  }, [zaposleni, setValue]);
-
   const { radnaMesta, isRadnaMestaLoading } = useFetchData();
+  const isPrijavljen = watch("prijavljeni");
+
+  const odjavaColor = isPrijavljen ? "gray" : "darkred";
+  const odjavaText = isPrijavljen ? "odjavljeni" : "odjavljeni".toUpperCase();
+  const prijavaColor = isPrijavljen ? "green" : "gray";
+  const prijavaText = isPrijavljen
+    ? "prijavljeni".toUpperCase()
+    : "prijavljeni";
 
   return (
     <Box component="form">
+      <Box sx={{ m: 1, display: "flex", alignItems: "center" }}>
+        <FormLabel
+          sx={{
+            m: 1,
+            color: odjavaColor,
+            width: 100,
+            textAlign: "right",
+            fontWeight: !isPrijavljen ? "bold" : "normal",
+          }}
+        >
+          {odjavaText}
+        </FormLabel>
+        <Controller
+          name="prijavljeni"
+          control={control}
+          render={({ field }) => (
+            <Switch {...field} checked={field.value} color="success" />
+          )}
+        />
+        <FormLabel
+          sx={{
+            m: 1,
+            color: prijavaColor,
+            width: 100,
+            textAlign: "left",
+            fontWeight: isPrijavljen ? "bold" : "normal",
+          }}
+        >
+          {prijavaText}
+        </FormLabel>
+      </Box>
       <TextField
         {...register("ime")}
         sx={{ m: 1 }}
@@ -83,6 +117,7 @@ export function ZaposleniForm({ zaposleni, onSubmit }: ZaposleniFormProps) {
         error={Boolean(errors.e_mail)}
         helperText={errors.e_mail?.message}
       />
+
       <TextField
         {...register("telefon")}
         sx={{ m: 1 }}

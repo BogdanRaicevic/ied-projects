@@ -5,11 +5,14 @@ import {
   Button,
   Divider,
   FormControl,
+  FormLabel,
   Grid,
   InputAdornment,
+  Switch,
   TextField,
   Typography,
 } from "@mui/material";
+import { FirmaSchema, type FirmaType, type ZaposleniType } from "ied-shared";
 import type React from "react";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
@@ -20,13 +23,7 @@ import {
   useUpdateFirma,
 } from "../../../hooks/firma/useFirmaMutations";
 import { useFetchData } from "../../../hooks/useFetchData";
-import {
-  FirmaSchema,
-  type FirmaType,
-  InputTypesSchema,
-  type Metadata,
-  type Zaposleni,
-} from "../../../schemas/firmaSchemas";
+import { InputTypesSchema, type Metadata } from "../../../schemas/metadata";
 import AutocompleteSingle from "../../Autocomplete/Single";
 import { firmaFormMetadata } from "./metadata";
 
@@ -63,6 +60,10 @@ export const FirmaForm: React.FC<FirmaFormProps> = ({ inputCompany }) => {
   useEffect(() => {
     reset(inputCompany);
   }, [inputCompany, reset]);
+
+  const onError = (errors: any) => {
+    console.error("Form validation errors:", errors);
+  };
 
   const onSubmit = (data: FirmaType) => {
     const cleanData = {
@@ -205,8 +206,50 @@ export const FirmaForm: React.FC<FirmaFormProps> = ({ inputCompany }) => {
       });
   };
 
+  const isPrijavljen = watch("prijavljeni");
+
+  const odjavaColor = isPrijavljen ? "gray" : "darkred";
+  const odjavaText = isPrijavljen ? "odjavljeni" : "odjavljeni".toUpperCase();
+  const prijavaColor = isPrijavljen ? "green" : "gray";
+  const prijavaText = isPrijavljen
+    ? "prijavljeni".toUpperCase()
+    : "prijavljeni";
+
   return (
-    <Box onSubmit={handleSubmit(onSubmit)} component="form" sx={{ mt: 4 }}>
+    <Box
+      onSubmit={handleSubmit(onSubmit, onError)}
+      component="form"
+      sx={{ mt: 4 }}
+    >
+      <Box sx={{ m: 1, display: "flex", alignItems: "center" }}>
+        <FormLabel
+          sx={{
+            m: 1,
+            color: odjavaColor,
+            width: 100,
+            textAlign: "right",
+            fontWeight: !isPrijavljen ? "bold" : "normal",
+          }}
+        >
+          {odjavaText}
+        </FormLabel>
+        <Switch
+          checked={isPrijavljen || false}
+          onChange={(e) => setValue("prijavljeni", e.target.checked)}
+          color="success"
+        />
+        <FormLabel
+          sx={{
+            m: 1,
+            color: prijavaColor,
+            width: 100,
+            textAlign: "left",
+            fontWeight: isPrijavljen ? "bold" : "normal",
+          }}
+        >
+          {prijavaText}
+        </FormLabel>
+      </Box>
       <Grid container m={0} spacing={2}>
         {inputItems(InputTypesSchema.enum.Text).map((item) => {
           return (
@@ -305,7 +348,7 @@ export const FirmaForm: React.FC<FirmaFormProps> = ({ inputCompany }) => {
                       // Get the problematic value if available
                       const value =
                         inputCompany.zaposleni?.[idx]?.[
-                          field as keyof Zaposleni
+                          field as keyof ZaposleniType
                         ];
                       return (
                         <li key={field + idx}>

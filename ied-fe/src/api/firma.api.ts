@@ -1,6 +1,9 @@
 import type { ExportFirma, ExportZaposlenih } from "@ied-shared/index";
-import type { FirmaQueryParams } from "@ied-shared/types/firma.zod";
-import type { FirmaType, Zaposleni } from "../schemas/firmaSchemas";
+import type {
+  FirmaQueryParams,
+  FirmaType,
+  ZaposleniType,
+} from "@ied-shared/types/firma.zod";
 import axiosInstanceWithAuth from "./interceptors/auth";
 
 export const fetchFirmaPretrage = async (
@@ -170,7 +173,7 @@ export const deleteFirma = async (id: string) => {
 
 export const addZaposleniToFirma = async (
   firmaId: string,
-  zaposleni: Partial<Zaposleni>,
+  zaposleni: Partial<ZaposleniType>,
 ) => {
   try {
     const response = await axiosInstanceWithAuth.post(
@@ -190,7 +193,7 @@ export const addZaposleniToFirma = async (
 export const updateZaposleniInFirma = async (
   firmaId: string,
   zaposleniId: string,
-  zaposleni: Partial<Zaposleni>,
+  zaposleni: Partial<ZaposleniType>,
 ) => {
   try {
     const response = await axiosInstanceWithAuth.put(

@@ -12,8 +12,6 @@ type FirmaType = Document & {
   tip_firme: string;
   delatnost: string;
   ucesce_na_seminarima: number;
-  FK_VELICINA_FIRME_ID_velicina_firme: number;
-  FK_MESTO_ID_mesto: number;
   komentar: string;
   provereno: number;
   RB: number;
@@ -25,6 +23,7 @@ type FirmaType = Document & {
   velicina_firme: string;
   jbkjs: string;
   maticni_broj: string;
+  prijavljeni: boolean;
 };
 
 const firmaSchema = new Schema<FirmaType>(
@@ -41,8 +40,6 @@ const firmaSchema = new Schema<FirmaType>(
     tip_firme: String,
     delatnost: String,
     ucesce_na_seminarima: Number,
-    FK_VELICINA_FIRME_ID_velicina_firme: Number,
-    FK_MESTO_ID_mesto: Number,
     komentar: String,
     provereno: Number,
     RB: Number,
@@ -50,6 +47,7 @@ const firmaSchema = new Schema<FirmaType>(
     zaposleni: { type: [zaposleniSchema], default: [] },
     jbkjs: String,
     maticni_broj: String,
+    prijavljeni: { type: Boolean, default: true },
   },
   {
     timestamps: { createdAt: "created_at", updatedAt: "updated_at" },
