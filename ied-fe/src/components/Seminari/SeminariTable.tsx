@@ -29,6 +29,7 @@ import {
 } from "material-react-table";
 import { useEffect, useMemo, useState } from "react";
 import { deleteSeminar, fetchSeminari } from "../../api/seminari.api";
+import { useTopScrollbar } from "../../hooks/useTopScrollbar";
 import PrijaveSeminarTable from "./PrijaveSeminarTable";
 import SeminarForm from "./SeminarForm";
 
@@ -52,6 +53,8 @@ export default function SeminariTable({
     pageIndex: 0,
     pageSize: 50,
   });
+
+  const scrollbarProps = useTopScrollbar<SeminarZodType>();
 
   useEffect(() => {
     const loadData = async () => {
@@ -309,6 +312,7 @@ export default function SeminariTable({
         )
       );
     },
+    ...scrollbarProps,
   });
 
   const handleSubmitSuccess = () => {
