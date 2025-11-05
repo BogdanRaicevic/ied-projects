@@ -33,8 +33,8 @@ importers:
         specifier: ^3.922.0
         version: 3.922.0(@aws-sdk/client-s3@3.922.0)
       '@clerk/express':
-        specifier: ^1.7.43
-        version: 1.7.43(express@5.1.0)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
+        specifier: ^1.7.45
+        version: 1.7.45(express@5.1.0)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
       cors:
         specifier: ^2.8.5
         version: 2.8.5
@@ -517,8 +517,8 @@ packages:
     cpu: [x64]
     os: [win32]
 
-  '@clerk/backend@2.19.1':
-    resolution: {integrity: sha512-lREqQ0BMa/sOjRRjB3LnIJ4mykbsQ9xyd2rsrVc0qjxidh326g2FKLkmY/x0To7AQ8FdUkfkdgxlQbIL20iWmA==}
+  '@clerk/backend@2.19.3':
+    resolution: {integrity: sha512-cnZWdcqW9ALZvfJlG0/1RCZZWRsqfEqaAklVzI8hNIjkYAgP2eP4lXOuiJhgl21tR/LXFqEw2CKmjAVscAtpiA==}
     engines: {node: '>=18.17.0'}
 
   '@clerk/clerk-react@5.53.4':
@@ -528,8 +528,8 @@ packages:
       react: ^18.0.0 || ^19.0.0 || ^19.0.0-0
       react-dom: ^18.0.0 || ^19.0.0 || ^19.0.0-0
 
-  '@clerk/express@1.7.43':
-    resolution: {integrity: sha512-I24202+DirFnTaA2LNKyTRX0GbW5D9CxM5A8dk8K67iLr80a1dF703UhoNvQn7nA2It1JwOQN9NNcDGALqkEfg==}
+  '@clerk/express@1.7.45':
+    resolution: {integrity: sha512-JSF5SfKb1h90ScZ4vJWC29Av/yb+ylkWMMTGM4s3GCjEITj0MplISOrJ3063LB1gqfXXv8ESanMXH8F7XOtFdA==}
     engines: {node: '>=18.17.0'}
     peerDependencies:
       express: ^4.17.0 || ^5.0.0
@@ -546,8 +546,24 @@ packages:
       react-dom:
         optional: true
 
+  '@clerk/shared@3.31.0':
+    resolution: {integrity: sha512-Erw2waPbSWsU4SYpHg96LraeI5oDfKK6qNBykVGuwcncjkvVggcWWD7FkNfzjOiN+c/Emb8Wa1iGngbucX5fJw==}
+    engines: {node: '>=18.17.0'}
+    peerDependencies:
+      react: ^18.0.0 || ^19.0.0 || ^19.0.0-0
+      react-dom: ^18.0.0 || ^19.0.0 || ^19.0.0-0
+    peerDependenciesMeta:
+      react:
+        optional: true
+      react-dom:
+        optional: true
+
   '@clerk/types@4.96.0':
     resolution: {integrity: sha512-07AoSkx6CF1YjjRFa75HtrmZuVe+8X9WskWZJ6bC1juxYKf0RQfVbNHoEjMuJMh2+Ao6LYrNcrTu8gNwB2O4MA==}
+    engines: {node: '>=18.17.0'}
+
+  '@clerk/types@4.97.1':
+    resolution: {integrity: sha512-rNWBdE36fUE+zhomCHs6WrO7XGZQPOFMT695GVGqgQas5iN1MJ4HgO5LRasNMXscOGuA0EX5tzRoPK6ZufdiZQ==}
     engines: {node: '>=18.17.0'}
 
   '@cspotcode/source-map-support@0.8.1':
@@ -3462,10 +3478,10 @@ snapshots:
   '@biomejs/cli-win32-x64@2.3.4':
     optional: true
 
-  '@clerk/backend@2.19.1(react-dom@19.2.0(react@19.2.0))(react@19.2.0)':
+  '@clerk/backend@2.19.3(react-dom@19.2.0(react@19.2.0))(react@19.2.0)':
     dependencies:
-      '@clerk/shared': 3.29.0(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
-      '@clerk/types': 4.96.0
+      '@clerk/shared': 3.31.0(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
+      '@clerk/types': 4.97.1(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
       cookie: 1.0.2
       standardwebhooks: 1.0.0
       tslib: 2.8.1
@@ -3481,11 +3497,11 @@ snapshots:
       react-dom: 19.2.0(react@19.2.0)
       tslib: 2.8.1
 
-  '@clerk/express@1.7.43(express@5.1.0)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)':
+  '@clerk/express@1.7.45(express@5.1.0)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)':
     dependencies:
-      '@clerk/backend': 2.19.1(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
-      '@clerk/shared': 3.29.0(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
-      '@clerk/types': 4.96.0
+      '@clerk/backend': 2.19.3(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
+      '@clerk/shared': 3.31.0(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
+      '@clerk/types': 4.97.1(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
       express: 5.1.0
       tslib: 2.8.1
     transitivePeerDependencies:
@@ -3504,9 +3520,28 @@ snapshots:
       react: 19.2.0
       react-dom: 19.2.0(react@19.2.0)
 
+  '@clerk/shared@3.31.0(react-dom@19.2.0(react@19.2.0))(react@19.2.0)':
+    dependencies:
+      csstype: 3.1.3
+      dequal: 2.0.3
+      glob-to-regexp: 0.4.1
+      js-cookie: 3.0.5
+      std-env: 3.9.0
+      swr: 2.3.4(react@19.2.0)
+    optionalDependencies:
+      react: 19.2.0
+      react-dom: 19.2.0(react@19.2.0)
+
   '@clerk/types@4.96.0':
     dependencies:
       csstype: 3.1.3
+
+  '@clerk/types@4.97.1(react-dom@19.2.0(react@19.2.0))(react@19.2.0)':
+    dependencies:
+      '@clerk/shared': 3.31.0(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
+    transitivePeerDependencies:
+      - react
+      - react-dom
 
   '@cspotcode/source-map-support@0.8.1':
     dependencies:
