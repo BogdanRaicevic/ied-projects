@@ -19,12 +19,12 @@ import {
   useCreateNewFirma,
   useDeleteFirma,
   useUpdateFirma,
-} from "../../../hooks/firma/useFirmaMutations";
-import { useFetchData } from "../../../hooks/useFetchData";
-import { InputTypesSchema, type Metadata } from "../../../schemas/metadata";
-import AutocompleteSingle from "../../Autocomplete/Single";
-import MailingListSwitch from "../../MailingListSwitch";
-import { firmaFormMetadata } from "./metadata";
+} from "../../hooks/firma/useFirmaMutations";
+import { useFetchData } from "../../hooks/useFetchData";
+import { InputTypesSchema, type Metadata } from "../../schemas/metadata";
+import AutocompleteSingle from "../Autocomplete/Single";
+import MailingListSwitch from "../MailingListSwitch";
+import { firmaFormMetadata } from "./firmaFormMetadata";
 
 type FirmaFormProps = {
   inputCompany: FirmaType;

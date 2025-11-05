@@ -6,8 +6,8 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import PrijavaNaSeminarDialog from "../components/Dialogs/PrijaviZaposlenogNaSeminar";
 import ZaposleniDialog from "../components/Dialogs/ZaposleniDialog";
+import FirmaForm from "../components/FirmaForm";
 import { ZaposleniTable } from "../components/FirmasTable";
-import FirmaForm from "../components/Forms/FirmaForm";
 import {
   useAddZaposleni,
   useDeleteZaposleni,
