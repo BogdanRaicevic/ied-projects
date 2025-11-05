@@ -1,3 +1,4 @@
+import { red } from "@mui/material/colors";
 import type { FirmaType } from "ied-shared";
 import {
   MaterialReactTable,
@@ -10,7 +11,7 @@ import { useTopScrollbar } from "../../hooks/useTopScrollbar";
 import { usePretragaStore } from "../../store/pretragaParameters.store";
 import { firmaColumns } from "./firmaColumns";
 
-export default function FirmasTable() {
+export const FirmasTable = () => {
   const [data, setData] = useState<FirmaType[]>([]);
   const [documents, setDocuments] = useState(1000);
 
@@ -60,7 +61,13 @@ export default function FirmasTable() {
         left: ["rowNumber", "naziv_firme"],
       },
     },
+    muiTableBodyRowProps: ({ row }) => ({
+      sx: {
+        backgroundColor:
+          row.original.prijavljeni === false ? red[100] : "inherit",
+      },
+    }),
     ...scrollbarProps,
   });
   return <MaterialReactTable table={table} />;
-}
+};

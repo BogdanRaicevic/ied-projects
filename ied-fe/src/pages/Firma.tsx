@@ -1,28 +1,13 @@
-import DeleteIcon from "@mui/icons-material/Delete";
-import EditIcon from "@mui/icons-material/Edit";
-import PersonAddIcon from "@mui/icons-material/PersonAdd";
-import {
-  Alert,
-  Box,
-  Button,
-  CircularProgress,
-  IconButton,
-  Tooltip,
-} from "@mui/material";
+import { Alert, Box, Button, CircularProgress } from "@mui/material";
 import { format } from "date-fns/format";
 import type { FirmaType, ZaposleniType } from "ied-shared";
-import {
-  MaterialReactTable,
-  type MRT_ColumnDef,
-  type MRT_Row,
-  useMaterialReactTable,
-} from "material-react-table";
-import { useEffect, useMemo, useState } from "react";
+import type { MRT_Row } from "material-react-table";
+import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import PrijavaNaSeminarDialog from "../components/Dialogs/PrijaviZaposlenogNaSeminar";
 import ZaposleniDialog from "../components/Dialogs/ZaposleniDialog";
-import { zaposleniColumns } from "../components/FirmasTable/zaposleniColumns";
-import FirmaForm from "../components/Forms/FirmaForm";
+import FirmaForm from "../components/FirmaForm";
+import { ZaposleniTable } from "../components/FirmasTable";
 import {
   useAddZaposleni,
   useDeleteZaposleni,
@@ -30,7 +15,6 @@ import {
   useUpdateZaposleni,
 } from "../hooks/firma/useFirmaMutations";
 import { useGetFirma } from "../hooks/firma/useFirmaQueries";
-import { useTopScrollbar } from "../hooks/useTopScrollbar";
 
 const defaultFirmaData: FirmaType = {
   ID_firma: 0,
@@ -180,71 +164,6 @@ export default function Firma() {
     setOpenPrijavaNaSeminarDialog(true);
   };
 
-  const scrollbarProps = useTopScrollbar<ZaposleniType>();
-
-  const zaposleniTable = useMaterialReactTable({
-    columns: useMemo<MRT_ColumnDef<ZaposleniType>[]>(
-      () => zaposleniColumns,
-      [],
-    ),
-    data: firmaData?.zaposleni || [],
-    enableColumnOrdering: true,
-    enableGlobalFilter: true,
-    enableEditing: true,
-    enableRowActions: true,
-    renderRowActions: ({ row }) => {
-      return (
-        <Box sx={{ display: "flex", gap: "1rem" }}>
-          <Tooltip title="Prijavi na seminar" color="success">
-            <IconButton
-              onClick={() => {
-                setSelectedRow(row);
-                handlePrijaviNaSeminar();
-              }}
-            >
-              <PersonAddIcon />
-            </IconButton>
-          </Tooltip>
-          <Tooltip title="Edit">
-            <IconButton onClick={() => handleEdit(row)}>
-              <EditIcon />
-            </IconButton>
-          </Tooltip>
-          <Tooltip title="Delete">
-            <IconButton
-              color="error"
-              onClick={() => {
-                if (
-                  window.confirm(
-                    "Da li ste sigurni da želite da obrišete zaposlenog?",
-                  )
-                ) {
-                  handleDeleteZaposleni(row);
-                }
-              }}
-              disabled={
-                deleteZaposleniMutation.isPending &&
-                deleteZaposleniMutation.variables === row.original._id
-              }
-            >
-              <DeleteIcon />
-            </IconButton>
-          </Tooltip>
-        </Box>
-      );
-    },
-    initialState: {
-      pagination: {
-        pageIndex: 0,
-        pageSize: 50,
-      },
-      columnPinning: {
-        left: ["rowNumber", "actions"],
-      },
-    },
-    ...scrollbarProps,
-  });
-
   if (isLoading) {
     return (
       <Box sx={{ display: "flex", justifyContent: "center", mt: 4 }}>
@@ -301,7 +220,17 @@ export default function Firma() {
               {warningAlert}
             </Alert>
           )}
-          <MaterialReactTable table={zaposleniTable} />
+          <ZaposleniTable
+            zaposleni={firmaData?.zaposleni || []}
+            onEdit={handleEdit}
+            onDelete={handleDeleteZaposleni}
+            onPrijaviNaSeminar={(row) => {
+              setSelectedRow(row);
+              handlePrijaviNaSeminar();
+            }}
+            isDeleting={deleteZaposleniMutation.isPending}
+            deletingZaposleniId={deleteZaposleniMutation.variables}
+          />
           <ZaposleniDialog
             zaposleni={selectedRow?.original}
             open={openZaposleniDialog}
