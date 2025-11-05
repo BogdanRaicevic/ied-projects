@@ -12,7 +12,7 @@ import {
 } from "material-react-table";
 import { useMemo } from "react";
 import { useTopScrollbar } from "../../hooks/useTopScrollbar";
-import { zaposleniColumns } from "../FirmasTable/zaposleniColumns";
+import { zaposleniColumns } from "./zaposleniColumns";
 
 type ZaposleniTableProps = {
   zaposleni: ZaposleniType[];
