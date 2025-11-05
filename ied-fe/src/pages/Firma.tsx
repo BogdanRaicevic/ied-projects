@@ -30,6 +30,7 @@ import {
   useUpdateZaposleni,
 } from "../hooks/firma/useFirmaMutations";
 import { useGetFirma } from "../hooks/firma/useFirmaQueries";
+import { useTopScrollbar } from "../hooks/useTopScrollbar";
 
 const defaultFirmaData: FirmaType = {
   ID_firma: 0,
@@ -179,7 +180,9 @@ export default function Firma() {
     setOpenPrijavaNaSeminarDialog(true);
   };
 
-  const zapTable = useMaterialReactTable({
+  const scrollbarProps = useTopScrollbar<ZaposleniType>();
+
+  const zaposleniTable = useMaterialReactTable({
     columns: useMemo<MRT_ColumnDef<ZaposleniType>[]>(
       () => zaposleniColumns,
       [],
@@ -188,6 +191,7 @@ export default function Firma() {
     enableColumnOrdering: true,
     enableGlobalFilter: true,
     enableEditing: true,
+    enableRowActions: true,
     renderRowActions: ({ row }) => {
       return (
         <Box sx={{ display: "flex", gap: "1rem" }}>
@@ -238,6 +242,7 @@ export default function Firma() {
         left: ["rowNumber", "actions"],
       },
     },
+    ...scrollbarProps,
   });
 
   if (isLoading) {
@@ -296,7 +301,7 @@ export default function Firma() {
               {warningAlert}
             </Alert>
           )}
-          <MaterialReactTable table={zapTable} />
+          <MaterialReactTable table={zaposleniTable} />
           <ZaposleniDialog
             zaposleni={selectedRow?.original}
             open={openZaposleniDialog}

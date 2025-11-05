@@ -6,6 +6,7 @@ import {
 } from "material-react-table";
 import { useEffect, useMemo, useState } from "react";
 import { fetchFirmaPretrage } from "../../api/firma.api";
+import { useTopScrollbar } from "../../hooks/useTopScrollbar";
 import { usePretragaStore } from "../../store/pretragaParameters.store";
 import { firmaColumns } from "./firmaColumns";
 
@@ -29,6 +30,8 @@ export default function FirmasTable() {
     };
     loadData();
   }, [pagination.pageIndex, pagination.pageSize, appliedParameters]);
+
+  const scrollbarProps = useTopScrollbar<FirmaType>();
 
   const table = useMaterialReactTable({
     columns: useMemo<MRT_ColumnDef<FirmaType>[]>(() => firmaColumns, []),
@@ -57,6 +60,7 @@ export default function FirmasTable() {
         left: ["rowNumber", "naziv_firme"],
       },
     },
+    ...scrollbarProps,
   });
   return <MaterialReactTable table={table} />;
 }
