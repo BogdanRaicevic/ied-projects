@@ -35,7 +35,7 @@
     "cors": "^2.8.5",
     "cron": "^4.3.3",
     "date-fns": "^4.1.0",
-    "docxtemplater": "^3.67.1",
+    "docxtemplater": "^3.67.3",
     "dotenv": "^17.2.3",
     "es-toolkit": "^1.39.10",
     "express": "^5.1.0",
