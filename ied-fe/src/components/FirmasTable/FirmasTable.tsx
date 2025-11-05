@@ -11,7 +11,7 @@ import { useTopScrollbar } from "../../hooks/useTopScrollbar";
 import { usePretragaStore } from "../../store/pretragaParameters.store";
 import { firmaColumns } from "./firmaColumns";
 
-export default function FirmasTable() {
+export const FirmasTable = () => {
   const [data, setData] = useState<FirmaType[]>([]);
   const [documents, setDocuments] = useState(1000);
 
@@ -70,4 +70,4 @@ export default function FirmasTable() {
     ...scrollbarProps,
   });
   return <MaterialReactTable table={table} />;
-}
+};
