@@ -299,66 +299,84 @@ export default function PretragaParameters() {
         </Grid>
       </Grid>
 
-      <Grid container spacing={2} marginTop={2}>
-        <Grid size={8}>
-          <Grid container alignItems="center"></Grid>
-        </Grid>
-      </Grid>
-
-      <Box
-        sx={{
-          "& .MuiTextField-root": { m: 1, width: "25ch" },
-        }}
-      >
-        <Grid mt={4} maxWidth="lg">
+      <Grid container spacing={2} columns={12} mt={4} mb={4}>
+        <Grid size={3}>
           <Controller
             name="imeFirme"
             control={control}
-            render={({ field }) => <TextField label="Ime Firme" {...field} />}
+            render={({ field }) => (
+              <TextField fullWidth label="Ime Firme" {...field} />
+            )}
           />
+        </Grid>
+        <Grid size={3}>
           <Controller
             name="pib"
             control={control}
-            render={({ field }) => <TextField label="PIB" {...field} />}
+            render={({ field }) => (
+              <TextField fullWidth label="PIB" {...field} />
+            )}
           />
+        </Grid>
+        <Grid size={3}>
           <Controller
             name="maticniBroj"
             control={control}
             render={({ field }) => (
-              <TextField label="Matični broj" {...field} />
+              <TextField fullWidth label="Matični broj" {...field} />
             )}
           />
+        </Grid>
+        <Grid size={3}>
           <Controller
             name="email"
             control={control}
-            render={({ field }) => <TextField label="E-mail" {...field} />}
+            render={({ field }) => (
+              <TextField fullWidth label="E-mail" {...field} />
+            )}
           />
+        </Grid>
+        <Grid size={3}>
           <Controller
             name="jbkjs"
             control={control}
-            render={({ field }) => <TextField label="JBKJS" {...field} />}
+            render={({ field }) => (
+              <TextField fullWidth label="JBKJS" {...field} />
+            )}
           />
+        </Grid>
+        <Grid size={3}>
           <Controller
             name="komentar"
             control={control}
-            render={({ field }) => <TextField label="Komentar" {...field} />}
+            render={({ field }) => (
+              <TextField fullWidth label="Komentar" {...field} />
+            )}
           />
+        </Grid>
+        <Grid size={3}>
           <Controller
             name="imePrezime"
             control={control}
             render={({ field }) => (
-              <TextField label="Ime i prezime zaposlenog" {...field} />
+              <TextField
+                fullWidth
+                label="Ime i prezime zaposlenog"
+                {...field}
+              />
             )}
           />
+        </Grid>
+        <Grid size={3}>
           <Controller
             name="emailZaposlenog"
             control={control}
             render={({ field }) => (
-              <TextField label="E-mail zaposlenog" {...field} />
+              <TextField fullWidth label="E-mail zaposlenog" {...field} />
             )}
           />
         </Grid>
-      </Box>
+      </Grid>
 
       <Box
         display="flex"
