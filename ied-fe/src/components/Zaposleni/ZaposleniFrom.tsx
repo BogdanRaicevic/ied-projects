@@ -1,10 +1,11 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Box, Button, FormLabel, Switch, TextField } from "@mui/material";
+import { Box, Button, TextField } from "@mui/material";
 import { ZaposleniSchema, type ZaposleniType } from "ied-shared";
 import { useState } from "react";
-import { Controller, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { useFetchData } from "../../hooks/useFetchData";
 import Single from "../Autocomplete/Single";
+import MailingListSwitch from "../MailingListSwitch";
 
 type ZaposleniFormProps = {
   zaposleni?: ZaposleniType;
@@ -16,7 +17,7 @@ export function ZaposleniForm({ zaposleni, onSubmit }: ZaposleniFormProps) {
     register,
     handleSubmit,
     watch,
-    control,
+    setValue,
     formState: { errors },
   } = useForm<ZaposleniType>({
     resolver: zodResolver(ZaposleniSchema),
@@ -53,46 +54,12 @@ export function ZaposleniForm({ zaposleni, onSubmit }: ZaposleniFormProps) {
   const { radnaMesta, isRadnaMestaLoading } = useFetchData();
   const isPrijavljen = watch("prijavljeni");
 
-  const odjavaColor = isPrijavljen ? "gray" : "darkred";
-  const odjavaText = isPrijavljen ? "odjavljeni" : "odjavljeni".toUpperCase();
-  const prijavaColor = isPrijavljen ? "green" : "gray";
-  const prijavaText = isPrijavljen
-    ? "prijavljeni".toUpperCase()
-    : "prijavljeni";
-
   return (
     <Box component="form">
-      <Box sx={{ m: 1, display: "flex", alignItems: "center" }}>
-        <FormLabel
-          sx={{
-            m: 1,
-            color: odjavaColor,
-            width: 100,
-            textAlign: "right",
-            fontWeight: !isPrijavljen ? "bold" : "normal",
-          }}
-        >
-          {odjavaText}
-        </FormLabel>
-        <Controller
-          name="prijavljeni"
-          control={control}
-          render={({ field }) => (
-            <Switch {...field} checked={field.value} color="success" />
-          )}
-        />
-        <FormLabel
-          sx={{
-            m: 1,
-            color: prijavaColor,
-            width: 100,
-            textAlign: "left",
-            fontWeight: isPrijavljen ? "bold" : "normal",
-          }}
-        >
-          {prijavaText}
-        </FormLabel>
-      </Box>
+      <MailingListSwitch
+        isPrijavljen={isPrijavljen}
+        onChange={(newValue) => setValue("prijavljeni", newValue)}
+      />
       <TextField
         {...register("ime")}
         sx={{ m: 1 }}

@@ -5,10 +5,8 @@ import {
   Button,
   Divider,
   FormControl,
-  FormLabel,
   Grid,
   InputAdornment,
-  Switch,
   TextField,
   Typography,
 } from "@mui/material";
@@ -25,6 +23,7 @@ import {
 import { useFetchData } from "../../../hooks/useFetchData";
 import { InputTypesSchema, type Metadata } from "../../../schemas/metadata";
 import AutocompleteSingle from "../../Autocomplete/Single";
+import MailingListSwitch from "../../MailingListSwitch";
 import { firmaFormMetadata } from "./metadata";
 
 type FirmaFormProps = {
@@ -206,14 +205,7 @@ export const FirmaForm: React.FC<FirmaFormProps> = ({ inputCompany }) => {
       });
   };
 
-  const isPrijavljen = watch("prijavljeni");
-
-  const odjavaColor = isPrijavljen ? "gray" : "darkred";
-  const odjavaText = isPrijavljen ? "odjavljeni" : "odjavljeni".toUpperCase();
-  const prijavaColor = isPrijavljen ? "green" : "gray";
-  const prijavaText = isPrijavljen
-    ? "prijavljeni".toUpperCase()
-    : "prijavljeni";
+  const isPrijavljen = Boolean(watch("prijavljeni"));
 
   return (
     <Box
@@ -221,35 +213,10 @@ export const FirmaForm: React.FC<FirmaFormProps> = ({ inputCompany }) => {
       component="form"
       sx={{ mt: 4 }}
     >
-      <Box sx={{ m: 1, display: "flex", alignItems: "center" }}>
-        <FormLabel
-          sx={{
-            m: 1,
-            color: odjavaColor,
-            width: 100,
-            textAlign: "right",
-            fontWeight: !isPrijavljen ? "bold" : "normal",
-          }}
-        >
-          {odjavaText}
-        </FormLabel>
-        <Switch
-          checked={isPrijavljen || false}
-          onChange={(e) => setValue("prijavljeni", e.target.checked)}
-          color="success"
-        />
-        <FormLabel
-          sx={{
-            m: 1,
-            color: prijavaColor,
-            width: 100,
-            textAlign: "left",
-            fontWeight: isPrijavljen ? "bold" : "normal",
-          }}
-        >
-          {prijavaText}
-        </FormLabel>
-      </Box>
+      <MailingListSwitch
+        isPrijavljen={isPrijavljen}
+        onChange={(newValue) => setValue("prijavljeni", newValue)}
+      />
       <Grid container m={0} spacing={2}>
         {inputItems(InputTypesSchema.enum.Text).map((item) => {
           return (
