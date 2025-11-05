@@ -9,6 +9,7 @@ import {
   IconButton,
   Tooltip,
 } from "@mui/material";
+import { red } from "@mui/material/colors";
 import { format } from "date-fns/format";
 import type { FirmaType, ZaposleniType } from "ied-shared";
 import {
@@ -242,6 +243,12 @@ export default function Firma() {
         left: ["rowNumber", "actions"],
       },
     },
+    muiTableBodyRowProps: ({ row }) => ({
+      sx: {
+        backgroundColor:
+          row.original.prijavljeni === false ? red[100] : "inherit",
+      },
+    }),
     ...scrollbarProps,
   });
 
