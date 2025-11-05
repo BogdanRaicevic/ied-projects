@@ -1,3 +1,4 @@
+import { red } from "@mui/material/colors";
 import type { FirmaType } from "ied-shared";
 import {
   MaterialReactTable,
@@ -60,6 +61,12 @@ export default function FirmasTable() {
         left: ["rowNumber", "naziv_firme"],
       },
     },
+    muiTableBodyRowProps: ({ row }) => ({
+      sx: {
+        backgroundColor:
+          row.original.prijavljeni === false ? red[100] : "inherit",
+      },
+    }),
     ...scrollbarProps,
   });
   return <MaterialReactTable table={table} />;
