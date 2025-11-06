@@ -43,7 +43,7 @@ export const defaultPretrageParameters: FirmaQueryParams = {
   seminari: [],
   imePrezime: "",
   emailZaposlenog: "",
-  prijavljeni: undefined,
+  firmaPrijavljeni: undefined,
 };
 
 export const usePretragaStore = create<PretragaStore>((set, get) => ({

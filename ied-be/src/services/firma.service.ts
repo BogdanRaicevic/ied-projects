@@ -144,6 +144,15 @@ export const exportSearchedZaposleniData = async (
           console.warn("Zaposleni missing _id:", z);
           continue;
         }
+
+        if (
+          queryParameters.zaposleniPrijavljeni !== undefined &&
+          typeof queryParameters.zaposleniPrijavljeni === "boolean" &&
+          z.prijavljeni !== queryParameters.zaposleniPrijavljeni
+        ) {
+          continue;
+        }
+
         const isZaposleniInSeminar =
           seminarAttendees?.includes(z._id.toString()) ?? false;
         const isRadnoMestoNegated =

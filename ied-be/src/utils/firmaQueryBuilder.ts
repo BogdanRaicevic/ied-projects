@@ -142,10 +142,22 @@ export const createFirmaQuery = async (params: FirmaQueryParams) => {
   }
 
   if (
-    params?.prijavljeni !== undefined &&
-    typeof params.prijavljeni === "boolean"
+    params?.firmaPrijavljeni !== undefined &&
+    typeof params.firmaPrijavljeni === "boolean"
   ) {
-    query.prijavljeni = params.prijavljeni;
+    query.prijavljeni = params.firmaPrijavljeni;
+  }
+
+  // Returns the whole firma that satisfies the zaposleni prijavljeni condition
+  if (
+    params?.zaposleniPrijavljeni !== undefined &&
+    typeof params.zaposleniPrijavljeni === "boolean"
+  ) {
+    query.zaposleni = {
+      $elemMatch: {
+        prijavljeni: { $eq: params.zaposleniPrijavljeni },
+      },
+    };
   }
 
   return query;

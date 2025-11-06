@@ -313,7 +313,7 @@ export default function PretragaParameters() {
       <Grid container spacing={2} mt={2}>
         <Grid size={3}>
           <Controller
-            name="prijavljeni"
+            name="firmaPrijavljeni"
             control={control}
             render={({ field }) => {
               const handleChange = (
@@ -339,11 +339,58 @@ export default function PretragaParameters() {
               return (
                 <FormControl>
                   <FormLabel>Firme prijavljene na majling listu:</FormLabel>
-                  <RadioGroup
-                    value={fieldValue}
-                    onChange={handleChange}
-                    name="radio-buttons-group"
-                  >
+                  <RadioGroup value={fieldValue} onChange={handleChange}>
+                    <FormControlLabel
+                      value="svi"
+                      control={<Radio />}
+                      label="Svi"
+                    />
+                    <FormControlLabel
+                      value="true"
+                      control={<Radio />}
+                      label="Prijavljene"
+                    />
+                    <FormControlLabel
+                      value="false"
+                      control={<Radio />}
+                      label="Odjavljene"
+                    />
+                  </RadioGroup>
+                </FormControl>
+              );
+            }}
+          />
+        </Grid>
+
+        <Grid size={3}>
+          <Controller
+            name="zaposleniPrijavljeni"
+            control={control}
+            render={({ field }) => {
+              const handleChange = (
+                event: React.ChangeEvent<HTMLInputElement>,
+              ) => {
+                const value = event.target.value;
+                if (value === "true") {
+                  field.onChange(true);
+                } else if (value === "false") {
+                  field.onChange(false);
+                } else {
+                  field.onChange(undefined);
+                }
+              };
+
+              const fieldValue =
+                field.value === true
+                  ? "true"
+                  : field.value === false
+                    ? "false"
+                    : "sve";
+
+              return (
+                <FormControl>
+                  <FormLabel>Zaposleni prijavljeni na majling listu:</FormLabel>
+                  <RadioGroup value={fieldValue} onChange={handleChange}>
                     <FormControlLabel
                       value="sve"
                       control={<Radio />}

@@ -95,6 +95,7 @@ export const FirmaQueryParamsSchema = z.object({
     .optional(),
   imePrezime: z.string().optional(),
   emailZaposlenog: z.string().optional(),
-  prijavljeni: z.boolean().optional(),
+  firmaPrijavljeni: z.boolean().optional(),
+  zaposleniPrijavljeni: z.boolean().optional(),
 });
 export type FirmaQueryParams = z.infer<typeof FirmaQueryParamsSchema>;
