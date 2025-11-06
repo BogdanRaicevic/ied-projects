@@ -334,7 +334,7 @@ export default function PretragaParameters() {
                   ? "true"
                   : field.value === false
                     ? "false"
-                    : "sve";
+                    : "svi";
 
               return (
                 <FormControl>
