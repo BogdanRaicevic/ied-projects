@@ -226,21 +226,27 @@ export const createZaposleni = async (
 export const updateZaposleni = async (
   firmaId: string,
   zaposleniId: string,
-  zaposleniData: Partial<Zaposleni>,
+  zaposleniData: Partial<Zaposleni> & { firmaKomentar?: string },
 ) => {
   try {
     if (zaposleniData.radno_mesto === "") {
       zaposleniData.radno_mesto = "nema";
     }
 
+    const { firmaKomentar, ...zaposleniUpdateData } = zaposleniData;
+
     const updateObject = {};
-    for (const key in zaposleniData) {
-      updateObject[`zaposleni.$.${key}`] = zaposleniData[key];
+    for (const key in zaposleniUpdateData) {
+      updateObject[`zaposleni.$.${key}`] = zaposleniUpdateData[key];
+    }
+
+    if (firmaKomentar) {
+      updateObject["komentar"] = firmaKomentar;
     }
 
     const updatedFirma = await Firma.findOneAndUpdate(
       { _id: firmaId, "zaposleni._id": zaposleniId },
-      { $set: updateObject }, // Use the new update object
+      { $set: updateObject },
       {
         new: true,
         runValidators: true,
