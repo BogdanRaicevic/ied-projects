@@ -37,6 +37,7 @@ export const savePretraga = async (
     pretragaData.komentar = queryParameters.komentar;
     pretragaData.imePrezime = queryParameters.imePrezime;
     pretragaData.emailZaposlenog = queryParameters.emailZaposlenog;
+    pretragaData.prijavljeni = queryParameters.prijavljeni;
 
     const p = await Pretrage.findOneAndUpdate(
       { _id: pretraga.id },
