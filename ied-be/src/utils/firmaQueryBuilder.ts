@@ -141,5 +141,12 @@ export const createFirmaQuery = async (params: FirmaQueryParams) => {
     };
   }
 
+  if (
+    params?.prijavljeni !== undefined &&
+    typeof params.prijavljeni === "boolean"
+  ) {
+    query.prijavljeni = params.prijavljeni;
+  }
+
   return query;
 };

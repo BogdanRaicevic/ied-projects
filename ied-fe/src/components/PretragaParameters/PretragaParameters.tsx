@@ -1,7 +1,18 @@
 import type { FirmaQueryParams } from "@ied-shared/types/firma.zod";
 import AddBoxIcon from "@mui/icons-material/AddBox";
 import SearchIcon from "@mui/icons-material/Search";
-import { Box, Button, Chip, Grid, TextField } from "@mui/material";
+import {
+  Box,
+  Button,
+  Chip,
+  FormControl,
+  FormControlLabel,
+  FormLabel,
+  Grid,
+  Radio,
+  RadioGroup,
+  TextField,
+} from "@mui/material";
 import { format } from "date-fns";
 import { useEffect } from "react";
 import { Controller, useForm } from "react-hook-form";
@@ -295,6 +306,63 @@ export default function PretragaParameters() {
                 onCheckedChange={field.onChange}
               />
             )}
+          />
+        </Grid>
+      </Grid>
+
+      <Grid container spacing={2} mt={2}>
+        <Grid size={3}>
+          <Controller
+            name="prijavljeni"
+            control={control}
+            render={({ field }) => {
+              const handleChange = (
+                event: React.ChangeEvent<HTMLInputElement>,
+              ) => {
+                const value = event.target.value;
+                if (value === "true") {
+                  field.onChange(true);
+                } else if (value === "false") {
+                  field.onChange(false);
+                } else {
+                  field.onChange(undefined);
+                }
+              };
+
+              const fieldValue =
+                field.value === true
+                  ? "true"
+                  : field.value === false
+                    ? "false"
+                    : "sve";
+
+              return (
+                <FormControl>
+                  <FormLabel>Firme prijavljene na majling listu:</FormLabel>
+                  <RadioGroup
+                    value={fieldValue}
+                    onChange={handleChange}
+                    name="radio-buttons-group"
+                  >
+                    <FormControlLabel
+                      value="sve"
+                      control={<Radio />}
+                      label="Sve"
+                    />
+                    <FormControlLabel
+                      value="true"
+                      control={<Radio />}
+                      label="Prijavljene"
+                    />
+                    <FormControlLabel
+                      value="false"
+                      control={<Radio />}
+                      label="Odjavljene"
+                    />
+                  </RadioGroup>
+                </FormControl>
+              );
+            }}
           />
         </Grid>
       </Grid>
