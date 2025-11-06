@@ -169,26 +169,36 @@ export const useUpdateZaposleni = (firmaId: string) => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async (zaposleni: Partial<ZaposleniType>) => {
+    mutationFn: async (
+      zaposleni: Partial<ZaposleniType> & { firmaKomentar?: string },
+    ) => {
       if (!zaposleni._id)
         throw new Error("Zaposleni ID is required for update");
       return await updateZaposleniInFirma(firmaId, zaposleni._id, zaposleni);
     },
     onMutate: async (updatedZaposleni) => {
       await queryClient.cancelQueries({ queryKey: firmaQueryKey(firmaId) });
-      const previousFirma = queryClient.getQueryData<FirmaType>(
-        firmaQueryKey(firmaId),
-      );
+      const firma = queryClient.getQueryData<FirmaType>(firmaQueryKey(firmaId));
 
-      if (previousFirma) {
-        queryClient.setQueryData<FirmaType>(firmaQueryKey(firmaId), {
-          ...previousFirma,
-          zaposleni: previousFirma.zaposleni.map((z) =>
+      if (firma) {
+        const newFirmaState = {
+          ...firma,
+          komentar:
+            updatedZaposleni.firmaKomentar !== undefined
+              ? updatedZaposleni.firmaKomentar
+              : firma.komentar,
+          // Update the specific employee in the array
+          zaposleni: firma.zaposleni.map((z) =>
             z._id === updatedZaposleni._id ? { ...z, ...updatedZaposleni } : z,
           ),
-        });
+        };
+
+        queryClient.setQueryData<FirmaType>(
+          firmaQueryKey(firmaId),
+          newFirmaState,
+        );
       }
-      return { previousFirma };
+      return { previousFirma: firma };
     },
     onError: (_err, _updatedZaposleni, context) => {
       if (context?.previousFirma) {

@@ -11,7 +11,6 @@ import { ZaposleniTable } from "../components/FirmasTable";
 import {
   useAddZaposleni,
   useDeleteZaposleni,
-  useUpdateFirma,
   useUpdateZaposleni,
 } from "../hooks/firma/useFirmaMutations";
 import { useGetFirma } from "../hooks/firma/useFirmaQueries";
@@ -52,7 +51,6 @@ export default function Firma() {
   const addZaposleniMutation = useAddZaposleni(id!);
   const updateZaposleniMutation = useUpdateZaposleni(id!);
   const deleteZaposleniMutation = useDeleteZaposleni(id!);
-  const updateFirmaMutation = useUpdateFirma(id!);
 
   const [errorAlert, setErrorAlert] = useState<string | null>(null);
   const [warningAlert, setWarningAlert] = useState<string | null>(null);
@@ -109,17 +107,14 @@ export default function Firma() {
 
       const imePrezime =
         `${zaposleni.ime || ""} ${zaposleni.prezime || ""}`.trim();
-      const prijavaKomentar = `\n${format(Date(), "dd.MM.yyyy")} - ${imePrezime} - ${seminar} - PRIJAVA`;
+      const prijavaKomentar = `\n${format(new Date(), "dd.MM.yyyy")} - ${imePrezime} - ${seminar} - PRIJAVA`;
       const newFirmaKomentar = `${firmaData?.komentar || ""}${prijavaKomentar}`;
-      updateFirmaMutation.mutate({
-        ...firmaData,
-        komentar: `${newFirmaKomentar}`,
-      });
-
       const newZaposleniKomentar = `${zaposleni.komentar || ""}${prijavaKomentar}`;
+
       updateZaposleniMutation.mutate({
-        ...zaposleni,
-        komentar: `${newZaposleniKomentar}`,
+        _id: zaposleni._id,
+        komentar: newZaposleniKomentar,
+        firmaKomentar: newFirmaKomentar,
       });
     }
     handleClosePrijavaDialog();

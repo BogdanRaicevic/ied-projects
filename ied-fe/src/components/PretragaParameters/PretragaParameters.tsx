@@ -334,16 +334,16 @@ export default function PretragaParameters() {
                   ? "true"
                   : field.value === false
                     ? "false"
-                    : "svi";
+                    : "sve";
 
               return (
                 <FormControl>
                   <FormLabel>Firme prijavljene na majling listu:</FormLabel>
                   <RadioGroup value={fieldValue} onChange={handleChange}>
                     <FormControlLabel
-                      value="svi"
+                      value="sve"
                       control={<Radio />}
-                      label="Svi"
+                      label="Sve"
                     />
                     <FormControlLabel
                       value="true"
@@ -385,26 +385,26 @@ export default function PretragaParameters() {
                   ? "true"
                   : field.value === false
                     ? "false"
-                    : "sve";
+                    : "svi";
 
               return (
                 <FormControl>
                   <FormLabel>Zaposleni prijavljeni na majling listu:</FormLabel>
                   <RadioGroup value={fieldValue} onChange={handleChange}>
                     <FormControlLabel
-                      value="sve"
+                      value="svi"
                       control={<Radio />}
-                      label="Sve"
+                      label="Svi"
                     />
                     <FormControlLabel
                       value="true"
                       control={<Radio />}
-                      label="Prijavljene"
+                      label="Prijavljeni"
                     />
                     <FormControlLabel
                       value="false"
                       control={<Radio />}
-                      label="Odjavljene"
+                      label="Odjavljeni"
                     />
                   </RadioGroup>
                 </FormControl>
