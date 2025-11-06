@@ -99,6 +99,8 @@ export default function PredefinedPretrage() {
       komentar: option.komentar,
       imePrezime: option.imePrezime,
       emailZaposlenog: option.emailZaposlenog,
+      firmaPrijavljeni: option.firmaPrijavljeni,
+      zaposleniPrijavljeni: option.zaposleniPrijavljeni,
     };
     setPretragaParameters(mappedPregrage);
     setAppliedParameters();

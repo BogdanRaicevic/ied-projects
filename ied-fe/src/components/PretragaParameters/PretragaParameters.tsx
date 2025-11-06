@@ -1,7 +1,18 @@
 import type { FirmaQueryParams } from "@ied-shared/types/firma.zod";
 import AddBoxIcon from "@mui/icons-material/AddBox";
 import SearchIcon from "@mui/icons-material/Search";
-import { Box, Button, Chip, Grid, TextField } from "@mui/material";
+import {
+  Box,
+  Button,
+  Chip,
+  FormControl,
+  FormControlLabel,
+  FormLabel,
+  Grid,
+  Radio,
+  RadioGroup,
+  TextField,
+} from "@mui/material";
 import { format } from "date-fns";
 import { useEffect } from "react";
 import { Controller, useForm } from "react-hook-form";
@@ -299,66 +310,188 @@ export default function PretragaParameters() {
         </Grid>
       </Grid>
 
-      <Grid container spacing={2} marginTop={2}>
-        <Grid size={8}>
-          <Grid container alignItems="center"></Grid>
+      <Grid container spacing={2} mt={2}>
+        <Grid size={3}>
+          <Controller
+            name="firmaPrijavljeni"
+            control={control}
+            render={({ field }) => {
+              const handleChange = (
+                event: React.ChangeEvent<HTMLInputElement>,
+              ) => {
+                const value = event.target.value;
+                if (value === "true") {
+                  field.onChange(true);
+                } else if (value === "false") {
+                  field.onChange(false);
+                } else {
+                  field.onChange(undefined);
+                }
+              };
+
+              const fieldValue =
+                field.value === true
+                  ? "true"
+                  : field.value === false
+                    ? "false"
+                    : "sve";
+
+              return (
+                <FormControl>
+                  <FormLabel>Firme prijavljene na majling listu:</FormLabel>
+                  <RadioGroup value={fieldValue} onChange={handleChange}>
+                    <FormControlLabel
+                      value="svi"
+                      control={<Radio />}
+                      label="Svi"
+                    />
+                    <FormControlLabel
+                      value="true"
+                      control={<Radio />}
+                      label="Prijavljene"
+                    />
+                    <FormControlLabel
+                      value="false"
+                      control={<Radio />}
+                      label="Odjavljene"
+                    />
+                  </RadioGroup>
+                </FormControl>
+              );
+            }}
+          />
+        </Grid>
+
+        <Grid size={3}>
+          <Controller
+            name="zaposleniPrijavljeni"
+            control={control}
+            render={({ field }) => {
+              const handleChange = (
+                event: React.ChangeEvent<HTMLInputElement>,
+              ) => {
+                const value = event.target.value;
+                if (value === "true") {
+                  field.onChange(true);
+                } else if (value === "false") {
+                  field.onChange(false);
+                } else {
+                  field.onChange(undefined);
+                }
+              };
+
+              const fieldValue =
+                field.value === true
+                  ? "true"
+                  : field.value === false
+                    ? "false"
+                    : "sve";
+
+              return (
+                <FormControl>
+                  <FormLabel>Zaposleni prijavljeni na majling listu:</FormLabel>
+                  <RadioGroup value={fieldValue} onChange={handleChange}>
+                    <FormControlLabel
+                      value="sve"
+                      control={<Radio />}
+                      label="Sve"
+                    />
+                    <FormControlLabel
+                      value="true"
+                      control={<Radio />}
+                      label="Prijavljene"
+                    />
+                    <FormControlLabel
+                      value="false"
+                      control={<Radio />}
+                      label="Odjavljene"
+                    />
+                  </RadioGroup>
+                </FormControl>
+              );
+            }}
+          />
         </Grid>
       </Grid>
 
-      <Box
-        sx={{
-          "& .MuiTextField-root": { m: 1, width: "25ch" },
-        }}
-      >
-        <Grid mt={4} maxWidth="lg">
+      <Grid container spacing={2} columns={12} mt={4} mb={4}>
+        <Grid size={3}>
           <Controller
             name="imeFirme"
             control={control}
-            render={({ field }) => <TextField label="Ime Firme" {...field} />}
+            render={({ field }) => (
+              <TextField fullWidth label="Ime Firme" {...field} />
+            )}
           />
+        </Grid>
+        <Grid size={3}>
           <Controller
             name="pib"
             control={control}
-            render={({ field }) => <TextField label="PIB" {...field} />}
+            render={({ field }) => (
+              <TextField fullWidth label="PIB" {...field} />
+            )}
           />
+        </Grid>
+        <Grid size={3}>
           <Controller
             name="maticniBroj"
             control={control}
             render={({ field }) => (
-              <TextField label="Matični broj" {...field} />
+              <TextField fullWidth label="Matični broj" {...field} />
             )}
           />
+        </Grid>
+        <Grid size={3}>
           <Controller
             name="email"
             control={control}
-            render={({ field }) => <TextField label="E-mail" {...field} />}
+            render={({ field }) => (
+              <TextField fullWidth label="E-mail" {...field} />
+            )}
           />
+        </Grid>
+        <Grid size={3}>
           <Controller
             name="jbkjs"
             control={control}
-            render={({ field }) => <TextField label="JBKJS" {...field} />}
+            render={({ field }) => (
+              <TextField fullWidth label="JBKJS" {...field} />
+            )}
           />
+        </Grid>
+        <Grid size={3}>
           <Controller
             name="komentar"
             control={control}
-            render={({ field }) => <TextField label="Komentar" {...field} />}
+            render={({ field }) => (
+              <TextField fullWidth label="Komentar" {...field} />
+            )}
           />
+        </Grid>
+        <Grid size={3}>
           <Controller
             name="imePrezime"
             control={control}
             render={({ field }) => (
-              <TextField label="Ime i prezime zaposlenog" {...field} />
+              <TextField
+                fullWidth
+                label="Ime i prezime zaposlenog"
+                {...field}
+              />
             )}
           />
+        </Grid>
+        <Grid size={3}>
           <Controller
             name="emailZaposlenog"
             control={control}
             render={({ field }) => (
-              <TextField label="E-mail zaposlenog" {...field} />
+              <TextField fullWidth label="E-mail zaposlenog" {...field} />
             )}
           />
         </Grid>
-      </Box>
+      </Grid>
 
       <Box
         display="flex"

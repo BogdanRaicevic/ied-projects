@@ -17,6 +17,8 @@ export type PretrageType = Document & {
   komentar: string;
   imePrezime: string;
   emailZaposlenog: string;
+  firmaPrijavljeni?: boolean;
+  zaposleniPrijavljeni?: boolean;
 };
 
 const pretrageSchema = new Schema<PretrageType>(
@@ -37,6 +39,8 @@ const pretrageSchema = new Schema<PretrageType>(
     komentar: { type: String },
     imePrezime: { type: String },
     emailZaposlenog: { type: String },
+    firmaPrijavljeni: { type: Boolean },
+    zaposleniPrijavljeni: { type: Boolean },
   },
   { collection: "pretrage" },
 );
