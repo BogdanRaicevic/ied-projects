@@ -57,20 +57,6 @@ export const createFirmaQuery = async (params: FirmaQueryParams) => {
     }
   }
 
-  if (Array.isArray(params?.radnaMesta) && params.radnaMesta.length > 0) {
-    if (negateRadnoMesto) {
-      query.zaposleni = {
-        $not: {
-          $elemMatch: { radno_mesto: { $in: params.radnaMesta } },
-        },
-      };
-    } else {
-      query.zaposleni = {
-        $elemMatch: { radno_mesto: { $in: params.radnaMesta } },
-      };
-    }
-  }
-
   if (Array.isArray(params?.velicineFirmi) && params.velicineFirmi.length > 0) {
     query.velicina_firme = { $in: params.velicineFirmi };
   }
@@ -112,35 +98,6 @@ export const createFirmaQuery = async (params: FirmaQueryParams) => {
     }
   }
 
-  if (params?.imePrezime && params.imePrezime.length > 0) {
-    const imePrezime = params.imePrezime.split(" ");
-    const ime = imePrezime[0];
-    const prezime = imePrezime[1] || "";
-
-    query.zaposleni = {
-      $elemMatch: {
-        $or: [
-          {
-            ime: { $regex: `^${ime}`, $options: "i" },
-            prezime: { $regex: `^${prezime}`, $options: "i" },
-          },
-          {
-            ime: { $regex: `^${prezime}`, $options: "i" },
-            prezime: { $regex: `^${ime}`, $options: "i" },
-          },
-        ],
-      },
-    };
-  }
-
-  if (params?.emailZaposlenog && params.emailZaposlenog.length > 0) {
-    query.zaposleni = {
-      $elemMatch: {
-        e_mail: { $regex: params.emailZaposlenog, $options: "i" },
-      },
-    };
-  }
-
   if (
     params?.firmaPrijavljeni !== undefined &&
     typeof params.firmaPrijavljeni === "boolean"
@@ -148,16 +105,61 @@ export const createFirmaQuery = async (params: FirmaQueryParams) => {
     query.prijavljeni = params.firmaPrijavljeni;
   }
 
-  // Returns the whole firma that satisfies the zaposleni prijavljeni condition
+  // ____ ZAPOSLENI FILTERS ____
+
+  const zaposleniElemMatch: FilterQuery<FirmaType> = {};
+
+  if (Array.isArray(params?.radnaMesta) && params.radnaMesta.length > 0) {
+    if (negateRadnoMesto) {
+      query.zaposleni = {
+        $not: {
+          $elemMatch: { radno_mesto: { $in: params.radnaMesta } },
+        },
+      };
+    } else {
+      zaposleniElemMatch.radno_mesto = { $in: params.radnaMesta };
+    }
+  }
+
+  if (params?.imePrezime && params.imePrezime.length > 0) {
+    const imePrezime = params.imePrezime.split(" ");
+    const ime = imePrezime[0];
+    const prezime = imePrezime[1] || "";
+
+    zaposleniElemMatch.$or = [
+      {
+        ime: { $regex: `^${ime}`, $options: "i" },
+        prezime: { $regex: `^${prezime}`, $options: "i" },
+      },
+      {
+        ime: { $regex: `^${prezime}`, $options: "i" },
+        prezime: { $regex: `^${ime}`, $options: "i" },
+      },
+    ];
+  }
+
+  if (params?.emailZaposlenog && params.emailZaposlenog.length > 0) {
+    zaposleniElemMatch.e_mail = {
+      $regex: params.emailZaposlenog,
+      $options: "i",
+    };
+  }
+
   if (
     params?.zaposleniPrijavljeni !== undefined &&
     typeof params.zaposleniPrijavljeni === "boolean"
   ) {
-    query.zaposleni = {
-      $elemMatch: {
-        prijavljeni: { $eq: params.zaposleniPrijavljeni },
-      },
-    };
+    zaposleniElemMatch.prijavljeni = { $eq: params.zaposleniPrijavljeni };
+  }
+
+  if (Object.keys(zaposleniElemMatch).length > 0) {
+    if (query.zaposleni) {
+      // Handles the case where negateRadnoMesto is true
+      query.$and = query.$and || [];
+      query.$and.push({ zaposleni: { $elemMatch: zaposleniElemMatch } });
+    } else {
+      query.zaposleni = { $elemMatch: zaposleniElemMatch };
+    }
   }
 
   return query;
