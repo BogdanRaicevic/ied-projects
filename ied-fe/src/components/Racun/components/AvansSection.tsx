@@ -30,14 +30,31 @@ export const AvansSection = () => {
     100;
   const avans = Number(racunData.calculations.avansBezPdv) + Number(avansPdv);
 
+  const resetAvansFields = useCallback(() => {
+    updateNestedField("calculations.avansBezPdv", 0);
+    updateNestedField("seminar.naziv", "");
+    updateField("datumUplateAvansa", null);
+  }, [updateField, updateNestedField]);
+
   const fetchAvansniRacun = useCallback(
     async (pozivNaBroj: string) => {
-      if (pozivNaBroj.length === 8 && !isNaN(Number(pozivNaBroj))) {
+      if (pozivNaBroj.length !== 8 || Number.isNaN(Number(pozivNaBroj))) {
+        resetAvansFields();
+        return;
+      }
+
+      try {
         const avansniRacun = await getRacunByPozivNaBrojAndIzdavac(
           pozivNaBroj,
           racunData.izdavacRacuna,
           TipRacuna.AVANSNI_RACUN,
         );
+
+        if (
+          useRacunStore.getState().racunData.linkedPozivNaBroj !== pozivNaBroj
+        ) {
+          return;
+        }
 
         if (avansniRacun) {
           updateNestedField(
@@ -46,14 +63,14 @@ export const AvansSection = () => {
           );
           updateNestedField("seminar.naziv", avansniRacun.seminar.naziv);
           updateField("datumUplateAvansa", avansniRacun.datumUplateAvansa);
+        } else {
+          resetAvansFields();
         }
-      } else {
-        updateNestedField("calculations.avansBezPdv", 0);
-        updateNestedField("seminar.naziv", "");
-        updateField("datumUplateAvansa", null);
+      } catch (error) {
+        resetAvansFields();
       }
     },
-    [racunData.izdavacRacuna, updateField, updateNestedField],
+    [racunData.izdavacRacuna, resetAvansFields],
   );
 
   useEffect(() => {
