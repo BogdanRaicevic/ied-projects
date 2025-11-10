@@ -73,7 +73,7 @@ export const RacunZod = z.object({
   seminar: SeminarRacunZod,
   calculations: CalculationsRacunZod,
   rokZaUplatu: z.coerce.number().default(0),
-  datumUplateAvansa: z.coerce.date().optional(),
+  datumUplateAvansa: z.coerce.date().nullable().optional(),
   pozivNaBroj: z.string().optional(),
   dateCreatedAt: z.coerce.date().optional(),
   dateUpdatedAt: z.coerce.date().optional(),
