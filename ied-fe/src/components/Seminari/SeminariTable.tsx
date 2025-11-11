@@ -35,10 +35,8 @@ import SeminarForm from "./SeminarForm";
 
 export default function SeminariTable({
   queryParameters,
-  updateCounter,
 }: {
   queryParameters: SeminarQueryParams;
-  updateCounter: number;
 }) {
   const [data, setData] = useState<SeminarZodType[]>([]);
   const [documents, setDocuments] = useState(1000);
@@ -68,7 +66,6 @@ export default function SeminariTable({
     pagination,
     deletePrijavaCounter,
     seminarChangesCounter,
-    updateCounter,
     queryParameters,
   ]);
 
