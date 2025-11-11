@@ -123,11 +123,13 @@ export function ParametriPretrageSeminar({
               )}
             />
           </FormControl>
-        </Grid>
 
-        <Button size="large" variant="contained" color="info" type="submit">
-          Pretrazi
-        </Button>
+          <Grid size={12} sx={{ textAlign: "right", my: 2 }}>
+            <Button size="large" variant="contained" color="info" type="submit">
+              Pretraži
+            </Button>
+          </Grid>
+        </Grid>
       </Grid>
     </>
   );
