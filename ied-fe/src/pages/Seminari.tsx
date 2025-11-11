@@ -18,9 +18,16 @@ export default function Seminari() {
     setTableInputParameters(values);
   };
 
+  const handleSeminarCreated = () => {
+    setTableInputParameters({ ...tableInputParameters });
+  };
+
   return (
     <>
-      <ParametriPretrageSeminar onSubmit={handlePretraziSeminare} />
+      <ParametriPretrageSeminar
+        onSubmit={handlePretraziSeminare}
+        onSeminarCreated={handleSeminarCreated}
+      />
       <SeminariTable queryParameters={tableInputParameters} />
     </>
   );

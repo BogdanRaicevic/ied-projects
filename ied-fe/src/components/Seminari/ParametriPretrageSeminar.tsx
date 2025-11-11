@@ -21,8 +21,10 @@ import SeminarForm from "./SeminarForm";
 
 export function ParametriPretrageSeminar({
   onSubmit,
+  onSeminarCreated,
 }: {
   onSubmit: (data: SeminarQueryParams) => void;
+  onSeminarCreated: () => void;
 }) {
   const {
     control,
@@ -165,7 +167,12 @@ export function ParametriPretrageSeminar({
       >
         <DialogContent>
           <Box sx={{ p: 2 }}>
-            <SeminarForm onSuccess={() => setCreateSeminar(false)} />
+            <SeminarForm
+              onSuccess={() => {
+                setCreateSeminar(false);
+                onSeminarCreated();
+              }}
+            />
           </Box>
         </DialogContent>
       </Dialog>
