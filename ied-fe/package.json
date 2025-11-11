@@ -28,7 +28,7 @@
     "axios": "^1.13.2",
     "date-fns": "^4.1.0",
     "diff": "^8.0.2",
-    "es-toolkit": "^1.39.10",
+    "es-toolkit": "^1.41.0",
     "ied-shared": "workspace:^",
     "material-react-table": "^3.2.1",
     "react": "^19.2.0",
