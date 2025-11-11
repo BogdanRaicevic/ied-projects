@@ -4,10 +4,20 @@ import {
   SeminarQueryParamsSchema,
 } from "@ied-shared/types/seminar.zod";
 import { UnfoldLess } from "@mui/icons-material";
-import { Box, Button, FormControl, Grid, TextField } from "@mui/material";
+import {
+  Box,
+  Button,
+  Dialog,
+  DialogContent,
+  FormControl,
+  Grid,
+  TextField,
+} from "@mui/material";
 import { DatePicker } from "@mui/x-date-pickers";
 import { addMonths, subMonths } from "date-fns";
+import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
+import SeminarForm from "./SeminarForm";
 
 export function ParametriPretrageSeminar({
   onSubmit,
@@ -26,9 +36,12 @@ export function ParametriPretrageSeminar({
     },
   });
 
+  const [createSeminar, setCreateSeminar] = useState(false);
+
   const handleFormSubmit = (data: SeminarQueryParams) => {
     onSubmit(data);
   };
+
   return (
     <>
       <h1>Parametri Pretrage</h1>
@@ -123,14 +136,39 @@ export function ParametriPretrageSeminar({
               )}
             />
           </FormControl>
+        </Grid>
 
-          <Grid size={12} sx={{ textAlign: "right", my: 2 }}>
-            <Button size="large" variant="contained" color="info" type="submit">
-              Pretraži
-            </Button>
-          </Grid>
+        <Grid
+          size={12}
+          sx={{ textAlign: "right", mb: 2 }}
+          display="flex"
+          justifyContent="space-between"
+          alignItems="center"
+        >
+          <Button
+            size="large"
+            variant="contained"
+            color="secondary"
+            onClick={() => setCreateSeminar(true)}
+          >
+            Kreiraj Seminar
+          </Button>
+          <Button size="large" variant="contained" color="info" type="submit">
+            Pretraži
+          </Button>
         </Grid>
       </Grid>
+      <Dialog
+        open={createSeminar}
+        onClose={() => setCreateSeminar(false)}
+        maxWidth="lg"
+      >
+        <DialogContent>
+          <Box sx={{ p: 2 }}>
+            <SeminarForm onSuccess={() => setCreateSeminar(false)} />
+          </Box>
+        </DialogContent>
+      </Dialog>
     </>
   );
 }
