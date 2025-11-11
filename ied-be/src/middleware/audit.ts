@@ -1,4 +1,5 @@
 import { clerkClient, getAuth } from "@clerk/express";
+import { isEqual } from "es-toolkit";
 import type { NextFunction, Request, Response } from "express";
 import { type Model, Types } from "mongoose";
 import { AuditLog } from "../models/audit_log.model";
@@ -152,10 +153,28 @@ const fetchDocumentAfter = async (
 };
 
 const shouldLogChange = (before: TODO_ANY, after: TODO_ANY): boolean => {
-  if (!before && !after) {
-    return false; // Nothing to log
-  }
-  if (before && after && JSON.stringify(before) === JSON.stringify(after)) {
+  if (!before && after) { // Document created
+    return true;
+  } 
+  if (before && !after) { // Document deleted
+    return true;
+  } 
+  if (!before && !after) { // Nothing to log
+    return false;
+  } 
+
+  // Create copies and remove fields that should not be considered for change detection
+  const beforeComparable = { ...before };
+  const afterComparable = { ...after };
+
+  delete beforeComparable.updated_at;
+  delete afterComparable.updated_at;
+  delete beforeComparable.__v;
+  delete afterComparable.__v;
+  delete beforeComparable.created_at;
+  delete afterComparable.created_at;
+
+  if (before && after && isEqual(beforeComparable, afterComparable)) {
     return false; // No changes
   }
   return true;
