@@ -4,7 +4,7 @@ import {
   SeminarQueryParamsSchema,
 } from "@ied-shared/types/seminar.zod";
 import { UnfoldLess } from "@mui/icons-material";
-import { Box, Button, FormControl, TextField } from "@mui/material";
+import { Box, Button, FormControl, Grid, TextField } from "@mui/material";
 import { DatePicker } from "@mui/x-date-pickers";
 import { addMonths, subMonths } from "date-fns";
 import { Controller, useForm } from "react-hook-form";
@@ -28,90 +28,103 @@ export function ParametriPretrageSeminar({
   return (
     <>
       <h1>Parametri Pretrage</h1>
-      <Box
+      <Grid
+        container
+        spacing={2}
         component="form"
         onSubmit={handleSubmit((data) => handleFormSubmit(data))}
       >
-        <Controller
-          name="naziv"
-          control={control}
-          render={({ field }) => (
-            <TextField
-              {...field}
-              sx={{ m: 1 }}
-              label="Naziv seminara"
-              variant="outlined"
-              error={!!errors.naziv}
-              helperText={errors.naziv?.message}
-            />
-          )}
-        />
-
-        <Controller
-          name="predavac"
-          control={control}
-          render={({ field }) => (
-            <TextField
-              {...field}
-              sx={{ m: 1 }}
-              label="Predavač"
-              variant="outlined"
-              error={!!errors.predavac}
-              helperText={errors.predavac?.message}
-            />
-          )}
-        />
-
-        <Controller
-          name="lokacija"
-          control={control}
-          render={({ field }) => (
-            <TextField
-              {...field}
-              sx={{ m: 1 }}
-              label="Lokacija"
-              variant="outlined"
-              error={!!errors.lokacija}
-              helperText={errors.lokacija?.message}
-            />
-          )}
-        />
-
-        <FormControl sx={{ m: 1 }}>
+        <Grid size={3}>
           <Controller
-            name="datumOd"
+            name="naziv"
             control={control}
             render={({ field }) => (
-              <DatePicker
+              <TextField
                 {...field}
-                format="yyyy/MM/dd"
-                label="Početni datum"
-                name="datumOd"
-                defaultValue={subMonths(new Date(), 3)}
-                value={field.value as Date | null}
-                onChange={(date) => field.onChange(date)}
+                sx={{ m: 1 }}
+                label="Naziv seminara"
+                variant="outlined"
+                error={!!errors.naziv}
+                helperText={errors.naziv?.message}
+                fullWidth
               />
             )}
           />
-          <Box display="flex" alignItems="center" justifyContent="center">
-            <UnfoldLess />
-          </Box>
+        </Grid>
+
+        <Grid size={3}>
           <Controller
-            name="datumDo"
+            name="predavac"
             control={control}
             render={({ field }) => (
-              <DatePicker
+              <TextField
                 {...field}
-                format="yyyy/MM/dd"
-                label="Krajnji datum"
-                name="datumDo"
-                defaultValue={addMonths(new Date(), 3)}
-                value={field.value as Date | null}
-                onChange={(date) => field.onChange(date)}
+                sx={{ m: 1 }}
+                label="Predavač"
+                variant="outlined"
+                error={!!errors.predavac}
+                helperText={errors.predavac?.message}
+                fullWidth
               />
             )}
           />
-        </FormControl>
+        </Grid>
+
+        <Grid size={3}>
+          <Controller
+            name="lokacija"
+            control={control}
+            render={({ field }) => (
+              <TextField
+                {...field}
+                sx={{ m: 1 }}
+                label="Lokacija"
+                variant="outlined"
+                error={!!errors.lokacija}
+                helperText={errors.lokacija?.message}
+                fullWidth
+              />
+            )}
+          />
+        </Grid>
+
+        <Grid size={3}>
+          <FormControl fullWidth sx={{ m: 1 }}>
+            <Controller
+              name="datumOd"
+              control={control}
+              render={({ field }) => (
+                <DatePicker
+                  {...field}
+                  format="yyyy/MM/dd"
+                  label="Početni datum"
+                  name="datumOd"
+                  defaultValue={subMonths(new Date(), 3)}
+                  value={field.value as Date | null}
+                  onChange={(date) => field.onChange(date)}
+                />
+              )}
+            />
+            <Box display="flex" alignItems="center" justifyContent="center">
+              <UnfoldLess />
+            </Box>
+            <Controller
+              name="datumDo"
+              control={control}
+              render={({ field }) => (
+                <DatePicker
+                  {...field}
+                  format="yyyy/MM/dd"
+                  label="Krajnji datum"
+                  name="datumDo"
+                  defaultValue={addMonths(new Date(), 3)}
+                  value={field.value as Date | null}
+                  onChange={(date) => field.onChange(date)}
+                />
+              )}
+            />
+          </FormControl>
+        </Grid>
 
         <Button
           sx={{ m: 1 }}
@@ -122,7 +135,7 @@ export function ParametriPretrageSeminar({
         >
           Pretrazi
         </Button>
-      </Box>
+      </Grid>
     </>
   );
 }
