@@ -1,10 +1,22 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { SeminarSchema, type SeminarZodType } from "@ied-shared/index";
-import { Alert, Box, Button, FormControl, Snackbar, TextField } from "@mui/material";
+import {
+  Alert,
+  Button,
+  FormControl,
+  Grid,
+  Snackbar,
+  TextField,
+} from "@mui/material";
 import InputAdornment from "@mui/material/InputAdornment";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-import * as React from "react";
-import { Controller, type Resolver, type SubmitHandler, useForm } from "react-hook-form";
+import { useEffect, useState } from "react";
+import {
+  Controller,
+  type Resolver,
+  type SubmitHandler,
+  useForm,
+} from "react-hook-form";
 import { saveSeminar } from "../../api/seminari.api";
 
 export default function SeminarForm({
@@ -41,17 +53,21 @@ export default function SeminarForm({
     resolver: zodResolver(SeminarSchema) as Resolver<SeminarZodType>,
   });
 
-  const [alertOpen, setAlertOpen] = React.useState(false);
-  const [alertSeverity, setAlertSeverity] = React.useState<"success" | "error">("success");
-  const [alertMessage, setAlertMessage] = React.useState("");
+  const [alertOpen, setAlertOpen] = useState(false);
+  const [alertSeverity, setAlertSeverity] = useState<"success" | "error">(
+    "success",
+  );
+  const [alertMessage, setAlertMessage] = useState("");
 
-  React.useEffect(() => {
+  useEffect(() => {
     // Reset form if the seminar prop changes (e.g., when opening dialog for different seminar)
     if (seminar) {
       reset({
         ...defaultSeminarData,
         ...seminar,
-        datum: seminar.datum ? new Date(seminar.datum) : defaultSeminarData.datum,
+        datum: seminar.datum
+          ? new Date(seminar.datum)
+          : defaultSeminarData.datum,
       });
     } else {
       reset(defaultSeminarData);
@@ -64,7 +80,9 @@ export default function SeminarForm({
       const payload = seminar?._id ? { ...data, _id: seminar._id } : data;
       await saveSeminar(payload);
       setAlertSeverity("success");
-      setAlertMessage(seminar?._id ? "Uspešno izmenjen seminar" : "Uspešno kreiran seminar");
+      setAlertMessage(
+        seminar?._id ? "Uspešno izmenjen seminar" : "Uspešno kreiran seminar",
+      );
       setAlertOpen(true);
       // TODO: Fix missing snackbar because of dialog unmount
       onDialogClose?.();
@@ -80,131 +98,166 @@ export default function SeminarForm({
   return (
     <>
       <h1>{seminar?._id ? "Izmeni" : "Kreiraj"} seminar</h1>
-      <Box component="form" onSubmit={handleSubmit(onSubmit)}>
-        <Controller
-          name="naziv"
-          control={control}
-          render={({ field }) => (
-            <TextField
-              {...field}
-              sx={{ m: 1 }}
-              id="seminar-name"
-              label="Naziv seminara"
-              placeholder="Naziv seminara"
-              error={!!errors.naziv}
-              helperText={errors.naziv ? errors.naziv.message : ""}
-            />
-          )}
-        />
-
-        <Controller
-          name="predavac"
-          control={control}
-          render={({ field }) => (
-            <TextField
-              {...field}
-              sx={{ m: 1 }}
-              id="predavac-name"
-              label="Predavač"
-              placeholder="Predavač"
-              error={!!errors.predavac}
-              helperText={errors.predavac?.message}
-            />
-          )}
-        />
-        <Controller
-          name="lokacija"
-          control={control}
-          render={({ field }) => (
-            <TextField
-              {...field}
-              sx={{ m: 1 }}
-              id="seminar-location"
-              label="Lokacija"
-              placeholder="Mesto održavanja"
-              error={!!errors.lokacija}
-              helperText={errors.lokacija?.message}
-            />
-          )}
-        />
-        <Controller
-          name="offlineCena"
-          control={control}
-          render={({ field }) => (
-            <TextField
-              {...field}
-              label="Offline cena"
-              id="offlineCena"
-              name="offlineCena"
-              sx={{ m: 1 }}
-              slotProps={{
-                input: {
-                  startAdornment: <InputAdornment position="start">RSD</InputAdornment>,
-                },
-              }}
-              onChange={(e) => field.onChange(parseFloat(e.target.value) || 0)} // Parse to number
-              error={!!errors.offlineCena}
-              helperText={errors.offlineCena?.message}
-            />
-          )}
-        />
-
-        <Controller
-          name="onlineCena"
-          control={control}
-          render={({ field }) => (
-            <TextField
-              {...field}
-              label="Online cena"
-              id="onlineCena"
-              name="onlineCena"
-              sx={{ m: 1 }}
-              slotProps={{
-                input: {
-                  startAdornment: <InputAdornment position="start">RSD</InputAdornment>,
-                },
-              }}
-              onChange={(e) => field.onChange(parseFloat(e.target.value) || 0)} // Parse to number
-              error={!!errors.onlineCena}
-              helperText={errors.onlineCena?.message}
-            />
-          )}
-        />
-
-        <FormControl sx={{ m: 1 }}>
+      <Grid
+        container
+        spacing={2}
+        component="form"
+        onSubmit={handleSubmit(onSubmit)}
+      >
+        <Grid size={3}>
           <Controller
-            name="datum"
+            name="naziv"
             control={control}
             render={({ field }) => (
-              <DatePicker
-                format="yyyy-MM-dd"
-                label="Datum održavanja"
-                value={field.value ?? null}
-                onChange={(date) => field.onChange(date)}
+              <TextField
+                {...field}
+                sx={{ m: 1 }}
+                label="Naziv seminara"
+                placeholder="Naziv seminara"
+                error={!!errors.naziv}
+                helperText={errors.naziv ? errors.naziv.message : ""}
+                fullWidth
               />
             )}
           />
-        </FormControl>
-        <Controller
-          name="detalji"
-          control={control}
-          render={({ field }) => (
-            <TextField
-              {...field}
-              fullWidth
-              multiline
-              rows={4}
-              label="Detalji seminara"
-              sx={{ m: 1 }}
-              id="detalji"
-              name="detalji"
-              error={!!errors.detalji}
-              helperText={errors.detalji?.message}
-            />
-          )}
-        />
+        </Grid>
 
-        <Button sx={{ m: 1 }} size="large" variant="contained" color="primary" type="submit">
+        <Grid size={3}>
+          <Controller
+            name="predavac"
+            control={control}
+            render={({ field }) => (
+              <TextField
+                {...field}
+                sx={{ m: 1 }}
+                label="Predavač"
+                placeholder="Predavač"
+                error={!!errors.predavac}
+                helperText={errors.predavac?.message}
+                fullWidth
+              />
+            )}
+          />
+        </Grid>
+
+        <Grid size={3}>
+          <Controller
+            name="lokacija"
+            control={control}
+            render={({ field }) => (
+              <TextField
+                {...field}
+                sx={{ m: 1 }}
+                label="Lokacija"
+                placeholder="Mesto održavanja"
+                error={!!errors.lokacija}
+                helperText={errors.lokacija?.message}
+                fullWidth
+              />
+            )}
+          />
+        </Grid>
+
+        <Grid size={3}>
+          <Controller
+            name="offlineCena"
+            control={control}
+            render={({ field }) => (
+              <TextField
+                {...field}
+                label="Offline cena"
+                name="offlineCena"
+                sx={{ m: 1 }}
+                slotProps={{
+                  input: {
+                    startAdornment: (
+                      <InputAdornment position="start">RSD</InputAdornment>
+                    ),
+                  },
+                }}
+                onChange={(e) =>
+                  field.onChange(parseFloat(e.target.value) || 0)
+                } // Parse to number
+                error={!!errors.offlineCena}
+                helperText={errors.offlineCena?.message}
+                fullWidth
+              />
+            )}
+          />
+        </Grid>
+
+        <Grid size={3}>
+          <Controller
+            name="onlineCena"
+            control={control}
+            render={({ field }) => (
+              <TextField
+                {...field}
+                label="Online cena"
+                name="onlineCena"
+                sx={{ m: 1 }}
+                slotProps={{
+                  input: {
+                    startAdornment: (
+                      <InputAdornment position="start">RSD</InputAdornment>
+                    ),
+                  },
+                }}
+                onChange={(e) =>
+                  field.onChange(parseFloat(e.target.value) || 0)
+                } // Parse to number
+                error={!!errors.onlineCena}
+                helperText={errors.onlineCena?.message}
+                fullWidth
+              />
+            )}
+          />
+        </Grid>
+
+        <Grid size={3}>
+          <FormControl fullWidth sx={{ m: 1 }}>
+            <Controller
+              name="datum"
+              control={control}
+              render={({ field }) => (
+                <DatePicker
+                  format="yyyy-MM-dd"
+                  label="Datum održavanja"
+                  value={field.value ?? null}
+                  onChange={(date) => field.onChange(date)}
+                />
+              )}
+            />
+          </FormControl>
+        </Grid>
+
+        <Grid size={12}>
+          <Controller
+            name="detalji"
+            control={control}
+            render={({ field }) => (
+              <TextField
+                {...field}
+                fullWidth
+                multiline
+                rows={4}
+                label="Detalji seminara"
+                sx={{ m: 1 }}
+                name="detalji"
+                error={!!errors.detalji}
+                helperText={errors.detalji?.message}
+              />
+            )}
+          />
+        </Grid>
+
+        <Button
+          sx={{ m: 1 }}
+          size="large"
+          variant="contained"
+          color="primary"
+          type="submit"
+        >
           {seminar?._id ? "Izmeni" : "Kreiraj"} seminar
         </Button>
         <Snackbar
@@ -217,7 +270,7 @@ export default function SeminarForm({
             {alertMessage}
           </Alert>
         </Snackbar>
-      </Box>
+      </Grid>
     </>
   );
 }
