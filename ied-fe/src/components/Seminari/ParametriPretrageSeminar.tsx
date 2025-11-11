@@ -20,6 +20,10 @@ export function ParametriPretrageSeminar({
     formState: { errors },
   } = useForm({
     resolver: zodResolver(SeminarQueryParamsSchema),
+    defaultValues: {
+      datumOd: subMonths(new Date(), 3),
+      datumDo: addMonths(new Date(), 3),
+    },
   });
 
   const handleFormSubmit = (data: SeminarQueryParams) => {
@@ -41,7 +45,6 @@ export function ParametriPretrageSeminar({
             render={({ field }) => (
               <TextField
                 {...field}
-                sx={{ m: 1 }}
                 label="Naziv seminara"
                 variant="outlined"
                 error={!!errors.naziv}
@@ -59,7 +62,6 @@ export function ParametriPretrageSeminar({
             render={({ field }) => (
               <TextField
                 {...field}
-                sx={{ m: 1 }}
                 label="Predavač"
                 variant="outlined"
                 error={!!errors.predavac}
@@ -77,7 +79,6 @@ export function ParametriPretrageSeminar({
             render={({ field }) => (
               <TextField
                 {...field}
-                sx={{ m: 1 }}
                 label="Lokacija"
                 variant="outlined"
                 error={!!errors.lokacija}
@@ -89,7 +90,7 @@ export function ParametriPretrageSeminar({
         </Grid>
 
         <Grid size={3}>
-          <FormControl fullWidth sx={{ m: 1 }}>
+          <FormControl fullWidth>
             <Controller
               name="datumOd"
               control={control}
@@ -99,7 +100,6 @@ export function ParametriPretrageSeminar({
                   format="yyyy/MM/dd"
                   label="Početni datum"
                   name="datumOd"
-                  defaultValue={subMonths(new Date(), 3)}
                   value={field.value as Date | null}
                   onChange={(date) => field.onChange(date)}
                 />
@@ -117,7 +117,6 @@ export function ParametriPretrageSeminar({
                   format="yyyy/MM/dd"
                   label="Krajnji datum"
                   name="datumDo"
-                  defaultValue={addMonths(new Date(), 3)}
                   value={field.value as Date | null}
                   onChange={(date) => field.onChange(date)}
                 />
@@ -126,13 +125,7 @@ export function ParametriPretrageSeminar({
           </FormControl>
         </Grid>
 
-        <Button
-          sx={{ m: 1 }}
-          size="large"
-          variant="contained"
-          color="info"
-          type="submit"
-        >
+        <Button size="large" variant="contained" color="info" type="submit">
           Pretrazi
         </Button>
       </Grid>
