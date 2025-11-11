@@ -39,8 +39,8 @@ importers:
         specifier: ^2.8.5
         version: 2.8.5
       cron:
-        specifier: ^4.3.3
-        version: 4.3.3
+        specifier: ^4.3.4
+        version: 4.3.4
       date-fns:
         specifier: ^4.1.0
         version: 4.1.0
@@ -1924,8 +1924,8 @@ packages:
   create-require@1.1.1:
     resolution: {integrity: sha512-dcKFX3jn0MpIaXjisoRvexIJVEKzaq7z2rZKxf+MSr9TkdmHmsU4m2lcLojrj/FHl8mk5VxMmYA+ftRkP/3oKQ==}
 
-  cron@4.3.3:
-    resolution: {integrity: sha512-B/CJj5yL3sjtlun6RtYHvoSB26EmQ2NUmhq9ZiJSyKIM4K/fqfh9aelDFlIayD2YMeFZqWLi9hHV+c+pq2Djkw==}
+  cron@4.3.4:
+    resolution: {integrity: sha512-OiO0l73MGhQOZQCjYZ0v7r8yFWpBOWteemwR1RIxiHtfVsIOwiTJZDvg7GmKzggkwC0RO8tI3P1QYBUCIZNYRQ==}
     engines: {node: '>=18.x'}
 
   cross-env@10.1.0:
@@ -4807,7 +4807,7 @@ snapshots:
 
   create-require@1.1.1: {}
 
-  cron@4.3.3:
+  cron@4.3.4:
     dependencies:
       '@types/luxon': 3.7.1
       luxon: 3.7.2

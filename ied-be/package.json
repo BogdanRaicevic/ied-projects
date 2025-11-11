@@ -33,7 +33,7 @@
     "@aws-sdk/lib-storage": "^3.922.0",
     "@clerk/express": "^1.7.46",
     "cors": "^2.8.5",
-    "cron": "^4.3.3",
+    "cron": "^4.3.4",
     "date-fns": "^4.1.0",
     "docxtemplater": "^3.67.3",
     "dotenv": "^17.2.3",
