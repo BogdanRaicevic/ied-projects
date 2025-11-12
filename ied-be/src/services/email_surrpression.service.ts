@@ -5,7 +5,7 @@ import {
 
 export const addSuppressedEmail = async (
   emails: string[],
-  reason: SuppressionReason,
+  reason: keyof typeof SuppressionReason,
 ) => {
   try {
     for (const email of emails) {

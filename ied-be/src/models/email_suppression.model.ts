@@ -1,24 +1,31 @@
 import { model, Schema } from "mongoose";
 
-export enum SuppressionReason {
-  UNSUBSCRIBED = "unsubscribed",
-  HARD_BOUNCE = "hard_bounce",
-  SPAM_COMPLAINT = "spam_complaint",
-}
+export const SuppressionReason = {
+  UNSUBSCRIBED: "UNSUBSCRIBED",
+  HARD_BOUNCE: "HARD_BOUNCE",
+  SPAM_COMPLAINT: "SPAM_COMPLAINT",
+} as const;
 
 export type EmailSuppression = {
   email: string;
-  reason: SuppressionReason;
+  reason: keyof typeof SuppressionReason;
 };
 
 export const emailSuppressionSchema = new Schema<EmailSuppression>(
   {
     email: { type: String, required: true, unique: true, lowercase: true },
-    reason: { type: String, enum: Object.values(SuppressionReason), required: true },
+    reason: {
+      type: String,
+      enum: Object.values(SuppressionReason),
+      required: true,
+    },
   },
   {
-    timestamps: { createdAt: "createdAt", updatedAt: false },
+    collection: "email_suppressions",
   },
 );
 
-export const EmailSuppression = model<EmailSuppression>("EmailSuppression", emailSuppressionSchema);
+export const EmailSuppression = model<EmailSuppression>(
+  "EmailSuppression",
+  emailSuppressionSchema,
+);

@@ -8,7 +8,7 @@ import { addSuppressedEmail } from "../services/email_surrpression.service";
 
 const router = Router();
 
-router.post("/", async (req: Request, res: Response, next: NextFunction) => {
+router.put("/add", async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { emails, reason } = req.body;
     await addSuppressedEmail(emails, reason);
