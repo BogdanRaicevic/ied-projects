@@ -5,13 +5,15 @@ export const addSuppressedEmail = async (
   suppressedEmails: SuppressedEmail[],
 ) => {
   try {
-    suppressedEmails.forEach(async (email) => {
-      await EmailSuppression.updateOne(
-        { email: email.email.toLowerCase() },
-        { $set: { reason: email.reason } },
-        { upsert: true },
-      ).exec();
-    });
+    await Promise.all(
+      suppressedEmails.map(async (suppressedEmail) => {
+        EmailSuppression.updateOne(
+          { email: suppressedEmail.email.toLowerCase() },
+          { $set: { reason: suppressedEmail.reason.toUpperCase() } },
+          { upsert: true },
+        ).exec();
+      }),
+    );
   } catch (error) {
     console.error("Error adding suppressed emails:", error);
     throw new Error("Error adding suppressed emails");
