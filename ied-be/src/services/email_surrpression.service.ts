@@ -1,20 +1,17 @@
-import {
-  EmailSuppression,
-  type SuppressionReason,
-} from "../models/email_suppression.model";
+import type { SuppressedEmail } from "@ied-shared/index";
+import { EmailSuppression } from "../models/email_suppression.model";
 
 export const addSuppressedEmail = async (
-  emails: string[],
-  reason: keyof typeof SuppressionReason,
+  suppressedEmails: SuppressedEmail[],
 ) => {
   try {
-    for (const email of emails) {
+    suppressedEmails.forEach(async (email) => {
       await EmailSuppression.updateOne(
-        { email: email.toLowerCase() },
-        { $set: { reason } },
+        { email: email.email.toLowerCase() },
+        { $set: { reason: email.reason } },
         { upsert: true },
       ).exec();
-    }
+    });
   } catch (error) {
     console.error("Error adding suppressed emails:", error);
     throw new Error("Error adding suppressed emails");

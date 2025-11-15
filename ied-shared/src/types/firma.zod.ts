@@ -99,3 +99,10 @@ export const FirmaQueryParamsSchema = z.object({
   zaposleniPrijavljeni: z.boolean().optional(),
 });
 export type FirmaQueryParams = z.infer<typeof FirmaQueryParamsSchema>;
+
+export const SuppressedEmailSchema = z.object({
+  email: z.email("Neispravna email adresa"),
+  reason: z.enum(["UNSUBSCRIBED", "HARD_BOUNCE", "SPAM_COMPLAINT"]),
+});
+
+export type SuppressedEmail = z.infer<typeof SuppressedEmailSchema>;
