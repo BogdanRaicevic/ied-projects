@@ -1,14 +1,12 @@
+import {
+  SUPPRESSION_REASONS,
+  type SuppressionReasons,
+} from "@ied-shared/index";
 import { model, Schema } from "mongoose";
-
-export const SuppressionReason = {
-  UNSUBSCRIBED: "UNSUBSCRIBED",
-  HARD_BOUNCE: "HARD_BOUNCE",
-  SPAM_COMPLAINT: "SPAM_COMPLAINT",
-} as const;
 
 export type EmailSuppression = {
   email: string;
-  reason: keyof typeof SuppressionReason;
+  reason: SuppressionReasons;
 };
 
 export const emailSuppressionSchema = new Schema<EmailSuppression>(
@@ -16,7 +14,7 @@ export const emailSuppressionSchema = new Schema<EmailSuppression>(
     email: { type: String, required: true, unique: true, lowercase: true },
     reason: {
       type: String,
-      enum: Object.values(SuppressionReason),
+      enum: Object.values(SUPPRESSION_REASONS),
       required: true,
     },
   },
