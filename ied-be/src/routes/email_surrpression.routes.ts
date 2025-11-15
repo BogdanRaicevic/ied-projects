@@ -17,7 +17,6 @@ router.put(
   rawCsvParser,
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      console.log("Received file:", req.body);
       if (!req.body || req.body.length === 0) {
         return res.status(400).send("No file uploaded");
       }
