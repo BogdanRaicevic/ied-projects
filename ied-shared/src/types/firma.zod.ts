@@ -1,4 +1,5 @@
 import z from "zod";
+import { SUPPRESSION_REASONS } from "../constants/email";
 
 export const ExportZaposlenihSchema = z.array(
   z.object({
@@ -99,3 +100,10 @@ export const FirmaQueryParamsSchema = z.object({
   zaposleniPrijavljeni: z.boolean().optional(),
 });
 export type FirmaQueryParams = z.infer<typeof FirmaQueryParamsSchema>;
+
+export const SuppressedEmailSchema = z.object({
+  email: z.email("Neispravna email adresa"),
+  reason: z.enum(SUPPRESSION_REASONS),
+});
+
+export type SuppressedEmail = z.infer<typeof SuppressedEmailSchema>;

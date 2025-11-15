@@ -19,6 +19,7 @@ import velicineFirmiRoutes from "./routes/velicina_firme.routes";
 import { env } from "./utils/envVariables";
 import "./database/cron";
 import auditLogRoutes from "./routes/audit_log.routes";
+import emailSuppressionRoutes from "./routes/email_surrpression.routes";
 
 const app = express();
 const allowedOrigins = env.fe.allowedPorts.map(
@@ -60,6 +61,12 @@ app.use("/api/seminari", requireAuth(), hasPermission, seminarRoutes);
 app.use("/api/docx", requireAuth(), hasPermission, docxRoutes);
 app.use("/api/racuni", requireAuth(), hasPermission, racuniRoutes);
 app.use("/api/audit-log", requireAuth(), hasPermission, auditLogRoutes);
+app.use(
+  "/api/email-suppression",
+  requireAuth(),
+  hasPermission,
+  emailSuppressionRoutes,
+);
 app.use("/api/test", testRoutes);
 
 app.use(errorWrapper);

@@ -4,7 +4,7 @@ Go to any page, after you logged in
 open devtools, go to console and run:
 
 ```js
-await window.Clerk.session.getToken({ template: "<this is a secret>" });
+await window.Clerk.session.getToken();
 ```
 
 this will give you the bearer token that will last for 1 hour.

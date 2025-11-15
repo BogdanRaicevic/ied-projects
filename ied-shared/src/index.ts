@@ -1,3 +1,4 @@
+export * from "./constants/email";
 export * from "./types/audit_log.zod";
 export * from "./types/diff";
 export * from "./types/firma.zod";

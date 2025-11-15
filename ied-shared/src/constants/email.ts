@@ -1,0 +1,7 @@
+export const SUPPRESSION_REASONS = {
+  UNSUBSCRIBED: "UNSUBSCRIBED",
+  HARD_BOUNCE: "HARD_BOUNCE",
+  SPAM_COMPLAINT: "SPAM_COMPLAINT",
+} as const;
+
+export type SuppressionReasons = keyof typeof SUPPRESSION_REASONS;
