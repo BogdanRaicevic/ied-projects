@@ -20,6 +20,15 @@ export const addSuppressedEmail = async (
   }
 };
 
+export const removeSuppressedEmail = async (email: string) => {
+  try {
+    await EmailSuppression.deleteOne({ email: email.toLowerCase() }).exec();
+  } catch (error) {
+    console.error("Error removing suppressed email:", error);
+    throw new Error("Error removing suppressed email");
+  }
+};
+
 export const isEmailSuppressed = async (email: string) => {
   const result = await EmailSuppression.findOne({
     email: email.toLowerCase(),

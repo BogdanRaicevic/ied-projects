@@ -17,6 +17,7 @@ import {
 import {
   addSuppressedEmail,
   isEmailSuppressed,
+  removeSuppressedEmail,
 } from "../services/email_suppression.service";
 
 const router = Router();
@@ -66,6 +67,21 @@ router.put(
       await addSuppressedEmail([{ email, reason }]);
 
       res.status(200).send("Suppressed email added successfully");
+    } catch (error) {
+      next(error);
+    }
+  },
+);
+
+router.delete(
+  "/remove-email",
+  validateRequestBody(SuppressedEmailSchema.pick({ email: true })),
+  async (req: Request, res: Response, next: NextFunction) => {
+    const { email } = req.body as { email: string };
+    try {
+      await removeSuppressedEmail(email);
+
+      res.status(200).send("Suppressed email removed successfully");
     } catch (error) {
       next(error);
     }
