@@ -19,7 +19,7 @@ import velicineFirmiRoutes from "./routes/velicina_firme.routes";
 import { env } from "./utils/envVariables";
 import "./database/cron";
 import auditLogRoutes from "./routes/audit_log.routes";
-import emailSuppressionRoutes from "./routes/email_surrpression.routes";
+import emailSuppressionRoutes from "./routes/email_suppression.routes";
 
 const app = express();
 const allowedOrigins = env.fe.allowedPorts.map(

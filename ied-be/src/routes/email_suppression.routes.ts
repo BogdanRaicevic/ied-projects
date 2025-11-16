@@ -7,7 +7,10 @@ import {
   Router,
   raw,
 } from "express";
-import { addSuppressedEmail } from "../services/email_surrpression.service";
+import {
+  addSuppressedEmail,
+  isEmailSuppressed,
+} from "../services/email_suppression.service";
 
 const router = Router();
 const rawCsvParser = raw({ type: "text/csv", limit: "10mb" });
@@ -41,6 +44,23 @@ router.put(
       await addSuppressedEmail(records);
 
       res.status(201).send("Suppressed emails added successfully");
+    } catch (error) {
+      next(error);
+    }
+  },
+);
+
+router.get(
+  "/check-status",
+  async (req: Request, res: Response, next: NextFunction) => {
+    const email = req.query.email as string;
+    try {
+      if (!email) {
+        return res.status(400).send("Email query parameter is required");
+      }
+
+      const suppressed = await isEmailSuppressed(email);
+      res.status(200).json({ suppressed });
     } catch (error) {
       next(error);
     }
