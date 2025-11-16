@@ -4,9 +4,14 @@ import {
   type RacunType,
   RacunZod,
 } from "@ied-shared/types/racuni.zod";
-import { type NextFunction, type Request, type Response, Router } from "express";
+import {
+  type NextFunction,
+  type Request,
+  type Response,
+  Router,
+} from "express";
 import { izdavacRacuna } from "../constants/izdavacRacuna.const";
-import { validate } from "../middleware/validateSchema";
+import { validateRequestBody } from "../middleware/validateSchema";
 import {
   getRacunById,
   getRacunByPozivNaBrojAndIzdavac,
@@ -17,25 +22,32 @@ import {
 
 const router = Router();
 
-router.get("/izdavaci", async (_req: Request, res: Response, next: NextFunction) => {
-  try {
-    const result = izdavacRacuna.map((i) => {
-      return {
-        id: i.id,
-        tekuciRacuni: i.tekuciRacuni,
-      };
-    });
+router.get(
+  "/izdavaci",
+  async (_req: Request, res: Response, next: NextFunction) => {
+    try {
+      const result = izdavacRacuna.map((i) => {
+        return {
+          id: i.id,
+          tekuciRacuni: i.tekuciRacuni,
+        };
+      });
 
-    res.json(result);
-  } catch (error) {
-    next(error);
-  }
-});
+      res.json(result);
+    } catch (error) {
+      next(error);
+    }
+  },
+);
 
 router.post(
   "/search",
   async (
-    req: Request<{}, {}, { pageSize: number; pageIndex: number } & PretrageRacunaType>,
+    req: Request<
+      {},
+      {},
+      { pageSize: number; pageIndex: number } & PretrageRacunaType
+    >,
     res: Response,
     next: NextFunction,
   ) => {
@@ -66,8 +78,12 @@ router.get("/:id", async (req: Request, res: Response, next: NextFunction) => {
 
 router.post(
   "/save",
-  validate(RacunZod),
-  async (req: Request<{}, any, RacunType>, res: Response, next: NextFunction) => {
+  validateRequestBody(RacunZod),
+  async (
+    req: Request<{}, any, RacunType>,
+    res: Response,
+    next: NextFunction,
+  ) => {
     try {
       const result = await saveRacun(req.body);
       if (!result) {
@@ -83,8 +99,12 @@ router.post(
 
 router.put(
   "/update/:id",
-  validate(RacunZod),
-  async (req: Request<{ id: string }, any, RacunType>, res: Response, next: NextFunction) => {
+  validateRequestBody(RacunZod),
+  async (
+    req: Request<{ id: string }, any, RacunType>,
+    res: Response,
+    next: NextFunction,
+  ) => {
     try {
       const { id } = req.params;
       const racun = req.body;
@@ -102,7 +122,11 @@ router.put(
 
 router.get(
   "/",
-  async (req: Request<{}, any, any, RacunQueryType>, res: Response, next: NextFunction) => {
+  async (
+    req: Request<{}, any, any, RacunQueryType>,
+    res: Response,
+    next: NextFunction,
+  ) => {
     try {
       const { pozivNaBroj, izdavacRacuna, tipRacuna } = req.query;
 
@@ -120,7 +144,11 @@ router.get(
         return;
       }
 
-      const racun = await getRacunByPozivNaBrojAndIzdavac(pozivNaBroj, izdavacRacuna, tipRacuna);
+      const racun = await getRacunByPozivNaBrojAndIzdavac(
+        pozivNaBroj,
+        izdavacRacuna,
+        tipRacuna,
+      );
       if (!racun) {
         res.status(404).send("Racun not found");
         return;

@@ -20,9 +20,12 @@ export const addSuppressedEmail = async (
   }
 };
 
-export const isEmailSuppressed = async (email: string): Promise<boolean> => {
+export const isEmailSuppressed = async (email: string) => {
   const result = await EmailSuppression.findOne({
     email: email.toLowerCase(),
   }).exec();
-  return result !== null;
+
+  return {
+    suppressed: result !== null ? result.reason : false,
+  };
 };

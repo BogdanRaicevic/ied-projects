@@ -12,7 +12,7 @@ import {
 } from "express";
 import type { z } from "zod";
 import { createAuditMiddleware } from "../middleware/audit";
-import { validate } from "../middleware/validateSchema";
+import { validateRequestBody } from "../middleware/validateSchema";
 import { Seminar, type SeminarType } from "../models/seminar.model";
 import {
   createPrijava,
@@ -32,7 +32,7 @@ const seminariAudit = createAuditMiddleware(Seminar);
 router.post(
   "/save",
   seminariAudit,
-  validate(SeminarSchema),
+  validateRequestBody(SeminarSchema),
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       const seminar = await saveSeminar(req.body);
@@ -45,7 +45,7 @@ router.post(
 
 router.post(
   "/search",
-  validate(ExtendedSearchSeminarZod),
+  validateRequestBody(ExtendedSearchSeminarZod),
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       const paginationResult = await searchSeminars(
@@ -101,7 +101,7 @@ router.get("/:id", async (req: Request, res: Response, next: NextFunction) => {
 router.post(
   "/create-prijava/:id",
   seminariAudit, // Apply audit middleware
-  validate(PrijavaSchema),
+  validateRequestBody(PrijavaSchema),
   async (req: Request, res: Response, next: NextFunction) => {
     const { id: seminar_id } = req.params;
     const prijava = req.body as z.infer<typeof PrijavaSchema>;
@@ -121,7 +121,7 @@ router.post(
 router.post(
   "/update-prijava/:id",
   seminariAudit, // Apply audit middleware
-  validate(PrijavaSchema),
+  validateRequestBody(PrijavaSchema),
   async (req: Request, res: Response, next: NextFunction) => {
     const { id: seminar_id } = req.params;
     const prijava = req.body as z.infer<typeof PrijavaSchema>;

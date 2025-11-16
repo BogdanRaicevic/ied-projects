@@ -1,4 +1,7 @@
-import type { SuppressedEmail } from "@ied-shared/types/firma.zod";
+import {
+  type SuppressedEmail,
+  SuppressedEmailSchema,
+} from "@ied-shared/types/firma.zod";
 import { parse } from "csv-parse";
 import {
   type NextFunction,
@@ -7,6 +10,7 @@ import {
   Router,
   raw,
 } from "express";
+import { validateRequestQuery } from "../middleware/validateSchema";
 import {
   addSuppressedEmail,
   isEmailSuppressed,
@@ -52,6 +56,7 @@ router.put(
 
 router.get(
   "/check-status",
+  validateRequestQuery(SuppressedEmailSchema.pick({ email: true })),
   async (req: Request, res: Response, next: NextFunction) => {
     const email = req.query.email as string;
     try {
@@ -60,7 +65,7 @@ router.get(
       }
 
       const suppressed = await isEmailSuppressed(email);
-      res.status(200).json({ suppressed });
+      res.status(200).json(suppressed);
     } catch (error) {
       next(error);
     }
