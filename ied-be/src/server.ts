@@ -63,8 +63,8 @@ app.use("/api/racuni", requireAuth(), hasPermission, racuniRoutes);
 app.use("/api/audit-log", requireAuth(), hasPermission, auditLogRoutes);
 app.use(
   "/api/email-suppression",
-  requireAuth(),
-  hasPermission,
+  // requireAuth(),
+  // hasPermission,
   emailSuppressionRoutes,
 );
 app.use("/api/test", testRoutes);
