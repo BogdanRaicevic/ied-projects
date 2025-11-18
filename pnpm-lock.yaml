@@ -48,8 +48,8 @@ importers:
         specifier: ^4.1.0
         version: 4.1.0
       docxtemplater:
-        specifier: ^3.67.3
-        version: 3.67.3
+        specifier: ^3.67.5
+        version: 3.67.5
       dotenv:
         specifier: ^17.2.3
         version: 17.2.3
@@ -1977,8 +1977,8 @@ packages:
     resolution: {integrity: sha512-sSuxWU5j5SR9QQji/o2qMvqRNYRDOcBTgsJ/DeCf4iSN4gW+gNMXM7wFIP+fdXZxoNiAnHUTGjCr+TSWXdRDKg==}
     engines: {node: '>=0.3.1'}
 
-  docxtemplater@3.67.3:
-    resolution: {integrity: sha512-E5WJACJWhQy/odFn/+ZzPfk8TSSYImtv1gVtiGyUsd0vUboKxCNiG9gavaSYF1VFgjZaYVrbAjir4MLlmioX4Q==}
+  docxtemplater@3.67.5:
+    resolution: {integrity: sha512-Jnh9rdMf5sDmrfONs3nVDhZwVFxLNdP3RVHkqLQYA6eZLkWA+kx5aYy0cVmEqJcVIaFYf5JJEFdClD7fn6ZUng==}
     engines: {node: '>=0.10'}
 
   dom-helpers@5.2.1:
@@ -4835,7 +4835,7 @@ snapshots:
 
   diff@8.0.2: {}
 
-  docxtemplater@3.67.3:
+  docxtemplater@3.67.5:
     dependencies:
       '@xmldom/xmldom': 0.9.8
 
