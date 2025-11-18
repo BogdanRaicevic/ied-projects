@@ -1,7 +1,6 @@
 import type { ExportFirma, ExportZaposlenih } from "@ied-shared/index";
 import type { FirmaQueryParams } from "@ied-shared/types/firma.zod";
 import { type FilterQuery, sanitizeFilter } from "mongoose";
-import { EmailSuppression } from "../models/email_suppression.model";
 import { Firma, type FirmaType } from "../models/firma.model";
 import type { Zaposleni } from "../models/zaposleni.model";
 import { createFirmaQuery } from "../utils/firmaQueryBuilder";
@@ -23,10 +22,6 @@ export const deleteById = async (id: string): Promise<FirmaType | null> => {
 export const create = async (
   firmaData: Partial<FirmaType>,
 ): Promise<FirmaType> => {
-  if (firmaData.e_mail) {
-    await checkEmailSuppression(firmaData.e_mail);
-  }
-
   const firma = new Firma(firmaData);
   const doc = await firma.save();
   return doc.toObject({
@@ -40,10 +35,6 @@ export const updateById = async (
   firmaData: Partial<FirmaType>,
 ): Promise<FirmaType | null> => {
   try {
-    if (firmaData.e_mail) {
-      await checkEmailSuppression(firmaData.e_mail);
-    }
-
     const sanitizedData = sanitizeFilter(firmaData as FilterQuery<FirmaType>);
     if (!id || typeof sanitizedData !== "object" || sanitizedData === null) {
       throw new Error("Invalid firma input data");
@@ -215,8 +206,6 @@ export const createZaposleni = async (
   zaposleniData: Zaposleni,
 ) => {
   try {
-    await checkEmailSuppression(zaposleniData.e_mail);
-
     if (zaposleniData.radno_mesto === "") {
       zaposleniData.radno_mesto = "nema";
     }
@@ -240,8 +229,6 @@ export const updateZaposleni = async (
   zaposleniData: Partial<Zaposleni> & { firmaKomentar?: string },
 ) => {
   try {
-    await checkEmailSuppression(zaposleniData.e_mail);
-
     if (zaposleniData.radno_mesto === "") {
       zaposleniData.radno_mesto = "nema";
     }
@@ -285,20 +272,5 @@ export const deleteZaposleni = async (firmaId: string, zaposleniId: string) => {
   } catch (error) {
     console.error("Error deleting zaposleni:", error);
     throw error;
-  }
-};
-
-const checkEmailSuppression = async (email?: string) => {
-  if (!email) {
-    return;
-  }
-  const suppressionRecord = await EmailSuppression.findOne({
-    email: email.toLowerCase(),
-  });
-  if (suppressionRecord) {
-    // This will be caught by your route's error handler and sent to the frontend
-    throw new Error(
-      `Email ${email} cannot be used. Reason: ${suppressionRecord.reason}.`,
-    );
   }
 };

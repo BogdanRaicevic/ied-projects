@@ -3,6 +3,11 @@ import { Box, Button, TextField } from "@mui/material";
 import { ZaposleniSchema, type ZaposleniType } from "ied-shared";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
+import {
+  addEmailToSuppressionList,
+  checkIfEmailIsSuppressed,
+  removeEmailFromSuppressionList,
+} from "../../api/email_suppression.api";
 import { useFetchData } from "../../hooks/useFetchData";
 import Single from "../Autocomplete/Single";
 import MailingListSwitch from "../MailingListSwitch";
@@ -53,12 +58,38 @@ export function ZaposleniForm({ zaposleni, onSubmit }: ZaposleniFormProps) {
 
   const { radnaMesta, isRadnaMestaLoading } = useFetchData();
   const isPrijavljen = watch("prijavljeni");
+  const email = watch("e_mail");
+
+  const handleMailingListChange = async (newValue: boolean) => {
+    if (!email) {
+      setValue("prijavljeni", newValue);
+      return;
+    }
+
+    const suppressionStatus = await checkIfEmailIsSuppressed(email);
+
+    if (suppressionStatus && suppressionStatus.reason !== "UNSUBSCRIBED") {
+      console.error(
+        `Cannot subscribe ${email}. Reason: ${suppressionStatus.reason}`,
+      );
+      setValue("prijavljeni", false);
+      return;
+    }
+
+    if (newValue === false) {
+      await addEmailToSuppressionList(email);
+    } else {
+      await removeEmailFromSuppressionList(email);
+    }
+
+    setValue("prijavljeni", newValue);
+  };
 
   return (
     <Box component="form">
       <MailingListSwitch
         isPrijavljen={isPrijavljen}
-        onChange={(newValue) => setValue("prijavljeni", newValue)}
+        onChange={handleMailingListChange}
       />
       <TextField
         {...register("ime")}

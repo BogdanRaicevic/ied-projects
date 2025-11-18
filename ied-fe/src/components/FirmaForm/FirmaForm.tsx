@@ -16,6 +16,11 @@ import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import type { z } from "zod";
 import {
+  addEmailToSuppressionList,
+  checkIfEmailIsSuppressed,
+  removeEmailFromSuppressionList,
+} from "../../api/email_suppression.api";
+import {
   useCreateNewFirma,
   useDeleteFirma,
   useUpdateFirma,
@@ -206,6 +211,32 @@ export const FirmaForm: React.FC<FirmaFormProps> = ({ inputCompany }) => {
   };
 
   const isPrijavljen = Boolean(watch("prijavljeni"));
+  const email = watch("e_mail");
+
+  const handleMailingListChange = async (newValue: boolean) => {
+    if (!email) {
+      setValue("prijavljeni", newValue);
+      return;
+    }
+
+    const suppressionStatus = await checkIfEmailIsSuppressed(email);
+
+    if (suppressionStatus && suppressionStatus.reason !== "UNSUBSCRIBED") {
+      console.error(
+        `Cannot subscribe ${email}. Reason: ${suppressionStatus.reason}`,
+      );
+      setValue("prijavljeni", false);
+      return;
+    }
+
+    if (newValue === false) {
+      await addEmailToSuppressionList(email);
+    } else {
+      await removeEmailFromSuppressionList(email);
+    }
+
+    setValue("prijavljeni", newValue);
+  };
 
   return (
     <Box
@@ -215,7 +246,7 @@ export const FirmaForm: React.FC<FirmaFormProps> = ({ inputCompany }) => {
     >
       <MailingListSwitch
         isPrijavljen={isPrijavljen}
-        onChange={(newValue) => setValue("prijavljeni", newValue)}
+        onChange={handleMailingListChange}
       />
       <Grid container m={0} spacing={2}>
         {inputItems(InputTypesSchema.enum.Text).map((item) => {

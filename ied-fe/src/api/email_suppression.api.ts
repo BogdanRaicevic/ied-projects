@@ -1,11 +1,11 @@
 import type { SuppressedEmail } from "@ied-shared/types/firma.zod";
 import axiosInstanceWithAuth from "./interceptors/auth";
 
-export const setEmailToSuppressionList = async (email: string) => {
+export const addEmailToSuppressionList = async (email: string) => {
   try {
     const suppressedEmail: SuppressedEmail = { email, reason: "UNSUBSCRIBED" };
 
-    const response = await axiosInstanceWithAuth.post(
+    const response = await axiosInstanceWithAuth.put(
       `/api/email-suppression/add-email`,
       suppressedEmail,
     );
@@ -35,7 +35,9 @@ export const removeEmailFromSuppressionList = async (email: string) => {
   }
 };
 
-export const checkIfEmailIsSuppressed = async (email: string) => {
+export const checkIfEmailIsSuppressed = async (
+  email: string,
+): Promise<SuppressedEmail> => {
   try {
     const response = await axiosInstanceWithAuth.get(
       `/api/email-suppression/check-status`,
