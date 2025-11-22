@@ -34,7 +34,5 @@ export const isEmailSuppressed = async (email: string) => {
     email: email.toLowerCase(),
   }).exec();
 
-  return {
-    suppressed: result !== null ? result.reason : false,
-  };
+  return result !== null ? result.reason : null;
 };

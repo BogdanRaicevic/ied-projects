@@ -98,8 +98,8 @@ router.get(
         return res.status(400).send("Email query parameter is required");
       }
 
-      const suppressed = await isEmailSuppressed(email);
-      res.status(200).json(suppressed);
+      const isSuppressed = await isEmailSuppressed(email);
+      res.status(200).json(isSuppressed);
     } catch (error) {
       next(error);
     }

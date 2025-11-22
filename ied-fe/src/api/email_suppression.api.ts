@@ -37,7 +37,7 @@ export const removeEmailFromSuppressionList = async (email: string) => {
 
 export const checkIfEmailIsSuppressed = async (
   email: string,
-): Promise<SuppressedEmail> => {
+): Promise<string | null> => {
   try {
     const response = await axiosInstanceWithAuth.get(
       `/api/email-suppression/check-status`,

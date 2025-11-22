@@ -23,8 +23,8 @@ export const deleteById = async (id: string): Promise<FirmaType | null> => {
 export const create = async (
   firmaData: Partial<FirmaType>,
 ): Promise<FirmaType> => {
-  const prijava = await isEmailSuppressed(firmaData.e_mail);
-  if (prijava) {
+  const isSuppressed = await isEmailSuppressed(firmaData.e_mail);
+  if (isSuppressed) {
     firmaData.prijavljeni = false;
   }
 
@@ -46,8 +46,8 @@ export const updateById = async (
       throw new Error("Invalid firma input data");
     }
 
-    const prijava = await isEmailSuppressed(firmaData.e_mail);
-    if (prijava) {
+    const isSuppressed = await isEmailSuppressed(firmaData.e_mail);
+    if (isSuppressed) {
       firmaData.prijavljeni = false;
     }
 
@@ -221,8 +221,8 @@ export const createZaposleni = async (
       zaposleniData.radno_mesto = "nema";
     }
 
-    const prijava = await isEmailSuppressed(zaposleniData.e_mail);
-    if (prijava) {
+    const isSuppressed = await isEmailSuppressed(zaposleniData.e_mail);
+    if (isSuppressed) {
       zaposleniData.prijavljeni = false;
     }
 
@@ -260,8 +260,8 @@ export const updateZaposleni = async (
       updateObject["komentar"] = firmaKomentar;
     }
 
-    const prijava = await isEmailSuppressed(zaposleniData.e_mail);
-    if (prijava) {
+    const isSuppressed = await isEmailSuppressed(zaposleniData.e_mail);
+    if (isSuppressed) {
       zaposleniData.prijavljeni = false;
     }
 

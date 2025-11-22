@@ -1,7 +1,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Box, Button, TextField, Typography } from "@mui/material";
 import { ZaposleniSchema, type ZaposleniType } from "ied-shared";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import {
   addEmailToSuppressionList,
@@ -72,21 +72,23 @@ export function ZaposleniForm({ zaposleni, onSubmit }: ZaposleniFormProps) {
 
     const suppressionStatus = await checkIfEmailIsSuppressed(email);
 
-    if (suppressionStatus && suppressionStatus.reason !== "UNSUBSCRIBED") {
-      console.error(
-        `Cannot subscribe ${email}. Reason: ${suppressionStatus.reason}`,
-      );
+    if (suppressionStatus && suppressionStatus !== "UNSUBSCRIBED") {
+      console.error(`Cannot subscribe ${email}. Reason: ${suppressionStatus}`);
       setValue("prijavljeni", false);
       return;
     }
 
     if (newValue === false) {
+      console.log("Adding to suppression list");
       await addEmailToSuppressionList(email);
+      setValue("prijavljeni", false);
+      return;
     } else {
+      console.log("Removing from suppression list");
       await removeEmailFromSuppressionList(email);
+      setValue("prijavljeni", true);
+      return;
     }
-
-    setValue("prijavljeni", newValue);
   };
 
   const handleEmailChange = async () => {
@@ -109,6 +111,12 @@ export function ZaposleniForm({ zaposleni, onSubmit }: ZaposleniFormProps) {
       setSuppressionWarning(null);
     }
   };
+
+  useEffect(() => {
+    if (zaposleni?.e_mail) {
+      handleEmailChange();
+    }
+  }, []);
 
   return (
     <Box component="form">
