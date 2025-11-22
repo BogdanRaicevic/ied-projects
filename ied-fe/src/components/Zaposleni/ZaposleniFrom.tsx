@@ -1,5 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Box, Button, TextField } from "@mui/material";
+import { Box, Button, TextField, Typography } from "@mui/material";
 import { ZaposleniSchema, type ZaposleniType } from "ied-shared";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
@@ -37,6 +37,10 @@ export function ZaposleniForm({ zaposleni, onSubmit }: ZaposleniFormProps) {
       prijavljeni: zaposleni?.prijavljeni ?? true,
     },
   });
+
+  const [suppressionWarning, setSuppressionWarning] = useState<string | null>(
+    null,
+  );
 
   const [selectedRadnoMesto, setSelectedRadnoMesto] = useState(
     zaposleni?.radno_mesto || "",
@@ -85,6 +89,27 @@ export function ZaposleniForm({ zaposleni, onSubmit }: ZaposleniFormProps) {
     setValue("prijavljeni", newValue);
   };
 
+  const handleEmailChange = async () => {
+    if (!email) {
+      setSuppressionWarning(null);
+      return;
+    }
+
+    try {
+      const isEmailSuppressed = await checkIfEmailIsSuppressed(email);
+      if (isEmailSuppressed) {
+        setSuppressionWarning(
+          "Ovaj email je na listi za odjavu. Ne može se prijaviti na mailing listu.",
+        );
+        setValue("prijavljeni", false);
+      } else {
+        setSuppressionWarning(null);
+      }
+    } catch (error) {
+      setSuppressionWarning(null);
+    }
+  };
+
   return (
     <Box component="form">
       <MailingListSwitch
@@ -113,7 +138,19 @@ export function ZaposleniForm({ zaposleni, onSubmit }: ZaposleniFormProps) {
         label="Email"
         variant="outlined"
         error={Boolean(errors.e_mail)}
-        helperText={errors.e_mail?.message}
+        helperText={
+          errors.e_mail?.message ? (
+            errors.e_mail.message
+          ) : suppressionWarning ? (
+            <Typography component="span" variant="caption" color="warning.main">
+              {suppressionWarning}
+            </Typography>
+          ) : null
+        }
+        onBlur={(event) => {
+          register("e_mail").onBlur(event);
+          handleEmailChange();
+        }}
       />
 
       <TextField
