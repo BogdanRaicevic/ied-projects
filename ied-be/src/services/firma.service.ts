@@ -1,6 +1,7 @@
 import type { ExportFirma, ExportZaposlenih } from "@ied-shared/index";
 import type { FirmaQueryParams } from "@ied-shared/types/firma.zod";
 import { type FilterQuery, sanitizeFilter } from "mongoose";
+import { EmailSuppression } from "../models/email_suppression.model";
 import { Firma, type FirmaType } from "../models/firma.model";
 import type { Zaposleni } from "../models/zaposleni.model";
 import { createFirmaQuery } from "../utils/firmaQueryBuilder";
@@ -22,6 +23,11 @@ export const deleteById = async (id: string): Promise<FirmaType | null> => {
 export const create = async (
   firmaData: Partial<FirmaType>,
 ): Promise<FirmaType> => {
+  const prijava = await isEmailSuppressed(firmaData.e_mail);
+  if (prijava) {
+    firmaData.prijavljeni = false;
+  }
+
   const firma = new Firma(firmaData);
   const doc = await firma.save();
   return doc.toObject({
@@ -38,6 +44,11 @@ export const updateById = async (
     const sanitizedData = sanitizeFilter(firmaData as FilterQuery<FirmaType>);
     if (!id || typeof sanitizedData !== "object" || sanitizedData === null) {
       throw new Error("Invalid firma input data");
+    }
+
+    const prijava = await isEmailSuppressed(firmaData.e_mail);
+    if (prijava) {
+      firmaData.prijavljeni = false;
     }
 
     return await Firma.findOneAndUpdate(
@@ -210,6 +221,11 @@ export const createZaposleni = async (
       zaposleniData.radno_mesto = "nema";
     }
 
+    const prijava = await isEmailSuppressed(zaposleniData.e_mail);
+    if (prijava) {
+      zaposleniData.prijavljeni = false;
+    }
+
     const updatedFirma = await Firma.findByIdAndUpdate(
       firmaId,
       { $push: { zaposleni: zaposleniData } },
@@ -244,6 +260,11 @@ export const updateZaposleni = async (
       updateObject["komentar"] = firmaKomentar;
     }
 
+    const prijava = await isEmailSuppressed(zaposleniData.e_mail);
+    if (prijava) {
+      zaposleniData.prijavljeni = false;
+    }
+
     const updatedFirma = await Firma.findOneAndUpdate(
       { _id: firmaId, "zaposleni._id": zaposleniId },
       { $set: updateObject },
@@ -273,4 +294,15 @@ export const deleteZaposleni = async (firmaId: string, zaposleniId: string) => {
     console.error("Error deleting zaposleni:", error);
     throw error;
   }
+};
+
+const isEmailSuppressed = async (email?: string) => {
+  if (!email) {
+    return false;
+  }
+  const suppressionRecord = await EmailSuppression.findOne({
+    email: email.toLowerCase(),
+  });
+
+  return !!suppressionRecord;
 };
