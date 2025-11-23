@@ -94,10 +94,6 @@ router.get(
   async (req: Request, res: Response, next: NextFunction) => {
     const email = req.query.email as string;
     try {
-      if (!email) {
-        return res.status(400).send("Email query parameter is required");
-      }
-
       const isSuppressed = await isEmailSuppressed(email);
       res.status(200).json(isSuppressed);
     } catch (error) {

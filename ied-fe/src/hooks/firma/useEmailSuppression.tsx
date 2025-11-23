@@ -34,7 +34,7 @@ export const useEmailSuppression = (
         suppressed === SUPPRESSION_REASONS.SPAM_COMPLAINT
       ) {
         setSuppressionWarning(
-          `Ovaj email je u listi za suzbiljanje ${suppressed}. Ne možete ga prijaviti na mailing listu.`,
+          `Ovaj email je u listi za suzbijanje ${suppressed}. Ne možete ga prijaviti na mailing listu.`,
         );
       } else {
         setSuppressionWarning(null);
@@ -51,21 +51,27 @@ export const useEmailSuppression = (
         return;
       }
 
-      const status = await checkIfEmailIsSuppressed(email);
-      if (status && status !== "UNSUBSCRIBED") {
-        console.error(`Cannot subscribe ${email}. Reason: ${status}`);
-        setValue("prijavljeni", false);
-        return;
-      }
+      try {
+        const status = await checkIfEmailIsSuppressed(email);
+        if (status && status !== SUPPRESSION_REASONS.UNSUBSCRIBED) {
+          console.error(`Cannot subscribe ${email}. Reason: ${status}`);
+          setValue("prijavljeni", false);
+          return;
+        }
 
-      if (newValue === false) {
-        await addEmailToSuppressionList(email);
-        setValue("prijavljeni", false);
-      } else {
-        await removeEmailFromSuppressionList(email);
-        setValue("prijavljeni", true);
+        if (newValue === false) {
+          await addEmailToSuppressionList(email);
+          setValue("prijavljeni", false);
+        } else {
+          await removeEmailFromSuppressionList(email);
+          setValue("prijavljeni", true);
+        }
+        await handleEmailChange();
+      } catch (error) {
+        console.error("Error handling mailing list change:", error);
+        await handleEmailChange();
+        throw error;
       }
-      await handleEmailChange();
     },
     [email, setValue, handleEmailChange],
   );
