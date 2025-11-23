@@ -43,3 +43,33 @@ jobs:
 
       - name: Build all packages
         run: pnpm run build
+  
+  release:
+    # Only run on direct push/squash/merge commit to main
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      issues: write
+      pull-requests: write
+    steps:
+      - name: Checkout (full history for semantic-release)
+        uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10.20.0
+      - name: Setup Node
+        uses: actions/setup-node@v6
+        with:
+          node-version: 22.21.1
+          cache: pnpm
+      - name: Install deps (needed for semantic-release plugins)
+        run: pnpm install --frozen-lockfile
+      - name: Release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: pnpm release
