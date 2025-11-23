@@ -1,13 +1,9 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Box, Button, TextField, Typography } from "@mui/material";
 import { ZaposleniSchema, type ZaposleniType } from "ied-shared";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
-import {
-  addEmailToSuppressionList,
-  checkIfEmailIsSuppressed,
-  removeEmailFromSuppressionList,
-} from "../../api/email_suppression.api";
+import { useEmailSuppression } from "../../hooks/firma/useEmailSuppression";
 import { useFetchData } from "../../hooks/useFetchData";
 import Single from "../Autocomplete/Single";
 import MailingListSwitch from "../MailingListSwitch";
@@ -38,10 +34,6 @@ export function ZaposleniForm({ zaposleni, onSubmit }: ZaposleniFormProps) {
     },
   });
 
-  const [suppressionWarning, setSuppressionWarning] = useState<string | null>(
-    null,
-  );
-
   const [selectedRadnoMesto, setSelectedRadnoMesto] = useState(
     zaposleni?.radno_mesto || "",
   );
@@ -64,59 +56,8 @@ export function ZaposleniForm({ zaposleni, onSubmit }: ZaposleniFormProps) {
   const isPrijavljen = watch("prijavljeni");
   const email = watch("e_mail");
 
-  const handleMailingListChange = async (newValue: boolean) => {
-    if (!email) {
-      setValue("prijavljeni", newValue);
-      return;
-    }
-
-    const suppressionStatus = await checkIfEmailIsSuppressed(email);
-
-    if (suppressionStatus && suppressionStatus !== "UNSUBSCRIBED") {
-      console.error(`Cannot subscribe ${email}. Reason: ${suppressionStatus}`);
-      setValue("prijavljeni", false);
-      return;
-    }
-
-    if (newValue === false) {
-      console.log("Adding to suppression list");
-      await addEmailToSuppressionList(email);
-      setValue("prijavljeni", false);
-      return;
-    } else {
-      console.log("Removing from suppression list");
-      await removeEmailFromSuppressionList(email);
-      setValue("prijavljeni", true);
-      return;
-    }
-  };
-
-  const handleEmailChange = async () => {
-    if (!email) {
-      setSuppressionWarning(null);
-      return;
-    }
-
-    try {
-      const isEmailSuppressed = await checkIfEmailIsSuppressed(email);
-      if (isEmailSuppressed) {
-        setSuppressionWarning(
-          "Ovaj email je na listi za odjavu. Ne može se prijaviti na mailing listu.",
-        );
-        setValue("prijavljeni", false);
-      } else {
-        setSuppressionWarning(null);
-      }
-    } catch (error) {
-      setSuppressionWarning(null);
-    }
-  };
-
-  useEffect(() => {
-    if (zaposleni?.e_mail) {
-      handleEmailChange();
-    }
-  }, []);
+  const { suppressionWarning, handleMailingListChange, withEmailBlur } =
+    useEmailSuppression(email, setValue);
 
   return (
     <Box component="form">
@@ -155,10 +96,7 @@ export function ZaposleniForm({ zaposleni, onSubmit }: ZaposleniFormProps) {
             </Typography>
           ) : null
         }
-        onBlur={(event) => {
-          register("e_mail").onBlur(event);
-          handleEmailChange();
-        }}
+        onBlur={withEmailBlur(register("e_mail").onBlur)}
       />
 
       <TextField

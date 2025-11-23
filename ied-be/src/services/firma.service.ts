@@ -46,9 +46,9 @@ export const updateById = async (
       throw new Error("Invalid firma input data");
     }
 
-    const isSuppressed = await isEmailSuppressed(firmaData.e_mail);
+    const isSuppressed = await isEmailSuppressed(sanitizedData.e_mail);
     if (isSuppressed) {
-      firmaData.prijavljeni = false;
+      sanitizedData.prijavljeni = false;
     }
 
     return await Firma.findOneAndUpdate(
@@ -251,6 +251,10 @@ export const updateZaposleni = async (
 
     const { firmaKomentar, ...zaposleniUpdateData } = zaposleniData;
 
+    const isSuppressed = await isEmailSuppressed(zaposleniData.e_mail);
+    if (isSuppressed) {
+      zaposleniUpdateData.prijavljeni = false;
+    }
     const updateObject = {};
     for (const key in zaposleniUpdateData) {
       updateObject[`zaposleni.$.${key}`] = zaposleniUpdateData[key];
@@ -258,11 +262,6 @@ export const updateZaposleni = async (
 
     if (firmaKomentar) {
       updateObject["komentar"] = firmaKomentar;
-    }
-
-    const isSuppressed = await isEmailSuppressed(zaposleniData.e_mail);
-    if (isSuppressed) {
-      zaposleniData.prijavljeni = false;
     }
 
     const updatedFirma = await Firma.findOneAndUpdate(
