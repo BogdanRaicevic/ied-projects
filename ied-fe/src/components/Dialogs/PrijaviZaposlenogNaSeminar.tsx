@@ -24,7 +24,7 @@ import {
 import { format } from "date-fns";
 import { useEffect, useState } from "react";
 import { createPrijava } from "../../api/seminari.api";
-import { useFetchSeminari } from "../../hooks/useFetchData";
+import { useFetchSeminari } from "../../hooks/seminar/useSeminarQueries";
 
 export default function PrijavaNaSeminarDialog({
   open,

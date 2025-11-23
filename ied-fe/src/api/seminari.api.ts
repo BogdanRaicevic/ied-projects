@@ -32,8 +32,8 @@ export const fetchSeminari = async (
 ) => {
   try {
     const body = {
-      pageSize: pageSize || 50,
-      pageIndex: pageIndex || 0,
+      pageSize: pageSize,
+      pageIndex: pageIndex,
       ...queryParameters,
     };
 
@@ -136,8 +136,8 @@ export const fetchFirmaSeminari = async (
 ) => {
   try {
     const body = {
-      pageSize: pageSize || 50,
-      pageIndex: pageIndex || 0,
+      pageSize: pageSize,
+      pageIndex: pageIndex,
       ...queryParameters,
     };
 
