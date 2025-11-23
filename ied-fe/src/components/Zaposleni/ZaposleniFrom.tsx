@@ -1,8 +1,9 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Box, Button, TextField } from "@mui/material";
+import { Box, Button, TextField, Typography } from "@mui/material";
 import { ZaposleniSchema, type ZaposleniType } from "ied-shared";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { useEmailSuppression } from "../../hooks/firma/useEmailSuppression";
 import { useFetchData } from "../../hooks/useFetchData";
 import Single from "../Autocomplete/Single";
 import MailingListSwitch from "../MailingListSwitch";
@@ -53,12 +54,16 @@ export function ZaposleniForm({ zaposleni, onSubmit }: ZaposleniFormProps) {
 
   const { radnaMesta, isRadnaMestaLoading } = useFetchData();
   const isPrijavljen = watch("prijavljeni");
+  const email = watch("e_mail");
+
+  const { suppressionWarning, handleMailingListChange, withEmailBlur } =
+    useEmailSuppression(email, setValue);
 
   return (
     <Box component="form">
       <MailingListSwitch
         isPrijavljen={isPrijavljen}
-        onChange={(newValue) => setValue("prijavljeni", newValue)}
+        onChange={handleMailingListChange}
       />
       <TextField
         {...register("ime")}
@@ -82,7 +87,16 @@ export function ZaposleniForm({ zaposleni, onSubmit }: ZaposleniFormProps) {
         label="Email"
         variant="outlined"
         error={Boolean(errors.e_mail)}
-        helperText={errors.e_mail?.message}
+        helperText={
+          errors.e_mail?.message ? (
+            errors.e_mail.message
+          ) : suppressionWarning ? (
+            <Typography component="span" variant="caption" color="warning.main">
+              {suppressionWarning}
+            </Typography>
+          ) : null
+        }
+        onBlur={withEmailBlur(register("e_mail").onBlur)}
       />
 
       <TextField

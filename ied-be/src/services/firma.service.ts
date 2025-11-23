@@ -1,10 +1,10 @@
 import type { ExportFirma, ExportZaposlenih } from "@ied-shared/index";
 import type { FirmaQueryParams } from "@ied-shared/types/firma.zod";
 import { type FilterQuery, sanitizeFilter } from "mongoose";
-import { EmailSuppression } from "../models/email_suppression.model";
 import { Firma, type FirmaType } from "../models/firma.model";
 import type { Zaposleni } from "../models/zaposleni.model";
 import { createFirmaQuery } from "../utils/firmaQueryBuilder";
+import { isEmailSuppressed } from "./email_suppression.service";
 import { getZaposleniIdsFromSeminars } from "./seminar.service";
 
 export const findById = async (id: string): Promise<FirmaType | null> => {
@@ -23,8 +23,9 @@ export const deleteById = async (id: string): Promise<FirmaType | null> => {
 export const create = async (
   firmaData: Partial<FirmaType>,
 ): Promise<FirmaType> => {
-  if (firmaData.e_mail) {
-    await checkEmailSuppression(firmaData.e_mail);
+  const isSuppressed = await isEmailSuppressed(firmaData.e_mail);
+  if (isSuppressed) {
+    firmaData.prijavljeni = false;
   }
 
   const firma = new Firma(firmaData);
@@ -40,13 +41,14 @@ export const updateById = async (
   firmaData: Partial<FirmaType>,
 ): Promise<FirmaType | null> => {
   try {
-    if (firmaData.e_mail) {
-      await checkEmailSuppression(firmaData.e_mail);
-    }
-
     const sanitizedData = sanitizeFilter(firmaData as FilterQuery<FirmaType>);
     if (!id || typeof sanitizedData !== "object" || sanitizedData === null) {
       throw new Error("Invalid firma input data");
+    }
+
+    const isSuppressed = await isEmailSuppressed(sanitizedData.e_mail);
+    if (isSuppressed) {
+      sanitizedData.prijavljeni = false;
     }
 
     return await Firma.findOneAndUpdate(
@@ -215,10 +217,13 @@ export const createZaposleni = async (
   zaposleniData: Zaposleni,
 ) => {
   try {
-    await checkEmailSuppression(zaposleniData.e_mail);
-
     if (zaposleniData.radno_mesto === "") {
       zaposleniData.radno_mesto = "nema";
+    }
+
+    const isSuppressed = await isEmailSuppressed(zaposleniData.e_mail);
+    if (isSuppressed) {
+      zaposleniData.prijavljeni = false;
     }
 
     const updatedFirma = await Firma.findByIdAndUpdate(
@@ -240,14 +245,16 @@ export const updateZaposleni = async (
   zaposleniData: Partial<Zaposleni> & { firmaKomentar?: string },
 ) => {
   try {
-    await checkEmailSuppression(zaposleniData.e_mail);
-
     if (zaposleniData.radno_mesto === "") {
       zaposleniData.radno_mesto = "nema";
     }
 
     const { firmaKomentar, ...zaposleniUpdateData } = zaposleniData;
 
+    const isSuppressed = await isEmailSuppressed(zaposleniData.e_mail);
+    if (isSuppressed) {
+      zaposleniUpdateData.prijavljeni = false;
+    }
     const updateObject = {};
     for (const key in zaposleniUpdateData) {
       updateObject[`zaposleni.$.${key}`] = zaposleniUpdateData[key];
@@ -285,20 +292,5 @@ export const deleteZaposleni = async (firmaId: string, zaposleniId: string) => {
   } catch (error) {
     console.error("Error deleting zaposleni:", error);
     throw error;
-  }
-};
-
-const checkEmailSuppression = async (email?: string) => {
-  if (!email) {
-    return;
-  }
-  const suppressionRecord = await EmailSuppression.findOne({
-    email: email.toLowerCase(),
-  });
-  if (suppressionRecord) {
-    // This will be caught by your route's error handler and sent to the frontend
-    throw new Error(
-      `Email ${email} cannot be used. Reason: ${suppressionRecord.reason}.`,
-    );
   }
 };

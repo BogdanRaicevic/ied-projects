@@ -15,6 +15,7 @@ import type React from "react";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import type { z } from "zod";
+import { useEmailSuppression } from "../../hooks/firma/useEmailSuppression";
 import {
   useCreateNewFirma,
   useDeleteFirma,
@@ -114,6 +115,8 @@ export const FirmaForm: React.FC<FirmaFormProps> = ({ inputCompany }) => {
 
   function renderFiled(item: Metadata, errors: any) {
     if (item.inputType === InputTypesSchema.enum.Text) {
+      const isEmail = item.key === "e_mail";
+
       return (
         <TextField
           {...register(item.key as keyof FirmaType)}
@@ -128,8 +131,27 @@ export const FirmaForm: React.FC<FirmaFormProps> = ({ inputCompany }) => {
             },
           }}
           name={item.key}
-          error={Boolean(errors[item.key])}
-          helperText={errors[item.key]?.message}
+          onBlur={
+            isEmail ? withEmailBlur(register("e_mail").onBlur) : undefined
+          }
+          error={isEmail ? Boolean(errors.e_mail) : Boolean(errors[item.key])}
+          helperText={
+            isEmail ? (
+              errors.e_mail?.message ? (
+                errors.e_mail.message
+              ) : suppressionWarning ? (
+                <Typography
+                  component="span"
+                  variant="caption"
+                  color="warning.main"
+                >
+                  {suppressionWarning}
+                </Typography>
+              ) : null
+            ) : (
+              errors[item.key]?.message
+            )
+          }
         />
       );
     }
@@ -206,6 +228,10 @@ export const FirmaForm: React.FC<FirmaFormProps> = ({ inputCompany }) => {
   };
 
   const isPrijavljen = Boolean(watch("prijavljeni"));
+  const email = watch("e_mail");
+
+  const { suppressionWarning, handleMailingListChange, withEmailBlur } =
+    useEmailSuppression(email, setValue);
 
   return (
     <Box
@@ -215,7 +241,7 @@ export const FirmaForm: React.FC<FirmaFormProps> = ({ inputCompany }) => {
     >
       <MailingListSwitch
         isPrijavljen={isPrijavljen}
-        onChange={(newValue) => setValue("prijavljeni", newValue)}
+        onChange={handleMailingListChange}
       />
       <Grid container m={0} spacing={2}>
         {inputItems(InputTypesSchema.enum.Text).map((item) => {
