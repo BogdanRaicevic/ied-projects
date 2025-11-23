@@ -1,15 +1,14 @@
 import { useQuery } from "@tanstack/react-query";
-import { addMonths, subMonths } from "date-fns";
 import { fetchAllDelatnosti } from "../api/delatnosti.api";
 import { fetchAllMesta } from "../api/mesta.api";
 import { getIzdavaciRacuna } from "../api/racuni.api";
 import { fetchAllRadnaMesta } from "../api/radna_mesto.api";
-import { fetchAllSeminars, fetchSeminari } from "../api/seminari.api";
+import { fetchAllSeminars } from "../api/seminari.api";
 import { fetchAllStanjaFirme } from "../api/stanja_firme.api";
 import { fetchAllTipoviFirme } from "../api/tip_firme.api";
 import { fetchAllVelicineFirme } from "../api/velicina_firme.api";
 
-export function useFetchData() {
+export function useFetchPretragaData() {
   const { data: delatnosti } = useQuery({
     queryKey: ["delatnosti"],
     queryFn: fetchAllDelatnosti,
@@ -55,21 +54,6 @@ export function useFetchData() {
     stanjaFirme,
     sviSeminari,
   };
-}
-
-export function useFetchSeminari() {
-  const { data: fetchedSeminars } = useQuery({
-    queryKey: ["fetchedSeminars"],
-    queryFn: () => {
-      // TODO: use variables for pageSize and pageIndex
-      return fetchSeminari(50, 0, {
-        datumOd: subMonths(new Date(), 3),
-        datumDo: addMonths(new Date(), 3),
-      });
-    },
-  });
-
-  return { fetchedSeminars };
 }
 
 export const useFetchIzdavaciRacuna = () => {

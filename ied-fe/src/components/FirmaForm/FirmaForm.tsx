@@ -21,7 +21,7 @@ import {
   useDeleteFirma,
   useUpdateFirma,
 } from "../../hooks/firma/useFirmaMutations";
-import { useFetchData } from "../../hooks/useFetchData";
+import { useFetchPretragaData } from "../../hooks/useFetchData";
 import { InputTypesSchema, type Metadata } from "../../schemas/metadata";
 import AutocompleteSingle from "../Autocomplete/Single";
 import MailingListSwitch from "../MailingListSwitch";
@@ -45,7 +45,7 @@ export const FirmaForm: React.FC<FirmaFormProps> = ({ inputCompany }) => {
   });
 
   const { tipoviFirme, velicineFirme, stanjaFirme, mesta, delatnosti } =
-    useFetchData();
+    useFetchPretragaData();
 
   const isEditing = !!inputCompany?._id;
   const currentFirmaId = inputCompany?._id || null;

@@ -16,7 +16,7 @@ import {
 import { format } from "date-fns";
 import { useEffect } from "react";
 import { Controller, useForm } from "react-hook-form";
-import { useFetchData } from "../../hooks/useFetchData";
+import { useFetchPretragaData } from "../../hooks/useFetchData";
 import {
   defaultPretrageParameters,
   usePretragaStore,
@@ -35,7 +35,7 @@ export default function PretragaParameters() {
     velicineFirme,
     stanjaFirme,
     sviSeminari,
-  } = useFetchData();
+  } = useFetchPretragaData();
 
   const {
     setPretragaParameters,
