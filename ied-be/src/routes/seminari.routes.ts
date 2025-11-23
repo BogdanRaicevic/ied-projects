@@ -21,6 +21,7 @@ import {
   getAllSeminars,
   getSeminarById,
   saveSeminar,
+  searchFirmaSeminars,
   searchSeminars,
   updatePrijava,
 } from "../services/seminar.service";
@@ -71,6 +72,26 @@ router.post(
         console.error(error);
         res.status(500).json({ message: "Internal server error" });
       });
+    } catch (error) {
+      next(error);
+    }
+  },
+);
+
+router.post(
+  "/firma-seminari",
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const { pageIndex, pageSize, queryParams } = req.body as Record<
+        string,
+        unknown
+      >;
+      const firmaSeminari = await searchFirmaSeminars(
+        pageIndex as number,
+        pageSize as number,
+        null,
+      );
+      res.status(200).json(firmaSeminari);
     } catch (error) {
       next(error);
     }

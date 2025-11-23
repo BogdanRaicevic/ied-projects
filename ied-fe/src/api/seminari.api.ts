@@ -128,3 +128,27 @@ export const fetchAllSeminars = async () => {
     throw error;
   }
 };
+
+export const fetchFirmaSeminari = async (
+  pageSize: number,
+  pageIndex: number,
+  queryParameters: any, // TODO: define type
+) => {
+  try {
+    const body = {
+      pageSize: pageSize || 50,
+      pageIndex: pageIndex || 0,
+      ...queryParameters,
+    };
+
+    const response = await axiosInstanceWithAuth.post(
+      `/api/seminari/firma-seminari`,
+      body,
+    );
+
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching seminari data:", error);
+    throw error;
+  }
+};
