@@ -29,7 +29,11 @@ export const removeSuppressedEmail = async (email: string) => {
   }
 };
 
-export const isEmailSuppressed = async (email: string) => {
+export const isEmailSuppressed = async (email?: string) => {
+  if (!email) {
+    return null;
+  }
+
   const result = await EmailSuppression.findOne({
     email: email.toLowerCase(),
   }).exec();

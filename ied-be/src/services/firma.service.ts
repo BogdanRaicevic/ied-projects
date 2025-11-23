@@ -1,10 +1,10 @@
 import type { ExportFirma, ExportZaposlenih } from "@ied-shared/index";
 import type { FirmaQueryParams } from "@ied-shared/types/firma.zod";
 import { type FilterQuery, sanitizeFilter } from "mongoose";
-import { EmailSuppression } from "../models/email_suppression.model";
 import { Firma, type FirmaType } from "../models/firma.model";
 import type { Zaposleni } from "../models/zaposleni.model";
 import { createFirmaQuery } from "../utils/firmaQueryBuilder";
+import { isEmailSuppressed } from "./email_suppression.service";
 import { getZaposleniIdsFromSeminars } from "./seminar.service";
 
 export const findById = async (id: string): Promise<FirmaType | null> => {
@@ -293,15 +293,4 @@ export const deleteZaposleni = async (firmaId: string, zaposleniId: string) => {
     console.error("Error deleting zaposleni:", error);
     throw error;
   }
-};
-
-const isEmailSuppressed = async (email?: string) => {
-  if (!email) {
-    return false;
-  }
-  const suppressionRecord = await EmailSuppression.findOne({
-    email: email.toLowerCase(),
-  });
-
-  return !!suppressionRecord;
 };
