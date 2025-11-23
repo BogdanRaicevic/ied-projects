@@ -221,21 +221,23 @@ export const FirmaForm: React.FC<FirmaFormProps> = ({ inputCompany }) => {
 
     const suppressionStatus = await checkIfEmailIsSuppressed(email);
 
-    if (suppressionStatus && suppressionStatus.reason !== "UNSUBSCRIBED") {
-      console.error(
-        `Cannot subscribe ${email}. Reason: ${suppressionStatus.reason}`,
-      );
+    if (suppressionStatus && suppressionStatus !== "UNSUBSCRIBED") {
+      console.error(`Cannot subscribe ${email}. Reason: ${suppressionStatus}`);
       setValue("prijavljeni", false);
       return;
     }
 
     if (newValue === false) {
+      console.log("Adding to suppression list");
       await addEmailToSuppressionList(email);
+      setValue("prijavljeni", false);
+      return;
     } else {
+      console.log("Removing from suppression list");
       await removeEmailFromSuppressionList(email);
+      setValue("prijavljeni", true);
+      return;
     }
-
-    setValue("prijavljeni", newValue);
   };
 
   return (
