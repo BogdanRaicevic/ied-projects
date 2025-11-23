@@ -1,4 +1,4 @@
-name: Build all projects
+name: Build and Release
 
 on:
   push:
