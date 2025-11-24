@@ -18,20 +18,13 @@ export default function Seminari() {
     setTableInputParameters(values);
   };
 
-  const handleSeminarCreated = () => {
-    setTableInputParameters({ ...tableInputParameters });
-  };
-
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setTabIndex(newValue);
   };
 
   return (
     <>
-      <ParametriPretrageSeminar
-        onSubmit={handlePretraziSeminare}
-        onSeminarCreated={handleSeminarCreated}
-      />
+      <ParametriPretrageSeminar onSubmit={handlePretraziSeminare} />
 
       <Tabs value={tabIndex} onChange={handleChange}>
         <Tab label="Pregled po seminaru" />
