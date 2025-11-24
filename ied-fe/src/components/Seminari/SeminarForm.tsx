@@ -17,7 +17,7 @@ import {
   type SubmitHandler,
   useForm,
 } from "react-hook-form";
-import { saveSeminar } from "../../api/seminari.api";
+import { useSaveSeminarMutation } from "../../hooks/seminar/useSeminarMutations";
 
 export default function SeminarForm({
   seminar,
@@ -59,6 +59,8 @@ export default function SeminarForm({
   );
   const [alertMessage, setAlertMessage] = useState("");
 
+  const saveSeminarMutation = useSaveSeminarMutation();
+
   useEffect(() => {
     // Reset form if the seminar prop changes (e.g., when opening dialog for different seminar)
     if (seminar) {
@@ -78,7 +80,8 @@ export default function SeminarForm({
     try {
       // Include _id if it's an existing seminar being edited
       const payload = seminar?._id ? { ...data, _id: seminar._id } : data;
-      await saveSeminar(payload);
+      await saveSeminarMutation.mutateAsync(payload);
+
       setAlertSeverity("success");
       setAlertMessage(
         seminar?._id ? "Uspešno izmenjen seminar" : "Uspešno kreiran seminar",
@@ -257,8 +260,11 @@ export default function SeminarForm({
           variant="contained"
           color="primary"
           type="submit"
+          disabled={saveSeminarMutation.isPending}
         >
-          {seminar?._id ? "Izmeni" : "Kreiraj"} seminar
+          {saveSeminarMutation.isPending
+            ? "Čuvanje..."
+            : (seminar?._id ? "Izmeni" : "Kreiraj") + " seminar"}
         </Button>
         <Snackbar
           anchorOrigin={{ vertical: "bottom", horizontal: "center" }}

@@ -27,8 +27,9 @@ import {
   type MRT_PaginationState,
   useMaterialReactTable,
 } from "material-react-table";
-import { useEffect, useMemo, useState } from "react";
-import { deleteSeminar, fetchSeminari } from "../../api/seminari.api";
+import { useMemo, useState } from "react";
+import { useDeleteSeminarMutation } from "../../hooks/seminar/useSeminarMutations";
+import { useSearchSeminari } from "../../hooks/seminar/useSeminarQueries";
 import { useTopScrollbar } from "../../hooks/useTopScrollbar";
 import PrijaveSeminarTable from "./PrijaveSeminarTable";
 import SeminarForm from "./SeminarForm";
@@ -38,10 +39,6 @@ export default function SeminariTable({
 }: {
   queryParameters: SeminarQueryParams;
 }) {
-  const [data, setData] = useState<SeminarZodType[]>([]);
-  const [documents, setDocuments] = useState(1000);
-  const [deletePrijavaCounter, setDeletePrijavaCounter] = useState(0);
-  const [seminarChangesCounter, setSeminarChangesCount] = useState(0);
   const [editSeminar, setEditSeminar] = useState(false);
   const [selectedSeminar, setSelectedSeminar] = useState<
     Partial<SeminarZodType>
@@ -52,26 +49,20 @@ export default function SeminariTable({
     pageSize: 50,
   });
 
+  const deleteSeminarMutation = useDeleteSeminarMutation();
+  const { seminars, isLoading } = useSearchSeminari({
+    pageSize: pagination.pageSize,
+    pageIndex: pagination.pageIndex,
+    queryParameters,
+  });
+
   const scrollbarProps = useTopScrollbar<SeminarZodType>();
 
-  useEffect(() => {
-    const loadData = async () => {
-      const { pageIndex, pageSize } = table.getState().pagination;
-      const res = await fetchSeminari(pageSize, pageIndex, queryParameters);
-      setData(res.seminari);
-      setDocuments(res.totalDocuments);
-    };
-    loadData();
-  }, [
-    pagination,
-    deletePrijavaCounter,
-    seminarChangesCounter,
-    queryParameters,
-  ]);
+  const data = seminars?.seminari || [];
+  const documents = seminars?.totalDocuments || 0;
 
   const handleDelete = async (id: string) => {
-    await deleteSeminar(id);
-    setSeminarChangesCount((prev) => prev + 1);
+    await deleteSeminarMutation.mutateAsync(id);
   };
 
   const handleEditSeminar = (seminar: any) => {
@@ -187,7 +178,6 @@ export default function SeminariTable({
                   ) {
                     if (seminar._id) {
                       handleDelete(seminar._id);
-                      setSeminarChangesCount((prev) => prev + 1);
                     }
                   }
                 }}
@@ -247,6 +237,8 @@ export default function SeminariTable({
     enablePagination: true,
     state: {
       pagination,
+      isLoading,
+      showProgressBars: isLoading,
     },
     rowCount: documents,
     enableExpanding: true,
@@ -296,9 +288,6 @@ export default function SeminariTable({
                         key={naziv_firme}
                         seminarId={row.row.original._id || ""}
                         prijave={prijave}
-                        onDelete={() => {
-                          setDeletePrijavaCounter((prev) => prev + 1);
-                        }}
                       />
                     );
                   },
@@ -314,7 +303,6 @@ export default function SeminariTable({
 
   const handleSubmitSuccess = () => {
     setEditSeminar(false);
-    setSeminarChangesCount((prev) => prev + 1); // Triggers table refresh
   };
 
   return (
