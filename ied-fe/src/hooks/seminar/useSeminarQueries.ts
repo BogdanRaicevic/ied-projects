@@ -44,3 +44,21 @@ export function useSearchSeminari(params: {
 
   return { seminars, isLoading };
 }
+
+export function useSearchFirmaSeminari(params: {
+  pageSize: number;
+  pageIndex: number;
+  queryParameters: SeminarQueryParams;
+}) {
+  const { pageSize, pageIndex, queryParameters } = params;
+
+  const { data: firmaSeminars, isLoading } = useQuery({
+    queryKey: [
+      "firma-seminari",
+      { pageSize, pageIndex, filters: queryParameters },
+    ],
+    queryFn: () => fetchFirmaSeminari(pageSize, pageIndex, queryParameters),
+  });
+
+  return { firmaSeminars, isLoading };
+}

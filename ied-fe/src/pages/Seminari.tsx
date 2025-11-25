@@ -2,6 +2,7 @@ import type { SeminarQueryParams } from "@ied-shared/types/seminar.zod";
 import { Box, Skeleton, Tab, Tabs } from "@mui/material";
 import { addMonths, subMonths } from "date-fns";
 import { useState, useTransition } from "react";
+import FirmaSeminariTable from "../components/Seminari/FirmaSeminariTable";
 import { ParametriPretrageSeminar } from "../components/Seminari/ParametriPretrageSeminar";
 import SeminariTable from "../components/Seminari/SeminariTable";
 export default function Seminari() {
@@ -20,7 +21,7 @@ export default function Seminari() {
     setTableInputParameters(values);
   };
 
-  const handleChange = (event: React.SyntheticEvent, newValue: number) => {
+  const handleChange = (_event: React.SyntheticEvent, newValue: number) => {
     startTransition(() => {
       setTabIndex(newValue);
     });
@@ -48,7 +49,11 @@ export default function Seminari() {
             {tabIndex === 0 && (
               <SeminariTable queryParameters={tableInputParameters} />
             )}
-            {tabIndex === 1 && <Box>{/* Content for second tab */}</Box>}
+            {tabIndex === 1 && (
+              <Box>
+                <FirmaSeminariTable queryParameters={tableInputParameters} />
+              </Box>
+            )}
           </>
         )}
       </Box>
