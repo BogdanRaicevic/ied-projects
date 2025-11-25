@@ -258,7 +258,7 @@ const generateSeminarPipeline = (
     // Join firma metadata
     {
       $lookup: {
-        from: "firmas", // ensure matches Firma model collection name
+        from: "firmas",
         localField: "_id",
         foreignField: "_id",
         as: "firma",
