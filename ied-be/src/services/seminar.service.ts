@@ -19,13 +19,18 @@ export const saveSeminar = async (
   if (seminarData._id) {
     validateMongoId(seminarData._id);
 
-    seminarData.prijave.forEach((prijava) => {
-      transformPrijavaToDb(prijava as PrijavaZodType);
-    });
+    const transformedPrijave: PrijavaType[] = seminarData.prijave.map(
+      (prijava) => transformPrijavaToDb(prijava as PrijavaZodType),
+    );
+
+    const updatePayload = {
+      ...seminarData,
+      prijave: transformedPrijave,
+    };
 
     const updatedSeminar = await Seminar.findOneAndUpdate(
       { _id: { $eq: seminarData._id } },
-      seminarData,
+      updatePayload,
       { new: true },
     ).lean();
 
