@@ -21,7 +21,7 @@ export function useFetchSeminari() {
 
 export function useFetchFirmaSeminari() {
   const { data: fetchedFirmaSeminars } = useQuery({
-    queryKey: ["seminari"],
+    queryKey: ["firma-seminari"],
     queryFn: () => {
       return fetchFirmaSeminari(50, 0, {});
     },
