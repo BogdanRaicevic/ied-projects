@@ -39,11 +39,6 @@ export function useFetchPretragaData() {
     queryFn: fetchAllStanjaFirme,
   });
 
-  const { data: sviSeminari } = useQuery({
-    queryKey: ["sviSeminari"],
-    queryFn: fetchAllSeminars,
-  });
-
   return {
     delatnosti,
     mesta,
@@ -52,7 +47,6 @@ export function useFetchPretragaData() {
     tipoviFirme,
     velicineFirme,
     stanjaFirme,
-    sviSeminari,
   };
 }
 
