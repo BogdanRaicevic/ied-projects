@@ -30,7 +30,6 @@ export default function Seminari() {
 
   return (
     <>
-      <ParametriPretrageSeminar onSubmit={handlePretraziSeminare} />
       <Tabs value={tabIndex} onChange={handleChange}>
         <Tab label="Pregled po seminaru" />
         <Tab label="Pregled po firmi" />
@@ -48,11 +47,14 @@ export default function Seminari() {
         ) : (
           <>
             {tabIndex === 0 && (
-              <SeminariTable queryParameters={tableInputParameters} />
+              <Box>
+                <ParametriPretrageSeminar onSubmit={handlePretraziSeminare} />
+                <SeminariTable queryParameters={tableInputParameters} />
+              </Box>
             )}
             {tabIndex === 1 && (
               <Box>
-                <FirmaSeminarTable queryParameters={tableInputParameters} />
+                <FirmaSeminarTable queryParameters={null} />
               </Box>
             )}
           </>

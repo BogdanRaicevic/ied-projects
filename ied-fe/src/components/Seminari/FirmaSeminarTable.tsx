@@ -1,5 +1,4 @@
 import { Box, Link } from "@mui/material";
-import type { SeminarQueryParams } from "ied-shared/dist/types/seminar.zod";
 import {
   MaterialReactTable,
   type MRT_ColumnDef,
@@ -11,10 +10,36 @@ import { Link as RouterLink } from "react-router-dom";
 import { useSearchFirmaSeminari } from "../../hooks/seminar/useSeminarQueries";
 import FirmaSeminarSubTable from "./FirmaSeminarSubTable";
 
+export type SeminarDetail = {
+  seminar_id: string;
+  naziv: string;
+  predavac: string;
+  datum: string;
+  offlineCena: number;
+  onlineCena: number;
+  totalUcesnici: number;
+  onlineUcesnici: number;
+  offlineUcesnici: number;
+};
+
+type FirmaSeminar = {
+  firmaId: string;
+  naziv: string;
+  email: string;
+  mesto: string;
+  tipFirme: string;
+  delatnost: string;
+  brojSeminara: number;
+  totalUcesnici: number;
+  onlineUcesnici: number;
+  offlineUcesnici: number;
+  seminars: SeminarDetail[];
+};
+
 export default function FirmaSeminarTable({
   queryParameters,
 }: {
-  queryParameters: SeminarQueryParams; // TODO: fix query parameters
+  queryParameters: any; // TODO: fix query parameters
 }) {
   const [pagination, setPagination] = useState<MRT_PaginationState>({
     pageIndex: 0,
@@ -28,7 +53,7 @@ export default function FirmaSeminarTable({
   });
 
   // TODO: fix the type
-  const seminariTableColumns: MRT_ColumnDef<any>[] = [
+  const seminariTableColumns: MRT_ColumnDef<FirmaSeminar>[] = [
     {
       header: "R. BR.",
       accessorKey: "rowNumber",
@@ -89,9 +114,15 @@ export default function FirmaSeminarTable({
   ];
 
   const table = useMaterialReactTable({
-    columns: useMemo<MRT_ColumnDef<any>[]>(() => seminariTableColumns, []),
+    columns: useMemo<MRT_ColumnDef<FirmaSeminar>[]>(
+      () => seminariTableColumns,
+      [],
+    ),
     state: { isLoading, showProgressBars: isLoading, pagination },
-    data: useMemo<any[]>(() => firmaSeminars?.firmas || [], [firmaSeminars]),
+    data: useMemo<FirmaSeminar[]>(
+      () => firmaSeminars?.firmas || [],
+      [firmaSeminars],
+    ),
     enableColumnFilterModes: true,
     enableColumnOrdering: true,
     enableColumnPinning: true,

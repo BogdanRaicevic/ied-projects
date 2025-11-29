@@ -10,7 +10,7 @@ export function useSearchSeminari(params: {
   const { pageSize, pageIndex, queryParameters } = params;
 
   return useQuery({
-    queryKey: ["seminari", { pageSize, pageIndex, filters: queryParameters }],
+    queryKey: ["seminari", { pageSize, pageIndex, queryParameters }],
     queryFn: () => fetchSeminari(pageSize, pageIndex, queryParameters),
   });
 }
@@ -18,7 +18,7 @@ export function useSearchSeminari(params: {
 export function useSearchFirmaSeminari(params: {
   pageSize: number;
   pageIndex: number;
-  queryParameters: SeminarQueryParams; // TODO: use different type if needed
+  queryParameters: any; // TODO: add appropriate type
 }) {
   const { pageSize, pageIndex, queryParameters } = params;
 

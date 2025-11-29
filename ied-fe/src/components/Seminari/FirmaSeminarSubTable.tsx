@@ -4,18 +4,7 @@ import {
   useMaterialReactTable,
 } from "material-react-table";
 import { useMemo } from "react";
-
-// TODO: move to zod types
-// Define the type for a single seminar in the sub-table
-type SeminarDetail = {
-  seminar_id: string;
-  naziv: string;
-  predavac: string;
-  datum: string;
-  totalUcesnici: number;
-  onlineUcesnici: number;
-  offlineUcesnici: number;
-};
+import type { SeminarDetail } from "./FirmaSeminarTable";
 
 export default function FirmaSeminarSubTable({
   seminars,
