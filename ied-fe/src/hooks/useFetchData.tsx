@@ -3,7 +3,6 @@ import { fetchAllDelatnosti } from "../api/delatnosti.api";
 import { fetchAllMesta } from "../api/mesta.api";
 import { getIzdavaciRacuna } from "../api/racuni.api";
 import { fetchAllRadnaMesta } from "../api/radna_mesto.api";
-import { fetchAllSeminars } from "../api/seminari.api";
 import { fetchAllStanjaFirme } from "../api/stanja_firme.api";
 import { fetchAllTipoviFirme } from "../api/tip_firme.api";
 import { fetchAllVelicineFirme } from "../api/velicina_firme.api";
