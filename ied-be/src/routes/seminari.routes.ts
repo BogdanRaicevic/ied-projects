@@ -10,7 +10,7 @@ import {
   type Response,
   Router,
 } from "express";
-import type { z } from "zod";
+import { z } from "zod";
 import { createAuditMiddleware } from "../middleware/audit";
 import { validateRequestBody } from "../middleware/validateSchema";
 import { Seminar, type SeminarType } from "../models/seminar.model";
@@ -62,7 +62,7 @@ router.post(
 
 router.post(
   "/search",
-  validateRequestBody(ExtendedSearchSeminarZod),
+  validateRequestBody(ExtendedSearchSeminarZod), // TODO: fix this type
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       const paginationResult = await searchSeminars(
@@ -94,8 +94,15 @@ router.post(
   },
 );
 
+const FirmaSeminarQuerySchema = z.object({
+  pageIndex: z.number().int().min(0),
+  pageSize: z.number().int().min(1).max(100),
+  queryParameters: z.any(), // TODO: Fix type in the future when you know the exact shape
+});
+
 router.post(
   "/firma-seminari",
+  validateRequestBody(FirmaSeminarQuerySchema),
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { pageIndex, pageSize, queryParameters } = req.body as Record<

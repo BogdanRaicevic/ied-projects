@@ -7,13 +7,13 @@ import axiosInstanceWithAuth from "./interceptors/auth";
 
 export const createSeminar = async (seminarData: SeminarZodType) => {
   if (!seminarData.naziv) {
-    console.error("Seminar must contain a name");
-    return;
+    throw new Error("Seminar must contain a name");
   }
 
   if (seminarData._id) {
-    console.error("Seminar must not contain an id when creating a new seminar");
-    return;
+    throw new Error(
+      "Seminar must not contain an id when creating a new seminar",
+    );
   }
 
   try {
@@ -24,20 +24,17 @@ export const createSeminar = async (seminarData: SeminarZodType) => {
 
     return response.data;
   } catch (error) {
-    console.error("Error creating seminar: ", error);
-    throw error;
+    throw new Error(`Error creating seminar: ${(error as any).message}`);
   }
 };
 
 export const updateSeminar = async (seminarData: SeminarZodType) => {
   if (!seminarData.naziv) {
-    console.error("Seminar must contain a name");
-    return;
+    throw new Error("Seminar must contain a name");
   }
 
   if (!seminarData._id) {
-    console.error("Seminar must contain an id");
-    return;
+    throw new Error("Seminar must contain an id");
   }
 
   try {
@@ -48,8 +45,7 @@ export const updateSeminar = async (seminarData: SeminarZodType) => {
 
     return response.data;
   } catch (error) {
-    console.error("Error updating seminar: ", error);
-    throw error;
+    throw new Error(`Error updating seminar: ${(error as any).message}`);
   }
 };
 
@@ -60,8 +56,8 @@ export const fetchSeminari = async (
 ) => {
   try {
     const body = {
-      pageSize: pageSize,
-      pageIndex: pageIndex,
+      pageSize,
+      pageIndex,
       ...queryParameters,
     };
 
@@ -75,8 +71,7 @@ export const fetchSeminari = async (
 
     return response.data;
   } catch (error) {
-    console.error("Error fetching seminari data:", error);
-    throw error;
+    throw new Error(`Error fetching seminari data: ${(error as any).message}`);
   }
 };
 
@@ -86,8 +81,7 @@ export const fetchSeminarById = async (id: string) => {
 
     return response.data;
   } catch (error) {
-    console.error("Error fetching seminar data:", error);
-    throw error;
+    throw new Error(`Error fetching seminar data: ${(error as any).message}`);
   }
 };
 
@@ -111,7 +105,7 @@ export const createPrijava = async (
         cause: "duplicate",
       });
     }
-    throw error;
+    throw new Error(`Error creating prijava: ${(error as any).message}`);
   }
 };
 
@@ -126,8 +120,7 @@ export const deletePrijava = async (
 
     return response.data;
   } catch (error) {
-    console.error("Error deleting prijava: ", error);
-    throw error;
+    throw new Error(`Error deleting prijava: ${(error as any).message}`);
   }
 };
 
@@ -139,8 +132,7 @@ export const deleteSeminar = async (id: string) => {
 
     return response.data;
   } catch (error) {
-    console.error("Error deleting seminar: ", error);
-    throw error;
+    throw new Error(`Error deleting seminar: ${(error as any).message}`);
   }
 };
 
@@ -163,7 +155,6 @@ export const fetchFirmaSeminari = async (
 
     return response.data;
   } catch (error) {
-    console.error("Error fetching seminari data:", error);
-    throw error;
+    throw new Error(`Error fetching seminari data: ${(error as any).message}`);
   }
 };
