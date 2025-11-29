@@ -144,19 +144,6 @@ export const deleteSeminar = async (id: string) => {
   }
 };
 
-export const fetchAllSeminars = async () => {
-  try {
-    const response = await axiosInstanceWithAuth.get(
-      `/api/seminari/all-seminars`,
-    );
-
-    return response.data;
-  } catch (error) {
-    console.error("Error fetching all seminars: ", error);
-    throw error;
-  }
-};
-
 export const fetchFirmaSeminari = async (
   pageSize: number,
   pageIndex: number,
