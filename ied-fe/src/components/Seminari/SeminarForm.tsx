@@ -17,7 +17,10 @@ import {
   type SubmitHandler,
   useForm,
 } from "react-hook-form";
-import { useSaveSeminarMutation } from "../../hooks/seminar/useSeminarMutations";
+import {
+  useCreateSeminarMutation,
+  useUpdateSeminarMutation,
+} from "../../hooks/seminar/useSeminarMutations";
 
 export default function SeminarForm({
   seminar,
@@ -59,7 +62,10 @@ export default function SeminarForm({
   );
   const [alertMessage, setAlertMessage] = useState("");
 
-  const saveSeminarMutation = useSaveSeminarMutation();
+  const createSeminarMutation = useCreateSeminarMutation();
+  const updateSeminarMutation = useUpdateSeminarMutation();
+  const isPending =
+    createSeminarMutation.isPending || updateSeminarMutation.isPending;
 
   useEffect(() => {
     // Reset form if the seminar prop changes (e.g., when opening dialog for different seminar)
@@ -78,14 +84,15 @@ export default function SeminarForm({
 
   const onSubmit: SubmitHandler<SeminarZodType> = async (data) => {
     try {
-      // Include _id if it's an existing seminar being edited
-      const payload = seminar?._id ? { ...data, _id: seminar._id } : data;
-      await saveSeminarMutation.mutateAsync(payload);
+      if (seminar?._id) {
+        await updateSeminarMutation.mutateAsync({ ...data, _id: seminar._id });
+        setAlertMessage("Uspešno izmenjen seminar");
+      } else {
+        await createSeminarMutation.mutateAsync(data);
+        setAlertMessage("Uspešno kreiran seminar");
+      }
 
       setAlertSeverity("success");
-      setAlertMessage(
-        seminar?._id ? "Uspešno izmenjen seminar" : "Uspešno kreiran seminar",
-      );
       setAlertOpen(true);
       // TODO: Fix missing snackbar because of dialog unmount
       onDialogClose?.();
@@ -260,9 +267,9 @@ export default function SeminarForm({
           variant="contained"
           color="primary"
           type="submit"
-          disabled={saveSeminarMutation.isPending}
+          disabled={isPending}
         >
-          {saveSeminarMutation.isPending
+          {isPending
             ? "Čuvanje..."
             : (seminar?._id ? "Izmeni" : "Kreiraj") + " seminar"}
         </Button>

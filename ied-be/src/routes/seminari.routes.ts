@@ -16,14 +16,15 @@ import { validateRequestBody } from "../middleware/validateSchema";
 import { Seminar, type SeminarType } from "../models/seminar.model";
 import {
   createPrijava,
+  createSeminar,
   deletePrijava,
   deleteSeminar,
   getAllSeminars,
   getSeminarById,
-  saveSeminar,
   searchFirmaSeminars,
   searchSeminars,
   updatePrijava,
+  updateSeminar,
 } from "../services/seminar.service";
 import { ErrorWithCause } from "../utils/customErrors";
 
@@ -31,13 +32,28 @@ const router = Router();
 const seminariAudit = createAuditMiddleware(Seminar);
 
 router.post(
-  "/save",
+  "/create",
   seminariAudit,
   validateRequestBody(SeminarSchema),
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const seminar = await saveSeminar(req.body);
+      const seminar = await createSeminar(req.body);
       res.status(201).json(seminar);
+    } catch (error) {
+      next(error);
+    }
+  },
+);
+
+router.post(
+  "/update/:id",
+  seminariAudit,
+  validateRequestBody(SeminarSchema),
+  async (req: Request, res: Response, next: NextFunction) => {
+    const { id } = req.params;
+    try {
+      const updatedSeminar = await updateSeminar(id, req.body);
+      res.status(200).json(updatedSeminar);
     } catch (error) {
       next(error);
     }

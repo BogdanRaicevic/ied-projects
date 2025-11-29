@@ -13,35 +13,30 @@ import {
 import { createSeminarQuery } from "../utils/seminariQueryBuilder";
 import { validateMongoId } from "../utils/utils";
 
-export const saveSeminar = async (
+export const createSeminar = async (
   seminarData: SeminarZodType,
 ): Promise<SeminarType> => {
-  if (seminarData._id) {
-    validateMongoId(seminarData._id);
-
-    const transformedPrijave: PrijavaType[] = seminarData.prijave.map(
-      (prijava) => transformPrijavaToDb(prijava as PrijavaZodType),
-    );
-
-    const updatePayload = {
-      ...seminarData,
-      prijave: transformedPrijave,
-    };
-
-    const updatedSeminar = await Seminar.findOneAndUpdate(
-      { _id: { $eq: seminarData._id } },
-      updatePayload,
-      { new: true },
-    ).lean();
-
-    if (!updatedSeminar) {
-      throw new Error("Seminar not found");
-    }
-    return updatedSeminar;
-  }
-
-  const seminar = new Seminar(seminarData);
+  const dataToSave = prepareSeminarData(seminarData);
+  const seminar = new Seminar(dataToSave);
   return (await seminar.save()).toObject();
+};
+
+export const updateSeminar = async (
+  id: string,
+  seminarData: SeminarZodType,
+): Promise<SeminarType> => {
+  validateMongoId(id);
+
+  const dataToUpdate = prepareSeminarData(seminarData);
+
+  const updatedSeminar = await Seminar.findByIdAndUpdate(id, dataToUpdate, {
+    new: true,
+  }).lean();
+
+  if (!updatedSeminar) {
+    throw new Error("Seminar not found");
+  }
+  return updatedSeminar;
 };
 
 export const searchSeminars = async (qq: ExtendedSearchSeminarType) => {
@@ -201,6 +196,17 @@ const transformPrijavaToDb = (prijava: PrijavaZodType): PrijavaType => {
     zaposleni_id: new Types.ObjectId(prijava.zaposleni_id),
     _id: prijava._id ? new Types.ObjectId(prijava._id) : undefined,
   } as PrijavaType;
+};
+
+const prepareSeminarData = (seminarData: SeminarZodType) => {
+  const transformedPrijave = (seminarData.prijave || []).map((prijava) =>
+    transformPrijavaToDb(prijava as PrijavaZodType),
+  );
+
+  return {
+    ...seminarData,
+    prijave: transformedPrijave,
+  };
 };
 
 const generateSeminarPipeline = (
