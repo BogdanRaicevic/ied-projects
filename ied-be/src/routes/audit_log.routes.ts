@@ -1,4 +1,10 @@
-import { type NextFunction, type Request, type Response, Router } from "express";
+import { parseInt as parseIntCompat } from "es-toolkit/compat";
+import {
+  type NextFunction,
+  type Request,
+  type Response,
+  Router,
+} from "express";
 import { getAuditLogs } from "../services/audit_log.service";
 
 const router = Router();
@@ -6,10 +12,8 @@ const router = Router();
 router.get("/", async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { pageSize, pageIndex, ...params } = req.query;
-    let size = parseInt(pageSize as string, 10);
-    let index = parseInt(pageIndex as string, 10);
-    size = size < 0 || !Number.isNaN(size) ? 50 : size;
-    index = index < 0 || !Number.isNaN(index) ? 0 : index;
+    const index = parseIntCompat(pageIndex as string, 10) || 0;
+    const size = parseIntCompat(pageSize as string, 10) || 50;
 
     const result = await getAuditLogs({
       pageIndex: index,

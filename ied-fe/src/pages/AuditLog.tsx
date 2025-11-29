@@ -37,6 +37,7 @@ export default function AuditLog() {
     pageIndex: pagination.pageIndex,
     pageSize: pagination.pageSize,
   });
+
   const { control, handleSubmit } = useForm<AuditLogQueryParams>({
     defaultValues: queryParams,
   });
@@ -48,6 +49,22 @@ export default function AuditLog() {
 
   const auditLogsColumns = useMemo<MRT_ColumnDef<AuditLogType>[]>(
     () => [
+      {
+        header: "R. BR.",
+        accessorKey: "rowNumber",
+        size: 20,
+        enableSorting: false,
+        enableColumnActions: false,
+        enableColumnFilter: false,
+        enableColumnOrdering: false,
+        enableHiding: false,
+
+        Cell: ({ row, table }) => {
+          const pageIndex = table.getState().pagination.pageIndex;
+          const pageSize = table.getState().pagination.pageSize;
+          return pageIndex * pageSize + row.index + 1;
+        },
+      },
       {
         accessorKey: "timestamp",
         header: "Timestamp",
@@ -139,10 +156,8 @@ export default function AuditLog() {
     data: auditLogs || [],
     state: {
       isLoading,
-      pagination: {
-        pageIndex: pagination.pageIndex,
-        pageSize: pagination.pageSize,
-      },
+      showProgressBars: isLoading,
+      pagination,
     },
     enableColumnFilterModes: true,
     enableColumnOrdering: true,
