@@ -28,6 +28,22 @@ export default function FirmaSeminarTable({
   // TODO: fix the type
   const seminariTableColumns: MRT_ColumnDef<any>[] = [
     {
+      header: "R. BR.",
+      accessorKey: "rowNumber",
+      size: 20,
+      enableSorting: false,
+      enableColumnActions: false,
+      enableColumnFilter: false,
+      enableColumnOrdering: false,
+      enableHiding: false,
+
+      Cell: ({ row, table }) => {
+        const pageIndex = table.getState().pagination.pageIndex;
+        const pageSize = table.getState().pagination.pageSize;
+        return pageIndex * pageSize + row.index + 1;
+      },
+    },
+    {
       accessorKey: "naziv",
       header: "Naziv firme",
       Cell: ({ row }) => (

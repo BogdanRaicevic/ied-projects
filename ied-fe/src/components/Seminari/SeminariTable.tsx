@@ -124,6 +124,22 @@ export default function SeminariTable({
 
   const seminariTableColumns: MRT_ColumnDef<SeminarZodType>[] = [
     {
+      header: "R. BR.",
+      accessorKey: "rowNumber",
+      size: 20,
+      enableSorting: false,
+      enableColumnActions: false,
+      enableColumnFilter: false,
+      enableColumnOrdering: false,
+      enableHiding: false,
+
+      Cell: ({ row, table }) => {
+        const pageIndex = table.getState().pagination.pageIndex;
+        const pageSize = table.getState().pagination.pageSize;
+        return pageIndex * pageSize + row.index + 1;
+      },
+    },
+    {
       id: "actions",
       header: "Akcije",
       size: 100,
