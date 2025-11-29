@@ -2,7 +2,7 @@ import type { SeminarQueryParams } from "@ied-shared/types/seminar.zod";
 import { Box, Skeleton, Tab, Tabs } from "@mui/material";
 import { addMonths, subMonths } from "date-fns";
 import { useState, useTransition } from "react";
-import FirmaSeminariTable from "../components/Seminari/FirmaSeminariTable";
+import FirmaSeminarTable from "../components/Seminari/FirmaSeminarTable";
 import { ParametriPretrageSeminar } from "../components/Seminari/ParametriPretrageSeminar";
 import SeminariTable from "../components/Seminari/SeminariTable";
 export default function Seminari() {
@@ -51,7 +51,7 @@ export default function Seminari() {
             )}
             {tabIndex === 1 && (
               <Box>
-                <FirmaSeminariTable queryParameters={tableInputParameters} />
+                <FirmaSeminarTable queryParameters={tableInputParameters} />
               </Box>
             )}
           </>
