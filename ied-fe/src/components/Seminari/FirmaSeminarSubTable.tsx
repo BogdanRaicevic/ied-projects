@@ -1,11 +1,9 @@
-import { Link } from "@mui/material";
 import {
   MaterialReactTable,
   type MRT_ColumnDef,
   useMaterialReactTable,
 } from "material-react-table";
 import { useMemo } from "react";
-import { Link as RouterLink } from "react-router-dom";
 
 // TODO: move to zod types
 // Define the type for a single seminar in the sub-table
@@ -27,16 +25,19 @@ export default function FirmaSeminarSubTable({
   const seminariTableColumns = useMemo<MRT_ColumnDef<any>[]>(
     () => [
       {
+        header: "R. BR.",
+        id: "rowNumber",
+        size: 20,
+        Cell: ({ row }) => row.index + 1,
+        enableSorting: false,
+        enableColumnActions: false,
+        enableColumnFilter: false,
+        enableColumnOrdering: false,
+        enableHiding: false,
+      },
+      {
         accessorKey: "naziv",
         header: "Naziv seminara",
-        Cell: ({ cell, row }) => (
-          <Link
-            component={RouterLink}
-            to={`/seminar/${row.original.seminar_id}`}
-          >
-            {cell.getValue<string>()}
-          </Link>
-        ),
       },
       {
         accessorFn: (originalRow) =>
