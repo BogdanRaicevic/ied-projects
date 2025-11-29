@@ -48,7 +48,7 @@ export const updateSeminar = async (seminarData: SeminarZodType) => {
 
     return response.data;
   } catch (error) {
-    console.error("Error creating seminar: ", error);
+    console.error("Error updating seminar: ", error);
     throw error;
   }
 };
@@ -164,9 +164,9 @@ export const fetchFirmaSeminari = async (
 ) => {
   try {
     const body = {
-      pageSize: pageSize,
-      pageIndex: pageIndex,
-      ...queryParameters,
+      pageSize,
+      pageIndex,
+      queryParameters,
     };
 
     const response = await axiosInstanceWithAuth.post(

@@ -5,6 +5,7 @@ import { useState, useTransition } from "react";
 import FirmaSeminarTable from "../components/Seminari/FirmaSeminarTable";
 import { ParametriPretrageSeminar } from "../components/Seminari/ParametriPretrageSeminar";
 import SeminariTable from "../components/Seminari/SeminariTable";
+
 export default function Seminari() {
   const [tableInputParameters, setTableInputParameters] =
     useState<SeminarQueryParams>({
@@ -38,11 +39,11 @@ export default function Seminari() {
       <Box mt={2}>
         {isPending ? (
           <Box>
-            <Skeleton variant="rounded" animation="wave" />
-            <Skeleton variant="text" animation="wave" />
-            <Skeleton variant="rectangular" animation="wave" />
-            <Skeleton variant="text" animation="wave" />
-            <Skeleton variant="rectangular" animation="wave" />
+            <Skeleton variant="rounded" height={60} animation="wave" />
+            <Skeleton variant="text" height={40} animation="wave" />
+            <Skeleton variant="rectangular" height={400} animation="wave" />
+            <Skeleton variant="text" height={40} animation="wave" />
+            <Skeleton variant="rectangular" height={400} animation="wave" />
           </Box>
         ) : (
           <>
