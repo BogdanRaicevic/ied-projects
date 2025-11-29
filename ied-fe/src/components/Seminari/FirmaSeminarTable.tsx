@@ -3,9 +3,10 @@ import type { SeminarQueryParams } from "ied-shared/dist/types/seminar.zod";
 import {
   MaterialReactTable,
   type MRT_ColumnDef,
+  type MRT_PaginationState,
   useMaterialReactTable,
 } from "material-react-table";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { Link as RouterLink } from "react-router-dom";
 import { useSearchFirmaSeminari } from "../../hooks/seminar/useSeminarQueries";
 import FirmaSeminarSubTable from "./FirmaSeminarSubTable";
@@ -13,17 +14,18 @@ import FirmaSeminarSubTable from "./FirmaSeminarSubTable";
 export default function FirmaSeminarTable({
   queryParameters,
 }: {
-  queryParameters: SeminarQueryParams;
+  queryParameters: SeminarQueryParams; // TODO: fix query parameters
 }) {
-  console.log("FirmaSeminarTable queryParameters:", queryParameters);
-
-  const { firmaSeminars, isLoading } = useSearchFirmaSeminari({
-    pageSize: 50,
+  const [pagination, setPagination] = useState<MRT_PaginationState>({
     pageIndex: 0,
-    queryParameters: {}, // TODO: fix query parameters
+    pageSize: 50,
   });
 
-  console.log("firmas:", firmaSeminars);
+  const { firmaSeminars, isLoading } = useSearchFirmaSeminari({
+    pageSize: pagination.pageSize,
+    pageIndex: pagination.pageIndex,
+    queryParameters,
+  });
 
   // TODO: fix the type
   const seminariTableColumns: MRT_ColumnDef<any>[] = [
@@ -88,7 +90,7 @@ export default function FirmaSeminarTable({
 
   const table = useMaterialReactTable({
     columns: useMemo<MRT_ColumnDef<any>[]>(() => seminariTableColumns, []),
-    state: { isLoading: isLoading, showProgressBars: isLoading },
+    state: { isLoading, showProgressBars: isLoading, pagination },
     data: useMemo<any[]>(() => firmaSeminars?.firmas || [], [firmaSeminars]),
     enableColumnFilterModes: true,
     enableColumnOrdering: true,
@@ -100,10 +102,11 @@ export default function FirmaSeminarTable({
     rowCount: firmaSeminars?.totalDocuments || 0,
     enableExpanding: true,
     renderDetailPanel: ({ row }) => (
-      <Box sx={{ padding: "16px", backgroundColor: "#f5f5f5" }}>
+      <Box sx={{ padding: "16px" }}>
         <FirmaSeminarSubTable seminars={row.original.seminars} />
       </Box>
     ),
+    onPaginationChange: setPagination,
   });
 
   return <MaterialReactTable table={table} />;
