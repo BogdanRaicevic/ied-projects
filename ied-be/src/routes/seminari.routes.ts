@@ -98,14 +98,14 @@ router.post(
   "/firma-seminari",
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const { pageIndex, pageSize, queryParams } = req.body as Record<
+      const { pageIndex, pageSize, queryParameters } = req.body as Record<
         string,
         unknown
       >;
       const firmaSeminari = await searchFirmaSeminars(
         pageIndex as number,
         pageSize as number,
-        null,
+        queryParameters,
       );
       res.status(200).json(firmaSeminari);
     } catch (error) {
