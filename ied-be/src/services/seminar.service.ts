@@ -3,41 +3,40 @@ import type {
   PrijavaZodType,
   SeminarZodType,
 } from "@ied-shared/types/seminar.zod";
-import { Types } from "mongoose";
+import { type PipelineStage, Types } from "mongoose";
 import { Firma } from "../models/firma.model";
 import {
   type PrijavaType,
   Seminar,
   type SeminarType,
 } from "./../models/seminar.model";
-import { ErrorWithCause } from "../utils/customErrors";
 import { createSeminarQuery } from "../utils/seminariQueryBuilder";
 import { validateMongoId } from "../utils/utils";
 
-export const saveSeminar = async (
+export const createSeminar = async (
   seminarData: SeminarZodType,
 ): Promise<SeminarType> => {
-  if (seminarData._id) {
-    validateMongoId(seminarData._id);
-
-    seminarData.prijave.forEach((prijava) => {
-      transformPrijavaToDb(prijava as PrijavaZodType);
-    });
-
-    const updatedSeminar = await Seminar.findOneAndUpdate(
-      { _id: { $eq: seminarData._id } },
-      seminarData,
-      { new: true },
-    ).lean();
-
-    if (!updatedSeminar) {
-      throw new Error("Seminar not found");
-    }
-    return updatedSeminar;
-  }
-
-  const seminar = new Seminar(seminarData);
+  const dataToSave = prepareSeminarData(seminarData);
+  const seminar = new Seminar(dataToSave);
   return (await seminar.save()).toObject();
+};
+
+export const updateSeminar = async (
+  id: string,
+  seminarData: SeminarZodType,
+): Promise<SeminarType> => {
+  validateMongoId(id);
+
+  const dataToUpdate = prepareSeminarData(seminarData);
+
+  const updatedSeminar = await Seminar.findByIdAndUpdate(id, dataToUpdate, {
+    new: true,
+  }).lean();
+
+  if (!updatedSeminar) {
+    throw new Error("Seminar not found");
+  }
+  return updatedSeminar;
 };
 
 export const searchSeminars = async (qq: ExtendedSearchSeminarType) => {
@@ -168,6 +167,28 @@ export const getZaposleniIdsFromSeminars = async (
   return [];
 };
 
+export const searchFirmaSeminars = async (
+  pageIndex: number = 0,
+  pageSize: number = 50,
+  queryParams: any, // TODO: define type
+) => {
+  const skip = pageIndex * pageSize;
+
+  const pipeline: PipelineStage[] = generateSeminarPipeline(skip, pageSize);
+
+  const aggregationResult = await Seminar.aggregate(pipeline);
+  const data = aggregationResult[0]?.data ?? [];
+  const totalDocuments = aggregationResult[0]?.totalDocuments?.[0]?.count
+    ? aggregationResult[0].totalDocuments[0].count
+    : 0;
+
+  return {
+    firmas: data,
+    totalDocuments,
+    totalPages: Math.ceil(totalDocuments / pageSize),
+  };
+};
+
 const transformPrijavaToDb = (prijava: PrijavaZodType): PrijavaType => {
   return {
     ...prijava,
@@ -175,4 +196,110 @@ const transformPrijavaToDb = (prijava: PrijavaZodType): PrijavaType => {
     zaposleni_id: new Types.ObjectId(prijava.zaposleni_id),
     _id: prijava._id ? new Types.ObjectId(prijava._id) : undefined,
   } as PrijavaType;
+};
+
+const prepareSeminarData = (seminarData: SeminarZodType) => {
+  const transformedPrijave = (seminarData.prijave || []).map((prijava) =>
+    transformPrijavaToDb(prijava as PrijavaZodType),
+  );
+
+  return {
+    ...seminarData,
+    prijave: transformedPrijave,
+  };
+};
+
+const generateSeminarPipeline = (
+  skip: number,
+  pageSize: number,
+): PipelineStage[] => {
+  return [
+    { $unwind: "$prijave" },
+
+    // Per (firma, seminar) counts
+    {
+      $group: {
+        _id: {
+          firma_id: "$prijave.firma_id",
+          seminar_id: "$_id",
+        },
+        naziv: { $first: "$naziv" },
+        predavac: { $first: "$predavac" },
+        onlineCena: { $first: "$onlineCena" },
+        offlineCena: { $first: "$offlineCena" },
+        datum: { $first: "$datum" },
+        totalUcesniciSeminar: { $sum: 1 },
+        onlineUcesniciSeminar: {
+          $sum: { $cond: [{ $eq: ["$prijave.prisustvo", "online"] }, 1, 0] },
+        },
+        offlineUcesniciSeminar: {
+          $sum: { $cond: [{ $eq: ["$prijave.prisustvo", "offline"] }, 1, 0] },
+        },
+      },
+    },
+
+    // Optional sort of seminars inside each firma
+    { $sort: { datum: -1 } },
+
+    // Re-group by firma, push seminar objects
+    {
+      $group: {
+        _id: "$_id.firma_id",
+        seminars: {
+          $push: {
+            seminar_id: "$_id.seminar_id",
+            naziv: "$naziv",
+            predavac: "$predavac",
+            lokacija: "$lokacija",
+            onlineCena: "$onlineCena",
+            offlineCena: "$offlineCena",
+            datum: "$datum",
+            totalUcesnici: "$totalUcesniciSeminar",
+            onlineUcesnici: "$onlineUcesniciSeminar",
+            offlineUcesnici: "$offlineUcesniciSeminar",
+          },
+        },
+        brojSeminara: { $sum: 1 },
+        totalUcesnici: { $sum: "$totalUcesniciSeminar" },
+        onlineUcesnici: { $sum: "$onlineUcesniciSeminar" },
+        offlineUcesnici: { $sum: "$offlineUcesniciSeminar" },
+      },
+    },
+
+    // Join firma metadata
+    {
+      $lookup: {
+        from: "firmas",
+        localField: "_id",
+        foreignField: "_id",
+        as: "firma",
+      },
+    },
+    { $unwind: { path: "$firma", preserveNullAndEmptyArrays: true } },
+
+    // Final shape
+    {
+      $project: {
+        _id: 0,
+        firmaId: "$_id",
+        naziv: "$firma.naziv_firme",
+        email: "$firma.e_mail",
+        mesto: "$firma.mesto",
+        tipFirme: "$firma.tip_firme",
+        delatnost: "$firma.delatnost",
+        brojSeminara: 1,
+        totalUcesnici: 1,
+        onlineUcesnici: 1,
+        offlineUcesnici: 1,
+        seminars: 1,
+      },
+    },
+    { $sort: { totalUcesnici: -1, naziv: 1 } },
+    {
+      $facet: {
+        data: [{ $skip: skip }, { $limit: pageSize }],
+        totalDocuments: [{ $count: "count" }],
+      },
+    },
+  ];
 };

@@ -9,7 +9,7 @@ export type EmailSuppression = {
   reason: SuppressionReasons;
 };
 
-export const emailSuppressionSchema = new Schema<EmailSuppression>(
+const emailSuppressionSchema = new Schema<EmailSuppression>(
   {
     email: { type: String, required: true, unique: true, lowercase: true },
     reason: {

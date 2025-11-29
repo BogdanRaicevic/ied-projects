@@ -5,22 +5,50 @@ import type {
 } from "@ied-shared/types/seminar.zod";
 import axiosInstanceWithAuth from "./interceptors/auth";
 
-export const saveSeminar = async (seminarData: SeminarZodType) => {
-  try {
-    if (!seminarData.naziv) {
-      console.error("Seminar must contain a name");
-      return;
-    }
+export const createSeminar = async (seminarData: SeminarZodType) => {
+  if (!seminarData.naziv) {
+    console.error("Seminar must contain a name");
+    return;
+  }
 
-    // TODO: split this function into create and update
+  if (seminarData._id) {
+    console.error("Seminar must not contain an id when creating a new seminar");
+    return;
+  }
+
+  try {
     const response = await axiosInstanceWithAuth.post(
-      `/api/seminari/save`,
+      `/api/seminari/create`,
       seminarData,
     );
 
     return response.data;
   } catch (error) {
-    console.error("Error saving seminar: ", error);
+    console.error("Error creating seminar: ", error);
+    throw error;
+  }
+};
+
+export const updateSeminar = async (seminarData: SeminarZodType) => {
+  if (!seminarData.naziv) {
+    console.error("Seminar must contain a name");
+    return;
+  }
+
+  if (!seminarData._id) {
+    console.error("Seminar must contain an id");
+    return;
+  }
+
+  try {
+    const response = await axiosInstanceWithAuth.post(
+      `/api/seminari/update/${seminarData._id}`,
+      seminarData,
+    );
+
+    return response.data;
+  } catch (error) {
+    console.error("Error updating seminar: ", error);
     throw error;
   }
 };
@@ -32,8 +60,8 @@ export const fetchSeminari = async (
 ) => {
   try {
     const body = {
-      pageSize: pageSize || 50,
-      pageIndex: pageIndex || 0,
+      pageSize: pageSize,
+      pageIndex: pageIndex,
       ...queryParameters,
     };
 
@@ -116,15 +144,26 @@ export const deleteSeminar = async (id: string) => {
   }
 };
 
-export const fetchAllSeminars = async () => {
+export const fetchFirmaSeminari = async (
+  pageSize: number,
+  pageIndex: number,
+  queryParameters: any, // TODO: define type
+) => {
   try {
-    const response = await axiosInstanceWithAuth.get(
-      `/api/seminari/all-seminars`,
+    const body = {
+      pageSize,
+      pageIndex,
+      queryParameters,
+    };
+
+    const response = await axiosInstanceWithAuth.post(
+      `/api/seminari/firma-seminari`,
+      body,
     );
 
     return response.data;
   } catch (error) {
-    console.error("Error fetching all seminars: ", error);
+    console.error("Error fetching seminari data:", error);
     throw error;
   }
 };

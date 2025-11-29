@@ -17,26 +17,28 @@ import {
 } from "@mui/material";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { deletePrijava } from "../../api/seminari.api";
+import { useDeletePrijavaMutation } from "../../hooks/seminar/useSeminarMutations";
 
 export default function PrijaveSeminarTable({
   seminarId,
   prijave,
-  onDelete,
 }: {
   seminarId: string;
   prijave: PrijavaZodType[];
-  onDelete?: () => void;
 }) {
   const [open, setOpen] = useState(false);
 
-  const onePrijavaDelete = async (zaposleni_id: string, seminar_id: string) => {
+  const deletePrijava = useDeletePrijavaMutation();
+
+  const onPrijavaDelete = async (zaposleni_id: string, seminar_id: string) => {
     const confirmed = window.confirm(
       "Da li ste sigurni da želite da obrišete prijavu?",
     );
     if (confirmed) {
-      await deletePrijava(zaposleni_id, seminar_id);
-      onDelete?.();
+      await deletePrijava.mutateAsync({
+        zaposleniId: zaposleni_id,
+        seminarId: seminar_id,
+      });
     }
   };
 
@@ -101,7 +103,7 @@ export default function PrijaveSeminarTable({
                         <IconButton
                           color="error"
                           onClick={() =>
-                            onePrijavaDelete(prijava.zaposleni_id, seminarId)
+                            onPrijavaDelete(prijava.zaposleni_id, seminarId)
                           }
                         >
                           <DeleteIcon />

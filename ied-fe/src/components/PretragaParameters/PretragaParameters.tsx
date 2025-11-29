@@ -4,7 +4,6 @@ import SearchIcon from "@mui/icons-material/Search";
 import {
   Box,
   Button,
-  Chip,
   FormControl,
   FormControlLabel,
   FormLabel,
@@ -16,7 +15,8 @@ import {
 import { format } from "date-fns";
 import { useEffect } from "react";
 import { Controller, useForm } from "react-hook-form";
-import { useFetchData } from "../../hooks/useFetchData";
+import { useSearchSeminari } from "../../hooks/seminar/useSeminarQueries";
+import { useFetchPretragaData } from "../../hooks/useFetchData";
 import {
   defaultPretrageParameters,
   usePretragaStore,
@@ -34,8 +34,18 @@ export default function PretragaParameters() {
     tipoviFirme,
     velicineFirme,
     stanjaFirme,
-    sviSeminari,
-  } = useFetchData();
+  } = useFetchPretragaData();
+
+  const { data: fetchedSeminars } = useSearchSeminari({
+    pageIndex: 0,
+    pageSize: 50,
+    queryParameters: {},
+  });
+
+  const seminarTitles =
+    fetchedSeminars?.seminari.map((seminar) => {
+      return `${format(seminar.datum, "dd.MM.yyyy")} - ${seminar.naziv}`;
+    }) || [];
 
   const {
     setPretragaParameters,
@@ -237,26 +247,12 @@ export default function PretragaParameters() {
                   control={control}
                   render={({ field }) => (
                     <AutocompleteMultiple
-                      data={sviSeminari}
+                      id="seminari"
+                      data={seminarTitles}
                       onCheckedChange={field.onChange}
                       placeholder="Seminari"
-                      id="seminar"
                       key="autocomplete-seminar"
                       checkedValues={field.value || []}
-                      getOptionLabel={(option) => {
-                        return `${format(option.datum, "dd.MM.yyyy")} - ${option.naziv}`;
-                      }}
-                      renderTag={(getTagProps, index, option) => {
-                        const { key, ...tagProps } = getTagProps({ index });
-                        return (
-                          <Chip
-                            variant="outlined"
-                            label={`${format(option.datum, "dd.MM.yyyy")} - ${option.naziv}`}
-                            key={key}
-                            {...tagProps}
-                          />
-                        );
-                      }}
                     />
                   )}
                 />
