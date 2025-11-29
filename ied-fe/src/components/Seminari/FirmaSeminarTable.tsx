@@ -1,36 +1,40 @@
-import type {
-  SeminarQueryParams,
-  SeminarZodType,
-} from "ied-shared/dist/types/seminar.zod";
+import { Box, Link } from "@mui/material";
+import type { SeminarQueryParams } from "ied-shared/dist/types/seminar.zod";
 import {
   MaterialReactTable,
   type MRT_ColumnDef,
   useMaterialReactTable,
 } from "material-react-table";
 import { useMemo } from "react";
+import { Link as RouterLink } from "react-router-dom";
 import { useSearchFirmaSeminari } from "../../hooks/seminar/useSeminarQueries";
+import FirmaSeminarSubTable from "./FirmaSeminarSubTable";
 
-export default function FirmaSeminariTable({
+export default function FirmaSeminarTable({
   queryParameters,
 }: {
   queryParameters: SeminarQueryParams;
 }) {
-  console.log("FirmaSeminariTable queryParameters:", queryParameters);
+  console.log("FirmaSeminarTable queryParameters:", queryParameters);
 
   const { firmaSeminars, isLoading } = useSearchFirmaSeminari({
     pageSize: 50,
     pageIndex: 0,
-    queryParameters: {}, // TODO: fix
+    queryParameters: {}, // TODO: fix query parameters
   });
 
   console.log("firmas:", firmaSeminars);
 
-  // fix the type
+  // TODO: fix the type
   const seminariTableColumns: MRT_ColumnDef<any>[] = [
     {
       accessorKey: "naziv",
       header: "Naziv firme",
-      Cell: ({ row }) => row.original.naziv || row.original.firmaId || "N/A",
+      Cell: ({ row }) => (
+        <Link component={RouterLink} to={`/firma/${row.original.firmaId}`}>
+          {row.original.naziv || row.original.firmaId || "N/A"}
+        </Link>
+      ),
     },
     {
       accessorKey: "email",
@@ -76,10 +80,14 @@ export default function FirmaSeminariTable({
     paginationDisplayMode: "default",
     positionToolbarAlertBanner: "bottom",
     manualPagination: true,
-    // onPaginationChange: setPagination,
     enablePagination: true,
     rowCount: firmaSeminars?.totalDocuments || 0,
-    // enableExpanding: true,
+    enableExpanding: true,
+    renderDetailPanel: ({ row }) => (
+      <Box sx={{ padding: "16px", backgroundColor: "#f5f5f5" }}>
+        <FirmaSeminarSubTable seminars={row.original.seminars} />
+      </Box>
+    ),
   });
 
   return <MaterialReactTable table={table} />;
