@@ -21,10 +21,10 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import { format } from "date-fns";
-import { useEffect, useState } from "react";
+import { addMonths, format, subMonths } from "date-fns";
+import { useEffect, useMemo, useState } from "react";
 import { createPrijava } from "../../api/seminari.api";
-import { useFetchSeminari } from "../../hooks/seminar/useSeminarQueries";
+import { useSearchSeminari } from "../../hooks/seminar/useSeminarQueries";
 
 export default function PrijavaNaSeminarDialog({
   open,
@@ -91,9 +91,21 @@ export default function PrijavaNaSeminarDialog({
     }
   };
 
-  const { fetchedSeminars } = useFetchSeminari();
+  const queryParameters = useMemo(
+    () => ({
+      datumOd: subMonths(new Date(), 3),
+      datumDo: addMonths(new Date(), 3),
+    }),
+    [],
+  );
 
-  const seminari = fetchedSeminars?.seminari;
+  const { data: fetchedSeminars } = useSearchSeminari({
+    pageIndex: 0,
+    pageSize: 100,
+    queryParameters,
+  });
+
+  const seminari = fetchedSeminars?.seminari || [];
 
   return (
     <Dialog open={open} onClose={onClose} maxWidth="lg">

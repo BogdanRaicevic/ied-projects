@@ -50,7 +50,7 @@ export default function SeminariTable({
   });
 
   const deleteSeminarMutation = useDeleteSeminarMutation();
-  const { seminars, isLoading } = useSearchSeminari({
+  const { data: seminars, isLoading } = useSearchSeminari({
     pageSize: pagination.pageSize,
     pageIndex: pagination.pageIndex,
     queryParameters,
