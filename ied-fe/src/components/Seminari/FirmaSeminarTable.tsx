@@ -8,6 +8,7 @@ import {
 import { useMemo, useState } from "react";
 import { Link as RouterLink } from "react-router-dom";
 import { useSearchFirmaSeminari } from "../../hooks/seminar/useSeminarQueries";
+import { useTopScrollbar } from "../../hooks/useTopScrollbar";
 import FirmaSeminarSubTable from "./FirmaSeminarSubTable";
 
 export type SeminarDetail = {
@@ -52,7 +53,6 @@ export default function FirmaSeminarTable({
     queryParameters,
   });
 
-  // TODO: fix the type
   const seminariTableColumns: MRT_ColumnDef<FirmaSeminar>[] = [
     {
       header: "R. BR.",
@@ -113,6 +113,8 @@ export default function FirmaSeminarTable({
     },
   ];
 
+  const scrollbarProps = useTopScrollbar<FirmaSeminar>();
+
   const table = useMaterialReactTable({
     columns: useMemo<MRT_ColumnDef<FirmaSeminar>[]>(
       () => seminariTableColumns,
@@ -138,6 +140,7 @@ export default function FirmaSeminarTable({
       </Box>
     ),
     onPaginationChange: setPagination,
+    ...scrollbarProps,
   });
 
   return <MaterialReactTable table={table} />;
