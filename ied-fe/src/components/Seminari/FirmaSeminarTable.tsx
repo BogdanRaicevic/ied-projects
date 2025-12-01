@@ -1,3 +1,4 @@
+import type { FirmaSeminarSearchParams } from "@ied-shared/index";
 import { Box, Link } from "@mui/material";
 import {
   MaterialReactTable,
@@ -40,7 +41,7 @@ type FirmaSeminar = {
 export default function FirmaSeminarTable({
   queryParameters,
 }: {
-  queryParameters: any; // TODO: fix query parameters
+  queryParameters: FirmaSeminarSearchParams;
 }) {
   const [pagination, setPagination] = useState<MRT_PaginationState>({
     pageIndex: 0,

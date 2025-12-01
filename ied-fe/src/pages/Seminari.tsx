@@ -1,13 +1,17 @@
-import type { SeminarQueryParams } from "@ied-shared/types/seminar.zod";
+import type {
+  FirmaSeminarSearchParams,
+  SeminarQueryParams,
+} from "@ied-shared/types/seminar.zod";
 import { Box, Skeleton, Tab, Tabs } from "@mui/material";
 import { addMonths, subMonths } from "date-fns";
 import { useState, useTransition } from "react";
 import FirmaSeminarTable from "../components/Seminari/FirmaSeminarTable";
+import ParametriPretrageFirmaSeminar from "../components/Seminari/ParametriPretrageFirmaSeminar";
 import { ParametriPretrageSeminar } from "../components/Seminari/ParametriPretrageSeminar";
 import SeminariTable from "../components/Seminari/SeminariTable";
 
 export default function Seminari() {
-  const [tableInputParameters, setTableInputParameters] =
+  const [searchSeminariParameters, setSearchSeminariParameters] =
     useState<SeminarQueryParams>({
       naziv: "",
       predavac: "",
@@ -15,17 +19,32 @@ export default function Seminari() {
       datumOd: subMonths(new Date(), 3),
       datumDo: addMonths(new Date(), 3),
     });
+  const [firmaSeminarParams, setFirmaSeminarParams] =
+    useState<FirmaSeminarSearchParams>({
+      nazivFirme: "",
+      nazivSeminara: "",
+      tipFirme: [],
+      delatnost: [],
+      radnaMesta: [],
+      velicineFirme: [],
+      predavac: "",
+    });
+
   const [tabIndex, setTabIndex] = useState(0);
   const [isPending, startTransition] = useTransition();
 
   const handlePretraziSeminare = (values: SeminarQueryParams) => {
-    setTableInputParameters(values);
+    setSearchSeminariParameters(values);
   };
 
   const handleChange = (_event: React.SyntheticEvent, newValue: number) => {
     startTransition(() => {
       setTabIndex(newValue);
     });
+  };
+
+  const handleSearchFirmaSeminar = (values: any) => {
+    setFirmaSeminarParams(values);
   };
 
   return (
@@ -49,12 +68,15 @@ export default function Seminari() {
             {tabIndex === 0 && (
               <Box>
                 <ParametriPretrageSeminar onSubmit={handlePretraziSeminare} />
-                <SeminariTable queryParameters={tableInputParameters} />
+                <SeminariTable queryParameters={searchSeminariParameters} />
               </Box>
             )}
             {tabIndex === 1 && (
               <Box>
-                <FirmaSeminarTable queryParameters={null} />
+                <ParametriPretrageFirmaSeminar
+                  onSubmit={handleSearchFirmaSeminar}
+                />
+                <FirmaSeminarTable queryParameters={firmaSeminarParams} />
               </Box>
             )}
           </>

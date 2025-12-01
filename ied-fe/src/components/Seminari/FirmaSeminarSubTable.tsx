@@ -4,6 +4,7 @@ import {
   useMaterialReactTable,
 } from "material-react-table";
 import { useMemo } from "react";
+import { formatToRSDNumber } from "../../utils/helpers";
 import type { SeminarDetail } from "./FirmaSeminarTable";
 
 export default function FirmaSeminarSubTable({
@@ -41,10 +42,12 @@ export default function FirmaSeminarSubTable({
       {
         accessorKey: "offlineCena",
         header: "Cena (offline)",
+        Cell: ({ cell }) => formatToRSDNumber(cell.getValue<number>()),
       },
       {
         accessorKey: "onlineCena",
         header: "Cena (online)",
+        Cell: ({ cell }) => formatToRSDNumber(cell.getValue<number>()),
       },
       {
         accessorKey: "totalUcesnici",
