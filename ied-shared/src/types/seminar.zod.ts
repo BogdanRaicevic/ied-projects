@@ -36,9 +36,9 @@ export const SeminarSchema = z.object({
 });
 
 export const SeminarQueryParamsSchema = z.object({
-  naziv: z.string().optional(),
-  lokacija: z.string().optional(),
-  predavac: z.string().optional(),
+  naziv: z.string().default(""),
+  lokacija: z.string().default(""),
+  predavac: z.string().default(""),
   datumOd: z.coerce.date().optional(),
   datumDo: z.coerce.date().optional(),
   datum: z.coerce.date().optional(),
@@ -55,4 +55,18 @@ export const ExtendedSearchSeminarZod = SeminarQueryParamsSchema.extend({
 
 export type ExtendedSearchSeminarType = z.infer<
   typeof ExtendedSearchSeminarZod
+>;
+
+export const FirmaSeminarSearchParamsSchema = z.object({
+  nazivFirme: z.string().default(""),
+  nazivSeminara: z.string().default(""),
+  tipFirme: z.array(z.string()).default([]),
+  delatnost: z.array(z.string()).default([]),
+  radnaMesta: z.array(z.string()).default([]),
+  velicineFirme: z.array(z.string()).default([]),
+  predavac: z.string().default(""),
+});
+
+export type FirmaSeminarSearchParams = z.infer<
+  typeof FirmaSeminarSearchParamsSchema
 >;

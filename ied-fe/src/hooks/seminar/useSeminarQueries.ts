@@ -1,3 +1,4 @@
+import type { FirmaSeminarSearchParams } from "@ied-shared/types/seminar.zod";
 import { useQuery } from "@tanstack/react-query";
 import type { SeminarQueryParams } from "ied-shared/dist/types/seminar.zod";
 import { fetchFirmaSeminari, fetchSeminari } from "../../api/seminari.api";
@@ -18,7 +19,7 @@ export function useSearchSeminari(params: {
 export function useSearchFirmaSeminari(params: {
   pageSize: number;
   pageIndex: number;
-  queryParameters: any; // TODO: add appropriate type
+  queryParameters: FirmaSeminarSearchParams;
 }) {
   const { pageSize, pageIndex, queryParameters } = params;
 
