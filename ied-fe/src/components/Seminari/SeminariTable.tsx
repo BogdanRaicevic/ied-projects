@@ -6,33 +6,21 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import ForwardToInboxIcon from "@mui/icons-material/ForwardToInbox";
 import TableViewIcon from "@mui/icons-material/TableView";
-import {
-  Box,
-  Dialog,
-  DialogContent,
-  IconButton,
-  Paper,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Tooltip,
-} from "@mui/material";
+import { Box, Dialog, DialogContent, IconButton, Tooltip } from "@mui/material";
 import { format } from "date-fns";
 import {
   MaterialReactTable,
   type MRT_ColumnDef,
   type MRT_PaginationState,
+  type MRT_Row,
   useMaterialReactTable,
 } from "material-react-table";
 import { useMemo, useState } from "react";
 import { useDeleteSeminarMutation } from "../../hooks/seminar/useSeminarMutations";
 import { useSearchSeminari } from "../../hooks/seminar/useSeminarQueries";
 import { useTopScrollbar } from "../../hooks/useTopScrollbar";
-import PrijaveSeminarTable from "./PrijaveSeminarTable";
 import SeminarForm from "./SeminarForm";
+import SeminarSubTable from "./SeminarSubTable";
 
 export default function SeminariTable({
   queryParameters,
@@ -258,62 +246,9 @@ export default function SeminariTable({
     },
     rowCount: documents,
     enableExpanding: true,
-    renderDetailPanel: (row) => {
-      const participants = row.row.original.prijave;
-
-      const groupedParticipants = participants.reduce(
-        (acc, curr) => {
-          const key = curr.firma_naziv;
-          if (!key) {
-            return acc;
-          }
-
-          if (!acc[key]) {
-            acc[key] = [];
-          }
-          acc[key].push(curr);
-          return acc;
-        },
-        {} as Record<string, typeof participants>,
-      );
-
-      return (
-        participants.length > 0 && (
-          <TableContainer component={Paper}>
-            <Table size="small">
-              <TableHead>
-                <TableRow
-                  sx={{
-                    "& > *": { borderBottom: "unset" },
-                    backgroundColor: "#95bb9f",
-                  }}
-                >
-                  <TableCell />
-                  <TableCell>Akcije</TableCell>
-                  <TableCell>Naziv Firme</TableCell>
-                  <TableCell>Email</TableCell>
-                  <TableCell>Telefon</TableCell>
-                  <TableCell>Broj Prijavljenih</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {Object.entries(groupedParticipants).map(
-                  ([naziv_firme, prijave]) => {
-                    return (
-                      <PrijaveSeminarTable
-                        key={naziv_firme}
-                        seminarId={row.row.original._id || ""}
-                        prijave={prijave}
-                      />
-                    );
-                  },
-                )}
-              </TableBody>
-            </Table>
-          </TableContainer>
-        )
-      );
-    },
+    renderDetailPanel: ({ row }: { row: MRT_Row<SeminarZodType> }) => (
+      <SeminarSubTable row={row} />
+    ),
     ...scrollbarProps,
   });
 
