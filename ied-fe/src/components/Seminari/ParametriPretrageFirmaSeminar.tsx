@@ -9,8 +9,7 @@ export default function ParametriPretrageFirmaSeminar({
 }: {
   onSubmit: (data: FirmaSeminarSearchParams) => void;
 }) {
-  const { delatnosti, radnaMesta, tipoviFirme, velicineFirme } =
-    useFetchPretragaData();
+  const { delatnosti, tipoviFirme, velicineFirme } = useFetchPretragaData();
 
   const { control, handleSubmit, register } = useForm<FirmaSeminarSearchParams>(
     {
@@ -72,7 +71,7 @@ export default function ParametriPretrageFirmaSeminar({
             )}
           />
         </Grid>
-        <Grid size={3}>
+        {/* <Grid size={3}>
           <Controller
             name="radnaMesta"
             control={control}
@@ -86,7 +85,7 @@ export default function ParametriPretrageFirmaSeminar({
               />
             )}
           />
-        </Grid>
+        </Grid> */}
         <Grid size={3}>
           <Controller
             name="velicineFirme"
