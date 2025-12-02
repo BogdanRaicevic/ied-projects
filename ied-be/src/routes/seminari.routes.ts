@@ -1,6 +1,8 @@
 import {
   type ExtendedSearchSeminarType,
   ExtendedSearchSeminarZod,
+  type FirmaSeminarSearchParams,
+  FirmaSeminarSearchParamsSchema,
   PrijavaSchema,
   SeminarSchema,
 } from "@ied-shared/types/seminar.zod";
@@ -97,7 +99,7 @@ router.post(
 const FirmaSeminarQuerySchema = z.object({
   pageIndex: z.number().int().min(0),
   pageSize: z.number().int().min(1).max(100),
-  queryParameters: z.any(), // TODO: Fix type in the future when you know the exact shape
+  queryParameters: FirmaSeminarSearchParamsSchema,
 });
 
 router.post(
@@ -105,14 +107,12 @@ router.post(
   validateRequestBody(FirmaSeminarQuerySchema),
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const { pageIndex, pageSize, queryParameters } = req.body as Record<
-        string,
-        unknown
-      >;
+      const { pageIndex, pageSize, queryParameters } = req.body;
+
       const firmaSeminari = await searchFirmaSeminars(
         pageIndex as number,
         pageSize as number,
-        queryParameters,
+        queryParameters as FirmaSeminarSearchParams,
       );
       res.status(200).json(firmaSeminari);
     } catch (error) {

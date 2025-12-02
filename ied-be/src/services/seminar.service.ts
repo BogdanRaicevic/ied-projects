@@ -1,5 +1,6 @@
 import type {
   ExtendedSearchSeminarType,
+  FirmaSeminarSearchParams,
   PrijavaZodType,
   SeminarZodType,
 } from "@ied-shared/types/seminar.zod";
@@ -170,11 +171,15 @@ export const getZaposleniIdsFromSeminars = async (
 export const searchFirmaSeminars = async (
   pageIndex: number = 0,
   pageSize: number = 50,
-  queryParams: any, // TODO: define type
+  queryParams: FirmaSeminarSearchParams,
 ) => {
   const skip = pageIndex * pageSize;
 
-  const pipeline: PipelineStage[] = generateSeminarPipeline(skip, pageSize);
+  const pipeline: PipelineStage[] = generateSeminarPipeline(
+    skip,
+    pageSize,
+    queryParams,
+  );
 
   const aggregationResult = await Seminar.aggregate(pipeline);
   const data = aggregationResult[0]?.data ?? [];
@@ -212,8 +217,25 @@ const prepareSeminarData = (seminarData: SeminarZodType) => {
 const generateSeminarPipeline = (
   skip: number,
   pageSize: number,
+  queryParams: FirmaSeminarSearchParams,
 ): PipelineStage[] => {
+  const matchStages: PipelineStage.Match[] = [];
+
+  const seminarMatch: any = {};
+  if (queryParams.nazivSeminara) {
+    seminarMatch.naziv = { $regex: queryParams.nazivSeminara, $options: "i" };
+  }
+
+  if (queryParams.predavac) {
+    seminarMatch.predavac = { $regex: queryParams.predavac, $options: "i" };
+  }
+
+  if (Object.keys(seminarMatch).length > 0) {
+    matchStages.push({ $match: seminarMatch });
+  }
+
   return [
+    ...matchStages,
     { $unwind: "$prijave" },
 
     // Per (firma, seminar) counts
@@ -277,6 +299,9 @@ const generateSeminarPipeline = (
     },
     { $unwind: { path: "$firma", preserveNullAndEmptyArrays: true } },
 
+    // Match firma filters AFTER lookup
+    ...buildFirmaMatchStage(queryParams),
+
     // Final shape
     {
       $project: {
@@ -302,4 +327,37 @@ const generateSeminarPipeline = (
       },
     },
   ];
+};
+
+// Helper function to build firma match conditions
+const buildFirmaMatchStage = (
+  queryParams: FirmaSeminarSearchParams,
+): PipelineStage[] => {
+  const firmaMatch: any = {};
+
+  if (queryParams.nazivFirme) {
+    firmaMatch["firma.naziv_firme"] = {
+      $regex: queryParams.nazivFirme,
+      $options: "i",
+    };
+  }
+
+  if (queryParams.tipFirme && queryParams.tipFirme.length > 0) {
+    firmaMatch["firma.tip_firme"] = { $in: queryParams.tipFirme };
+  }
+
+  if (queryParams.delatnost && queryParams.delatnost.length > 0) {
+    firmaMatch["firma.delatnost"] = { $in: queryParams.delatnost };
+  }
+
+  if (queryParams.velicineFirme && queryParams.velicineFirme.length > 0) {
+    firmaMatch["firma.velicina_firme"] = { $in: queryParams.velicineFirme };
+  }
+
+  if (queryParams.radnaMesta && queryParams.radnaMesta.length > 0) {
+    // If you need to filter by radna mesta, you'll need another lookup to zaposleni
+    // This is more complex and depends on your data structure
+  }
+
+  return Object.keys(firmaMatch).length > 0 ? [{ $match: firmaMatch }] : [];
 };
