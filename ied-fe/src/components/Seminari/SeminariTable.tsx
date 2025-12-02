@@ -46,7 +46,7 @@ export default function SeminariTable({
 
   const [pagination, setPagination] = useState<MRT_PaginationState>({
     pageIndex: 0,
-    pageSize: 50,
+    pageSize: 25,
   });
 
   const deleteSeminarMutation = useDeleteSeminarMutation();
