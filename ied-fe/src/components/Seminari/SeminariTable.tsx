@@ -2,11 +2,7 @@ import type {
   SeminarQueryParams,
   SeminarZodType,
 } from "@ied-shared/types/seminar.zod";
-import DeleteIcon from "@mui/icons-material/Delete";
-import EditIcon from "@mui/icons-material/Edit";
-import ForwardToInboxIcon from "@mui/icons-material/ForwardToInbox";
-import TableViewIcon from "@mui/icons-material/TableView";
-import { Box, Dialog, DialogContent, IconButton, Tooltip } from "@mui/material";
+import { Box, Dialog, DialogContent } from "@mui/material";
 import { format } from "date-fns";
 import {
   MaterialReactTable,
@@ -16,10 +12,10 @@ import {
   useMaterialReactTable,
 } from "material-react-table";
 import { useMemo, useState } from "react";
-import { useDeleteSeminarMutation } from "../../hooks/seminar/useSeminarMutations";
 import { useSearchSeminari } from "../../hooks/seminar/useSeminarQueries";
 import { useTopScrollbar } from "../../hooks/useTopScrollbar";
 import SeminarForm from "./SeminarForm";
+import SeminariTableActionCell from "./SeminariTableActionCell";
 import SeminarSubTable from "./SeminarSubTable";
 
 export default function SeminariTable({
@@ -37,7 +33,6 @@ export default function SeminariTable({
     pageSize: 25,
   });
 
-  const deleteSeminarMutation = useDeleteSeminarMutation();
   const { data: seminars, isLoading } = useSearchSeminari({
     pageSize: pagination.pageSize,
     pageIndex: pagination.pageIndex,
@@ -49,65 +44,9 @@ export default function SeminariTable({
   const data = seminars?.seminari || [];
   const documents = seminars?.totalDocuments || 0;
 
-  const handleDelete = async (id: string) => {
-    await deleteSeminarMutation.mutateAsync(id);
-  };
-
   const handleEditSeminar = (seminar: any) => {
     setSelectedSeminar(seminar);
     setEditSeminar(true);
-  };
-
-  const handleExportUcesnikaSeminara = (seminar: Partial<SeminarZodType>) => {
-    let csv = "Redni Broj, Naziv firme, Ime i Prezime, Email\n";
-    const data = seminar.prijave
-      ?.map(
-        (p, index) =>
-          `${index + 1},${p.firma_naziv},${p.zaposleni_ime} ${p.zaposleni_prezime},${p.zaposleni_email}`,
-      )
-      .join("\n");
-
-    csv += data;
-    exportDataToCSV(seminar, "klijenti", csv);
-  };
-
-  const handleExportSeminarTable = (seminar: Partial<SeminarZodType>) => {
-    const csvRows: string =
-      `${seminar.naziv}\n` +
-      "Redni Broj, Naziv firme, Ime i Prezime, Email\n" +
-      seminar.prijave
-        ?.map((p, index) => {
-          return `${index + 1}, ${p.firma_naziv},${p.zaposleni_ime} ${p.zaposleni_prezime},${p.zaposleni_email}`;
-        })
-        .join("\n");
-
-    exportDataToCSV(seminar, "seminar", csvRows);
-  };
-
-  const exportDataToCSV = async (
-    seminar: Partial<SeminarZodType>,
-    exportSubject: "seminar" | "klijenti",
-    csvData: string,
-  ) => {
-    try {
-      // Prepend BOM for Excel to recognize UTF-8 encoding of special Serbian characters
-      const bom = "\uFEFF";
-      const blob = new Blob([bom + csvData], {
-        type: "text/csv;charset=utf-8;",
-      });
-      const url = URL.createObjectURL(blob);
-
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = `${seminar.naziv}-${exportSubject}.csv`;
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      URL.revokeObjectURL(url);
-    } catch (error) {
-      // TODO: show error snackbar or toast
-      console.error("Error exporting data:", error);
-    }
   };
 
   const seminariTableColumns: MRT_ColumnDef<SeminarZodType>[] = [
@@ -131,67 +70,12 @@ export default function SeminariTable({
       id: "actions",
       header: "Akcije",
       size: 100,
-      Cell: ({ row }) => {
-        const seminar: Partial<SeminarZodType> = row.original;
-        return (
-          <Box sx={{ display: "flex", gap: "1rem" }}>
-            <Tooltip title="Edit">
-              <IconButton
-                color="info"
-                onClick={() => {
-                  if (seminar._id) {
-                    handleEditSeminar(seminar);
-                  }
-                }}
-              >
-                <EditIcon />
-              </IconButton>
-            </Tooltip>
-            <Tooltip title="Export učesnika">
-              <IconButton
-                color="secondary"
-                onClick={() => {
-                  if (seminar._id) {
-                    handleExportUcesnikaSeminara(seminar);
-                  }
-                }}
-              >
-                <ForwardToInboxIcon />
-              </IconButton>
-            </Tooltip>
-            <Tooltip title="Export tabele">
-              <IconButton
-                color="secondary"
-                onClick={() => {
-                  if (seminar._id) {
-                    handleExportSeminarTable(seminar);
-                  }
-                }}
-              >
-                <TableViewIcon />
-              </IconButton>
-            </Tooltip>
-            <Tooltip title="Delete">
-              <IconButton
-                color="error"
-                onClick={() => {
-                  if (
-                    window.confirm(
-                      "Da li ste sigurni da želite da obrišete seminar?",
-                    )
-                  ) {
-                    if (seminar._id) {
-                      handleDelete(seminar._id);
-                    }
-                  }
-                }}
-              >
-                <DeleteIcon />
-              </IconButton>
-            </Tooltip>
-          </Box>
-        );
-      },
+      Cell: ({ row }) => (
+        <SeminariTableActionCell
+          seminar={row.original}
+          onEdit={handleEditSeminar}
+        />
+      ),
     },
     {
       header: "Naziv Seminara",
