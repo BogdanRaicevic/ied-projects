@@ -70,3 +70,31 @@ export const FirmaSeminarSearchParamsSchema = z.object({
 export type FirmaSeminarSearchParams = z.infer<
   typeof FirmaSeminarSearchParamsSchema
 >;
+
+export const SeminarDetailSchema = z.object({
+  seminar_id: z.string(),
+  naziv: z.string(),
+  predavac: z.string(),
+  datum: z.string(),
+  offlineCena: z.number(),
+  onlineCena: z.number(),
+  totalUcesnici: z.number(),
+  onlineUcesnici: z.number(),
+  offlineUcesnici: z.number(),
+});
+export type SeminarDetail = z.infer<typeof SeminarDetailSchema>;
+
+export const FirmaSeminarSchema = z.object({
+  firmaId: z.string(),
+  naziv: z.string(),
+  email: z.string(),
+  mesto: z.string(),
+  tipFirme: z.string(),
+  delatnost: z.string(),
+  brojSeminara: z.number(),
+  totalUcesnici: z.number(),
+  onlineUcesnici: z.number(),
+  offlineUcesnici: z.number(),
+  seminars: z.array(SeminarDetailSchema),
+});
+export type FirmaSeminar = z.infer<typeof FirmaSeminarSchema>;

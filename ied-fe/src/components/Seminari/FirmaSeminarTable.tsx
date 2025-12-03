@@ -1,5 +1,6 @@
 import type { FirmaSeminarSearchParams } from "@ied-shared/index";
 import { Box, Link } from "@mui/material";
+import type { FirmaSeminar } from "ied-shared/dist/types/seminar.zod";
 import {
   MaterialReactTable,
   type MRT_ColumnDef,
@@ -10,33 +11,8 @@ import { useMemo, useState } from "react";
 import { Link as RouterLink } from "react-router-dom";
 import { useSearchFirmaSeminari } from "../../hooks/seminar/useSeminarQueries";
 import { useTopScrollbar } from "../../hooks/useTopScrollbar";
+import FirmaSeminarCharts from "./FirmaSeminarCharts";
 import FirmaSeminarSubTable from "./FirmaSeminarSubTable";
-
-export type SeminarDetail = {
-  seminar_id: string;
-  naziv: string;
-  predavac: string;
-  datum: string;
-  offlineCena: number;
-  onlineCena: number;
-  totalUcesnici: number;
-  onlineUcesnici: number;
-  offlineUcesnici: number;
-};
-
-type FirmaSeminar = {
-  firmaId: string;
-  naziv: string;
-  email: string;
-  mesto: string;
-  tipFirme: string;
-  delatnost: string;
-  brojSeminara: number;
-  totalUcesnici: number;
-  onlineUcesnici: number;
-  offlineUcesnici: number;
-  seminars: SeminarDetail[];
-};
 
 export default function FirmaSeminarTable({
   queryParameters,
@@ -116,16 +92,18 @@ export default function FirmaSeminarTable({
 
   const scrollbarProps = useTopScrollbar<FirmaSeminar>();
 
+  const tableData = useMemo<FirmaSeminar[]>(
+    () => firmaSeminars?.firmas || [],
+    [firmaSeminars],
+  );
+
   const table = useMaterialReactTable({
     columns: useMemo<MRT_ColumnDef<FirmaSeminar>[]>(
       () => seminariTableColumns,
       [],
     ),
     state: { isLoading, showProgressBars: isLoading, pagination },
-    data: useMemo<FirmaSeminar[]>(
-      () => firmaSeminars?.firmas || [],
-      [firmaSeminars],
-    ),
+    data: tableData,
     enableColumnFilterModes: true,
     enableColumnOrdering: true,
     enableColumnPinning: true,
@@ -137,6 +115,7 @@ export default function FirmaSeminarTable({
     enableExpanding: true,
     renderDetailPanel: ({ row }) => (
       <Box sx={{ padding: "16px" }}>
+        <FirmaSeminarCharts data={row.original.seminars} />
         <FirmaSeminarSubTable seminars={row.original.seminars} />
       </Box>
     ),

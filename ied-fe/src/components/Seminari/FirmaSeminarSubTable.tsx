@@ -1,3 +1,4 @@
+import type { SeminarDetail } from "@ied-shared/types/seminar.zod";
 import {
   MaterialReactTable,
   type MRT_ColumnDef,
@@ -5,7 +6,6 @@ import {
 } from "material-react-table";
 import { useMemo } from "react";
 import { formatToRSDNumber } from "../../utils/helpers";
-import type { SeminarDetail } from "./FirmaSeminarTable";
 
 export default function FirmaSeminarSubTable({
   seminars,
