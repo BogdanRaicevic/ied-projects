@@ -1,4 +1,5 @@
 import type {
+  FirmaSeminarSearchParams,
   PrijavaZodType,
   SeminarQueryParams,
   SeminarZodType,
@@ -139,7 +140,7 @@ export const deleteSeminar = async (id: string) => {
 export const fetchFirmaSeminari = async (
   pageSize: number,
   pageIndex: number,
-  queryParameters: any, // TODO: define type
+  queryParameters: FirmaSeminarSearchParams,
 ) => {
   try {
     const body = {

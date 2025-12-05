@@ -54,6 +54,10 @@ export default function FirmaSeminarCharts({
     0,
   );
 
+  if (totalRevenue === 0) {
+    return <Box>Nema podataka za prikaz grafikona!</Box>;
+  }
+
   return (
     <Box
       sx={{

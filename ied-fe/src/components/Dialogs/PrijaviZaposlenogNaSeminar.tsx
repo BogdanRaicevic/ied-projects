@@ -93,6 +93,9 @@ export default function PrijavaNaSeminarDialog({
 
   const queryParameters = useMemo(
     () => ({
+      naziv: "",
+      lokacija: "",
+      predavac: "",
       datumOd: subMonths(new Date(), 3),
       datumDo: addMonths(new Date(), 3),
     }),
