@@ -39,7 +39,11 @@ export default function PretragaParameters() {
   const { data: fetchedSeminars } = useSearchSeminari({
     pageIndex: 0,
     pageSize: 50,
-    queryParameters: {},
+    queryParameters: {
+      naziv: "",
+      lokacija: "",
+      predavac: "",
+    },
   });
 
   const seminarTitles =

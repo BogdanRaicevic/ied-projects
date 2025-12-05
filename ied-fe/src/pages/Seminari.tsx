@@ -43,7 +43,7 @@ export default function Seminari() {
     });
   };
 
-  const handleSearchFirmaSeminar = (values: any) => {
+  const handleSearchFirmaSeminar = (values: FirmaSeminarSearchParams) => {
     setFirmaSeminarParams(values);
   };
 

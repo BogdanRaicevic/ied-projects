@@ -11,7 +11,7 @@ import {
   type MRT_Row,
   useMaterialReactTable,
 } from "material-react-table";
-import { useMemo, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { useSearchSeminari } from "../../hooks/seminar/useSeminarQueries";
 import { useTopScrollbar } from "../../hooks/useTopScrollbar";
 import SeminarForm from "./SeminarForm";
@@ -109,12 +109,23 @@ export default function SeminariTable({
     },
   ];
 
-  const table = useMaterialReactTable({
-    columns: useMemo<MRT_ColumnDef<SeminarZodType>[]>(
-      () => seminariTableColumns,
-      [],
+  const columns = useMemo<MRT_ColumnDef<SeminarZodType>[]>(
+    () => seminariTableColumns,
+    [],
+  );
+
+  const renderDetailPanel = useCallback(
+    ({ row }: { row: MRT_Row<SeminarZodType> }) => (
+      <Box sx={{ padding: "16px" }}>
+        <SeminarSubTable row={row} />
+      </Box>
     ),
-    data: useMemo<SeminarZodType[]>(() => data, [data]),
+    [],
+  );
+
+  const table = useMaterialReactTable({
+    columns,
+    data,
     enableColumnFilterModes: true,
     enableColumnOrdering: true,
     enableColumnPinning: true,
@@ -130,9 +141,7 @@ export default function SeminariTable({
     },
     rowCount: documents,
     enableExpanding: true,
-    renderDetailPanel: ({ row }: { row: MRT_Row<SeminarZodType> }) => (
-      <SeminarSubTable row={row} />
-    ),
+    renderDetailPanel,
     ...scrollbarProps,
   });
 

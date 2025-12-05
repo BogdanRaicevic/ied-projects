@@ -168,6 +168,7 @@ export const getZaposleniIdsFromSeminars = async (
   return [];
 };
 
+// TODO: add indexes to optimize aggregation performance
 export const searchFirmaSeminars = async (
   pageIndex: number = 0,
   pageSize: number = 50,
