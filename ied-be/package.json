@@ -39,7 +39,7 @@
     "docxtemplater": "^3.67.5",
     "dotenv": "^17.2.3",
     "es-toolkit": "^1.41.0",
-    "express": "^5.1.0",
+    "express": "^5.2.0",
     "ied-shared": "workspace:^",
     "mongoose": "^8.18.2",
     "node-cache": "^5.1.2",
