@@ -1,3 +1,22 @@
+## [1.4.0](https://github.com/BogdanRaicevic/ied-projects/compare/v1.3.6...v1.4.0) (2025-12-06)
+
+### Features
+
+* add firma seminar table ([6c82a85](https://github.com/BogdanRaicevic/ied-projects/commit/6c82a85789dd748e23f14fefc809fac1561f671a))
+* add FirmaSeminarCharts component ([d087c11](https://github.com/BogdanRaicevic/ied-projects/commit/d087c11b44a61ed8076d706583111538ed83d7b1))
+* Add migration to fix string ids in prijave ([057ba6f](https://github.com/BogdanRaicevic/ied-projects/commit/057ba6f4118cea020d98e6d71bebe0731fdd91dd))
+* add query parameters for firma seminari ([14fc73a](https://github.com/BogdanRaicevic/ied-projects/commit/14fc73aadaf80d3c050fa9d8f38959a778835fce))
+* add scroll bar at the top of the table ([2096d9a](https://github.com/BogdanRaicevic/ied-projects/commit/2096d9ae37702910c72171b55648a3434a8c6557))
+* add sub table for firma's seminars ([4775a81](https://github.com/BogdanRaicevic/ied-projects/commit/4775a817f6ae3636f7c040c0ebd16541e09aa574))
+* create service to fetch seminari for firma overview ([5cdb860](https://github.com/BogdanRaicevic/ied-projects/commit/5cdb860d9748d657b3cc7e5c3269d6b2546edc43))
+* use search params ([443ab03](https://github.com/BogdanRaicevic/ied-projects/commit/443ab03958ae7bb895c0c0406eb79c35c3201f92))
+
+### Bug Fixes
+
+* failing build ([96c12cc](https://github.com/BogdanRaicevic/ied-projects/commit/96c12cc486ba820cd16ba4ea7033c08aa68e057e))
+* Fix prijave saving ids as strings instead of ObjectID ([60f4fbe](https://github.com/BogdanRaicevic/ied-projects/commit/60f4fbe242854108974e71fa60a233663a2ad6da))
+* tables not using pagination options ([b8e5251](https://github.com/BogdanRaicevic/ied-projects/commit/b8e52514951f02d5691015e2f6570e01715aa0a3))
+
 ## [1.3.6](https://github.com/BogdanRaicevic/ied-projects/compare/v1.3.5...v1.3.6) (2025-11-23)
 
 ### Bug Fixes
