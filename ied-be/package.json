@@ -33,7 +33,7 @@
     "@aws-sdk/lib-storage": "^3.940.0",
     "@clerk/express": "^1.7.48",
     "cors": "^2.8.5",
-    "cron": "^4.3.4",
+    "cron": "^4.3.5",
     "csv-parse": "^6.1.0",
     "date-fns": "^4.1.0",
     "docxtemplater": "^3.67.5",
