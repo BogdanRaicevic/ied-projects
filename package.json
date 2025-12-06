@@ -27,7 +27,7 @@
     "@semantic-release/npm": "^13.1.2",
     "@types/node": "^22.18.13",
     "conventional-changelog-conventionalcommits": "^9.1.0",
-    "knip": "^5.69.0",
+    "knip": "^5.71.0",
     "semantic-release": "^25.0.2",
     "turbo": "^2.6.1",
     "typescript": "^5.9.3"
