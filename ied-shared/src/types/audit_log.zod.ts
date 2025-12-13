@@ -22,5 +22,15 @@ export const AuditLogQueryParamsZod = z.object({
   resourceId: z.string().optional(),
 });
 
+export const AuditLogStatsQueryParamsSchema = z.object({
+  userEmail: z.string(),
+  dateFrom: z.coerce.date().optional(),
+  dateTo: z.coerce.date().optional(),
+  model: z.string().optional().default("Firma"),
+});
+
 export type AuditLogType = z.infer<typeof AuditLogZod>;
 export type AuditLogQueryParams = z.infer<typeof AuditLogQueryParamsZod>;
+export type AuditLogStatsQueryParams = z.infer<
+  typeof AuditLogStatsQueryParamsSchema
+>;
