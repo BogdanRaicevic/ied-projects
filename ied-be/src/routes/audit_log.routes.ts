@@ -1,3 +1,4 @@
+import { AuditLogStatsQueryParamsZod } from "@ied-shared/types/audit_log.zod";
 import { parseInt as parseIntCompat } from "es-toolkit/compat";
 import {
   type NextFunction,
@@ -5,7 +6,13 @@ import {
   type Response,
   Router,
 } from "express";
-import { getAuditLogs } from "../services/audit_log.service";
+import { validateRequestQuery } from "../middleware/validateSchema";
+import {
+  getAuditLogs,
+  getUserChanges2,
+  getUserChangesByDate,
+  getUserChangesStats,
+} from "../services/audit_log.service";
 
 const router = Router();
 
@@ -26,5 +33,68 @@ router.get("/", async (req: Request, res: Response, next: NextFunction) => {
     next(error);
   }
 });
+
+router.get(
+  "/user-changes",
+  validateRequestQuery(AuditLogStatsQueryParamsZod),
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const { userEmail, dateFrom, dateTo, model } = req.query;
+
+      const result = await getUserChangesStats({
+        userEmail: userEmail as string,
+        dateFrom: dateFrom ? new Date(dateFrom as string) : undefined,
+        dateTo: dateTo ? new Date(dateTo as string) : undefined,
+        model: (model as string) || "Firma",
+      });
+
+      console.log("hit");
+
+      res.json(result);
+    } catch (error) {
+      next(error);
+    }
+  },
+);
+
+router.get(
+  "/user-changes-v2",
+  validateRequestQuery(AuditLogStatsQueryParamsZod),
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const { userEmail, dateFrom, dateTo, model } = req.query;
+
+      const result = await getUserChanges2({
+        userEmail: userEmail as string,
+        dateFrom: dateFrom ? new Date(dateFrom as string) : undefined,
+        dateTo: dateTo ? new Date(dateTo as string) : undefined,
+        model: (model as string) || "Firma",
+      });
+
+      res.json(result);
+    } catch (error) {
+      next(error);
+    }
+  },
+);
+
+router.get(
+  "/user-changes-by-date",
+  validateRequestQuery(AuditLogStatsQueryParamsZod),
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const { userEmail, dateFrom, dateTo, model } = req.query;
+      const result = await getUserChangesByDate({
+        userEmail: userEmail as string,
+        dateFrom: dateFrom ? new Date(dateFrom as string) : undefined,
+        dateTo: dateTo ? new Date(dateTo as string) : undefined,
+        model: (model as string) || "Firma",
+      });
+      res.json(result);
+    } catch (error) {
+      next(error);
+    }
+  },
+);
 
 export default router;
