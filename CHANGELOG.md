@@ -1,3 +1,10 @@
+## [1.5.1](https://github.com/BogdanRaicevic/ied-projects/compare/v1.5.0...v1.5.1) (2025-12-14)
+
+### Bug Fixes
+
+* hide metadata fields in the UI ([761028a](https://github.com/BogdanRaicevic/ied-projects/commit/761028ac01a8ee347b449158667669da917dee42))
+* remove metadata fields from audit log ([215ab1a](https://github.com/BogdanRaicevic/ied-projects/commit/215ab1ae95faaf659db7471828d37b2a9e02fb89))
+
 ## [1.5.0](https://github.com/BogdanRaicevic/ied-projects/compare/v1.4.0...v1.5.0) (2025-12-14)
 
 ### Features
