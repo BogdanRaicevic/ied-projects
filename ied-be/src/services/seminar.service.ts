@@ -174,22 +174,72 @@ export const searchFirmaSeminars = async (
   pageSize: number = 50,
   queryParams: FirmaSeminarSearchParams,
 ) => {
-  const skip = pageIndex * pageSize;
+  // Step 1: Query and filter Firma collection
+  const firmaQuery = buildFirmaQuery(queryParams);
+  const allMatchingFirmas = await Firma.find(firmaQuery, {
+    _id: 1,
+    naziv_firme: 1,
+    e_mail: 1,
+    mesto: 1,
+    tip_firme: 1,
+    delatnost: 1,
+  }).lean();
 
-  const pipeline: PipelineStage[] = generateSeminarPipeline(
-    skip,
-    pageSize,
+  if (allMatchingFirmas.length === 0) {
+    return {
+      firmas: [],
+      totalDocuments: 0,
+      totalPages: 0,
+    };
+  }
+
+  const firmaIds = allMatchingFirmas.map((f) => f._id as Types.ObjectId);
+
+  // Step 2: Aggregate seminars for these firmas
+  const seminarAggregation = await aggregateSeminarsByFirma(
+    firmaIds,
     queryParams,
   );
 
-  const aggregationResult = await Seminar.aggregate(pipeline);
-  const data = aggregationResult[0]?.data ?? [];
-  const totalDocuments = aggregationResult[0]?.totalDocuments?.[0]?.count
-    ? aggregationResult[0].totalDocuments[0].count
-    : 0;
+  // Step 3: Join firma metadata with seminar aggregations in TypeScript
+  const firmaMap = new Map(allMatchingFirmas.map((f) => [f._id.toString(), f]));
+
+  const enrichedData = seminarAggregation
+    .map((aggData) => {
+      const firma = firmaMap.get(aggData.firmaId.toString());
+      if (!firma) return null;
+
+      return {
+        firmaId: aggData.firmaId,
+        naziv: firma.naziv_firme,
+        email: firma.e_mail,
+        mesto: firma.mesto,
+        tipFirme: firma.tip_firme,
+        delatnost: firma.delatnost,
+        brojSeminara: aggData.seminars.length,
+        totalUcesnici: aggData.totalUcesnici,
+        onlineUcesnici: aggData.onlineUcesnici,
+        offlineUcesnici: aggData.offlineUcesnici,
+        seminars: aggData.seminars,
+      };
+    })
+    .filter((item) => item !== null);
+
+  // Step 4: Sort by totalUcesnici (descending) and naziv (ascending)
+  enrichedData.sort((a, b) => {
+    if (b.totalUcesnici !== a.totalUcesnici) {
+      return b.totalUcesnici - a.totalUcesnici;
+    }
+    return (a.naziv || "").localeCompare(b.naziv || "");
+  });
+
+  // Step 5: Paginate
+  const totalDocuments = enrichedData.length;
+  const skip = pageIndex * pageSize;
+  const paginatedData = enrichedData.slice(skip, skip + pageSize);
 
   return {
-    firmas: data,
+    firmas: paginatedData,
     totalDocuments,
     totalPages: Math.ceil(totalDocuments / pageSize),
   };
@@ -215,150 +265,122 @@ const prepareSeminarData = (seminarData: SeminarZodType) => {
   };
 };
 
-const generateSeminarPipeline = (
-  skip: number,
-  pageSize: number,
-  queryParams: FirmaSeminarSearchParams,
-): PipelineStage[] => {
-  const matchStages: PipelineStage.Match[] = [];
+// Helper: Build Firma query from search params
+const buildFirmaQuery = (queryParams: FirmaSeminarSearchParams) => {
+  const query: any = {};
 
+  if (queryParams.nazivFirme) {
+    query.naziv_firme = { $regex: queryParams.nazivFirme, $options: "i" };
+  }
+
+  if (queryParams.tipFirme && queryParams.tipFirme.length > 0) {
+    query.tip_firme = { $in: queryParams.tipFirme };
+  }
+
+  if (queryParams.delatnost && queryParams.delatnost.length > 0) {
+    query.delatnost = { $in: queryParams.delatnost };
+  }
+
+  if (queryParams.velicineFirme && queryParams.velicineFirme.length > 0) {
+    query.velicina_firme = { $in: queryParams.velicineFirme };
+  }
+
+  // Note: radnaMesta filtering would require a more complex approach
+  // involving nested document queries on zaposleni array
+
+  return query;
+};
+
+// Helper: Aggregate seminars by firma
+const aggregateSeminarsByFirma = async (
+  firmaIds: Types.ObjectId[],
+  queryParams: FirmaSeminarSearchParams,
+) => {
+  const pipeline: PipelineStage[] = [];
+
+  // Match seminars based on filters
   const seminarMatch: any = {};
   if (queryParams.nazivSeminara) {
     seminarMatch.naziv = { $regex: queryParams.nazivSeminara, $options: "i" };
   }
-
   if (queryParams.predavac) {
     seminarMatch.predavac = { $regex: queryParams.predavac, $options: "i" };
   }
-
   if (Object.keys(seminarMatch).length > 0) {
-    matchStages.push({ $match: seminarMatch });
+    pipeline.push({ $match: seminarMatch });
   }
 
-  return [
-    ...matchStages,
+  // Unwind prijave and filter by firma IDs
+  pipeline.push(
     { $unwind: "$prijave" },
-
-    // Per (firma, seminar) counts
     {
-      $group: {
-        _id: {
-          firma_id: "$prijave.firma_id",
-          seminar_id: "$_id",
+      $match: {
+        "prijave.firma_id": { $in: firmaIds },
+      },
+    },
+  );
+
+  // Group by (firma, seminar) to calculate counts per seminar
+  pipeline.push({
+    $group: {
+      _id: {
+        firma_id: "$prijave.firma_id",
+        seminar_id: "$_id",
+      },
+      naziv: { $first: "$naziv" },
+      predavac: { $first: "$predavac" },
+      onlineCena: { $first: "$onlineCena" },
+      offlineCena: { $first: "$offlineCena" },
+      datum: { $first: "$datum" },
+      lokacija: { $first: "$lokacija" },
+      totalUcesniciSeminar: { $sum: 1 },
+      onlineUcesniciSeminar: {
+        $sum: { $cond: [{ $eq: ["$prijave.prisustvo", "online"] }, 1, 0] },
+      },
+      offlineUcesniciSeminar: {
+        $sum: { $cond: [{ $eq: ["$prijave.prisustvo", "offline"] }, 1, 0] },
+      },
+    },
+  });
+
+  // Sort seminars by date
+  pipeline.push({ $sort: { datum: -1 } });
+
+  // Group by firma and collect seminars
+  pipeline.push({
+    $group: {
+      _id: "$_id.firma_id",
+      seminars: {
+        $push: {
+          seminar_id: "$_id.seminar_id",
+          naziv: "$naziv",
+          predavac: "$predavac",
+          lokacija: "$lokacija",
+          onlineCena: "$onlineCena",
+          offlineCena: "$offlineCena",
+          datum: "$datum",
+          totalUcesnici: "$totalUcesniciSeminar",
+          onlineUcesnici: "$onlineUcesniciSeminar",
+          offlineUcesnici: "$offlineUcesniciSeminar",
         },
-        naziv: { $first: "$naziv" },
-        predavac: { $first: "$predavac" },
-        onlineCena: { $first: "$onlineCena" },
-        offlineCena: { $first: "$offlineCena" },
-        datum: { $first: "$datum" },
-        totalUcesniciSeminar: { $sum: 1 },
-        onlineUcesniciSeminar: {
-          $sum: { $cond: [{ $eq: ["$prijave.prisustvo", "online"] }, 1, 0] },
-        },
-        offlineUcesniciSeminar: {
-          $sum: { $cond: [{ $eq: ["$prijave.prisustvo", "offline"] }, 1, 0] },
-        },
       },
+      totalUcesnici: { $sum: "$totalUcesniciSeminar" },
+      onlineUcesnici: { $sum: "$onlineUcesniciSeminar" },
+      offlineUcesnici: { $sum: "$offlineUcesniciSeminar" },
     },
+  });
 
-    // Optional sort of seminars inside each firma
-    { $sort: { datum: -1 } },
-
-    // Re-group by firma, push seminar objects
-    {
-      $group: {
-        _id: "$_id.firma_id",
-        seminars: {
-          $push: {
-            seminar_id: "$_id.seminar_id",
-            naziv: "$naziv",
-            predavac: "$predavac",
-            lokacija: "$lokacija",
-            onlineCena: "$onlineCena",
-            offlineCena: "$offlineCena",
-            datum: "$datum",
-            totalUcesnici: "$totalUcesniciSeminar",
-            onlineUcesnici: "$onlineUcesniciSeminar",
-            offlineUcesnici: "$offlineUcesniciSeminar",
-          },
-        },
-        brojSeminara: { $sum: 1 },
-        totalUcesnici: { $sum: "$totalUcesniciSeminar" },
-        onlineUcesnici: { $sum: "$onlineUcesniciSeminar" },
-        offlineUcesnici: { $sum: "$offlineUcesniciSeminar" },
-      },
+  // Project final shape
+  pipeline.push({
+    $project: {
+      _id: 0,
+      firmaId: "$_id",
+      seminars: 1,
+      totalUcesnici: 1,
+      onlineUcesnici: 1,
+      offlineUcesnici: 1,
     },
+  });
 
-    // Join firma metadata
-    {
-      $lookup: {
-        from: "firmas",
-        localField: "_id",
-        foreignField: "_id",
-        as: "firma",
-      },
-    },
-    { $unwind: { path: "$firma", preserveNullAndEmptyArrays: true } },
-
-    // Match firma filters AFTER lookup
-    ...buildFirmaMatchStage(queryParams),
-
-    // Final shape
-    {
-      $project: {
-        _id: 0,
-        firmaId: "$_id",
-        naziv: "$firma.naziv_firme",
-        email: "$firma.e_mail",
-        mesto: "$firma.mesto",
-        tipFirme: "$firma.tip_firme",
-        delatnost: "$firma.delatnost",
-        brojSeminara: 1,
-        totalUcesnici: 1,
-        onlineUcesnici: 1,
-        offlineUcesnici: 1,
-        seminars: 1,
-      },
-    },
-    { $sort: { totalUcesnici: -1, naziv: 1 } },
-    {
-      $facet: {
-        data: [{ $skip: skip }, { $limit: pageSize }],
-        totalDocuments: [{ $count: "count" }],
-      },
-    },
-  ];
-};
-
-// Helper function to build firma match conditions
-const buildFirmaMatchStage = (
-  queryParams: FirmaSeminarSearchParams,
-): PipelineStage[] => {
-  const firmaMatch: any = {};
-
-  if (queryParams.nazivFirme) {
-    firmaMatch["firma.naziv_firme"] = {
-      $regex: queryParams.nazivFirme,
-      $options: "i",
-    };
-  }
-
-  if (queryParams.tipFirme && queryParams.tipFirme.length > 0) {
-    firmaMatch["firma.tip_firme"] = { $in: queryParams.tipFirme };
-  }
-
-  if (queryParams.delatnost && queryParams.delatnost.length > 0) {
-    firmaMatch["firma.delatnost"] = { $in: queryParams.delatnost };
-  }
-
-  if (queryParams.velicineFirme && queryParams.velicineFirme.length > 0) {
-    firmaMatch["firma.velicina_firme"] = { $in: queryParams.velicineFirme };
-  }
-
-  if (queryParams.radnaMesta && queryParams.radnaMesta.length > 0) {
-    // If you need to filter by radna mesta, you'll need another lookup to zaposleni
-    // This is more complex and depends on your data structure
-  }
-
-  return Object.keys(firmaMatch).length > 0 ? [{ $match: firmaMatch }] : [];
+  return await Seminar.aggregate(pipeline);
 };
