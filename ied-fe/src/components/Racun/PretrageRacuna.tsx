@@ -125,7 +125,7 @@ export const PretrageRacuna = () => {
         },
       },
       {
-        accessorKey: "dateCreatedAt",
+        accessorKey: "created_at",
         header: "Datum kreiranja racuna",
         Cell: ({ cell }) => {
           const date = new Date(cell.getValue<string>());

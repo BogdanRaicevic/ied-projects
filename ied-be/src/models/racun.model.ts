@@ -44,11 +44,10 @@ const racunBaseSchema = new Schema(
       required: false,
     },
     stopaPdv: { type: Number, default: 20, required: true },
-    dateCreatedAt: { type: Date, default: Date.now, immutable: true },
   },
   {
     collection: "racuni",
-    timestamps: { createdAt: "dateCreatedAt", updatedAt: "dateUpdatedAt" },
+    timestamps: { createdAt: "created_at", updatedAt: "updated_at" },
   },
 );
 
