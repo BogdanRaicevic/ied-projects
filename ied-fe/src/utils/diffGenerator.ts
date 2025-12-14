@@ -2,14 +2,24 @@ import type { IArrayChange, IChange } from "@ied-shared/types/diff";
 import { diffWordsWithSpace } from "diff";
 import { isEqual } from "es-toolkit";
 
-export const generateStructuredDiff = (before: any, after: any): IChange[] | null => {
+export const generateStructuredDiff = (
+  before: any,
+  after: any,
+): IChange[] | null => {
   const changes: IChange[] = [];
   const beforeObj = before || {};
   const afterObj = after || {};
 
-  const allKeys = new Set([...Object.keys(beforeObj), ...Object.keys(afterObj)]);
+  const allKeys = new Set([
+    ...Object.keys(beforeObj),
+    ...Object.keys(afterObj),
+  ]);
 
   for (const key of allKeys) {
+    // Skip metadata fields
+    if (key === "updated_at" || key === "__v" || key === "created_at") {
+      continue;
+    }
     const oldValue = beforeObj[key];
     const newValue = afterObj[key];
 
@@ -27,8 +37,12 @@ export const generateStructuredDiff = (before: any, after: any): IChange[] | nul
           const arrayChanges: IArrayChange[] = [];
           const uniqueKey = "_id";
 
-          const beforeMap = new Map(oldValue.map((item) => [item[uniqueKey], item]));
-          const afterMap = new Map(newValue.map((item) => [item[uniqueKey], item]));
+          const beforeMap = new Map(
+            oldValue.map((item) => [item[uniqueKey], item]),
+          );
+          const afterMap = new Map(
+            newValue.map((item) => [item[uniqueKey], item]),
+          );
 
           // Pronađi izmenjene i obrisane
           for (const [id, item] of beforeMap.entries()) {
@@ -39,7 +53,12 @@ export const generateStructuredDiff = (before: any, after: any): IChange[] | nul
               // Rekurzivni poziv za objekat zaposlenog!
               const itemChanges = generateStructuredDiff(item, newItem);
               if (itemChanges) {
-                arrayChanges.push({ type: "modified", id, changes: itemChanges, item: newItem });
+                arrayChanges.push({
+                  type: "modified",
+                  id,
+                  changes: itemChanges,
+                  item: newItem,
+                });
               }
             }
           }
