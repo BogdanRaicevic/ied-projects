@@ -6,6 +6,7 @@ import type {
 } from "@ied-shared/types/seminar.zod";
 import { type PipelineStage, Types } from "mongoose";
 import { Firma } from "../models/firma.model";
+import { RacunBaseModel } from "../models/racun.model";
 import {
   type PrijavaType,
   Seminar,
@@ -201,6 +202,9 @@ export const searchFirmaSeminars = async (
     queryParams,
   );
 
+  // Step 2.5: Fetch racuni for all firma-seminar pairs
+  const racuniMap = await fetchRacuniForSeminars(seminarAggregation);
+
   // Step 3: Join firma metadata with seminar aggregations in TypeScript
   const firmaMap = new Map(allMatchingFirmas.map((f) => [f._id.toString(), f]));
 
@@ -208,6 +212,26 @@ export const searchFirmaSeminars = async (
     .map((aggData) => {
       const firma = firmaMap.get(aggData.firmaId.toString());
       if (!firma) return null;
+
+      // Enrich each seminar with ukupnaNaknada from racuni
+      const enrichedSeminars = aggData.seminars.map((seminar) => {
+        const racunKey = `${aggData.firmaId.toString()}_${seminar.seminar_id.toString()}`;
+        let ukupnaNaknada = racuniMap.get(racunKey) ?? null;
+
+        // If no racun exists, calculate from participant counts and prices
+        if (ukupnaNaknada === null) {
+          const onlineTotal =
+            (seminar.onlineCena ?? 0) * (seminar.onlineUcesnici ?? 0);
+          const offlineTotal =
+            (seminar.offlineCena ?? 0) * (seminar.offlineUcesnici ?? 0);
+          ukupnaNaknada = onlineTotal + offlineTotal;
+        }
+
+        return {
+          ...seminar,
+          ukupnaNaknada,
+        };
+      });
 
       return {
         firmaId: aggData.firmaId,
@@ -220,7 +244,7 @@ export const searchFirmaSeminars = async (
         totalUcesnici: aggData.totalUcesnici,
         onlineUcesnici: aggData.onlineUcesnici,
         offlineUcesnici: aggData.offlineUcesnici,
-        seminars: aggData.seminars,
+        seminars: enrichedSeminars,
       };
     })
     .filter((item) => item !== null);
@@ -383,4 +407,59 @@ const aggregateSeminarsByFirma = async (
   });
 
   return await Seminar.aggregate(pipeline);
+};
+
+// Helper: Fetch racuni for firma-seminar pairs with priority logic
+const fetchRacuniForSeminars = async (
+  seminarAggregation: any[],
+): Promise<Map<string, number>> => {
+  // Extract all firma-seminar pairs
+  const firmaSeminarPairs: Array<{
+    firma_id: Types.ObjectId;
+    seminar_id: Types.ObjectId;
+  }> = [];
+
+  for (const aggData of seminarAggregation) {
+    for (const seminar of aggData.seminars) {
+      firmaSeminarPairs.push({
+        firma_id: aggData.firmaId,
+        seminar_id: seminar.seminar_id,
+      });
+    }
+  }
+
+  if (firmaSeminarPairs.length === 0) {
+    return new Map();
+  }
+
+  // Fetch all relevant racuni (predracun and konacniRacun types)
+  const racuni = await RacunBaseModel.find({
+    tipRacuna: { $in: ["predracun", "konacniRacun"] },
+    "primalacRacuna.firma_id": {
+      $in: firmaSeminarPairs.map((p) => p.firma_id),
+    },
+    "seminar.seminar_id": {
+      $in: firmaSeminarPairs.map((p) => p.seminar_id),
+    },
+  }).lean();
+
+  // Build map: first racun found wins, no overwriting
+  const racuniMap = new Map<string, number>();
+
+  for (const racun of racuni) {
+    if (
+      racun.primalacRacuna?.firma_id &&
+      racun.seminar?.seminar_id &&
+      (racun as any).calculations?.ukupnaNaknada != null
+    ) {
+      const key = `${racun.primalacRacuna.firma_id.toString()}_${racun.seminar.seminar_id.toString()}`;
+
+      // Only set if not already present
+      if (!racuniMap.has(key)) {
+        racuniMap.set(key, (racun as any).calculations.ukupnaNaknada);
+      }
+    }
+  }
+
+  return racuniMap;
 };
