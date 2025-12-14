@@ -1,3 +1,9 @@
+## [1.5.0](https://github.com/BogdanRaicevic/ied-projects/compare/v1.4.0...v1.5.0) (2025-12-14)
+
+### Features
+
+* pull and calculate ukupnaNaknada ([89b9f5e](https://github.com/BogdanRaicevic/ied-projects/commit/89b9f5e3af128aeec66c03e964c6aad3761141ee))
+
 ## [1.4.0](https://github.com/BogdanRaicevic/ied-projects/compare/v1.3.6...v1.4.0) (2025-12-06)
 
 ### Features
