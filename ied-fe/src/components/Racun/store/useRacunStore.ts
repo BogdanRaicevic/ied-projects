@@ -12,7 +12,10 @@ const updateNestedProperty = (obj: any, path: string[], value: any): any => {
   const [current, ...rest] = path;
   return {
     ...obj,
-    [current]: rest.length === 0 ? value : updateNestedProperty(obj[current] || {}, rest, value),
+    [current]:
+      rest.length === 0
+        ? value
+        : updateNestedProperty(obj[current] || {}, rest, value),
   };
 };
 
@@ -23,7 +26,10 @@ interface RacunState {
   updateRacunData: (data: RacunType) => void;
   updateNestedField: (fieldPath: string, value: any) => void;
   updateCalculations: (calculations: CalculationsRacunType) => void;
-  updateField: <K extends keyof RacunType>(field: K, value: RacunType[K]) => void;
+  updateField: <K extends keyof RacunType>(
+    field: K,
+    value: RacunType[K],
+  ) => void;
 
   getCompleteRacunData: () => RacunType;
   reset: () => void;
@@ -76,7 +82,7 @@ const initialRacunData: RacunType = {
   izdavacRacuna: IzdavacRacuna.IED,
   tipRacuna: TipRacuna.PREDRACUN,
   rokZaUplatu: 0,
-  datumUplateAvansa: null
+  datumUplateAvansa: null,
 };
 
 export const useRacunStore = create<RacunState>((set, get) => ({
@@ -136,8 +142,8 @@ export const useRacunStore = create<RacunState>((set, get) => ({
         tekuciRacun: "",
         datumUplateAvansa: null,
         _id: undefined,
-        dateCreatedAt: undefined,
-        dateUpdatedAt: undefined,
+        created_at: undefined,
+        updated_at: undefined,
       },
     })),
 }));

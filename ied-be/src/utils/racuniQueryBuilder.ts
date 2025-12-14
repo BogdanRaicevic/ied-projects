@@ -1,26 +1,32 @@
 import type { PretrageRacunaType, RacunType } from "@ied-shared/index";
 import type { FilterQuery } from "mongoose";
 
-export function createRacunQuery(params: PretrageRacunaType): FilterQuery<RacunType> {
+export function createRacunQuery(
+  params: PretrageRacunaType,
+): FilterQuery<RacunType> {
   const query: FilterQuery<RacunType> = {};
 
   if (params?.pozivNaBroj) {
     query.pozivNaBroj = { $regex: params.pozivNaBroj, $options: "i" }; // Case-insensitive partial match
   }
 
-  if (params?.tipRacuna && Array.isArray(params.tipRacuna) && params.tipRacuna.length > 0) {
+  if (
+    params?.tipRacuna &&
+    Array.isArray(params.tipRacuna) &&
+    params.tipRacuna.length > 0
+  ) {
     query.tipRacuna = { $in: params.tipRacuna }; // Match any of the values
   }
 
   if (params?.datumOd && params?.datumDo) {
-    query.dateCreatedAt = {
+    query.created_at = {
       $gte: params.datumOd,
       $lte: params.datumDo,
     };
   } else if (params?.datumOd) {
-    query.dateCreatedAt = { $gte: params.datumOd };
+    query.created_at = { $gte: params.datumOd };
   } else if (params?.datumDo) {
-    query.dateCreatedAt = { $lte: params.datumDo };
+    query.created_at = { $lte: params.datumDo };
   }
 
   if (params?.izdavacRacuna && params.izdavacRacuna.length > 0) {

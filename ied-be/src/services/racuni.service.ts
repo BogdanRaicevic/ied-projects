@@ -80,7 +80,7 @@ export const searchRacuni = async (
     const [totalDocuments, racuni] = await Promise.all([
       RacunBaseModel.countDocuments(mongoQuery),
       RacunBaseModel.find(mongoQuery)
-        .sort({ dateCreatedAt: -1 })
+        .sort({ created_at: -1 })
         .skip(skip)
         .limit(pageSize)
         .lean(),
