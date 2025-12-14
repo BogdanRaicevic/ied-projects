@@ -68,8 +68,8 @@ export const createAuditMiddleware = (Model: Model<TODO_ANY>) => {
             model: Model.modelName,
             id: id,
           },
-          before: documentBefore,
-          after: documentAfter,
+          before: removeMetadataFields(documentBefore),
+          after: removeMetadataFields(documentAfter),
         });
 
         await auditLog.save();
@@ -152,27 +152,34 @@ const fetchDocumentAfter = async (
   return null;
 };
 
+const removeMetadataFields = (document: TODO_ANY): TODO_ANY => {
+  if (!document) {
+    return document;
+  }
+  const cleaned = { ...document };
+  delete cleaned.updated_at;
+  delete cleaned.__v;
+  delete cleaned.created_at;
+  return cleaned;
+};
+
 const shouldLogChange = (before: TODO_ANY, after: TODO_ANY): boolean => {
-  if (!before && after) { // Document created
+  if (!before && after) {
+    // Document created
     return true;
-  } 
-  if (before && !after) { // Document deleted
+  }
+  if (before && !after) {
+    // Document deleted
     return true;
-  } 
-  if (!before && !after) { // Nothing to log
+  }
+  if (!before && !after) {
+    // Nothing to log
     return false;
-  } 
+  }
 
   // Create copies and remove fields that should not be considered for change detection
-  const beforeComparable = { ...before };
-  const afterComparable = { ...after };
-
-  delete beforeComparable.updated_at;
-  delete afterComparable.updated_at;
-  delete beforeComparable.__v;
-  delete afterComparable.__v;
-  delete beforeComparable.created_at;
-  delete afterComparable.created_at;
+  const beforeComparable = removeMetadataFields(before);
+  const afterComparable = removeMetadataFields(after);
 
   if (before && after && isEqual(beforeComparable, afterComparable)) {
     return false; // No changes
