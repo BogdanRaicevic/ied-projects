@@ -4,6 +4,9 @@ packages:
   - ied-shared
   - mongo-migrator
 
+ignoredBuiltDependencies:
+  - esbuild
+
 onlyBuiltDependencies:
   - '@clerk/shared'
   - '@swc/core'
