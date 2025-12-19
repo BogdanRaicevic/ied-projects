@@ -1,3 +1,9 @@
+## [1.5.3](https://github.com/BogdanRaicevic/ied-projects/compare/v1.5.2...v1.5.3) (2025-12-19)
+
+### Bug Fixes
+
+* Search seminars further in the future when creating a prijava for seminar ([b979aab](https://github.com/BogdanRaicevic/ied-projects/commit/b979aab8c246b495e7bfb57c1ca6b1cf27a202b9))
+
 ## [1.5.2](https://github.com/BogdanRaicevic/ied-projects/compare/v1.5.1...v1.5.2) (2025-12-14)
 
 ### Bug Fixes
