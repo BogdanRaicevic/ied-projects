@@ -97,7 +97,7 @@ export default function PrijavaNaSeminarDialog({
       lokacija: "",
       predavac: "",
       datumOd: subMonths(new Date(), 3),
-      datumDo: addMonths(new Date(), 3),
+      datumDo: addMonths(new Date(), 6),
     }),
     [],
   );
