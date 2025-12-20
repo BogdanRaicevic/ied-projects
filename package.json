@@ -29,7 +29,7 @@
     "conventional-changelog-conventionalcommits": "^9.1.0",
     "knip": "^5.73.4",
     "semantic-release": "^25.0.2",
-    "turbo": "^2.6.3",
+    "turbo": "^2.7.0",
     "typescript": "^5.9.3"
   },
   "engines": {
