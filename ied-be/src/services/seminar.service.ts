@@ -330,6 +330,17 @@ const aggregateSeminarsByFirma = async (
   if (queryParams.predavac) {
     seminarMatch.predavac = { $regex: queryParams.predavac, $options: "i" };
   }
+
+  if (queryParams.datumOd || queryParams.datumDo) {
+    seminarMatch.datum = {};
+    if (queryParams.datumOd) {
+      seminarMatch.datum.$gte = new Date(queryParams.datumOd);
+    }
+    if (queryParams.datumDo) {
+      seminarMatch.datum.$lte = new Date(queryParams.datumDo);
+    }
+  }
+
   if (Object.keys(seminarMatch).length > 0) {
     pipeline.push({ $match: seminarMatch });
   }
