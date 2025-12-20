@@ -128,7 +128,7 @@ export default function ParametriPretrageFirmaSeminar({
             render={({ field }) => (
               <DatePicker
                 format="yyyy/MM/dd"
-                label="Startni datum"
+                label="Startni datum seminara"
                 value={field.value}
                 onChange={(date) => field.onChange(date)}
                 slotProps={{ textField: { fullWidth: true } }}
@@ -143,7 +143,7 @@ export default function ParametriPretrageFirmaSeminar({
             render={({ field }) => (
               <DatePicker
                 format="yyyy/MM/dd"
-                label="Krajnji datum"
+                label="Krajnji datum seminara"
                 value={field.value}
                 onChange={(date) => field.onChange(date)}
                 slotProps={{ textField: { fullWidth: true } }}
