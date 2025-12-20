@@ -65,6 +65,8 @@ export const FirmaSeminarSearchParamsSchema = z.object({
   radnaMesta: z.array(z.string()).default([]),
   velicineFirme: z.array(z.string()).default([]),
   predavac: z.string().default(""),
+  datumOd: z.coerce.date().optional(),
+  datumDo: z.coerce.date().optional(),
 });
 
 export type FirmaSeminarSearchParams = z.infer<
