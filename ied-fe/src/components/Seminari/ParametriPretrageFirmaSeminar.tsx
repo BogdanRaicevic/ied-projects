@@ -1,5 +1,7 @@
 import type { FirmaSeminarSearchParams } from "@ied-shared/types/seminar.zod";
 import { Button, Grid, TextField } from "@mui/material";
+import { DatePicker } from "@mui/x-date-pickers";
+import { addMonths } from "date-fns";
 import { Controller, useForm } from "react-hook-form";
 import { useFetchPretragaData } from "../../hooks/useFetchData";
 import AutocompleteMultiple from "../Autocomplete/Multiple";
@@ -20,6 +22,9 @@ export default function ParametriPretrageFirmaSeminar({
         delatnost: [],
         radnaMesta: [],
         velicineFirme: [],
+        datumOd: new Date(),
+        datumDo: addMonths(new Date(), 1),
+        predavac: "",
       },
     },
   );
@@ -101,6 +106,52 @@ export default function ParametriPretrageFirmaSeminar({
             )}
           />
         </Grid>
+        <Grid size={3}>
+          <Controller
+            name="predavac"
+            control={control}
+            render={({ field }) => (
+              <TextField
+                {...field}
+                fullWidth
+                label="Predavač"
+                onChange={(e) => field.onChange(e.target.value)}
+              />
+            )}
+          />
+        </Grid>
+
+        <Grid size={3}>
+          <Controller
+            name="datumOd"
+            control={control}
+            render={({ field }) => (
+              <DatePicker
+                format="yyyy/MM/dd"
+                label="Startni datum"
+                value={field.value}
+                onChange={(date) => field.onChange(date)}
+                slotProps={{ textField: { fullWidth: true } }}
+              />
+            )}
+          />
+        </Grid>
+        <Grid size={3}>
+          <Controller
+            name="datumDo"
+            control={control}
+            render={({ field }) => (
+              <DatePicker
+                format="yyyy/MM/dd"
+                label="Krajnji datum"
+                value={field.value}
+                onChange={(date) => field.onChange(date)}
+                slotProps={{ textField: { fullWidth: true } }}
+              />
+            )}
+          />
+        </Grid>
+
         <Button type="submit" variant="contained" color="primary">
           Pretraži
         </Button>
