@@ -152,9 +152,11 @@ export default function ParametriPretrageFirmaSeminar({
           />
         </Grid>
 
-        <Button type="submit" variant="contained" color="primary">
-          Pretraži
-        </Button>
+        <Grid size={12} sx={{ mb: 2 }}>
+          <Button type="submit" variant="contained" color="primary">
+            Pretraži
+          </Button>
+        </Grid>
       </Grid>
     </form>
   );
