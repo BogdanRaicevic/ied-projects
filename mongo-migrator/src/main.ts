@@ -39,7 +39,7 @@ const loadMigrations = (): MigrationFile[] => {
       const [timestamp, ...nameParts] = file.split("_");
       const name = nameParts.join("_").replace(".ts", "");
       return {
-        timestamp: parseInt(timestamp, 10),
+        timestamp: parseInt(timestamp!, 10),
         name,
         up: require(path.join(migrationsDir, file)).up,
       };

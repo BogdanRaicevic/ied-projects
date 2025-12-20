@@ -98,7 +98,11 @@ router.post("/export-zaposleni-data", async (req, res) => {
 router.post(
   "/:firmaId/zaposleni",
   firmaAudit,
-  async (req: Request, res: Response, next: NextFunction) => {
+  async (
+    req: Request<{ firmaId: string }>,
+    res: Response,
+    next: NextFunction,
+  ) => {
     try {
       const { firmaId } = req.params;
       const updatedFirma = await createZaposleni(firmaId, req.body);
@@ -113,7 +117,11 @@ router.post(
 router.put(
   "/:firmaId/zaposleni/:zaposleniId",
   firmaAudit,
-  async (req: Request, res: Response, next: NextFunction) => {
+  async (
+    req: Request<{ firmaId: string; zaposleniId: string }>,
+    res: Response,
+    next: NextFunction,
+  ) => {
     try {
       const { firmaId, zaposleniId } = req.params;
       const updatedFirma = await updateZaposleni(
@@ -131,7 +139,11 @@ router.put(
 router.delete(
   "/:firmaId/zaposleni/:zaposleniId",
   firmaAudit,
-  async (req: Request, res: Response, next: NextFunction) => {
+  async (
+    req: Request<{ firmaId: string; zaposleniId: string }>,
+    res: Response,
+    next: NextFunction,
+  ) => {
     try {
       const { firmaId, zaposleniId } = req.params;
       await deleteZaposleni(firmaId, zaposleniId);
@@ -161,9 +173,10 @@ router.get("/:id", async (req: Request, res: Response, next: NextFunction) => {
 router.delete(
   "/:id",
   firmaAudit,
-  async (req: Request, res: Response, next: NextFunction) => {
+  async (req: Request<{ id: string }>, res: Response, next: NextFunction) => {
     try {
-      const firma = await deleteById(req.params.id);
+      const firmaId = req.params.id;
+      const firma = await deleteById(firmaId);
       if (firma) {
         res.json(firma);
       } else {
@@ -193,9 +206,10 @@ router.post(
 router.put(
   "/:id",
   firmaAudit,
-  async (req: Request, res: Response, next: NextFunction) => {
+  async (req: Request<{ id: string }>, res: Response, next: NextFunction) => {
     try {
-      const firma = await updateById(req.params.id, req.body);
+      const firmaId = req.params.id;
+      const firma = await updateById(firmaId, req.body);
       if (firma) {
         res.json(firma);
       } else {

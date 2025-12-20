@@ -62,19 +62,22 @@ router.post(
   },
 );
 
-router.get("/:id", async (req: Request, res: Response, next: NextFunction) => {
-  try {
-    const { id } = req.params;
-    const racun = await getRacunById(id);
-    if (!racun) {
-      res.status(404).send("Racun not found");
-      return;
+router.get(
+  "/:id",
+  async (req: Request<{ id: string }>, res: Response, next: NextFunction) => {
+    try {
+      const { id } = req.params;
+      const racun = await getRacunById(id);
+      if (!racun) {
+        res.status(404).send("Racun not found");
+        return;
+      }
+      res.json(racun);
+    } catch (error) {
+      next(error);
     }
-    res.json(racun);
-  } catch (error) {
-    next(error);
-  }
-});
+  },
+);
 
 router.post(
   "/save",

@@ -10,6 +10,10 @@ const updateNestedProperty = (obj: any, path: string[], value: any): any => {
   if (path.length === 0) return value;
 
   const [current, ...rest] = path;
+  if (!current) {
+    return obj;
+  }
+
   return {
     ...obj,
     [current]:

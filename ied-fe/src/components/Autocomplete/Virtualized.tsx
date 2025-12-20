@@ -73,7 +73,10 @@ const ListboxComponent = React.forwardRef<
   const itemCount = itemData.length;
   const itemSize = smUp ? 36 : 48;
 
-  const getChildSize = (child: React.ReactElement) => {
+  const getChildSize = (child: React.ReactElement | undefined) => {
+    if (!child) {
+      return itemSize;
+    }
     // biome-ignore lint: // lint/suspicious/noPrototypeBuiltins
     if (child.hasOwnProperty("group")) {
       return 48;

@@ -14,8 +14,8 @@ export const up = async (db: Connection) => {
       const oldPib = ((document?.PIB as string) || "").toLowerCase();
       if (oldPib.includes("mb:")) {
         const pibParts = oldPib.split("mb:");
-        const pibPart = pibParts[0].trim().replace(/,/g, "");
-        const mbPart = pibParts[1].trim();
+        const pibPart = pibParts[0]!.trim().replace(/,/g, "");
+        const mbPart = pibParts[1]!.trim();
 
         const numberRegex = /^\d*$/;
 

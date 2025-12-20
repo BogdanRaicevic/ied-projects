@@ -51,7 +51,7 @@ router.post(
   "/update/:id",
   seminariAudit,
   validateRequestBody(SeminarSchema),
-  async (req: Request, res: Response, next: NextFunction) => {
+  async (req: Request<{ id: string }>, res: Response, next: NextFunction) => {
     const { id } = req.params;
     try {
       const updatedSeminar = await updateSeminar(id, req.body);
@@ -133,24 +133,27 @@ router.get(
   },
 );
 
-router.get("/:id", async (req: Request, res: Response, next: NextFunction) => {
-  try {
-    const seminar = await getSeminarById(req.params.id);
-    res.status(200).json(seminar);
-  } catch (error) {
-    next(error);
-  }
-});
+router.get(
+  "/:id",
+  async (req: Request<{ id: string }>, res: Response, next: NextFunction) => {
+    try {
+      const seminar = await getSeminarById(req.params.id);
+      res.status(200).json(seminar);
+    } catch (error) {
+      next(error);
+    }
+  },
+);
 
 router.post(
   "/create-prijava/:id",
   seminariAudit, // Apply audit middleware
   validateRequestBody(PrijavaSchema),
-  async (req: Request, res: Response, next: NextFunction) => {
-    const { id: seminar_id } = req.params;
+  async (req: Request<{ id: string }>, res: Response, next: NextFunction) => {
+    const { id } = req.params;
     const prijava = req.body as z.infer<typeof PrijavaSchema>;
     try {
-      const response = await createPrijava(seminar_id, prijava);
+      const response = await createPrijava(id, prijava);
       res.status(201).json(response);
     } catch (error: unknown) {
       if (error instanceof ErrorWithCause && error.code === "duplicate") {
@@ -166,11 +169,11 @@ router.post(
   "/update-prijava/:id",
   seminariAudit, // Apply audit middleware
   validateRequestBody(PrijavaSchema),
-  async (req: Request, res: Response, next: NextFunction) => {
-    const { id: seminar_id } = req.params;
+  async (req: Request<{ id: string }>, res: Response, next: NextFunction) => {
+    const { id } = req.params;
     const prijava = req.body as z.infer<typeof PrijavaSchema>;
     try {
-      const response = await updatePrijava(seminar_id, prijava);
+      const response = await updatePrijava(id, prijava);
       res.status(201).json(response);
     } catch (error: unknown) {
       if (error instanceof ErrorWithCause && error.code === "duplicate") {
@@ -203,7 +206,7 @@ router.delete(
 router.delete(
   "/delete/:id",
   seminariAudit, // Apply audit middleware
-  async (req: Request, res: Response, next: NextFunction) => {
+  async (req: Request<{ id: string }>, res: Response, next: NextFunction) => {
     try {
       const deletedSeminar = await deleteSeminar(req.params.id);
       res.status(200).json(deletedSeminar);

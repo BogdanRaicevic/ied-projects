@@ -72,12 +72,12 @@ export default function PrijaveSeminarTable({
             </IconButton>
           </Tooltip>
         </TableCell>
-        <TableCell>{prijave[0].firma_naziv}</TableCell>
-        <TableCell>{prijave[0].firma_email}</TableCell>
-        <TableCell>{prijave[0].firma_telefon}</TableCell>
+        <TableCell>{prijave[0]?.firma_naziv}</TableCell>
+        <TableCell>{prijave[0]?.firma_email}</TableCell>
+        <TableCell>{prijave[0]?.firma_telefon}</TableCell>
         <TableCell>{prijave.length}</TableCell>
       </TableRow>
-      <TableRow key={prijave[0].firma_id} sx={{ backgroundColor: "#c8d3c8" }}>
+      <TableRow key={prijave[0]?.firma_id} sx={{ backgroundColor: "#c8d3c8" }}>
         <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
           <Collapse in={open} timeout="auto" unmountOnExit>
             <Box sx={{ margin: 1 }}>
