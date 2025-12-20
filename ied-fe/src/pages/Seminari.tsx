@@ -28,6 +28,8 @@ export default function Seminari() {
       radnaMesta: [],
       velicineFirme: [],
       predavac: "",
+      datumOd: new Date(),
+      datumDo: addMonths(new Date(), 1),
     });
 
   const [tabIndex, setTabIndex] = useState(0);
