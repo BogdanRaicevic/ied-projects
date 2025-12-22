@@ -36,6 +36,14 @@ export const SeminarSchema = z.object({
   tipSeminara: z.string(),
 });
 
+export const SeminarSearchResultsSchema = z.object({
+  seminari: z.array(SeminarSchema),
+  totalDocuments: z.number(),
+  totalPages: z.number(),
+});
+
+export type SeminarSearchResults = z.infer<typeof SeminarSearchResultsSchema>;
+
 export const SeminarQueryParamsSchema = z.object({
   naziv: z.string().default(""),
   lokacija: z.string().default(""),
@@ -103,3 +111,16 @@ export const FirmaSeminarSchema = z.object({
   seminars: z.array(SeminarDetailSchema),
 });
 export type FirmaSeminar = z.infer<typeof FirmaSeminarSchema>;
+
+export const FirmaSeminarResultSchema = z.object({
+  firmas: z.array(FirmaSeminarSchema),
+  totalDocuments: z.number(),
+  totalPages: z.number(),
+});
+export type FirmaSeminarResult = z.infer<typeof FirmaSeminarResultSchema>;
+
+export const TipSeminaraSchema = z.object({
+  _id: z.string(),
+  tipSeminara: z.string(),
+});
+export type TipSeminara = z.infer<typeof TipSeminaraSchema>;

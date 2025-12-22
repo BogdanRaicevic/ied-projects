@@ -1,3 +1,4 @@
+import type { TipSeminara } from "@ied-shared/types/seminar.zod";
 import { type UseQueryResult, useQuery } from "@tanstack/react-query";
 import { fetchAllDelatnosti } from "../api/delatnosti.api";
 import { fetchAllMesta } from "../api/mesta.api";
@@ -59,9 +60,7 @@ export const useFetchIzdavaciRacuna = () => {
   });
 };
 
-export function useFetchTipoviSeminara(): UseQueryResult<
-  { _id: string; tipSeminara: string }[]
-> {
+export function useFetchTipoviSeminara(): UseQueryResult<TipSeminara[]> {
   return useQuery({
     queryKey: ["tipoviSeminara"],
     queryFn: async () => {
