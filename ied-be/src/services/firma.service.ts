@@ -1,3 +1,4 @@
+import { NEGACIJA } from "@ied-shared/constants/firma";
 import type { ExportFirma, ExportZaposlenih } from "@ied-shared/index";
 import type { FirmaQueryParams } from "@ied-shared/types/firma.zod";
 import { type FilterQuery, sanitizeFilter } from "mongoose";
@@ -131,7 +132,7 @@ export const exportSearchedZaposleniData = async (
     queryParameters.seminari || [],
   );
 
-  if (queryParameters.negacije?.includes("negate-radno-mesto")) {
+  if (queryParameters.negacije?.includes(NEGACIJA.radnoMesto)) {
     mongoQuery.zaposleni = {
       $elemMatch: { radno_mesto: { $nin: queryParameters.radnaMesta } }, // TODO: investigate do i need ?? []
     };
@@ -167,7 +168,7 @@ export const exportSearchedZaposleniData = async (
         const isZaposleniInSeminar =
           seminarAttendees?.includes(z._id.toString()) ?? false;
         const isRadnoMestoNegated =
-          queryParameters.negacije?.includes("negate-radno-mesto") ?? false;
+          queryParameters.negacije?.includes(NEGACIJA.radnoMesto) ?? false;
         const isRadnoMestoIncluded =
           queryParameters.radnaMesta.includes(z.radno_mesto) ?? false;
         const hasNoRadnaMestaFilter = queryParameters.radnaMesta.length === 0;

@@ -1,5 +1,6 @@
 import z from "zod";
 import { SUPPRESSION_REASONS } from "../constants/email";
+import { NEGACIJA } from "../constants/firma";
 
 export const ExportZaposlenihSchema = z.array(
   z.object({
@@ -80,7 +81,7 @@ export const FirmaQueryParamsSchema = z.object({
   tipoviFirme: z.array(z.string()).optional(),
   radnaMesta: z.array(z.string()).optional(),
   velicineFirmi: z.array(z.string()).optional(),
-  negacije: z.array(z.string()).optional(),
+  negacije: z.array(z.enum(NEGACIJA)).optional(),
   stanjaFirme: z.array(z.string()).optional(),
   jbkjs: z.string().optional(),
   maticniBroj: z.string().optional(),
@@ -98,6 +99,7 @@ export const FirmaQueryParamsSchema = z.object({
   emailZaposlenog: z.string().optional(),
   firmaPrijavljeni: z.boolean().optional(),
   zaposleniPrijavljeni: z.boolean().optional(),
+  tipSeminara: z.array(z.string()).optional(),
 });
 export type FirmaQueryParams = z.infer<typeof FirmaQueryParamsSchema>;
 
