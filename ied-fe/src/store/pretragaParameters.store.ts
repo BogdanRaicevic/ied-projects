@@ -1,3 +1,4 @@
+import type { NEGACIJA } from "@ied-shared/constants/firma";
 import type { FirmaQueryParams } from "@ied-shared/types/firma.zod";
 import { create } from "zustand";
 
@@ -13,7 +14,7 @@ type PretragaStore = {
     pageIndex: number;
     pageSize: number;
   }) => void;
-  toggleNegation: (value: string) => void;
+  toggleNegation: (value: (typeof NEGACIJA)[keyof typeof NEGACIJA]) => void;
   setAppliedParameters: () => void;
   loadFromStorage: () => void;
   resetParameters: () => void;
