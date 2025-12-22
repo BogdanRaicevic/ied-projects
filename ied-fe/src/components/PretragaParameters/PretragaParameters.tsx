@@ -14,7 +14,7 @@ import {
   TextField,
 } from "@mui/material";
 import { format } from "date-fns";
-import type { SeminarZodType, TipSeminara } from "ied-shared";
+import type { TipSeminara } from "ied-shared";
 import { useCallback, useEffect, useMemo } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { useSearchSeminari } from "../../hooks/seminar/useSeminarQueries";
