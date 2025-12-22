@@ -27,6 +27,7 @@ export default function Seminari() {
       lokacija: "",
       datumOd: subMonths(new Date(), 3),
       datumDo: addMonths(new Date(), 3),
+      tipSeminara: [],
     });
   const [firmaSeminarParams, setFirmaSeminarParams] =
     useState<FirmaSeminarSearchParams>({
@@ -39,6 +40,7 @@ export default function Seminari() {
       predavac: "",
       datumOd: new Date(),
       datumDo: addMonths(new Date(), 1),
+      tipSeminara: [],
     });
 
   const [tabIndex, setTabIndex] = useState(0);

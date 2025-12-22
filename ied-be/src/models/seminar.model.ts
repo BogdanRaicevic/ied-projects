@@ -9,6 +9,7 @@ export type SeminarType = Document & {
   datum?: Date;
   detalji?: string;
   prijave: PrijavaType[];
+  tipSeminara: Types.ObjectId;
 };
 
 export type PrijavaType = {
@@ -55,6 +56,11 @@ const seminarSchema = new Schema<SeminarType>(
     datum: { type: Date, required: false },
     detalji: { type: String, required: false },
     prijave: [prijavaSchema],
+    tipSeminara: {
+      type: Schema.Types.ObjectId,
+      ref: "TipSeminara",
+      required: true,
+    },
   },
   { collection: "seminari" },
 );

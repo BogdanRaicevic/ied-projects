@@ -40,6 +40,7 @@ export default function SeminarForm({
     datum: new Date(),
     detalji: "",
     prijave: [],
+    tipSeminara: "",
   };
 
   const {
