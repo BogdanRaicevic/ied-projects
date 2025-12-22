@@ -74,21 +74,18 @@ export const createFirmaQuery = async (params: FirmaQueryParams) => {
     };
   }
 
+  query.$and = query.$and || [];
+  ``;
   if (Array.isArray(params?.seminari) && params.seminari.length > 0) {
     const seminarIds = params.seminari.map((s) => s._id);
+    const ids = await Seminar.distinct("prijave.firma_id", {
+      _id: { $in: seminarIds },
+    });
 
     if (negateSeminar) {
-      query._id = {
-        $nin: await Seminar.distinct("prijave.firma_id", {
-          _id: { $in: seminarIds },
-        }),
-      };
+      query.$and.push({ _id: { $nin: ids } });
     } else {
-      query._id = {
-        $in: await Seminar.distinct("prijave.firma_id", {
-          _id: { $in: seminarIds },
-        }),
-      };
+      query.$and.push({ _id: { $in: ids } });
     }
   }
 
@@ -96,17 +93,11 @@ export const createFirmaQuery = async (params: FirmaQueryParams) => {
     const seminarFilter: FilterQuery<any> = {
       tipSeminara: { $in: params.tipSeminara },
     };
-
+    const ids = await Seminar.distinct("prijave.firma_id", seminarFilter);
     if (negateTipSeminara) {
-      query._id = {
-        ...query._id,
-        $nin: await Seminar.distinct("prijave.firma_id", seminarFilter),
-      };
+      query.$and.push({ _id: { $nin: ids } });
     } else {
-      query._id = {
-        ...query._id,
-        $in: await Seminar.distinct("prijave.firma_id", seminarFilter),
-      };
+      query.$and.push({ _id: { $in: ids } });
     }
   }
 
