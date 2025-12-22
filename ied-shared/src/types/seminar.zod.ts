@@ -42,6 +42,7 @@ export const SeminarQueryParamsSchema = z.object({
   datumOd: z.coerce.date().optional(),
   datumDo: z.coerce.date().optional(),
   datum: z.coerce.date().optional(),
+  tipSeminara: z.array(z.string()).default([]),
 });
 
 export type PrijavaZodType = z.infer<typeof PrijavaSchema>;

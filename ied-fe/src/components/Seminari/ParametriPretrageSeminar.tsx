@@ -8,6 +8,7 @@ import { Box, Button, FormControl, Grid, TextField } from "@mui/material";
 import { DatePicker } from "@mui/x-date-pickers";
 import { addMonths, subMonths } from "date-fns";
 import { Controller, useForm } from "react-hook-form";
+import AutocompleteMultiple from "../Autocomplete/Multiple";
 
 export function ParametriPretrageSeminar({
   onSubmit,
@@ -124,6 +125,22 @@ export function ParametriPretrageSeminar({
               )}
             />
           </FormControl>
+        </Grid>
+
+        <Grid size={3}>
+          <Controller
+            name="tipSeminara"
+            control={control}
+            render={({ field }) => (
+              <AutocompleteMultiple
+                placeholder="Tip seminara"
+                data={[]}
+                checkedValues={field.value || []}
+                onCheckedChange={field.onChange}
+                id={"tip-seminara-fs"}
+              />
+            )}
+          />
         </Grid>
 
         <Grid

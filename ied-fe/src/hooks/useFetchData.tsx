@@ -5,6 +5,7 @@ import { getIzdavaciRacuna } from "../api/racuni.api";
 import { fetchAllRadnaMesta } from "../api/radna_mesto.api";
 import { fetchAllStanjaFirme } from "../api/stanja_firme.api";
 import { fetchAllTipoviFirme } from "../api/tip_firme.api";
+import { fetchAllTipoviSeminara } from "../api/tip_seminara.api";
 import { fetchAllVelicineFirme } from "../api/velicina_firme.api";
 
 export function useFetchPretragaData() {
@@ -57,3 +58,13 @@ export const useFetchIzdavaciRacuna = () => {
     },
   });
 };
+
+export function useFetchTipoviSeminara() {
+  return useQuery({
+    queryKey: ["tipoviSeminara"],
+    queryFn: async () => {
+      const response = await fetchAllTipoviSeminara();
+      return response;
+    },
+  });
+}
