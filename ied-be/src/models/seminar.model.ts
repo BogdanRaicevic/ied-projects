@@ -9,7 +9,7 @@ export type SeminarType = Document & {
   datum?: Date;
   detalji?: string;
   prijave: PrijavaType[];
-  tipSeminara: Types.ObjectId;
+  tipSeminara?: Types.ObjectId;
 };
 
 export type PrijavaType = {
