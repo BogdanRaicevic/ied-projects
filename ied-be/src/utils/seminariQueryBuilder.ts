@@ -30,5 +30,9 @@ export function createSeminarQuery(
     query.datum = { $lte: params.datumDo };
   }
 
+  if (params?.tipSeminara && params.tipSeminara.length > 0) {
+    query.tipSeminara = { $in: params.tipSeminara };
+  }
+
   return query;
 }

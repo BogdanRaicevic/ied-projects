@@ -64,7 +64,7 @@ router.post(
 
 router.post(
   "/search",
-  validateRequestBody(ExtendedSearchSeminarZod), // TODO: fix this type
+  validateRequestBody(ExtendedSearchSeminarZod),
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       const paginationResult = await searchSeminars(

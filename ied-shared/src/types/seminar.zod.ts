@@ -33,6 +33,7 @@ export const SeminarSchema = z.object({
   datum: z.coerce.date(),
   detalji: z.string().optional(),
   prijave: z.array(PrijavaSchema).default([]),
+  tipSeminara: z.string(),
 });
 
 export const SeminarQueryParamsSchema = z.object({
@@ -68,6 +69,7 @@ export const FirmaSeminarSearchParamsSchema = z.object({
   predavac: z.string().default(""),
   datumOd: z.coerce.date().optional(),
   datumDo: z.coerce.date().optional(),
+  tipSeminara: z.array(z.string()).default([]),
 });
 
 export type FirmaSeminarSearchParams = z.infer<
