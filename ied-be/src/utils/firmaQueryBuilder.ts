@@ -75,7 +75,6 @@ export const createFirmaQuery = async (params: FirmaQueryParams) => {
   }
 
   query.$and = query.$and || [];
-  ``;
   if (Array.isArray(params?.seminari) && params.seminari.length > 0) {
     const seminarIds = params.seminari.map((s) => s);
     const ids = await Seminar.distinct("prijave.firma_id", {

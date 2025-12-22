@@ -14,6 +14,7 @@ import {
 } from "@mui/material";
 import { DatePicker } from "@mui/x-date-pickers";
 import { addMonths, subMonths } from "date-fns";
+import type { TipSeminara } from "ied-shared";
 import { Controller, useForm } from "react-hook-form";
 import { useFetchTipoviSeminara } from "../../hooks/useFetchData";
 import MultiSelectAutocomplete from "../Autocomplete/MultiSelectAutocomplete";
@@ -112,8 +113,8 @@ export function ParametriPretrageSeminar({
               name="tipSeminara"
               control={control}
               render={({ field }) => (
-                <MultiSelectAutocomplete
-                  labelKey={"tipSeminara" as any}
+                <MultiSelectAutocomplete<TipSeminara>
+                  labelKey="tipSeminara"
                   options={tipoviSeminara || []}
                   value={field.value || []}
                   onChange={(newValue) => field.onChange(newValue)}

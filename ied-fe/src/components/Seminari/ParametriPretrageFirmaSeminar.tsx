@@ -1,4 +1,7 @@
-import type { FirmaSeminarSearchParams } from "@ied-shared/types/seminar.zod";
+import type {
+  FirmaSeminarSearchParams,
+  TipSeminara,
+} from "@ied-shared/types/seminar.zod";
 import { UnfoldLess } from "@mui/icons-material";
 import { Box, Button, FormControl, Grid, TextField } from "@mui/material";
 import { DatePicker } from "@mui/x-date-pickers";
@@ -132,8 +135,8 @@ export default function ParametriPretrageFirmaSeminar({
               name="tipSeminara"
               control={control}
               render={({ field }) => (
-                <MultiSelectAutocomplete
-                  labelKey={"tipSeminara" as any}
+                <MultiSelectAutocomplete<TipSeminara>
+                  labelKey="tipSeminara"
                   options={tipoviSeminara || []}
                   value={field.value || []}
                   onChange={(newValue) => field.onChange(newValue)}

@@ -1,7 +1,7 @@
 import { Autocomplete, Chip, TextField } from "@mui/material";
-import { memo, useCallback, useMemo } from "react";
+import { useCallback, useMemo } from "react";
 
-interface MultiSelectAutocomplete<T> {
+interface MultiSelectAutocompleteProps<T> {
   labelKey: keyof T;
   options: T[];
   value: string[];
@@ -14,16 +14,14 @@ interface MultiSelectAutocomplete<T> {
  * T is a generic type that extends an object with at least an _id field
  */
 
-export default memo(function MultiSelectAutocomplete<
-  T extends { _id: string },
->({
+export default function MultiSelectAutocomplete<T extends { _id: string }>({
   options,
   value,
   onChange,
   inputLabel,
   inputPlaceholder,
   labelKey,
-}: MultiSelectAutocomplete<T>) {
+}: MultiSelectAutocompleteProps<T>) {
   // Memoize selected options to avoid recalculating on every render
   const selectedOptions = useMemo(
     () => options.filter((opt) => value?.includes(opt._id)),
@@ -90,4 +88,4 @@ export default memo(function MultiSelectAutocomplete<
       )}
     />
   );
-});
+}
