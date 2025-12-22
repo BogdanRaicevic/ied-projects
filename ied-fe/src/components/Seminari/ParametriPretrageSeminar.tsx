@@ -6,7 +6,6 @@ import {
 import { UnfoldLess } from "@mui/icons-material";
 import {
   Alert,
-  Autocomplete,
   Box,
   Button,
   FormControl,
@@ -17,6 +16,7 @@ import { DatePicker } from "@mui/x-date-pickers";
 import { addMonths, subMonths } from "date-fns";
 import { Controller, useForm } from "react-hook-form";
 import { useFetchTipoviSeminara } from "../../hooks/useFetchData";
+import MultiSelectAutocomplete from "../Autocomplete/MultiSelectAutocomplete";
 
 export function ParametriPretrageSeminar({
   onSubmit,
@@ -112,34 +112,15 @@ export function ParametriPretrageSeminar({
               name="tipSeminara"
               control={control}
               render={({ field }) => (
-                <Autocomplete
-                  multiple
+                <MultiSelectAutocomplete
+                  labelKey={"tipSeminara" as any}
                   options={tipoviSeminara || []}
-                  getOptionLabel={(option) => option.tipSeminara}
-                  value={
-                    tipoviSeminara?.filter((tip) =>
-                      field.value?.includes(tip._id),
-                    ) || []
+                  value={field.value || []}
+                  onChange={(newValue) => field.onChange(newValue)}
+                  inputLabel="Tip seminara"
+                  inputPlaceholder={
+                    isLoading ? "Učitavanje..." : "Izaberite tipove"
                   }
-                  onChange={(_event, newValue) => {
-                    field.onChange(newValue.map((item) => item._id));
-                  }}
-                  loading={isLoading}
-                  disabled={isLoading}
-                  isOptionEqualToValue={(option, value) =>
-                    option._id === value._id
-                  }
-                  renderInput={(params) => (
-                    <TextField
-                      {...params}
-                      label="Tip seminara"
-                      placeholder={
-                        isLoading ? "Učitavanje..." : "Izaberite tipove"
-                      }
-                      error={!!errors.tipSeminara}
-                      helperText={errors.tipSeminara?.message}
-                    />
-                  )}
                 />
               )}
             />

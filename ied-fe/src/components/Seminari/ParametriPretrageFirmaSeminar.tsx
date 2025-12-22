@@ -1,5 +1,5 @@
 import type { FirmaSeminarSearchParams } from "@ied-shared/types/seminar.zod";
-import { Autocomplete, Button, Grid, TextField } from "@mui/material";
+import { Button, Grid, TextField } from "@mui/material";
 import { DatePicker } from "@mui/x-date-pickers";
 import { addMonths } from "date-fns";
 import { Controller, useForm } from "react-hook-form";
@@ -8,6 +8,7 @@ import {
   useFetchTipoviSeminara,
 } from "../../hooks/useFetchData";
 import AutocompleteMultiple from "../Autocomplete/Multiple";
+import MultiSelectAutocomplete from "../Autocomplete/MultiSelectAutocomplete";
 
 export default function ParametriPretrageFirmaSeminar({
   onSubmit,
@@ -15,26 +16,23 @@ export default function ParametriPretrageFirmaSeminar({
   onSubmit: (data: FirmaSeminarSearchParams) => void;
 }) {
   const { delatnosti, tipoviFirme, velicineFirme } = useFetchPretragaData();
-  const { data: tipoviSeminara, isLoading, isError } = useFetchTipoviSeminara();
+  const { data: tipoviSeminara, isLoading } = useFetchTipoviSeminara();
 
-  const {
-    control,
-    handleSubmit,
-    register,
-    formState: { errors },
-  } = useForm<FirmaSeminarSearchParams>({
-    defaultValues: {
-      nazivFirme: "",
-      nazivSeminara: "",
-      tipFirme: [],
-      delatnost: [],
-      radnaMesta: [],
-      velicineFirme: [],
-      datumOd: new Date(),
-      datumDo: addMonths(new Date(), 1),
-      predavac: "",
+  const { control, handleSubmit, register } = useForm<FirmaSeminarSearchParams>(
+    {
+      defaultValues: {
+        nazivFirme: "",
+        nazivSeminara: "",
+        tipFirme: [],
+        delatnost: [],
+        radnaMesta: [],
+        velicineFirme: [],
+        datumOd: new Date(),
+        datumDo: addMonths(new Date(), 1),
+        predavac: "",
+      },
     },
-  });
+  );
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -132,34 +130,15 @@ export default function ParametriPretrageFirmaSeminar({
             name="tipSeminara"
             control={control}
             render={({ field }) => (
-              <Autocomplete
-                multiple
+              <MultiSelectAutocomplete
+                labelKey={"tipSeminara" as any}
                 options={tipoviSeminara || []}
-                getOptionLabel={(option) => option.tipSeminara}
-                value={
-                  tipoviSeminara?.filter((tip) =>
-                    field.value?.includes(tip._id),
-                  ) || []
+                value={field.value || []}
+                onChange={(newValue) => field.onChange(newValue)}
+                inputLabel="Tip seminara"
+                inputPlaceholder={
+                  isLoading ? "Učitavanje..." : "Izaberite tipove"
                 }
-                onChange={(_event, newValue) => {
-                  field.onChange(newValue.map((item) => item._id));
-                }}
-                loading={isLoading}
-                disabled={isLoading}
-                isOptionEqualToValue={(option, value) =>
-                  option._id === value._id
-                }
-                renderInput={(params) => (
-                  <TextField
-                    {...params}
-                    label="Tip seminara"
-                    placeholder={
-                      isLoading ? "Učitavanje..." : "Izaberite tipove"
-                    }
-                    error={!!errors.tipSeminara}
-                    helperText={errors.tipSeminara?.message}
-                  />
-                )}
               />
             )}
           />
