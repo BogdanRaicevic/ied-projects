@@ -13,7 +13,7 @@ import {
   TextField,
 } from "@mui/material";
 import { format } from "date-fns";
-import { useCallback, useEffect } from "react";
+import { useCallback, useEffect, useMemo } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { useSearchSeminari } from "../../hooks/seminar/useSeminarQueries";
 import { useFetchPretragaData } from "../../hooks/useFetchData";
@@ -47,10 +47,13 @@ export default function PretragaParameters() {
     },
   });
 
-  const seminarTitles =
-    fetchedSeminars?.seminari.map((seminar) => {
-      return `${format(seminar.datum, "dd.MM.yyyy")} - ${seminar.naziv}`;
-    }) || [];
+  const seminarTitles = useMemo(
+    () =>
+      fetchedSeminars?.seminari.map((seminar) => {
+        return `${format(seminar.datum, "dd.MM.yyyy")} - ${seminar.naziv}`;
+      }) || [],
+    [fetchedSeminars],
+  );
 
   const {
     setPretragaParameters,
@@ -106,7 +109,6 @@ export default function PretragaParameters() {
                       onCheckedChange={field.onChange}
                       placeholder="Radno Mesto"
                       id="radno-mesto"
-                      key="autocomplete-radno-mesto"
                       checkedValues={field.value || []}
                     />
                   )}
@@ -118,7 +120,6 @@ export default function PretragaParameters() {
                   control={control}
                   render={({ field }) => (
                     <NegationCheckbox
-                      key="negate-radno-mesto"
                       value="negate-radno-mesto"
                       negationChecked={
                         field.value?.includes("negate-radno-mesto") || false
@@ -140,7 +141,6 @@ export default function PretragaParameters() {
                       onCheckedChange={field.onChange}
                       placeholder="Tip Firme"
                       id="tip-firme"
-                      key="autocomplete-tip-firme"
                       checkedValues={field.value || []}
                     />
                   )}
@@ -152,7 +152,6 @@ export default function PretragaParameters() {
                   control={control}
                   render={({ field }) => (
                     <NegationCheckbox
-                      key="negate-tip-firme"
                       value="negate-tip-firme"
                       negationChecked={
                         field.value?.includes("negate-tip-firme") || false
@@ -174,7 +173,6 @@ export default function PretragaParameters() {
                       onCheckedChange={field.onChange}
                       placeholder="Delatnost"
                       id="delatnost"
-                      key="autocomplete-delatnost"
                       checkedValues={field.value || []}
                     />
                   )}
@@ -186,7 +184,6 @@ export default function PretragaParameters() {
                   control={control}
                   render={({ field }) => (
                     <NegationCheckbox
-                      key="negate-delatnost"
                       value="negate-delatnost"
                       negationChecked={
                         field.value?.includes("negate-delatnost") || false
@@ -208,7 +205,6 @@ export default function PretragaParameters() {
                       onCheckedChange={field.onChange}
                       placeholder="Mesta"
                       id="mesto"
-                      key="autocomplete-mesto"
                       checkedValues={field.value || []}
                     />
                   )}
@@ -220,7 +216,6 @@ export default function PretragaParameters() {
                   control={control}
                   render={({ field }) => (
                     <NegationCheckbox
-                      key="negate-mesto"
                       value="negate-mesto"
                       negationChecked={
                         field.value?.includes("negate-mesto") || false
@@ -242,7 +237,6 @@ export default function PretragaParameters() {
                       data={seminarTitles}
                       onCheckedChange={field.onChange}
                       placeholder="Seminari"
-                      key="autocomplete-seminar"
                       checkedValues={field.value || []}
                     />
                   )}
@@ -254,7 +248,6 @@ export default function PretragaParameters() {
                   control={control}
                   render={({ field }) => (
                     <NegationCheckbox
-                      key="negate-seminar"
                       value="negate-seminar"
                       negationChecked={
                         field.value?.includes("negate-seminar") || false
