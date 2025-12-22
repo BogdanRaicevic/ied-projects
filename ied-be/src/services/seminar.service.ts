@@ -333,6 +333,14 @@ const aggregateSeminarsByFirma = async (
     seminarMatch.predavac = { $regex: queryParams.predavac, $options: "i" };
   }
 
+  if (queryParams.tipSeminara && queryParams.tipSeminara.length > 0) {
+    seminarMatch.tipSeminara = {
+      $in: queryParams.tipSeminara.map((id) =>
+        Types.ObjectId.createFromHexString(id),
+      ),
+    };
+  }
+
   if (queryParams.datumOd || queryParams.datumDo) {
     seminarMatch.datum = {};
     if (queryParams.datumOd) {

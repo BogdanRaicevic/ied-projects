@@ -1,9 +1,12 @@
 import type { FirmaSeminarSearchParams } from "@ied-shared/types/seminar.zod";
-import { Button, Grid, TextField } from "@mui/material";
+import { Autocomplete, Button, Grid, TextField } from "@mui/material";
 import { DatePicker } from "@mui/x-date-pickers";
 import { addMonths } from "date-fns";
 import { Controller, useForm } from "react-hook-form";
-import { useFetchPretragaData } from "../../hooks/useFetchData";
+import {
+  useFetchPretragaData,
+  useFetchTipoviSeminara,
+} from "../../hooks/useFetchData";
 import AutocompleteMultiple from "../Autocomplete/Multiple";
 
 export default function ParametriPretrageFirmaSeminar({
@@ -12,22 +15,26 @@ export default function ParametriPretrageFirmaSeminar({
   onSubmit: (data: FirmaSeminarSearchParams) => void;
 }) {
   const { delatnosti, tipoviFirme, velicineFirme } = useFetchPretragaData();
+  const { data: tipoviSeminara, isLoading, isError } = useFetchTipoviSeminara();
 
-  const { control, handleSubmit, register } = useForm<FirmaSeminarSearchParams>(
-    {
-      defaultValues: {
-        nazivFirme: "",
-        nazivSeminara: "",
-        tipFirme: [],
-        delatnost: [],
-        radnaMesta: [],
-        velicineFirme: [],
-        datumOd: new Date(),
-        datumDo: addMonths(new Date(), 1),
-        predavac: "",
-      },
+  const {
+    control,
+    handleSubmit,
+    register,
+    formState: { errors },
+  } = useForm<FirmaSeminarSearchParams>({
+    defaultValues: {
+      nazivFirme: "",
+      nazivSeminara: "",
+      tipFirme: [],
+      delatnost: [],
+      radnaMesta: [],
+      velicineFirme: [],
+      datumOd: new Date(),
+      datumDo: addMonths(new Date(), 1),
+      predavac: "",
     },
-  );
+  });
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -116,6 +123,43 @@ export default function ParametriPretrageFirmaSeminar({
                 fullWidth
                 label="Predavač"
                 onChange={(e) => field.onChange(e.target.value)}
+              />
+            )}
+          />
+        </Grid>
+        <Grid size={3}>
+          <Controller
+            name="tipSeminara"
+            control={control}
+            render={({ field }) => (
+              <Autocomplete
+                multiple
+                options={tipoviSeminara || []}
+                getOptionLabel={(option) => option.tipSeminara}
+                value={
+                  tipoviSeminara?.filter((tip) =>
+                    field.value?.includes(tip._id),
+                  ) || []
+                }
+                onChange={(_event, newValue) => {
+                  field.onChange(newValue.map((item) => item._id));
+                }}
+                loading={isLoading}
+                disabled={isLoading}
+                isOptionEqualToValue={(option, value) =>
+                  option._id === value._id
+                }
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    label="Tip seminara"
+                    placeholder={
+                      isLoading ? "Učitavanje..." : "Izaberite tipove"
+                    }
+                    error={!!errors.tipSeminara}
+                    helperText={errors.tipSeminara?.message}
+                  />
+                )}
               />
             )}
           />
