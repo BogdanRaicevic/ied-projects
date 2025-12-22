@@ -1,5 +1,5 @@
 import { Autocomplete, Chip, TextField } from "@mui/material";
-import { memo, useEffect, useState } from "react";
+import { memo } from "react";
 
 interface AutocompleteMultipleProps {
   data: string[];
@@ -24,15 +24,7 @@ export default memo(function AutocompleteCheckbox({
   getOptionLabel,
   renderTag,
 }: AutocompleteMultipleProps) {
-  const [selectedOptions, setSelectedOptions] =
-    useState<string[]>(checkedValues);
-
-  useEffect(() => {
-    setSelectedOptions(checkedValues);
-  }, [checkedValues]);
-
   const handleChange = (_event: any, value: string[]) => {
-    setSelectedOptions(value);
     onCheckedChange(value);
   };
 
@@ -55,8 +47,8 @@ export default memo(function AutocompleteCheckbox({
       id={`autocomplete-${id}`}
       disableCloseOnSelect
       getOptionLabel={getOptionLabel || defaultGetOptionLabel} // Use the getOptionLabel prop or default
-      options={(data || []).map((option) => option)}
-      renderTags={(value: readonly string[], getTagProps) =>
+      options={data || []}
+      renderValue={(value: readonly string[], getTagProps) =>
         value.map((option: string, index: number) => {
           return (renderTag || defaultRenderTag)(getTagProps, index, option);
         })
@@ -65,7 +57,7 @@ export default memo(function AutocompleteCheckbox({
         <TextField {...params} placeholder={placeholder} />
       )}
       onChange={handleChange}
-      value={selectedOptions}
+      value={checkedValues}
     />
   );
 });

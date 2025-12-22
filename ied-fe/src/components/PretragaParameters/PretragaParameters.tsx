@@ -13,7 +13,7 @@ import {
   TextField,
 } from "@mui/material";
 import { format } from "date-fns";
-import { useEffect } from "react";
+import { useCallback, useEffect } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { useSearchSeminari } from "../../hooks/seminar/useSeminarQueries";
 import { useFetchPretragaData } from "../../hooks/useFetchData";
@@ -73,36 +73,22 @@ export default function PretragaParameters() {
     reset(appliedParameters);
   }, [appliedParameters, reset]);
 
-  useEffect(() => {
-    const handleKeyPress = (event: KeyboardEvent) => {
-      if (event.key === "Enter") {
-        // Prevent default form submission if this component is part of a <form>
-        // event.preventDefault();
-        handleSubmit(onSubmit)();
-      }
-    };
+  const onSubmit = useCallback(
+    (data: FirmaQueryParams) => {
+      setPretragaParameters(data);
+      setPaginationParameters({ pageIndex: 0, pageSize: 50 });
+      setAppliedParameters();
+    },
+    [setPretragaParameters, setPaginationParameters, setAppliedParameters],
+  );
 
-    document.addEventListener("keydown", handleKeyPress);
-
-    // Remove event listener when the component unmounts
-    return () => {
-      document.removeEventListener("keydown", handleKeyPress);
-    };
-  }, [handleSubmit]);
-
-  const onSubmit = (data: FirmaQueryParams) => {
-    setPretragaParameters(data);
-    setPaginationParameters({ pageIndex: 0, pageSize: 50 });
-    setAppliedParameters();
-  };
-
-  const toggleNegation = (field: any, val: string) => {
+  const toggleNegation = useCallback((field: any, val: string) => {
     if (field.value?.includes(val)) {
       field.onChange(field.value.filter((v: string) => v !== val));
     } else {
       field.onChange([...(field.value || []), val]);
     }
-  };
+  }, []);
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
