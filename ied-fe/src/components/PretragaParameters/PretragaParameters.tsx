@@ -1,3 +1,4 @@
+import { NEGACIJA } from "@ied-shared/constants/firma";
 import type { FirmaQueryParams } from "@ied-shared/types/firma.zod";
 import AddBoxIcon from "@mui/icons-material/AddBox";
 import SearchIcon from "@mui/icons-material/Search";
@@ -16,12 +17,16 @@ import { format } from "date-fns";
 import { useCallback, useEffect, useMemo } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { useSearchSeminari } from "../../hooks/seminar/useSeminarQueries";
-import { useFetchPretragaData } from "../../hooks/useFetchData";
+import {
+  useFetchPretragaData,
+  useFetchTipoviSeminara,
+} from "../../hooks/useFetchData";
 import {
   defaultPretrageParameters,
   usePretragaStore,
 } from "../../store/pretragaParameters.store";
 import AutocompleteMultiple from "../Autocomplete/Multiple";
+import MultiSelectAutocomplete from "../Autocomplete/MultiSelectAutocomplete";
 import CheckboxList from "../CheckboxList";
 import NegationCheckbox from "../NegationCheckbox";
 import { ExportButtons } from "./ExportButtons";
@@ -35,6 +40,8 @@ export default function PretragaParameters() {
     velicineFirme,
     stanjaFirme,
   } = useFetchPretragaData();
+  const { data: tipoviSeminara, isLoading: isLoadingTipoviSeminara } =
+    useFetchTipoviSeminara();
 
   const { data: fetchedSeminars } = useSearchSeminari({
     pageIndex: 0,
@@ -120,9 +127,9 @@ export default function PretragaParameters() {
                   control={control}
                   render={({ field }) => (
                     <NegationCheckbox
-                      value="negate-radno-mesto"
+                      value={NEGACIJA.radnoMesto}
                       negationChecked={
-                        field.value?.includes("negate-radno-mesto") || false
+                        field.value?.includes(NEGACIJA.radnoMesto) || false
                       }
                       onNegationChange={(val) => toggleNegation(field, val)}
                     />
@@ -152,9 +159,9 @@ export default function PretragaParameters() {
                   control={control}
                   render={({ field }) => (
                     <NegationCheckbox
-                      value="negate-tip-firme"
+                      value={NEGACIJA.tipFirme}
                       negationChecked={
-                        field.value?.includes("negate-tip-firme") || false
+                        field.value?.includes(NEGACIJA.tipFirme) || false
                       }
                       onNegationChange={(val) => toggleNegation(field, val)}
                     />
@@ -184,9 +191,9 @@ export default function PretragaParameters() {
                   control={control}
                   render={({ field }) => (
                     <NegationCheckbox
-                      value="negate-delatnost"
+                      value={NEGACIJA.delatnost}
                       negationChecked={
-                        field.value?.includes("negate-delatnost") || false
+                        field.value?.includes(NEGACIJA.delatnost) || false
                       }
                       onNegationChange={(val) => toggleNegation(field, val)}
                     />
@@ -216,9 +223,9 @@ export default function PretragaParameters() {
                   control={control}
                   render={({ field }) => (
                     <NegationCheckbox
-                      value="negate-mesto"
+                      value={NEGACIJA.mesto}
                       negationChecked={
-                        field.value?.includes("negate-mesto") || false
+                        field.value?.includes(NEGACIJA.mesto) || false
                       }
                       onNegationChange={(val) => toggleNegation(field, val)}
                     />
@@ -248,9 +255,46 @@ export default function PretragaParameters() {
                   control={control}
                   render={({ field }) => (
                     <NegationCheckbox
-                      value="negate-seminar"
+                      value={NEGACIJA.seminar}
                       negationChecked={
-                        field.value?.includes("negate-seminar") || false
+                        field.value?.includes(NEGACIJA.seminar) || false
+                      }
+                      onNegationChange={(val) => toggleNegation(field, val)}
+                    />
+                  )}
+                />
+              </Grid>
+            </Grid>
+            <Grid container alignItems="center">
+              <Grid size={10} sx={{ width: "75%" }}>
+                <Controller
+                  name="tipSeminara"
+                  control={control}
+                  render={({ field }) => (
+                    <MultiSelectAutocomplete
+                      labelKey={"tipSeminara" as any}
+                      options={tipoviSeminara || []}
+                      value={field.value || []}
+                      onChange={(newValue) => field.onChange(newValue)}
+                      inputLabel="Tip seminara"
+                      inputPlaceholder={
+                        isLoadingTipoviSeminara
+                          ? "Učitavanje..."
+                          : "Izaberite tipove seminara"
+                      }
+                    />
+                  )}
+                />
+              </Grid>
+              <Grid px={2} size={2}>
+                <Controller
+                  name="negacije"
+                  control={control}
+                  render={({ field }) => (
+                    <NegationCheckbox
+                      value={NEGACIJA.tipSeminara}
+                      negationChecked={
+                        field.value?.includes(NEGACIJA.tipSeminara) || false
                       }
                       onNegationChange={(val) => toggleNegation(field, val)}
                     />

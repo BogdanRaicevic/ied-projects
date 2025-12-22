@@ -139,7 +139,7 @@ export default function ParametriPretrageFirmaSeminar({
                   onChange={(newValue) => field.onChange(newValue)}
                   inputLabel="Tip seminara"
                   inputPlaceholder={
-                    isLoading ? "Učitavanje..." : "Izaberite tipove"
+                    isLoading ? "Učitavanje..." : "Izaberite tipove seminara"
                   }
                 />
               )}

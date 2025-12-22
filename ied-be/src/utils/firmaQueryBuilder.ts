@@ -1,25 +1,19 @@
+import { NEGACIJA } from "@ied-shared/constants/firma";
 import type { FirmaQueryParams } from "@ied-shared/types/firma.zod";
 import type { FilterQuery } from "mongoose";
 import type { FirmaType } from "../models/firma.model";
 import { Seminar } from "../models/seminar.model";
 
-enum Negations {
-  RadnoMesto = "negate-radno-mesto",
-  TipFirme = "negate-tip-firme",
-  Delatnost = "negate-delatnost",
-  Mesto = "negate-mesto",
-  Seminar = "negate-seminar",
-}
-
 export const createFirmaQuery = async (params: FirmaQueryParams) => {
   const query: FilterQuery<FirmaType> = {};
 
   const negations = params?.negacije || [];
-  const negateRadnoMesto = negations.includes(Negations.RadnoMesto);
-  const negateTipFirme = negations.includes(Negations.TipFirme);
-  const negateDelatnost = negations.includes(Negations.Delatnost);
-  const negateMesto = negations.includes(Negations.Mesto);
-  const negateSeminar = negations.includes(Negations.Seminar);
+  const negateRadnoMesto = negations.includes(NEGACIJA.radnoMesto);
+  const negateTipFirme = negations.includes(NEGACIJA.tipFirme);
+  const negateDelatnost = negations.includes(NEGACIJA.delatnost);
+  const negateMesto = negations.includes(NEGACIJA.mesto);
+  const negateSeminar = negations.includes(NEGACIJA.seminar);
+  const negateTipSeminara = negations.includes(NEGACIJA.tipSeminara);
 
   if (params?.imeFirme && params.imeFirme.length > 0) {
     query.naziv_firme = { $regex: params.imeFirme, $options: "i" }; // Case-insensitive partial match
@@ -94,6 +88,24 @@ export const createFirmaQuery = async (params: FirmaQueryParams) => {
         $in: await Seminar.distinct("prijave.firma_id", {
           _id: { $in: seminarIds },
         }),
+      };
+    }
+  }
+
+  if (Array.isArray(params?.tipSeminara) && params.tipSeminara.length > 0) {
+    const seminarFilter: FilterQuery<any> = {
+      tipSeminara: { $in: params.tipSeminara },
+    };
+
+    if (negateTipSeminara) {
+      query._id = {
+        ...query._id,
+        $nin: await Seminar.distinct("prijave.firma_id", seminarFilter),
+      };
+    } else {
+      query._id = {
+        ...query._id,
+        $in: await Seminar.distinct("prijave.firma_id", seminarFilter),
       };
     }
   }
