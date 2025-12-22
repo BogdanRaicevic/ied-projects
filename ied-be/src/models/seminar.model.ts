@@ -59,7 +59,7 @@ const seminarSchema = new Schema<SeminarType>(
     tipSeminara: {
       type: Schema.Types.ObjectId,
       ref: "TipSeminara",
-      required: true,
+      required: false,
     },
   },
   { collection: "seminari" },
