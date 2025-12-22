@@ -4,7 +4,14 @@ import {
   SeminarQueryParamsSchema,
 } from "@ied-shared/types/seminar.zod";
 import { UnfoldLess } from "@mui/icons-material";
-import { Box, Button, FormControl, Grid, TextField } from "@mui/material";
+import {
+  Alert,
+  Box,
+  Button,
+  FormControl,
+  Grid,
+  TextField,
+} from "@mui/material";
 import { DatePicker } from "@mui/x-date-pickers";
 import { addMonths, subMonths } from "date-fns";
 import { Controller, useForm } from "react-hook-form";
@@ -37,6 +44,11 @@ export function ParametriPretrageSeminar({
   return (
     <>
       <h1>Parametri Pretrage</h1>
+      {isError && (
+        <Alert severity="error" sx={{ mb: 2 }}>
+          Došlo je do greške prilikom učitavanja tipova seminara.
+        </Alert>
+      )}
       <Grid
         container
         spacing={2}
@@ -101,8 +113,8 @@ export function ParametriPretrageSeminar({
               control={control}
               render={({ field }) => (
                 <AutocompleteMultiple
-                  placeholder="Tip seminara"
-                  data={tipoviSeminara}
+                  placeholder={isLoading ? "Učitavanje..." : "Tip seminara"}
+                  data={tipoviSeminara || []}
                   checkedValues={field.value || []}
                   onCheckedChange={field.onChange}
                   id={"tip-seminara-fs"}
