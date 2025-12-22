@@ -58,7 +58,7 @@ export const savePretraga = async (
 export const deletePretraga = async (id: string) => {
   try {
     validateMongoId(id);
-    await Pretrage.findByIdAndDelete({ _id: id });
+    await Pretrage.findByIdAndDelete(id);
   } catch (error) {
     console.error("Error deleting pretraga", error);
     throw error;
