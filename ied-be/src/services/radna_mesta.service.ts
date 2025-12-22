@@ -6,6 +6,6 @@ export const getAllRadnaMesta = async () => {
     return result.map((item) => item.radno_mesto);
   } catch (error) {
     console.error("Error finding radna_mesta", error);
-    throw new Error("Error finding radna_mesta");
+    throw error;
   }
 };

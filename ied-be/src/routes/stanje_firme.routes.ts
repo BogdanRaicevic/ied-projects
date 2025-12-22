@@ -11,11 +11,7 @@ const router = Router();
 router.get("/", async (_req: Request, res: Response, next: NextFunction) => {
   try {
     const result = await getAllStanjaFirmi();
-    if (!result) {
-      res.status(404).send("Stanje firme not found");
-      return;
-    }
-    res.json(result);
+    res.json(result || []);
   } catch (error) {
     next(error);
   }

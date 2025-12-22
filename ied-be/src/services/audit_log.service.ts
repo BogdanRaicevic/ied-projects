@@ -8,7 +8,11 @@ type AuditQuery = {
   filterParams: AuditLogQueryParams;
 };
 
-export const getAuditLogs = async ({ pageIndex = 0, pageSize = 50, filterParams }: AuditQuery) => {
+export const getAuditLogs = async ({
+  pageIndex = 0,
+  pageSize = 50,
+  filterParams,
+}: AuditQuery) => {
   try {
     const auditQuery = createAuditLogQuery(filterParams);
 
@@ -26,6 +30,6 @@ export const getAuditLogs = async ({ pageIndex = 0, pageSize = 50, filterParams 
     };
   } catch (error) {
     console.error("Error finding audit log", error);
-    throw new Error("Error finding audit log");
+    throw error;
   }
 };

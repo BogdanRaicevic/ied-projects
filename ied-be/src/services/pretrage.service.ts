@@ -8,7 +8,7 @@ export const getAllPretrage = async () => {
     return result.map((item) => item);
   } catch (error) {
     console.error("Error finding pretrage", error);
-    throw new Error("Error finding pretrage");
+    throw error;
   }
 };
 
@@ -51,7 +51,7 @@ export const savePretraga = async (
     }
   } catch (error) {
     console.error("Error saving pretraga", error);
-    throw new Error("Error saving pretraga");
+    throw error;
   }
 };
 
@@ -61,6 +61,6 @@ export const deletePretraga = async (id: string) => {
     await Pretrage.findByIdAndDelete({ _id: id });
   } catch (error) {
     console.error("Error deleting pretraga", error);
-    throw new Error("Error deleting pretraga");
+    throw error;
   }
 };

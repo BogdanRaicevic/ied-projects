@@ -177,11 +177,7 @@ router.delete(
     try {
       const firmaId = req.params.id;
       const firma = await deleteById(firmaId);
-      if (firma) {
-        res.json(firma);
-      } else {
-        res.status(404).send("Firma not found");
-      }
+      res.json(firma || []);
     } catch (error) {
       next(error);
     }

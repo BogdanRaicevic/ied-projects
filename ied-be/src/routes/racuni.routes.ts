@@ -89,11 +89,7 @@ router.post(
   ) => {
     try {
       const result = await saveRacun(req.body);
-      if (!result) {
-        res.status(404).send("Racun not found");
-        return;
-      }
-      res.json(result);
+      res.json(result || []);
     } catch (error) {
       next(error);
     }
