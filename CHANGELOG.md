@@ -1,3 +1,16 @@
+## [1.7.0](https://github.com/BogdanRaicevic/ied-projects/compare/v1.6.0...v1.7.0) (2025-12-22)
+
+### Features
+
+* add collection for tip seminara and required infrastructure ([dedafb1](https://github.com/BogdanRaicevic/ied-projects/commit/dedafb1d7fec8cfc534dd06b75a75c1899ead928))
+* add field for search by tip seminara ([0c0fbf7](https://github.com/BogdanRaicevic/ied-projects/commit/0c0fbf78090f7700f7794b0e71659dbdf7a04664))
+
+### Bug Fixes
+
+* findByIdAndDelete expects the ID as first param directly ([0cbe474](https://github.com/BogdanRaicevic/ied-projects/commit/0cbe47400193d0df7d8779032e3bd9fc0d524553))
+* minor improvements ([75f9ec2](https://github.com/BogdanRaicevic/ied-projects/commit/75f9ec2c1e50ef49351e1dd2df5893d5a5ccadda))
+* search query overwriting seminar results ([a18ab89](https://github.com/BogdanRaicevic/ied-projects/commit/a18ab898876489a9a09079a254938a72e4522864))
+
 ## [1.6.0](https://github.com/BogdanRaicevic/ied-projects/compare/v1.5.3...v1.6.0) (2025-12-20)
 
 ### Features
