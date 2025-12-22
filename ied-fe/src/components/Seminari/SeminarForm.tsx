@@ -2,6 +2,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { SeminarSchema, type SeminarZodType } from "@ied-shared/index";
 import {
   Alert,
+  Autocomplete,
   Button,
   FormControl,
   Grid,
@@ -21,6 +22,7 @@ import {
   useCreateSeminarMutation,
   useUpdateSeminarMutation,
 } from "../../hooks/seminar/useSeminarMutations";
+import { useFetchTipoviSeminara } from "../../hooks/useFetchData";
 
 export default function SeminarForm({
   seminar,
@@ -67,6 +69,8 @@ export default function SeminarForm({
   const updateSeminarMutation = useUpdateSeminarMutation();
   const isPending =
     createSeminarMutation.isPending || updateSeminarMutation.isPending;
+
+  const { data: tipoviSeminara } = useFetchTipoviSeminara();
 
   useEffect(() => {
     // Reset form if the seminar prop changes (e.g., when opening dialog for different seminar)
@@ -240,6 +244,34 @@ export default function SeminarForm({
               )}
             />
           </FormControl>
+        </Grid>
+
+        <Grid size={3} sx={{ m: 1 }}>
+          <Controller
+            name="tipSeminara"
+            control={control}
+            render={({ field }) => (
+              <Autocomplete
+                options={tipoviSeminara || []}
+                getOptionLabel={(option) => option.tipSeminara}
+                value={
+                  tipoviSeminara?.find((tip) => tip._id === field.value) || null
+                }
+                onChange={(_event, newValue) => {
+                  field.onChange(newValue?._id || "");
+                }}
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    label="Tip Seminara"
+                    placeholder="Izaberite tip seminara"
+                    error={!!errors.tipSeminara}
+                    helperText={errors.tipSeminara?.message}
+                  />
+                )}
+              />
+            )}
+          />
         </Grid>
 
         <Grid size={12}>

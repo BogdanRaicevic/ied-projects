@@ -1,4 +1,4 @@
-import { useQuery } from "@tanstack/react-query";
+import { type UseQueryResult, useQuery } from "@tanstack/react-query";
 import { fetchAllDelatnosti } from "../api/delatnosti.api";
 import { fetchAllMesta } from "../api/mesta.api";
 import { getIzdavaciRacuna } from "../api/racuni.api";
@@ -59,7 +59,9 @@ export const useFetchIzdavaciRacuna = () => {
   });
 };
 
-export function useFetchTipoviSeminara() {
+export function useFetchTipoviSeminara(): UseQueryResult<
+  { _id: string; tipSeminara: string }[]
+> {
   return useQuery({
     queryKey: ["tipoviSeminara"],
     queryFn: async () => {
