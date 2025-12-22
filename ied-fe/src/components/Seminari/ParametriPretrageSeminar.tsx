@@ -6,6 +6,7 @@ import {
 import { UnfoldLess } from "@mui/icons-material";
 import {
   Alert,
+  Autocomplete,
   Box,
   Button,
   FormControl,
@@ -16,7 +17,6 @@ import { DatePicker } from "@mui/x-date-pickers";
 import { addMonths, subMonths } from "date-fns";
 import { Controller, useForm } from "react-hook-form";
 import { useFetchTipoviSeminara } from "../../hooks/useFetchData";
-import AutocompleteMultiple from "../Autocomplete/Multiple";
 
 export function ParametriPretrageSeminar({
   onSubmit,
@@ -112,12 +112,34 @@ export function ParametriPretrageSeminar({
               name="tipSeminara"
               control={control}
               render={({ field }) => (
-                <AutocompleteMultiple
-                  placeholder={isLoading ? "Učitavanje..." : "Tip seminara"}
-                  data={tipoviSeminara || []}
-                  checkedValues={field.value || []}
-                  onCheckedChange={field.onChange}
-                  id={"tip-seminara-fs"}
+                <Autocomplete
+                  multiple
+                  options={tipoviSeminara || []}
+                  getOptionLabel={(option) => option.tipSeminara}
+                  value={
+                    tipoviSeminara?.filter((tip) =>
+                      field.value?.includes(tip._id),
+                    ) || []
+                  }
+                  onChange={(_event, newValue) => {
+                    field.onChange(newValue.map((item) => item._id));
+                  }}
+                  loading={isLoading}
+                  disabled={isLoading}
+                  isOptionEqualToValue={(option, value) =>
+                    option._id === value._id
+                  }
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      label="Tip seminara"
+                      placeholder={
+                        isLoading ? "Učitavanje..." : "Izaberite tipove"
+                      }
+                      error={!!errors.tipSeminara}
+                      helperText={errors.tipSeminara?.message}
+                    />
+                  )}
                 />
               )}
             />
