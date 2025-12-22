@@ -24,11 +24,12 @@ export default function FirmaSeminarTable({
     pageSize: 25,
   });
 
-  const { firmaSeminars, isLoading } = useSearchFirmaSeminari({
-    pageSize: pagination.pageSize,
-    pageIndex: pagination.pageIndex,
-    queryParameters,
-  });
+  const { data: firmaSeminars, isLoading: isLoadingSeminars } =
+    useSearchFirmaSeminari({
+      pageSize: pagination.pageSize,
+      pageIndex: pagination.pageIndex,
+      queryParameters,
+    });
 
   const seminariTableColumns: MRT_ColumnDef<FirmaSeminar>[] = [
     {
@@ -102,7 +103,11 @@ export default function FirmaSeminarTable({
       () => seminariTableColumns,
       [],
     ),
-    state: { isLoading, showProgressBars: isLoading, pagination },
+    state: {
+      isLoading: isLoadingSeminars,
+      showProgressBars: isLoadingSeminars,
+      pagination,
+    },
     data: tableData,
     enableColumnFilterModes: true,
     enableColumnOrdering: true,

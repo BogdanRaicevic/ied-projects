@@ -86,15 +86,7 @@ export const FirmaQueryParamsSchema = z.object({
   jbkjs: z.string().optional(),
   maticniBroj: z.string().optional(),
   komentar: z.string().optional(),
-  seminari: z
-    .array(
-      z.object({
-        _id: z.string(),
-        naziv: z.string(),
-        datum: z.union([z.string(), z.date()]),
-      }),
-    )
-    .optional(),
+  seminari: z.array(z.string()).optional(),
   imePrezime: z.string().optional(),
   emailZaposlenog: z.string().optional(),
   firmaPrijavljeni: z.boolean().optional(),

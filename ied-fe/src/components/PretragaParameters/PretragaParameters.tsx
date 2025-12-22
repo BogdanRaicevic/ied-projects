@@ -43,22 +43,26 @@ export default function PretragaParameters() {
   const { data: tipoviSeminara, isLoading: isLoadingTipoviSeminara } =
     useFetchTipoviSeminara();
 
-  const { data: fetchedSeminars } = useSearchSeminari({
-    pageIndex: 0,
-    pageSize: 50,
-    queryParameters: {
-      naziv: "",
-      lokacija: "",
-      predavac: "",
-      tipSeminara: [],
-    },
-  });
+  const { data: fetchedSeminars, isLoading: isLoadingSeminars } =
+    useSearchSeminari({
+      pageIndex: 0,
+      pageSize: 50,
+      queryParameters: {
+        naziv: "",
+        lokacija: "",
+        predavac: "",
+        tipSeminara: [],
+      },
+    });
 
-  const seminarTitles = useMemo(
+  const seminarOptions = useMemo(
     () =>
-      fetchedSeminars?.seminari.map((seminar) => {
-        return `${format(seminar.datum, "dd.MM.yyyy")} - ${seminar.naziv}`;
-      }) || [],
+      (fetchedSeminars?.seminari ?? [])
+        .filter((seminar) => typeof seminar._id === "string")
+        .map((seminar) => ({
+          _id: seminar._id as string,
+          naziv: `${format(seminar.datum, "dd.MM.yyyy")} - ${seminar.naziv}`,
+        })),
     [fetchedSeminars],
   );
 
@@ -239,12 +243,17 @@ export default function PretragaParameters() {
                   name="seminari"
                   control={control}
                   render={({ field }) => (
-                    <AutocompleteMultiple
-                      id="seminari"
-                      data={seminarTitles}
-                      onCheckedChange={field.onChange}
-                      placeholder="Seminari"
-                      checkedValues={field.value || []}
+                    <MultiSelectAutocomplete
+                      labelKey={"naziv" as any}
+                      options={seminarOptions}
+                      onChange={(newValue) => field.onChange(newValue)}
+                      inputLabel="Seminar"
+                      inputPlaceholder={
+                        isLoadingSeminars
+                          ? "Učitavanje..."
+                          : "Izaberite seminare"
+                      }
+                      value={field.value || []}
                     />
                   )}
                 />
@@ -534,7 +543,7 @@ export default function PretragaParameters() {
             startIcon={<SearchIcon />}
             type="submit"
           >
-            Pretrazi
+            Pretraži
           </Button>
         </Box>
 
