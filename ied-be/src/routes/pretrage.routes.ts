@@ -15,11 +15,7 @@ const router = Router();
 router.get("/", async (_req: Request, res: Response, next: NextFunction) => {
   try {
     const result = await getAllPretrage();
-    if (!result) {
-      res.status(404).send("Pretrage not found");
-      return;
-    }
-    res.json(result);
+    res.json(result || []);
   } catch (error) {
     next(error);
   }

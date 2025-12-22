@@ -6,6 +6,6 @@ export const getAllStanjaFirmi = async () => {
     return result.map((item) => item.stanje_firme);
   } catch (error) {
     console.error("Error finding stanje_firme", error);
-    throw new Error("Error finding stanje_firme");
+    throw error;
   }
 };

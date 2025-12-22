@@ -6,6 +6,6 @@ export const getAllTipoviFirme = async () => {
     return result.map((item) => item.tip_firme);
   } catch (error) {
     console.error("Error finding tip_firme", error);
-    throw new Error("Error finding tip_firme");
+    throw error;
   }
 };

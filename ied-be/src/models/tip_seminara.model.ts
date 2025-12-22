@@ -6,7 +6,7 @@ type TipSeminaraType = Document & {
 
 const tipSeminaraSchema = new Schema<TipSeminaraType>(
   {
-    tipSeminara: { type: String, required: true },
+    tipSeminara: { type: String, required: true, unique: true, trim: true },
   },
   { collection: "tipovi_seminara" },
 );

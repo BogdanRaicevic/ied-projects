@@ -6,6 +6,6 @@ export const getAllDelatnosti = async () => {
     return result.map((item) => item.delatnost);
   } catch (error) {
     console.error("Error finding delatnosti", error);
-    throw new Error("Error finding delatnosti");
+    throw error;
   }
 };
