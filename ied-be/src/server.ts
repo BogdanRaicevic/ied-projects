@@ -20,6 +20,7 @@ import { env } from "./utils/envVariables";
 import "./database/cron";
 import auditLogRoutes from "./routes/audit_log.routes";
 import emailSuppressionRoutes from "./routes/email_suppression.routes";
+import tipSeminaraRoutes from "./routes/tip_seminara.routes";
 
 const app = express();
 const allowedOrigins = env.fe.allowedPorts.map(
@@ -67,6 +68,7 @@ app.use(
   hasPermission,
   emailSuppressionRoutes,
 );
+app.use("/api/tip-seminara", requireAuth(), hasPermission, tipSeminaraRoutes);
 app.use("/api/test", testRoutes);
 
 app.use(errorWrapper);
