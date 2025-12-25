@@ -1,4 +1,4 @@
-import { AuditLogStatsQueryParamsZod } from "@ied-shared/types/audit_log.zod";
+import { AuditLogQueryParamsZod } from "@ied-shared/types/audit_log.zod";
 import { parseInt as parseIntCompat } from "es-toolkit/compat";
 import {
   type NextFunction,
@@ -16,27 +16,9 @@ import {
 
 const router = Router();
 
-router.get("/", async (req: Request, res: Response, next: NextFunction) => {
-  try {
-    const { pageSize, pageIndex, ...params } = req.query;
-    const index = parseIntCompat(pageIndex as string, 10) || 0;
-    const size = parseIntCompat(pageSize as string, 10) || 50;
-
-    const result = await getAuditLogs({
-      pageIndex: index,
-      pageSize: size,
-      filterParams: params,
-    });
-
-    res.json(result);
-  } catch (error) {
-    next(error);
-  }
-});
-
 router.get(
   "/user-changes",
-  validateRequestQuery(AuditLogStatsQueryParamsZod),
+  validateRequestQuery(AuditLogQueryParamsZod),
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { userEmail, dateFrom, dateTo, model } = req.query;
@@ -59,7 +41,7 @@ router.get(
 
 router.get(
   "/user-changes-v2",
-  validateRequestQuery(AuditLogStatsQueryParamsZod),
+  validateRequestQuery(AuditLogQueryParamsZod),
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { userEmail, dateFrom, dateTo, model } = req.query;
@@ -80,7 +62,7 @@ router.get(
 
 router.get(
   "/user-changes-by-date",
-  validateRequestQuery(AuditLogStatsQueryParamsZod),
+  validateRequestQuery(AuditLogQueryParamsZod),
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { userEmail, dateFrom, dateTo, model } = req.query;
@@ -96,5 +78,23 @@ router.get(
     }
   },
 );
+
+router.get("/", async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const { pageSize, pageIndex, ...params } = req.query;
+    const index = parseIntCompat(pageIndex as string, 10) || 0;
+    const size = parseIntCompat(pageSize as string, 10) || 50;
+
+    const result = await getAuditLogs({
+      pageIndex: index,
+      pageSize: size,
+      filterParams: params,
+    });
+
+    res.json(result);
+  } catch (error) {
+    next(error);
+  }
+});
 
 export default router;

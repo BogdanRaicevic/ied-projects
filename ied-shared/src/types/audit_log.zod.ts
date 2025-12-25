@@ -34,3 +34,32 @@ export type AuditLogQueryParams = z.infer<typeof AuditLogQueryParamsZod>;
 export type AuditLogStatsQueryParams = z.infer<
   typeof AuditLogStatsQueryParamsSchema
 >;
+
+export const AuditLogStatsByDateResponseSchema = z.object({
+  userEmail: z.string(),
+  model: z.string(),
+  dateStart: z.string(),
+  dateEnd: z.string(),
+  totalNew: z.number(),
+  totalDeleted: z.number(),
+  totalUpdated: z.number(),
+  totalEstimatedWorkTime: z.number(),
+  averageTimeBetweenEntries: z.number(),
+  averageEditStartTime: z.string(),
+  averageEditEndTime: z.string(),
+  dailyStats: z.array(
+    z.object({
+      date: z.string(),
+      new: z.number(),
+      deleted: z.number(),
+      aggregatedUpdated: z.number(),
+      earliestEdit: z.string(),
+      latestEdit: z.string(),
+      estimatedWorkTime: z.number(),
+      averageTimeBetweenEntries: z.number(),
+    }),
+  ),
+});
+export type AuditLogStatsByDateResponse = z.infer<
+  typeof AuditLogStatsByDateResponseSchema
+>;

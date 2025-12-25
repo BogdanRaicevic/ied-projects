@@ -1,7 +1,4 @@
-import type {
-  AuditLogQueryParams,
-  AuditLogStatsQueryParams,
-} from "@ied-shared/types/audit_log.zod";
+import type { AuditLogQueryParams } from "@ied-shared/types/audit_log.zod";
 import { AuditLog } from "./../models/audit_log.model";
 import { createAuditLogQuery } from "../utils/auditLogQueryBuilder";
 
@@ -37,7 +34,7 @@ export const getAuditLogs = async ({
   }
 };
 
-export const getUserChangesStats = async (params: AuditLogStatsQueryParams) => {
+export const getUserChangesStats = async (params: AuditLogQueryParams) => {
   try {
     const { userEmail, dateFrom, dateTo, model } = params;
 
@@ -97,12 +94,12 @@ export const getUserChangesStats = async (params: AuditLogStatsQueryParams) => {
 
     // Transform the result into the desired format
     const stats: {
-      userEmail: string;
+      userEmail?: string;
       new: number;
       deleted: number;
       changed: number;
       totalUnique: number;
-      model: string;
+      model?: string;
       dateStart?: Date;
       dateEnd?: Date;
     } = {
@@ -131,7 +128,7 @@ export const getUserChangesStats = async (params: AuditLogStatsQueryParams) => {
   }
 };
 
-export const getUserChanges2 = async (params: AuditLogStatsQueryParams) => {
+export const getUserChanges2 = async (params: AuditLogQueryParams) => {
   try {
     const { userEmail, dateFrom, dateTo, model } = params;
 
@@ -349,6 +346,7 @@ export const getUserChangesByDate = async (params: AuditLogQueryParams) => {
         latestEdit?: string; // HH:MM:SS format
         estimatedWorkTime?: number; // in minutes
         averageTimeBetweenEntries?: number; // in minutes
+        biggestGapBetweenEntries?: number; // in minutes
       }
     >();
 
@@ -414,8 +412,8 @@ export const getUserChangesByDate = async (params: AuditLogQueryParams) => {
         const earliestTimestamp = timestamps[0];
         const latestTimestamp = timestamps[timestamps.length - 1];
 
-        dateStats.earliestEdit = earliestTimestamp.toTimeString().split(" ")[0]; // HH:MM:SS
-        dateStats.latestEdit = latestTimestamp.toTimeString().split(" ")[0]; // HH:MM:SS
+        dateStats.earliestEdit = earliestTimestamp;
+        dateStats.latestEdit = latestTimestamp;
 
         // Estimated work time (in minutes)
         const workTimeMs =
@@ -425,15 +423,22 @@ export const getUserChangesByDate = async (params: AuditLogQueryParams) => {
         // Average time between entries (in minutes)
         if (timestamps.length > 1) {
           let totalGapMs = 0;
+          let biggestGapMs = 0;
           for (let i = 1; i < timestamps.length; i++) {
-            totalGapMs += timestamps[i].getTime() - timestamps[i - 1].getTime();
+            const gapMs = timestamps[i].getTime() - timestamps[i - 1].getTime();
+            totalGapMs += gapMs;
+            biggestGapMs = Math.max(biggestGapMs, gapMs);
           }
           const avgGapMs = totalGapMs / (timestamps.length - 1);
           dateStats.averageTimeBetweenEntries = Math.round(
             avgGapMs / 1000 / 60,
           );
+          dateStats.biggestGapBetweenEntries = Math.round(
+            biggestGapMs / 1000 / 60,
+          );
         } else {
           dateStats.averageTimeBetweenEntries = 0;
+          dateStats.biggestGapBetweenEntries = 0;
         }
       }
     }
@@ -443,15 +448,96 @@ export const getUserChangesByDate = async (params: AuditLogQueryParams) => {
       a.date.localeCompare(b.date),
     );
 
-    return {
+    const auditOverview = {
       userEmail,
       model,
       ...(dateFrom && { dateStart: dateFrom }),
       ...(dateTo && { dateEnd: dateTo }),
       dailyStats,
     };
+
+    const auditStats = calculateStatistics(dailyStats);
+    return {
+      ...auditOverview,
+      ...auditStats,
+    };
   } catch (error) {
     console.error("Error getting user changes by date", error);
     throw new Error("Error getting user changes by date");
   }
+};
+
+const calculateStatistics = (dailyStats) => {
+  const totalNew = dailyStats.reduce((sum, day) => sum + day.new, 0);
+
+  const totalDeleted = dailyStats.reduce((sum, day) => sum + day.deleted, 0);
+
+  const totalUpdated = dailyStats.reduce(
+    (sum, day) => sum + day.aggregatedUpdated,
+    0,
+  );
+
+  const averageUpdatesPerDay = Number(
+    (totalUpdated / dailyStats.length).toFixed(2),
+  );
+
+  const averageStartTime = (() => {
+    const totalMinutes = dailyStats.reduce((sum, day) => {
+      const date = new Date(day.earliestEdit);
+      return sum + date.getHours() * 60 + date.getMinutes();
+    }, 0);
+
+    const avgMinutes = totalMinutes / dailyStats.length;
+    const hours = Math.floor(avgMinutes / 60);
+    const minutes = Math.round(avgMinutes % 60);
+
+    return `${String(hours).padStart(2, "0")}:${String(minutes).padStart(2, "0")}`;
+  })();
+
+  const averageEndTime = (() => {
+    const totalMinutes = dailyStats.reduce((sum, day) => {
+      const date = new Date(day.latestEdit);
+      return sum + date.getHours() * 60 + date.getMinutes();
+    }, 0);
+
+    const avgMinutes = totalMinutes / dailyStats.length;
+    const hours = Math.floor(avgMinutes / 60);
+    const minutes = Math.round(avgMinutes % 60);
+
+    return `${String(hours).padStart(2, "0")}:${String(minutes).padStart(2, "0")}`;
+  })();
+
+  const speculatedWorkTime = (() => {
+    const avgMinutes = Math.round(
+      dailyStats.reduce((sum, day) => sum + day.estimatedWorkTime, 0) /
+        dailyStats.length,
+    );
+
+    const hours = Math.floor(avgMinutes / 60);
+    const minutes = Math.round(avgMinutes % 60);
+
+    return `${String(hours).padStart(2, "0")}:${String(minutes).padStart(2, "0")}`;
+  })();
+
+  const averageTimeBetweenEntries = Math.round(
+    dailyStats.reduce((sum, day) => sum + day.averageTimeBetweenEntries, 0) /
+      dailyStats.length,
+  );
+
+  const averageTimeForGreatestGap = Math.round(
+    dailyStats.reduce((sum, day) => sum + day.biggestGapBetweenEntries, 0) /
+      dailyStats.length,
+  );
+
+  return {
+    totalNew,
+    totalDeleted,
+    totalUpdated,
+    averageUpdatesPerDay,
+    averageStartTime,
+    averageEndTime,
+    speculatedWorkTime,
+    averageTimeBetweenEntries,
+    averageTimeForGreatestGap,
+  };
 };
