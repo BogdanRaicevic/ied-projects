@@ -1,4 +1,4 @@
-import { AuditLogStatsQueryParamsZod } from "@ied-shared/types/audit_log.zod";
+import { AuditLogStatsQueryParamsSchema } from "@ied-shared/types/audit_log.zod";
 import { parseInt as parseIntCompat } from "es-toolkit/compat";
 import {
   type NextFunction,
@@ -36,7 +36,7 @@ router.get("/", async (req: Request, res: Response, next: NextFunction) => {
 
 router.get(
   "/user-changes",
-  validateRequestQuery(AuditLogStatsQueryParamsZod),
+  validateRequestQuery(AuditLogStatsQueryParamsSchema),
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { userEmail, dateFrom, dateTo, model } = req.query;
@@ -59,7 +59,7 @@ router.get(
 
 router.get(
   "/user-changes-v2",
-  validateRequestQuery(AuditLogStatsQueryParamsZod),
+  validateRequestQuery(AuditLogStatsQueryParamsSchema),
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { userEmail, dateFrom, dateTo, model } = req.query;
@@ -80,7 +80,7 @@ router.get(
 
 router.get(
   "/user-changes-by-date",
-  validateRequestQuery(AuditLogStatsQueryParamsZod),
+  validateRequestQuery(AuditLogStatsQueryParamsSchema),
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { userEmail, dateFrom, dateTo, model } = req.query;
