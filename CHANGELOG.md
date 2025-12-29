@@ -1,3 +1,9 @@
+## [1.7.1](https://github.com/BogdanRaicevic/ied-projects/compare/v1.7.0...v1.7.1) (2025-12-29)
+
+### Reverts
+
+* Revert "chore: (renovate): Update dependency zod to ^4.2.1" ([9c0d968](https://github.com/BogdanRaicevic/ied-projects/commit/9c0d9680503a0d2daf5973386740f335bd8ecc60))
+
 ## [1.7.0](https://github.com/BogdanRaicevic/ied-projects/compare/v1.6.0...v1.7.0) (2025-12-22)
 
 ### Features
