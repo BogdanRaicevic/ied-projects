@@ -1,3 +1,9 @@
+## [1.7.2](https://github.com/BogdanRaicevic/ied-projects/compare/v1.7.1...v1.7.2) (2025-12-29)
+
+### Bug Fixes
+
+* make tipSeminara optional ([26d2d41](https://github.com/BogdanRaicevic/ied-projects/commit/26d2d410a72fd63ed9ba0191f052e85172ca8e87))
+
 ## [1.7.1](https://github.com/BogdanRaicevic/ied-projects/compare/v1.7.0...v1.7.1) (2025-12-29)
 
 ### Reverts
