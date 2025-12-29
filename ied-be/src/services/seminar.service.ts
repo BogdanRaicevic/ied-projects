@@ -287,7 +287,9 @@ const prepareSeminarData = (seminarData: SeminarZodType) => {
   return {
     ...seminarData,
     prijave: transformedPrijave,
-    tipSeminara: Types.ObjectId.createFromHexString(seminarData.tipSeminara),
+    tipSeminara: seminarData.tipSeminara
+      ? Types.ObjectId.createFromHexString(seminarData.tipSeminara)
+      : undefined,
   };
 };
 

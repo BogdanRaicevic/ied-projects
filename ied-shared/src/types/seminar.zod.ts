@@ -33,7 +33,12 @@ export const SeminarSchema = z.object({
   datum: z.coerce.date(),
   detalji: z.string().optional(),
   prijave: z.array(PrijavaSchema).default([]),
-  tipSeminara: z.string(),
+  tipSeminara: z
+    .string()
+    .optional()
+    .refine((val) => !val || /^[a-fA-F0-9]{24}$/.test(val), {
+      message: "Nevažeći ID tipa seminara",
+    }),
 });
 
 export const SeminarSearchResultsSchema = z.object({
