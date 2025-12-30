@@ -1,10 +1,11 @@
-import type { PretrageRacunaType, RacunType } from "@ied-shared/index";
-import type { FilterQuery } from "mongoose";
+import type { PretrageRacunaType } from "@ied-shared/index";
+import type { QueryFilter } from "mongoose";
+import type { RacunBaseType } from "../models/racun.model";
 
 export function createRacunQuery(
   params: PretrageRacunaType,
-): FilterQuery<RacunType> {
-  const query: FilterQuery<RacunType> = {};
+): QueryFilter<RacunBaseType> {
+  const query: QueryFilter<RacunBaseType> = {};
 
   if (params?.pozivNaBroj) {
     query.pozivNaBroj = { $regex: params.pozivNaBroj, $options: "i" }; // Case-insensitive partial match

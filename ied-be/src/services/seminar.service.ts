@@ -4,9 +4,9 @@ import type {
   PrijavaZodType,
   SeminarZodType,
 } from "@ied-shared/types/seminar.zod";
-import { type PipelineStage, Types } from "mongoose";
+import { type PipelineStage, type QueryFilter, Types } from "mongoose";
 import { Firma } from "../models/firma.model";
-import { RacunBaseModel } from "../models/racun.model";
+import { RacunBaseModel, type RacunBaseType } from "../models/racun.model";
 import {
   type PrijavaType,
   Seminar,
@@ -456,15 +456,17 @@ const fetchRacuniForSeminars = async (
   }
 
   // Fetch all relevant racuni (predracun and konacniRacun types)
-  const racuni = await RacunBaseModel.find({
+  const racunFilter: QueryFilter<RacunBaseType> = {
     tipRacuna: { $in: ["predracun", "konacniRacun"] },
     "primalacRacuna.firma_id": {
-      $in: firmaSeminarPairs.map((p) => p.firma_id),
+      $in: firmaSeminarPairs.map((p) => p.firma_id.toString()),
     },
     "seminar.seminar_id": {
-      $in: firmaSeminarPairs.map((p) => p.seminar_id),
+      $in: firmaSeminarPairs.map((p) => p.seminar_id.toString()),
     },
-  }).lean();
+  };
+
+  const racuni = await RacunBaseModel.find(racunFilter).lean();
 
   // Build map: first racun found wins, no overwriting
   const racuniMap = new Map<string, number>();

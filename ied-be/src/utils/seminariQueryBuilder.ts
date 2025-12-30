@@ -1,11 +1,11 @@
 import type { SeminarQueryParams } from "@ied-shared/types/seminar.zod";
-import type { FilterQuery } from "mongoose";
+import type { QueryFilter } from "mongoose";
 import type { SeminarType } from "../models/seminar.model";
 
 export function createSeminarQuery(
   params: SeminarQueryParams,
-): FilterQuery<SeminarType> {
-  const query: FilterQuery<SeminarType> = {};
+): QueryFilter<SeminarType> {
+  const query: QueryFilter<SeminarType> = {};
 
   if (params?.naziv && params.naziv.length > 0) {
     query.naziv = { $regex: params.naziv, $options: "i" }; // Case-insensitive partial match

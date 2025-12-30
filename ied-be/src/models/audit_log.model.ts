@@ -1,6 +1,6 @@
 import { type Document, model, Schema } from "mongoose";
 
-type AuditLogType = Document & {
+export type AuditLogType = Document & {
   userEmail: string;
   method: string;
   route: string;

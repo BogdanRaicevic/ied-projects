@@ -89,13 +89,19 @@ export const RacunQueryZod = z.object({
 });
 
 export const PretrageRacunaZod = z.object({
-  pozivNaBroj: z.coerce.number().nonnegative().optional(),
+  pozivNaBroj: z
+    .string()
+    .regex(/^\d*$/, "Poziv na broj mora sadržati samo cifre")
+    .optional(),
   datumOd: z.coerce.date().optional(),
   datumDo: z.coerce.date().optional(),
   izdavacRacuna: z.array(z.enum(IzdavacRacuna)).optional(),
   tipRacuna: z.array(z.enum(TipRacuna)).optional(),
   imeFirme: z.string().optional(),
-  pibFirme: z.coerce.number().nonnegative().optional(),
+  pibFirme: z
+    .string()
+    .regex(/^\d*$/, "PIB mora sadržati samo cifre")
+    .optional(),
   nazivSeminara: z.string().optional(),
 });
 
