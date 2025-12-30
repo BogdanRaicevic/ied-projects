@@ -12,6 +12,9 @@
   "scripts": {
     "build": "turbo run build",
     "dev": "turbo run dev",
+    "test": "turbo run test",
+    "test:run": "turbo run test:run",
+    "test:coverage": "turbo run test:coverage",
     "lint": "turbo run lint",
     "lint:error": "turbo run lint:error",
     "biome:format": "turbo run biome:format",
