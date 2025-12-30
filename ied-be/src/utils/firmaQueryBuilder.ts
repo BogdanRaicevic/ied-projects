@@ -3,6 +3,7 @@ import type { FirmaQueryParams } from "@ied-shared/types/firma.zod";
 import type { QueryFilter } from "mongoose";
 import type { FirmaType } from "../models/firma.model";
 import { Seminar, type SeminarType } from "../models/seminar.model";
+import type { Zaposleni } from "../models/zaposleni.model";
 
 export const createFirmaQuery = async (params: FirmaQueryParams) => {
   const query: QueryFilter<FirmaType> = {};
@@ -109,7 +110,7 @@ export const createFirmaQuery = async (params: FirmaQueryParams) => {
 
   // ____ ZAPOSLENI FILTERS ____
 
-  const zaposleniElemMatch: QueryFilter<FirmaType> = {};
+  const zaposleniElemMatch: QueryFilter<Zaposleni> = {};
 
   if (Array.isArray(params?.radnaMesta) && params.radnaMesta.length > 0) {
     if (negateRadnoMesto) {
