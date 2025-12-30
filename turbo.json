@@ -5,6 +5,19 @@
       "dependsOn": ["^build"],
       "outputs": ["dist/**"]
     },
+    "test": {
+      "dependsOn": ["^build"],
+      "cache": false
+    },
+    "test:run": {
+      "dependsOn": ["^build"],
+      "cache": false
+    },
+    "test:coverage": {
+      "dependsOn": ["^build"],
+      "outputs": ["coverage/**"],
+      "cache": false
+    },
     "lint": {},
     "lint:error": {},
     "dev": {
