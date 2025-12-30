@@ -1,3 +1,10 @@
+## [1.7.3](https://github.com/BogdanRaicevic/ied-projects/compare/v1.7.2...v1.7.3) (2025-12-30)
+
+### Bug Fixes
+
+* type alocated to query filter ([2638a9d](https://github.com/BogdanRaicevic/ied-projects/commit/2638a9d822c37e757a24820f341401d4cad58cb3))
+* type mismatch ([e7c4714](https://github.com/BogdanRaicevic/ied-projects/commit/e7c4714fc1d553372df9d67d970f655c63f157f5))
+
 ## [1.7.2](https://github.com/BogdanRaicevic/ied-projects/compare/v1.7.1...v1.7.2) (2025-12-29)
 
 ### Bug Fixes
