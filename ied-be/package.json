@@ -8,6 +8,9 @@
     "build": "tsc",
     "start": "cross-env NODE_ENV=production tsx src/server.ts",
     "dev": "cross-env NODE_ENV=development tsx watch src/server.ts",
+    "test": "vitest",
+    "test:run": "vitest run",
+    "test:coverage": "vitest run --coverage",
     "biome:format": "npx biome format --write ./src",
     "biome:check": "npx biome check --write ./src",
     "lint": "npx biome lint ./src",
@@ -24,9 +27,11 @@
     "@types/express": "^5.0.6",
     "@types/node": "^24.10.4",
     "cross-env": "^10.1.0",
-    "globals": "^17.0.0",
+    "globals": "^17.0",
+    "mongodb-memory-server": "^10.0.0",
     "tsx": "^4.21.0",
-    "typescript": "^5.9.3"
+    "typescript": "^5.9.3",
+    "vitest": "^3.0.0"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.958.0",
