@@ -58,10 +58,10 @@ racunBaseSchema.index(
 );
 
 // --- PRE-SAVE HOOK FOR pozivNaBroj ---
-racunBaseSchema.pre("save", async function (next) {
+racunBaseSchema.pre("save", async function () {
   // Only run for new documents
   if (!this.isNew || this.pozivNaBroj) {
-    return next();
+    return;
   }
 
   try {
@@ -83,13 +83,11 @@ racunBaseSchema.pre("save", async function (next) {
     const sequenceNumber = sequenceDoc ? sequenceDoc.sequenceNumber : 1;
     const sequenceNumberPadded = sequenceNumber.toString().padStart(4, "0");
 
-    this.pozivNaBroj = `${datePrefix}${sequenceNumberPadded}`;
-
-    next();
+    this.set("pozivNaBroj", `${datePrefix}${sequenceNumberPadded}`);
   } catch (error: unknown) {
     const err = error instanceof Error ? error : new Error(String(error));
     console.error("Error generating pozivNaBroj:", err.message);
-    next(err);
+    throw err;
   }
 });
 // --- END OF PRE-SAVE HOOK ---
@@ -168,7 +166,7 @@ RacunBaseModel.discriminator(
   }),
 );
 
-export type RacunBaseModel = Document & {
+export type RacunBaseType = Document & {
   izdavacRacuna: "ied" | "permanent" | "bs";
   tipRacuna: "predracun" | "racun" | "avansniRacun" | "konacniRacun";
   tekuciRacun: string;
@@ -176,8 +174,8 @@ export type RacunBaseModel = Document & {
     firma_id: string;
     naziv: string;
     adresa: string;
-    pib: number;
-    maticniBroj: number;
+    pib: string;
+    maticniBroj: string;
     mesto: string;
   };
   seminar: {
@@ -194,7 +192,7 @@ export type RacunBaseModel = Document & {
   pozivNaBroj: string;
 };
 
-export type PredracunModel = RacunBaseModel & {
+export type PredracunModel = RacunBaseType & {
   calculations: {
     onlineUkupnaNaknada: number;
     offlineUkupnaNaknada: number;
@@ -210,7 +208,7 @@ export type PredracunModel = RacunBaseModel & {
   rokZaUplatu: number;
 };
 
-export type AvansniRacunModel = RacunBaseModel & {
+export type AvansniRacunModel = RacunBaseType & {
   calculations: {
     avansBezPdv: number;
     avansPdv: number;
@@ -219,7 +217,7 @@ export type AvansniRacunModel = RacunBaseModel & {
   datumUplateAvansa: Date;
 };
 
-export type KonacniRacunModel = RacunBaseModel & {
+export type KonacniRacunModel = RacunBaseType & {
   calculations: {
     onlineUkupnaNaknada: number;
     offlineUkupnaNaknada: number;
@@ -238,7 +236,7 @@ export type KonacniRacunModel = RacunBaseModel & {
   linkedPozivNaBroj: string;
 };
 
-export type RacunModel = RacunBaseModel & {
+export type RacunModel = RacunBaseType & {
   calculations: {
     onlineUkupnaNaknada: number;
     offlineUkupnaNaknada: number;

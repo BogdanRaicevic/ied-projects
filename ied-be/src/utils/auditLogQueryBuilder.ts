@@ -1,8 +1,11 @@
-import type { AuditLogQueryParams, AuditLogType } from "@ied-shared/types/audit_log.zod";
-import type { FilterQuery } from "mongoose";
+import type { AuditLogQueryParams } from "@ied-shared/types/audit_log.zod";
+import type { QueryFilter } from "mongoose";
+import type { AuditLogType } from "../models/audit_log.model";
 
-export function createAuditLogQuery(params: AuditLogQueryParams) {
-  const query: FilterQuery<AuditLogType> = {};
+export function createAuditLogQuery(
+  params: AuditLogQueryParams,
+): QueryFilter<AuditLogType> {
+  const query: QueryFilter<AuditLogType> = {};
 
   if (params?.userEmail && params.userEmail.length > 0) {
     query.userEmail = { $regex: params.userEmail, $options: "i" }; // Case-insensitive partial match

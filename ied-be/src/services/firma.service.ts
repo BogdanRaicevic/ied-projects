@@ -1,7 +1,6 @@
 import { NEGACIJA } from "@ied-shared/constants/firma";
 import type { ExportFirma, ExportZaposlenih } from "@ied-shared/index";
 import type { FirmaQueryParams } from "@ied-shared/types/firma.zod";
-import { type FilterQuery, sanitizeFilter } from "mongoose";
 import { Firma, type FirmaType } from "../models/firma.model";
 import type { Zaposleni } from "../models/zaposleni.model";
 import { createFirmaQuery } from "../utils/firmaQueryBuilder";
@@ -42,19 +41,14 @@ export const updateById = async (
   firmaData: Partial<FirmaType>,
 ): Promise<FirmaType | null> => {
   try {
-    const sanitizedData = sanitizeFilter(firmaData as FilterQuery<FirmaType>);
-    if (!id || typeof sanitizedData !== "object" || sanitizedData === null) {
-      throw new Error("Invalid firma input data");
-    }
-
-    const isSuppressed = await isEmailSuppressed(sanitizedData.e_mail);
+    const isSuppressed = await isEmailSuppressed(firmaData.e_mail);
     if (isSuppressed) {
-      sanitizedData.prijavljeni = false;
+      firmaData.prijavljeni = false;
     }
 
     return await Firma.findOneAndUpdate(
       { _id: id },
-      { $set: sanitizedData },
+      { $set: firmaData },
       { new: true, runValidators: true },
     ).lean();
   } catch (error) {
@@ -85,7 +79,7 @@ export const search = async (
 };
 
 export const exportSearchedFirmaData = async (
-  queryParameters: FilterQuery<FirmaQueryParams>,
+  queryParameters: FirmaQueryParams,
 ): Promise<ExportFirma> => {
   const mongoQuery = await createFirmaQuery(queryParameters);
 
@@ -124,7 +118,7 @@ export const exportSearchedFirmaData = async (
 };
 
 export const exportSearchedZaposleniData = async (
-  queryParameters: FilterQuery<FirmaQueryParams>,
+  queryParameters: FirmaQueryParams,
 ): Promise<ExportZaposlenih> => {
   const mongoQuery = await createFirmaQuery(queryParameters);
 
@@ -170,11 +164,15 @@ export const exportSearchedZaposleniData = async (
         const isRadnoMestoNegated =
           queryParameters.negacije?.includes(NEGACIJA.radnoMesto) ?? false;
         const isRadnoMestoIncluded =
-          queryParameters.radnaMesta.includes(z.radno_mesto) ?? false;
-        const hasNoRadnaMestaFilter = queryParameters.radnaMesta.length === 0;
+          queryParameters.radnaMesta?.includes(z.radno_mesto) ?? false;
+        const hasNoRadnaMestaFilter = queryParameters.radnaMesta?.length === 0;
 
         // Skip if zaposleni is not in the specified seminars
-        if (queryParameters.seminari.length > 0 && !isZaposleniInSeminar) {
+        if (
+          queryParameters.seminari &&
+          queryParameters.seminari.length > 0 &&
+          !isZaposleniInSeminar
+        ) {
           continue;
         }
 

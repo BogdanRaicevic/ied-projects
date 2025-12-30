@@ -1,11 +1,11 @@
 import { NEGACIJA } from "@ied-shared/constants/firma";
 import type { FirmaQueryParams } from "@ied-shared/types/firma.zod";
-import type { FilterQuery } from "mongoose";
+import type { QueryFilter } from "mongoose";
 import type { FirmaType } from "../models/firma.model";
-import { Seminar } from "../models/seminar.model";
+import { Seminar, type SeminarType } from "../models/seminar.model";
 
 export const createFirmaQuery = async (params: FirmaQueryParams) => {
-  const query: FilterQuery<FirmaType> = {};
+  const query: QueryFilter<FirmaType> = {};
 
   const negations = params?.negacije || [];
   const negateRadnoMesto = negations.includes(NEGACIJA.radnoMesto);
@@ -89,7 +89,7 @@ export const createFirmaQuery = async (params: FirmaQueryParams) => {
   }
 
   if (Array.isArray(params?.tipSeminara) && params.tipSeminara.length > 0) {
-    const seminarFilter: FilterQuery<any> = {
+    const seminarFilter: QueryFilter<SeminarType> = {
       tipSeminara: { $in: params.tipSeminara },
     };
     const ids = await Seminar.distinct("prijave.firma_id", seminarFilter);
@@ -109,7 +109,7 @@ export const createFirmaQuery = async (params: FirmaQueryParams) => {
 
   // ____ ZAPOSLENI FILTERS ____
 
-  const zaposleniElemMatch: FilterQuery<FirmaType> = {};
+  const zaposleniElemMatch: QueryFilter<FirmaType> = {};
 
   if (Array.isArray(params?.radnaMesta) && params.radnaMesta.length > 0) {
     if (negateRadnoMesto) {
