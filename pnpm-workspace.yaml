@@ -12,3 +12,4 @@ onlyBuiltDependencies:
   - '@swc/core'
   - browser-tabs-lock
   - core-js
+  - mongodb-memory-server
