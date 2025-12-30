@@ -459,10 +459,10 @@ const fetchRacuniForSeminars = async (
   const racunFilter: QueryFilter<RacunBaseType> = {
     tipRacuna: { $in: ["predracun", "konacniRacun"] },
     "primalacRacuna.firma_id": {
-      $in: firmaSeminarPairs.map((p) => p.firma_id.toString()),
+      $in: firmaSeminarPairs.map((p) => p.firma_id),
     },
     "seminar.seminar_id": {
-      $in: firmaSeminarPairs.map((p) => p.seminar_id.toString()),
+      $in: firmaSeminarPairs.map((p) => p.seminar_id),
     },
   };
 

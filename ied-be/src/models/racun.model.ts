@@ -1,4 +1,4 @@
-import { type Document, model, Schema } from "mongoose";
+import { type Document, model, Schema, Types } from "mongoose";
 import { SequenceModel } from "./sequence.model";
 
 const racunBaseSchema = new Schema(
@@ -21,7 +21,7 @@ const racunBaseSchema = new Schema(
       required: true,
     },
     primalacRacuna: {
-      firma_id: { type: Schema.Types.ObjectId, ref: "Firma" },
+      firma_id: { type: Types.ObjectId, ref: "Firma" },
       naziv: { type: String, required: true },
       adresa: { type: String, required: false },
       pib: { type: String, required: false },
@@ -29,7 +29,7 @@ const racunBaseSchema = new Schema(
       mesto: { type: String, required: false },
     },
     seminar: {
-      seminar_id: { type: Schema.Types.ObjectId, ref: "Seminar" },
+      seminar_id: { type: Types.ObjectId, ref: "Seminar" },
       naziv: { type: String, required: true },
       datum: { type: Date, required: true },
       lokacija: { type: String, required: false },
@@ -171,7 +171,7 @@ export type RacunBaseType = Document & {
   tipRacuna: "predracun" | "racun" | "avansniRacun" | "konacniRacun";
   tekuciRacun: string;
   primalacRacuna: {
-    firma_id: string;
+    firma_id: Types.ObjectId;
     naziv: string;
     adresa: string;
     pib: string;
@@ -179,7 +179,7 @@ export type RacunBaseType = Document & {
     mesto: string;
   };
   seminar: {
-    seminar_id: string;
+    seminar_id: Types.ObjectId;
     naziv: string;
     datum: Date;
     lokacija: string;
