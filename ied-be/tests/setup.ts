@@ -1,6 +1,6 @@
 import { MongoMemoryServer } from "mongodb-memory-server";
 import mongoose from "mongoose";
-import { afterAll, afterEach, beforeAll } from "vitest";
+import { afterAll, beforeAll } from "vitest";
 
 let mongoServer: MongoMemoryServer;
 
@@ -20,13 +20,14 @@ afterAll(async () => {
   }
 });
 
-afterEach(async () => {
-  // Clean up all collections after each test
-  const collections = mongoose.connection.collections;
-  for (const key in collections) {
-    const collection = collections[key];
-    if (collection) {
-      await collection.deleteMany({});
-    }
-  }
-});
+// Clean up database between tests
+// afterEach(async () => {
+//   // Clean up all collections after each test
+//   const collections = mongoose.connection.collections;
+//   for (const key in collections) {
+//     const collection = collections[key];
+//     if (collection) {
+//       await collection.deleteMany({});
+//     }
+//   }
+// });
