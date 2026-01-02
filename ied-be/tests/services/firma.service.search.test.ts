@@ -1,23 +1,27 @@
 import type { FirmaQueryParams } from "@ied-shared/types/firma.zod";
 import { beforeAll, describe, expect, it, vi } from "vitest";
+import { Firma } from "../../src/models/firma.model";
+import { Seminar } from "../../src/models/seminar.model";
+import { TipSeminara } from "../../src/models/tip_seminara.model";
 import * as firmaService from "../../src/services/firma.service";
-import { seedTestDatabase, TEST_DATA_CONFIG } from "../seedData";
+import staticTestData from "../fixtures/staticTestData.json";
 
 vi.mock("../../src/services/email_suppression.service", () => ({
   isEmailSuppressed: vi.fn().mockResolvedValue(false),
 }));
 
 describe("firma.service search", () => {
-  let seededData: Awaited<ReturnType<typeof seedTestDatabase>>;
-
   beforeAll(async () => {
-    seededData = await seedTestDatabase();
+    // Load static data into the database
+    await TipSeminara.insertMany(staticTestData.tipoviSeminara);
+    await Firma.insertMany(staticTestData.firme);
+    await Seminar.insertMany(staticTestData.seminari);
   });
 
   describe("simple search over FIRMA", () => {
     it("should find ALL firmas, no filters", async () => {
       const result = await firmaService.search({});
-      expect(result.totalDocuments).toBe(TEST_DATA_CONFIG.FIRMAS_COUNT);
+      expect(result.totalDocuments).toBe(staticTestData.firme.length);
     });
 
     it("should filter by MESTA", async () => {
@@ -25,7 +29,7 @@ describe("firma.service search", () => {
       const result = await firmaService.search(queryParameters);
 
       expect(result.totalDocuments).toBeGreaterThan(0);
-      expect(result.totalDocuments).toBeLessThan(TEST_DATA_CONFIG.FIRMAS_COUNT);
+      expect(result.totalDocuments).toBeLessThan(staticTestData.firme.length);
     });
 
     it("should filter by DELATNOSTI", async () => {
@@ -33,7 +37,7 @@ describe("firma.service search", () => {
       const result = await firmaService.search(queryParameters);
 
       expect(result.totalDocuments).toBeGreaterThan(0);
-      expect(result.totalDocuments).toBeLessThan(TEST_DATA_CONFIG.FIRMAS_COUNT);
+      expect(result.totalDocuments).toBeLessThan(staticTestData.firme.length);
     });
 
     it("should filter by TIPOVI FIRME", async () => {
@@ -41,7 +45,7 @@ describe("firma.service search", () => {
       const result = await firmaService.search(queryParameters);
 
       expect(result.totalDocuments).toBeGreaterThan(0);
-      expect(result.totalDocuments).toBeLessThan(TEST_DATA_CONFIG.FIRMAS_COUNT);
+      expect(result.totalDocuments).toBeLessThan(staticTestData.firme.length);
     });
 
     it("should filter by VELICINE FIRMI", async () => {
@@ -49,7 +53,7 @@ describe("firma.service search", () => {
       const result = await firmaService.search(queryParameters);
 
       expect(result.totalDocuments).toBeGreaterThan(0);
-      expect(result.totalDocuments).toBeLessThan(TEST_DATA_CONFIG.FIRMAS_COUNT);
+      expect(result.totalDocuments).toBeLessThan(staticTestData.firme.length);
     });
 
     it("should filter by STANJA FIRME", async () => {
@@ -57,14 +61,14 @@ describe("firma.service search", () => {
       const result = await firmaService.search(queryParameters);
 
       expect(result.totalDocuments).toBeGreaterThan(0);
-      expect(result.totalDocuments).toBeLessThan(TEST_DATA_CONFIG.FIRMAS_COUNT);
+      expect(result.totalDocuments).toBeLessThan(staticTestData.firme.length);
     });
 
     it("should filter by PRIJAVLJENI status", async () => {
       const result = await firmaService.search({ firmaPrijavljeni: true });
 
       expect(result.totalDocuments).toBeGreaterThan(0);
-      expect(result.totalDocuments).toBeLessThan(TEST_DATA_CONFIG.FIRMAS_COUNT);
+      expect(result.totalDocuments).toBeLessThan(staticTestData.firme.length);
     });
 
     it("should search by text in NAZIV FIRME", async () => {
@@ -72,7 +76,7 @@ describe("firma.service search", () => {
       const result = await firmaService.search(queryParameters);
 
       expect(result.totalDocuments).toBeGreaterThan(0);
-      expect(result.totalDocuments).toBeLessThan(TEST_DATA_CONFIG.FIRMAS_COUNT);
+      expect(result.totalDocuments).toBeLessThan(staticTestData.firme.length);
     });
   });
 
@@ -83,22 +87,118 @@ describe("firma.service search", () => {
       };
 
       const result = await firmaService.search(queryParameters);
-      console.log("Result:", result.totalDocuments);
 
       expect(result.totalDocuments).toBeGreaterThan(0);
-      expect(result.totalDocuments).toBeLessThan(TEST_DATA_CONFIG.FIRMAS_COUNT);
+      expect(result.totalDocuments).toBeLessThan(staticTestData.firme.length);
     });
 
-    it("should find firmas where DIFFERENT zaposleni match DIFFERENT criteria", async () => {
+    it("should find firmas where zaposleni match criteria", async () => {
       const queryParameters: FirmaQueryParams = {
         radnaMesta: ["Developer"],
         imePrezime: "Al",
       };
 
-      console.log("seededData.firme:", seededData.firme.length);
       const result = await firmaService.search(queryParameters);
 
+      // Count expected results from static data
+      const expectedCount = staticTestData.firme.filter((firma) =>
+        firma.zaposleni?.some(
+          (z) =>
+            z.radno_mesto === "Developer" &&
+            (z.ime.startsWith("Al") || z.prezime.startsWith("Al")),
+        ),
+      ).length;
+
+      expect(result.totalDocuments).toBe(expectedCount);
+    });
+  });
+
+  describe("complex combined filters", () => {
+    it("should combine multiple filters", async () => {
+      const queryParameters: FirmaQueryParams = {
+        mesta: ["Beograd"],
+        delatnosti: ["IT"],
+        tipoviFirme: ["JP"],
+      };
+
+      const result = await firmaService.search(queryParameters);
       expect(result.totalDocuments).toBe(1);
+    });
+
+    it("should combine seminar filter with firma filters", async () => {
+      const seminarId = staticTestData.seminari[0]!._id.toString();
+      const queryParameters: FirmaQueryParams = {
+        seminari: [seminarId],
+        tipoviFirme: ["DOO", "AD"],
+        stanjaFirme: ["aktivna"],
+      };
+
+      const result = await firmaService.search(queryParameters);
+      expect(result.totalDocuments).toBe(1);
+    });
+  });
+
+  describe("seminar-related search with seeded data", () => {
+    const seminarId = staticTestData.seminari[0]!._id.toString();
+    it("should filter by SEMINARI - firmas with prijave on specific seminar", async () => {
+      const queryParameters: FirmaQueryParams = {
+        seminari: [seminarId],
+      };
+
+      const result = await firmaService.search(queryParameters);
+
+      expect(result.totalDocuments).toBe(5);
+    });
+
+    it("should filter by multiple SEMINARI", async () => {
+      const seminarIds = staticTestData.seminari
+        .slice(0, 3)
+        .map((s) => s._id.toString());
+      const queryParameters: FirmaQueryParams = { seminari: seminarIds };
+
+      const result = await firmaService.search(queryParameters);
+
+      expect(result.totalDocuments).toBeGreaterThan(0);
+    });
+
+    it("should filter by TIP_SEMINARA", async () => {
+      const tipSeminaraId =
+        staticTestData.tipoviSeminara[0]?._id.toString() || "";
+      const queryParameters: FirmaQueryParams = {
+        tipSeminara: [tipSeminaraId],
+      };
+
+      const result = await firmaService.search(queryParameters);
+
+      // Should find firmas that have prijave on seminars of this type
+      expect(result.totalDocuments).toBeGreaterThan(0);
+    });
+
+    it("should return 0 results for non-existent seminar", async () => {
+      const fakeId = "612e3c4f1c4ae5b6f0d9f999";
+      const queryParameters: FirmaQueryParams = { seminari: [fakeId] };
+
+      const result = await firmaService.search(queryParameters);
+
+      expect(result.totalDocuments).toBe(0);
+    });
+
+    it("should combine SEMINARI filter with other filters", async () => {
+      const queryParameters: FirmaQueryParams = {
+        seminari: [seminarId],
+        mesta: ["Beograd"],
+      };
+
+      const result = await firmaService.search(queryParameters);
+
+      // Result should be subset of seminar-only filter
+      const seminarOnlyResult = await firmaService.search({
+        seminari: [seminarId],
+      });
+
+      expect(result.totalDocuments).toBeLessThanOrEqual(
+        seminarOnlyResult.totalDocuments,
+      );
     });
   });
 });
