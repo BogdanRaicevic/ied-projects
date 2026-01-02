@@ -10,11 +10,6 @@ export default defineConfig({
     testTimeout: 30000, // 30s for mongodb-memory-server startup
     hookTimeout: 30000,
     pool: "forks", // Better isolation for database tests
-    poolOptions: {
-      forks: {
-        singleFork: true, // Run tests sequentially to avoid DB conflicts
-      },
-    },
     coverage: {
       provider: "v8",
       reporter: ["text", "json", "html"],
