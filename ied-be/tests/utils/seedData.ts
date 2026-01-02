@@ -1,10 +1,10 @@
 import { faker } from "@faker-js/faker";
 import { Types } from "mongoose";
-import type { FirmaType } from "../src/models/firma.model";
-import { Seminar, type SeminarType } from "../src/models/seminar.model";
-import { TipSeminara } from "../src/models/tip_seminara.model";
-import type { Zaposleni } from "../src/models/zaposleni.model";
-import * as firmaService from "../src/services/firma.service";
+import type { FirmaType } from "../../src/models/firma.model";
+import { Seminar, type SeminarType } from "../../src/models/seminar.model";
+import { TipSeminara } from "../../src/models/tip_seminara.model";
+import type { Zaposleni } from "../../src/models/zaposleni.model";
+import * as firmaService from "../../src/services/firma.service";
 
 // Seed faker for reproducible tests
 faker.seed(12345);
