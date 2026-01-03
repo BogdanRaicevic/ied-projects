@@ -109,7 +109,7 @@ importers:
         specifier: ^24.10.4
         version: 24.10.4
       '@vitest/coverage-v8':
-        specifier: 4.0.16
+        specifier: ^4.0.16
         version: 4.0.16(vitest@4.0.16(@types/node@24.10.4)(jiti@2.6.0)(tsx@4.21.0))
       cross-env:
         specifier: ^10.1.0
@@ -7293,7 +7293,7 @@ snapshots:
 
   istanbul-lib-source-maps@5.0.6:
     dependencies:
-      '@jridgewell/trace-mapping': 0.3.30
+      '@jridgewell/trace-mapping': 0.3.31
       debug: 4.4.3
       istanbul-lib-coverage: 3.2.2
     transitivePeerDependencies:
