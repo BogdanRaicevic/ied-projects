@@ -118,7 +118,7 @@ importers:
         specifier: ^17.0
         version: 17.0.0
       mongodb-memory-server:
-        specifier: ^10.0.0
+        specifier: ^10.4.3
         version: 10.4.3
       tsx:
         specifier: ^4.21.0
