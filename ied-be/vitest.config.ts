@@ -1,4 +1,3 @@
-import path from "node:path";
 import { defineConfig } from "vitest/config";
 
 export default defineConfig({
@@ -14,12 +13,6 @@ export default defineConfig({
       provider: "v8",
       reporter: ["text", "json", "html"],
       enabled: true,
-    },
-  },
-
-  resolve: {
-    alias: {
-      "@ied-shared": path.resolve(__dirname, "../ied-shared/dist"),
     },
   },
 });
