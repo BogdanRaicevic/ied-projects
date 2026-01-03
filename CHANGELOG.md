@@ -1,3 +1,10 @@
+## [1.8.0](https://github.com/BogdanRaicevic/ied-projects/compare/v1.7.3...v1.8.0) (2026-01-03)
+
+### Features
+
+* add CI step for executing tests ([3cff2c2](https://github.com/BogdanRaicevic/ied-projects/commit/3cff2c2b72036c62fcf3ce53b6a86470e81aaf29))
+* add faker to fake data ([232db2a](https://github.com/BogdanRaicevic/ied-projects/commit/232db2a246358ed62f9f0a3cac3fd1569a99f36d))
+
 ## [1.7.3](https://github.com/BogdanRaicevic/ied-projects/compare/v1.7.2...v1.7.3) (2025-12-30)
 
 ### Bug Fixes
