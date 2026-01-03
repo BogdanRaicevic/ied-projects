@@ -1,15 +1,6 @@
-import type { FirmaQueryParams } from "@ied-shared/types/firma.zod";
 import mongoose from "mongoose";
-import { beforeEach, describe, expect, it, vi } from "vitest";
-import type { FirmaType } from "../../src/models/firma.model";
-import type { SeminarType } from "../../src/models/seminar.model";
+import { describe, expect, it, vi } from "vitest";
 import * as firmaService from "../../src/services/firma.service";
-import {
-  cursorToArray,
-  type SeededData,
-  seedTestDatabase,
-  TEST_DATA_CONFIG,
-} from "../utils/seedData";
 
 vi.mock("../../src/services/email_suppression.service", () => ({
   isEmailSuppressed: vi.fn().mockResolvedValue(false),
