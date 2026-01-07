@@ -2,7 +2,7 @@ import type {
   AuditLogQueryParams,
   AuditLogType,
 } from "@ied-shared/types/audit_log.zod";
-import { Button, Paper, TextField } from "@mui/material";
+import { Button, Paper, Tab, Tabs, TextField, Typography } from "@mui/material";
 import { grey } from "@mui/material/colors";
 import { Box, Grid } from "@mui/system";
 import { DatePicker } from "@mui/x-date-pickers";
@@ -15,6 +15,8 @@ import {
 import { useMemo, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { AuditChangesViewer } from "../components/AuditChangesViewer/AuditChangesViewer";
+import AuditOverview from "../components/AuditChangesViewer/AuditOverview";
+import PageTitle from "../components/PageTitle";
 import AddedChip from "../components/styled/AddedChip";
 import RemovedChip from "../components/styled/RemovedChip";
 import {
@@ -34,6 +36,7 @@ export default function AuditLog() {
     pageIndex: 0,
     pageSize: 5,
   });
+  const [activeTab, setActiveTab] = useState(0);
 
   const { data, isLoading } = useAuditLogs({
     params: queryParams,
@@ -179,18 +182,18 @@ export default function AuditLog() {
     setQueryParams(data);
   };
 
-  const formatSecondsToTime = (totalSeconds: number) => {
-    const hours = Math.floor(totalSeconds / 3600);
-    const minutes = Math.floor((totalSeconds % 3600) / 60);
-    const seconds = Math.floor(totalSeconds % 60);
-    return `${String(hours).padStart(2, "0")}:${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
+  const handleTabChange = (_event: React.SyntheticEvent, newValue: number) => {
+    setActiveTab(newValue);
   };
 
   return (
-    <div>
-      <h1>Evidencija Promena</h1>
+    <Box mt={3} mb={5}>
+      <PageTitle title="Evidencija Promena" />
 
       <Paper sx={{ p: 2, mb: 3 }}>
+        <Typography variant="h4" gutterBottom>
+          Parametri pretrage
+        </Typography>
         <Box component="form" onSubmit={handleSubmit(onSearch)}>
           <Grid container spacing={2} alignItems="center">
             <Grid size={3}>
@@ -274,57 +277,24 @@ export default function AuditLog() {
             </Box>
           </Grid>
         </Box>
-
-        {queryParams.userEmail ? (
-          <Box mt={2}>
-            Prikaz rezultata za korisnika:{" "}
-            <strong>{queryParams.userEmail}</strong> za period od{" "}
-            <strong>
-              {queryParams.dateFrom
-                ? formatDate(queryParams.dateFrom, "yyyy-MM-dd")
-                : "početka"}
-            </strong>{" "}
-            do{" "}
-            <strong>
-              {queryParams.dateTo
-                ? formatDate(queryParams.dateTo, "yyyy-MM-dd")
-                : "danas"}
-            </strong>
-            .
-            <Box>
-              Ukupno novih dokumenata:
-              <strong>{auditStats?.totalNew || 0}</strong>
-              Ukupno obrisanih dokumenata:
-              <strong>{auditStats?.totalDeleted || 0}</strong>
-              Ukupno izmenjenih dokumenata:
-              <strong>{auditStats?.totalUpdated || 0}</strong>
-              Prosečan broj izmena po danu:
-              {/* <strong>
-                {getUserStats()?.averageUpdatesPerDay.toFixed(2) || 0}
-              </strong>
-              Prosečno vreme prve izmene u danu:
-              <strong>
-                {formatSecondsToTime(getUserStats()?.averageStartTime || 0)}
-              </strong>
-              Prosečno vreme poslednje izmene u danu:
-              <strong>
-                {formatSecondsToTime(getUserStats()?.averageEndTime || 0)}
-              </strong>
-              Prosečno vreme između izmena:
-              <strong>
-                {getUserStats()?.averageTimeBetweenEntries.toFixed(2) || 0}{" "}
-                minuta
-              </strong>
-              Suma spekulisano provedenog vremena na izmenama:
-              <strong>
-                {formatSecondsToTime(getUserStats()?.speculatedWorkTime || 0)}
-              </strong> */}
-            </Box>
-          </Box>
-        ) : null}
       </Paper>
 
-      <MaterialReactTable table={auditLogsTable} />
-    </div>
+      <Box>
+        <Box>
+          <Tabs value={activeTab} onChange={handleTabChange}>
+            <Tab label="Pregled izmena" value={0} />
+            <Tab label="Detalji izmena" value={1} />
+          </Tabs>
+        </Box>
+      </Box>
+      {activeTab === 1 && (
+        <Box>
+          <MaterialReactTable table={auditLogsTable} />
+        </Box>
+      )}
+      {activeTab === 0 && auditStats && (
+        <AuditOverview auditData={auditStats} />
+      )}
+    </Box>
   );
 }
