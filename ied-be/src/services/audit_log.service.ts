@@ -1,4 +1,7 @@
-import type { AuditLogQueryParams } from "@ied-shared/types/audit_log.zod";
+import type {
+  AuditLogOverviewStats,
+  AuditLogQueryParams,
+} from "@ied-shared/types/audit_log.zod";
 import { AuditLog } from "./../models/audit_log.model";
 import { createAuditLogQuery } from "../utils/auditLogQueryBuilder";
 
@@ -467,7 +470,7 @@ export const getUserChangesByDate = async (params: AuditLogQueryParams) => {
   }
 };
 
-const calculateStatistics = (dailyStats) => {
+const calculateStatistics = (dailyStats): AuditLogOverviewStats => {
   const totalNew = dailyStats.reduce((sum, day) => sum + day.new, 0);
 
   const totalDeleted = dailyStats.reduce((sum, day) => sum + day.deleted, 0);
@@ -481,7 +484,7 @@ const calculateStatistics = (dailyStats) => {
     (totalUpdated / dailyStats.length).toFixed(2),
   );
 
-  const averageStartTime = (() => {
+  const averageEditStartTime = (() => {
     const totalMinutes = dailyStats.reduce((sum, day) => {
       const date = new Date(day.earliestEdit);
       return sum + date.getHours() * 60 + date.getMinutes();
@@ -494,7 +497,7 @@ const calculateStatistics = (dailyStats) => {
     return `${String(hours).padStart(2, "0")}:${String(minutes).padStart(2, "0")}`;
   })();
 
-  const averageEndTime = (() => {
+  const averageEditEndTime = (() => {
     const totalMinutes = dailyStats.reduce((sum, day) => {
       const date = new Date(day.latestEdit);
       return sum + date.getHours() * 60 + date.getMinutes();
@@ -507,7 +510,7 @@ const calculateStatistics = (dailyStats) => {
     return `${String(hours).padStart(2, "0")}:${String(minutes).padStart(2, "0")}`;
   })();
 
-  const speculatedWorkTime = (() => {
+  const averageEstimatedWorkTime = (() => {
     const avgMinutes = Math.round(
       dailyStats.reduce((sum, day) => sum + day.estimatedWorkTime, 0) /
         dailyStats.length,
@@ -534,9 +537,9 @@ const calculateStatistics = (dailyStats) => {
     totalDeleted,
     totalUpdated,
     averageUpdatesPerDay,
-    averageStartTime,
-    averageEndTime,
-    speculatedWorkTime,
+    averageEditStartTime,
+    averageEditEndTime,
+    averageEstimatedWorkTime,
     averageTimeBetweenEntries,
     averageTimeForGreatestGap,
   };

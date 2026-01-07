@@ -43,10 +43,12 @@ export const AuditLogStatsByDateResponseSchema = z.object({
   totalNew: z.number(),
   totalDeleted: z.number(),
   totalUpdated: z.number(),
-  totalEstimatedWorkTime: z.number(),
+  averageUpdatesPerDay: z.number(),
+  averageEstimatedWorkTime: z.string(),
   averageTimeBetweenEntries: z.number(),
   averageEditStartTime: z.string(),
   averageEditEndTime: z.string(),
+  averageTimeForGreatestGap: z.number(),
   dailyStats: z.array(
     z.object({
       date: z.string(),
@@ -62,4 +64,9 @@ export const AuditLogStatsByDateResponseSchema = z.object({
 });
 export type AuditLogStatsByDateResponse = z.infer<
   typeof AuditLogStatsByDateResponseSchema
+>;
+
+export type AuditLogOverviewStats = Omit<
+  AuditLogStatsByDateResponse,
+  "dailyStats" | "userEmail" | "model" | "dateStart" | "dateEnd"
 >;
