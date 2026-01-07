@@ -19,8 +19,6 @@ export default function AuditOverview({
     "dailyStats" | "userEmail" | "model" | "dateStart" | "dateEnd"
   >;
 
-  console.log("auditData", auditData);
-
   const tableData: {
     label: string;
     value: string | number | undefined | null;
@@ -47,6 +45,22 @@ export default function AuditOverview({
       key: "averageUpdatesPerDay",
     },
     {
+      label: "Broj dana sa izmenama u datom periodu (bez praznika)",
+      value: auditData.totalWorkedDays,
+      key: "totalWorkedDays",
+    },
+
+    {
+      label: "Broj dana bez izmena u datom periodu (bez praznika)",
+      value: auditData.totalUnworkedDays,
+      key: "totalUnworkedDays",
+    },
+    {
+      label: "Broj vikend dana sa izmenama u datom periodu",
+      value: auditData.totalWorkedWeekendDays,
+      key: "totalWorkedWeekendDays",
+    },
+    {
       label: "Prosečno vreme početka izmena",
       value: auditData.averageEditStartTime,
       key: "averageEditStartTime",
@@ -62,12 +76,12 @@ export default function AuditOverview({
       key: "averageEstimatedWorkTime",
     },
     {
-      label: "Prosečno vreme između unosa",
+      label: "Prosečno vreme između unosa (u minutima)",
       value: auditData.averageTimeBetweenEntries,
       key: "averageTimeBetweenEntries",
     },
     {
-      label: "Prosečno vreme za najveći prekid",
+      label: "Prosečno vreme za najveći prekid u radu (u minutima)",
       value: auditData.averageTimeForGreatestGap,
       key: "averageTimeForGreatestGap",
     },
