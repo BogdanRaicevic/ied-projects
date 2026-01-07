@@ -30,8 +30,6 @@ router.get(
         model: (model as string) || "Firma",
       });
 
-      console.log("hit");
-
       res.json(result);
     } catch (error) {
       next(error);

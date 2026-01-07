@@ -32,7 +32,7 @@ export const getAuditLogData = async ({
     );
     return res.data;
   } catch (error) {
-    throw new Error(`Error fetching seminari data: ${(error as any).message}`);
+    throw new Error(`Error fetching audit log data: ${(error as any).message}`);
   }
 };
 
@@ -50,6 +50,8 @@ export const getAuditLogStats = async ({
     );
     return res.data;
   } catch (error) {
-    throw new Error(`Error fetching seminari data: ${(error as any).message}`);
+    throw new Error(
+      `Error fetching audit log stats: ${(error as any).message}`,
+    );
   }
 };

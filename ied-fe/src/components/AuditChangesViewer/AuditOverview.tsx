@@ -107,7 +107,9 @@ export default function AuditOverview({
               <TableCell component="th" scope="row">
                 {item.label}
               </TableCell>
-              <TableCell align="right">{String(item.value)}</TableCell>
+              <TableCell align="right">
+                {item.value != null ? String(item.value) : "N/A"}
+              </TableCell>
             </TableRow>
           ))}
         </TableBody>

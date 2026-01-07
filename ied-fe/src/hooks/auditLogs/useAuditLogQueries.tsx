@@ -16,7 +16,7 @@ export const useAuditLogs = ({
   pageSize: number;
 }) => {
   return useQuery<AuditLogsResponse>({
-    queryKey: ["audit-log", params],
+    queryKey: ["audit-log", params, pageIndex, pageSize],
     queryFn: () => getAuditLogData({ pageSize, pageIndex, params }),
   });
 };
