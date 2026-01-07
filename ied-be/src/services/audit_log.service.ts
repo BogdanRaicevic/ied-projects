@@ -2,6 +2,7 @@ import type {
   AuditLogOverviewStats,
   AuditLogQueryParams,
 } from "@ied-shared/types/audit_log.zod";
+import { differenceInBusinessDays, isWeekend } from "date-fns";
 import { AuditLog } from "./../models/audit_log.model";
 import { createAuditLogQuery } from "../utils/auditLogQueryBuilder";
 
@@ -459,7 +460,7 @@ export const getUserChangesByDate = async (params: AuditLogQueryParams) => {
       dailyStats,
     };
 
-    const auditStats = calculateStatistics(dailyStats);
+    const auditStats = calculateStatistics(dailyStats, dateFrom, dateTo);
     return {
       ...auditOverview,
       ...auditStats,
@@ -470,7 +471,11 @@ export const getUserChangesByDate = async (params: AuditLogQueryParams) => {
   }
 };
 
-const calculateStatistics = (dailyStats): AuditLogOverviewStats => {
+const calculateStatistics = (
+  dailyStats: Array<any>,
+  dateFrom: Date | undefined,
+  dateTo: Date | undefined,
+): AuditLogOverviewStats => {
   const totalNew = dailyStats.reduce((sum, day) => sum + day.new, 0);
 
   const totalDeleted = dailyStats.reduce((sum, day) => sum + day.deleted, 0);
@@ -479,6 +484,29 @@ const calculateStatistics = (dailyStats): AuditLogOverviewStats => {
     (sum, day) => sum + day.aggregatedUpdated,
     0,
   );
+
+  if (!dateFrom || !dateTo || dailyStats.length === 0) {
+    throw Error("Invalid parameters for calculating statistics");
+  }
+
+  const numberOfBusinessDays = differenceInBusinessDays(dateTo, dateFrom) + 1;
+
+  const countUnworkedDays = () => {
+    const workedDates = new Set(dailyStats.map((day) => day.date));
+
+    return numberOfBusinessDays - workedDates.size;
+  };
+
+  const countWorkedWeekendDays = () => {
+    const workedDates = new Set(dailyStats.map((day) => day.date));
+    let counter = 0;
+    workedDates.forEach((d) => {
+      if (isWeekend(d)) {
+        counter++;
+      }
+    });
+    return counter;
+  };
 
   const averageUpdatesPerDay =
     dailyStats.length > 0
@@ -567,5 +595,8 @@ const calculateStatistics = (dailyStats): AuditLogOverviewStats => {
     averageEstimatedWorkTime,
     averageTimeBetweenEntries,
     averageTimeForGreatestGap,
+    totalWorkedDays: `${dailyStats.length} / ${numberOfBusinessDays}`,
+    totalUnworkedDays: `${countUnworkedDays()} / ${numberOfBusinessDays}`,
+    totalWorkedWeekendDays: countWorkedWeekendDays(),
   };
 };
