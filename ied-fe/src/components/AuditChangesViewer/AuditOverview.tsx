@@ -14,15 +14,6 @@ export default function AuditOverview({
 }: {
   auditData: AuditLogStatsByDateResponse;
 }) {
-  //   type AuditLogOverviewStats = Omit<
-  //     AuditLogStatsByDateResponse,
-  //     "dailyStats" | "userEmail" | "model" | "dateStart" | "dateEnd"
-  //   >;
-
-  //   type DailyStats = AuditLogStatsByDateResponse["dailyStats"][0];
-
-  //   const headers = Object.keys(overviewStats);
-
   type AuditOverviewStats = Omit<
     AuditLogStatsByDateResponse,
     "dailyStats" | "userEmail" | "model" | "dateStart" | "dateEnd"

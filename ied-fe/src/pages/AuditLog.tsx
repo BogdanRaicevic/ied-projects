@@ -292,9 +292,14 @@ export default function AuditLog() {
           <MaterialReactTable table={auditLogsTable} />
         </Box>
       )}
-      {activeTab === 0 && auditStats && (
-        <AuditOverview auditData={auditStats} />
-      )}
+      {activeTab === 0 &&
+        (queryParams.userEmail ? (
+          auditStats && <AuditOverview auditData={auditStats} />
+        ) : (
+          <Paper sx={{ p: 3, mt: 2, textAlign: "center" }}>
+            <Typography>Dodajte email u pretragu</Typography>
+          </Paper>
+        ))}
     </Box>
   );
 }

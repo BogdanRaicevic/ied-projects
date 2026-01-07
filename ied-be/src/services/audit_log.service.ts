@@ -480,12 +480,15 @@ const calculateStatistics = (dailyStats): AuditLogOverviewStats => {
     0,
   );
 
-  const averageUpdatesPerDay = Number(
-    (totalUpdated / dailyStats.length).toFixed(2),
-  );
+  const averageUpdatesPerDay =
+    dailyStats.length > 0
+      ? Number((totalUpdated / dailyStats.length).toFixed(2))
+      : 0;
 
   const averageEditStartTime = (() => {
+    if (dailyStats.length === 0) return "Nema podataka";
     const totalMinutes = dailyStats.reduce((sum, day) => {
+      if (!day.earliestEdit) return sum;
       const date = new Date(day.earliestEdit);
       return sum + date.getHours() * 60 + date.getMinutes();
     }, 0);
@@ -494,11 +497,16 @@ const calculateStatistics = (dailyStats): AuditLogOverviewStats => {
     const hours = Math.floor(avgMinutes / 60);
     const minutes = Math.round(avgMinutes % 60);
 
-    return `${String(hours).padStart(2, "0")}:${String(minutes).padStart(2, "0")}`;
+    return `${String(hours).padStart(2, "0")}:${String(minutes).padStart(
+      2,
+      "0",
+    )}`;
   })();
 
   const averageEditEndTime = (() => {
+    if (dailyStats.length === 0) return "Nema podataka";
     const totalMinutes = dailyStats.reduce((sum, day) => {
+      if (!day.latestEdit) return sum;
       const date = new Date(day.latestEdit);
       return sum + date.getHours() * 60 + date.getMinutes();
     }, 0);
@@ -507,30 +515,47 @@ const calculateStatistics = (dailyStats): AuditLogOverviewStats => {
     const hours = Math.floor(avgMinutes / 60);
     const minutes = Math.round(avgMinutes % 60);
 
-    return `${String(hours).padStart(2, "0")}:${String(minutes).padStart(2, "0")}`;
+    return `${String(hours).padStart(2, "0")}:${String(minutes).padStart(
+      2,
+      "0",
+    )}`;
   })();
 
   const averageEstimatedWorkTime = (() => {
+    if (dailyStats.length === 0) return "Nema podataka";
     const avgMinutes = Math.round(
-      dailyStats.reduce((sum, day) => sum + day.estimatedWorkTime, 0) /
+      dailyStats.reduce((sum, day) => sum + (day.estimatedWorkTime || 0), 0) /
         dailyStats.length,
     );
 
     const hours = Math.floor(avgMinutes / 60);
     const minutes = Math.round(avgMinutes % 60);
 
-    return `${String(hours).padStart(2, "0")}:${String(minutes).padStart(2, "0")}`;
+    return `${String(hours).padStart(2, "0")}:${String(minutes).padStart(
+      2,
+      "0",
+    )}`;
   })();
 
-  const averageTimeBetweenEntries = Math.round(
-    dailyStats.reduce((sum, day) => sum + day.averageTimeBetweenEntries, 0) /
-      dailyStats.length,
-  );
+  const averageTimeBetweenEntries =
+    dailyStats.length > 0
+      ? Math.round(
+          dailyStats.reduce(
+            (sum, day) => sum + (day.averageTimeBetweenEntries || 0),
+            0,
+          ) / dailyStats.length,
+        )
+      : 0;
 
-  const averageTimeForGreatestGap = Math.round(
-    dailyStats.reduce((sum, day) => sum + day.biggestGapBetweenEntries, 0) /
-      dailyStats.length,
-  );
+  const averageTimeForGreatestGap =
+    dailyStats.length > 0
+      ? Math.round(
+          dailyStats.reduce(
+            (sum, day) => sum + (day.biggestGapBetweenEntries || 0),
+            0,
+          ) / dailyStats.length,
+        )
+      : 0;
 
   return {
     totalNew,
