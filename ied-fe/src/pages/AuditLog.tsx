@@ -16,6 +16,7 @@ import { useMemo, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { AuditChangesViewer } from "../components/AuditChangesViewer/AuditChangesViewer";
 import AuditOverview from "../components/AuditChangesViewer/AuditOverview";
+import AuditOverviewDetails from "../components/AuditChangesViewer/AuditOverviewDetails";
 import PageTitle from "../components/PageTitle";
 import AddedChip from "../components/styled/AddedChip";
 import RemovedChip from "../components/styled/RemovedChip";
@@ -294,7 +295,12 @@ export default function AuditLog() {
       )}
       {activeTab === 0 &&
         (queryParams.userEmail ? (
-          auditStats && <AuditOverview auditData={auditStats} />
+          auditStats && (
+            <Box>
+              <AuditOverview auditData={auditStats} />
+              <AuditOverviewDetails auditData={auditStats} />
+            </Box>
+          )
         ) : (
           <Paper sx={{ p: 3, mt: 2, textAlign: "center" }}>
             <Typography>Dodajte email u pretragu</Typography>
