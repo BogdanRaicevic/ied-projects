@@ -13,7 +13,7 @@ import type { AuditLogStatsByDateResponse } from "ied-shared";
 import {
   getDayInfo,
   getTimeFromISODate,
-  populateMissingWorkdays,
+  populateMissingDays,
 } from "../../utils/audit-log.helpers";
 
 export default function AuditOverviewDetails({
@@ -33,7 +33,7 @@ export default function AuditOverviewDetails({
     "Prosečno vreme između unosa (min)",
   ];
 
-  const updatedStats = populateMissingWorkdays({
+  const updatedStats = populateMissingDays({
     dailyStats: auditData.dailyStats,
     dateStart: auditData.dateStart,
     dateEnd: auditData.dateEnd,
