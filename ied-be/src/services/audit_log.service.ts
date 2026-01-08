@@ -79,6 +79,11 @@ export const getUserChangesStats = async (params: AuditLogQueryParams) => {
         },
       },
 
+      // Sort by timestamp to get the first operation chronologically
+      {
+        $sort: { timestamp: 1 },
+      },
+
       // Group by resource.id and get the first operation type
       {
         $group: {
@@ -261,6 +266,7 @@ export const getUserChangesByDate = async (params: AuditLogQueryParams) => {
       }
     }
 
+    // TODO: Fix type issues below
     const result = await AuditLog.aggregate([
       // Match the user and model
       { $match: matchConditions },
@@ -416,8 +422,8 @@ export const getUserChangesByDate = async (params: AuditLogQueryParams) => {
         const earliestTimestamp = timestamps[0];
         const latestTimestamp = timestamps[timestamps.length - 1];
 
-        dateStats.earliestEdit = earliestTimestamp;
-        dateStats.latestEdit = latestTimestamp;
+        dateStats.earliestEdit = earliestTimestamp.toISOString();
+        dateStats.latestEdit = latestTimestamp.toISOString();
 
         // Estimated work time (in minutes)
         const workTimeMs =
@@ -494,7 +500,7 @@ const calculateStatistics = (
   const countUnworkedDays = () => {
     const workedDates = new Set(dailyStats.map((day) => day.date));
 
-    return numberOfBusinessDays - workedDates.size;
+    return Math.max(0, numberOfBusinessDays - workedDates.size);
   };
 
   const countWorkedWeekendDays = () => {

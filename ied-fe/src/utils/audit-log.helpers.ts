@@ -10,7 +10,7 @@ import type { AuditLogStatsByDateResponse } from "ied-shared";
 
 type DailyStat = AuditLogStatsByDateResponse["dailyStats"][number];
 
-export const populateMissingWorkdays = ({
+export const populateMissingDays = ({
   dailyStats,
   dateStart,
   dateEnd,
