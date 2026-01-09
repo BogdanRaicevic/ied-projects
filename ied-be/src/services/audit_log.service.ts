@@ -505,9 +505,8 @@ const calculateStatistics = (
       averageEstimatedWorkTime: 0,
       averageTimeBetweenEntries: 0,
       averageTimeForGreatestGap: 0,
-      totalWorkedDays: `0 / 0`,
-      totalUnworkedDays: `0 / 0`,
-      totalWorkedWeekendDays: 0,
+      totalWorkedDays: 0,
+      totalUnworkedDays: 0,
     };
   }
 
@@ -517,17 +516,6 @@ const calculateStatistics = (
     const workedDates = new Set(dailyStats.map((day) => day.date));
 
     return Math.max(0, numberOfBusinessDays - workedDates.size);
-  };
-
-  const countWorkedWeekendDays = () => {
-    const workedDates = new Set(dailyStats.map((day) => day.date));
-    let counter = 0;
-    workedDates.forEach((d) => {
-      if (isWeekend(d)) {
-        counter++;
-      }
-    });
-    return counter;
   };
 
   const averageUpdatesPerDay =
@@ -611,8 +599,7 @@ const calculateStatistics = (
     averageEstimatedWorkTime,
     averageTimeBetweenEntries,
     averageTimeForGreatestGap,
-    totalWorkedDays: `${dailyStats.length} / ${numberOfBusinessDays}`,
-    totalUnworkedDays: `${countUnworkedDays()} / ${numberOfBusinessDays}`,
-    totalWorkedWeekendDays: countWorkedWeekendDays(),
+    totalWorkedDays: dailyStats.length,
+    totalUnworkedDays: countUnworkedDays(),
   };
 };

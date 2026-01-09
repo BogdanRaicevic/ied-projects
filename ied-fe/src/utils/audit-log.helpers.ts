@@ -60,6 +60,15 @@ export const getDayInfo = (dateString: string) => {
   };
 };
 
+export const getNumberOfBusinessDays = (dateStart: string, dateEnd: string) => {
+  const startDate = parseISO(dateStart);
+  const endDate = parseISO(dateEnd);
+
+  const allDays = eachDayOfInterval({ start: startDate, end: endDate });
+
+  return allDays.filter((day) => !isWeekend(day)).length;
+};
+
 export const getTimeFromISODate = (isoDate: string) => {
   const date = parseISO(isoDate);
   if (!isValid(date)) {
