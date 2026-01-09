@@ -1,9 +1,8 @@
 import mongoose from "mongoose";
 import { env } from "../utils/envVariables";
-import type { TODO_ANY } from "../utils/utils";
 
 const uri = env.mongo.uri ?? "";
-let dbConnection: TODO_ANY;
+let dbConnection: mongoose.Connection | null = null;
 
 export async function connectDB() {
   if (!dbConnection) {
