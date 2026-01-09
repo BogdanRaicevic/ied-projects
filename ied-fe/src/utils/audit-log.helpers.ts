@@ -68,3 +68,9 @@ export const getTimeFromISODate = (isoDate: string) => {
   }
   return format(date, "HH:mm");
 };
+
+export const minutesToHoursAndMinutes = (totalMinutes: number) => {
+  const hours = Math.floor(totalMinutes / 60);
+  const minutes = totalMinutes % 60;
+  return `${hours}h ${minutes}m`;
+};
