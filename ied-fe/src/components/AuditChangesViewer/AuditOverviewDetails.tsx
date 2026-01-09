@@ -13,6 +13,7 @@ import type { AuditLogStatsByDateResponse } from "ied-shared";
 import {
   getDayInfo,
   getTimeFromISODate,
+  minutesToHoursAndMinutes,
   populateMissingDays,
 } from "../../utils/audit-log.helpers";
 
@@ -82,10 +83,10 @@ export default function AuditOverviewDetails({
                 <TableCell>{stat.aggregatedUpdated}</TableCell>
                 <TableCell>{getTimeFromISODate(stat.earliestEdit)}</TableCell>
                 <TableCell>{getTimeFromISODate(stat.latestEdit)}</TableCell>
-                <TableCell>{stat.estimatedWorkTime.toFixed(2)}</TableCell>
                 <TableCell>
-                  {stat.averageTimeBetweenEntries.toFixed(2)}
+                  {minutesToHoursAndMinutes(stat.estimatedWorkTime)}
                 </TableCell>
+                <TableCell>{stat.averageTimeBetweenEntries}</TableCell>
               </TableRow>
             );
           })}
