@@ -61,11 +61,7 @@ app.use("/api/stanja-firmi", requireAuth(), hasPermission, stanjaFirmeRoutes);
 app.use("/api/seminari", requireAuth(), hasPermission, seminarRoutes);
 app.use("/api/docx", requireAuth(), hasPermission, docxRoutes);
 app.use("/api/racuni", requireAuth(), hasPermission, racuniRoutes);
-app.use(
-  "/api/audit-log",
-  //  requireAuth(), hasPermission,
-  auditLogRoutes,
-);
+app.use("/api/audit-log", requireAuth(), hasPermission, auditLogRoutes);
 app.use(
   "/api/email-suppression",
   requireAuth(),
