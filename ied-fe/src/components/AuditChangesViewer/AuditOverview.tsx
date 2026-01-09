@@ -12,7 +12,10 @@ import type {
   AuditLogStatsByDateResponse,
 } from "ied-shared";
 import { useMemo } from "react";
-import { minutesToHoursAndMinutes } from "../../utils/audit-log.helpers";
+import {
+  getNumberOfBusinessDays,
+  minutesToHoursAndMinutes,
+} from "../../utils/audit-log.helpers";
 
 export default function AuditOverview({
   auditData,
@@ -47,19 +50,20 @@ export default function AuditOverview({
       },
       {
         label: "Broj dana sa izmenama u datom periodu",
-        value: auditData.totalWorkedDays,
+        value:
+          auditData.totalWorkedDays +
+          " / " +
+          getNumberOfBusinessDays(auditData.dateStart, auditData.dateEnd),
         key: "totalWorkedDays",
       },
 
       {
         label: "Broj dana bez izmena u datom periodu",
-        value: auditData.totalUnworkedDays,
+        value:
+          auditData.totalUnworkedDays +
+          " / " +
+          getNumberOfBusinessDays(auditData.dateStart, auditData.dateEnd),
         key: "totalUnworkedDays",
-      },
-      {
-        label: "Broj vikend dana sa izmenama u datom periodu",
-        value: auditData.totalWorkedWeekendDays,
-        key: "totalWorkedWeekendDays",
       },
       {
         label: "Prosečno vreme početka izmena",
