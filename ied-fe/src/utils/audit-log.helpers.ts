@@ -1,3 +1,4 @@
+import type { DailyStat } from "@ied-shared/index";
 import {
   eachDayOfInterval,
   format,
@@ -6,9 +7,6 @@ import {
   parseISO,
 } from "date-fns";
 import { srLatn } from "date-fns/locale";
-import type { AuditLogStatsByDateResponse } from "ied-shared";
-
-type DailyStat = AuditLogStatsByDateResponse["dailyStats"][number];
 
 export const populateMissingDays = ({
   dailyStats,
@@ -25,7 +23,7 @@ export const populateMissingDays = ({
   const allDays = eachDayOfInterval({ start: startDate, end: endDate });
 
   const statsMap = new Map(
-    dailyStats.map((stat) => [format(parseISO(stat.date), "yyyy-MM-dd"), stat]),
+    dailyStats.map((stat) => [format(stat.date, "yyyy-MM-dd"), stat]),
   );
 
   const allDates = allDays.map((d) => {
