@@ -20,6 +20,10 @@ export const populateMissingDays = ({
   const startDate = parseISO(dateStart);
   const endDate = parseISO(dateEnd);
 
+  if (!isValid(startDate) || !isValid(endDate)) {
+    throw new Error("Invalid dateStart or dateEnd provided");
+  }
+
   const allDays = eachDayOfInterval({ start: startDate, end: endDate });
 
   const statsMap = new Map(
@@ -53,6 +57,9 @@ export const populateMissingDays = ({
 // Helper to get Serbian day name and check for weekend
 export const getDayInfo = (dateString: string) => {
   const date = parseISO(dateString);
+  if (!isValid(date)) {
+    throw new Error("Invalid date string provided");
+  }
   const dayName = format(date, "EEEE", { locale: srLatn }); // Default locale is Serbian
   return {
     dayName: dayName.charAt(0).toUpperCase() + dayName.slice(1),
