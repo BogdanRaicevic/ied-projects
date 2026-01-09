@@ -547,14 +547,25 @@ const calculateStatistics = (
       : 0;
 
   const averageEditStartTime = (() => {
-    if (dailyStats.length === 0) return "Nema podataka";
-    const totalMinutes = dailyStats.reduce((sum, day) => {
-      if (!day.earliestEdit) return sum;
+    // Filter out entries with no valid earliestEdit
+    const validStats = dailyStats.filter(
+      (day) => day.earliestEdit && day.earliestEdit !== "N/A",
+    );
+
+    if (validStats.length === 0) {
+      return "Nema podataka";
+    }
+
+    const totalMinutes = validStats.reduce((sum, day) => {
+      if (!day.earliestEdit) {
+        return sum;
+      }
+
       const date = new Date(day.earliestEdit);
       return sum + date.getHours() * 60 + date.getMinutes();
     }, 0);
 
-    const avgMinutes = totalMinutes / dailyStats.length;
+    const avgMinutes = totalMinutes / validStats.length;
     const hours = Math.floor(avgMinutes / 60);
     const minutes = Math.round(avgMinutes % 60);
 
@@ -565,14 +576,24 @@ const calculateStatistics = (
   })();
 
   const averageEditEndTime = (() => {
-    if (dailyStats.length === 0) return "Nema podataka";
-    const totalMinutes = dailyStats.reduce((sum, day) => {
-      if (!day.latestEdit) return sum;
+    // Filter out entries with no valid latestEdit
+    const validStats = dailyStats.filter(
+      (day) => day.latestEdit && day.latestEdit !== "N/A",
+    );
+
+    if (validStats.length === 0) {
+      return "Nema podataka";
+    }
+
+    const totalMinutes = validStats.reduce((sum, day) => {
+      if (!day.latestEdit) {
+        return sum;
+      }
       const date = new Date(day.latestEdit);
       return sum + date.getHours() * 60 + date.getMinutes();
     }, 0);
 
-    const avgMinutes = totalMinutes / dailyStats.length;
+    const avgMinutes = totalMinutes / validStats.length;
     const hours = Math.floor(avgMinutes / 60);
     const minutes = Math.round(avgMinutes % 60);
 

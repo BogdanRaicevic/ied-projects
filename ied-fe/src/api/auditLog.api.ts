@@ -16,7 +16,7 @@ export const getAuditLogData = async ({
   pageSize: number;
   pageIndex: number;
   params: AuditLogQueryParams;
-}) => {
+}): Promise<AuditLogsResponse> => {
   try {
     const res = await axiosInstanceWithAuth.get<AuditLogsResponse>(
       "/api/audit-log",
@@ -38,7 +38,7 @@ export const getAuditLogStats = async ({
   params,
 }: {
   params: AuditLogQueryParams;
-}) => {
+}): Promise<AuditLogStatsByDateResponse> => {
   try {
     const res = await axiosInstanceWithAuth.get<AuditLogStatsByDateResponse>(
       "/api/audit-log/user-changes-by-date",
