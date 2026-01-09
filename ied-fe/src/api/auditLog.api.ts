@@ -18,16 +18,14 @@ export const getAuditLogData = async ({
   params: AuditLogQueryParams;
 }) => {
   try {
-    const body = {
-      pageSize,
-      pageIndex,
-      params,
-    };
-
     const res = await axiosInstanceWithAuth.get<AuditLogsResponse>(
       "/api/audit-log",
       {
-        params: body,
+        params: {
+          pageSize,
+          pageIndex,
+          ...params,
+        },
       },
     );
     return res.data;
