@@ -492,7 +492,20 @@ const calculateStatistics = (
   );
 
   if (!dateFrom || !dateTo || dailyStats.length === 0) {
-    throw Error("Invalid parameters for calculating statistics");
+    return {
+      totalNew,
+      totalDeleted,
+      totalUpdated,
+      averageUpdatesPerDay: 0,
+      averageEditStartTime: "Nema podataka",
+      averageEditEndTime: "Nema podataka",
+      averageEstimatedWorkTime: 0,
+      averageTimeBetweenEntries: 0,
+      averageTimeForGreatestGap: 0,
+      totalWorkedDays: `0 / 0`,
+      totalUnworkedDays: `0 / 0`,
+      totalWorkedWeekendDays: 0,
+    };
   }
 
   const numberOfBusinessDays = differenceInBusinessDays(dateTo, dateFrom) + 1;
