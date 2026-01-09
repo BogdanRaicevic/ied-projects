@@ -469,8 +469,6 @@ export const getUserChangesByDate = async (params: AuditLogQueryParams) => {
       dailyStats,
     };
 
-    console.log("auditOverview", auditOverview);
-
     const auditStats = calculateStatistics(dailyStats, dateFrom, dateTo);
     return {
       ...auditOverview,

@@ -6,6 +6,7 @@ import {
   type Response,
   Router,
 } from "express";
+import z from "zod";
 import { validateRequestQuery } from "../middleware/validateSchema";
 import {
   getAuditLogs,
@@ -13,6 +14,11 @@ import {
   getUserChangesByDate,
   getUserChangesStats,
 } from "../services/audit_log.service";
+
+const AuditLogGetQuerySchema = AuditLogQueryParamsZod.extend({
+  pageSize: z.string().optional(),
+  pageIndex: z.string().optional(),
+});
 
 const router = Router();
 
@@ -77,22 +83,26 @@ router.get(
   },
 );
 
-router.get("/", async (req: Request, res: Response, next: NextFunction) => {
-  try {
-    const { pageSize, pageIndex, ...params } = req.query;
-    const index = parseIntCompat(pageIndex as string, 10) || 0;
-    const size = parseIntCompat(pageSize as string, 10) || 50;
+router.get(
+  "/",
+  validateRequestQuery(AuditLogGetQuerySchema),
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const { pageSize, pageIndex, ...params } = req.query;
+      const index = parseIntCompat(pageIndex as string, 10) || 0;
+      const size = parseIntCompat(pageSize as string, 10) || 50;
 
-    const result = await getAuditLogs({
-      pageIndex: index,
-      pageSize: size,
-      filterParams: params,
-    });
+      const result = await getAuditLogs({
+        pageIndex: index,
+        pageSize: size,
+        filterParams: params,
+      });
 
-    res.json(result);
-  } catch (error) {
-    next(error);
-  }
-});
+      res.json(result);
+    } catch (error) {
+      next(error);
+    }
+  },
+);
 
 export default router;
