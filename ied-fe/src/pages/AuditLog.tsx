@@ -6,7 +6,7 @@ import { Button, Paper, Tab, Tabs, TextField, Typography } from "@mui/material";
 import { grey } from "@mui/material/colors";
 import { Box, Grid } from "@mui/system";
 import { DatePicker } from "@mui/x-date-pickers";
-import { endOfDay, formatDate, startOfDay, subDays } from "date-fns";
+import { endOfDay, formatDate, startOfDay, subMonths } from "date-fns";
 import {
   MaterialReactTable,
   type MRT_ColumnDef,
@@ -29,7 +29,7 @@ import { generateStructuredDiff } from "../utils/diffGenerator";
 export default function AuditLog() {
   const [queryParams, setQueryParams] = useState<AuditLogQueryParams>({
     userEmail: "",
-    dateFrom: startOfDay(subDays(new Date(), 7)),
+    dateFrom: startOfDay(subMonths(new Date(), 1)),
     dateTo: endOfDay(new Date()),
     model: "",
   });

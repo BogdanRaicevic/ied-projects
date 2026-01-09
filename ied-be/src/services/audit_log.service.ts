@@ -555,21 +555,15 @@ const calculateStatistics = (
     )}`;
   })();
 
-  const averageEstimatedWorkTime = (() => {
-    if (dailyStats.length === 0) return "Nema podataka";
-    const avgMinutes = Math.round(
-      dailyStats.reduce((sum, day) => sum + (day.estimatedWorkTime || 0), 0) /
-        dailyStats.length,
-    );
-
-    const hours = Math.floor(avgMinutes / 60);
-    const minutes = Math.round(avgMinutes % 60);
-
-    return `${String(hours).padStart(2, "0")}:${String(minutes).padStart(
-      2,
-      "0",
-    )}`;
-  })();
+  const averageEstimatedWorkTime =
+    dailyStats.length === 0
+      ? 0
+      : Math.round(
+          dailyStats.reduce(
+            (sum, day) => sum + (day.estimatedWorkTime || 0),
+            0,
+          ) / dailyStats.length,
+        );
 
   const averageTimeBetweenEntries =
     dailyStats.length > 0
