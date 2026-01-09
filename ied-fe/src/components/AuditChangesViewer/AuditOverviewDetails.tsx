@@ -30,8 +30,9 @@ export default function AuditOverviewDetails({
     "Ažurirani unosi",
     "Najranija izmena",
     "Najkasnija izmena",
-    "Procenjeno vreme rada (min)",
-    "Prosečno vreme između unosa (min)",
+    "Procenjeno vreme rada",
+    "Prosečno vreme između unosa",
+    "Najveća pauza između unosa",
   ];
 
   const updatedStats = populateMissingDays({
@@ -86,7 +87,12 @@ export default function AuditOverviewDetails({
                 <TableCell>
                   {minutesToHoursAndMinutes(stat.estimatedWorkTime)}
                 </TableCell>
-                <TableCell>{stat.averageTimeBetweenEntries}</TableCell>
+                <TableCell>
+                  {minutesToHoursAndMinutes(stat.averageTimeBetweenEntries)}
+                </TableCell>
+                <TableCell>
+                  {minutesToHoursAndMinutes(stat.biggestGapBetweenEntries)}
+                </TableCell>
               </TableRow>
             );
           })}

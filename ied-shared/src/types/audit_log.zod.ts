@@ -62,6 +62,7 @@ export const AuditLogStatsByDateResponseSchema = z.object({
       latestEdit: z.string(),
       estimatedWorkTime: z.number(),
       averageTimeBetweenEntries: z.number(),
+      biggestGapBetweenEntries: z.number(),
     }),
   ),
 });
