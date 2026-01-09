@@ -1,3 +1,19 @@
+## [1.9.0](https://github.com/BogdanRaicevic/ied-projects/compare/v1.8.0...v1.9.0) (2026-01-09)
+
+### Features
+
+* Add API for audit log stats overview ([4baed9e](https://github.com/BogdanRaicevic/ied-projects/commit/4baed9e9ce19c1ed3e95207695012dc73099b635))
+* improve readability of time parameters ([49a9ba3](https://github.com/BogdanRaicevic/ied-projects/commit/49a9ba3738e4568c5d6e00047bc10b7a8ce8d7bb))
+* show worked days ([54ba165](https://github.com/BogdanRaicevic/ied-projects/commit/54ba165e61dade767b3221c0895cbc4b01b5d05f))
+
+### Bug Fixes
+
+* badly formatted param delivered to route ([fd676cf](https://github.com/BogdanRaicevic/ied-projects/commit/fd676cf0c5fab9c6d29d1fa17818b4ede2cf1fac))
+* remove testing code ([07469ed](https://github.com/BogdanRaicevic/ied-projects/commit/07469ed5b1abcaf63d7a93d55dbd47a9949ca9eb))
+* return default values instead of throwing an error ([33eff96](https://github.com/BogdanRaicevic/ied-projects/commit/33eff96761b6e451cf33da332de27860a10bc6cf))
+* send proper ISO format dates from BE to FE ([9181dd8](https://github.com/BogdanRaicevic/ied-projects/commit/9181dd8a6ff76ae11d3bada658bc0afbb31d9ab6))
+* type issues ([0cd1d32](https://github.com/BogdanRaicevic/ied-projects/commit/0cd1d32b8591908070fbdb51acc47b0bca6bb02a))
+
 ## [1.8.0](https://github.com/BogdanRaicevic/ied-projects/compare/v1.7.3...v1.8.0) (2026-01-03)
 
 ### Features
