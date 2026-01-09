@@ -288,8 +288,9 @@ export const getUserChangesByDate = async (params: AuditLogQueryParams) => {
           // Extract date only (YYYY-MM-DD)
           dateOnly: {
             $dateToString: {
-              format: "%Y-%m-%d",
+              format: "%Y-%m-%dT00:00:00.000Z",
               date: "$timestamp",
+              timezone: "UTC",
             },
           },
         },
@@ -373,9 +374,11 @@ export const getUserChangesByDate = async (params: AuditLogQueryParams) => {
           });
         }
         const dateStats = dateMap.get(date)!;
-        if (item._id.operationType === "new") dateStats.new = item.count;
-        else if (item._id.operationType === "deleted")
+        if (item._id.operationType === "new") {
+          dateStats.new = item.count;
+        } else if (item._id.operationType === "deleted") {
           dateStats.deleted = item.count;
+        }
       }
     }
 
@@ -465,6 +468,8 @@ export const getUserChangesByDate = async (params: AuditLogQueryParams) => {
       ...(dateTo && { dateEnd: dateTo }),
       dailyStats,
     };
+
+    console.log("auditOverview", auditOverview);
 
     const auditStats = calculateStatistics(dailyStats, dateFrom, dateTo);
     return {

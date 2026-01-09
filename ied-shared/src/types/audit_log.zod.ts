@@ -74,3 +74,4 @@ export type AuditLogOverviewStats = Omit<
   AuditLogStatsByDateResponse,
   "dailyStats" | "userEmail" | "model" | "dateStart" | "dateEnd"
 >;
+export type DailyStat = AuditLogStatsByDateResponse["dailyStats"][number];

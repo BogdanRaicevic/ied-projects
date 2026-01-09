@@ -8,6 +8,7 @@ import {
   TableRow,
 } from "@mui/material";
 import { green, grey, red } from "@mui/material/colors";
+import { format, parseISO } from "date-fns";
 import type { AuditLogStatsByDateResponse } from "ied-shared";
 import {
   getDayInfo,
@@ -80,7 +81,9 @@ export default function AuditOverviewDetails({
                   "&:hover": { backgroundColor: hoverColors },
                 }}
               >
-                <TableCell>{stat.date}</TableCell>
+                <TableCell>
+                  {format(parseISO(stat.date), "yyyy-MM-dd")}
+                </TableCell>
                 <TableCell>{dayName}</TableCell>
                 <TableCell>{stat.new}</TableCell>
                 <TableCell>{stat.deleted}</TableCell>
