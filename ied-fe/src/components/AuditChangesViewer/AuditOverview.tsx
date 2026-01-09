@@ -7,7 +7,11 @@ import {
   TableHead,
   TableRow,
 } from "@mui/material";
-import type { AuditLogStatsByDateResponse } from "ied-shared";
+import type {
+  AuditLogOverviewStats,
+  AuditLogStatsByDateResponse,
+} from "ied-shared";
+import { useMemo } from "react";
 import { minutesToHoursAndMinutes } from "../../utils/audit-log.helpers";
 
 export default function AuditOverview({
@@ -15,78 +19,76 @@ export default function AuditOverview({
 }: {
   auditData: AuditLogStatsByDateResponse;
 }) {
-  type AuditOverviewStats = Omit<
-    AuditLogStatsByDateResponse,
-    "dailyStats" | "userEmail" | "model" | "dateStart" | "dateEnd"
-  >;
-
   const tableData: {
     label: string;
     value: string | number | undefined | null;
-    key: keyof AuditOverviewStats;
-  }[] = [
-    {
-      label: "Novi unosi",
-      value: auditData.totalNew,
-      key: "totalNew",
-    },
-    {
-      label: "Obrisani unosi",
-      value: auditData.totalDeleted,
-      key: "totalDeleted",
-    },
-    {
-      label: "Ažurirani unosi",
-      value: auditData.totalUpdated,
-      key: "totalUpdated",
-    },
-    {
-      label: "Prosečan broj izmena po danu",
-      value: auditData.averageUpdatesPerDay,
-      key: "averageUpdatesPerDay",
-    },
-    {
-      label: "Broj dana sa izmenama u datom periodu",
-      value: auditData.totalWorkedDays,
-      key: "totalWorkedDays",
-    },
+    key: keyof AuditLogOverviewStats;
+  }[] = useMemo(
+    () => [
+      {
+        label: "Novi unosi",
+        value: auditData.totalNew,
+        key: "totalNew",
+      },
+      {
+        label: "Obrisani unosi",
+        value: auditData.totalDeleted,
+        key: "totalDeleted",
+      },
+      {
+        label: "Ažurirani unosi",
+        value: auditData.totalUpdated,
+        key: "totalUpdated",
+      },
+      {
+        label: "Prosečan broj izmena po danu",
+        value: auditData.averageUpdatesPerDay,
+        key: "averageUpdatesPerDay",
+      },
+      {
+        label: "Broj dana sa izmenama u datom periodu",
+        value: auditData.totalWorkedDays,
+        key: "totalWorkedDays",
+      },
 
-    {
-      label: "Broj dana bez izmena u datom periodu",
-      value: auditData.totalUnworkedDays,
-      key: "totalUnworkedDays",
-    },
-    {
-      label: "Broj vikend dana sa izmenama u datom periodu",
-      value: auditData.totalWorkedWeekendDays,
-      key: "totalWorkedWeekendDays",
-    },
-    {
-      label: "Prosečno vreme početka izmena",
-      value: auditData.averageEditStartTime,
-      key: "averageEditStartTime",
-    },
-    {
-      label: "Prosečno vreme završetka izmena",
-      value: auditData.averageEditEndTime,
-      key: "averageEditEndTime",
-    },
-    {
-      label: "Prosečno procenjeno vreme rada",
-      value: minutesToHoursAndMinutes(auditData.averageEstimatedWorkTime),
-      key: "averageEstimatedWorkTime",
-    },
-    {
-      label: "Prosečno vreme između unosa",
-      value: minutesToHoursAndMinutes(auditData.averageTimeBetweenEntries),
-      key: "averageTimeBetweenEntries",
-    },
-    {
-      label: "Prosečno vreme za najveći prekid u radu",
-      value: minutesToHoursAndMinutes(auditData.averageTimeForGreatestGap),
-      key: "averageTimeForGreatestGap",
-    },
-  ];
+      {
+        label: "Broj dana bez izmena u datom periodu",
+        value: auditData.totalUnworkedDays,
+        key: "totalUnworkedDays",
+      },
+      {
+        label: "Broj vikend dana sa izmenama u datom periodu",
+        value: auditData.totalWorkedWeekendDays,
+        key: "totalWorkedWeekendDays",
+      },
+      {
+        label: "Prosečno vreme početka izmena",
+        value: auditData.averageEditStartTime,
+        key: "averageEditStartTime",
+      },
+      {
+        label: "Prosečno vreme završetka izmena",
+        value: auditData.averageEditEndTime,
+        key: "averageEditEndTime",
+      },
+      {
+        label: "Prosečno procenjeno vreme rada",
+        value: minutesToHoursAndMinutes(auditData.averageEstimatedWorkTime),
+        key: "averageEstimatedWorkTime",
+      },
+      {
+        label: "Prosečno vreme između unosa",
+        value: minutesToHoursAndMinutes(auditData.averageTimeBetweenEntries),
+        key: "averageTimeBetweenEntries",
+      },
+      {
+        label: "Prosečno vreme za najveći prekid u radu",
+        value: minutesToHoursAndMinutes(auditData.averageTimeForGreatestGap),
+        key: "averageTimeForGreatestGap",
+      },
+    ],
+    [auditData],
+  );
 
   return (
     <TableContainer component={Paper}>
