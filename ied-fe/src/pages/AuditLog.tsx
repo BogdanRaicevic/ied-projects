@@ -2,10 +2,9 @@ import type {
   AuditLogQueryParams,
   AuditLogType,
 } from "@ied-shared/types/audit_log.zod";
-import { Button, Paper, Tab, Tabs, TextField, Typography } from "@mui/material";
+import { Paper, Tab, Tabs, Typography } from "@mui/material";
 import { grey } from "@mui/material/colors";
-import { Box, Grid } from "@mui/system";
-import { DatePicker } from "@mui/x-date-pickers";
+import { Box } from "@mui/system";
 import { endOfDay, formatDate, startOfDay, subMonths } from "date-fns";
 import {
   MaterialReactTable,
@@ -13,8 +12,8 @@ import {
   useMaterialReactTable,
 } from "material-react-table";
 import { useMemo, useState } from "react";
-import { Controller, useForm } from "react-hook-form";
 import { AuditChangesViewer } from "../components/AuditChangesViewer/AuditChangesViewer";
+import AuditLogSearchForm from "../components/AuditChangesViewer/AuditLogSearchForm";
 import AuditOverview from "../components/AuditChangesViewer/AuditOverview";
 import AuditOverviewDetails from "../components/AuditChangesViewer/AuditOverviewDetails";
 import PageTitle from "../components/PageTitle";
@@ -46,10 +45,6 @@ export default function AuditLog() {
   });
 
   const { data: auditStats } = useAuditLogStatsByDate(queryParams);
-
-  const { control, handleSubmit } = useForm<AuditLogQueryParams>({
-    defaultValues: queryParams,
-  });
 
   const { data: auditLogs, totalDocuments } = data || {
     auditLogs: [],
@@ -190,96 +185,7 @@ export default function AuditLog() {
   return (
     <Box mt={3} mb={5}>
       <PageTitle title="Evidencija Promena" />
-
-      <Paper sx={{ p: 2, mb: 3 }}>
-        <Typography variant="h4" gutterBottom>
-          Parametri pretrage
-        </Typography>
-        <Box component="form" onSubmit={handleSubmit(onSearch)}>
-          <Grid container spacing={2} alignItems="center">
-            <Grid size={3}>
-              <Controller
-                name="userEmail"
-                control={control}
-                render={({ field }) => (
-                  <TextField
-                    {...field}
-                    label="Email korisnika"
-                    variant="outlined"
-                    fullWidth
-                    placeholder="Pretraga po email adresi..."
-                  />
-                )}
-              />
-            </Grid>
-
-            <Grid size={3}>
-              <Controller
-                name="model"
-                control={control}
-                render={({ field }) => (
-                  <TextField
-                    {...field}
-                    label="Tip resursa"
-                    variant="outlined"
-                    fullWidth
-                    placeholder="Pretraga po tipu resursa..."
-                  />
-                )}
-              />
-            </Grid>
-
-            <Grid size={3}>
-              <Controller
-                name="dateFrom"
-                control={control}
-                render={({ field }) => (
-                  <DatePicker
-                    label="Datum od"
-                    value={field.value}
-                    onChange={(date) =>
-                      field.onChange(date ? startOfDay(date) : null)
-                    }
-                    format="yyyy-MM-dd"
-                    slotProps={{ textField: { fullWidth: true } }}
-                  />
-                )}
-              />
-            </Grid>
-
-            <Grid size={3}>
-              <Controller
-                name="dateTo"
-                control={control}
-                render={({ field }) => (
-                  <DatePicker
-                    label="Datum do"
-                    value={field.value}
-                    onChange={(date) =>
-                      field.onChange(date ? endOfDay(date) : null)
-                    }
-                    format="yyyy-MM-dd"
-                    slotProps={{ textField: { fullWidth: true } }}
-                    disableFuture={true}
-                  />
-                )}
-              />
-            </Grid>
-
-            <Box display="flex" justifyContent="flex-end">
-              <Button
-                type="submit"
-                variant="contained"
-                color="primary"
-                fullWidth
-              >
-                Pretraga
-              </Button>
-            </Box>
-          </Grid>
-        </Box>
-      </Paper>
-
+      <AuditLogSearchForm onSearch={onSearch} defaultValues={queryParams} />
       <Box>
         <Box>
           <Tabs value={activeTab} onChange={handleTabChange}>
