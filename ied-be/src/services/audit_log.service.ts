@@ -1,8 +1,10 @@
+import assert from "node:assert";
 import type {
   AuditLogOverviewStats,
   AuditLogQueryParams,
+  DailyStat,
 } from "@ied-shared/types/audit_log.zod";
-import { differenceInBusinessDays, isWeekend } from "date-fns";
+import { differenceInBusinessDays } from "date-fns";
 import { AuditLog } from "./../models/audit_log.model";
 import { createAuditLogQuery } from "../utils/auditLogQueryBuilder";
 
@@ -10,6 +12,21 @@ type AuditQuery = {
   pageIndex: number;
   pageSize: number;
   filterParams: AuditLogQueryParams;
+};
+
+type AggregateResult = {
+  totalCounts: Array<{
+    _id: { date: string; operationType: string };
+    count: number;
+  }>;
+  uniqueCounts: Array<{
+    _id: { date: string; operationType: string };
+    count: number;
+  }>;
+  timestamps: Array<{
+    _id: string;
+    timestamps: Date[];
+  }>;
 };
 
 export const getAuditLogs = async ({
@@ -267,7 +284,7 @@ export const getUserChangesByDate = async (params: AuditLogQueryParams) => {
     }
 
     // TODO: Fix type issues below
-    const result = await AuditLog.aggregate([
+    const result = await AuditLog.aggregate<AggregateResult>([
       // Match the user and model
       { $match: matchConditions },
 
@@ -346,34 +363,34 @@ export const getUserChangesByDate = async (params: AuditLogQueryParams) => {
     ]);
 
     // Transform the result into a map grouped by date
-    const dateMap = new Map<
-      string,
-      {
-        date: string;
-        new: number;
-        deleted: number;
-        aggregatedUpdated: number;
-        earliestEdit?: string;
-        latestEdit?: string;
-        estimatedWorkTime?: number; // in minutes
-        averageTimeBetweenEntries?: number; // in minutes
-        biggestGapBetweenEntries?: number; // in minutes
+    const dateMap = new Map<string, DailyStat>();
+
+    const defaultDateStats = {
+      date: "",
+      new: 0,
+      deleted: 0,
+      aggregatedUpdated: 0,
+      earliestEdit: "N/A",
+      latestEdit: "N/A",
+      estimatedWorkTime: 0,
+      averageTimeBetweenEntries: 0,
+      biggestGapBetweenEntries: 0,
+    };
+
+    // Helper function to get or create date stats
+    const getOrCreateDateStats = (date: string): DailyStat => {
+      if (!dateMap.has(date)) {
+        dateMap.set(date, { ...defaultDateStats, date });
       }
-    >();
+      return dateMap.get(date)!;
+    };
 
     // Process total counts
     if (result[0]?.totalCounts) {
       for (const item of result[0].totalCounts) {
         const date = item._id.date;
-        if (!dateMap.has(date)) {
-          dateMap.set(date, {
-            date,
-            new: 0,
-            deleted: 0,
-            aggregatedUpdated: 0,
-          });
-        }
-        const dateStats = dateMap.get(date)!;
+        const dateStats = getOrCreateDateStats(date);
+
         if (item._id.operationType === "new") {
           dateStats.new = item.count;
         } else if (item._id.operationType === "deleted") {
@@ -386,15 +403,8 @@ export const getUserChangesByDate = async (params: AuditLogQueryParams) => {
     if (result[0]?.uniqueCounts) {
       for (const item of result[0].uniqueCounts) {
         const date = item._id.date;
-        if (!dateMap.has(date)) {
-          dateMap.set(date, {
-            date,
-            new: 0,
-            deleted: 0,
-            aggregatedUpdated: 0,
-          });
-        }
-        const dateStats = dateMap.get(date)!;
+        const dateStats = getOrCreateDateStats(date);
+
         if (item._id.operationType === "updated") {
           dateStats.aggregatedUpdated = item.count;
         }
@@ -407,23 +417,23 @@ export const getUserChangesByDate = async (params: AuditLogQueryParams) => {
         const date = item._id;
         const timestamps = item.timestamps.map((ts: Date) => new Date(ts));
 
-        if (!dateMap.has(date)) {
-          dateMap.set(date, {
-            date,
-            new: 0,
-            deleted: 0,
-            aggregatedUpdated: 0,
-          });
-        }
-
-        const dateStats = dateMap.get(date)!;
+        const dateStats = getOrCreateDateStats(date);
 
         // Sort timestamps
         timestamps.sort((a: Date, b: Date) => a.getTime() - b.getTime());
 
         // Earliest and latest edit (time only)
+
+        assert(timestamps.length > 0, "Timestamps array should not be empty");
+
         const earliestTimestamp = timestamps[0];
         const latestTimestamp = timestamps[timestamps.length - 1];
+
+        assert(
+          earliestTimestamp !== undefined,
+          "Earliest timestamp must exist",
+        );
+        assert(latestTimestamp !== undefined, "Latest timestamp must exist");
 
         dateStats.earliestEdit = earliestTimestamp.toISOString();
         dateStats.latestEdit = latestTimestamp.toISOString();
@@ -438,7 +448,20 @@ export const getUserChangesByDate = async (params: AuditLogQueryParams) => {
           let totalGapMs = 0;
           let biggestGapMs = 0;
           for (let i = 1; i < timestamps.length; i++) {
-            const gapMs = timestamps[i].getTime() - timestamps[i - 1].getTime();
+            const currentTimestamp = timestamps[i];
+            const previousTimestamp = timestamps[i - 1];
+
+            assert(
+              currentTimestamp !== undefined,
+              "Current timestamp must exist",
+            );
+            assert(
+              previousTimestamp !== undefined,
+              "Previous timestamp must exist",
+            );
+
+            const gapMs =
+              currentTimestamp.getTime() - previousTimestamp.getTime();
             totalGapMs += gapMs;
             biggestGapMs = Math.max(biggestGapMs, gapMs);
           }
@@ -481,7 +504,7 @@ export const getUserChangesByDate = async (params: AuditLogQueryParams) => {
 };
 
 const calculateStatistics = (
-  dailyStats: Array<any>,
+  dailyStats: Array<DailyStat>,
   dateFrom: Date | undefined,
   dateTo: Date | undefined,
 ): AuditLogOverviewStats => {
