@@ -47,7 +47,7 @@ export const AuditLogStatsByDateResponseSchema = z.object({
   totalWorkedWeekendDays: z.number(),
   totalUnworkedDays: z.string(),
   averageUpdatesPerDay: z.number(),
-  averageEstimatedWorkTime: z.string(),
+  averageEstimatedWorkTime: z.number(),
   averageTimeBetweenEntries: z.number(),
   averageEditStartTime: z.string(),
   averageEditEndTime: z.string(),

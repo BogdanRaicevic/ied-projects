@@ -8,6 +8,7 @@ import {
   TableRow,
 } from "@mui/material";
 import type { AuditLogStatsByDateResponse } from "ied-shared";
+import { minutesToHoursAndMinutes } from "../../utils/audit-log.helpers";
 
 export default function AuditOverview({
   auditData,
@@ -45,13 +46,13 @@ export default function AuditOverview({
       key: "averageUpdatesPerDay",
     },
     {
-      label: "Broj dana sa izmenama u datom periodu (bez praznika)",
+      label: "Broj dana sa izmenama u datom periodu",
       value: auditData.totalWorkedDays,
       key: "totalWorkedDays",
     },
 
     {
-      label: "Broj dana bez izmena u datom periodu (bez praznika)",
+      label: "Broj dana bez izmena u datom periodu",
       value: auditData.totalUnworkedDays,
       key: "totalUnworkedDays",
     },
@@ -72,17 +73,17 @@ export default function AuditOverview({
     },
     {
       label: "Prosečno procenjeno vreme rada",
-      value: auditData.averageEstimatedWorkTime,
+      value: minutesToHoursAndMinutes(auditData.averageEstimatedWorkTime),
       key: "averageEstimatedWorkTime",
     },
     {
-      label: "Prosečno vreme između unosa (u minutima)",
-      value: auditData.averageTimeBetweenEntries,
+      label: "Prosečno vreme između unosa",
+      value: minutesToHoursAndMinutes(auditData.averageTimeBetweenEntries),
       key: "averageTimeBetweenEntries",
     },
     {
-      label: "Prosečno vreme za najveći prekid u radu (u minutima)",
-      value: auditData.averageTimeForGreatestGap,
+      label: "Prosečno vreme za najveći prekid u radu",
+      value: minutesToHoursAndMinutes(auditData.averageTimeForGreatestGap),
       key: "averageTimeForGreatestGap",
     },
   ];
