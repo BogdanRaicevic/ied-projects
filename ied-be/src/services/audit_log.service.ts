@@ -354,7 +354,7 @@ export const getUserChangesByDate = async (params: AuditLogQueryParams) => {
         aggregatedUpdated: number;
         earliestEdit?: string;
         latestEdit?: string;
-        estimatedWorkTime?: number;
+        estimatedWorkTime?: number; // in minutes
         averageTimeBetweenEntries?: number; // in minutes
         biggestGapBetweenEntries?: number; // in minutes
       }

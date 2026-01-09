@@ -45,6 +45,7 @@ export const populateMissingDays = ({
       latestEdit: "N/A",
       estimatedWorkTime: 0,
       averageTimeBetweenEntries: 0,
+      biggestGapBetweenEntries: 0,
     };
   });
 
