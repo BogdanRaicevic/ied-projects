@@ -39,31 +39,29 @@ export const ZaposleniSchema = z.object({
 export const FirmaSchema = z.object({
   _id: z.string().optional(),
   ID_firma: z.number().optional(),
-  naziv_firme: z.string().max(100).default(""),
-  adresa: z.string().max(150).default(""),
-  PIB: z.string().or(z.literal("")).default(""),
-  telefon: z.string().default(""),
+  naziv_firme: z.string().max(100).optional(),
+  adresa: z.string().max(150).optional(),
+  PIB: z.string().or(z.literal("")).optional(),
+  telefon: z.string().optional(),
   e_mail: z
     .email("Neispravna email adresa")
     .max(100, "Predugacka email adresa")
     .or(z.literal(""))
-
-    .default(""),
-  tip_firme: z.string().default(""),
-  delatnost: z.string().default(""),
-  komentar: z.string().max(1000).default(""),
-  stanje_firme: z.string().max(50).default(""),
-  mesto: z.string().default(""),
-
-  velicina_firme: z.string().default(""),
-  zaposleni: z.array(ZaposleniSchema).default([]),
+    .optional(),
+  tip_firme: z.string().optional(),
+  delatnost: z.string().optional(),
+  komentar: z.string().max(1000).optional(),
+  stanje_firme: z.string().max(50).optional(),
+  mesto: z.string().optional(),
+  velicina_firme: z.string().optional(),
+  zaposleni: z.array(ZaposleniSchema).optional(),
   jbkjs: z
     .string()
     .regex(/^\d{5}$/, "JBKJS moze da se sastoji samo od 5 brojeva")
     .or(z.literal(""))
-    .default(""),
-  maticni_broj: z.string().or(z.literal("")).default(""),
-  prijavljeni: z.boolean().default(true),
+    .optional(),
+  maticni_broj: z.string().or(z.literal("")).optional(),
+  prijavljeni: z.boolean(),
 });
 
 export type ZaposleniType = z.infer<typeof ZaposleniSchema>;
