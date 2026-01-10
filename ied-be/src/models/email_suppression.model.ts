@@ -1,7 +1,4 @@
-import {
-  SUPPRESSION_REASONS,
-  type SuppressionReasons,
-} from "@ied-shared/index";
+import { SUPPRESSION_REASONS, type SuppressionReasons } from "ied-shared";
 import { model, Schema } from "mongoose";
 
 export type EmailSuppression = {

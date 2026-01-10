@@ -1,10 +1,10 @@
-import type { FirmaQueryParams } from "@ied-shared/types/firma.zod";
 import {
   type NextFunction,
   type Request,
   type Response,
   Router,
 } from "express";
+import type { FirmaQueryParams } from "ied-shared";
 import { createAuditMiddleware } from "../middleware/audit";
 import { Firma, type FirmaType } from "../models/firma.model";
 import {

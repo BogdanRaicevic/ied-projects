@@ -1,4 +1,4 @@
-import type { SuppressedEmail } from "@ied-shared/index";
+import type { SuppressedEmail } from "ied-shared";
 import { EmailSuppression } from "../models/email_suppression.model";
 
 export const addSuppressedEmail = async (

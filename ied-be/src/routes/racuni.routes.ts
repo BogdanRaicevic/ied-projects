@@ -1,15 +1,15 @@
 import {
-  type PretrageRacunaType,
-  type RacunQueryType,
-  type RacunType,
-  RacunZod,
-} from "@ied-shared/types/racuni.zod";
-import {
   type NextFunction,
   type Request,
   type Response,
   Router,
 } from "express";
+import {
+  type PretrageRacunaType,
+  type RacunQueryType,
+  type RacunType,
+  RacunZod,
+} from "ied-shared";
 import { izdavacRacuna } from "../constants/izdavacRacuna.const";
 import { validateRequestBody } from "../middleware/validateSchema";
 import {

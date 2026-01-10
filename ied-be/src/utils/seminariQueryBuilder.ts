@@ -1,4 +1,4 @@
-import type { SeminarQueryParams } from "@ied-shared/types/seminar.zod";
+import type { SeminarQueryParams } from "ied-shared";
 import type { QueryFilter } from "mongoose";
 import type { SeminarType } from "../models/seminar.model";
 

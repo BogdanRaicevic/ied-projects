@@ -1,5 +1,4 @@
-import type { SuppressedEmail } from "@ied-shared/types/firma.zod";
-import type { SuppressionReasons } from "ied-shared/dist/constants/email";
+import type { SuppressedEmail, SuppressionReasons } from "ied-shared";
 import axiosInstanceWithAuth from "./interceptors/auth";
 
 export const addEmailToSuppressionList = async (email: string) => {

@@ -9,18 +9,11 @@
     ".": {
       "import": "./dist/index.js",
       "types": "./dist/index.d.ts"
-    },
-    "./enums/*": {
-      "import": "./dist/enums/*.js",
-      "types": "./dist/enums/*.d.ts"
-    },
-    "./types/*": {
-      "import": "./dist/types/*.js",
-      "types": "./dist/types/*.d.ts"
     }
   },
   "scripts": {
     "build": "tsc",
+    "dev": "tsc --watch",
     "biome:format": "npx biome format --write ./src",
     "biome:check": "npx biome check --write ./src",
     "lint": "npx biome lint ./src",

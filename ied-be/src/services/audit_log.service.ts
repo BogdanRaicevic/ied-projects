@@ -1,10 +1,10 @@
 import assert from "node:assert";
+import { differenceInBusinessDays } from "date-fns";
 import type {
   AuditLogOverviewStats,
   AuditLogQueryParams,
   DailyStat,
-} from "@ied-shared/types/audit_log.zod";
-import { differenceInBusinessDays } from "date-fns";
+} from "ied-shared";
 import { AuditLog } from "./../models/audit_log.model";
 import { createAuditLogQuery } from "../utils/auditLogQueryBuilder";
 

@@ -1,5 +1,5 @@
-import type { AuditLogQueryParams } from "@ied-shared/types/audit_log.zod";
 import { useQuery } from "@tanstack/react-query";
+import type { AuditLogQueryParams } from "ied-shared";
 import {
   type AuditLogsResponse,
   getAuditLogData,

@@ -1,5 +1,5 @@
-import { NEGACIJA } from "@ied-shared/constants/firma";
-import type { FirmaQueryParams } from "@ied-shared/types/firma.zod";
+import type { FirmaQueryParams } from "ied-shared";
+import { NEGACIJA } from "ied-shared";
 import type { QueryFilter } from "mongoose";
 import type { FirmaType } from "../models/firma.model";
 import { Seminar, type SeminarType } from "../models/seminar.model";

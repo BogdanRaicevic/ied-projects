@@ -3,7 +3,7 @@ import {
   IzdavacRacuna,
   type RacunType,
   TipRacuna,
-} from "@ied-shared/types/racuni.zod";
+} from "ied-shared";
 import { create } from "zustand";
 
 const updateNestedProperty = (obj: any, path: string[], value: any): any => {

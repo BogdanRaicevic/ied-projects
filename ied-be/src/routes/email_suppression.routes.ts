@@ -1,7 +1,3 @@
-import {
-  type SuppressedEmail,
-  SuppressedEmailSchema,
-} from "@ied-shared/types/firma.zod";
 import { parse } from "csv-parse";
 import {
   type NextFunction,
@@ -10,6 +6,7 @@ import {
   Router,
   raw,
 } from "express";
+import { type SuppressedEmail, SuppressedEmailSchema } from "ied-shared";
 import {
   validateRequestBody,
   validateRequestQuery,

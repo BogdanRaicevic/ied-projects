@@ -9,9 +9,6 @@
     "strict": true,
     "lib": ["ESNext"],
     "noImplicitAny": false,
-    "paths": {
-      "@ied-shared/*": ["../ied-shared/dist/*"]
-    },
     "allowJs": true,
     "resolveJsonModule": true,
     "esModuleInterop": true,

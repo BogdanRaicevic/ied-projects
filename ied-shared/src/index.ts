@@ -1,4 +1,5 @@
 export * from "./constants/email";
+export * from "./constants/firma";
 export * from "./types/audit_log.zod";
 export * from "./types/diff";
 export * from "./types/firma.zod";

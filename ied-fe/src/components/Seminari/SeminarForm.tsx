@@ -1,5 +1,4 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { SeminarSchema, type SeminarZodType } from "@ied-shared/index";
 import {
   Alert,
   Autocomplete,
@@ -11,6 +10,7 @@ import {
 } from "@mui/material";
 import InputAdornment from "@mui/material/InputAdornment";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import { SeminarSchema, type SeminarZodType } from "ied-shared";
 import { useEffect, useState } from "react";
 import {
   Controller,

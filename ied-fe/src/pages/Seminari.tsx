@@ -1,7 +1,3 @@
-import type {
-  FirmaSeminarSearchParams,
-  SeminarQueryParams,
-} from "@ied-shared/types/seminar.zod";
 import {
   Box,
   Button,
@@ -12,6 +8,7 @@ import {
   Tabs,
 } from "@mui/material";
 import { addMonths, subMonths } from "date-fns";
+import type { FirmaSeminarSearchParams, SeminarQueryParams } from "ied-shared";
 import { useState, useTransition } from "react";
 import FirmaSeminarTable from "../components/Seminari/FirmaSeminarTable";
 import ParametriPretrageFirmaSeminar from "../components/Seminari/ParametriPretrageFirmaSeminar";

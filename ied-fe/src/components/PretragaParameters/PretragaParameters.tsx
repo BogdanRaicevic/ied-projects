@@ -1,5 +1,3 @@
-import { NEGACIJA } from "@ied-shared/constants/firma";
-import type { FirmaQueryParams } from "@ied-shared/types/firma.zod";
 import AddBoxIcon from "@mui/icons-material/AddBox";
 import SearchIcon from "@mui/icons-material/Search";
 import {
@@ -14,7 +12,8 @@ import {
   TextField,
 } from "@mui/material";
 import { format } from "date-fns";
-import type { TipSeminara } from "ied-shared";
+import type { FirmaQueryParams, TipSeminara } from "ied-shared";
+import { NEGACIJA } from "ied-shared";
 import { useCallback, useEffect, useMemo } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { useSearchSeminari } from "../../hooks/seminar/useSeminarQueries";

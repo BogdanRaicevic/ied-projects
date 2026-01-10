@@ -1,5 +1,4 @@
-import type { NEGACIJA } from "@ied-shared/constants/firma";
-import type { FirmaQueryParams } from "@ied-shared/types/firma.zod";
+import type { FirmaQueryParams, NEGACIJA } from "ied-shared";
 import { create } from "zustand";
 
 type PretragaStore = {

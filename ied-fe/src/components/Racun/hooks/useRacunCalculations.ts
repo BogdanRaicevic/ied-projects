@@ -1,4 +1,4 @@
-import { TipRacuna } from "@ied-shared/index";
+import { TipRacuna } from "ied-shared";
 import { useEffect } from "react";
 import { useRacunStore } from "../store/useRacunStore";
 

@@ -1,4 +1,3 @@
-import type { DailyStat } from "@ied-shared/index";
 import {
   eachDayOfInterval,
   format,
@@ -7,6 +6,7 @@ import {
   parseISO,
 } from "date-fns";
 import { srLatn } from "date-fns/locale";
+import type { DailyStat } from "ied-shared";
 
 export const populateMissingDays = ({
   dailyStats,

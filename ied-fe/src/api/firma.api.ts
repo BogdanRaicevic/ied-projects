@@ -1,9 +1,10 @@
-import type { ExportFirma, ExportZaposlenih } from "@ied-shared/index";
 import type {
+  ExportFirma,
+  ExportZaposlenih,
   FirmaQueryParams,
   FirmaType,
   ZaposleniType,
-} from "@ied-shared/types/firma.zod";
+} from "ied-shared";
 import axiosInstanceWithAuth from "./interceptors/auth";
 
 export const fetchFirmaPretrage = async (

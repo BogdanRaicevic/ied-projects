@@ -1,11 +1,11 @@
+import PostAddIcon from "@mui/icons-material/PostAdd";
+import { Alert, Box, Button, Snackbar, Tab, Tabs } from "@mui/material";
 import {
   type FirmaType,
   type PrijavaZodType,
   type SeminarZodType,
   TipRacuna,
-} from "@ied-shared/index";
-import PostAddIcon from "@mui/icons-material/PostAdd";
-import { Alert, Box, Button, Snackbar, Tab, Tabs } from "@mui/material";
+} from "ied-shared";
 import { useEffect, useMemo, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { generateRacunDocument } from "../api/docx.api";

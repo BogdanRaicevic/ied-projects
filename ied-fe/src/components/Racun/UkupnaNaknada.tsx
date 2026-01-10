@@ -1,5 +1,5 @@
-import { IzdavacRacuna, TipRacuna } from "@ied-shared/index";
 import { Box, TextField, Typography } from "@mui/material";
+import { IzdavacRacuna, TipRacuna } from "ied-shared";
 import { formatToRSDNumber } from "../../utils/helpers";
 import { useRacunStore } from "./store/useRacunStore";
 

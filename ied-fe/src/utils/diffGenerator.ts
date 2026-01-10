@@ -1,6 +1,6 @@
-import type { IArrayChange, IChange } from "@ied-shared/types/diff";
 import { diffWordsWithSpace } from "diff";
 import { isEqual } from "es-toolkit";
+import type { IArrayChange, IChange } from "ied-shared";
 
 export const generateStructuredDiff = (
   before: any,

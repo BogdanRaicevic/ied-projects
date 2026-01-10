@@ -1,4 +1,3 @@
-import type { IzdavacRacuna } from "@ied-shared/index";
 import {
   FormControl,
   MenuItem,
@@ -6,6 +5,7 @@ import {
   type SelectChangeEvent,
   Tooltip,
 } from "@mui/material";
+import type { IzdavacRacuna } from "ied-shared";
 import bsLogo from "../../images/bs-logo.png";
 import iedLogo from "../../images/ied-logo.png";
 import permanentLogo from "../../images/permanent-logo.png";
