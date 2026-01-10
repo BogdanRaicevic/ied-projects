@@ -24,14 +24,14 @@ importers:
         specifier: ^13.1.3
         version: 13.1.3(semantic-release@25.0.2(typescript@5.9.3))
       '@types/node':
-        specifier: ^24.10.4
-        version: 24.10.4
+        specifier: ^24.10.6
+        version: 24.10.6
       conventional-changelog-conventionalcommits:
         specifier: ^9.1.0
         version: 9.1.0
       knip:
         specifier: ^5.80.2
-        version: 5.80.2(@types/node@24.10.4)(typescript@5.9.3)
+        version: 5.80.2(@types/node@24.10.6)(typescript@5.9.3)
       semantic-release:
         specifier: ^25.0.2
         version: 25.0.2(typescript@5.9.3)
@@ -106,11 +106,11 @@ importers:
         specifier: ^5.0.6
         version: 5.0.6
       '@types/node':
-        specifier: ^24.10.4
-        version: 24.10.4
+        specifier: ^24.10.6
+        version: 24.10.6
       '@vitest/coverage-v8':
         specifier: ^4.0.16
-        version: 4.0.16(vitest@4.0.16(@types/node@24.10.4)(jiti@2.6.0)(tsx@4.21.0))
+        version: 4.0.16(vitest@4.0.16(@types/node@24.10.6)(jiti@2.6.0)(tsx@4.21.0))
       cross-env:
         specifier: ^10.1.0
         version: 10.1.0
@@ -128,7 +128,7 @@ importers:
         version: 5.9.3
       vitest:
         specifier: ^4.0.16
-        version: 4.0.16(@types/node@24.10.4)(jiti@2.6.0)(tsx@4.21.0)
+        version: 4.0.16(@types/node@24.10.6)(jiti@2.6.0)(tsx@4.21.0)
 
   ied-fe:
     dependencies:
@@ -215,8 +215,8 @@ importers:
         specifier: ^2.3.11
         version: 2.3.11
       '@types/node':
-        specifier: ^24.10.4
-        version: 24.10.4
+        specifier: ^24.10.6
+        version: 24.10.6
       '@types/react':
         specifier: 19.2.8
         version: 19.2.8
@@ -231,7 +231,7 @@ importers:
         version: 1.8.8
       '@vitejs/plugin-react-swc':
         specifier: ^4.2.2
-        version: 4.2.2(vite@7.3.1(@types/node@24.10.4)(jiti@2.6.0)(tsx@4.21.0))
+        version: 4.2.2(vite@7.3.1(@types/node@24.10.6)(jiti@2.6.0)(tsx@4.21.0))
       globals:
         specifier: ^17.0.0
         version: 17.0.0
@@ -240,7 +240,7 @@ importers:
         version: 5.9.3
       vite:
         specifier: ^7.3.1
-        version: 7.3.1(@types/node@24.10.4)(jiti@2.6.0)(tsx@4.21.0)
+        version: 7.3.1(@types/node@24.10.6)(jiti@2.6.0)(tsx@4.21.0)
 
   ied-shared:
     dependencies:
@@ -255,8 +255,8 @@ importers:
         specifier: ^2.3.11
         version: 2.3.11
       '@types/node':
-        specifier: ^24.10.4
-        version: 24.10.4
+        specifier: ^24.10.6
+        version: 24.10.6
       tsx:
         specifier: ^4.21.0
         version: 4.21.0
@@ -283,11 +283,11 @@ importers:
         specifier: ^2.3.11
         version: 2.3.11
       '@types/node':
-        specifier: ^24.10.4
-        version: 24.10.4
+        specifier: ^24.10.6
+        version: 24.10.6
       ts-node:
         specifier: ^10.9.2
-        version: 10.9.2(@swc/core@1.13.5)(@types/node@24.10.4)(typescript@5.9.3)
+        version: 10.9.2(@swc/core@1.13.5)(@types/node@24.10.6)(typescript@5.9.3)
       typescript:
         specifier: ^5.9.3
         version: 5.9.3
@@ -1856,8 +1856,8 @@ packages:
   '@types/mime@1.3.5':
     resolution: {integrity: sha512-/pyBZWSLD2n0dcHE3hq8s8ZvcETHtEuF+3E7XVt0Ig2nvsVQXdghHVcEkIWjy9A0wKfTn97a/PSDYohKIlnP/w==}
 
-  '@types/node@24.10.4':
-    resolution: {integrity: sha512-vnDVpYPMzs4wunl27jHrfmwojOGKya0xyM3sH+UE5iv5uPS6vX7UIoh6m+vQc5LGBq52HBKPIn/zcSZVzeDEZg==}
+  '@types/node@24.10.6':
+    resolution: {integrity: sha512-B8h60xgJMR/xmgyX9fncRzEW9gCxoJjdenUhke2v1JGOd/V66KopmWrLPXi5oUI4VuiGK+d+HlXJjDRZMj21EQ==}
 
   '@types/normalize-package-data@2.4.4':
     resolution: {integrity: sha512-37i+OaWTh9qeK4LSHPsyRC7NahnGotNuZvjLSgcPzblpHB3rrCJxAOgI5gCdKm7coonsaX1Of0ILiTcnZjbfxA==}
@@ -6230,7 +6230,7 @@ snapshots:
   '@types/body-parser@1.19.6':
     dependencies:
       '@types/connect': 3.4.38
-      '@types/node': 24.10.4
+      '@types/node': 24.10.6
 
   '@types/chai@5.2.3':
     dependencies:
@@ -6239,11 +6239,11 @@ snapshots:
 
   '@types/connect@3.4.38':
     dependencies:
-      '@types/node': 24.10.4
+      '@types/node': 24.10.6
 
   '@types/cors@2.8.19':
     dependencies:
-      '@types/node': 24.10.4
+      '@types/node': 24.10.6
 
   '@types/d3-array@3.2.2': {}
 
@@ -6277,7 +6277,7 @@ snapshots:
 
   '@types/express-serve-static-core@5.0.7':
     dependencies:
-      '@types/node': 24.10.4
+      '@types/node': 24.10.6
       '@types/qs': 6.14.0
       '@types/range-parser': 1.2.7
       '@types/send': 0.17.5
@@ -6301,7 +6301,7 @@ snapshots:
 
   '@types/mime@1.3.5': {}
 
-  '@types/node@24.10.4':
+  '@types/node@24.10.6':
     dependencies:
       undici-types: 7.16.0
 
@@ -6345,12 +6345,12 @@ snapshots:
   '@types/send@0.17.5':
     dependencies:
       '@types/mime': 1.3.5
-      '@types/node': 24.10.4
+      '@types/node': 24.10.6
 
   '@types/serve-static@2.2.0':
     dependencies:
       '@types/http-errors': 2.0.5
-      '@types/node': 24.10.4
+      '@types/node': 24.10.6
 
   '@types/stylis@4.2.5': {}
 
@@ -6360,15 +6360,15 @@ snapshots:
     dependencies:
       '@types/webidl-conversions': 7.0.3
 
-  '@vitejs/plugin-react-swc@4.2.2(vite@7.3.1(@types/node@24.10.4)(jiti@2.6.0)(tsx@4.21.0))':
+  '@vitejs/plugin-react-swc@4.2.2(vite@7.3.1(@types/node@24.10.6)(jiti@2.6.0)(tsx@4.21.0))':
     dependencies:
       '@rolldown/pluginutils': 1.0.0-beta.47
       '@swc/core': 1.13.5
-      vite: 7.3.1(@types/node@24.10.4)(jiti@2.6.0)(tsx@4.21.0)
+      vite: 7.3.1(@types/node@24.10.6)(jiti@2.6.0)(tsx@4.21.0)
     transitivePeerDependencies:
       - '@swc/helpers'
 
-  '@vitest/coverage-v8@4.0.16(vitest@4.0.16(@types/node@24.10.4)(jiti@2.6.0)(tsx@4.21.0))':
+  '@vitest/coverage-v8@4.0.16(vitest@4.0.16(@types/node@24.10.6)(jiti@2.6.0)(tsx@4.21.0))':
     dependencies:
       '@bcoe/v8-coverage': 1.0.2
       '@vitest/utils': 4.0.16
@@ -6381,7 +6381,7 @@ snapshots:
       obug: 2.1.1
       std-env: 3.10.0
       tinyrainbow: 3.0.3
-      vitest: 4.0.16(@types/node@24.10.4)(jiti@2.6.0)(tsx@4.21.0)
+      vitest: 4.0.16(@types/node@24.10.6)(jiti@2.6.0)(tsx@4.21.0)
     transitivePeerDependencies:
       - supports-color
 
@@ -6394,13 +6394,13 @@ snapshots:
       chai: 6.2.2
       tinyrainbow: 3.0.3
 
-  '@vitest/mocker@4.0.16(vite@7.3.0(@types/node@24.10.4)(jiti@2.6.0)(tsx@4.21.0))':
+  '@vitest/mocker@4.0.16(vite@7.3.0(@types/node@24.10.6)(jiti@2.6.0)(tsx@4.21.0))':
     dependencies:
       '@vitest/spy': 4.0.16
       estree-walker: 3.0.3
       magic-string: 0.30.21
     optionalDependencies:
-      vite: 7.3.0(@types/node@24.10.4)(jiti@2.6.0)(tsx@4.21.0)
+      vite: 7.3.0(@types/node@24.10.6)(jiti@2.6.0)(tsx@4.21.0)
 
   '@vitest/pretty-format@4.0.16':
     dependencies:
@@ -7385,10 +7385,10 @@ snapshots:
 
   kareem@3.0.0: {}
 
-  knip@5.80.2(@types/node@24.10.4)(typescript@5.9.3):
+  knip@5.80.2(@types/node@24.10.6)(typescript@5.9.3):
     dependencies:
       '@nodelib/fs.walk': 1.2.8
-      '@types/node': 24.10.4
+      '@types/node': 24.10.6
       fast-glob: 3.3.3
       formatly: 0.3.0
       jiti: 2.6.0
@@ -8429,14 +8429,14 @@ snapshots:
 
   traverse@0.6.8: {}
 
-  ts-node@10.9.2(@swc/core@1.13.5)(@types/node@24.10.4)(typescript@5.9.3):
+  ts-node@10.9.2(@swc/core@1.13.5)(@types/node@24.10.6)(typescript@5.9.3):
     dependencies:
       '@cspotcode/source-map-support': 0.8.1
       '@tsconfig/node10': 1.0.11
       '@tsconfig/node12': 1.0.11
       '@tsconfig/node14': 1.0.3
       '@tsconfig/node16': 1.0.4
-      '@types/node': 24.10.4
+      '@types/node': 24.10.6
       acorn: 8.15.0
       acorn-walk: 8.3.4
       arg: 4.1.3
@@ -8551,7 +8551,7 @@ snapshots:
 
   vary@1.1.2: {}
 
-  vite@7.3.0(@types/node@24.10.4)(jiti@2.6.0)(tsx@4.21.0):
+  vite@7.3.0(@types/node@24.10.6)(jiti@2.6.0)(tsx@4.21.0):
     dependencies:
       esbuild: 0.27.1
       fdir: 6.5.0(picomatch@4.0.3)
@@ -8560,12 +8560,12 @@ snapshots:
       rollup: 4.52.5
       tinyglobby: 0.2.15
     optionalDependencies:
-      '@types/node': 24.10.4
+      '@types/node': 24.10.6
       fsevents: 2.3.3
       jiti: 2.6.0
       tsx: 4.21.0
 
-  vite@7.3.1(@types/node@24.10.4)(jiti@2.6.0)(tsx@4.21.0):
+  vite@7.3.1(@types/node@24.10.6)(jiti@2.6.0)(tsx@4.21.0):
     dependencies:
       esbuild: 0.27.1
       fdir: 6.5.0(picomatch@4.0.3)
@@ -8574,15 +8574,15 @@ snapshots:
       rollup: 4.52.5
       tinyglobby: 0.2.15
     optionalDependencies:
-      '@types/node': 24.10.4
+      '@types/node': 24.10.6
       fsevents: 2.3.3
       jiti: 2.6.0
       tsx: 4.21.0
 
-  vitest@4.0.16(@types/node@24.10.4)(jiti@2.6.0)(tsx@4.21.0):
+  vitest@4.0.16(@types/node@24.10.6)(jiti@2.6.0)(tsx@4.21.0):
     dependencies:
       '@vitest/expect': 4.0.16
-      '@vitest/mocker': 4.0.16(vite@7.3.0(@types/node@24.10.4)(jiti@2.6.0)(tsx@4.21.0))
+      '@vitest/mocker': 4.0.16(vite@7.3.0(@types/node@24.10.6)(jiti@2.6.0)(tsx@4.21.0))
       '@vitest/pretty-format': 4.0.16
       '@vitest/runner': 4.0.16
       '@vitest/snapshot': 4.0.16
@@ -8599,10 +8599,10 @@ snapshots:
       tinyexec: 1.0.2
       tinyglobby: 0.2.15
       tinyrainbow: 3.0.3
-      vite: 7.3.0(@types/node@24.10.4)(jiti@2.6.0)(tsx@4.21.0)
+      vite: 7.3.0(@types/node@24.10.6)(jiti@2.6.0)(tsx@4.21.0)
       why-is-node-running: 2.3.0
     optionalDependencies:
-      '@types/node': 24.10.4
+      '@types/node': 24.10.6
     transitivePeerDependencies:
       - jiti
       - less
