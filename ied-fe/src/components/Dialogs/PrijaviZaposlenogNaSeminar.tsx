@@ -1,8 +1,3 @@
-import type {
-  FirmaType,
-  PrijavaZodType,
-  ZaposleniType,
-} from "@ied-shared/index";
 import {
   Alert,
   Autocomplete,
@@ -22,6 +17,7 @@ import {
   Typography,
 } from "@mui/material";
 import { addMonths, format, subMonths } from "date-fns";
+import type { FirmaType, PrijavaZodType, ZaposleniType } from "ied-shared";
 import { useEffect, useMemo, useState } from "react";
 import { createPrijava } from "../../api/seminari.api";
 import { useSearchSeminari } from "../../hooks/seminar/useSeminarQueries";

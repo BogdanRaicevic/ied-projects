@@ -1,8 +1,8 @@
-import type { AuditLogQueryParams } from "@ied-shared/types/audit_log.zod";
 import { Button, Paper, TextField, Typography } from "@mui/material";
 import { Box, Grid } from "@mui/system";
 import { DatePicker } from "@mui/x-date-pickers";
 import { endOfDay, startOfDay } from "date-fns";
+import type { AuditLogQueryParams } from "ied-shared";
 import { Controller, useForm } from "react-hook-form";
 
 interface AuditLogSearchFormProps {

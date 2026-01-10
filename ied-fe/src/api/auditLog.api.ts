@@ -1,5 +1,8 @@
-import type { AuditLogStatsByDateResponse } from "@ied-shared/index";
-import type { AuditLogQueryParams, AuditLogType } from "ied-shared";
+import type {
+  AuditLogQueryParams,
+  AuditLogStatsByDateResponse,
+  AuditLogType,
+} from "ied-shared";
 import axiosInstanceWithAuth from "./interceptors/auth";
 
 export type AuditLogsResponse = {

@@ -1,15 +1,10 @@
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import {
-  IzdavacRacuna,
-  type RacunType,
-  RacunZod,
-  TipRacuna,
-} from "@ied-shared/types/racuni.zod";
 import { formatDate } from "date-fns";
 import Docxtemplater from "docxtemplater";
 import { type Request, Router } from "express";
+import { IzdavacRacuna, type RacunType, RacunZod, TipRacuna } from "ied-shared";
 import PizZip from "pizzip";
 import { izdavacRacuna } from "../constants/izdavacRacuna.const";
 import { validateRequestBody } from "../middleware/validateSchema";

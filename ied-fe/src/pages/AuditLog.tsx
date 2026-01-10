@@ -1,11 +1,8 @@
-import type {
-  AuditLogQueryParams,
-  AuditLogType,
-} from "@ied-shared/types/audit_log.zod";
 import { Paper, Tab, Tabs, Typography } from "@mui/material";
 import { grey } from "@mui/material/colors";
 import { Box } from "@mui/system";
 import { endOfDay, formatDate, startOfDay, subMonths } from "date-fns";
+import type { AuditLogQueryParams, AuditLogType } from "ied-shared";
 import {
   MaterialReactTable,
   type MRT_ColumnDef,

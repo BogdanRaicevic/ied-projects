@@ -1,10 +1,10 @@
+import { type UseQueryResult, useQuery } from "@tanstack/react-query";
 import type {
   FirmaSeminarResult,
   FirmaSeminarSearchParams,
   SeminarQueryParams,
   SeminarSearchResults,
-} from "@ied-shared/types/seminar.zod";
-import { type UseQueryResult, useQuery } from "@tanstack/react-query";
+} from "ied-shared";
 import { fetchFirmaSeminari, fetchSeminari } from "../../api/seminari.api";
 
 export function useSearchSeminari(params: {

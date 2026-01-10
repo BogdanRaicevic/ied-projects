@@ -1,5 +1,5 @@
-import type { IChange } from "@ied-shared/types/diff";
 import { common, green, grey, red } from "@mui/material/colors";
+import type { IChange } from "ied-shared";
 import AddedChip from "../styled/AddedChip";
 import RemovedChip from "../styled/RemovedChip";
 import UpdatedChip from "../styled/UpdatedChip";

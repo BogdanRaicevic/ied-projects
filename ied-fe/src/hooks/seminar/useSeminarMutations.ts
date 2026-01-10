@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import type { SeminarZodType } from "ied-shared/dist/types/seminar.zod";
+import type { SeminarZodType } from "ied-shared";
 import {
   createSeminar,
   deletePrijava,

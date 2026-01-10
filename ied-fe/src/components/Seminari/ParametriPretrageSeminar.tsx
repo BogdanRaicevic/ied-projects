@@ -1,8 +1,4 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import {
-  type SeminarQueryParams,
-  SeminarQueryParamsSchema,
-} from "@ied-shared/types/seminar.zod";
 import { UnfoldLess } from "@mui/icons-material";
 import {
   Alert,
@@ -15,6 +11,7 @@ import {
 import { DatePicker } from "@mui/x-date-pickers";
 import { addMonths, subMonths } from "date-fns";
 import type { TipSeminara } from "ied-shared";
+import { type SeminarQueryParams, SeminarQueryParamsSchema } from "ied-shared";
 import { Controller, useForm } from "react-hook-form";
 import { useFetchTipoviSeminara } from "../../hooks/useFetchData";
 import MultiSelectAutocomplete from "../Autocomplete/MultiSelectAutocomplete";

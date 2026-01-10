@@ -1,4 +1,4 @@
-import type { SeminarDetail } from "@ied-shared/types/seminar.zod";
+import type { SeminarDetail } from "ied-shared";
 import {
   MaterialReactTable,
   type MRT_ColumnDef,

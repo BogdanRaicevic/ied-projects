@@ -1,5 +1,5 @@
-import type { TipSeminara } from "@ied-shared/types/seminar.zod";
 import { type UseQueryResult, useQuery } from "@tanstack/react-query";
+import type { TipSeminara } from "ied-shared";
 import { fetchAllDelatnosti } from "../api/delatnosti.api";
 import { fetchAllMesta } from "../api/mesta.api";
 import { getIzdavaciRacuna } from "../api/racuni.api";

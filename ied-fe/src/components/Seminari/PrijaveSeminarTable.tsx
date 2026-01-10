@@ -1,4 +1,3 @@
-import type { PrijavaZodType } from "@ied-shared/index";
 import DeleteIcon from "@mui/icons-material/Delete";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
@@ -15,6 +14,7 @@ import {
   Tooltip,
   Typography,
 } from "@mui/material";
+import type { PrijavaZodType } from "ied-shared";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDeletePrijavaMutation } from "../../hooks/seminar/useSeminarMutations";

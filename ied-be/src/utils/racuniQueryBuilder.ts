@@ -1,4 +1,4 @@
-import type { PretrageRacunaType } from "@ied-shared/index";
+import type { PretrageRacunaType } from "ied-shared";
 import type { QueryFilter } from "mongoose";
 import type { RacunBaseType } from "../models/racun.model";
 

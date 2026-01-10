@@ -1,4 +1,3 @@
-import type { PretrageRacunaType, RacunType } from "@ied-shared/index";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import {
   Box,
@@ -13,6 +12,7 @@ import {
 } from "@mui/material";
 import { blue, green, purple, red } from "@mui/material/colors";
 import { formatDate } from "date-fns";
+import type { PretrageRacunaType, RacunType } from "ied-shared";
 import {
   MaterialReactTable,
   type MRT_ColumnDef,

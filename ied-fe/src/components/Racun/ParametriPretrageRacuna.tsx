@@ -1,14 +1,22 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
+  Box,
+  Button,
+  Chip,
+  InputLabel,
+  MenuItem,
+  Select,
+  TextField,
+} from "@mui/material";
+import { blue, green, grey, purple, red } from "@mui/material/colors";
+import { DatePicker } from "@mui/x-date-pickers";
+import { subMonths } from "date-fns";
+import {
   type IzdavacRacuna,
   type PretrageRacunaType,
   PretrageRacunaZod,
   type TipRacuna,
-} from "@ied-shared/index";
-import { Box, Button, Chip, InputLabel, MenuItem, Select, TextField } from "@mui/material";
-import { blue, green, grey, purple, red } from "@mui/material/colors";
-import { DatePicker } from "@mui/x-date-pickers";
-import { subMonths } from "date-fns";
+} from "ied-shared";
 import { useEffect } from "react";
 import { Controller, useForm } from "react-hook-form";
 
@@ -16,7 +24,9 @@ interface ParametriPretrageRacunaProps {
   onSearch: (filters: PretrageRacunaType) => void;
 }
 
-export const ParametriPretrageRacuna = ({ onSearch }: ParametriPretrageRacunaProps) => {
+export const ParametriPretrageRacuna = ({
+  onSearch,
+}: ParametriPretrageRacunaProps) => {
   const { control, handleSubmit } = useForm({
     defaultValues: {
       pozivNaBroj: undefined,
@@ -80,7 +90,11 @@ export const ParametriPretrageRacuna = ({ onSearch }: ParametriPretrageRacunaPro
         name="pozivNaBroj"
         control={control}
         render={({ field }) => (
-          <TextField {...field} label="Poziv na Broj" placeholder="Poziv na Broj" />
+          <TextField
+            {...field}
+            label="Poziv na Broj"
+            placeholder="Poziv na Broj"
+          />
         )}
       />
 
@@ -117,7 +131,11 @@ export const ParametriPretrageRacuna = ({ onSearch }: ParametriPretrageRacunaPro
           >
             {Object.entries(tipRacunaChips).map(([value, cfg]) => (
               <MenuItem key={value} value={value}>
-                <Chip label={cfg.label} size="small" sx={{ bgcolor: cfg.color, color: "#fff" }} />
+                <Chip
+                  label={cfg.label}
+                  size="small"
+                  sx={{ bgcolor: cfg.color, color: "#fff" }}
+                />
               </MenuItem>
             ))}
           </Select>
@@ -183,7 +201,11 @@ export const ParametriPretrageRacuna = ({ onSearch }: ParametriPretrageRacunaPro
           >
             {Object.entries(izdavacRacunaChips).map(([value, cfg]) => (
               <MenuItem key={value} value={value}>
-                <Chip label={cfg.label} size="small" sx={{ bgcolor: cfg.color, color: "#fff" }} />
+                <Chip
+                  label={cfg.label}
+                  size="small"
+                  sx={{ bgcolor: cfg.color, color: "#fff" }}
+                />
               </MenuItem>
             ))}
           </Select>
@@ -193,22 +215,35 @@ export const ParametriPretrageRacuna = ({ onSearch }: ParametriPretrageRacunaPro
         name="nazivSeminara"
         control={control}
         render={({ field }) => (
-          <TextField {...field} label="Naziv Seminara" placeholder="Naziv Seminara" />
+          <TextField
+            {...field}
+            label="Naziv Seminara"
+            placeholder="Naziv Seminara"
+          />
         )}
       />
 
       <Controller
         name="imeFirme"
         control={control}
-        render={({ field }) => <TextField {...field} label="Ime Firme" placeholder="Ime Firme" />}
+        render={({ field }) => (
+          <TextField {...field} label="Ime Firme" placeholder="Ime Firme" />
+        )}
       />
 
       <Controller
         name="pibFirme"
         control={control}
-        render={({ field }) => <TextField {...field} placeholder="PIB Firme" label="PIB Firme" />}
+        render={({ field }) => (
+          <TextField {...field} placeholder="PIB Firme" label="PIB Firme" />
+        )}
       />
-      <Button variant="contained" color="primary" sx={{ marginBottom: 2 }} type="submit">
+      <Button
+        variant="contained"
+        color="primary"
+        sx={{ marginBottom: 2 }}
+        type="submit"
+      >
         Pretraži
       </Button>
     </Box>

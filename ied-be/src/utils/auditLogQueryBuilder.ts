@@ -1,4 +1,4 @@
-import type { AuditLogQueryParams } from "@ied-shared/types/audit_log.zod";
+import type { AuditLogQueryParams } from "ied-shared";
 import type { QueryFilter } from "mongoose";
 import type { AuditLogType } from "../models/audit_log.model";
 

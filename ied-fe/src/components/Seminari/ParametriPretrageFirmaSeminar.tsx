@@ -1,11 +1,8 @@
-import type {
-  FirmaSeminarSearchParams,
-  TipSeminara,
-} from "@ied-shared/types/seminar.zod";
 import { UnfoldLess } from "@mui/icons-material";
 import { Box, Button, FormControl, Grid, TextField } from "@mui/material";
 import { DatePicker } from "@mui/x-date-pickers";
 import { addMonths } from "date-fns";
+import type { FirmaSeminarSearchParams, TipSeminara } from "ied-shared";
 import { Controller, useForm } from "react-hook-form";
 import {
   useFetchPretragaData,

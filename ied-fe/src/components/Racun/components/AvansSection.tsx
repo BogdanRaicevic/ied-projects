@@ -1,4 +1,3 @@
-import { TipRacuna } from "@ied-shared/types/racuni.zod";
 import {
   Box,
   Chip,
@@ -14,6 +13,7 @@ import {
   Typography,
 } from "@mui/material";
 import { DatePicker } from "@mui/x-date-pickers";
+import { TipRacuna } from "ied-shared";
 import { useCallback, useEffect } from "react";
 import { getRacunByPozivNaBrojAndIzdavac } from "../../../api/racuni.api";
 import { formatToRSDNumber } from "../../../utils/helpers";

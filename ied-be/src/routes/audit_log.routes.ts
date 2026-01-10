@@ -1,4 +1,3 @@
-import { AuditLogQueryParamsZod } from "@ied-shared/types/audit_log.zod";
 import { parseInt as parseIntCompat } from "es-toolkit/compat";
 import {
   type NextFunction,
@@ -6,6 +5,7 @@ import {
   type Response,
   Router,
 } from "express";
+import { AuditLogQueryParamsZod } from "ied-shared";
 import z from "zod";
 import { validateRequestQuery } from "../middleware/validateSchema";
 import {

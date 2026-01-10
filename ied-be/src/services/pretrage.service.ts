@@ -1,4 +1,4 @@
-import type { FirmaQueryParams } from "@ied-shared/types/firma.zod";
+import type { FirmaQueryParams } from "ied-shared";
 import { Pretrage, type PretrageType } from "../models/pretrage.model";
 import { validateMongoId } from "../utils/utils";
 

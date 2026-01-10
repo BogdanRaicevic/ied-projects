@@ -1,17 +1,17 @@
 import {
+  type NextFunction,
+  type Request,
+  type Response,
+  Router,
+} from "express";
+import {
   type ExtendedSearchSeminarType,
   ExtendedSearchSeminarZod,
   type FirmaSeminarSearchParams,
   FirmaSeminarSearchParamsSchema,
   PrijavaSchema,
   SeminarSchema,
-} from "@ied-shared/types/seminar.zod";
-import {
-  type NextFunction,
-  type Request,
-  type Response,
-  Router,
-} from "express";
+} from "ied-shared";
 import { z } from "zod";
 import { createAuditMiddleware } from "../middleware/audit";
 import { validateRequestBody } from "../middleware/validateSchema";

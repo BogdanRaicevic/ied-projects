@@ -3,7 +3,7 @@ import type {
   PrijavaZodType,
   SeminarQueryParams,
   SeminarZodType,
-} from "@ied-shared/types/seminar.zod";
+} from "ied-shared";
 import axiosInstanceWithAuth from "./interceptors/auth";
 
 export const createSeminar = async (seminarData: SeminarZodType) => {

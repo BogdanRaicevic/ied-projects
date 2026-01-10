@@ -1,11 +1,11 @@
+import { isEqual } from "es-toolkit";
 import {
   type IzdavacRacuna,
   type PretrageRacunaType,
   type RacunType,
   RacunZod,
   TipRacuna,
-} from "@ied-shared/index";
-import { isEqual } from "es-toolkit";
+} from "ied-shared";
 import { RacunBaseModel } from "../models/racun.model";
 import { createRacunQuery } from "../utils/racuniQueryBuilder";
 

@@ -1,6 +1,5 @@
-import type { FirmaSeminarSearchParams } from "@ied-shared/index";
 import { Box, Link } from "@mui/material";
-import type { FirmaSeminar } from "ied-shared/dist/types/seminar.zod";
+import type { FirmaSeminar, FirmaSeminarSearchParams } from "ied-shared";
 import {
   MaterialReactTable,
   type MRT_ColumnDef,

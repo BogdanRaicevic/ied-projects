@@ -4,7 +4,7 @@ import {
   type RacunType,
   RacunZod,
   type TipRacuna,
-} from "@ied-shared/index";
+} from "ied-shared";
 import { validateOrThrow } from "../utils/zodErrorHelper";
 import axiosInstanceWithAuth from "./interceptors/auth";
 

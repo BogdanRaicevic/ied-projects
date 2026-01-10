@@ -15,10 +15,7 @@
     "jsx": "react-jsx",
     "experimentalDecorators": true,
     "noUnusedLocals": true,
-    "noUnusedParameters": true,
-    "paths": {
-      "@ied-shared/*": ["../ied-shared/src/*"]
-    }
+    "noUnusedParameters": true
   },
-  "include": ["src", "vite.config.ts", "../ied-shared/src"]
+  "include": ["src", "vite.config.ts"]
 }

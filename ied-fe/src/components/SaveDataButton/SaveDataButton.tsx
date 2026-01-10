@@ -1,10 +1,10 @@
+import DownloadIcon from "@mui/icons-material/Download";
+import Button from "@mui/material/Button";
 import type {
   ExportFirma,
   ExportZaposlenih,
   FirmaQueryParams,
-} from "@ied-shared/index";
-import DownloadIcon from "@mui/icons-material/Download";
-import Button from "@mui/material/Button";
+} from "ied-shared";
 import { exportFirmaData, exportZaposleniData } from "../../api/firma.api";
 
 type SaveButton = {

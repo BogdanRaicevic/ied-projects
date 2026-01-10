@@ -3,7 +3,7 @@ import type {
   FirmaSeminarSearchParams,
   PrijavaZodType,
   SeminarZodType,
-} from "@ied-shared/types/seminar.zod";
+} from "ied-shared";
 import { type PipelineStage, type QueryFilter, Types } from "mongoose";
 import { Firma } from "../models/firma.model";
 import { RacunBaseModel, type RacunBaseType } from "../models/racun.model";

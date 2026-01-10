@@ -1,4 +1,4 @@
-import type { FirmaQueryParams } from "@ied-shared/types/firma.zod";
+import type { FirmaQueryParams } from "ied-shared";
 import { beforeAll, describe, expect, it, vi } from "vitest";
 import { Firma } from "../../src/models/firma.model";
 import { Seminar } from "../../src/models/seminar.model";

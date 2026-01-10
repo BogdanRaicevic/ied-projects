@@ -1,9 +1,6 @@
-import type {
-  SeminarQueryParams,
-  SeminarZodType,
-} from "@ied-shared/types/seminar.zod";
 import { Box, Dialog, DialogContent } from "@mui/material";
 import { format } from "date-fns";
+import type { SeminarQueryParams, SeminarZodType } from "ied-shared";
 import {
   MaterialReactTable,
   type MRT_ColumnDef,
