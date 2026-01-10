@@ -1,3 +1,9 @@
+## [1.9.2](https://github.com/BogdanRaicevic/ied-projects/compare/v1.9.1...v1.9.2) (2026-01-10)
+
+### Bug Fixes
+
+* standardize ied-shared imports ([27f511f](https://github.com/BogdanRaicevic/ied-projects/commit/27f511f4bcbf89c3ef96a6fce0507b6b96d407db))
+
 ## [1.9.1](https://github.com/BogdanRaicevic/ied-projects/compare/v1.9.0...v1.9.1) (2026-01-10)
 
 ### Bug Fixes
