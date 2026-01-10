@@ -140,7 +140,7 @@ export const useAddZaposleni = (firmaId: string) => {
         queryClient.setQueryData<FirmaType>(firmaQueryKey(firmaId), {
           ...previousFirma,
           zaposleni: [
-            ...previousFirma.zaposleni,
+            ...(previousFirma.zaposleni || []),
             newZaposleni as ZaposleniType,
           ],
         });
@@ -188,7 +188,7 @@ export const useUpdateZaposleni = (firmaId: string) => {
               ? updatedZaposleni.firmaKomentar
               : firma.komentar,
           // Update the specific employee in the array
-          zaposleni: firma.zaposleni.map((z) =>
+          zaposleni: (firma.zaposleni || []).map((z) =>
             z._id === updatedZaposleni._id ? { ...z, ...updatedZaposleni } : z,
           ),
         };
@@ -244,7 +244,7 @@ export const useDeleteZaposleni = (firmaId?: string) => {
       if (previousFirma) {
         queryClient.setQueryData<FirmaType>(firmaQueryKey(firmaId), {
           ...previousFirma,
-          zaposleni: previousFirma.zaposleni.filter(
+          zaposleni: (previousFirma.zaposleni || []).filter(
             (z) => z._id !== zaposleniId,
           ),
         });

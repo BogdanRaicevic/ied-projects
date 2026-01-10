@@ -14,7 +14,6 @@ import { FirmaSchema, type FirmaType, type ZaposleniType } from "ied-shared";
 import type React from "react";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
-import type { z } from "zod";
 import { useEmailSuppression } from "../../hooks/firma/useEmailSuppression";
 import {
   useCreateNewFirma,
@@ -22,7 +21,11 @@ import {
   useUpdateFirma,
 } from "../../hooks/firma/useFirmaMutations";
 import { useFetchPretragaData } from "../../hooks/useFetchData";
-import { InputTypesSchema, type Metadata } from "../../schemas/metadata";
+import {
+  type InputTypes,
+  InputTypesSchema,
+  type Metadata,
+} from "../../schemas/metadata";
 import AutocompleteSingle from "../Autocomplete/Single";
 import MailingListSwitch from "../MailingListSwitch";
 import { firmaFormMetadata } from "./firmaFormMetadata";
@@ -39,8 +42,8 @@ export const FirmaForm: React.FC<FirmaFormProps> = ({ inputCompany }) => {
     reset,
     watch,
     setValue,
-  } = useForm<z.input<typeof FirmaSchema>, any, z.output<typeof FirmaSchema>>({
-    resolver: zodResolver(FirmaSchema), // find a way to pull error from this
+  } = useForm<FirmaType>({
+    resolver: zodResolver(FirmaSchema),
     defaultValues: inputCompany,
   });
 
@@ -215,7 +218,7 @@ export const FirmaForm: React.FC<FirmaFormProps> = ({ inputCompany }) => {
     }
   }
 
-  const inputItems = (inputType: z.infer<typeof InputTypesSchema>) => {
+  const inputItems = (inputType: InputTypes) => {
     return firmaFormMetadata
       .filter((element) => element.inputType === inputType)
       .map((item: Metadata) => {
