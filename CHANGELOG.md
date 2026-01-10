@@ -1,3 +1,9 @@
+## [1.9.1](https://github.com/BogdanRaicevic/ied-projects/compare/v1.9.0...v1.9.1) (2026-01-10)
+
+### Bug Fixes
+
+* align hook form types ([f4e8099](https://github.com/BogdanRaicevic/ied-projects/commit/f4e80994bd253cd7a5604330069ce1868a9c3c5f))
+
 ## [1.9.0](https://github.com/BogdanRaicevic/ied-projects/compare/v1.8.0...v1.9.0) (2026-01-09)
 
 ### Features
