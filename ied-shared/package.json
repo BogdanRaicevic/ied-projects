@@ -35,6 +35,6 @@
     "zod": "^4.3.5"
   },
   "peerDependencies": {
-    "diff": "^8.0.2"
+    "diff": "^8.0.3"
   }
 }
