@@ -30,8 +30,8 @@ importers:
         specifier: ^9.1.0
         version: 9.1.0
       knip:
-        specifier: ^5.80.2
-        version: 5.80.2(@types/node@24.10.6)(typescript@5.9.3)
+        specifier: ^5.81.0
+        version: 5.81.0(@types/node@24.10.6)(typescript@5.9.3)
       semantic-release:
         specifier: ^25.0.2
         version: 25.0.2(typescript@5.9.3)
@@ -2895,8 +2895,8 @@ packages:
     resolution: {integrity: sha512-RKhaOBSPN8L7y4yAgNhDT2602G5FD6QbOIISbjN9D6mjHPeqeg7K+EB5IGSU5o81/X2Gzm3ICnAvQW3x3OP8HA==}
     engines: {node: '>=18.0.0'}
 
-  knip@5.80.2:
-    resolution: {integrity: sha512-Yt7iF8Uzl7pp3mGA6yvum6PZBcbGhjasZYuqIwcIAX1jsIhGRUAK0icP0qrB6FSPBI3BpIeMHl7n9meCLO6ovg==}
+  knip@5.81.0:
+    resolution: {integrity: sha512-EM9YdNg6zU2DWMJuc9zD8kPUpj0wvPspa63Qe9DPGygzL956uYThfoUQk5aNpPmMr9hs/k+Xm7FLuWFKERFkrQ==}
     engines: {node: '>=18.18.0'}
     hasBin: true
     peerDependencies:
@@ -7214,7 +7214,7 @@ snapshots:
 
   kareem@3.0.0: {}
 
-  knip@5.80.2(@types/node@24.10.6)(typescript@5.9.3):
+  knip@5.81.0(@types/node@24.10.6)(typescript@5.9.3):
     dependencies:
       '@nodelib/fs.walk': 1.2.8
       '@types/node': 24.10.6
