@@ -1,8 +1,8 @@
-import type { TODO_ANY } from "./../../../ied-be/src/utils/utils";
+import type { ParametriPretrage } from "ied-shared";
 import axiosInstanceWithAuth from "./interceptors/auth";
 
 export const savePretraga = async (
-  queryParameters: TODO_ANY,
+  queryParameters: ParametriPretrage,
   pretraga: { id?: string; naziv: string },
 ) => {
   try {
@@ -27,7 +27,7 @@ export const fetchAllPretrage = async () => {
     const r = await axiosInstanceWithAuth.get(`/api/pretrage`);
     return r.data;
   } catch (error) {
-    console.error("Error fetching pregrage", error);
+    console.error("Error fetching pretrage", error);
     throw error;
   }
 };

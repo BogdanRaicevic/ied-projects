@@ -1,7 +1,7 @@
 import type {
   ExportFirma,
   ExportZaposlenih,
-  FirmaQueryParams,
+  ParametriPretrage,
 } from "ied-shared";
 import { NEGACIJA } from "ied-shared";
 import { Firma, type FirmaType } from "../models/firma.model";
@@ -14,7 +14,7 @@ export const findById = async (id: string): Promise<FirmaType | null> => {
   try {
     return await Firma.findById(id).lean();
   } catch (error) {
-    console.error("Error finding firma by od firma id:", error);
+    console.error("Error finding firma by id:", error);
     throw error;
   }
 };
@@ -61,7 +61,7 @@ export const updateById = async (
 };
 
 export const search = async (
-  queryParameters: FirmaQueryParams,
+  queryParameters: ParametriPretrage,
   pageIndex = 0,
   pageSize = 50,
 ) => {
@@ -82,7 +82,7 @@ export const search = async (
 };
 
 export const exportSearchedFirmaData = async (
-  queryParameters: FirmaQueryParams,
+  queryParameters: ParametriPretrage,
 ): Promise<ExportFirma> => {
   const mongoQuery = await createFirmaQuery(queryParameters);
 
@@ -121,7 +121,7 @@ export const exportSearchedFirmaData = async (
 };
 
 export const exportSearchedZaposleniData = async (
-  queryParameters: FirmaQueryParams,
+  queryParameters: ParametriPretrage,
 ): Promise<ExportZaposlenih> => {
   const mongoQuery = await createFirmaQuery(queryParameters);
 

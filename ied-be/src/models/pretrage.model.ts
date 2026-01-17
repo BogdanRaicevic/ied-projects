@@ -1,46 +1,50 @@
 import { type Document, model, Schema } from "mongoose";
 
 export type PretrageType = Document & {
-  naziv_pretrage: string;
+  nazivPretrage: string;
   mesta: string[];
   delatnosti: string[];
-  tipovi_firme: string[];
-  radna_mesta: string[];
-  velicine_firme: string[];
+  tipoviFirme: string[];
+  radnaMesta: string[];
+  velicineFirme: string[];
   negacije: string[];
-  ime_firme: string;
+  imeFirme: string;
   email: string;
   pib: string;
-  stanja_firme: string[];
+  stanjaFirme: string[];
   jbkjs: string;
-  maticni_broj: string;
+  maticniBroj: string;
   komentar: string;
   imePrezime: string;
   emailZaposlenog: string;
   firmaPrijavljeni?: boolean;
   zaposleniPrijavljeni?: boolean;
+  tipoviSeminara: string[];
+  seminari: string[];
 };
 
 const pretrageSchema = new Schema<PretrageType>(
   {
-    naziv_pretrage: { type: String, required: true },
+    nazivPretrage: { type: String, required: true },
     mesta: [{ type: String, ref: "Mesto" }],
     delatnosti: [{ type: String, ref: "Delatnost" }],
-    tipovi_firme: [{ type: String, ref: "TipFirme" }],
-    radna_mesta: [{ type: String, ref: "RadnaMesta" }],
-    velicine_firme: [{ type: String, ref: "VelicineFirmi" }],
-    negacije: [{ type: String }],
-    ime_firme: { type: String },
+    tipoviFirme: [{ type: String, ref: "TipFirme" }],
+    radnaMesta: [{ type: String, ref: "RadnaMesta" }],
+    velicineFirme: [{ type: String, ref: "VelicineFirmi" }],
+    negacije: [{ type: String }], // TODO: vezati za enum negacije
+    imeFirme: { type: String },
     email: { type: String },
     pib: { type: String },
-    stanja_firme: [{ type: String, ref: "StanjeFirme" }],
+    stanjaFirme: [{ type: String, ref: "StanjeFirme" }],
     jbkjs: { type: String },
-    maticni_broj: { type: String },
+    maticniBroj: { type: String },
     komentar: { type: String },
     imePrezime: { type: String },
     emailZaposlenog: { type: String },
     firmaPrijavljeni: { type: Boolean },
     zaposleniPrijavljeni: { type: Boolean },
+    tipoviSeminara: [{ type: String, ref: "TipSeminara" }],
+    seminari: [{ type: String, ref: "Seminar" }],
   },
   { collection: "pretrage" },
 );

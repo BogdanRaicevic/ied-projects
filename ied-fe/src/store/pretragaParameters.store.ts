@@ -1,14 +1,14 @@
-import type { FirmaQueryParams, NEGACIJA } from "ied-shared";
+import type { NEGACIJA, ParametriPretrage } from "ied-shared";
 import { create } from "zustand";
 
 type PretragaStore = {
-  pretragaParameters: FirmaQueryParams;
-  appliedParameters: FirmaQueryParams;
+  pretragaParameters: ParametriPretrage;
+  appliedParameters: ParametriPretrage;
   pagination: {
     pageIndex: number;
     pageSize: number;
   };
-  setPretragaParameters: (params: Partial<FirmaQueryParams>) => void;
+  setPretragaParameters: (params: Partial<ParametriPretrage>) => void;
   setPaginationParameters: (pagination: {
     pageIndex: number;
     pageSize: number;
@@ -26,11 +26,11 @@ const defaultPagination = {
   pageIndex: 0,
   pageSize: 50,
 };
-export const defaultPretrageParameters: FirmaQueryParams = {
+export const defaultPretrageParameters: ParametriPretrage = {
   imeFirme: "",
   pib: "",
   email: "",
-  velicineFirmi: [],
+  velicineFirme: [],
   radnaMesta: [],
   tipoviFirme: [],
   delatnosti: [],
@@ -43,8 +43,9 @@ export const defaultPretrageParameters: FirmaQueryParams = {
   seminari: [],
   imePrezime: "",
   emailZaposlenog: "",
-  firmaPrijavljeni: undefined,
-  zaposleniPrijavljeni: undefined,
+  firmaPrijavljeni: true,
+  zaposleniPrijavljeni: true,
+  tipoviSeminara: [],
 };
 
 export const usePretragaStore = create<PretragaStore>((set, get) => ({
