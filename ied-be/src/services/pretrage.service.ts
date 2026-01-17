@@ -1,4 +1,4 @@
-import type { FirmaQueryParams } from "ied-shared";
+import type { ParametriPretrage } from "ied-shared";
 import { Pretrage, type PretrageType } from "../models/pretrage.model";
 import { validateMongoId } from "../utils/utils";
 
@@ -13,32 +13,34 @@ export const getAllPretrage = async () => {
 };
 
 export const savePretraga = async (
-  queryParameters: FirmaQueryParams,
+  queryParameters: ParametriPretrage,
   pretraga: { id?: string; naziv: string },
 ) => {
   try {
     const pretragaData: Partial<PretrageType> = {};
-    pretragaData.naziv_pretrage = pretraga.naziv || "pretraga bez imena";
+    pretragaData.nazivPretrage = pretraga.naziv || "pretraga bez imena";
 
     pretragaData.mesta = queryParameters.mesta;
     pretragaData.delatnosti = queryParameters.delatnosti;
-    pretragaData.velicine_firme = queryParameters.velicineFirmi;
-    pretragaData.radna_mesta = queryParameters.radnaMesta;
-    pretragaData.tipovi_firme = queryParameters.tipoviFirme;
+    pretragaData.velicineFirme = queryParameters.velicineFirme;
+    pretragaData.radnaMesta = queryParameters.radnaMesta;
+    pretragaData.tipoviFirme = queryParameters.tipoviFirme;
 
-    pretragaData.ime_firme = queryParameters.imeFirme;
+    pretragaData.imeFirme = queryParameters.imeFirme;
     pretragaData.email = queryParameters.email;
     pretragaData.pib = queryParameters.pib;
 
     pretragaData.negacije = queryParameters.negacije;
-    pretragaData.stanja_firme = queryParameters.stanjaFirme;
+    pretragaData.stanjaFirme = queryParameters.stanjaFirme;
     pretragaData.jbkjs = queryParameters.jbkjs;
-    pretragaData.maticni_broj = queryParameters.maticniBroj;
+    pretragaData.maticniBroj = queryParameters.maticniBroj;
     pretragaData.komentar = queryParameters.komentar;
     pretragaData.imePrezime = queryParameters.imePrezime;
     pretragaData.emailZaposlenog = queryParameters.emailZaposlenog;
     pretragaData.firmaPrijavljeni = queryParameters.firmaPrijavljeni;
     pretragaData.zaposleniPrijavljeni = queryParameters.zaposleniPrijavljeni;
+    pretragaData.tipoviSeminara = queryParameters.tipoviSeminara;
+    pretragaData.seminari = queryParameters.seminari;
 
     const p = await Pretrage.findOneAndUpdate(
       { _id: pretraga.id },

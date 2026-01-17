@@ -3,12 +3,12 @@ import Button from "@mui/material/Button";
 import type {
   ExportFirma,
   ExportZaposlenih,
-  FirmaQueryParams,
+  ParametriPretrage,
 } from "ied-shared";
 import { exportFirmaData, exportZaposleniData } from "../../api/firma.api";
 
 type SaveButton = {
-  queryParameters: FirmaQueryParams;
+  queryParameters: ParametriPretrage;
   fileName: string;
   exportSubject: "firma" | "zaposleni";
 };

@@ -1,8 +1,8 @@
 import type {
   ExportFirma,
   ExportZaposlenih,
-  FirmaQueryParams,
   FirmaType,
+  ParametriPretrage,
   ZaposleniType,
 } from "ied-shared";
 import axiosInstanceWithAuth from "./interceptors/auth";
@@ -10,7 +10,7 @@ import axiosInstanceWithAuth from "./interceptors/auth";
 export const fetchFirmaPretrage = async (
   pageSize: number,
   pageIndex: number,
-  queryParameters: FirmaQueryParams,
+  queryParameters: ParametriPretrage,
 ) => {
   try {
     const body = {
@@ -40,7 +40,7 @@ export const fetchSingleFirma = async (id: string): Promise<FirmaType> => {
 };
 
 export const exportFirmaData = async (
-  queryParameters: FirmaQueryParams,
+  queryParameters: ParametriPretrage,
 ): Promise<{
   data: ExportFirma;
   duplicates: string[];
@@ -82,7 +82,7 @@ export const exportFirmaData = async (
 };
 
 export const exportZaposleniData = async (
-  queryParameters: FirmaQueryParams,
+  queryParameters: ParametriPretrage,
 ): Promise<{
   data: ExportZaposlenih;
   duplicates: string[];

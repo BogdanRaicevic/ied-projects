@@ -1,11 +1,10 @@
-import type { FirmaQueryParams } from "ied-shared";
-import { NEGACIJA } from "ied-shared";
+import { NEGACIJA, type ParametriPretrage } from "ied-shared";
 import type { QueryFilter } from "mongoose";
 import type { FirmaType } from "../models/firma.model";
 import { Seminar, type SeminarType } from "../models/seminar.model";
 import type { Zaposleni } from "../models/zaposleni.model";
 
-export const createFirmaQuery = async (params: FirmaQueryParams) => {
+export const createFirmaQuery = async (params: ParametriPretrage) => {
   const query: QueryFilter<FirmaType> = {};
 
   const negations = params?.negacije || [];
@@ -52,8 +51,8 @@ export const createFirmaQuery = async (params: FirmaQueryParams) => {
     }
   }
 
-  if (Array.isArray(params?.velicineFirmi) && params.velicineFirmi.length > 0) {
-    query.velicina_firme = { $in: params.velicineFirmi };
+  if (Array.isArray(params?.velicineFirme) && params.velicineFirme.length > 0) {
+    query.velicina_firme = { $in: params.velicineFirme };
   }
 
   if (Array.isArray(params?.stanjaFirme) && params.stanjaFirme.length > 0) {
@@ -89,9 +88,12 @@ export const createFirmaQuery = async (params: FirmaQueryParams) => {
     }
   }
 
-  if (Array.isArray(params?.tipSeminara) && params.tipSeminara.length > 0) {
+  if (
+    Array.isArray(params?.tipoviSeminara) &&
+    params.tipoviSeminara.length > 0
+  ) {
     const seminarFilter: QueryFilter<SeminarType> = {
-      tipSeminara: { $in: params.tipSeminara },
+      tipSeminara: { $in: params.tipoviSeminara },
     };
     const ids = await Seminar.distinct("prijave.firma_id", seminarFilter);
     if (negateTipSeminara) {

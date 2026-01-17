@@ -4,7 +4,7 @@ import {
   type Response,
   Router,
 } from "express";
-import type { FirmaQueryParams } from "ied-shared";
+import type { ParametriPretrage } from "ied-shared";
 import { createAuditMiddleware } from "../middleware/audit";
 import { Firma, type FirmaType } from "../models/firma.model";
 import {
@@ -27,7 +27,7 @@ interface SearchRequest extends Request {
   body: {
     pageIndex?: number;
     pageSize?: number;
-    queryParameters: FirmaQueryParams;
+    queryParameters: ParametriPretrage;
   };
 }
 

@@ -1,4 +1,4 @@
-import type { FirmaQueryParams } from "ied-shared";
+import type { ParametriPretrage } from "ied-shared";
 import { beforeAll, describe, expect, it, vi } from "vitest";
 import { Firma } from "../../src/models/firma.model";
 import { Seminar } from "../../src/models/seminar.model";
@@ -25,7 +25,7 @@ describe("firma.service search", () => {
     });
 
     it("should filter by MESTA", async () => {
-      const queryParameters: FirmaQueryParams = { mesta: ["Beograd"] };
+      const queryParameters: ParametriPretrage = { mesta: ["Beograd"] };
       const result = await firmaService.search(queryParameters);
 
       expect(result.totalDocuments).toBeGreaterThan(0);
@@ -33,7 +33,7 @@ describe("firma.service search", () => {
     });
 
     it("should filter by DELATNOSTI", async () => {
-      const queryParameters: FirmaQueryParams = { delatnosti: ["IT"] };
+      const queryParameters: ParametriPretrage = { delatnosti: ["IT"] };
       const result = await firmaService.search(queryParameters);
 
       expect(result.totalDocuments).toBeGreaterThan(0);
@@ -41,7 +41,7 @@ describe("firma.service search", () => {
     });
 
     it("should filter by TIPOVI FIRME", async () => {
-      const queryParameters: FirmaQueryParams = { tipoviFirme: ["DOO"] };
+      const queryParameters: ParametriPretrage = { tipoviFirme: ["DOO"] };
       const result = await firmaService.search(queryParameters);
 
       expect(result.totalDocuments).toBeGreaterThan(0);
@@ -49,7 +49,7 @@ describe("firma.service search", () => {
     });
 
     it("should filter by VELICINE FIRMI", async () => {
-      const queryParameters: FirmaQueryParams = { velicineFirmi: ["mala"] };
+      const queryParameters: ParametriPretrage = { velicineFirme: ["mala"] };
       const result = await firmaService.search(queryParameters);
 
       expect(result.totalDocuments).toBeGreaterThan(0);
@@ -57,7 +57,7 @@ describe("firma.service search", () => {
     });
 
     it("should filter by STANJA FIRME", async () => {
-      const queryParameters: FirmaQueryParams = { stanjaFirme: ["aktivna"] };
+      const queryParameters: ParametriPretrage = { stanjaFirme: ["aktivna"] };
       const result = await firmaService.search(queryParameters);
 
       expect(result.totalDocuments).toBeGreaterThan(0);
@@ -72,7 +72,7 @@ describe("firma.service search", () => {
     });
 
     it("should search by text in NAZIV FIRME", async () => {
-      const queryParameters: FirmaQueryParams = { imeFirme: "as" };
+      const queryParameters: ParametriPretrage = { imeFirme: "as" };
       const result = await firmaService.search(queryParameters);
 
       expect(result.totalDocuments).toBeGreaterThan(0);
@@ -82,7 +82,7 @@ describe("firma.service search", () => {
 
   describe("Zaposleni related search", () => {
     it("should filter by RADNA MESTA", async () => {
-      const queryParameters: FirmaQueryParams = {
+      const queryParameters: ParametriPretrage = {
         radnaMesta: ["Developer"],
       };
 
@@ -93,7 +93,7 @@ describe("firma.service search", () => {
     });
 
     it("should find firmas where zaposleni match criteria", async () => {
-      const queryParameters: FirmaQueryParams = {
+      const queryParameters: ParametriPretrage = {
         radnaMesta: ["Developer"],
         imePrezime: "Al",
       };
@@ -115,7 +115,7 @@ describe("firma.service search", () => {
 
   describe("complex combined filters", () => {
     it("should combine multiple filters", async () => {
-      const queryParameters: FirmaQueryParams = {
+      const queryParameters: ParametriPretrage = {
         mesta: ["Beograd"],
         delatnosti: ["IT"],
         tipoviFirme: ["JP"],
@@ -127,7 +127,7 @@ describe("firma.service search", () => {
 
     it("should combine seminar filter with firma filters", async () => {
       const seminarId = staticTestData.seminari[0]!._id.toString();
-      const queryParameters: FirmaQueryParams = {
+      const queryParameters: ParametriPretrage = {
         seminari: [seminarId],
         tipoviFirme: ["DOO", "AD"],
         stanjaFirme: ["aktivna"],
@@ -141,7 +141,7 @@ describe("firma.service search", () => {
   describe("seminar-related search with seeded data", () => {
     const seminarId = staticTestData.seminari[0]!._id.toString();
     it("should filter by SEMINARI - firmas with prijave on specific seminar", async () => {
-      const queryParameters: FirmaQueryParams = {
+      const queryParameters: ParametriPretrage = {
         seminari: [seminarId],
       };
 
@@ -154,7 +154,7 @@ describe("firma.service search", () => {
       const seminarIds = staticTestData.seminari
         .slice(0, 3)
         .map((s) => s._id.toString());
-      const queryParameters: FirmaQueryParams = { seminari: seminarIds };
+      const queryParameters: ParametriPretrage = { seminari: seminarIds };
 
       const result = await firmaService.search(queryParameters);
 
@@ -164,8 +164,8 @@ describe("firma.service search", () => {
     it("should filter by TIP_SEMINARA", async () => {
       const tipSeminaraId =
         staticTestData.tipoviSeminara[0]?._id.toString() || "";
-      const queryParameters: FirmaQueryParams = {
-        tipSeminara: [tipSeminaraId],
+      const queryParameters: ParametriPretrage = {
+        tipoviSeminara: [tipSeminaraId],
       };
 
       const result = await firmaService.search(queryParameters);
@@ -176,7 +176,7 @@ describe("firma.service search", () => {
 
     it("should return 0 results for non-existent seminar", async () => {
       const fakeId = "612e3c4f1c4ae5b6f0d9f999";
-      const queryParameters: FirmaQueryParams = { seminari: [fakeId] };
+      const queryParameters: ParametriPretrage = { seminari: [fakeId] };
 
       const result = await firmaService.search(queryParameters);
 
@@ -184,7 +184,7 @@ describe("firma.service search", () => {
     });
 
     it("should combine SEMINARI filter with other filters", async () => {
-      const queryParameters: FirmaQueryParams = {
+      const queryParameters: ParametriPretrage = {
         seminari: [seminarId],
         mesta: ["Beograd"],
       };

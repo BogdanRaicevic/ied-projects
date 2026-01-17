@@ -12,7 +12,7 @@ import {
   TextField,
 } from "@mui/material";
 import { format } from "date-fns";
-import type { FirmaQueryParams, TipSeminara } from "ied-shared";
+import type { ParametriPretrage, TipSeminara } from "ied-shared";
 import { NEGACIJA } from "ied-shared";
 import { useCallback, useEffect, useMemo } from "react";
 import { Controller, useForm } from "react-hook-form";
@@ -75,7 +75,7 @@ export default function PretragaParameters() {
   } = usePretragaStore();
 
   const { control, handleSubmit, reset } = useForm({
-    defaultValues: defaultPretrageParameters as FirmaQueryParams,
+    defaultValues: defaultPretrageParameters as ParametriPretrage,
   });
 
   useEffect(() => {
@@ -88,7 +88,7 @@ export default function PretragaParameters() {
   }, [appliedParameters, reset]);
 
   const onSubmit = useCallback(
-    (data: FirmaQueryParams) => {
+    (data: ParametriPretrage) => {
       setPretragaParameters(data);
       setPaginationParameters({ pageIndex: 0, pageSize: 50 });
       setAppliedParameters();
@@ -277,7 +277,7 @@ export default function PretragaParameters() {
             <Grid container alignItems="center">
               <Grid size={10} sx={{ width: "75%" }}>
                 <Controller
-                  name="tipSeminara"
+                  name="tipoviSeminara"
                   control={control}
                   render={({ field }) => (
                     <MultiSelectAutocomplete<TipSeminara>
@@ -315,7 +315,7 @@ export default function PretragaParameters() {
         </Grid>
         <Grid size={2}>
           <Controller
-            name="velicineFirmi"
+            name="velicineFirme"
             control={control}
             render={({ field }) => (
               <CheckboxList
