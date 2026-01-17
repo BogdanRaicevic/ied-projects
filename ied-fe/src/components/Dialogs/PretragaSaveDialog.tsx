@@ -6,7 +6,9 @@ import {
   DialogTitle,
   Grid,
   TextField,
+  Typography,
 } from "@mui/material";
+import { Box } from "@mui/system";
 import { useEffect, useState } from "react";
 import type { TODO_ANY } from "../../../../ied-be/src/utils/utils";
 
@@ -44,16 +46,24 @@ export default function PretrageSaveDialog({
       <DialogContent>
         <Grid container spacing={2} alignItems="center">
           <Grid size={6}>
-            <Button
-              variant="outlined"
-              color="warning"
-              onClick={() => {
-                handleSave(selectedPretraga.naziv, false);
-              }}
-              disabled={!selectedPretraga.naziv}
-            >
-              Sačuvaj preko postojeće
-            </Button>
+            <Box sx={{ m: 1 }}>
+              <Button
+                variant="outlined"
+                color="warning"
+                onClick={() => {
+                  handleSave(selectedPretraga.naziv, false);
+                }}
+                disabled={!selectedPretraga.naziv}
+              >
+                Sačuvaj preko postojeće
+              </Button>
+              <Box sx={{ m: 1 }}>
+                <Typography variant="body2" color="textSecondary">
+                  Pre čuvanja pretrage, pritisnite dugme "Pretraži" kako bi se
+                  sačuvali najnoviji parametri.
+                </Typography>
+              </Box>
+            </Box>
           </Grid>
 
           <Grid size={6}>
