@@ -14,8 +14,5 @@ export default defineConfig({
       reporter: ["text", "json", "html"],
       enabled: true,
     },
-    alias: {
-      "@ied-shared": "../ied-shared/src",
-    },
   },
 });
