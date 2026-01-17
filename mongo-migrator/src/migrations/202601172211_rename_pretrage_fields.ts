@@ -21,7 +21,7 @@ export const up = async (db: Connection) => {
       },
     );
   } catch (error) {
-    console.error("Error during migration of seed seminar types:", error);
+    console.error("Error during migration of pretrage field renames:", error);
     throw error;
   }
 };
