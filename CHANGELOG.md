@@ -1,3 +1,14 @@
+## [1.10.0](https://github.com/BogdanRaicevic/ied-projects/compare/v1.9.2...v1.10.0) (2026-01-17)
+
+### Features
+
+* add seed migration for seminar types ([2f8ae1d](https://github.com/BogdanRaicevic/ied-projects/commit/2f8ae1d4cc3562caf12068c4a88e169bbd762328))
+
+### Bug Fixes
+
+* Refactor Pretrage and fix missing searches for tipovi seminara ([ab15088](https://github.com/BogdanRaicevic/ied-projects/commit/ab1508892346c7b6dbd95c31cd561c1ee0ead177))
+* wrong error message ([ffd90a7](https://github.com/BogdanRaicevic/ied-projects/commit/ffd90a7875cc9f9fde117ff91f1e7c3a265a95e4))
+
 ## [1.9.2](https://github.com/BogdanRaicevic/ied-projects/compare/v1.9.1...v1.9.2) (2026-01-10)
 
 ### Bug Fixes
