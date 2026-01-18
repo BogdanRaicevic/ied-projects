@@ -22,15 +22,27 @@ async function generateStaticData() {
     tipoviSeminara: seededData.tipoviSeminara,
     seminari: seededData.seminari,
     firme: seededData.firme,
+    mesta: seededData.mesta,
+    delatnosti: seededData.delatnosti,
+    tipoviFirme: seededData.tipoviFirme,
+    velicineFirme: seededData.velicineFirme,
+    stanjaFirme: seededData.stanjaFirme,
+    radnaMesta: seededData.radnaMesta,
   };
 
-  const outputPath = join(__dirname, "../fixtures/static-test-data.json");
+  const outputPath = join(__dirname, "../fixtures/staticTestData.json");
   writeFileSync(outputPath, JSON.stringify(staticData, null, 2));
 
   console.log(`✅ Static test data generated at: ${outputPath}`);
   console.log(`   - Firme: ${staticData.firme.length}`);
   console.log(`   - Seminari: ${staticData.seminari.length}`);
   console.log(`   - Tipovi Seminara: ${staticData.tipoviSeminara.length}`);
+  console.log(`   - Mesta: ${staticData.mesta.length}`);
+  console.log(`   - Delatnosti: ${staticData.delatnosti.length}`);
+  console.log(`   - Tipovi Firme: ${staticData.tipoviFirme.length}`);
+  console.log(`   - Velicine Firme: ${staticData.velicineFirme.length}`);
+  console.log(`   - Stanja Firme: ${staticData.stanjaFirme.length}`);
+  console.log(`   - Radna Mesta: ${staticData.radnaMesta.length}`);
 
   await mongoose.disconnect();
   await mongoServer.stop();

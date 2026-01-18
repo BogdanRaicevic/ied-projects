@@ -1,6 +1,6 @@
 import { type Document, model, Schema } from "mongoose";
 
-type MestoType = Document & {
+export type MestoType = Document & {
   naziv_mesto: string;
   ID_mesto: number;
   postanski_broj: string;

@@ -1,6 +1,6 @@
 import { type Document, model, Schema } from "mongoose";
 
-type TipSeminaraType = Document & {
+export type TipSeminaraType = Document & {
   tipSeminara: string;
 };
 
