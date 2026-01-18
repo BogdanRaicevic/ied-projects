@@ -1,8 +1,29 @@
 import { faker } from "@faker-js/faker";
 import { Types } from "mongoose";
+import {
+  Delatnost,
+  type DelatnostType,
+} from "../../src/models/delatnosti.model";
 import type { FirmaType } from "../../src/models/firma.model";
+import { Mesto, type MestoType } from "../../src/models/mesto.model";
+import {
+  RadnaMesta,
+  type RadnaMestaType,
+} from "../../src/models/radna_mesta.model";
 import { Seminar, type SeminarType } from "../../src/models/seminar.model";
-import { TipSeminara } from "../../src/models/tip_seminara.model";
+import {
+  StanjeFirme,
+  type StanjeFirmeType,
+} from "../../src/models/stanje_firme.model";
+import { TipFirme, type TipFirmeType } from "../../src/models/tip_firme.model";
+import {
+  TipSeminara,
+  type TipSeminaraType,
+} from "../../src/models/tip_seminara.model";
+import {
+  VelicineFirmi,
+  type VelicineFirmiType,
+} from "../../src/models/velicina_firme.model";
 import type { Zaposleni } from "../../src/models/zaposleni.model";
 import * as firmaService from "../../src/services/firma.service";
 
@@ -55,14 +76,17 @@ export const TEST_DATA_CONFIG = {
 };
 
 // Types for seeded data references
-type SeededTipSeminara = { _id: Types.ObjectId; tipSeminara: string };
-type SeededSeminar = SeminarType & { _id: Types.ObjectId };
-type SeededFirma = FirmaType & { _id: Types.ObjectId };
 
 export type SeededData = {
-  tipoviSeminara: SeededTipSeminara[];
-  seminari: SeededSeminar[];
-  firme: SeededFirma[];
+  tipoviSeminara: TipSeminaraType[];
+  seminari: SeminarType[];
+  firme: FirmaType[];
+  mesta: MestoType[];
+  delatnosti: DelatnostType[];
+  tipoviFirme: TipFirmeType[];
+  velicineFirme: VelicineFirmiType[];
+  stanjaFirme: StanjeFirmeType[];
+  radnaMesta: RadnaMestaType[];
 };
 
 export async function cursorToArray<T>(cursor: any): Promise<T[]> {
@@ -118,7 +142,7 @@ function generateSeminar(tipSeminaraId: Types.ObjectId, overrides: any = {}) {
 }
 
 function generatePrijava(
-  firma: SeededFirma,
+  firma: FirmaType,
   zaposleni: Zaposleni,
 ): SeminarType["prijave"][0] {
   return {
@@ -143,7 +167,67 @@ export async function seedTestDatabase(): Promise<SeededData> {
     tipoviSeminara: [],
     seminari: [],
     firme: [],
+    mesta: [],
+    delatnosti: [],
+    tipoviFirme: [],
+    velicineFirme: [],
+    stanjaFirme: [],
+    radnaMesta: [],
   };
+
+  // 0. Seed lookup tables first
+  // Mesta
+  const postanskiBrojevi = [
+    "11000",
+    "21000",
+    "18000",
+    "34000",
+    "24000",
+    "32000",
+    "16000",
+    "36000",
+  ];
+  for (let i = 0; i < TEST_DATA_CONFIG.MESTA.length; i++) {
+    const mesto = await Mesto.create({
+      naziv_mesto: TEST_DATA_CONFIG.MESTA[i]!,
+      postanski_broj: postanskiBrojevi[i] || `${10000 + i}`,
+      ID_mesto: i + 1,
+    });
+    seededData.mesta.push(mesto.toObject());
+  }
+
+  // Delatnosti
+  for (const delatnostName of TEST_DATA_CONFIG.DELATNOSTI) {
+    const delatnost = await Delatnost.create({ delatnost: delatnostName });
+    seededData.delatnosti.push(delatnost.toObject());
+  }
+
+  // Tipovi Firme
+  for (const tipName of TEST_DATA_CONFIG.TIP_FIRME) {
+    const tip = await TipFirme.create({ tip_firme: tipName });
+    seededData.tipoviFirme.push(tip.toObject());
+  }
+
+  // Velicine Firme
+  for (let i = 0; i < TEST_DATA_CONFIG.VELICINA_FIRME.length; i++) {
+    const velicina = await VelicineFirmi.create({
+      ID_velicina_firme: i + 1,
+      velicina_firme: TEST_DATA_CONFIG.VELICINA_FIRME[i]!,
+    });
+    seededData.velicineFirme.push(velicina.toObject());
+  }
+
+  // Stanja Firme
+  for (const stanjeName of TEST_DATA_CONFIG.STANJE_FIRME) {
+    const stanje = await StanjeFirme.create({ stanje_firme: stanjeName });
+    seededData.stanjaFirme.push(stanje.toObject());
+  }
+
+  // Radna Mesta
+  for (const radnoMestoName of TEST_DATA_CONFIG.RADNA_MESTA) {
+    const radnoMesto = await RadnaMesta.create({ radno_mesto: radnoMestoName });
+    seededData.radnaMesta.push(radnoMesto.toObject());
+  }
 
   // 1. Create TipSeminara records
   for (const tipName of TEST_DATA_CONFIG.TIP_SEMINARA) {
@@ -171,7 +255,7 @@ export async function seedTestDatabase(): Promise<SeededData> {
       )) as FirmaType;
     }
 
-    seededData.firme.push(updatedFirma as SeededFirma);
+    seededData.firme.push(updatedFirma);
   }
 
   // 3. Create Seminars with random tipSeminara
@@ -180,7 +264,7 @@ export async function seedTestDatabase(): Promise<SeededData> {
     const seminarData = generateSeminar(randomTip._id);
     const seminar = await Seminar.create(seminarData);
 
-    seededData.seminari.push(seminar.toObject() as SeededSeminar);
+    seededData.seminari.push(seminar.toObject());
   }
 
   // 4. Create Prijave - link random zaposleni from random firmas to seminars
@@ -213,7 +297,7 @@ export async function seedTestDatabase(): Promise<SeededData> {
   }
 
   // Refresh seminari data after adding prijave
-  seededData.seminari = (await Seminar.find({}).lean()) as SeededSeminar[];
+  seededData.seminari = await Seminar.find({}).lean();
 
   return seededData;
 }

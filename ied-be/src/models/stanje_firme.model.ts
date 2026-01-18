@@ -1,6 +1,6 @@
 import { type Document, model, Schema } from "mongoose";
 
-type StanjeFirmeType = Document & {
+export type StanjeFirmeType = Document & {
   stanje_firme: string;
 };
 

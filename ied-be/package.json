@@ -14,7 +14,8 @@
     "biome:format": "npx biome format --write ./src",
     "biome:check": "npx biome check --write ./src",
     "lint": "npx biome lint ./src",
-    "lint:error": "npx biome lint --diagnostic-level error ./src"
+    "lint:error": "npx biome lint --diagnostic-level error ./src",
+    "generate:test-data": "tsx tests/utils/generateStaticData.ts"
   },
   "author": "",
   "license": "ISC",

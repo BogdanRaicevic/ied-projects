@@ -1,6 +1,6 @@
 import { type Document, model, Schema } from "mongoose";
 
-type RadnaMestaType = Document & {
+export type RadnaMestaType = Document & {
   radno_mesto: string;
 };
 
