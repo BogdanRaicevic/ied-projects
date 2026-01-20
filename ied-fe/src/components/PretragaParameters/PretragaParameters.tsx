@@ -1,16 +1,6 @@
 import AddBoxIcon from "@mui/icons-material/AddBox";
 import SearchIcon from "@mui/icons-material/Search";
-import {
-  Box,
-  Button,
-  FormControl,
-  FormControlLabel,
-  FormLabel,
-  Grid,
-  Radio,
-  RadioGroup,
-  TextField,
-} from "@mui/material";
+import { Box, Button, Grid, TextField } from "@mui/material";
 import { format } from "date-fns";
 import type { ParametriPretrage, TipSeminara } from "ied-shared";
 import { NEGACIJA } from "ied-shared";
@@ -30,7 +20,7 @@ import MultiSelectAutocomplete from "../Autocomplete/MultiSelectAutocomplete";
 import CheckboxList from "../CheckboxList";
 import NegationCheckbox from "../NegationCheckbox";
 import { ExportButtons } from "./ExportButtons";
-import { PrijaveRadioButtons } from "./PrijveRadioButtons";
+import { PrijaveRadioButtons } from "./PrijaveRadioButtons";
 
 export default function PretragaParameters() {
   const {
