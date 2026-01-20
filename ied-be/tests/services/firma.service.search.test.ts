@@ -66,7 +66,7 @@ describe("firma.service search", () => {
 
     it("should filter by PRIJAVLJENI status", async () => {
       const result = await firmaService.search({
-        firmaPrijavljeni: PRIJAVA_STATUS.all,
+        firmaPrijavljeni: PRIJAVA_STATUS.subscribed,
       });
 
       expect(result.totalDocuments).toBeGreaterThan(0);
