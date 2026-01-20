@@ -1,3 +1,10 @@
+## [1.10.1](https://github.com/BogdanRaicevic/ied-projects/compare/v1.10.0...v1.10.1) (2026-01-20)
+
+### Bug Fixes
+
+* add migration because prijave are now string values, not boolean ([01f8933](https://github.com/BogdanRaicevic/ied-projects/commit/01f8933ff6d4b2116b2b8c6acf35988939e2f28f))
+* radio buttons were not clickable ([593c23c](https://github.com/BogdanRaicevic/ied-projects/commit/593c23c6d98effa3d452c0c0c0fe1e4d6ff3ae7a))
+
 ## [1.10.0](https://github.com/BogdanRaicevic/ied-projects/compare/v1.9.2...v1.10.0) (2026-01-17)
 
 ### Features
