@@ -1,3 +1,9 @@
+import {
+  NEGACIJA,
+  type NegacijaType,
+  PRIJAVA_STATUS,
+  type PrijavaStatusType,
+} from "ied-shared";
 import { type Document, model, Schema } from "mongoose";
 
 export type PretrageType = Document & {
@@ -7,7 +13,7 @@ export type PretrageType = Document & {
   tipoviFirme: string[];
   radnaMesta: string[];
   velicineFirme: string[];
-  negacije: string[];
+  negacije: NegacijaType[];
   imeFirme: string;
   email: string;
   pib: string;
@@ -17,8 +23,8 @@ export type PretrageType = Document & {
   komentar: string;
   imePrezime: string;
   emailZaposlenog: string;
-  firmaPrijavljeni?: boolean;
-  zaposleniPrijavljeni?: boolean;
+  firmaPrijavljeni?: PrijavaStatusType;
+  zaposleniPrijavljeni?: PrijavaStatusType;
   tipoviSeminara: string[];
   seminari: string[];
 };
@@ -31,7 +37,7 @@ const pretrageSchema = new Schema<PretrageType>(
     tipoviFirme: [{ type: String, ref: "TipFirme" }],
     radnaMesta: [{ type: String, ref: "RadnaMesta" }],
     velicineFirme: [{ type: String, ref: "VelicineFirmi" }],
-    negacije: [{ type: String }], // TODO: vezati za enum negacije
+    negacije: [{ type: String, enum: Object.values(NEGACIJA) }],
     imeFirme: { type: String },
     email: { type: String },
     pib: { type: String },
@@ -41,8 +47,14 @@ const pretrageSchema = new Schema<PretrageType>(
     komentar: { type: String },
     imePrezime: { type: String },
     emailZaposlenog: { type: String },
-    firmaPrijavljeni: { type: Boolean },
-    zaposleniPrijavljeni: { type: Boolean },
+    firmaPrijavljeni: {
+      type: String,
+      enum: Object.values(PRIJAVA_STATUS),
+    },
+    zaposleniPrijavljeni: {
+      type: String,
+      enum: Object.values(PRIJAVA_STATUS),
+    },
     tipoviSeminara: [{ type: String, ref: "TipSeminara" }],
     seminari: [{ type: String, ref: "Seminar" }],
   },

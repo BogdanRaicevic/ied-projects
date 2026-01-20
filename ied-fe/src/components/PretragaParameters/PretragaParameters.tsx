@@ -30,6 +30,7 @@ import MultiSelectAutocomplete from "../Autocomplete/MultiSelectAutocomplete";
 import CheckboxList from "../CheckboxList";
 import NegationCheckbox from "../NegationCheckbox";
 import { ExportButtons } from "./ExportButtons";
+import { PrijaveRadioButtons } from "./PrijveRadioButtons";
 
 export default function PretragaParameters() {
   const {
@@ -344,107 +345,38 @@ export default function PretragaParameters() {
       </Grid>
 
       <Grid container spacing={2} mt={2}>
-        <Grid size={3}>
-          <Controller
-            name="firmaPrijavljeni"
-            control={control}
-            render={({ field }) => {
-              const handleChange = (
-                event: React.ChangeEvent<HTMLInputElement>,
-              ) => {
-                const value = event.target.value;
-                if (value === "true") {
-                  field.onChange(true);
-                } else if (value === "false") {
-                  field.onChange(false);
-                } else {
-                  field.onChange(undefined);
-                }
-              };
+        <PrijaveRadioButtons
+          name="firmaPrijavljeni"
+          control={control}
+          label="Firme prijavljene na mejling listu:"
+          options={{
+            all: "Sve",
+            subscribed: "Prijavljene",
+            unsubscribed: "Odjavljene",
+          }}
+        />
 
-              const fieldValue =
-                field.value === true
-                  ? "true"
-                  : field.value === false
-                    ? "false"
-                    : "sve";
+        <PrijaveRadioButtons
+          name="zaposleniPrijavljeni"
+          control={control}
+          label="Zaposleni prijavljeni na mejling listu:"
+          options={{
+            all: "Svi",
+            subscribed: "Prijavljeni",
+            unsubscribed: "Odjavljeni",
+          }}
+        />
 
-              return (
-                <FormControl>
-                  <FormLabel>Firme prijavljene na majling listu:</FormLabel>
-                  <RadioGroup value={fieldValue} onChange={handleChange}>
-                    <FormControlLabel
-                      value="sve"
-                      control={<Radio />}
-                      label="Sve"
-                    />
-                    <FormControlLabel
-                      value="true"
-                      control={<Radio />}
-                      label="Prijavljene"
-                    />
-                    <FormControlLabel
-                      value="false"
-                      control={<Radio />}
-                      label="Odjavljene"
-                    />
-                  </RadioGroup>
-                </FormControl>
-              );
-            }}
-          />
-        </Grid>
-
-        <Grid size={3}>
-          <Controller
-            name="zaposleniPrijavljeni"
-            control={control}
-            render={({ field }) => {
-              const handleChange = (
-                event: React.ChangeEvent<HTMLInputElement>,
-              ) => {
-                const value = event.target.value;
-                if (value === "true") {
-                  field.onChange(true);
-                } else if (value === "false") {
-                  field.onChange(false);
-                } else {
-                  field.onChange(undefined);
-                }
-              };
-
-              const fieldValue =
-                field.value === true
-                  ? "true"
-                  : field.value === false
-                    ? "false"
-                    : "svi";
-
-              return (
-                <FormControl>
-                  <FormLabel>Zaposleni prijavljeni na majling listu:</FormLabel>
-                  <RadioGroup value={fieldValue} onChange={handleChange}>
-                    <FormControlLabel
-                      value="svi"
-                      control={<Radio />}
-                      label="Svi"
-                    />
-                    <FormControlLabel
-                      value="true"
-                      control={<Radio />}
-                      label="Prijavljeni"
-                    />
-                    <FormControlLabel
-                      value="false"
-                      control={<Radio />}
-                      label="Odjavljeni"
-                    />
-                  </RadioGroup>
-                </FormControl>
-              );
-            }}
-          />
-        </Grid>
+        {/* <PrijaveRadioButtons
+          name="prijaveNaSeminare"
+          control={control}
+          label="Firme sa prijavama na seminare:"
+          options={{
+            all: "Sve",
+            subscribed: "Sa prijavama",
+            unsubscribed: "Bez prijava",
+          }}
+        /> */}
       </Grid>
 
       <Grid container spacing={2} columns={12} mt={4} mb={4}>
