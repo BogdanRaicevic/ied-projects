@@ -1,5 +1,4 @@
 import type { Connection } from "mongoose";
-import { PRIJAVA_STATUS } from "../../../ied-shared/dist";
 
 export const up = async (db: Connection) => {
   const mongoCollectionName = "pretrage";
@@ -17,8 +16,8 @@ export const up = async (db: Connection) => {
             firmaPrijavljeni: {
               $cond: [
                 { $eq: ["$firmaPrijavljeni", true] },
-                PRIJAVA_STATUS.subscribed,
-                PRIJAVA_STATUS.unsubscribed,
+                "subscribed",
+                "unsubscribed",
               ],
             },
           },
@@ -36,8 +35,8 @@ export const up = async (db: Connection) => {
             zaposleniPrijavljeni: {
               $cond: [
                 { $eq: ["$zaposleniPrijavljeni", true] },
-                PRIJAVA_STATUS.subscribed,
-                PRIJAVA_STATUS.unsubscribed,
+                "subscribed",
+                "unsubscribed",
               ],
             },
           },
