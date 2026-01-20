@@ -1,4 +1,8 @@
-import type { NEGACIJA, ParametriPretrage } from "ied-shared";
+import {
+  type NegacijaType,
+  type ParametriPretrage,
+  PRIJAVA_STATUS,
+} from "ied-shared";
 import { create } from "zustand";
 
 type PretragaStore = {
@@ -13,7 +17,7 @@ type PretragaStore = {
     pageIndex: number;
     pageSize: number;
   }) => void;
-  toggleNegation: (value: (typeof NEGACIJA)[keyof typeof NEGACIJA]) => void;
+  toggleNegation: (value: NegacijaType) => void;
   setAppliedParameters: () => void;
   loadFromStorage: () => void;
   resetParameters: () => void;
@@ -43,8 +47,8 @@ export const defaultPretrageParameters: ParametriPretrage = {
   seminari: [],
   imePrezime: "",
   emailZaposlenog: "",
-  firmaPrijavljeni: true,
-  zaposleniPrijavljeni: true,
+  firmaPrijavljeni: PRIJAVA_STATUS.all,
+  zaposleniPrijavljeni: PRIJAVA_STATUS.all,
   tipoviSeminara: [],
 };
 

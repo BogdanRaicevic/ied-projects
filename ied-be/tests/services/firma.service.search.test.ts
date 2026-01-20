@@ -1,4 +1,4 @@
-import type { ParametriPretrage } from "ied-shared";
+import { type ParametriPretrage, PRIJAVA_STATUS } from "ied-shared";
 import { beforeAll, describe, expect, it, vi } from "vitest";
 import { Firma } from "../../src/models/firma.model";
 import { Seminar } from "../../src/models/seminar.model";
@@ -65,7 +65,9 @@ describe("firma.service search", () => {
     });
 
     it("should filter by PRIJAVLJENI status", async () => {
-      const result = await firmaService.search({ firmaPrijavljeni: true });
+      const result = await firmaService.search({
+        firmaPrijavljeni: PRIJAVA_STATUS.all,
+      });
 
       expect(result.totalDocuments).toBeGreaterThan(0);
       expect(result.totalDocuments).toBeLessThan(staticTestData.firme.length);

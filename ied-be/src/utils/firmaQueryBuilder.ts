@@ -1,4 +1,4 @@
-import { NEGACIJA, type ParametriPretrage } from "ied-shared";
+import { NEGACIJA, type ParametriPretrage, PRIJAVA_STATUS } from "ied-shared";
 import type { QueryFilter } from "mongoose";
 import type { FirmaType } from "../models/firma.model";
 import { Seminar, type SeminarType } from "../models/seminar.model";
@@ -103,11 +103,13 @@ export const createFirmaQuery = async (params: ParametriPretrage) => {
     }
   }
 
-  if (
-    params?.firmaPrijavljeni !== undefined &&
-    typeof params.firmaPrijavljeni === "boolean"
-  ) {
-    query.prijavljeni = params.firmaPrijavljeni;
+  if (params?.firmaPrijavljeni !== undefined) {
+    if (params.firmaPrijavljeni === PRIJAVA_STATUS.subscribed) {
+      query.prijavljeni = true;
+    } else if (params.firmaPrijavljeni === PRIJAVA_STATUS.unsubscribed) {
+      query.prijavljeni = false;
+    }
+    // skip if all
   }
 
   // ____ ZAPOSLENI FILTERS ____
@@ -152,11 +154,13 @@ export const createFirmaQuery = async (params: ParametriPretrage) => {
     };
   }
 
-  if (
-    params?.zaposleniPrijavljeni !== undefined &&
-    typeof params.zaposleniPrijavljeni === "boolean"
-  ) {
-    zaposleniQuery.prijavljeni = { $eq: params.zaposleniPrijavljeni };
+  if (params?.zaposleniPrijavljeni !== undefined) {
+    if (params.zaposleniPrijavljeni === PRIJAVA_STATUS.subscribed) {
+      zaposleniQuery.prijavljeni = true;
+    } else if (params.zaposleniPrijavljeni === PRIJAVA_STATUS.unsubscribed) {
+      zaposleniQuery.prijavljeni = false;
+    }
+    // skip if all
   }
 
   if (Object.keys(zaposleniQuery).length > 0) {
