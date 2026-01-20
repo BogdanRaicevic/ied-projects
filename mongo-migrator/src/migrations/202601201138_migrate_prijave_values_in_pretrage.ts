@@ -44,7 +44,10 @@ export const up = async (db: Connection) => {
       ],
     );
   } catch (error) {
-    console.error("Error during migration of pretrage field renames:", error);
+    console.error(
+      "Error during migration of pretrage boolean to string conversion:",
+      error,
+    );
     throw error;
   }
 };
