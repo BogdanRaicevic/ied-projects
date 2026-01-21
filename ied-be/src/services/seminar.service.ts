@@ -31,6 +31,10 @@ export const updateSeminar = async (
 
   const dataToUpdate = prepareSeminarData(seminarData);
 
+  if (seminarData.tipSeminara === "") {
+    (dataToUpdate as any).$unset = { tipSeminara: 1 };
+  }
+
   const updatedSeminar = await Seminar.findByIdAndUpdate(id, dataToUpdate, {
     new: true,
   }).lean();
@@ -279,17 +283,22 @@ const transformPrijavaToDb = (prijava: PrijavaZodType): PrijavaType => {
 };
 
 const prepareSeminarData = (seminarData: SeminarZodType) => {
+  const { tipSeminara, ...rest } = seminarData;
+
   const transformedPrijave = (seminarData.prijave || []).map((prijava) =>
     transformPrijavaToDb(prijava as PrijavaZodType),
   );
 
-  return {
-    ...seminarData,
+  const data: any = {
+    ...rest,
     prijave: transformedPrijave,
-    tipSeminara: seminarData.tipSeminara
-      ? Types.ObjectId.createFromHexString(seminarData.tipSeminara)
-      : undefined,
   };
+
+  if (tipSeminara) {
+    data.tipSeminara = Types.ObjectId.createFromHexString(tipSeminara);
+  }
+
+  return data;
 };
 
 // Helper: Build Firma query from search params
