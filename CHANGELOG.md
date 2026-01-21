@@ -1,3 +1,10 @@
+## [1.10.2](https://github.com/BogdanRaicevic/ied-projects/compare/v1.10.1...v1.10.2) (2026-01-21)
+
+### Bug Fixes
+
+* remove .populate because it attached whole object instead of just adding the _id ([1bde2fd](https://github.com/BogdanRaicevic/ied-projects/commit/1bde2fd94cd6e03d10f882efd8b72c5fc3c0a165))
+* undefined in mongo ignores the field, unset to remove ([385b1a1](https://github.com/BogdanRaicevic/ied-projects/commit/385b1a1cc9545e0f08dcca43633473881ac8b75a))
+
 ## [1.10.1](https://github.com/BogdanRaicevic/ied-projects/compare/v1.10.0...v1.10.1) (2026-01-20)
 
 ### Bug Fixes
