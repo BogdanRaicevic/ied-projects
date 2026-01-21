@@ -31,8 +31,8 @@ export const updateSeminar = async (
 
   const dataToUpdate = prepareSeminarData(seminarData);
 
-  if (seminarData.tipSeminara === "") {
-    (dataToUpdate as any).$unset = { tipSeminara: 1 };
+  if (seminarData.tipSeminara === "" || seminarData.tipSeminara === undefined) {
+    dataToUpdate.tipSeminara = null;
   }
 
   const updatedSeminar = await Seminar.findByIdAndUpdate(id, dataToUpdate, {
