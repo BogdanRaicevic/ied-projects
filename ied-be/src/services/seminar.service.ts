@@ -51,7 +51,6 @@ export const searchSeminars = async (qq: ExtendedSearchSeminarType) => {
 
   return {
     courser: Seminar.find(mongoQuery, { zaposleni: 0 })
-      .populate("tipSeminara")
       .sort({ datum: -1 })
       .skip(skip)
       .limit(pageSize)
@@ -64,7 +63,7 @@ export const searchSeminars = async (qq: ExtendedSearchSeminarType) => {
 export const getSeminarById = async (id: string) => {
   validateMongoId(id);
 
-  const seminar = await Seminar.findById(id).populate("tipSeminara").lean();
+  const seminar = await Seminar.findById(id).lean();
   if (!seminar) {
     throw new Error("Seminar not found");
   }
