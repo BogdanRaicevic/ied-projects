@@ -155,12 +155,10 @@ export default function SeminariTable({
         maxWidth="lg"
       >
         <DialogContent>
-          <Box sx={{ p: 2 }}>
-            <SeminarForm
-              onDialogClose={handleSubmitSuccess}
-              seminar={selectedSeminar}
-            />
-          </Box>
+          <SeminarForm
+            onDialogClose={handleSubmitSuccess}
+            seminar={selectedSeminar}
+          />
         </DialogContent>
       </Dialog>
     </>
