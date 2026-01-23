@@ -29,7 +29,7 @@ export default function SeminarForm({
   onDialogClose,
   onSuccess,
 }: {
-  seminar?: Partial<SeminarZodType>;
+  seminar?: SeminarZodType;
   onDialogClose?: () => void;
   onSuccess?: () => void;
 }) {
@@ -58,6 +58,10 @@ export default function SeminarForm({
     },
     resolver: zodResolver(SeminarSchema) as Resolver<SeminarZodType>,
   });
+
+  if (Object.keys(errors).length > 0) {
+    console.error("errors", errors);
+  }
 
   const [alertOpen, setAlertOpen] = useState(false);
   const [alertSeverity, setAlertSeverity] = useState<"success" | "error">(
@@ -90,7 +94,10 @@ export default function SeminarForm({
   const onSubmit: SubmitHandler<SeminarZodType> = async (data) => {
     try {
       if (seminar?._id) {
-        await updateSeminarMutation.mutateAsync({ ...data, _id: seminar._id });
+        await updateSeminarMutation.mutateAsync({
+          ...data,
+          _id: seminar._id,
+        });
         setAlertMessage("Uspešno izmenjen seminar");
       } else {
         await createSeminarMutation.mutateAsync(data);

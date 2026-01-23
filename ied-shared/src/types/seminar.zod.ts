@@ -11,8 +11,10 @@ export const PrijavaSchema = z.object({
   zaposleni_prezime: z.string().optional(),
   zaposleni_email: z.string().optional(),
   zaposleni_telefon: z.string().optional(),
-  prisustvo: z.enum(["online", "offline"]),
-  vrsta_prijave: z.enum(["telefon", "email", "drustvene_mreze"]),
+  prisustvo: z.enum(["online", "offline"]).default("offline"),
+  vrsta_prijave: z
+    .enum(["telefon", "email", "drustvene_mreze"])
+    .default("email"),
 });
 
 export const SeminarSchema = z.object({
@@ -33,7 +35,7 @@ export const SeminarSchema = z.object({
   datum: z.coerce.date(),
   detalji: z.string().optional(),
   prijave: z.array(PrijavaSchema).default([]),
-  tipSeminara: z.string().optional(),
+  tipSeminara: z.string().nullable().optional(),
 });
 
 export const SeminarSearchResultsSchema = z.object({

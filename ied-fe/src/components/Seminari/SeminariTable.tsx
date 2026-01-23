@@ -21,9 +21,7 @@ export default function SeminariTable({
   queryParameters: SeminarQueryParams;
 }) {
   const [editSeminar, setEditSeminar] = useState(false);
-  const [selectedSeminar, setSelectedSeminar] = useState<
-    Partial<SeminarZodType>
-  >({});
+  const [selectedSeminar, setSelectedSeminar] = useState<SeminarZodType>();
 
   const [pagination, setPagination] = useState<MRT_PaginationState>({
     pageIndex: 0,
