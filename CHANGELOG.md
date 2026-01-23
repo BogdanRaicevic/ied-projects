@@ -1,3 +1,9 @@
+## [1.10.3](https://github.com/BogdanRaicevic/ied-projects/compare/v1.10.2...v1.10.3) (2026-01-23)
+
+### Bug Fixes
+
+* vrsta_prijava was not defined for some entires, so a default was put in place ([42285be](https://github.com/BogdanRaicevic/ied-projects/commit/42285beae978445271795588999ccc235e87ebf5))
+
 ## [1.10.2](https://github.com/BogdanRaicevic/ied-projects/compare/v1.10.1...v1.10.2) (2026-01-21)
 
 ### Bug Fixes
