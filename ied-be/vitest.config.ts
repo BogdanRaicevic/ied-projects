@@ -4,10 +4,11 @@ export default defineConfig({
   test: {
     globals: true,
     environment: "node",
+    globalSetup: ["./tests/globalSetup.ts"],
     setupFiles: ["./tests/setup.ts"],
     include: ["tests/**/*.test.ts"],
-    testTimeout: 30000, // 30s for mongodb-memory-server startup
-    hookTimeout: 30000,
+    testTimeout: 30_000,
+    hookTimeout: 30_000,
     pool: "forks", // Better isolation for database tests
     coverage: {
       provider: "v8",
