@@ -32,7 +32,7 @@
     "@biomejs/biome": "^2.3.12"
   },
   "dependencies": {
-    "zod": "^4.3.5"
+    "zod": "^4.3.6"
   },
   "peerDependencies": {
     "diff": "^8.0.3"
