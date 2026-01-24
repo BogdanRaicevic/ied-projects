@@ -53,12 +53,14 @@ export const searchSeminars = async (qq: ExtendedSearchSeminarType) => {
 
   const totalDocuments = await Seminar.countDocuments(mongoQuery);
 
+  const seminari = await Seminar.find(mongoQuery, { zaposleni: 0 })
+    .sort({ datum: -1 })
+    .skip(skip)
+    .limit(pageSize)
+    .lean();
+
   return {
-    courser: Seminar.find(mongoQuery, { zaposleni: 0 })
-      .sort({ datum: -1 })
-      .skip(skip)
-      .limit(pageSize)
-      .cursor(),
+    seminari,
     totalDocuments,
     totalPages: Math.ceil(totalDocuments / pageSize),
   };

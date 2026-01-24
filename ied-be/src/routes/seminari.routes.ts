@@ -15,7 +15,7 @@ import {
 import { z } from "zod";
 import { createAuditMiddleware } from "../middleware/audit";
 import { validateRequestBody } from "../middleware/validateSchema";
-import { Seminar, type SeminarType } from "../models/seminar.model";
+import { Seminar } from "../models/seminar.model";
 import {
   createPrijava,
   createSeminar,
@@ -67,29 +67,11 @@ router.post(
   validateRequestBody(ExtendedSearchSeminarZod),
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const paginationResult = await searchSeminars(
+      const result = await searchSeminars(
         req.body as ExtendedSearchSeminarType,
       );
 
-      const results: SeminarType[] = [];
-      paginationResult.courser.on("data", (doc) => {
-        results.push(doc);
-      });
-
-      paginationResult.courser.on("end", async () => {
-        await paginationResult.courser.close();
-        res.json({
-          seminari: results,
-          totalPages: paginationResult.totalPages,
-          totalDocuments: paginationResult.totalDocuments,
-        });
-      });
-
-      paginationResult.courser.on("error", async (error) => {
-        await paginationResult.courser.close();
-        console.error(error);
-        res.status(500).json({ message: "Internal server error" });
-      });
+      res.json(result);
     } catch (error) {
       next(error);
     }
