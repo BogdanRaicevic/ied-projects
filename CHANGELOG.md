@@ -1,3 +1,9 @@
+## [1.10.5](https://github.com/BogdanRaicevic/ied-projects/compare/v1.10.4...v1.10.5) (2026-01-24)
+
+### Bug Fixes
+
+* routes should not have access to db courser ([515131d](https://github.com/BogdanRaicevic/ied-projects/commit/515131dab2a1140291321dc145e777130b6ca621))
+
 ## [1.10.4](https://github.com/BogdanRaicevic/ied-projects/compare/v1.10.3...v1.10.4) (2026-01-24)
 
 ### Bug Fixes
