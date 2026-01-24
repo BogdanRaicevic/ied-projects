@@ -1,3 +1,9 @@
+## [1.10.4](https://github.com/BogdanRaicevic/ied-projects/compare/v1.10.3...v1.10.4) (2026-01-24)
+
+### Bug Fixes
+
+* handle mongos server race condition ([12b67f3](https://github.com/BogdanRaicevic/ied-projects/commit/12b67f323e6294434dbc7c9cc44e5ba67ed87668))
+
 ## [1.10.3](https://github.com/BogdanRaicevic/ied-projects/compare/v1.10.2...v1.10.3) (2026-01-23)
 
 ### Bug Fixes
