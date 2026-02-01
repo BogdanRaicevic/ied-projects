@@ -30,7 +30,7 @@
     "@types/node": "^24.10.9",
     "@vitest/coverage-v8": "^4.0.18",
     "cross-env": "^10.1.0",
-    "globals": "^17.2.0",
+    "globals": "^17.3.0",
     "mongodb-memory-server": "^11.0.1",
     "tsx": "^4.21.0",
     "typescript": "^5.9.3",
