@@ -20,7 +20,7 @@
     "mongoose": "^9.1.6",
     "mysql2": "^3.16.3",
     "ied-shared": "workspace:^",
-    "dotenv": "^17.2.3"
+    "dotenv": "^17.2.4"
   },
   "devDependencies": {
     "@types/node": "^24.10.9",

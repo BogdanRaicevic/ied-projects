@@ -45,7 +45,7 @@
     "csv-parse": "^6.1.0",
     "date-fns": "^4.1.0",
     "docxtemplater": "^3.67.6",
-    "dotenv": "^17.2.3",
+    "dotenv": "^17.2.4",
     "es-toolkit": "^1.44.0",
     "express": "^5.2.1",
     "ied-shared": "workspace:^",
