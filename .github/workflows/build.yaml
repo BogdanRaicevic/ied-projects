@@ -23,7 +23,7 @@ jobs:
       - name: Set up Node.js and cache pnpm dependencies
         uses: actions/setup-node@v6
         with:
-          node-version: '24.13.0'
+          node-version: '24.13.1'
           cache: 'pnpm'
 
       - name: Get pnpm store directory
@@ -65,7 +65,7 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v6
         with:
-          node-version: 24.13.0
+          node-version: 24.13.1
           cache: pnpm
       - name: Install deps (needed for semantic-release plugins)
         run: pnpm install --frozen-lockfile
