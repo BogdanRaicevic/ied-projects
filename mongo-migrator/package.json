@@ -14,7 +14,7 @@
   "author": "",
   "license": "ISC",
   "engines": {
-    "node": ">=24.13.0"
+    "node": ">=24.13.1"
   },
   "dependencies": {
     "mongoose": "^9.2.1",
@@ -23,7 +23,7 @@
     "dotenv": "^17.2.4"
   },
   "devDependencies": {
-    "@types/node": "^24.10.9",
+    "@types/node": "^24.10.13",
     "ts-node": "^10.9.2",
     "typescript": "^5.9.3",
     "@biomejs/biome": "^2.3.14"
