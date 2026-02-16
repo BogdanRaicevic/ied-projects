@@ -143,6 +143,8 @@ export const deletePrijava = async (
   zaposleni_id: string,
   seminar_id: string,
 ) => {
+  await removePrijavaComment(seminar_id, zaposleni_id);
+
   const updatedSeminar = await Seminar.findOneAndUpdate(
     { _id: seminar_id, "prijave.zaposleni_id": zaposleni_id },
     { $pull: { prijave: { zaposleni_id } } },
@@ -498,3 +500,55 @@ const fetchRacuniForSeminars = async (
 
   return racuniMap;
 };
+
+async function removePrijavaComment(
+  seminar_id: string,
+  zaposleni_id: string,
+): Promise<void> {
+  const seminar = await Seminar.findById(seminar_id).lean();
+
+  if (!seminar) {
+    return;
+  }
+
+  const prijava = seminar.prijave.find(
+    (p) => p.zaposleni_id.toString() === zaposleni_id,
+  );
+
+  if (!prijava) {
+    return;
+  }
+
+  const imePrezime =
+    `${prijava.zaposleni_ime || ""} ${prijava.zaposleni_prezime || ""}`.trim();
+  const seminarNaziv = seminar.naziv;
+
+  // Regex pattern:
+  // dd.MM.yyyy - escaped(imePrezime) - escaped(seminarNaziv) - PRIJAVA
+  const patternString = `\\d{2}\\.\\d{2}\\.\\d{4} - ${escapeRegExp(imePrezime)} - ${escapeRegExp(seminarNaziv)} - PRIJAVA`;
+  const regex = new RegExp(patternString, "g");
+
+  // Find and update Firma and Zaposleni comments
+  const firma = await Firma.findById(prijava.firma_id);
+  if (!firma) {
+    return;
+  }
+
+  if (firma?.komentar) {
+    firma.komentar = firma.komentar.replace(regex, "");
+  }
+
+  const zaposleni = firma?.zaposleni.find(
+    (z) => z._id.toString() === zaposleni_id,
+  );
+
+  if (zaposleni?.komentar) {
+    zaposleni.komentar = zaposleni.komentar.replace(regex, "");
+  }
+
+  await firma.save();
+}
+
+function escapeRegExp(string: string) {
+  return string.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"); // $& means the whole matched string
+}
