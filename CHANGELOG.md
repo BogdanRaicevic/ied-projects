@@ -1,3 +1,9 @@
+## [1.11.0](https://github.com/BogdanRaicevic/ied-projects/compare/v1.10.5...v1.11.0) (2026-02-16)
+
+### Features
+
+* remove prijava comment on prijava delete ([dc5b32d](https://github.com/BogdanRaicevic/ied-projects/commit/dc5b32d5cf72d36f9c0761a4e873fd6189b080a1))
+
 ## [1.10.5](https://github.com/BogdanRaicevic/ied-projects/compare/v1.10.4...v1.10.5) (2026-01-24)
 
 ### Bug Fixes
