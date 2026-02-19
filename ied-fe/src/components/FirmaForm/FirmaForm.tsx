@@ -20,6 +20,7 @@ import {
   useDeleteFirma,
   useUpdateFirma,
 } from "../../hooks/firma/useFirmaMutations";
+import { useGetMestaNames } from "../../hooks/mesto/useMestoQueries";
 import { useFetchPretragaData } from "../../hooks/useFetchData";
 import {
   type InputTypes,
@@ -47,8 +48,10 @@ export const FirmaForm: React.FC<FirmaFormProps> = ({ inputCompany }) => {
     defaultValues: inputCompany,
   });
 
-  const { tipoviFirme, velicineFirme, stanjaFirme, mesta, delatnosti } =
+  const { tipoviFirme, velicineFirme, stanjaFirme, delatnosti } =
     useFetchPretragaData();
+
+  const { data: mestaNames } = useGetMestaNames();
 
   const isEditing = !!inputCompany?._id;
   const currentFirmaId = inputCompany?._id || null;
@@ -196,7 +199,7 @@ export const FirmaForm: React.FC<FirmaFormProps> = ({ inputCompany }) => {
           optionsData = stanjaFirme;
           break;
         case "mesto":
-          optionsData = mesta;
+          optionsData = mestaNames || [];
           break;
         case "delatnost":
           optionsData = delatnosti;
