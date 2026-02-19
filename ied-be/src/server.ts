@@ -55,11 +55,7 @@ app.use(
 app.use("/api/radna-mesta", requireAuth(), hasPermission, radnaMestaRoutes);
 app.use("/api/tip-firme", requireAuth(), hasPermission, tipFirmeRoutes);
 app.use("/api/delatnost", requireAuth(), hasPermission, delatnostiRoutes);
-app.use(
-  "/api/mesto",
-  // requireAuth(), hasPermission,
-  mestoRoutes,
-);
+app.use("/api/mesto", requireAuth(), hasPermission, mestoRoutes);
 app.use("/api/pretrage", requireAuth(), hasPermission, pretrageRoutes);
 app.use("/api/stanja-firmi", requireAuth(), hasPermission, stanjaFirmeRoutes);
 app.use("/api/seminari", requireAuth(), hasPermission, seminarRoutes);
