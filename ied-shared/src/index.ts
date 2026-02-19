@@ -6,4 +6,5 @@ export * from "./types/firma.zod";
 export * from "./types/mesto.zod";
 export * from "./types/pretrage.zod";
 export * from "./types/racuni.zod";
+export * from "./types/radno_mesto.zod";
 export * from "./types/seminar.zod";

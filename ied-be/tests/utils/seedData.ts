@@ -7,9 +7,9 @@ import {
 import type { FirmaType } from "../../src/models/firma.model";
 import { Mesto, type MestoType } from "../../src/models/mesto.model";
 import {
-  RadnaMesta,
-  type RadnaMestaType,
-} from "../../src/models/radna_mesta.model";
+  RadnoMesto,
+  type RadnoMestoType,
+} from "../../src/models/radno_mesto.model";
 import { Seminar, type SeminarType } from "../../src/models/seminar.model";
 import {
   StanjeFirme,
@@ -86,7 +86,7 @@ export type SeededData = {
   tipoviFirme: TipFirmeType[];
   velicineFirme: VelicineFirmiType[];
   stanjaFirme: StanjeFirmeType[];
-  radnaMesta: RadnaMestaType[];
+  radnaMesta: RadnoMestoType[];
 };
 
 export async function cursorToArray<T>(cursor: any): Promise<T[]> {
@@ -225,7 +225,7 @@ export async function seedTestDatabase(): Promise<SeededData> {
 
   // Radna Mesta
   for (const radnoMestoName of TEST_DATA_CONFIG.RADNA_MESTA) {
-    const radnoMesto = await RadnaMesta.create({ radno_mesto: radnoMestoName });
+    const radnoMesto = await RadnoMesto.create({ radno_mesto: radnoMestoName });
     seededData.radnaMesta.push(radnoMesto.toObject());
   }
 

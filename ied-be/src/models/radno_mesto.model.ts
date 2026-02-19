@@ -1,14 +1,14 @@
 import { type Document, model, Schema } from "mongoose";
 
-export type RadnaMestaType = Document & {
+export type RadnoMestoType = Document & {
   radno_mesto: string;
 };
 
-const radnaMestaSchema = new Schema<RadnaMestaType>(
+const radnoMestoSchema = new Schema<RadnoMestoType>(
   {
     radno_mesto: { type: String, required: true },
   },
   { collection: "radna_mesta" },
 );
 
-export const RadnaMesta = model<RadnaMestaType>("RadnaMesta", radnaMestaSchema);
+export const RadnoMesto = model<RadnoMestoType>("RadnoMesto", radnoMestoSchema);
