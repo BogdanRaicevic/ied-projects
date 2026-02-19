@@ -155,7 +155,7 @@ importers:
         version: 7.3.8(@emotion/react@11.14.0(@types/react@19.2.14)(react@19.2.4))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.14)(react@19.2.4))(@types/react@19.2.14)(react@19.2.4))(@types/react@19.2.14)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
       '@mui/styled-engine-sc':
         specifier: ^7.3.8
-        version: 7.3.8(@types/react@19.2.14)(styled-components@6.3.10(react-dom@19.2.4(react@19.2.4))(react@19.2.4))
+        version: 7.3.8(@types/react@19.2.14)(styled-components@6.3.11(react-dom@19.2.4(react@19.2.4))(react@19.2.4))
       '@mui/system':
         specifier: ^7.3.8
         version: 7.3.8(@emotion/react@11.14.0(@types/react@19.2.14)(react@19.2.4))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.14)(react@19.2.4))(@types/react@19.2.14)(react@19.2.4))(@types/react@19.2.14)(react@19.2.4)
@@ -199,8 +199,8 @@ importers:
         specifier: ^7.13.0
         version: 7.13.0(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
       styled-components:
-        specifier: ^6.3.10
-        version: 6.3.10(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
+        specifier: ^6.3.11
+        version: 6.3.11(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
       zod:
         specifier: ^4.3.6
         version: 4.3.6
@@ -3865,8 +3865,8 @@ packages:
   strnum@2.1.2:
     resolution: {integrity: sha512-l63NF9y/cLROq/yqKXSLtcMeeyOfnSQlfMSlzFt/K73oIaD8DGaQWd7Z34X9GPiKqP5rbSh84Hl4bOlLcjiSrQ==}
 
-  styled-components@6.3.10:
-    resolution: {integrity: sha512-vX2InL9LGFjpsWEBDbRQdhjl7PxZXzLqKeCxgGFl0x7tC6CYrcWdYgD0GUCU/m2MhhymJDbBTpdF0gwwG98phg==}
+  styled-components@6.3.11:
+    resolution: {integrity: sha512-opzgceGlQ5rdZdGwf9ddLW7EM2F4L7tgsgLn6fFzQ2JgE5EVQ4HZwNkcgB1p8WfOBx1GEZP3fa66ajJmtXhSrA==}
     engines: {node: '>= 16'}
     peerDependencies:
       react: '>= 16.8.0'
@@ -5239,14 +5239,14 @@ snapshots:
     optionalDependencies:
       '@types/react': 19.2.14
 
-  '@mui/styled-engine-sc@7.3.8(@types/react@19.2.14)(styled-components@6.3.10(react-dom@19.2.4(react@19.2.4))(react@19.2.4))':
+  '@mui/styled-engine-sc@7.3.8(@types/react@19.2.14)(styled-components@6.3.11(react-dom@19.2.4(react@19.2.4))(react@19.2.4))':
     dependencies:
       '@babel/runtime': 7.28.6
       '@types/hoist-non-react-statics': 3.3.7(@types/react@19.2.14)
       csstype: 3.2.3
       hoist-non-react-statics: 3.3.2
       prop-types: 15.8.1
-      styled-components: 6.3.10(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
+      styled-components: 6.3.11(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
     transitivePeerDependencies:
       - '@types/react'
 
@@ -8213,7 +8213,7 @@ snapshots:
 
   strnum@2.1.2: {}
 
-  styled-components@6.3.10(react-dom@19.2.4(react@19.2.4))(react@19.2.4):
+  styled-components@6.3.11(react-dom@19.2.4(react@19.2.4))(react@19.2.4):
     dependencies:
       '@emotion/is-prop-valid': 1.4.0
       '@emotion/unitless': 0.10.0
