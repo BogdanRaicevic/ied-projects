@@ -2,7 +2,6 @@ import { z } from "zod";
 
 export const MestoSchema = z.object({
   naziv_mesto: z.string(),
-  ID_mesto: z.number().optional(),
   postanski_broj: z.string().optional(),
 });
 

@@ -4,14 +4,14 @@ import { fetchAllMesta, fetchAllMestaNames } from "../../api/mesto.api";
 
 export const useGetMestaNames = () => {
   return useQuery<string[], Error>({
-    queryKey: ["mesta", "names"],
+    queryKey: ["mesta"],
     queryFn: () => fetchAllMestaNames(),
   });
 };
 
 export const useGetMesta = () => {
   return useQuery<MestoFromDBType[], Error>({
-    queryKey: ["mesta", "all"],
+    queryKey: ["mesta"],
     queryFn: () => fetchAllMesta(),
   });
 };
