@@ -6,6 +6,7 @@ import type { ParametriPretrage, TipSeminara } from "ied-shared";
 import { NEGACIJA } from "ied-shared";
 import { useCallback, useEffect, useMemo } from "react";
 import { Controller, useForm } from "react-hook-form";
+import { useGetMestaNames } from "../../hooks/mesto/useMestoQueries";
 import { useSearchSeminari } from "../../hooks/seminar/useSeminarQueries";
 import {
   useFetchPretragaData,
@@ -23,14 +24,11 @@ import { ExportButtons } from "./ExportButtons";
 import { PrijaveRadioButtons } from "./PrijaveRadioButtons";
 
 export default function PretragaParameters() {
-  const {
-    delatnosti,
-    mesta,
-    radnaMesta,
-    tipoviFirme,
-    velicineFirme,
-    stanjaFirme,
-  } = useFetchPretragaData();
+  const { delatnosti, radnaMesta, tipoviFirme, velicineFirme, stanjaFirme } =
+    useFetchPretragaData();
+
+  const { data: mestaNames } = useGetMestaNames();
+
   const { data: tipoviSeminara, isLoading: isLoadingTipoviSeminara } =
     useFetchTipoviSeminara();
 
@@ -203,7 +201,7 @@ export default function PretragaParameters() {
                   control={control}
                   render={({ field }) => (
                     <AutocompleteMultiple
-                      data={mesta}
+                      data={mestaNames || []}
                       onCheckedChange={field.onChange}
                       placeholder="Mesta"
                       id="mesto"

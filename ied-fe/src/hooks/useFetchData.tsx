@@ -1,7 +1,6 @@
 import { type UseQueryResult, useQuery } from "@tanstack/react-query";
 import type { TipSeminara } from "ied-shared";
 import { fetchAllDelatnosti } from "../api/delatnosti.api";
-import { fetchAllMesta } from "../api/mesta.api";
 import { getIzdavaciRacuna } from "../api/racuni.api";
 import { fetchAllRadnaMesta } from "../api/radna_mesto.api";
 import { fetchAllStanjaFirme } from "../api/stanja_firme.api";
@@ -13,11 +12,6 @@ export function useFetchPretragaData() {
   const { data: delatnosti } = useQuery({
     queryKey: ["delatnosti"],
     queryFn: fetchAllDelatnosti,
-  });
-
-  const { data: mesta } = useQuery({
-    queryKey: ["mesta"],
-    queryFn: fetchAllMesta,
   });
 
   const { data: radnaMesta, isLoading: isRadnaMestaLoading } = useQuery({
@@ -42,7 +36,6 @@ export function useFetchPretragaData() {
 
   return {
     delatnosti,
-    mesta,
     radnaMesta,
     isRadnaMestaLoading,
     tipoviFirme,
