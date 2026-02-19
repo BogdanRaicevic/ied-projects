@@ -7,6 +7,7 @@ import { NEGACIJA } from "ied-shared";
 import { useCallback, useEffect, useMemo } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { useGetMestaNames } from "../../hooks/mesto/useMestoQueries";
+import { useGetRadnaMestaNames } from "../../hooks/radnoMesto/useRadnoMestoQueries";
 import { useSearchSeminari } from "../../hooks/seminar/useSeminarQueries";
 import {
   useFetchPretragaData,
@@ -24,9 +25,10 @@ import { ExportButtons } from "./ExportButtons";
 import { PrijaveRadioButtons } from "./PrijaveRadioButtons";
 
 export default function PretragaParameters() {
-  const { delatnosti, radnaMesta, tipoviFirme, velicineFirme, stanjaFirme } =
+  const { delatnosti, tipoviFirme, velicineFirme, stanjaFirme } =
     useFetchPretragaData();
 
+  const { data: radnaMesta } = useGetRadnaMestaNames();
   const { data: mestaNames } = useGetMestaNames();
 
   const { data: tipoviSeminara, isLoading: isLoadingTipoviSeminara } =

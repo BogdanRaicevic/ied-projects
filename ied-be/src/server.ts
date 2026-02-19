@@ -10,7 +10,7 @@ import firmaRoutes from "./routes/firma.routes";
 import mestoRoutes from "./routes/mesto.routes";
 import pretrageRoutes from "./routes/pretrage.routes";
 import racuniRoutes from "./routes/racuni.routes";
-import radnaMestaRoutes from "./routes/radna_mesta.routes";
+import radnaMestaRoutes from "./routes/radno_mesto.routes";
 import seminarRoutes from "./routes/seminari.routes";
 import stanjaFirmeRoutes from "./routes/stanje_firme.routes";
 import testRoutes from "./routes/test.routes";
@@ -55,7 +55,11 @@ app.use(
 app.use("/api/radna-mesta", requireAuth(), hasPermission, radnaMestaRoutes);
 app.use("/api/tip-firme", requireAuth(), hasPermission, tipFirmeRoutes);
 app.use("/api/delatnost", requireAuth(), hasPermission, delatnostiRoutes);
-app.use("/api/mesto", requireAuth(), hasPermission, mestoRoutes);
+app.use(
+  "/api/mesto",
+  // requireAuth(), hasPermission,
+  mestoRoutes,
+);
 app.use("/api/pretrage", requireAuth(), hasPermission, pretrageRoutes);
 app.use("/api/stanja-firmi", requireAuth(), hasPermission, stanjaFirmeRoutes);
 app.use("/api/seminari", requireAuth(), hasPermission, seminarRoutes);

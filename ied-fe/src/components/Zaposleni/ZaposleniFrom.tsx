@@ -4,7 +4,7 @@ import { ZaposleniSchema, type ZaposleniType } from "ied-shared";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useEmailSuppression } from "../../hooks/firma/useEmailSuppression";
-import { useFetchPretragaData } from "../../hooks/useFetchData";
+import { useGetRadnaMestaNames } from "../../hooks/radnoMesto/useRadnoMestoQueries";
 import Single from "../Autocomplete/Single";
 import MailingListSwitch from "../MailingListSwitch";
 
@@ -52,7 +52,8 @@ export function ZaposleniForm({ zaposleni, onSubmit }: ZaposleniFormProps) {
     console.error("Zaposleni form errors: ", errors, e);
   };
 
-  const { radnaMesta, isRadnaMestaLoading } = useFetchPretragaData();
+  const { data: radnaMesta, isLoading: isRadnaMestaLoading } =
+    useGetRadnaMestaNames();
   const isPrijavljen = watch("prijavljeni");
   const email = watch("e_mail");
 
