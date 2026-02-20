@@ -18,7 +18,7 @@
   },
   "dependencies": {
     "mongoose": "^9.2.1",
-    "mysql2": "^3.17.2",
+    "mysql2": "^3.17.4",
     "ied-shared": "workspace:^",
     "dotenv": "^17.3.1"
   },
