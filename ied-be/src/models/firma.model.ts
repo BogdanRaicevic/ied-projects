@@ -24,6 +24,7 @@ type FirmaType = Document & {
   jbkjs: string;
   maticni_broj: string;
   prijavljeni: boolean;
+  mesto_id: string;
 };
 
 const firmaSchema = new Schema<FirmaType>(
@@ -48,6 +49,7 @@ const firmaSchema = new Schema<FirmaType>(
     jbkjs: String,
     maticni_broj: String,
     prijavljeni: { type: Boolean, default: true },
+    mesto_id: { type: String, ref: "Mesto" },
   },
   {
     timestamps: { createdAt: "created_at", updatedAt: "updated_at" },
