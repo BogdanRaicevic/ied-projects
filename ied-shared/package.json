@@ -29,7 +29,7 @@
     "@types/node": "^24.10.13",
     "tsx": "^4.21.0",
     "typescript": "^5.9.3",
-    "@biomejs/biome": "^2.4.2"
+    "@biomejs/biome": "^2.4.4"
   },
   "dependencies": {
     "zod": "^4.3.6"
