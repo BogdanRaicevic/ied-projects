@@ -1,4 +1,4 @@
-import { type Document, model, Schema } from "mongoose";
+import { type Document, model, type ObjectId, Schema } from "mongoose";
 import { type Zaposleni, zaposleniSchema } from "./zaposleni.model";
 
 type FirmaType = Document & {
@@ -24,7 +24,7 @@ type FirmaType = Document & {
   jbkjs: string;
   maticni_broj: string;
   prijavljeni: boolean;
-  mesto_id: string;
+  mesto_id: ObjectId;
 };
 
 const firmaSchema = new Schema<FirmaType>(
@@ -49,7 +49,7 @@ const firmaSchema = new Schema<FirmaType>(
     jbkjs: String,
     maticni_broj: String,
     prijavljeni: { type: Boolean, default: true },
-    mesto_id: { type: String, ref: "Mesto" },
+    mesto_id: { type: Schema.Types.ObjectId, ref: "Mesto" },
   },
   {
     timestamps: { createdAt: "created_at", updatedAt: "updated_at" },
