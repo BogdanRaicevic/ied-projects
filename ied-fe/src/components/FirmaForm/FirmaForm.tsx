@@ -1,6 +1,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   Alert,
+  Autocomplete,
   Box,
   Button,
   Divider,
@@ -20,7 +21,7 @@ import {
   useDeleteFirma,
   useUpdateFirma,
 } from "../../hooks/firma/useFirmaMutations";
-import { useGetMestaNames } from "../../hooks/mesto/useMestoQueries";
+import { useGetMesta } from "../../hooks/mesto/useMestoQueries";
 import { useFetchPretragaData } from "../../hooks/useFetchData";
 import {
   type InputTypes,
@@ -51,7 +52,7 @@ export const FirmaForm: React.FC<FirmaFormProps> = ({ inputCompany }) => {
   const { tipoviFirme, velicineFirme, stanjaFirme, delatnosti } =
     useFetchPretragaData();
 
-  const { data: mestaNames } = useGetMestaNames();
+  const { data: mesta } = useGetMesta();
 
   const isEditing = !!inputCompany?._id;
   const currentFirmaId = inputCompany?._id || null;
@@ -198,9 +199,6 @@ export const FirmaForm: React.FC<FirmaFormProps> = ({ inputCompany }) => {
         case "stanje_firme":
           optionsData = stanjaFirme;
           break;
-        case "mesto":
-          optionsData = mestaNames || [];
-          break;
         case "delatnost":
           optionsData = delatnosti;
           break;
@@ -258,6 +256,22 @@ export const FirmaForm: React.FC<FirmaFormProps> = ({ inputCompany }) => {
           );
         })}
         <Divider sx={{ width: "100%", my: 4 }} />
+        <Grid size={{ xs: 12, md: 6, lg: 4 }}>
+          <Autocomplete
+            fullWidth
+            options={mesta || []}
+            getOptionLabel={(option) => option.naziv_mesto}
+            disablePortal
+            isOptionEqualToValue={(option, value) => option._id === value._id}
+            renderInput={(params) => <TextField {...params} label="Mesto" />}
+            onChange={(_event, newValue) => {
+              setValue("mesto_id", newValue?._id ?? "");
+            }}
+            value={
+              mesta?.find((option) => option._id === watch("mesto_id")) ?? null
+            }
+          />
+        </Grid>
         {inputItems(InputTypesSchema.enum.Select).map((item) => {
           return (
             <Grid key={item.key} size={{ xs: 12, md: 6, lg: 4 }}>
@@ -265,6 +279,7 @@ export const FirmaForm: React.FC<FirmaFormProps> = ({ inputCompany }) => {
             </Grid>
           );
         })}
+
         <Divider sx={{ width: "100%", my: 4 }} />
         {inputItems(InputTypesSchema.enum.TextMultiline).map((item) => {
           return (

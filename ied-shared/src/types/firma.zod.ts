@@ -61,6 +61,7 @@ export const FirmaSchema = z.object({
     .optional(),
   maticni_broj: z.string().or(z.literal("")).optional(),
   prijavljeni: z.boolean(),
+  mesto_id: z.string().optional(),
 });
 
 export type ZaposleniType = z.infer<typeof ZaposleniSchema>;
