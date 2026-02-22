@@ -26,7 +26,10 @@ export const up = async (db: Connection) => {
         bulkOps.push({
           updateOne: {
             filter: { _id: firma._id },
-            update: { $set: { mesto_id: mesto.mesto_id } },
+            update: {
+              $set: { mesto_id: mesto.mesto_id },
+              $unset: { mesto: 1 },
+            },
           },
         });
       }

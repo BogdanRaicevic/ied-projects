@@ -8,7 +8,6 @@ import {
   Height,
   Home,
   LocalPolice,
-  LocationCity,
   Phone,
   SwitchAccount,
 } from "@mui/icons-material";
@@ -26,12 +25,6 @@ export const firmaFormMetadata: Metadata[] = [
     label: "Adresa",
     inputAdornment: <Home />,
     inputType: InputTypesSchema.enum.Text,
-  },
-  {
-    key: "mesto",
-    label: "Mesto",
-    inputAdornment: <LocationCity />,
-    inputType: InputTypesSchema.enum.Select,
   },
   {
     key: "PIB",
