@@ -1,12 +1,23 @@
 import AddBoxIcon from "@mui/icons-material/AddBox";
 import SearchIcon from "@mui/icons-material/Search";
-import { Box, Button, Grid, TextField } from "@mui/material";
+import {
+  Autocomplete,
+  Box,
+  Button,
+  Chip,
+  Grid,
+  TextField,
+} from "@mui/material";
 import { format } from "date-fns";
-import type { ParametriPretrage, TipSeminara } from "ied-shared";
+import type {
+  MestoFromDBType,
+  ParametriPretrage,
+  TipSeminara,
+} from "ied-shared";
 import { NEGACIJA } from "ied-shared";
 import { useCallback, useEffect, useMemo } from "react";
 import { Controller, useForm } from "react-hook-form";
-import { useGetMestaNames } from "../../hooks/mesto/useMestoQueries";
+import { useGetMesta } from "../../hooks/mesto/useMestoQueries";
 import { useGetRadnaMestaNames } from "../../hooks/radnoMesto/useRadnoMestoQueries";
 import { useSearchSeminari } from "../../hooks/seminar/useSeminarQueries";
 import {
@@ -29,7 +40,7 @@ export default function PretragaParameters() {
     useFetchPretragaData();
 
   const { data: radnaMesta } = useGetRadnaMestaNames();
-  const { data: mestaNames } = useGetMestaNames();
+  const { data: mesta } = useGetMesta();
 
   const { data: tipoviSeminara, isLoading: isLoadingTipoviSeminara } =
     useFetchTipoviSeminara();
@@ -201,15 +212,51 @@ export default function PretragaParameters() {
                 <Controller
                   name="mesta"
                   control={control}
-                  render={({ field }) => (
-                    <AutocompleteMultiple
-                      data={mestaNames || []}
-                      onCheckedChange={field.onChange}
-                      placeholder="Mesta"
-                      id="mesto"
-                      checkedValues={field.value || []}
-                    />
-                  )}
+                  render={({ field }) => {
+                    const selectedIds = new Set(field.value ?? []);
+                    return (
+                      <Autocomplete
+                        multiple
+                        id="mesta"
+                        disableCloseOnSelect
+                        getOptionLabel={(option) => option.naziv_mesto}
+                        isOptionEqualToValue={(option, value) =>
+                          option._id === value._id
+                        }
+                        options={mesta || []}
+                        renderValue={(
+                          mestaObjects: readonly MestoFromDBType[],
+                        ) =>
+                          mestaObjects.map((mestoObject: MestoFromDBType) => {
+                            return (
+                              <Chip
+                                sx={{ m: 0.4 }}
+                                variant="outlined"
+                                onDelete={() =>
+                                  field.onChange(
+                                    field.value?.filter(
+                                      (v) => v !== mestoObject._id,
+                                    ),
+                                  )
+                                }
+                                label={mestoObject.naziv_mesto}
+                                key={mestoObject._id}
+                              />
+                            );
+                          })
+                        }
+                        renderInput={(params) => (
+                          <TextField {...params} placeholder="Mesta" />
+                        )}
+                        onChange={(_event, newValue) =>
+                          field.onChange(newValue.map((m) => m._id))
+                        }
+                        value={
+                          mesta?.filter((m) => selectedIds.has(m._id)) ?? []
+                        }
+                      />
+                    );
+                  }}
                 />
               </Grid>
               <Grid px={2} size={2}>

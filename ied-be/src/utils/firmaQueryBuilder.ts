@@ -1,5 +1,5 @@
 import { NEGACIJA, type ParametriPretrage, PRIJAVA_STATUS } from "ied-shared";
-import type { QueryFilter } from "mongoose";
+import { type QueryFilter, Types } from "mongoose";
 import type { FirmaType } from "../models/firma.model";
 import { Seminar, type SeminarType } from "../models/seminar.model";
 import type { Zaposleni } from "../models/zaposleni.model";
@@ -36,10 +36,11 @@ export const createFirmaQuery = async (params: ParametriPretrage) => {
   }
 
   if (Array.isArray(params?.mesta) && params.mesta.length > 0) {
+    const mestaIds = params.mesta.map((id) => new Types.ObjectId(id));
     if (negateMesto) {
-      query.mesto = { $nin: params.mesta };
+      query.mesto_id = { $nin: mestaIds };
     } else {
-      query.mesto = { $in: params.mesta };
+      query.mesto_id = { $in: mestaIds };
     }
   }
 

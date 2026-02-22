@@ -1,4 +1,4 @@
-import { type Document, model, type ObjectId, Schema } from "mongoose";
+import { type Document, model, Schema, type Types } from "mongoose";
 import { type Zaposleni, zaposleniSchema } from "./zaposleni.model";
 
 type FirmaType = Document & {
@@ -24,7 +24,7 @@ type FirmaType = Document & {
   jbkjs: string;
   maticni_broj: string;
   prijavljeni: boolean;
-  mesto_id: ObjectId;
+  mesto_id: Types.ObjectId;
 };
 
 const firmaSchema = new Schema<FirmaType>(
