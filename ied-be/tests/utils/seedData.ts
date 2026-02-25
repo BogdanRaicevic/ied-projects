@@ -27,8 +27,12 @@ import {
 import type { Zaposleni } from "../../src/models/zaposleni.model";
 import * as firmaService from "../../src/services/firma.service";
 
-// Seed faker for reproducible tests
+// Seed faker for reproducible tests (all data including ObjectIds is deterministic)
 faker.seed(12345);
+
+function deterministicObjectId(): Types.ObjectId {
+  return new Types.ObjectId(faker.database.mongodbObjectId());
+}
 
 export const TEST_DATA_CONFIG = {
   FIRMAS_COUNT: 50,
@@ -99,6 +103,7 @@ export async function cursorToArray<T>(cursor: any): Promise<T[]> {
 
 function generateZaposleni(overrides: any = {}) {
   return {
+    _id: deterministicObjectId(),
     ime: faker.person.firstName(),
     prezime: faker.person.lastName(),
     radno_mesto: faker.helpers.arrayElement(TEST_DATA_CONFIG.RADNA_MESTA),
@@ -109,25 +114,34 @@ function generateZaposleni(overrides: any = {}) {
   };
 }
 
-function generateFirma(overrides: any = {}) {
+function generateFirma(mesta: MestoType[], overrides: any = {}) {
+  const naziv_firme = faker.company.name();
+  const adresa = faker.location.streetAddress();
+  const PIB = faker.string.numeric(9);
+  const telefon = faker.phone.number({ style: "human" });
+  const e_mail = faker.internet.email().toLowerCase();
+  const selectedMesto = faker.helpers.arrayElement(mesta);
+
   return {
-    naziv_firme: faker.company.name(),
-    adresa: faker.location.streetAddress(),
-    PIB: faker.string.numeric(9),
-    telefon: faker.phone.number({ style: "human" }),
-    e_mail: faker.internet.email().toLowerCase(),
-    mesto: faker.helpers.arrayElement(TEST_DATA_CONFIG.MESTA),
+    _id: deterministicObjectId(),
+    naziv_firme,
+    adresa,
+    PIB,
+    telefon,
+    e_mail,
     tip_firme: faker.helpers.arrayElement(TEST_DATA_CONFIG.TIP_FIRME),
     delatnost: faker.helpers.arrayElement(TEST_DATA_CONFIG.DELATNOSTI),
     velicina_firme: faker.helpers.arrayElement(TEST_DATA_CONFIG.VELICINA_FIRME),
     stanje_firme: faker.helpers.arrayElement(TEST_DATA_CONFIG.STANJE_FIRME),
     prijavljeni: faker.datatype.boolean(),
+    mesto_id: selectedMesto._id,
     ...overrides,
   };
 }
 
 function generateSeminar(tipSeminaraId: Types.ObjectId, overrides: any = {}) {
   return {
+    _id: deterministicObjectId(),
     naziv: faker.company.catchPhrase(),
     predavac: faker.person.fullName(),
     lokacija: faker.location.city(),
@@ -146,7 +160,7 @@ function generatePrijava(
   zaposleni: Zaposleni,
 ): SeminarType["prijave"][0] {
   return {
-    _id: new Types.ObjectId(),
+    _id: deterministicObjectId(),
     firma_id: firma._id,
     firma_naziv: firma.naziv_firme,
     firma_email: firma.e_mail || "",
@@ -189,6 +203,7 @@ export async function seedTestDatabase(): Promise<SeededData> {
   ];
   for (let i = 0; i < TEST_DATA_CONFIG.MESTA.length; i++) {
     const mesto = await Mesto.create({
+      _id: deterministicObjectId(),
       naziv_mesto: TEST_DATA_CONFIG.MESTA[i]!,
       postanski_broj: postanskiBrojevi[i] || `${10000 + i}`,
       ID_mesto: i + 1,
@@ -198,19 +213,20 @@ export async function seedTestDatabase(): Promise<SeededData> {
 
   // Delatnosti
   for (const delatnostName of TEST_DATA_CONFIG.DELATNOSTI) {
-    const delatnost = await Delatnost.create({ delatnost: delatnostName });
+    const delatnost = await Delatnost.create({ _id: deterministicObjectId(), delatnost: delatnostName });
     seededData.delatnosti.push(delatnost.toObject());
   }
 
   // Tipovi Firme
   for (const tipName of TEST_DATA_CONFIG.TIP_FIRME) {
-    const tip = await TipFirme.create({ tip_firme: tipName });
+    const tip = await TipFirme.create({ _id: deterministicObjectId(), tip_firme: tipName });
     seededData.tipoviFirme.push(tip.toObject());
   }
 
   // Velicine Firme
   for (let i = 0; i < TEST_DATA_CONFIG.VELICINA_FIRME.length; i++) {
     const velicina = await VelicineFirmi.create({
+      _id: deterministicObjectId(),
       ID_velicina_firme: i + 1,
       velicina_firme: TEST_DATA_CONFIG.VELICINA_FIRME[i]!,
     });
@@ -219,25 +235,25 @@ export async function seedTestDatabase(): Promise<SeededData> {
 
   // Stanja Firme
   for (const stanjeName of TEST_DATA_CONFIG.STANJE_FIRME) {
-    const stanje = await StanjeFirme.create({ stanje_firme: stanjeName });
+    const stanje = await StanjeFirme.create({ _id: deterministicObjectId(), stanje_firme: stanjeName });
     seededData.stanjaFirme.push(stanje.toObject());
   }
 
   // Radna Mesta
   for (const radnoMestoName of TEST_DATA_CONFIG.RADNA_MESTA) {
-    const radnoMesto = await RadnoMesto.create({ radno_mesto: radnoMestoName });
+    const radnoMesto = await RadnoMesto.create({ _id: deterministicObjectId(), radno_mesto: radnoMestoName });
     seededData.radnaMesta.push(radnoMesto.toObject());
   }
 
   // 1. Create TipSeminara records
   for (const tipName of TEST_DATA_CONFIG.TIP_SEMINARA) {
-    const tip = await TipSeminara.create({ tipSeminara: tipName });
+    const tip = await TipSeminara.create({ _id: deterministicObjectId(), tipSeminara: tipName });
     seededData.tipoviSeminara.push(tip.toObject());
   }
 
   // 2. Create Firmas with Zaposleni
   for (let i = 0; i < TEST_DATA_CONFIG.FIRMAS_COUNT; i++) {
-    const firmaData = generateFirma();
+    const firmaData = generateFirma(seededData.mesta);
     const firma = await firmaService.create(firmaData);
 
     // Add random number of zaposleni
