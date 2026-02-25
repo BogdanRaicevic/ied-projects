@@ -190,7 +190,7 @@ export const searchFirmaSeminars = async (
     _id: 1,
     naziv_firme: 1,
     e_mail: 1,
-    mesto: 1,
+    mesto_id: 1,
     tip_firme: 1,
     delatnost: 1,
   })
