@@ -1,3 +1,18 @@
+## [1.12.0](https://github.com/BogdanRaicevic/ied-projects/compare/v1.11.0...v1.12.0) (2026-02-25)
+
+### Features
+
+* add migration adding mesto_id to each firma object ([551ac2d](https://github.com/BogdanRaicevic/ied-projects/commit/551ac2dca9d2f1fd3c8fe0b60f9e8bd33727ab69))
+* migrate mesta in pretrage to be mesto_id ([e20df4d](https://github.com/BogdanRaicevic/ied-projects/commit/e20df4d3584c5d0a577f2ad38d7effff219c6537))
+
+### Bug Fixes
+
+* enable search by mesto_id ([4f3ad22](https://github.com/BogdanRaicevic/ied-projects/commit/4f3ad221ace7030d3a641d4fa242c3bceeb51b15))
+* handle mesto_id in pretrage service ([f018b3e](https://github.com/BogdanRaicevic/ied-projects/commit/f018b3e0d29eef4150e088db1553bc034cd819b7))
+* mesto relation in seminar search ([b34a1ec](https://github.com/BogdanRaicevic/ied-projects/commit/b34a1ece294ff2b21860b0fa587623f3d9d678d1))
+* mongo projection property ([f617da5](https://github.com/BogdanRaicevic/ied-projects/commit/f617da5f3c801e15bcdb560f11f775ff11bafdd0))
+* tests ([69814e6](https://github.com/BogdanRaicevic/ied-projects/commit/69814e670be09e0115f0583c014750bb2c11bbef))
+
 ## [1.11.0](https://github.com/BogdanRaicevic/ied-projects/compare/v1.10.5...v1.11.0) (2026-02-16)
 
 ### Features
