@@ -1,9 +1,9 @@
-import { RestartAltOutlined } from "@mui/icons-material";
+import RestartAltOutlined from "@mui/icons-material/RestartAltOutlined";
 import ZoomInIcon from "@mui/icons-material/ZoomIn";
 import ZoomOutIcon from "@mui/icons-material/ZoomOut";
 import { Autocomplete, Button, Grid, TextField } from "@mui/material";
 import type { PretragaType } from "ied-shared";
-import { useEffect, useState } from "react";
+import { Activity, useEffect, useState } from "react";
 import {
   deletePretraga,
   fetchAllPretrage,
@@ -85,27 +85,8 @@ export default function PredefinedPretrage() {
       id: option._id ?? "",
       naziv: option.nazivPretrage ?? "",
     });
-    const mappedPregrage = {
-      imeFirme: option.imeFirme,
-      pib: option.pib,
-      email: option.email,
-      mesta: option.mesta,
-      delatnosti: option.delatnosti,
-      tipoviFirme: option.tipoviFirme,
-      radnaMesta: option.radnaMesta,
-      velicineFirme: option.velicineFirme,
-      negacije: option.negacije,
-      stanjaFirme: option.stanjaFirme,
-      jbkjs: option.jbkjs,
-      maticniBroj: option.maticniBroj,
-      komentar: option.komentar,
-      imePrezime: option.imePrezime,
-      emailZaposlenog: option.emailZaposlenog,
-      firmaPrijavljeni: option.firmaPrijavljeni,
-      zaposleniPrijavljeni: option.zaposleniPrijavljeni,
-      tipoviSeminara: option.tipoviSeminara,
-      seminari: option.seminari,
-    };
+    const { _id, nazivPretrage, __v, ...mappedPregrage } = option as any;
+
     setPretragaParameters(mappedPregrage);
     setAppliedParameters();
   };
@@ -143,15 +124,17 @@ export default function PredefinedPretrage() {
           handleSave={handleSavePretraga}
           selectedPretraga={selectedPretraga}
         />
-        <Button
-          startIcon={<ZoomOutIcon />}
-          variant="contained"
-          size="large"
-          color="error"
-          onClick={handleDeletePretraga}
-        >
-          Obrisi pretragu
-        </Button>
+        <Activity mode={selectedPretraga.id ? "visible" : "hidden"}>
+          <Button
+            startIcon={<ZoomOutIcon />}
+            variant="contained"
+            size="large"
+            color="error"
+            onClick={handleDeletePretraga}
+          >
+            Obrisi pretragu
+          </Button>
+        </Activity>
         <Button
           startIcon={<RestartAltOutlined />}
           variant="contained"

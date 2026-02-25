@@ -4,11 +4,11 @@ import {
   PRIJAVA_STATUS,
   type PrijavaStatusType,
 } from "ied-shared";
-import { type Document, model, Schema } from "mongoose";
+import { type Document, model, Schema, type Types } from "mongoose";
 
 export type PretrageType = Document & {
   nazivPretrage: string;
-  mesta: string[];
+  mesta: Types.ObjectId[];
   delatnosti: string[];
   tipoviFirme: string[];
   radnaMesta: string[];
@@ -32,7 +32,7 @@ export type PretrageType = Document & {
 const pretrageSchema = new Schema<PretrageType>(
   {
     nazivPretrage: { type: String, required: true },
-    mesta: [{ type: String, ref: "Mesto" }],
+    mesta: [{ type: Schema.Types.ObjectId, ref: "Mesto" }],
     delatnosti: [{ type: String, ref: "Delatnost" }],
     tipoviFirme: [{ type: String, ref: "TipFirme" }],
     radnaMesta: [{ type: String, ref: "RadnaMesta" }],

@@ -9,7 +9,7 @@ import {
   Typography,
 } from "@mui/material";
 import { Box } from "@mui/system";
-import { useEffect, useState } from "react";
+import { Activity, useEffect, useState } from "react";
 import type { TODO_ANY } from "../../../../ied-be/src/utils/utils";
 
 interface PretrageSaveDialogProps {
@@ -72,16 +72,19 @@ export default function PretrageSaveDialog({
               placeholder="Naziv pretrage"
               onChange={(e: TODO_ANY) => setNazivPretrage(e.target.value)}
             ></TextField>
-            <Button
-              variant="contained"
-              color="success"
-              onClick={() => {
-                handleSave(nazivPretrage, true);
-              }}
-              disabled={!nazivPretrage}
-            >
-              Sačuvaj kao novu pretragu
-            </Button>
+
+            <Activity mode={nazivPretrage ? "visible" : "hidden"}>
+              <Button
+                variant="contained"
+                color="success"
+                onClick={() => {
+                  handleSave(nazivPretrage, true);
+                }}
+                disabled={!nazivPretrage}
+              >
+                Sačuvaj kao novu pretragu
+              </Button>
+            </Activity>
           </Grid>
         </Grid>
       </DialogContent>
