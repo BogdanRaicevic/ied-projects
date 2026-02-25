@@ -1,6 +1,7 @@
 import type {
   ExtendedSearchSeminarType,
   FirmaSeminarSearchParams,
+  MestoType,
   PrijavaZodType,
   SeminarZodType,
 } from "ied-shared";
@@ -192,7 +193,9 @@ export const searchFirmaSeminars = async (
     mesto: 1,
     tip_firme: 1,
     delatnost: 1,
-  }).lean();
+  })
+    .populate<{ mesto_id: MestoType }>("mesto_id", "naziv_mesto")
+    .lean();
 
   if (allMatchingFirmas.length === 0) {
     return {
@@ -245,7 +248,7 @@ export const searchFirmaSeminars = async (
         firmaId: aggData.firmaId,
         naziv: firma.naziv_firme,
         email: firma.e_mail,
-        mesto: firma.mesto,
+        mesto: firma.mesto_id?.naziv_mesto ?? "",
         tipFirme: firma.tip_firme,
         delatnost: firma.delatnost,
         brojSeminara: aggData.seminars.length,
