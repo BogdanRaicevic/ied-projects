@@ -1,4 +1,5 @@
 import type { ParametriPretrage } from "ied-shared";
+import { Types } from "mongoose";
 import { Pretrage, type PretrageType } from "../models/pretrage.model";
 import { validateMongoId } from "../utils/utils";
 
@@ -20,7 +21,10 @@ export const savePretraga = async (
     const pretragaData: Partial<PretrageType> = {};
     pretragaData.nazivPretrage = pretraga.naziv || "pretraga bez imena";
 
-    pretragaData.mesta = queryParameters.mesta;
+    pretragaData.mesta =
+      queryParameters.mesta
+        ?.filter((mesto) => Types.ObjectId.isValid(mesto))
+        .map((mesto) => new Types.ObjectId(mesto)) ?? [];
     pretragaData.delatnosti = queryParameters.delatnosti;
     pretragaData.velicineFirme = queryParameters.velicineFirme;
     pretragaData.radnaMesta = queryParameters.radnaMesta;
