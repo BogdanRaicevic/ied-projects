@@ -19,7 +19,6 @@ type FirmaType = Document & {
   updated_at: Date;
   stanje_firme: string;
   zaposleni: Zaposleni[];
-  mesto: string;
   velicina_firme: string;
   jbkjs: string;
   maticni_broj: string;
@@ -35,7 +34,6 @@ const firmaSchema = new Schema<FirmaType>(
     PIB: String,
     telefon: String,
     e_mail: String,
-    mesto: String,
     velicina_firme: String,
     faks: String,
     tip_firme: String,

@@ -31,7 +31,15 @@ async function generateStaticData() {
   };
 
   const outputPath = join(__dirname, "../fixtures/staticTestData.json");
-  writeFileSync(outputPath, JSON.stringify(staticData, null, 2));
+  const NON_DETERMINISTIC_KEYS = new Set(["created_at", "updated_at"]);
+  writeFileSync(
+    outputPath,
+    JSON.stringify(
+      staticData,
+      (key, value) => (NON_DETERMINISTIC_KEYS.has(key) ? undefined : value),
+      2,
+    ),
+  );
 
   console.log(`✅ Static test data generated at: ${outputPath}`);
   console.log(`   - Firme: ${staticData.firme.length}`);

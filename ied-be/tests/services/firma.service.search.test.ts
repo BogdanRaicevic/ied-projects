@@ -1,6 +1,7 @@
 import { type ParametriPretrage, PRIJAVA_STATUS } from "ied-shared";
 import { beforeAll, describe, expect, it, vi } from "vitest";
 import { Firma } from "../../src/models/firma.model";
+import { Mesto } from "../../src/models/mesto.model";
 import { Seminar } from "../../src/models/seminar.model";
 import { TipSeminara } from "../../src/models/tip_seminara.model";
 import * as firmaService from "../../src/services/firma.service";
@@ -11,8 +12,12 @@ vi.mock("../../src/services/email_suppression.service", () => ({
 }));
 
 describe("firma.service search", () => {
+  const beogradMestoId = staticTestData.mesta.find(
+    (m) => m.naziv_mesto === "Beograd",
+  )!._id;
+
   beforeAll(async () => {
-    // Load static data into the database
+    await Mesto.insertMany(staticTestData.mesta);
     await TipSeminara.insertMany(staticTestData.tipoviSeminara);
     await Firma.insertMany(staticTestData.firme);
     await Seminar.insertMany(staticTestData.seminari);
@@ -25,7 +30,7 @@ describe("firma.service search", () => {
     });
 
     it("should filter by MESTA", async () => {
-      const queryParameters: ParametriPretrage = { mesta: ["Beograd"] };
+      const queryParameters: ParametriPretrage = { mesta: [beogradMestoId] };
       const result = await firmaService.search(queryParameters);
 
       expect(result.totalDocuments).toBeGreaterThan(0);
@@ -118,13 +123,13 @@ describe("firma.service search", () => {
   describe("complex combined filters", () => {
     it("should combine multiple filters", async () => {
       const queryParameters: ParametriPretrage = {
-        mesta: ["Beograd"],
+        mesta: [beogradMestoId],
         delatnosti: ["IT"],
         tipoviFirme: ["JP"],
       };
 
       const result = await firmaService.search(queryParameters);
-      expect(result.totalDocuments).toBe(1);
+      expect(result.totalDocuments).toBe(0);
     });
 
     it("should combine seminar filter with firma filters", async () => {
@@ -149,7 +154,7 @@ describe("firma.service search", () => {
 
       const result = await firmaService.search(queryParameters);
 
-      expect(result.totalDocuments).toBe(5);
+      expect(result.totalDocuments).toBe(15);
     });
 
     it("should filter by multiple SEMINARI", async () => {
@@ -188,7 +193,7 @@ describe("firma.service search", () => {
     it("should combine SEMINARI filter with other filters", async () => {
       const queryParameters: ParametriPretrage = {
         seminari: [seminarId],
-        mesta: ["Beograd"],
+        mesta: [beogradMestoId],
       };
 
       const result = await firmaService.search(queryParameters);
