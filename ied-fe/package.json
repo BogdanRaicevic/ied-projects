@@ -42,7 +42,7 @@
   },
   "devDependencies": {
     "@biomejs/biome": "^2.4.4",
-    "@types/node": "^24.10.13",
+    "@types/node": "^24.10.15",
     "@types/react": "19.2.14",
     "@types/react-dom": "19.2.3",
     "@types/react-router-dom": "^5.3.3",
@@ -52,6 +52,6 @@
     "vite": "^7.3.1"
   },
   "engines": {
-    "node": ">=24.13.1"
+    "node": ">=24.14.0"
   }
 }
