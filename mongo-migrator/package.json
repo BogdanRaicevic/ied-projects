@@ -17,7 +17,7 @@
     "node": ">=24.13.1"
   },
   "dependencies": {
-    "mongoose": "^9.2.2",
+    "mongoose": "^9.2.3",
     "mysql2": "^3.18.2",
     "ied-shared": "workspace:^",
     "dotenv": "^17.3.1"
