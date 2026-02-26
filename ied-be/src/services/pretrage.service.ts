@@ -49,7 +49,7 @@ export const savePretraga = async (
     const p = await Pretrage.findOneAndUpdate(
       { _id: pretraga.id },
       { $set: pretragaData },
-      { new: true, runValidators: true },
+      { returnDocument: "after", runValidators: true },
     );
 
     if (!p) {

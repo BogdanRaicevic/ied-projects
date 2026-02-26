@@ -168,10 +168,14 @@ export const exportSearchedZaposleniData = async (
           queryParameters.negacije?.includes(NEGACIJA.radnoMesto) ?? false;
         const isRadnoMestoIncluded =
           queryParameters.radnaMesta?.includes(z.radno_mesto) ?? false;
-        const hasNoRadnaMestaFilter = queryParameters.radnaMesta?.length === 0;
-
+        const hasNoRadnaMestaFilter =
+          !queryParameters.radnaMesta ||
+          queryParameters.radnaMesta.length === 0;
         // Skip if zaposleni is not in the specified seminars
+        const isNegateSeminar =
+          queryParameters.negacije?.includes(NEGACIJA.seminar) ?? false;
         if (
+          !isNegateSeminar &&
           queryParameters.seminari &&
           queryParameters.seminari.length > 0 &&
           !isZaposleniInSeminar
