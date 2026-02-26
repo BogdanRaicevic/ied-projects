@@ -1,7 +1,6 @@
 import type {
   ExtendedSearchSeminarType,
   FirmaSeminarSearchParams,
-  MestoType,
   PrijavaZodType,
   SeminarZodType,
 } from "ied-shared";
@@ -186,7 +185,16 @@ export const searchFirmaSeminars = async (
 ) => {
   // Step 1: Query and filter Firma collection
   const firmaQuery = buildFirmaQuery(queryParams);
-  const allMatchingFirmas = await Firma.find(firmaQuery, {
+
+  type FirmaProjection = {
+    _id: Types.ObjectId;
+    naziv_firme: string;
+    e_mail: string;
+    mesto_id: { mesto_id: Types.ObjectId; naziv_mesto: string } | null;
+    tip_firme: string;
+    delatnost: string;
+  };
+  const allMatchingFirmas = (await Firma.find(firmaQuery, {
     _id: 1,
     naziv_firme: 1,
     e_mail: 1,
@@ -194,8 +202,8 @@ export const searchFirmaSeminars = async (
     tip_firme: 1,
     delatnost: 1,
   })
-    .populate<{ mesto_id: MestoType }>("mesto_id", "naziv_mesto")
-    .lean();
+    .populate("mesto_id", "naziv_mesto")
+    .lean()) as unknown as FirmaProjection[];
 
   if (allMatchingFirmas.length === 0) {
     return {
