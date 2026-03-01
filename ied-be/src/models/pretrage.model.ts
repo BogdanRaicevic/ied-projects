@@ -25,7 +25,7 @@ export type PretrageType = Document & {
   emailZaposlenog: string;
   firmaPrijavljeni?: PrijavaStatusType;
   zaposleniPrijavljeni?: PrijavaStatusType;
-  tipoviSeminara: string[];
+  tipoviSeminara: Types.ObjectId[];
   seminari: string[];
 };
 
@@ -55,7 +55,7 @@ const pretrageSchema = new Schema<PretrageType>(
       type: String,
       enum: Object.values(PRIJAVA_STATUS),
     },
-    tipoviSeminara: [{ type: String, ref: "TipSeminara" }],
+    tipoviSeminara: [{ type: Schema.Types.ObjectId, ref: "TipSeminara" }],
     seminari: [{ type: String, ref: "Seminar" }],
   },
   { collection: "pretrage" },

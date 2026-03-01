@@ -22,7 +22,7 @@ import {
   useCreateSeminarMutation,
   useUpdateSeminarMutation,
 } from "../../hooks/seminar/useSeminarMutations";
-import { useFetchTipoviSeminara } from "../../hooks/useFetchData";
+import { useFetchTipoviSeminara } from "../../hooks/tipSeminara/useTipSeminaraQueries";
 
 export default function SeminarForm({
   seminar,

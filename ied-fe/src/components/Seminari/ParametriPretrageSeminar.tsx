@@ -10,10 +10,10 @@ import {
 } from "@mui/material";
 import { DatePicker } from "@mui/x-date-pickers";
 import { addMonths, subMonths } from "date-fns";
-import type { TipSeminara } from "ied-shared";
+import type { TipSeminaraFromDB } from "ied-shared";
 import { type SeminarQueryParams, SeminarQueryParamsSchema } from "ied-shared";
 import { Controller, useForm } from "react-hook-form";
-import { useFetchTipoviSeminara } from "../../hooks/useFetchData";
+import { useFetchTipoviSeminara } from "../../hooks/tipSeminara/useTipSeminaraQueries";
 import MultiSelectAutocomplete from "../Autocomplete/MultiSelectAutocomplete";
 
 export function ParametriPretrageSeminar({
@@ -110,7 +110,7 @@ export function ParametriPretrageSeminar({
               name="tipSeminara"
               control={control}
               render={({ field }) => (
-                <MultiSelectAutocomplete<TipSeminara>
+                <MultiSelectAutocomplete<TipSeminaraFromDB>
                   labelKey="tipSeminara"
                   options={tipoviSeminara || []}
                   value={field.value || []}

@@ -120,9 +120,3 @@ export const FirmaSeminarResultSchema = z.object({
   totalPages: z.number(),
 });
 export type FirmaSeminarResult = z.infer<typeof FirmaSeminarResultSchema>;
-
-export const TipSeminaraSchema = z.object({
-  _id: z.string(),
-  tipSeminara: z.string(),
-});
-export type TipSeminara = z.infer<typeof TipSeminaraSchema>;

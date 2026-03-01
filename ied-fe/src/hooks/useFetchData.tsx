@@ -1,10 +1,8 @@
-import { type UseQueryResult, useQuery } from "@tanstack/react-query";
-import type { TipSeminara } from "ied-shared";
+import { useQuery } from "@tanstack/react-query";
 import { fetchAllDelatnosti } from "../api/delatnosti.api";
 import { getIzdavaciRacuna } from "../api/racuni.api";
 import { fetchAllStanjaFirme } from "../api/stanja_firme.api";
 import { fetchAllTipoviFirme } from "../api/tip_firme.api";
-import { fetchAllTipoviSeminara } from "../api/tip_seminara.api";
 import { fetchAllVelicineFirme } from "../api/velicina_firme.api";
 
 export function useFetchPretragaData() {
@@ -44,13 +42,3 @@ export const useFetchIzdavaciRacuna = () => {
     },
   });
 };
-
-export function useFetchTipoviSeminara(): UseQueryResult<TipSeminara[]> {
-  return useQuery({
-    queryKey: ["tipoviSeminara"],
-    queryFn: async () => {
-      const response = await fetchAllTipoviSeminara();
-      return response;
-    },
-  });
-}
