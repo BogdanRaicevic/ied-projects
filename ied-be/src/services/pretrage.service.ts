@@ -43,7 +43,10 @@ export const savePretraga = async (
     pretragaData.emailZaposlenog = queryParameters.emailZaposlenog;
     pretragaData.firmaPrijavljeni = queryParameters.firmaPrijavljeni;
     pretragaData.zaposleniPrijavljeni = queryParameters.zaposleniPrijavljeni;
-    pretragaData.tipoviSeminara = queryParameters.tipoviSeminara;
+    pretragaData.tipoviSeminara =
+      queryParameters.tipoviSeminara
+        ?.filter((tipSeminara) => Types.ObjectId.isValid(tipSeminara))
+        .map((tipSeminara) => new Types.ObjectId(tipSeminara)) ?? [];
     pretragaData.seminari = queryParameters.seminari;
 
     const p = await Pretrage.findOneAndUpdate(

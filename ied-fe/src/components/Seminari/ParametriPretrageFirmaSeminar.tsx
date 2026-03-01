@@ -2,12 +2,10 @@ import { UnfoldLess } from "@mui/icons-material";
 import { Box, Button, FormControl, Grid, TextField } from "@mui/material";
 import { DatePicker } from "@mui/x-date-pickers";
 import { addMonths } from "date-fns";
-import type { FirmaSeminarSearchParams, TipSeminara } from "ied-shared";
+import type { FirmaSeminarSearchParams, TipSeminaraFromDB } from "ied-shared";
 import { Controller, useForm } from "react-hook-form";
-import {
-  useFetchPretragaData,
-  useFetchTipoviSeminara,
-} from "../../hooks/useFetchData";
+import { useFetchTipoviSeminara } from "../../hooks/tipSeminara/useTipSeminaraQueries";
+import { useFetchPretragaData } from "../../hooks/useFetchData";
 import AutocompleteMultiple from "../Autocomplete/Multiple";
 import MultiSelectAutocomplete from "../Autocomplete/MultiSelectAutocomplete";
 
@@ -132,7 +130,7 @@ export default function ParametriPretrageFirmaSeminar({
               name="tipSeminara"
               control={control}
               render={({ field }) => (
-                <MultiSelectAutocomplete<TipSeminara>
+                <MultiSelectAutocomplete<TipSeminaraFromDB>
                   labelKey="tipSeminara"
                   options={tipoviSeminara || []}
                   value={field.value || []}

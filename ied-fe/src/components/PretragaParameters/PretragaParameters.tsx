@@ -12,7 +12,7 @@ import { format } from "date-fns";
 import type {
   MestoFromDBType,
   ParametriPretrage,
-  TipSeminara,
+  TipSeminaraFromDB,
 } from "ied-shared";
 import { NEGACIJA } from "ied-shared";
 import { useCallback, useEffect, useMemo } from "react";
@@ -20,10 +20,8 @@ import { Controller, useForm } from "react-hook-form";
 import { useGetMesta } from "../../hooks/mesto/useMestoQueries";
 import { useGetRadnaMestaNames } from "../../hooks/radnoMesto/useRadnoMestoQueries";
 import { useSearchSeminari } from "../../hooks/seminar/useSeminarQueries";
-import {
-  useFetchPretragaData,
-  useFetchTipoviSeminara,
-} from "../../hooks/useFetchData";
+import { useFetchTipoviSeminara } from "../../hooks/tipSeminara/useTipSeminaraQueries";
+import { useFetchPretragaData } from "../../hooks/useFetchData";
 import {
   defaultPretrageParameters,
   usePretragaStore,
@@ -318,7 +316,7 @@ export default function PretragaParameters() {
                   name="tipoviSeminara"
                   control={control}
                   render={({ field }) => (
-                    <MultiSelectAutocomplete<TipSeminara>
+                    <MultiSelectAutocomplete<TipSeminaraFromDB>
                       labelKey="tipSeminara"
                       options={tipoviSeminara || []}
                       value={field.value || []}
