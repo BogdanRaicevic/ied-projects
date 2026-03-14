@@ -29,7 +29,7 @@
     "@semantic-release/github": "^12.0.6",
     "@semantic-release/npm": "^13.1.4",
     "@types/node": "^24.10.15",
-    "conventional-changelog-conventionalcommits": "^9.1.0",
+    "conventional-changelog-conventionalcommits": "^9.3.0",
     "knip": "^5.86.0",
     "semantic-release": "^25.0.3",
     "turbo": "^2.8.17",
