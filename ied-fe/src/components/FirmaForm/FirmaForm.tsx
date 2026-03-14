@@ -268,7 +268,14 @@ export const FirmaForm: React.FC<FirmaFormProps> = ({ inputCompany }) => {
               setValue("mesto_id", newValue?._id ?? "");
             }}
             value={
-              mesta?.find((option) => option._id === watch("mesto_id")) ?? null
+              mesta?.find((option) => {
+                const mesto = watch("mesto_id");
+                const id =
+                  typeof mesto === "object" && mesto !== null
+                    ? mesto._id
+                    : mesto;
+                return option._id === id;
+              }) ?? null
             }
           />
         </Grid>

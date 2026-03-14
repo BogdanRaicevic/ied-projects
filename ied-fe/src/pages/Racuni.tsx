@@ -132,7 +132,8 @@ export default function Racuni() {
   const firmaNaziv = firma?.naziv_firme;
   const firmaAdresa = firma?.adresa;
   const firmaPIB = firma?.PIB;
-  const firmaMesto = firma?.mesto;
+  const firmaMesto =
+    typeof firma?.mesto_id === "object" ? firma.mesto_id.naziv_mesto : "";
   const firmaMaticniBroj = firma?.maticni_broj;
 
   const onlineCount =

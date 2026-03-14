@@ -51,7 +51,6 @@ export const FirmaSchema = z.object({
   delatnost: z.string().optional(),
   komentar: z.string().max(1000).optional(),
   stanje_firme: z.string().max(50).optional(),
-  mesto: z.string().optional(),
   velicina_firme: z.string().optional(),
   zaposleni: z.array(ZaposleniSchema).optional(),
   jbkjs: z
@@ -61,7 +60,16 @@ export const FirmaSchema = z.object({
     .optional(),
   maticni_broj: z.string().or(z.literal("")).optional(),
   prijavljeni: z.boolean(),
-  mesto_id: z.string().optional(),
+  mesto_id: z
+    .union([
+      z.string(),
+      z.object({
+        _id: z.string(),
+        naziv_mesto: z.string(),
+        postanski_broj: z.string().optional(),
+      }),
+    ])
+    .optional(),
 });
 
 export type ZaposleniType = z.infer<typeof ZaposleniSchema>;

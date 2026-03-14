@@ -23,7 +23,6 @@ const defaultFirmaData: FirmaType = {
   e_mail: "",
   tip_firme: "",
   komentar: "",
-  mesto: "",
   PIB: "",
   velicina_firme: "",
   zaposleni: [],
@@ -32,6 +31,7 @@ const defaultFirmaData: FirmaType = {
   maticni_broj: "",
   delatnost: "",
   prijavljeni: true,
+  mesto_id: "",
 };
 
 const defaultZaposleniData: ZaposleniType = {
