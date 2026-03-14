@@ -1,3 +1,10 @@
+## [1.13.1](https://github.com/BogdanRaicevic/ied-projects/compare/v1.13.0...v1.13.1) (2026-03-14)
+
+### Bug Fixes
+
+* type mismatch after refactoring ([f009ab6](https://github.com/BogdanRaicevic/ied-projects/commit/f009ab69485eb08e6bc3d637c49641dd886f6e6c))
+* update `mesto_id` to support populated location objects across schema, backend, and frontend. ([6b5e48b](https://github.com/BogdanRaicevic/ied-projects/commit/6b5e48b9c1efef3caeaf83c774c3c4be10d29f60))
+
 ## [1.13.0](https://github.com/BogdanRaicevic/ied-projects/compare/v1.12.1...v1.13.0) (2026-03-14)
 
 ### Features
