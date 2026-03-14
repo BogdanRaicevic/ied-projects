@@ -25,6 +25,7 @@ import {
   type VelicineFirmiType,
 } from "../../src/models/velicina_firme.model";
 import type { Zaposleni } from "../../src/models/zaposleni.model";
+import { Pretrage, type PretrageType } from "../../src/models/pretrage.model";
 import * as firmaService from "../../src/services/firma.service";
 
 // Seed faker for reproducible tests (all data including ObjectIds is deterministic)
@@ -91,6 +92,7 @@ export type SeededData = {
   velicineFirme: VelicineFirmiType[];
   stanjaFirme: StanjeFirmeType[];
   radnaMesta: RadnoMestoType[];
+  pretrage: PretrageType[];
 };
 
 export async function cursorToArray<T>(cursor: any): Promise<T[]> {
@@ -187,6 +189,7 @@ export async function seedTestDatabase(): Promise<SeededData> {
     velicineFirme: [],
     stanjaFirme: [],
     radnaMesta: [],
+    pretrage: [],
   };
 
   // 0. Seed lookup tables first
@@ -314,6 +317,18 @@ export async function seedTestDatabase(): Promise<SeededData> {
 
   // Refresh seminari data after adding prijave
   seededData.seminari = await Seminar.find({}).lean();
+
+  // 5. Create Pretrage
+  for (let i = 0; i < 5; i++) {
+    const pretraga = await Pretrage.create({
+      _id: deterministicObjectId(),
+      nazivPretrage: faker.word.words(3),
+      mesta: faker.helpers.arrayElements(seededData.mesta, 2).map((m) => m._id),
+      delatnosti: faker.helpers.arrayElements(TEST_DATA_CONFIG.DELATNOSTI, 2),
+      tipoviSeminara: faker.helpers.arrayElements(seededData.tipoviSeminara, 2).map((t) => t._id),
+    });
+    seededData.pretrage.push(pretraga.toObject());
+  }
 
   return seededData;
 }
