@@ -28,6 +28,7 @@ async function generateStaticData() {
     velicineFirme: seededData.velicineFirme,
     stanjaFirme: seededData.stanjaFirme,
     radnaMesta: seededData.radnaMesta,
+    pretrage: seededData.pretrage,
   };
 
   const outputPath = join(__dirname, "../fixtures/staticTestData.json");
@@ -51,6 +52,7 @@ async function generateStaticData() {
   console.log(`   - Velicine Firme: ${staticData.velicineFirme.length}`);
   console.log(`   - Stanja Firme: ${staticData.stanjaFirme.length}`);
   console.log(`   - Radna Mesta: ${staticData.radnaMesta.length}`);
+  console.log(`   - Pretrage: ${staticData.pretrage.length}`);
 
   await mongoose.disconnect();
   await mongoServer.stop();

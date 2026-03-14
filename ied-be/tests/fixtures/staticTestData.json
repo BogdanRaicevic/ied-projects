@@ -5115,5 +5115,122 @@
       "_id": "15ae4afbaeb5c233828b7dfc",
       "__v": 0
     }
+  ],
+  "pretrage": [
+    {
+      "nazivPretrage": "christen electronics hypothesise",
+      "mesta": [
+        "3d6c99df614ecf1ca089decb",
+        "eb1cde952aa0ffa90db36d83"
+      ],
+      "delatnosti": [
+        "Obrazovanje",
+        "Usluge"
+      ],
+      "tipoviFirme": [],
+      "radnaMesta": [],
+      "velicineFirme": [],
+      "negacije": [],
+      "stanjaFirme": [],
+      "tipoviSeminara": [
+        "7cbda60cf3a04bab2d393fb4",
+        "dca07ae64d8dd7e9f34aba4f"
+      ],
+      "seminari": [],
+      "_id": "eda92d36edaff2f245ce6fdc",
+      "__v": 0
+    },
+    {
+      "nazivPretrage": "yippee till phew",
+      "mesta": [
+        "9afeb30bd0abd1dacbb245aa",
+        "7fb45baeeb5f8a47e6abce2e"
+      ],
+      "delatnosti": [
+        "Trgovina",
+        "Građevinarstvo"
+      ],
+      "tipoviFirme": [],
+      "radnaMesta": [],
+      "velicineFirme": [],
+      "negacije": [],
+      "stanjaFirme": [],
+      "tipoviSeminara": [
+        "7cbda60cf3a04bab2d393fb4",
+        "dca07ae64d8dd7e9f34aba4f"
+      ],
+      "seminari": [],
+      "_id": "e6338a60bf20ccf8ed7e20a6",
+      "__v": 0
+    },
+    {
+      "nazivPretrage": "well-lit waver regularly",
+      "mesta": [
+        "7cd046d13bfcecf5d90febfa",
+        "f3b3aed3a8ce86c42fbcfdda"
+      ],
+      "delatnosti": [
+        "Usluge",
+        "Građevinarstvo"
+      ],
+      "tipoviFirme": [],
+      "radnaMesta": [],
+      "velicineFirme": [],
+      "negacije": [],
+      "stanjaFirme": [],
+      "tipoviSeminara": [
+        "2c2d7d2ed060c3c06adba1ac",
+        "dca07ae64d8dd7e9f34aba4f"
+      ],
+      "seminari": [],
+      "_id": "d1080b6617d16cf3dbe62747",
+      "__v": 0
+    },
+    {
+      "nazivPretrage": "characterization e-mail whose",
+      "mesta": [
+        "eb1cde952aa0ffa90db36d83",
+        "f3b3aed3a8ce86c42fbcfdda"
+      ],
+      "delatnosti": [
+        "IT",
+        "Obrazovanje"
+      ],
+      "tipoviFirme": [],
+      "radnaMesta": [],
+      "velicineFirme": [],
+      "negacije": [],
+      "stanjaFirme": [],
+      "tipoviSeminara": [
+        "2c2d7d2ed060c3c06adba1ac",
+        "dca07ae64d8dd7e9f34aba4f"
+      ],
+      "seminari": [],
+      "_id": "287ea7b8ddb51cd51de934aa",
+      "__v": 0
+    },
+    {
+      "nazivPretrage": "govern unexpectedly till",
+      "mesta": [
+        "3d6c99df614ecf1ca089decb",
+        "8bd5fca7ddf006f33a1fa0bb"
+      ],
+      "delatnosti": [
+        "Trgovina",
+        "IT"
+      ],
+      "tipoviFirme": [],
+      "radnaMesta": [],
+      "velicineFirme": [],
+      "negacije": [],
+      "stanjaFirme": [],
+      "tipoviSeminara": [
+        "2c2d7d2ed060c3c06adba1ac",
+        "dca07ae64d8dd7e9f34aba4f"
+      ],
+      "seminari": [],
+      "_id": "aa0b596add8becda71afca4b",
+      "__v": 0
+    }
   ]
 }
