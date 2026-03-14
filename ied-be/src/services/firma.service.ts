@@ -12,7 +12,9 @@ import { getZaposleniIdsFromSeminars } from "./seminar.service";
 
 export const findById = async (id: string): Promise<FirmaType | null> => {
   try {
-    return await Firma.findById(id).lean();
+    return await Firma.findById(id)
+      .populate("mesto_id", "naziv_mesto postanski_broj")
+      .lean();
   } catch (error) {
     console.error("Error finding firma by id:", error);
     throw error;
