@@ -1,3 +1,14 @@
+## [1.13.0](https://github.com/BogdanRaicevic/ied-projects/compare/v1.12.1...v1.13.0) (2026-03-14)
+
+### Features
+
+* fix tip_seminara usage and add new APIs ([c656ac7](https://github.com/BogdanRaicevic/ied-projects/commit/c656ac76819f39cec04d19f6918ae3fc5283a83f))
+
+### Bug Fixes
+
+* guard against bad ids ([97a5478](https://github.com/BogdanRaicevic/ied-projects/commit/97a547880a180021249521108751fafc64bb4ca7))
+* remove console.log ([e2f39fb](https://github.com/BogdanRaicevic/ied-projects/commit/e2f39fb4f9965af1b9504a5be097f2ed7a9d0255))
+
 ## [1.12.1](https://github.com/BogdanRaicevic/ied-projects/compare/v1.12.0...v1.12.1) (2026-02-26)
 
 ### Bug Fixes
