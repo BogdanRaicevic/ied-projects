@@ -31,7 +31,7 @@ const defaultFirmaData: FirmaType = {
   maticni_broj: "",
   delatnost: "",
   prijavljeni: true,
-  mesto: "",
+  mesto: undefined,
 };
 
 const defaultZaposleniData: ZaposleniType = {
