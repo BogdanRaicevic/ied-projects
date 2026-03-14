@@ -2117,7 +2117,7 @@
       "delatnost": "Saobraćaj",
       "stanje_firme": "aktivna",
       "prijavljeni": true,
-      "mesto_id": "9afeb30bd0abd1dacbb245aa",
+      "mesto": "9afeb30bd0abd1dacbb245aa",
       "zaposleni": [
         {
           "_id": "d1849cf0ca86bfbfdd6bce9e",
@@ -2143,7 +2143,7 @@
       "delatnost": "Proizvodnja",
       "stanje_firme": "blokada",
       "prijavljeni": true,
-      "mesto_id": "f3b3aed3a8ce86c42fbcfdda",
+      "mesto": "f3b3aed3a8ce86c42fbcfdda",
       "zaposleni": [
         {
           "_id": "a9d2c4dfdfe7ef4b457bcd0f",
@@ -2178,7 +2178,7 @@
       "delatnost": "Proizvodnja",
       "stanje_firme": "blokada",
       "prijavljeni": true,
-      "mesto_id": "eb1cde952aa0ffa90db36d83",
+      "mesto": "eb1cde952aa0ffa90db36d83",
       "zaposleni": [
         {
           "_id": "8a225e704455bdee3b8ad45d",
@@ -2267,7 +2267,7 @@
       "delatnost": "Usluge",
       "stanje_firme": "stecaj",
       "prijavljeni": false,
-      "mesto_id": "eb1cde952aa0ffa90db36d83",
+      "mesto": "eb1cde952aa0ffa90db36d83",
       "zaposleni": [
         {
           "_id": "e2f3aae11e80188211bfe7a5",
@@ -2356,7 +2356,7 @@
       "delatnost": "Usluge",
       "stanje_firme": "blokada",
       "prijavljeni": false,
-      "mesto_id": "3d6c99df614ecf1ca089decb",
+      "mesto": "3d6c99df614ecf1ca089decb",
       "zaposleni": [
         {
           "_id": "1ffde608eb58e5eb0dfee8b7",
@@ -2418,7 +2418,7 @@
       "delatnost": "Obrazovanje",
       "stanje_firme": "aktivna",
       "prijavljeni": false,
-      "mesto_id": "8bd5fca7ddf006f33a1fa0bb",
+      "mesto": "8bd5fca7ddf006f33a1fa0bb",
       "zaposleni": [
         {
           "_id": "f7c4de6f03aaced2a03b1762",
@@ -2498,7 +2498,7 @@
       "delatnost": "Saobraćaj",
       "stanje_firme": "blokada",
       "prijavljeni": true,
-      "mesto_id": "f3b3aed3a8ce86c42fbcfdda",
+      "mesto": "f3b3aed3a8ce86c42fbcfdda",
       "zaposleni": [
         {
           "_id": "9da893e4d7699ee76fbb6bbd",
@@ -2587,7 +2587,7 @@
       "delatnost": "Proizvodnja",
       "stanje_firme": "aktivna",
       "prijavljeni": false,
-      "mesto_id": "e644cdfeaeaf026ebdffefa7",
+      "mesto": "e644cdfeaeaf026ebdffefa7",
       "zaposleni": [
         {
           "_id": "aed3bfb926eecdffb5dad1da",
@@ -2622,7 +2622,7 @@
       "delatnost": "Građevinarstvo",
       "stanje_firme": "aktivna",
       "prijavljeni": false,
-      "mesto_id": "e644cdfeaeaf026ebdffefa7",
+      "mesto": "e644cdfeaeaf026ebdffefa7",
       "zaposleni": [
         {
           "_id": "b7b57f0e2734ded81c580c28",
@@ -2675,7 +2675,7 @@
       "delatnost": "IT",
       "stanje_firme": "stecaj",
       "prijavljeni": true,
-      "mesto_id": "9afeb30bd0abd1dacbb245aa",
+      "mesto": "9afeb30bd0abd1dacbb245aa",
       "zaposleni": [
         {
           "_id": "ea564e05bfa99ebad9a9a215",
@@ -2755,7 +2755,7 @@
       "delatnost": "Trgovina",
       "stanje_firme": "stecaj",
       "prijavljeni": false,
-      "mesto_id": "9afeb30bd0abd1dacbb245aa",
+      "mesto": "9afeb30bd0abd1dacbb245aa",
       "zaposleni": [
         {
           "_id": "a8cb6fef8cc0aa7c35261282",
@@ -2817,7 +2817,7 @@
       "delatnost": "Građevinarstvo",
       "stanje_firme": "blokada",
       "prijavljeni": true,
-      "mesto_id": "f3b3aed3a8ce86c42fbcfdda",
+      "mesto": "f3b3aed3a8ce86c42fbcfdda",
       "zaposleni": [
         {
           "_id": "b96cdec6580aecc89cabccd8",
@@ -2870,7 +2870,7 @@
       "delatnost": "IT",
       "stanje_firme": "aktivna",
       "prijavljeni": false,
-      "mesto_id": "f3b3aed3a8ce86c42fbcfdda",
+      "mesto": "f3b3aed3a8ce86c42fbcfdda",
       "zaposleni": [
         {
           "_id": "918c8dc353d1ebca9ac0fbcd",
@@ -2905,7 +2905,7 @@
       "delatnost": "Saobraćaj",
       "stanje_firme": "aktivna",
       "prijavljeni": false,
-      "mesto_id": "9afeb30bd0abd1dacbb245aa",
+      "mesto": "9afeb30bd0abd1dacbb245aa",
       "zaposleni": [
         {
           "_id": "c20a41f31a38cffeaaade5d3",
@@ -2931,7 +2931,7 @@
       "delatnost": "Trgovina",
       "stanje_firme": "aktivna",
       "prijavljeni": false,
-      "mesto_id": "9afeb30bd0abd1dacbb245aa",
+      "mesto": "9afeb30bd0abd1dacbb245aa",
       "zaposleni": [
         {
           "_id": "3aeb6cce516a6e14f33d37b0",
@@ -3002,7 +3002,7 @@
       "delatnost": "Saobraćaj",
       "stanje_firme": "stecaj",
       "prijavljeni": false,
-      "mesto_id": "8bd5fca7ddf006f33a1fa0bb",
+      "mesto": "8bd5fca7ddf006f33a1fa0bb",
       "zaposleni": [
         {
           "_id": "20bc608a33bcbba8865eca18",
@@ -3091,7 +3091,7 @@
       "delatnost": "Proizvodnja",
       "stanje_firme": "stecaj",
       "prijavljeni": false,
-      "mesto_id": "7fb45baeeb5f8a47e6abce2e",
+      "mesto": "7fb45baeeb5f8a47e6abce2e",
       "zaposleni": [
         {
           "_id": "aabfc1d9841ec39e49ca59cc",
@@ -3126,7 +3126,7 @@
       "delatnost": "Građevinarstvo",
       "stanje_firme": "blokada",
       "prijavljeni": true,
-      "mesto_id": "7fb45baeeb5f8a47e6abce2e",
+      "mesto": "7fb45baeeb5f8a47e6abce2e",
       "zaposleni": [
         {
           "_id": "4ef8fdcdf538f2f73fa791d6",
@@ -3161,7 +3161,7 @@
       "delatnost": "Građevinarstvo",
       "stanje_firme": "blokada",
       "prijavljeni": false,
-      "mesto_id": "e644cdfeaeaf026ebdffefa7",
+      "mesto": "e644cdfeaeaf026ebdffefa7",
       "zaposleni": [
         {
           "_id": "fce4df8b03ffc8bd6d6c82ea",
@@ -3232,7 +3232,7 @@
       "delatnost": "Usluge",
       "stanje_firme": "stecaj",
       "prijavljeni": false,
-      "mesto_id": "f3b3aed3a8ce86c42fbcfdda",
+      "mesto": "f3b3aed3a8ce86c42fbcfdda",
       "zaposleni": [
         {
           "_id": "ad1f7859ca9eace2bad7f1b1",
@@ -3258,7 +3258,7 @@
       "delatnost": "Saobraćaj",
       "stanje_firme": "blokada",
       "prijavljeni": true,
-      "mesto_id": "8bd5fca7ddf006f33a1fa0bb",
+      "mesto": "8bd5fca7ddf006f33a1fa0bb",
       "zaposleni": [
         {
           "_id": "f1876a95f549fa5d7baa56cc",
@@ -3320,7 +3320,7 @@
       "delatnost": "Usluge",
       "stanje_firme": "aktivna",
       "prijavljeni": false,
-      "mesto_id": "3d6c99df614ecf1ca089decb",
+      "mesto": "3d6c99df614ecf1ca089decb",
       "zaposleni": [
         {
           "_id": "fb252014aaf9253ff75e7abc",
@@ -3409,7 +3409,7 @@
       "delatnost": "IT",
       "stanje_firme": "blokada",
       "prijavljeni": false,
-      "mesto_id": "9afeb30bd0abd1dacbb245aa",
+      "mesto": "9afeb30bd0abd1dacbb245aa",
       "zaposleni": [
         {
           "_id": "1be3ecfece8ca8e2e2bda41f",
@@ -3435,7 +3435,7 @@
       "delatnost": "IT",
       "stanje_firme": "blokada",
       "prijavljeni": true,
-      "mesto_id": "8bd5fca7ddf006f33a1fa0bb",
+      "mesto": "8bd5fca7ddf006f33a1fa0bb",
       "zaposleni": [
         {
           "_id": "8ed5a36b7ad5a2c74c4e63f6",
@@ -3515,7 +3515,7 @@
       "delatnost": "IT",
       "stanje_firme": "blokada",
       "prijavljeni": false,
-      "mesto_id": "f3b3aed3a8ce86c42fbcfdda",
+      "mesto": "f3b3aed3a8ce86c42fbcfdda",
       "zaposleni": [
         {
           "_id": "2ca210eedcb47c6b8f4cdbcc",
@@ -3568,7 +3568,7 @@
       "delatnost": "Saobraćaj",
       "stanje_firme": "stecaj",
       "prijavljeni": true,
-      "mesto_id": "9afeb30bd0abd1dacbb245aa",
+      "mesto": "9afeb30bd0abd1dacbb245aa",
       "zaposleni": [
         {
           "_id": "4db380ebd41989cf1eb4d93e",
@@ -3621,7 +3621,7 @@
       "delatnost": "Saobraćaj",
       "stanje_firme": "stecaj",
       "prijavljeni": false,
-      "mesto_id": "7fb45baeeb5f8a47e6abce2e",
+      "mesto": "7fb45baeeb5f8a47e6abce2e",
       "zaposleni": [
         {
           "_id": "9b92fcbc28b96e648ea89a4c",
@@ -3665,7 +3665,7 @@
       "delatnost": "Usluge",
       "stanje_firme": "stecaj",
       "prijavljeni": true,
-      "mesto_id": "8bd5fca7ddf006f33a1fa0bb",
+      "mesto": "8bd5fca7ddf006f33a1fa0bb",
       "zaposleni": [
         {
           "_id": "a7bd06edcac7cdce0be2fb60",
@@ -3718,7 +3718,7 @@
       "delatnost": "Proizvodnja",
       "stanje_firme": "stecaj",
       "prijavljeni": true,
-      "mesto_id": "eb1cde952aa0ffa90db36d83",
+      "mesto": "eb1cde952aa0ffa90db36d83",
       "zaposleni": [
         {
           "_id": "47f5669e52fe5afebdcc7eeb",
@@ -3762,7 +3762,7 @@
       "delatnost": "Građevinarstvo",
       "stanje_firme": "aktivna",
       "prijavljeni": true,
-      "mesto_id": "7fb45baeeb5f8a47e6abce2e",
+      "mesto": "7fb45baeeb5f8a47e6abce2e",
       "zaposleni": [
         {
           "_id": "64f47cca9e8da8c1d9ecd9dd",
@@ -3806,7 +3806,7 @@
       "delatnost": "Saobraćaj",
       "stanje_firme": "blokada",
       "prijavljeni": false,
-      "mesto_id": "9afeb30bd0abd1dacbb245aa",
+      "mesto": "9afeb30bd0abd1dacbb245aa",
       "zaposleni": [
         {
           "_id": "a5ca9e5039d78ba6fb8bcba7",
@@ -3877,7 +3877,7 @@
       "delatnost": "Usluge",
       "stanje_firme": "aktivna",
       "prijavljeni": false,
-      "mesto_id": "7fb45baeeb5f8a47e6abce2e",
+      "mesto": "7fb45baeeb5f8a47e6abce2e",
       "zaposleni": [
         {
           "_id": "cef168e28cbcaf1a5573fdc6",
@@ -3957,7 +3957,7 @@
       "delatnost": "Usluge",
       "stanje_firme": "blokada",
       "prijavljeni": true,
-      "mesto_id": "e644cdfeaeaf026ebdffefa7",
+      "mesto": "e644cdfeaeaf026ebdffefa7",
       "zaposleni": [
         {
           "_id": "b6b408fefd38ba5c6b8d3be6",
@@ -4046,7 +4046,7 @@
       "delatnost": "Proizvodnja",
       "stanje_firme": "aktivna",
       "prijavljeni": false,
-      "mesto_id": "9afeb30bd0abd1dacbb245aa",
+      "mesto": "9afeb30bd0abd1dacbb245aa",
       "zaposleni": [
         {
           "_id": "a993105b9edcae1242b7406c",
@@ -4072,7 +4072,7 @@
       "delatnost": "Proizvodnja",
       "stanje_firme": "stecaj",
       "prijavljeni": true,
-      "mesto_id": "9afeb30bd0abd1dacbb245aa",
+      "mesto": "9afeb30bd0abd1dacbb245aa",
       "zaposleni": [
         {
           "_id": "fa17b23f5ea63fd6ecbda6eb",
@@ -4116,7 +4116,7 @@
       "delatnost": "Trgovina",
       "stanje_firme": "aktivna",
       "prijavljeni": true,
-      "mesto_id": "7cd046d13bfcecf5d90febfa",
+      "mesto": "7cd046d13bfcecf5d90febfa",
       "zaposleni": [
         {
           "_id": "3081dacadf541f8d193fccfa",
@@ -4169,7 +4169,7 @@
       "delatnost": "Obrazovanje",
       "stanje_firme": "aktivna",
       "prijavljeni": false,
-      "mesto_id": "eb1cde952aa0ffa90db36d83",
+      "mesto": "eb1cde952aa0ffa90db36d83",
       "zaposleni": [
         {
           "_id": "c9171a0b822c9dce1ab5dccc",
@@ -4249,7 +4249,7 @@
       "delatnost": "Usluge",
       "stanje_firme": "stecaj",
       "prijavljeni": true,
-      "mesto_id": "eb1cde952aa0ffa90db36d83",
+      "mesto": "eb1cde952aa0ffa90db36d83",
       "zaposleni": [
         {
           "_id": "bd8f2945ac7fc682d732cbe7",
@@ -4302,7 +4302,7 @@
       "delatnost": "Proizvodnja",
       "stanje_firme": "stecaj",
       "prijavljeni": true,
-      "mesto_id": "7cd046d13bfcecf5d90febfa",
+      "mesto": "7cd046d13bfcecf5d90febfa",
       "zaposleni": [
         {
           "_id": "9aafbcbc7a0dec2b1fa7feab",
@@ -4337,7 +4337,7 @@
       "delatnost": "IT",
       "stanje_firme": "blokada",
       "prijavljeni": true,
-      "mesto_id": "f3b3aed3a8ce86c42fbcfdda",
+      "mesto": "f3b3aed3a8ce86c42fbcfdda",
       "zaposleni": [
         {
           "_id": "9e5f37dafaf44b13a2991adb",
@@ -4372,7 +4372,7 @@
       "delatnost": "IT",
       "stanje_firme": "aktivna",
       "prijavljeni": true,
-      "mesto_id": "eb1cde952aa0ffa90db36d83",
+      "mesto": "eb1cde952aa0ffa90db36d83",
       "zaposleni": [
         {
           "_id": "65005438eddeaf35d01d9f83",
@@ -4398,7 +4398,7 @@
       "delatnost": "Trgovina",
       "stanje_firme": "blokada",
       "prijavljeni": false,
-      "mesto_id": "7cd046d13bfcecf5d90febfa",
+      "mesto": "7cd046d13bfcecf5d90febfa",
       "zaposleni": [
         {
           "_id": "b2d1ff8ecfafe3aded3a0cbb",
@@ -4460,7 +4460,7 @@
       "delatnost": "Saobraćaj",
       "stanje_firme": "blokada",
       "prijavljeni": true,
-      "mesto_id": "9afeb30bd0abd1dacbb245aa",
+      "mesto": "9afeb30bd0abd1dacbb245aa",
       "zaposleni": [
         {
           "_id": "aedff3b54e2bab04de3a1d0b",
@@ -4540,7 +4540,7 @@
       "delatnost": "IT",
       "stanje_firme": "aktivna",
       "prijavljeni": false,
-      "mesto_id": "8bd5fca7ddf006f33a1fa0bb",
+      "mesto": "8bd5fca7ddf006f33a1fa0bb",
       "zaposleni": [
         {
           "_id": "b2ef8f4884752ae1fe5bdc01",
@@ -4620,7 +4620,7 @@
       "delatnost": "IT",
       "stanje_firme": "blokada",
       "prijavljeni": true,
-      "mesto_id": "7fb45baeeb5f8a47e6abce2e",
+      "mesto": "7fb45baeeb5f8a47e6abce2e",
       "zaposleni": [
         {
           "_id": "ccf4a2eeaaca0839ed2e0adc",
@@ -4709,7 +4709,7 @@
       "delatnost": "Obrazovanje",
       "stanje_firme": "stecaj",
       "prijavljeni": true,
-      "mesto_id": "f3b3aed3a8ce86c42fbcfdda",
+      "mesto": "f3b3aed3a8ce86c42fbcfdda",
       "zaposleni": [
         {
           "_id": "fce8c9bacabc638d227d35aa",
@@ -4753,7 +4753,7 @@
       "delatnost": "Obrazovanje",
       "stanje_firme": "blokada",
       "prijavljeni": false,
-      "mesto_id": "7cd046d13bfcecf5d90febfa",
+      "mesto": "7cd046d13bfcecf5d90febfa",
       "zaposleni": [
         {
           "_id": "af4d75783dbaca2fefdbd9fe",
@@ -4797,7 +4797,7 @@
       "delatnost": "Obrazovanje",
       "stanje_firme": "stecaj",
       "prijavljeni": false,
-      "mesto_id": "7fb45baeeb5f8a47e6abce2e",
+      "mesto": "7fb45baeeb5f8a47e6abce2e",
       "zaposleni": [
         {
           "_id": "1b9ffdb67bfb5cf6ebabbdbf",
@@ -4868,7 +4868,7 @@
       "delatnost": "Trgovina",
       "stanje_firme": "stecaj",
       "prijavljeni": true,
-      "mesto_id": "3d6c99df614ecf1ca089decb",
+      "mesto": "3d6c99df614ecf1ca089decb",
       "zaposleni": [
         {
           "_id": "1d2a6dd7320f5bcb46bac5a9",
@@ -4894,7 +4894,7 @@
       "delatnost": "Obrazovanje",
       "stanje_firme": "aktivna",
       "prijavljeni": true,
-      "mesto_id": "7fb45baeeb5f8a47e6abce2e",
+      "mesto": "7fb45baeeb5f8a47e6abce2e",
       "zaposleni": [
         {
           "_id": "0dc2fe42a315f8be5ba60de8",

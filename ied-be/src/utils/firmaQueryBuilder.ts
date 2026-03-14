@@ -40,9 +40,9 @@ export const createFirmaQuery = async (params: ParametriPretrage) => {
       .filter((id) => Types.ObjectId.isValid(id))
       .map((id) => new Types.ObjectId(id));
     if (negateMesto) {
-      query.mesto_id = { $nin: mestaIds };
+      query.mesto = { $nin: mestaIds };
     } else {
-      query.mesto_id = { $in: mestaIds };
+      query.mesto = { $in: mestaIds };
     }
   }
 

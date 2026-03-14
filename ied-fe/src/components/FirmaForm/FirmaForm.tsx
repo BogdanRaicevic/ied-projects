@@ -265,11 +265,11 @@ export const FirmaForm: React.FC<FirmaFormProps> = ({ inputCompany }) => {
             isOptionEqualToValue={(option, value) => option._id === value._id}
             renderInput={(params) => <TextField {...params} label="Mesto" />}
             onChange={(_event, newValue) => {
-              setValue("mesto_id", newValue?._id ?? "");
+              setValue("mesto", newValue?._id ?? "");
             }}
             value={
               mesta?.find((option) => {
-                const mesto = watch("mesto_id");
+                const mesto = watch("mesto");
                 const id =
                   typeof mesto === "object" && mesto !== null
                     ? mesto._id

@@ -190,7 +190,7 @@ export const searchFirmaSeminars = async (
     _id: Types.ObjectId;
     naziv_firme: string;
     e_mail: string;
-    mesto_id: { mesto_id: Types.ObjectId; naziv_mesto: string } | null;
+    mesto: { _id: Types.ObjectId; naziv_mesto: string } | null;
     tip_firme: string;
     delatnost: string;
   };
@@ -198,11 +198,11 @@ export const searchFirmaSeminars = async (
     _id: 1,
     naziv_firme: 1,
     e_mail: 1,
-    mesto_id: 1,
+    mesto: 1,
     tip_firme: 1,
     delatnost: 1,
   })
-    .populate("mesto_id", "naziv_mesto")
+    .populate("mesto", "naziv_mesto")
     .lean()) as unknown as FirmaProjection[];
 
   if (allMatchingFirmas.length === 0) {
@@ -256,7 +256,7 @@ export const searchFirmaSeminars = async (
         firmaId: aggData.firmaId,
         naziv: firma.naziv_firme,
         email: firma.e_mail,
-        mesto: firma.mesto_id?.naziv_mesto ?? "",
+        mesto: firma.mesto?.naziv_mesto ?? "",
         tipFirme: firma.tip_firme,
         delatnost: firma.delatnost,
         brojSeminara: aggData.seminars.length,
