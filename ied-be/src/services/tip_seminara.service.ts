@@ -41,6 +41,7 @@ export const updateTipSeminara = async (
   try {
     const result = await TipSeminara.findByIdAndUpdate(id, data, {
       new: true,
+      runValidators: true,
     }).lean();
 
     if (!result) {
