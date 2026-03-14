@@ -1,10 +1,13 @@
 import mongoose from "mongoose";
-import { describe, expect, it, vi } from "vitest";
+import { beforeAll, describe, expect, it, vi } from "vitest";
+import { Mesto } from "../../src/models/mesto.model";
 import * as firmaService from "../../src/services/firma.service";
 
 vi.mock("../../src/services/email_suppression.service", () => ({
   isEmailSuppressed: vi.fn().mockResolvedValue(false),
 }));
+
+const mestoId = new mongoose.Types.ObjectId();
 
 describe("firma.service", () => {
   const sampleFirmaData = {
@@ -13,13 +16,21 @@ describe("firma.service", () => {
     PIB: "123456789",
     telefon: "011-123-456",
     e_mail: "test@firma.rs",
-    mesto: "Beograd",
+    mesto: mestoId,
     tip_firme: "DOO",
     delatnost: "IT",
     velicina_firme: "mala",
     stanje_firme: "aktivna",
     prijavljeni: true,
   };
+
+  beforeAll(async () => {
+    await Mesto.create({
+      _id: mestoId,
+      naziv_mesto: "Beograd",
+      postanski_broj: "11000",
+    });
+  });
 
   describe("create", () => {
     it("should create a new firma", async () => {
@@ -30,6 +41,13 @@ describe("firma.service", () => {
       expect(result.e_mail).toBe(sampleFirmaData.e_mail);
       expect(result.PIB).toBe(sampleFirmaData.PIB);
       expect(result._id).toBeDefined();
+    });
+
+    it("should create a firma with mesto", async () => {
+      const result = await firmaService.create(sampleFirmaData);
+
+      expect(result).toBeDefined();
+      expect(result.mesto).toBeDefined();
     });
 
     it("should persist firma to database", async () => {
@@ -48,6 +66,16 @@ describe("firma.service", () => {
 
       expect(found).toBeDefined();
       expect(found?.naziv_firme).toBe(sampleFirmaData.naziv_firme);
+    });
+
+    it("should populate mesto when finding by id", async () => {
+      const created = await firmaService.create(sampleFirmaData);
+      const found = await firmaService.findById(created._id.toString());
+
+      expect(found).toBeDefined();
+      expect(found?.mesto).toBeDefined();
+      expect((found?.mesto as any).naziv_mesto).toBe("Beograd");
+      expect((found?.mesto as any).postanski_broj).toBe("11000");
     });
 
     it("should return null for non-existent id", async () => {
