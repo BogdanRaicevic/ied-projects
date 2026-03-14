@@ -136,7 +136,7 @@ function generateFirma(mesta: MestoType[], overrides: any = {}) {
     velicina_firme: faker.helpers.arrayElement(TEST_DATA_CONFIG.VELICINA_FIRME),
     stanje_firme: faker.helpers.arrayElement(TEST_DATA_CONFIG.STANJE_FIRME),
     prijavljeni: faker.datatype.boolean(),
-    mesto_id: selectedMesto._id,
+    mesto: selectedMesto._id,
     ...overrides,
   };
 }
