@@ -35,7 +35,6 @@ router.post(
     next: NextFunction,
   ) => {
     try {
-      console.log("req.body", req.body);
       const parsed = TipSeminaraSchema.safeParse(req.body);
       if (!parsed.success) {
         res.status(400).json({ message: "Invalid request body" });
@@ -58,7 +57,6 @@ router.put(
   ) => {
     try {
       const parsed = TipSeminaraSchema.safeParse(req.body);
-      console.log("parsed", parsed);
       if (!parsed.success) {
         res.status(400).json({ message: "Invalid request body" });
         return;
