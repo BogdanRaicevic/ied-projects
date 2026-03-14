@@ -20,7 +20,7 @@ export const createTipSeminara = async (
 ): Promise<TipSeminaraFromDB> => {
   try {
     const response = await axiosInstanceWithAuth.post(
-      `/api/tip-seminara`,
+      `/api/tip-seminara/create`,
       data,
     );
     return response.data;
@@ -36,7 +36,7 @@ export const updateTipSeminara = async (
 ): Promise<TipSeminaraFromDB> => {
   try {
     const response = await axiosInstanceWithAuth.put(
-      `/api/tip-seminara/${id}`,
+      `/api/tip-seminara/update/${id}`,
       data,
     );
     return response.data;
@@ -49,7 +49,7 @@ export const updateTipSeminara = async (
 export const deleteTipSeminara = async (id: string) => {
   try {
     const response = await axiosInstanceWithAuth.delete(
-      `/api/tip-seminara/${id}`,
+      `/api/tip-seminara/delete/${id}`,
     );
     return response.data;
   } catch (error) {
