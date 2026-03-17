@@ -540,24 +540,41 @@ async function removePrijavaComment(
   const regex = new RegExp(patternString, "g");
 
   // Find and update Firma and Zaposleni comments
-  const firma = await Firma.findById(prijava.firma_id);
+  const firma = await Firma.findById(prijava.firma_id).lean();
   if (!firma) {
     return;
   }
 
-  if (firma?.komentar) {
-    firma.komentar = firma.komentar.replace(regex, "");
+  const updateOps: Record<string, any> = {};
+
+  if (firma.komentar) {
+    updateOps["komentar"] = firma.komentar.replace(regex, "");
   }
 
-  const zaposleni = firma?.zaposleni.find(
+  const zaposleni = firma.zaposleni.find(
     (z) => z._id.toString() === zaposleni_id,
   );
 
   if (zaposleni?.komentar) {
-    zaposleni.komentar = zaposleni.komentar.replace(regex, "");
+    updateOps["zaposleni.$[z].komentar"] = zaposleni.komentar.replace(
+      regex,
+      "",
+    );
   }
 
-  await firma.save();
+  if (Object.keys(updateOps).length > 0) {
+    const updateOptions: any = {};
+    if (updateOps["zaposleni.$[z].komentar"] !== undefined) {
+      updateOptions.arrayFilters = [
+        { "z._id": new Types.ObjectId(zaposleni_id) },
+      ];
+    }
+    await Firma.updateOne(
+      { _id: firma._id },
+      { $set: updateOps },
+      updateOptions,
+    );
+  }
 }
 
 function escapeRegExp(string: string) {

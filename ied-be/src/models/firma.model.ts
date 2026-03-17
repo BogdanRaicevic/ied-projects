@@ -56,4 +56,4 @@ const firmaSchema = new Schema<FirmaType>(
 
 const Firma = model<FirmaType>("Firma", firmaSchema);
 
-export { type FirmaType, Firma };
+export { Firma, type FirmaType };
