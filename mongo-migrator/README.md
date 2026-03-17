@@ -18,3 +18,5 @@ To restore a gz file run `mongorestore --uri="$MONGO_URI" --archive=/path/to/bac
 mongorestore --uri="$MONGO_URI" --archive=backup-2025-02-08.gz --gzip
 
 Example when executing from folder where backup is located => `mongorestore --uri="mongodb://localhost:27017/ied" --archive=backup-2025-08-23.gz --gzip`
+
+for podman: `podman exec -i mongodb-server mongorestore --uri="mongodb://localhost:27017/ied" --archive --gzip < backup-2026-03-16.gz`
