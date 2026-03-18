@@ -1,4 +1,5 @@
 import { clerkMiddleware, requireAuth } from "@clerk/express";
+import * as Sentry from "@sentry/node";
 import cors from "cors";
 import express from "express";
 import { connectDB } from "./database/db";
@@ -70,6 +71,8 @@ app.use(
 );
 app.use("/api/tip-seminara", requireAuth(), hasPermission, tipSeminaraRoutes);
 app.use("/api/test", testRoutes);
+
+Sentry.setupExpressErrorHandler(app);
 
 app.use(errorWrapper);
 
