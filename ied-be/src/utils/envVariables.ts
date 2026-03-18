@@ -4,6 +4,8 @@ import "dotenv/config";
 const config = process.env;
 
 export const env = {
+  serverName: config.SERVER_NAME,
+  nodeEnv: config.NODE_ENV || "development",
   be: {
     appPort: Number(config.BE_APP_PORT),
   },
@@ -24,5 +26,8 @@ export const env = {
     accessKeyId: config.AWS_ACCESS_KEY_ID,
     secretAccessKey: config.AWS_SECRET_ACCESS_KEY,
     shouldBackup: config.BACKUP_TO_S3 === "true",
+  },
+  sentry: {
+    dsn: config.SENTRY_DSN,
   },
 };
