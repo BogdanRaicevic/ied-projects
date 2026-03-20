@@ -1,7 +1,7 @@
 import { ContentCopy } from "@mui/icons-material";
 import BusinessIcon from "@mui/icons-material/Business";
-import { Icon, Link } from "@mui/material";
-import type { FirmaType } from "ied-shared";
+import { colors, Icon, Link } from "@mui/material";
+import { FirmaSchema, type FirmaType } from "ied-shared";
 import type { MRT_ColumnDef } from "material-react-table";
 
 export const firmaColumns: MRT_ColumnDef<FirmaType>[] = [
@@ -56,6 +56,15 @@ export const firmaColumns: MRT_ColumnDef<FirmaType>[] = [
       fullWidth: true,
       startIcon: <ContentCopy />,
       sx: { justifyContent: "flex-start" },
+    },
+    muiTableBodyCellProps({ cell }) {
+      const email = cell.getValue() as string;
+      const isValid = FirmaSchema.shape.e_mail.safeParse(email).success;
+      return {
+        sx: {
+          backgroundColor: isValid ? "inherit" : colors.red[100],
+        },
+      };
     },
   },
 
