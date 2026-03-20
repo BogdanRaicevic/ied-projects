@@ -44,6 +44,7 @@ export const FirmaForm: React.FC<FirmaFormProps> = ({ inputCompany }) => {
     reset,
     watch,
     setValue,
+    trigger,
   } = useForm<FirmaType>({
     resolver: zodResolver(FirmaSchema),
     defaultValues: inputCompany,
@@ -66,7 +67,10 @@ export const FirmaForm: React.FC<FirmaFormProps> = ({ inputCompany }) => {
 
   useEffect(() => {
     reset(inputCompany);
-  }, [inputCompany, reset]);
+    if (inputCompany?.e_mail) {
+      trigger("e_mail");
+    }
+  }, [inputCompany, reset, trigger]);
 
   const onError = (errors: any) => {
     console.error("Form validation errors:", errors);
