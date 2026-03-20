@@ -1,3 +1,9 @@
+## [1.13.3](https://github.com/BogdanRaicevic/ied-projects/compare/v1.13.2...v1.13.3) (2026-03-20)
+
+### Bug Fixes
+
+* Add migration to remove invalid string `mesto` fields from `firmas` collection documents. ([64f0b44](https://github.com/BogdanRaicevic/ied-projects/commit/64f0b44cc252c6578e1b476765406b24f0906e9f))
+
 ## [1.13.2](https://github.com/BogdanRaicevic/ied-projects/compare/v1.13.1...v1.13.2) (2026-03-17)
 
 ### Bug Fixes
