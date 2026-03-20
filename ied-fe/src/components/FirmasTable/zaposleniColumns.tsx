@@ -1,5 +1,6 @@
 import { ContentCopy } from "@mui/icons-material";
-import type { ZaposleniType } from "ied-shared";
+import { colors } from "@mui/material";
+import { ZaposleniSchema, type ZaposleniType } from "ied-shared";
 import type { MRT_ColumnDef } from "material-react-table";
 
 export const zaposleniColumns: MRT_ColumnDef<ZaposleniType>[] = [
@@ -30,6 +31,16 @@ export const zaposleniColumns: MRT_ColumnDef<ZaposleniType>[] = [
       fullWidth: true,
       startIcon: <ContentCopy />,
       sx: { justifyContent: "flex-start" },
+    },
+    muiTableBodyCellProps: ({ cell }) => {
+      const email = cell.getValue<string>();
+      const isValid = ZaposleniSchema.shape.e_mail.safeParse(email).success;
+
+      return {
+        sx: {
+          backgroundColor: isValid ? "inherit" : colors.red[100],
+        },
+      };
     },
   },
   {
