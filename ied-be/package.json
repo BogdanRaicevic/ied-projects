@@ -42,7 +42,7 @@
     "@clerk/express": "^1.7.76",
     "cors": "^2.8.6",
     "cron": "^4.4.0",
-    "csv-parse": "^6.2.0",
+    "csv-parse": "^6.2.1",
     "date-fns": "^4.1.0",
     "docxtemplater": "^3.68.3",
     "dotenv": "^17.3.1",
