@@ -74,6 +74,7 @@ export const search = async (
 
   return {
     cursor: Firma.find(mongoQuery, { zaposleni: 0 })
+      .populate("mesto", "naziv_mesto postanski_broj")
       .sort({ naziv_firme: 1 })
       .skip(skip)
       .limit(pageSize)

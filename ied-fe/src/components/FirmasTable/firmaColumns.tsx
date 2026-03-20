@@ -66,6 +66,12 @@ export const firmaColumns: MRT_ColumnDef<FirmaType>[] = [
   {
     header: "Mesto",
     accessorKey: "mesto",
+    Cell: ({ row }: { row: { original: FirmaType } }) => {
+      const mesto = row.original.mesto;
+      return typeof mesto === "object" && mesto !== null
+        ? mesto.naziv_mesto
+        : "";
+    },
   },
   {
     header: "Postanski broj",
