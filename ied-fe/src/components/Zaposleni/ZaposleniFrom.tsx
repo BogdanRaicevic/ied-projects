@@ -1,7 +1,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Box, Button, TextField, Typography } from "@mui/material";
 import { ZaposleniSchema, type ZaposleniType } from "ied-shared";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useEmailSuppression } from "../../hooks/firma/useEmailSuppression";
 import { useGetRadnaMestaNames } from "../../hooks/radnoMesto/useRadnoMestoQueries";
@@ -19,6 +19,7 @@ export function ZaposleniForm({ zaposleni, onSubmit }: ZaposleniFormProps) {
     handleSubmit,
     watch,
     setValue,
+    trigger,
     formState: { errors },
   } = useForm<ZaposleniType>({
     resolver: zodResolver(ZaposleniSchema),
@@ -59,6 +60,12 @@ export function ZaposleniForm({ zaposleni, onSubmit }: ZaposleniFormProps) {
 
   const { suppressionWarning, handleMailingListChange, withEmailBlur } =
     useEmailSuppression(email, setValue);
+
+  useEffect(() => {
+    if (zaposleni?.e_mail) {
+      trigger("e_mail");
+    }
+  }, [zaposleni?.e_mail, trigger]);
 
   return (
     <Box component="form">
