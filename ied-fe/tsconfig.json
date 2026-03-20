@@ -15,7 +15,9 @@
     "jsx": "react-jsx",
     "experimentalDecorators": true,
     "noUnusedLocals": true,
-    "noUnusedParameters": true
-  },
+    "noUnusedParameters": true,
+    "sourceMap": true,
+    "inlineSources": true
+  },  
   "include": ["src", "vite.config.ts"]
 }
