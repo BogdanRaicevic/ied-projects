@@ -1,3 +1,16 @@
+## [1.14.0](https://github.com/BogdanRaicevic/ied-projects/compare/v1.13.3...v1.14.0) (2026-03-20)
+
+### Features
+
+* show badly formatted emails in the firma table ([bd0595e](https://github.com/BogdanRaicevic/ied-projects/commit/bd0595eba148eb91714a11248b4ec5d083c36166))
+* show errors for bad emails ([031bc6b](https://github.com/BogdanRaicevic/ied-projects/commit/031bc6bb3220ced8246c77065ac0dffdfc324f92))
+
+### Bug Fixes
+
+* badly formatted emails are colored red in zaposleni table ([a7f7567](https://github.com/BogdanRaicevic/ied-projects/commit/a7f756754437847ad9881920684b8651b9a5a35f))
+* on FE populate mesto with `naziv_mesto` instead of ObjectID ([d061925](https://github.com/BogdanRaicevic/ied-projects/commit/d061925a5305e3d7ce2aed5650456c3a8cbe7ba8))
+* Trigger email field validation on data load ([c9bbf32](https://github.com/BogdanRaicevic/ied-projects/commit/c9bbf32c1b0feb59653daea08d3d476d3630a341))
+
 ## [1.13.3](https://github.com/BogdanRaicevic/ied-projects/compare/v1.13.2...v1.13.3) (2026-03-20)
 
 ### Bug Fixes
