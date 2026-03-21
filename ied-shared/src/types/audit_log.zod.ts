@@ -51,11 +51,13 @@ export const AuditLogStatsByDateResponseSchema = z.object({
   averageEditStartTime: z.string(),
   averageEditEndTime: z.string(),
   averageTimeForGreatestGap: z.number(),
+  totalSeminarRegistrations: z.number(),
   dailyStats: z.array(
     z.object({
       date: z.string(),
       new: z.number(),
       deleted: z.number(),
+      seminarRegistrations: z.number().default(0),
       aggregatedUpdated: z.number(),
       earliestEdit: z.string(),
       latestEdit: z.string(),

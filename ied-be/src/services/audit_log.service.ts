@@ -6,6 +6,7 @@ import type {
   DailyStat,
 } from "ied-shared";
 import { AuditLog } from "./../models/audit_log.model";
+import { Seminar } from "../models/seminar.model";
 import { createAuditLogQuery } from "../utils/auditLogQueryBuilder";
 
 type AuditQuery = {
@@ -283,84 +284,136 @@ export const getUserChangesByDate = async (params: AuditLogQueryParams) => {
       }
     }
 
+    const seminarAggregatePromise = userEmail
+      ? Seminar.aggregate<{ _id: string; count: number }>([
+          // Unwind prijave to process each registration individually
+          { $unwind: "$prijave" },
+          // Match by komercijalista (email) within the date range
+          {
+            $match: {
+              "prijave.komercijalista": userEmail,
+              ...(dateFrom || dateTo
+                ? {
+                    "prijave.createdAt": {
+                      ...(dateFrom && { $gte: dateFrom }),
+                      ...(dateTo && { $lte: dateTo }),
+                    },
+                  }
+                : {}),
+            },
+          },
+          // Extract the date part of createdAt
+          {
+            $addFields: {
+              dateOnly: {
+                $dateToString: {
+                  format: "%Y-%m-%dT00:00:00.000Z",
+                  date: "$prijave.createdAt",
+                  timezone: "UTC",
+                },
+              },
+            },
+          },
+          // Count registrations per day
+          {
+            $group: {
+              _id: "$dateOnly",
+              count: { $sum: 1 },
+            },
+          },
+        ])
+      : Promise.resolve([] as { _id: string; count: number }[]);
+
     // TODO: Fix type issues below
-    const result = await AuditLog.aggregate<AggregateResult>([
-      // Match the user and model
-      { $match: matchConditions },
+    const [result, seminarResult] = await Promise.all([
+      AuditLog.aggregate<AggregateResult>([
+        // Match the user and model
+        { $match: matchConditions },
 
-      // Categorize each operation
-      {
-        $addFields: {
-          operationType: {
-            $switch: {
-              branches: [
-                // biome-ignore lint: MongoDB aggregation $switch requires "then" keyword
-                { case: { $eq: ["$before", null] }, then: "new" },
-                // biome-ignore lint: MongoDB aggregation $switch requires "then" keyword
-                { case: { $eq: ["$after", null] }, then: "deleted" },
-              ],
-              default: "updated",
+        // Categorize each operation
+        {
+          $addFields: {
+            operationType: {
+              $switch: {
+                branches: [
+                  // biome-ignore lint: MongoDB aggregation $switch requires "then" keyword
+                  { case: { $eq: ["$before", null] }, then: "new" },
+                  // biome-ignore lint: MongoDB aggregation $switch requires "then" keyword
+                  { case: { $eq: ["$after", null] }, then: "deleted" },
+                ],
+                default: "updated",
+              },
             },
-          },
-          // Extract date only (YYYY-MM-DD)
-          dateOnly: {
-            $dateToString: {
-              format: "%Y-%m-%dT00:00:00.000Z",
-              date: "$timestamp",
-              timezone: "UTC",
+            // Extract date only (YYYY-MM-DD)
+            dateOnly: {
+              $dateToString: {
+                format: "%Y-%m-%dT00:00:00.000Z",
+                date: "$timestamp",
+                timezone: "UTC",
+              },
             },
           },
         },
-      },
 
-      // Group by date and operation type
-      {
-        $facet: {
-          // Total counts per date
-          totalCounts: [
-            {
-              $group: {
-                _id: {
-                  date: "$dateOnly",
-                  operationType: "$operationType",
-                },
-                count: { $sum: 1 },
-              },
-            },
-          ],
-          // Unique counts per date (aggregated by resource.id)
-          uniqueCounts: [
-            {
-              $group: {
-                _id: {
-                  date: "$dateOnly",
-                  operationType: "$operationType",
-                  resourceId: "$resource.id",
+        // Group by date and operation type
+        {
+          $facet: {
+            // Total counts per date
+            totalCounts: [
+              {
+                $group: {
+                  _id: {
+                    date: "$dateOnly",
+                    operationType: "$operationType",
+                  },
+                  count: { $sum: 1 },
                 },
               },
-            },
-            {
-              $group: {
-                _id: {
-                  date: "$_id.date",
-                  operationType: "$_id.operationType",
+            ],
+            // Unique counts per date (aggregated by resource.id)
+            uniqueCounts: [
+              {
+                $group: {
+                  _id: {
+                    date: "$dateOnly",
+                    operationType: "$operationType",
+                    resourceId: "$resource.id",
+                  },
                 },
-                count: { $sum: 1 },
               },
-            },
-          ],
-          // Timestamps per date for time analysis
-          timestamps: [
-            {
-              $group: {
-                _id: "$dateOnly",
-                timestamps: { $push: "$timestamp" },
+              {
+                $group: {
+                  _id: {
+                    date: "$_id.date",
+                    operationType: "$_id.operationType",
+                  },
+                  count: { $sum: 1 },
+                },
               },
-            },
-          ],
+            ],
+            // Timestamps per date for time analysis
+            timestamps: [
+              {
+                $group: {
+                  _id: "$dateOnly",
+                  timestamps: { $push: "$timestamp" },
+                },
+              },
+            ],
+          },
         },
-      },
+      ]),
+      seminarAggregatePromise,
     ]);
+
+    console.log(
+      "Audit log aggregation result:",
+      JSON.stringify(result, null, 2),
+    );
+    console.log(
+      "Seminar aggregation result:",
+      JSON.stringify(seminarResult, null, 2),
+    );
 
     // Transform the result into a map grouped by date
     const dateMap = new Map<string, DailyStat>();
@@ -375,6 +428,7 @@ export const getUserChangesByDate = async (params: AuditLogQueryParams) => {
       estimatedWorkTime: 0,
       averageTimeBetweenEntries: 0,
       biggestGapBetweenEntries: 0,
+      seminarRegistrations: 0,
     };
 
     // Helper function to get or create date stats
@@ -479,6 +533,12 @@ export const getUserChangesByDate = async (params: AuditLogQueryParams) => {
       }
     }
 
+    // Merge seminar registration counts per day
+    for (const item of seminarResult) {
+      const dateStats = getOrCreateDateStats(item._id);
+      dateStats.seminarRegistrations = item.count;
+    }
+
     // Convert map to array and sort by date
     const dailyStats = Array.from(dateMap.values()).sort((a, b) =>
       a.date.localeCompare(b.date),
@@ -517,6 +577,11 @@ const calculateStatistics = (
     0,
   );
 
+  const totalSeminarRegistrations = dailyStats.reduce(
+    (sum, day) => sum + (day.seminarRegistrations || 0),
+    0,
+  );
+
   if (!dateFrom || !dateTo || dailyStats.length === 0) {
     return {
       totalNew,
@@ -530,6 +595,7 @@ const calculateStatistics = (
       averageTimeForGreatestGap: 0,
       totalWorkedDays: 0,
       totalUnworkedDays: 0,
+      totalSeminarRegistrations: 0,
     };
   }
 
@@ -645,5 +711,6 @@ const calculateStatistics = (
     averageTimeForGreatestGap,
     totalWorkedDays: dailyStats.length,
     totalUnworkedDays: countUnworkedDays(),
+    totalSeminarRegistrations,
   };
 };

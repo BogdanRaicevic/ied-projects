@@ -49,6 +49,11 @@ export default function AuditOverview({
         key: "averageUpdatesPerDay",
       },
       {
+        label: "Broj prijava na seminare",
+        value: auditData.totalSeminarRegistrations,
+        key: "totalSeminarRegistrations",
+      },
+      {
         label: "Broj dana sa izmenama u datom periodu",
         value:
           auditData.totalWorkedDays +
