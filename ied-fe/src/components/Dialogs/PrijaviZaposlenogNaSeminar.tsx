@@ -78,6 +78,7 @@ export default function PrijavaNaSeminarDialog({
       prisustvo,
       vrsta_prijave: vrstaPrijave,
       komercijalista: komercijalista || undefined,
+      createdAt: new Date(),
     };
 
     try {
