@@ -406,15 +406,6 @@ export const getUserChangesByDate = async (params: AuditLogQueryParams) => {
       seminarAggregatePromise,
     ]);
 
-    console.log(
-      "Audit log aggregation result:",
-      JSON.stringify(result, null, 2),
-    );
-    console.log(
-      "Seminar aggregation result:",
-      JSON.stringify(seminarResult, null, 2),
-    );
-
     // Transform the result into a map grouped by date
     const dateMap = new Map<string, DailyStat>();
 
