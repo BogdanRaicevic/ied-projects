@@ -1,4 +1,8 @@
 import { type Document, model, Schema, type Types } from "mongoose";
+import {
+  type LastContactedType,
+  lastContactedSchema,
+} from "./last_contacted.model";
 import { type Zaposleni, zaposleniSchema } from "./zaposleni.model";
 
 type FirmaType = Document & {
@@ -24,6 +28,7 @@ type FirmaType = Document & {
   maticni_broj: string;
   prijavljeni: boolean;
   mesto: Types.ObjectId;
+  lastContacted: LastContactedType[];
 };
 
 const firmaSchema = new Schema<FirmaType>(
@@ -48,6 +53,7 @@ const firmaSchema = new Schema<FirmaType>(
     maticni_broj: String,
     prijavljeni: { type: Boolean, default: true },
     mesto: { type: Schema.Types.ObjectId, ref: "Mesto" },
+    lastContacted: { type: [lastContactedSchema], default: [] },
   },
   {
     timestamps: { createdAt: "created_at", updatedAt: "updated_at" },

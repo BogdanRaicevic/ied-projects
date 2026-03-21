@@ -36,7 +36,7 @@ export const updateSeminar = async (
   }
 
   const updatedSeminar = await Seminar.findByIdAndUpdate(id, dataToUpdate, {
-    new: true,
+    returnDocument: "after",
   }).lean();
 
   if (!updatedSeminar) {
@@ -112,7 +112,7 @@ export const createPrijava = async (
       "prijave.zaposleni_id": { $ne: trasnformedPrijava.zaposleni_id },
     },
     { $push: { prijave: trasnformedPrijava } },
-    { new: true },
+    { returnDocument: "after" },
   ).lean();
 
   return updatedSeminar;
@@ -133,7 +133,7 @@ export const updatePrijava = async (
   const updatedSeminar = await Seminar.findOneAndUpdate(
     { _id: seminar_id, "prijave._id": trasnformedPrijava._id },
     { $set: { "prijave.$": trasnformedPrijava } },
-    { new: true },
+    { returnDocument: "after" },
   ).lean();
 
   return updatedSeminar;
@@ -148,7 +148,7 @@ export const deletePrijava = async (
   const updatedSeminar = await Seminar.findOneAndUpdate(
     { _id: seminar_id, "prijave.zaposleni_id": zaposleni_id },
     { $pull: { prijave: { zaposleni_id } } },
-    { new: true },
+    { returnDocument: "after" },
   ).lean();
 
   return updatedSeminar;

@@ -40,7 +40,7 @@ export const updateTipSeminara = async (
 ): Promise<TipSeminaraFromDB> => {
   try {
     const result = await TipSeminara.findByIdAndUpdate(id, data, {
-      new: true,
+      returnDocument: "after",
       runValidators: true,
     }).lean();
 

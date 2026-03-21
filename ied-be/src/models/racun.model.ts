@@ -74,7 +74,7 @@ racunBaseSchema.pre("save", async function () {
       { _id: `${this.izdavacRacuna}_${this.tipRacuna}_${datePrefix}` },
       { $inc: { sequenceNumber: 1 } },
       {
-        new: true,
+        returnDocument: "after",
         upsert: true,
         setDefaultsOnInsert: true,
       },

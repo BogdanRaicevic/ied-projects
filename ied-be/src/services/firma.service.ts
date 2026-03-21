@@ -54,7 +54,7 @@ export const updateById = async (
     return await Firma.findOneAndUpdate(
       { _id: id },
       { $set: firmaData },
-      { new: true, runValidators: true },
+      { returnDocument: "after", runValidators: true },
     ).lean();
   } catch (error) {
     console.error("Error updating firma:", error);
@@ -238,7 +238,7 @@ export const createZaposleni = async (
     const updatedFirma = await Firma.findByIdAndUpdate(
       firmaId,
       { $push: { zaposleni: zaposleniData } },
-      { new: true, runValidators: true },
+      { returnDocument: "after", runValidators: true },
     ).lean();
 
     return updatedFirma;
@@ -277,7 +277,7 @@ export const updateZaposleni = async (
       { _id: firmaId, "zaposleni._id": zaposleniId },
       { $set: updateObject },
       {
-        new: true,
+        returnDocument: "after",
         runValidators: true,
       },
     ).lean();
@@ -294,7 +294,7 @@ export const deleteZaposleni = async (firmaId: string, zaposleniId: string) => {
     const updatedFirma = await Firma.findOneAndUpdate(
       { _id: firmaId, "zaposleni._id": zaposleniId },
       { $pull: { zaposleni: { _id: zaposleniId } } },
-      { new: true },
+      { returnDocument: "after" },
     ).lean();
 
     return updatedFirma;
