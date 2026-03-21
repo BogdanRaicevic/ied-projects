@@ -78,7 +78,6 @@ export default function PrijavaNaSeminarDialog({
       prisustvo,
       vrsta_prijave: vrstaPrijave,
       komercijalista: komercijalista || undefined,
-      createdAt: new Date(),
     };
 
     try {
@@ -246,17 +245,17 @@ export default function PrijavaNaSeminarDialog({
                   label="Komercijalista"
                   onChange={(e) => setKomercijalista(e.target.value)}
                 >
-                  <MenuItem value={"misa@economicdiplaomacy.co.rs"}>
-                    misa@economicdiplaomacy.co.rs
+                  <MenuItem value={"misa@economicdiplomacy.co.rs"}>
+                    misa@economicdiplomacy.co.rs
                   </MenuItem>
-                  <MenuItem value={"ivana@economicdiplaomacy.co.rs"}>
-                    ivana@economicdiplaomacy.co.rs
+                  <MenuItem value={"ivana@economicdiplomacy.co.rs"}>
+                    ivana@economicdiplomacy.co.rs
                   </MenuItem>
-                  <MenuItem value={"biljana@economicdiplaomacy.co.rs"}>
-                    biljana@economicdiplaomacy.co.rs
+                  <MenuItem value={"biljana@economicdiplomacy.co.rs"}>
+                    biljana@economicdiplomacy.co.rs
                   </MenuItem>
-                  <MenuItem value={"jsimovic@economicdiplaomacy.co.rs"}>
-                    jsimovic@economicdiplaomacy.co.rs
+                  <MenuItem value={"jsimovic@economicdiplomacy.co.rs"}>
+                    jsimovic@economicdiplomacy.co.rs
                   </MenuItem>
                   <MenuItem value={"cvetka@balkanskisavet.rs"}>
                     cvetka@balkanskisavet.rs
