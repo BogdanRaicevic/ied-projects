@@ -1,3 +1,14 @@
+## [1.16.0](https://github.com/BogdanRaicevic/ied-projects/compare/v1.15.0...v1.16.0) (2026-03-21)
+
+### Features
+
+* add komercijalista to prijava ([79b26e6](https://github.com/BogdanRaicevic/ied-projects/commit/79b26e6e7845c0d48ca8779bc7a2c17c2294d2d4))
+* add seminar registrations to audit log ([487859b](https://github.com/BogdanRaicevic/ied-projects/commit/487859be2fe776b3f186b9fe8dc595386190a63c))
+
+### Bug Fixes
+
+* build issue ([d0aa061](https://github.com/BogdanRaicevic/ied-projects/commit/d0aa061e7216c1cc9acd5d50e5362049c1beb00c))
+
 ## [1.15.0](https://github.com/BogdanRaicevic/ied-projects/compare/v1.14.0...v1.15.0) (2026-03-21)
 
 ### Features
