@@ -54,7 +54,7 @@ export const updateRacunById = async (id: string, updatedRacun: RacunType) => {
       id,
       { $set: updatedRacun },
       {
-        new: true,
+        returnDocument: "after",
         runValidators: true,
       },
     );
