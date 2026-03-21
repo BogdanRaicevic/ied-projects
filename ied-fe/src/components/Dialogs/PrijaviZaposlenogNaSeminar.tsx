@@ -251,8 +251,8 @@ export default function PrijavaNaSeminarDialog({
                   <MenuItem value={"ivana@economicdiplomacy.co.rs"}>
                     ivana@economicdiplomacy.co.rs
                   </MenuItem>
-                  <MenuItem value={"biljana@economicdiplomacy.co.rs"}>
-                    biljana@economicdiplomacy.co.rs
+                  <MenuItem value={"biljana.simovic@economicdiplomacy.co.rs"}>
+                    biljana.simovic@economicdiplomacy.co.rs
                   </MenuItem>
                   <MenuItem value={"jsimovic@economicdiplomacy.co.rs"}>
                     jsimovic@economicdiplomacy.co.rs
