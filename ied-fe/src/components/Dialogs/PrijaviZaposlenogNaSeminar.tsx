@@ -11,8 +11,11 @@ import {
   FormControlLabel,
   FormLabel,
   Grid,
+  InputLabel,
+  MenuItem,
   Radio,
   RadioGroup,
+  Select,
   TextField,
   Typography,
 } from "@mui/material";
@@ -39,10 +42,13 @@ export default function PrijavaNaSeminarDialog({
     "success" | "warning" | "error" | ""
   >("");
   const [selectedSeminarId, setSelectedSeminarId] = useState<string>("");
-  const [prisustvo, setPrisustvo] = useState<"online" | "offline">("online");
-  const [vrstaPrijave, setVrstaPrijave] = useState<
-    "telefon" | "email" | "drustvene_mreze"
-  >("email");
+  const [prisustvo, setPrisustvo] =
+    useState<Pick<PrijavaZodType, "prisustvo">["prisustvo"]>("online");
+  const [vrstaPrijave, setVrstaPrijave] =
+    useState<Pick<PrijavaZodType, "vrsta_prijave">["vrsta_prijave"]>("email");
+  const [komercijalista, setKomercijalista] = useState<string | undefined>(
+    undefined,
+  );
 
   useEffect(() => {
     if (open) {
@@ -50,6 +56,7 @@ export default function PrijavaNaSeminarDialog({
       setSelectedSeminarId("");
       setPrisustvo("online");
       setVrstaPrijave("email");
+      setKomercijalista(undefined);
     }
   }, [open]);
 
@@ -70,6 +77,7 @@ export default function PrijavaNaSeminarDialog({
       zaposleni_telefon: zaposleniData.telefon,
       prisustvo,
       vrsta_prijave: vrstaPrijave,
+      komercijalista: komercijalista || undefined,
     };
 
     try {
@@ -106,6 +114,17 @@ export default function PrijavaNaSeminarDialog({
   });
 
   const seminari = fetchedSeminars?.seminari || [];
+
+  const handleVrstaPrijaveChange = (
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) => {
+    const value = (event.target as HTMLInputElement).value as
+      | "telefon"
+      | "email"
+      | "drustvene_mreze";
+    setVrstaPrijave(value);
+    setKomercijalista(undefined);
+  };
 
   return (
     <Dialog open={open} onClose={onClose} maxWidth="lg">
@@ -195,11 +214,7 @@ export default function PrijavaNaSeminarDialog({
                 aria-labelledby="vrsta-prijave-radio-buttons-group-label"
                 defaultValue="email"
                 name="vrsta-prijave-radio-buttons-group"
-                onChange={(e) =>
-                  setVrstaPrijave(
-                    e.target.value as "telefon" | "email" | "drustvene_mreze",
-                  )
-                }
+                onChange={handleVrstaPrijaveChange}
               >
                 <FormControlLabel
                   value="email"
@@ -218,6 +233,36 @@ export default function PrijavaNaSeminarDialog({
                 />
               </RadioGroup>
             </FormControl>
+            {vrstaPrijave === "telefon" && (
+              <FormControl sx={{ m: 2, minWidth: 300 }}>
+                <InputLabel id="komercijalista-label">
+                  Komercijalista
+                </InputLabel>
+                <Select
+                  labelId="komercijalista-label"
+                  id="komercijalista-select"
+                  value={komercijalista ?? ""}
+                  label="Komercijalista"
+                  onChange={(e) => setKomercijalista(e.target.value)}
+                >
+                  <MenuItem value={"misa@economicdiplaomacy.co.rs"}>
+                    misa@economicdiplaomacy.co.rs
+                  </MenuItem>
+                  <MenuItem value={"ivana@economicdiplaomacy.co.rs"}>
+                    ivana@economicdiplaomacy.co.rs
+                  </MenuItem>
+                  <MenuItem value={"biljana@economicdiplaomacy.co.rs"}>
+                    biljana@economicdiplaomacy.co.rs
+                  </MenuItem>
+                  <MenuItem value={"jsimovic@economicdiplaomacy.co.rs"}>
+                    jsimovic@economicdiplaomacy.co.rs
+                  </MenuItem>
+                  <MenuItem value={"cvetka@balkanskisavet.rs"}>
+                    cvetka@balkanskisavet.rs
+                  </MenuItem>
+                </Select>
+              </FormControl>
+            )}
             <Autocomplete
               options={seminari || []}
               getOptionLabel={(option) =>
@@ -255,7 +300,10 @@ export default function PrijavaNaSeminarDialog({
       )}
       <DialogActions>
         <Button
-          disabled={!selectedSeminarId}
+          disabled={
+            !selectedSeminarId ||
+            (vrstaPrijave === "telefon" && !komercijalista)
+          }
           variant="contained"
           color="success"
           onClick={handleSavePrijava}
