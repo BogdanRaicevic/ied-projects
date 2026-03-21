@@ -6,6 +6,7 @@ import {
 } from "../../src/models/delatnosti.model";
 import type { FirmaType } from "../../src/models/firma.model";
 import { Mesto, type MestoType } from "../../src/models/mesto.model";
+import { Pretrage, type PretrageType } from "../../src/models/pretrage.model";
 import {
   RadnoMesto,
   type RadnoMestoType,
@@ -25,7 +26,6 @@ import {
   type VelicineFirmiType,
 } from "../../src/models/velicina_firme.model";
 import type { Zaposleni } from "../../src/models/zaposleni.model";
-import { Pretrage, type PretrageType } from "../../src/models/pretrage.model";
 import * as firmaService from "../../src/services/firma.service";
 
 // Seed faker for reproducible tests (all data including ObjectIds is deterministic)
@@ -216,13 +216,19 @@ export async function seedTestDatabase(): Promise<SeededData> {
 
   // Delatnosti
   for (const delatnostName of TEST_DATA_CONFIG.DELATNOSTI) {
-    const delatnost = await Delatnost.create({ _id: deterministicObjectId(), delatnost: delatnostName });
+    const delatnost = await Delatnost.create({
+      _id: deterministicObjectId(),
+      delatnost: delatnostName,
+    });
     seededData.delatnosti.push(delatnost.toObject());
   }
 
   // Tipovi Firme
   for (const tipName of TEST_DATA_CONFIG.TIP_FIRME) {
-    const tip = await TipFirme.create({ _id: deterministicObjectId(), tip_firme: tipName });
+    const tip = await TipFirme.create({
+      _id: deterministicObjectId(),
+      tip_firme: tipName,
+    });
     seededData.tipoviFirme.push(tip.toObject());
   }
 
@@ -238,19 +244,28 @@ export async function seedTestDatabase(): Promise<SeededData> {
 
   // Stanja Firme
   for (const stanjeName of TEST_DATA_CONFIG.STANJE_FIRME) {
-    const stanje = await StanjeFirme.create({ _id: deterministicObjectId(), stanje_firme: stanjeName });
+    const stanje = await StanjeFirme.create({
+      _id: deterministicObjectId(),
+      stanje_firme: stanjeName,
+    });
     seededData.stanjaFirme.push(stanje.toObject());
   }
 
   // Radna Mesta
   for (const radnoMestoName of TEST_DATA_CONFIG.RADNA_MESTA) {
-    const radnoMesto = await RadnoMesto.create({ _id: deterministicObjectId(), radno_mesto: radnoMestoName });
+    const radnoMesto = await RadnoMesto.create({
+      _id: deterministicObjectId(),
+      radno_mesto: radnoMestoName,
+    });
     seededData.radnaMesta.push(radnoMesto.toObject());
   }
 
   // 1. Create TipSeminara records
   for (const tipName of TEST_DATA_CONFIG.TIP_SEMINARA) {
-    const tip = await TipSeminara.create({ _id: deterministicObjectId(), tipSeminara: tipName });
+    const tip = await TipSeminara.create({
+      _id: deterministicObjectId(),
+      tipSeminara: tipName,
+    });
     seededData.tipoviSeminara.push(tip.toObject());
   }
 
@@ -325,7 +340,9 @@ export async function seedTestDatabase(): Promise<SeededData> {
       nazivPretrage: faker.word.words(3),
       mesta: faker.helpers.arrayElements(seededData.mesta, 2).map((m) => m._id),
       delatnosti: faker.helpers.arrayElements(TEST_DATA_CONFIG.DELATNOSTI, 2),
-      tipoviSeminara: faker.helpers.arrayElements(seededData.tipoviSeminara, 2).map((t) => t._id),
+      tipoviSeminara: faker.helpers
+        .arrayElements(seededData.tipoviSeminara, 2)
+        .map((t) => t._id),
     });
     seededData.pretrage.push(pretraga.toObject());
   }

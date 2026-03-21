@@ -26,6 +26,7 @@ export type PrijavaType = {
   zaposleni_telefon: string;
   prisustvo: "online" | "offline";
   vrsta_prijave: "telefon" | "email" | "drustvene_mreze";
+  komercijalista?: string;
 };
 
 const prijavaSchema = new Schema<PrijavaType>({
@@ -44,6 +45,7 @@ const prijavaSchema = new Schema<PrijavaType>({
     type: String,
     enum: ["telefon", "email", "drustvene_mreze"],
   },
+  komercijalista: { type: String, required: false },
 });
 
 const seminarSchema = new Schema<SeminarType>(

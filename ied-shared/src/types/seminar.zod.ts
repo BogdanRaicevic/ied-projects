@@ -15,6 +15,7 @@ export const PrijavaSchema = z.object({
   vrsta_prijave: z
     .enum(["telefon", "email", "drustvene_mreze"])
     .default("email"),
+  komercijalista: z.string().optional(),
 });
 
 export const SeminarSchema = z.object({
