@@ -1,3 +1,10 @@
+## [1.15.0](https://github.com/BogdanRaicevic/ied-projects/compare/v1.14.0...v1.15.0) (2026-03-21)
+
+### Features
+
+* include sentry in the start and dev script ([bba7bd9](https://github.com/BogdanRaicevic/ied-projects/commit/bba7bd9e423ac97a57d6a5f8943247dd7d96f2f8))
+* integrate Sentry for error monitoring and performance tracing with environment-based configuration. ([7a8dfa0](https://github.com/BogdanRaicevic/ied-projects/commit/7a8dfa0a9493a636cc47611fd6ac421280c4c463))
+
 ## [1.14.0](https://github.com/BogdanRaicevic/ied-projects/compare/v1.13.3...v1.14.0) (2026-03-20)
 
 ### Features
