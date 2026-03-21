@@ -16,7 +16,7 @@ export const PrijavaSchema = z.object({
     .enum(["telefon", "email", "drustvene_mreze"])
     .default("email"),
   komercijalista: z.string().optional(),
-  createdAt: z.coerce.date().default(new Date()),
+  createdAt: z.coerce.date().optional(),
 });
 
 export const SeminarSchema = z.object({
