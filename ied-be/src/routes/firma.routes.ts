@@ -108,7 +108,7 @@ router.post(
     try {
       const { firmaId } = req.params;
       const updatedFirma = await createZaposleni(firmaId, req.body);
-      res.status(201).json(updatedFirma);
+      res.status(200).json(updatedFirma);
     } catch (error) {
       next(error);
     }
@@ -249,7 +249,11 @@ router.put(
         userEmail,
         contactType,
       });
-      res.status(201).json(updatedFirma);
+      if (updatedFirma) {
+        res.status(200).json(updatedFirma);
+      } else {
+        res.status(404).send("Firma not found");
+      }
     } catch (error) {
       next(error);
     }
