@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import type { FirmaType, ZaposleniType } from "ied-shared";
+import type { ContactTypeEnum, FirmaType, ZaposleniType } from "ied-shared";
 import { useNavigate } from "react-router-dom";
 import {
   addZaposleniToFirma,
@@ -7,6 +7,7 @@ import {
   deleteFirma,
   deleteZaposleniFromFirma,
   updateFirma,
+  updateLastContactInFirma,
   updateZaposleniInFirma,
 } from "../../api/firma.api";
 
@@ -267,6 +268,26 @@ export const useDeleteZaposleni = (firmaId?: string) => {
         throw new Error("Firma ID is required for update");
       }
       queryClient.invalidateQueries({ queryKey: firmaQueryKey(firmaId) });
+    },
+  });
+};
+
+export const useAddLastContact = (firmaId: string) => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (contactType: ContactTypeEnum) => {
+      if (!firmaId) {
+        throw new Error("Firma ID is required for update");
+      }
+      const response = await updateLastContactInFirma(firmaId, contactType);
+      return response.data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: firmaQueryKey(firmaId) });
+    },
+    onError: (error) => {
+      console.error("Error updating last contact in firma:", error);
     },
   });
 };

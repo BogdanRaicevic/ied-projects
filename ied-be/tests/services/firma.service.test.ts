@@ -53,7 +53,7 @@ describe("firma.service", () => {
     it("should persist firma to database", async () => {
       const created = await firmaService.create(sampleFirmaData);
 
-      const found = await firmaService.findById(created._id.toString());
+      const found = await firmaService.findFirmaById(created._id.toString());
       expect(found).toBeDefined();
       expect(found?.naziv_firme).toBe(sampleFirmaData.naziv_firme);
     });
@@ -62,7 +62,7 @@ describe("firma.service", () => {
   describe("findById", () => {
     it("should find firma by id", async () => {
       const created = await firmaService.create(sampleFirmaData);
-      const found = await firmaService.findById(created._id.toString());
+      const found = await firmaService.findFirmaById(created._id.toString());
 
       expect(found).toBeDefined();
       expect(found?.naziv_firme).toBe(sampleFirmaData.naziv_firme);
@@ -70,7 +70,7 @@ describe("firma.service", () => {
 
     it("should populate mesto when finding by id", async () => {
       const created = await firmaService.create(sampleFirmaData);
-      const found = await firmaService.findById(created._id.toString());
+      const found = await firmaService.findFirmaById(created._id.toString());
 
       expect(found).toBeDefined();
       expect(found?.mesto).toBeDefined();
@@ -80,7 +80,7 @@ describe("firma.service", () => {
 
     it("should return null for non-existent id", async () => {
       const fakeId = new mongoose.Types.ObjectId().toString();
-      const found = await firmaService.findById(fakeId);
+      const found = await firmaService.findFirmaById(fakeId);
 
       expect(found).toBeNull();
     });
@@ -90,10 +90,13 @@ describe("firma.service", () => {
     it("should update firma fields", async () => {
       const created = await firmaService.create(sampleFirmaData);
 
-      const updated = await firmaService.updateById(created._id.toString(), {
-        naziv_firme: "Updated Firma Name",
-        telefon: "011-999-999",
-      });
+      const updated = await firmaService.updateFirmaById(
+        created._id.toString(),
+        {
+          naziv_firme: "Updated Firma Name",
+          telefon: "011-999-999",
+        },
+      );
 
       expect(updated).toBeDefined();
       expect(updated?.naziv_firme).toBe("Updated Firma Name");
@@ -104,7 +107,7 @@ describe("firma.service", () => {
 
     it("should return null for non-existent id", async () => {
       const fakeId = new mongoose.Types.ObjectId().toString();
-      const updated = await firmaService.updateById(fakeId, {
+      const updated = await firmaService.updateFirmaById(fakeId, {
         naziv_firme: "Updated",
       });
 
@@ -115,19 +118,21 @@ describe("firma.service", () => {
   describe("deleteById", () => {
     it("should delete firma by id", async () => {
       const created = await firmaService.create(sampleFirmaData);
-      const deleted = await firmaService.deleteById(created._id.toString());
+      const deleted = await firmaService.deleteFirmaById(
+        created._id.toString(),
+      );
 
       expect(deleted).toBeDefined();
       expect(deleted?._id.toString()).toBe(created._id.toString());
 
       // Verify it's actually deleted
-      const found = await firmaService.findById(created._id.toString());
+      const found = await firmaService.findFirmaById(created._id.toString());
       expect(found).toBeNull();
     });
 
     it("should return null for non-existent id", async () => {
       const fakeId = new mongoose.Types.ObjectId().toString();
-      const deleted = await firmaService.deleteById(fakeId);
+      const deleted = await firmaService.deleteFirmaById(fakeId);
 
       expect(deleted).toBeNull();
     });

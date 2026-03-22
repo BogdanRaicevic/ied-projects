@@ -4,21 +4,23 @@ import {
   type Response,
   Router,
 } from "express";
-import type { ParametriPretrage } from "ied-shared";
+import type { ContactTypeEnum, ParametriPretrage } from "ied-shared";
 import { createAuditMiddleware } from "../middleware/audit";
 import { Firma, type FirmaType } from "../models/firma.model";
 import {
   create,
   createZaposleni,
-  deleteById,
+  deleteFirmaById,
   deleteZaposleni,
   exportSearchedFirmaData,
   exportSearchedZaposleniData,
-  findById,
+  findFirmaById,
   search,
-  updateById,
+  updateFirmaById,
+  updateLastContact,
   updateZaposleni,
 } from "../services/firma.service";
+import { getClerkEmailFromRequest } from "../utils/utils";
 
 const router = Router();
 const firmaAudit = createAuditMiddleware(Firma);
@@ -158,7 +160,7 @@ router.delete(
 router.get("/:id", async (req: Request, res: Response, next: NextFunction) => {
   const { id } = req.params;
   try {
-    const firma = await findById(String(id));
+    const firma = await findFirmaById(String(id));
     if (!firma) {
       res.status(404).send("Firma not found");
       return;
@@ -176,7 +178,7 @@ router.delete(
   async (req: Request<{ id: string }>, res: Response, next: NextFunction) => {
     try {
       const firmaId = req.params.id;
-      const firma = await deleteById(firmaId);
+      const firma = await deleteFirmaById(firmaId);
       res.json(firma || []);
     } catch (error) {
       next(error);
@@ -205,12 +207,49 @@ router.put(
   async (req: Request<{ id: string }>, res: Response, next: NextFunction) => {
     try {
       const firmaId = req.params.id;
-      const firma = await updateById(firmaId, req.body);
+      const firma = await updateFirmaById(firmaId, req.body);
       if (firma) {
         res.json(firma);
       } else {
         res.status(404).send("Firma not found");
       }
+    } catch (error) {
+      next(error);
+    }
+  },
+);
+
+// add new contact to firma
+router.put(
+  "/:id/last-contact",
+  firmaAudit,
+  async (req: Request<{ id: string }>, res: Response, next: NextFunction) => {
+    const userEmail = await getClerkEmailFromRequest(req);
+    // TODO: Investigate if we can have type on the query params to avoid this type assertion
+    const { contactType } = req.query as { contactType: ContactTypeEnum };
+
+    if (!userEmail) {
+      res.status(401).send("Unauthorized");
+      return;
+    }
+
+    if (
+      !contactType ||
+      (contactType !== "telefon" && contactType !== "email")
+    ) {
+      res.status(400).send("Invalid contact type");
+      return;
+    }
+
+    try {
+      const firmaId = req.params.id;
+
+      const updatedFirma = await updateLastContact({
+        firmaId,
+        userEmail,
+        contactType,
+      });
+      res.status(201).json(updatedFirma);
     } catch (error) {
       next(error);
     }

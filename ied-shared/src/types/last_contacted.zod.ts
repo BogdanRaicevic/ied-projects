@@ -1,9 +1,19 @@
 import z from "zod";
 
-export const LastContacted = z.object({
+export const Email = z
+  .email("Neispravna email adresa")
+  .max(100, "Predugacka email adresa")
+  .or(z.literal(""))
+  .optional();
+export type Email = z.infer<typeof Email>;
+
+export const ContactTypeEnum = z.enum(["email", "telefon"]);
+export type ContactTypeEnum = z.infer<typeof ContactTypeEnum>;
+
+export const LastContactedFromDB = z.object({
   date: z.date(),
-  userEmail: z.string(),
-  type: z.enum(["email", "telefon"]),
+  e_mail: Email,
+  contact_type: ContactTypeEnum,
 });
 
-export type LastContactedType = z.infer<typeof LastContacted>;
+export type LastContactedFromDb = z.infer<typeof LastContactedFromDB>;

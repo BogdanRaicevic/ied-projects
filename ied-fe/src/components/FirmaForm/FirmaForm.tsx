@@ -4,6 +4,7 @@ import {
   Autocomplete,
   Box,
   Button,
+  colors,
   Divider,
   FormControl,
   Grid,
@@ -15,6 +16,7 @@ import { FirmaSchema, type FirmaType, type ZaposleniType } from "ied-shared";
 import type React from "react";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
+import { updateLastContactInFirma } from "../../api/firma.api";
 import { useEmailSuppression } from "../../hooks/firma/useEmailSuppression";
 import {
   useCreateNewFirma,
@@ -259,7 +261,92 @@ export const FirmaForm: React.FC<FirmaFormProps> = ({ inputCompany }) => {
             </Grid>
           );
         })}
+        <Grid size={{ xs: 12 }}>
+          <Box
+            sx={{
+              bgcolor: colors.blue[50],
+              border: "1px solid",
+              borderColor: "primary.light",
+              borderRadius: 1,
+              p: 2,
+              mb: 3,
+            }}
+          >
+            <Typography variant="subtitle2" color="primary.dark" gutterBottom>
+              Status kontaktiranja
+            </Typography>
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                flexWrap: "wrap",
+                gap: 1,
+              }}
+            >
+              <Grid size={{ xs: 12, md: 6, lg: 6 }}>
+                <Button
+                  disabled={!currentFirmaId}
+                  onClick={() =>
+                    updateLastContactInFirma(currentFirmaId!, "telefon")
+                  }
+                >
+                  Kontaktirana Telefonom
+                </Button>
+                <Button
+                  disabled={!currentFirmaId}
+                  onClick={() =>
+                    updateLastContactInFirma(currentFirmaId!, "email")
+                  }
+                >
+                  Kontaktirana Emailom
+                </Button>
+                {
+                  // TODO should hide this if not checked
+                  <Typography variant="body2" color="success.main">
+                    ✓ Kontaktirana
+                  </Typography>
+                }
+              </Grid>
+              <Grid size={{ xs: 12, md: 6, lg: 6 }}>
+                <Typography variant="body2" color="text.secondary" gutterBottom>
+                  Poslednji kontakt
+                </Typography>
+                <Box sx={{ gap: 3 }}>
+                  <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                    <Typography variant="body2" color="text.secondary">
+                      Kontaktirao/la:
+                    </Typography>
+                    <Typography variant="body2" fontWeight={500}>
+                      {/* TODO Set last email that contacted */}
+                      {"—"}
+                    </Typography>
+                  </Box>
+                  <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                    <Typography variant="body2" color="text.secondary">
+                      Datum:
+                    </Typography>
+                    <Typography variant="body2" fontWeight={500}>
+                      {/* TODO Set last contact date */}
+                      {"—"}
+                    </Typography>
+                  </Box>
+                </Box>
+              </Grid>
+            </Box>
+            {
+              <Typography
+                variant="caption"
+                color="text.secondary"
+                display="block"
+                sx={{ mt: 0.5 }}
+              >
+                Označite ako ste kontaktirali ovu firmu
+              </Typography>
+            }
+          </Box>
+        </Grid>
         <Divider sx={{ width: "100%", my: 4 }} />
+
         <Grid size={{ xs: 12, md: 6, lg: 4 }}>
           <Autocomplete
             fullWidth

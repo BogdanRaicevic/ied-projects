@@ -12,7 +12,7 @@ import {
   Seminar,
   type SeminarType,
 } from "./../models/seminar.model";
-import { createSeminarQuery } from "../utils/seminariQueryBuilder";
+import { createSeminarQuery } from "../queryBuilders/seminariQueryBuilder";
 import { validateMongoId } from "../utils/utils";
 
 export const createSeminar = async (

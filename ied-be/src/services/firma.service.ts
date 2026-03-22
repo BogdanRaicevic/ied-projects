@@ -1,4 +1,6 @@
 import type {
+  ContactTypeEnum,
+  Email,
   ExportFirma,
   ExportZaposlenih,
   ParametriPretrage,
@@ -6,11 +8,11 @@ import type {
 import { NEGACIJA } from "ied-shared";
 import { Firma, type FirmaType } from "../models/firma.model";
 import type { Zaposleni } from "../models/zaposleni.model";
-import { createFirmaQuery } from "../utils/firmaQueryBuilder";
+import { createFirmaQuery } from "../queryBuilders/firmaQueryBuilder";
 import { isEmailSuppressed } from "./email_suppression.service";
 import { getZaposleniIdsFromSeminars } from "./seminar.service";
 
-export const findById = async (id: string): Promise<FirmaType | null> => {
+export const findFirmaById = async (id: string): Promise<FirmaType | null> => {
   try {
     return await Firma.findById(id)
       .populate("mesto", "naziv_mesto postanski_broj")
@@ -21,7 +23,9 @@ export const findById = async (id: string): Promise<FirmaType | null> => {
   }
 };
 
-export const deleteById = async (id: string): Promise<FirmaType | null> => {
+export const deleteFirmaById = async (
+  id: string,
+): Promise<FirmaType | null> => {
   return await Firma.findByIdAndDelete(id).exec();
 };
 
@@ -41,7 +45,7 @@ export const create = async (
   });
 };
 
-export const updateById = async (
+export const updateFirmaById = async (
   id: string,
   firmaData: Partial<FirmaType>,
 ): Promise<FirmaType | null> => {
@@ -300,6 +304,36 @@ export const deleteZaposleni = async (firmaId: string, zaposleniId: string) => {
     return updatedFirma;
   } catch (error) {
     console.error("Error deleting zaposleni:", error);
+    throw error;
+  }
+};
+
+export const updateLastContact = async ({
+  firmaId,
+  contactType,
+  userEmail,
+}: {
+  firmaId: string;
+  contactType: ContactTypeEnum;
+  userEmail: Email;
+}) => {
+  try {
+    const updatedFirma = await Firma.findByIdAndUpdate(
+      firmaId,
+      {
+        $push: {
+          last_contacted: {
+            e_mail: userEmail,
+            contact_type: contactType,
+          },
+        },
+      },
+      { returnDocument: "after" },
+    ).lean();
+
+    return updatedFirma;
+  } catch (error) {
+    console.error("Error adding last contacted:", error);
     throw error;
   }
 };
