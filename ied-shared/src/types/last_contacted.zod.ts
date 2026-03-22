@@ -11,7 +11,7 @@ export const ContactTypeEnum = z.enum(["email", "telefon"]);
 export type ContactTypeEnum = z.infer<typeof ContactTypeEnum>;
 
 export const LastContactedFromDB = z.object({
-  date: z.coerce.date(),
+  date: z.date(),
   e_mail: Email,
   contact_type: ContactTypeEnum,
 });
