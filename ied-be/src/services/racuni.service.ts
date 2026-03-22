@@ -7,7 +7,7 @@ import {
   TipRacuna,
 } from "ied-shared";
 import { RacunBaseModel } from "../models/racun.model";
-import { createRacunQuery } from "../utils/racuniQueryBuilder";
+import { createRacunQuery } from "../queryBuilders/racuniQueryBuilder";
 
 export const saveRacun = async (racun: RacunType) => {
   const DiscriminatorModel = RacunBaseModel.discriminators?.[racun.tipRacuna];

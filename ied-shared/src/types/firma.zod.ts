@@ -1,5 +1,6 @@
 import z from "zod";
 import { SUPPRESSION_REASONS } from "../constants/email";
+import { LastContactedFromDB } from "./last_contacted.zod";
 
 export const ExportZaposlenihSchema = z.array(
   z.object({
@@ -67,6 +68,7 @@ export const FirmaSchema = z.object({
       postanski_broj: z.string().optional(),
     })
     .optional(),
+  last_contacted: z.array(LastContactedFromDB).optional(),
 });
 
 export type ZaposleniType = z.infer<typeof ZaposleniSchema>;

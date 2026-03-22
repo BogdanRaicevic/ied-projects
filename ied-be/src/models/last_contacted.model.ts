@@ -2,14 +2,14 @@ import { model, Schema } from "mongoose";
 
 type LastContactedType = {
   date: Date;
-  userEmail: string;
-  type: "email" | "telefon";
+  e_mail: string;
+  contact_type: "email" | "telefon";
 };
 
 const lastContactedSchema = new Schema<LastContactedType>({
   date: { type: Date, default: Date.now },
-  userEmail: String,
-  type: { type: String, enum: ["email", "telefon"] },
+  e_mail: String,
+  contact_type: { type: String, enum: ["email", "telefon"] },
 });
 
 const LastContacted = model<LastContactedType>(

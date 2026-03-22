@@ -1,4 +1,5 @@
 import type {
+  ContactTypeEnum,
   ExportFirma,
   ExportZaposlenih,
   FirmaType,
@@ -225,6 +226,24 @@ export const deleteZaposleniFromFirma = async (
     };
   } catch (error) {
     console.error("Error deleting zaposleni from firma: ", error);
+    throw error;
+  }
+};
+
+export const updateLastContactInFirma = async (
+  firmaId: string,
+  contactType: ContactTypeEnum,
+) => {
+  try {
+    const response = await axiosInstanceWithAuth.put(
+      `/api/firma/${firmaId}/last-contact?contactType=${contactType}`,
+    );
+    return {
+      data: response.data,
+      status: response.status,
+    };
+  } catch (error) {
+    console.error("Error updating last contact in firma: ", error);
     throw error;
   }
 };

@@ -7,7 +7,7 @@ import type {
 } from "ied-shared";
 import { AuditLog } from "./../models/audit_log.model";
 import { Seminar } from "../models/seminar.model";
-import { createAuditLogQuery } from "../utils/auditLogQueryBuilder";
+import { createAuditLogQuery } from "../queryBuilders/auditLogQueryBuilder";
 
 type AuditQuery = {
   pageIndex: number;

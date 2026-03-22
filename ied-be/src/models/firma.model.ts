@@ -28,7 +28,7 @@ type FirmaType = Document & {
   maticni_broj: string;
   prijavljeni: boolean;
   mesto: Types.ObjectId;
-  lastContacted: LastContactedType[];
+  last_contacted: LastContactedType[];
 };
 
 const firmaSchema = new Schema<FirmaType>(
@@ -53,7 +53,7 @@ const firmaSchema = new Schema<FirmaType>(
     maticni_broj: String,
     prijavljeni: { type: Boolean, default: true },
     mesto: { type: Schema.Types.ObjectId, ref: "Mesto" },
-    lastContacted: { type: [lastContactedSchema], default: [] },
+    last_contacted: { type: [lastContactedSchema], default: [] },
   },
   {
     timestamps: { createdAt: "created_at", updatedAt: "updated_at" },
