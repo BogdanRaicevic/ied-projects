@@ -1,3 +1,16 @@
+## [1.17.0](https://github.com/BogdanRaicevic/ied-projects/compare/v1.16.0...v1.17.0) (2026-03-22)
+
+### Features
+
+* add lastContacted to firma model ([94110a3](https://github.com/BogdanRaicevic/ied-projects/commit/94110a3f8041fc051f0fec870884904c55832296))
+* implement last contact tracking for firma and update related models and services ([99becac](https://github.com/BogdanRaicevic/ied-projects/commit/99becac1da57c78cec3aebedba85077f47de63df))
+* style the the status kontaktiranja block ([db2a39d](https://github.com/BogdanRaicevic/ied-projects/commit/db2a39dce9088c29e5e01bb454d2644f39f895ec))
+* use react query to handle last contacted updates ([70138d7](https://github.com/BogdanRaicevic/ied-projects/commit/70138d71048c1583ede3c77855aa71ab45612444))
+
+### Bug Fixes
+
+* minor PR improvements ([f998860](https://github.com/BogdanRaicevic/ied-projects/commit/f998860854f912bb8073cbc892079fd8128341a6))
+
 ## [1.16.0](https://github.com/BogdanRaicevic/ied-projects/compare/v1.15.0...v1.16.0) (2026-03-21)
 
 ### Features
