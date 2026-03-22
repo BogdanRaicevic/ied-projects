@@ -26,7 +26,10 @@ export const getClerkEmailFromRequest = async (
     }
     return userEmail;
   } catch (error) {
-    console.error("Error decoding token:", error);
-    throw new Error("Invalid token format");
+    console.error("Error resolving user email from request:", error);
+    if (error instanceof Error) {
+      throw error;
+    }
+    throw new Error("Failed to resolve user email");
   }
 };

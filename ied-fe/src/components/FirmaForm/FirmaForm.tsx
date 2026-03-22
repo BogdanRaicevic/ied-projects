@@ -16,9 +16,9 @@ import { differenceInCalendarDays, formatDate } from "date-fns";
 import { FirmaSchema, type FirmaType, type ZaposleniType } from "ied-shared";
 import { Activity, type FC, useEffect } from "react";
 import { useForm } from "react-hook-form";
-import { updateLastContactInFirma } from "../../api/firma.api";
 import { useEmailSuppression } from "../../hooks/firma/useEmailSuppression";
 import {
+  useAddLastContact,
   useCreateNewFirma,
   useDeleteFirma,
   useUpdateFirma,
@@ -63,6 +63,7 @@ export const FirmaForm: FC<FirmaFormProps> = ({ inputCompany }) => {
   const createFirmaMutation = useCreateNewFirma();
   const updateFirmaMutation = useUpdateFirma(currentFirmaId);
   const deleteFirmaMutation = useDeleteFirma(currentFirmaId);
+  const updateLastContactMutation = useAddLastContact(currentFirmaId);
 
   const isSubmitting =
     createFirmaMutation.isPending || updateFirmaMutation.isPending;
@@ -302,22 +303,23 @@ export const FirmaForm: FC<FirmaFormProps> = ({ inputCompany }) => {
                 >
                   <Button
                     disabled={!currentFirmaId}
-                    onClick={() =>
-                      updateLastContactInFirma(currentFirmaId!, "telefon")
-                    }
+                    onClick={() => updateLastContactMutation.mutate("telefon")}
                     variant="outlined"
                   >
                     Kontaktirana Telefonom
                   </Button>
                   <Button
                     disabled={!currentFirmaId}
-                    onClick={() =>
-                      updateLastContactInFirma(currentFirmaId!, "email")
-                    }
+                    onClick={() => updateLastContactMutation.mutate("email")}
                     variant="outlined"
                   >
                     Kontaktirana Emailom
                   </Button>
+                  {updateLastContactMutation.isError && (
+                    <Typography variant="caption" color="error.main">
+                      Greška: {updateLastContactMutation.error?.message}
+                    </Typography>
+                  )}
                 </Box>
 
                 <Activity
