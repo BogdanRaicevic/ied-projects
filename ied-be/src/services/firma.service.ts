@@ -328,7 +328,7 @@ export const updateLastContact = async ({
           },
         },
       },
-      { returnDocument: "after" },
+      { returnDocument: "after", runValidators: true },
     ).lean();
 
     return updatedFirma;
