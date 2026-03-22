@@ -325,6 +325,7 @@ export const updateLastContact = async ({
           last_contacted: {
             e_mail: userEmail,
             contact_type: contactType,
+            date: new Date(),
           },
         },
       },
