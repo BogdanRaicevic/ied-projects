@@ -302,14 +302,18 @@ export const FirmaForm: FC<FirmaFormProps> = ({ inputCompany }) => {
                   }}
                 >
                   <Button
-                    disabled={!currentFirmaId}
+                    disabled={
+                      !currentFirmaId || updateLastContactMutation.isPending
+                    }
                     onClick={() => updateLastContactMutation.mutate("telefon")}
                     variant="outlined"
                   >
                     Kontaktirana Telefonom
                   </Button>
                   <Button
-                    disabled={!currentFirmaId}
+                    disabled={
+                      !currentFirmaId || updateLastContactMutation.isPending
+                    }
                     onClick={() => updateLastContactMutation.mutate("email")}
                     variant="outlined"
                   >

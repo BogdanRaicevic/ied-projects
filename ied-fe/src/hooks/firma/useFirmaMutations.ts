@@ -274,18 +274,19 @@ export const useDeleteZaposleni = (firmaId?: string) => {
 
 export const useAddLastContact = (firmaId: string | null) => {
   const queryClient = useQueryClient();
-  if (!firmaId) {
-    throw new Error("Firma ID is required for deletion");
-  }
+
   return useMutation({
     mutationFn: async (contactType: ContactTypeEnum) => {
       if (!firmaId) {
-        throw new Error("Firma ID is required for update");
+        throw new Error("Firma ID is required for last contact update");
       }
       const response = await updateLastContactInFirma(firmaId, contactType);
       return response.data;
     },
     onSuccess: () => {
+      if (!firmaId) {
+        return;
+      }
       queryClient.invalidateQueries({ queryKey: firmaQueryKey(firmaId) });
     },
     onError: (error) => {
