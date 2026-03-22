@@ -12,9 +12,9 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
+import { differenceInCalendarDays, formatDate } from "date-fns";
 import { FirmaSchema, type FirmaType, type ZaposleniType } from "ied-shared";
-import type React from "react";
-import { useEffect } from "react";
+import { Activity, type FC, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { updateLastContactInFirma } from "../../api/firma.api";
 import { useEmailSuppression } from "../../hooks/firma/useEmailSuppression";
@@ -38,7 +38,7 @@ type FirmaFormProps = {
   inputCompany: FirmaType;
 };
 
-export const FirmaForm: React.FC<FirmaFormProps> = ({ inputCompany }) => {
+export const FirmaForm: FC<FirmaFormProps> = ({ inputCompany }) => {
   const {
     register,
     formState: { errors },
@@ -243,6 +243,15 @@ export const FirmaForm: React.FC<FirmaFormProps> = ({ inputCompany }) => {
   const { suppressionWarning, handleMailingListChange, withEmailBlur } =
     useEmailSuppression(email, setValue);
 
+  const previousContacts = inputCompany?.last_contacted || [];
+  const numberOfContacts = previousContacts.length;
+  const lastContact = previousContacts[previousContacts.length - 1];
+  const contactedAgo = lastContact
+    ? differenceInCalendarDays(new Date(), new Date(lastContact.date))
+    : 0;
+  const wasContactedWithin30Days =
+    lastContact?.date !== undefined && contactedAgo <= 30;
+
   return (
     <Box
       onSubmit={handleSubmit(onSubmit, onError)}
@@ -269,7 +278,6 @@ export const FirmaForm: React.FC<FirmaFormProps> = ({ inputCompany }) => {
               borderColor: "primary.light",
               borderRadius: 1,
               p: 2,
-              mb: 3,
             }}
           >
             <Typography variant="subtitle2" color="primary.dark" gutterBottom>
@@ -283,66 +291,128 @@ export const FirmaForm: React.FC<FirmaFormProps> = ({ inputCompany }) => {
                 gap: 1,
               }}
             >
-              <Grid size={{ xs: 12, md: 6, lg: 6 }}>
-                <Button
-                  disabled={!currentFirmaId}
-                  onClick={() =>
-                    updateLastContactInFirma(currentFirmaId!, "telefon")
-                  }
+              <Grid size={{ xs: 12, md: 4, lg: 4 }}>
+                <Box
+                  sx={{
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: 1,
+                    alignItems: "flex-start",
+                  }}
                 >
-                  Kontaktirana Telefonom
-                </Button>
-                <Button
-                  disabled={!currentFirmaId}
-                  onClick={() =>
-                    updateLastContactInFirma(currentFirmaId!, "email")
-                  }
-                >
-                  Kontaktirana Emailom
-                </Button>
-                {
-                  // TODO should hide this if not checked
-                  <Typography variant="body2" color="success.main">
-                    ✓ Kontaktirana
-                  </Typography>
-                }
-              </Grid>
-              <Grid size={{ xs: 12, md: 6, lg: 6 }}>
-                <Typography variant="body2" color="text.secondary" gutterBottom>
-                  Poslednji kontakt
-                </Typography>
-                <Box sx={{ gap: 3 }}>
-                  <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-                    <Typography variant="body2" color="text.secondary">
-                      Kontaktirao/la:
-                    </Typography>
-                    <Typography variant="body2" fontWeight={500}>
-                      {/* TODO Set last email that contacted */}
-                      {"—"}
-                    </Typography>
-                  </Box>
-                  <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-                    <Typography variant="body2" color="text.secondary">
-                      Datum:
-                    </Typography>
-                    <Typography variant="body2" fontWeight={500}>
-                      {/* TODO Set last contact date */}
-                      {"—"}
-                    </Typography>
-                  </Box>
+                  <Button
+                    disabled={!currentFirmaId}
+                    onClick={() =>
+                      updateLastContactInFirma(currentFirmaId!, "telefon")
+                    }
+                    variant="outlined"
+                  >
+                    Kontaktirana Telefonom
+                  </Button>
+                  <Button
+                    disabled={!currentFirmaId}
+                    onClick={() =>
+                      updateLastContactInFirma(currentFirmaId!, "email")
+                    }
+                    variant="outlined"
+                  >
+                    Kontaktirana Emailom
+                  </Button>
                 </Box>
+
+                <Activity
+                  mode={wasContactedWithin30Days ? "visible" : "hidden"}
+                >
+                  <Typography variant="body2" color="success.main">
+                    ✓ Kontaktirana u poslednjih 30 dana ({contactedAgo})
+                  </Typography>
+                </Activity>
+                <Activity
+                  mode={
+                    !wasContactedWithin30Days && lastContact
+                      ? "visible"
+                      : "hidden"
+                  }
+                >
+                  <Typography variant="body2" color="error.main">
+                    ✗ Nije kontaktirana u poslednjih 30 dana{" "}
+                    {contactedAgo <= 30 ? "" : `(${contactedAgo} dana)`}
+                  </Typography>
+                </Activity>
+
+                <Typography
+                  variant="caption"
+                  color="text.secondary"
+                  display="block"
+                  sx={{ mt: 0.5 }}
+                >
+                  Kliknite na dugme ako ste kontaktirali ovu firmu
+                </Typography>
+              </Grid>
+              <Grid size={{ xs: 12, md: 4, lg: 4 }}>
+                <Grid
+                  container
+                  spacing={2}
+                  alignItems="center"
+                  justifyContent="center"
+                >
+                  <Typography
+                    variant="body2"
+                    color="text.secondary"
+                    gutterBottom
+                  >
+                    Poslednji kontakt
+                  </Typography>
+                  <Box
+                    sx={{ display: "flex", flexDirection: "column", gap: 1 }}
+                  >
+                    <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                      <Typography variant="body2" color="text.secondary">
+                        Kontaktirao/la:
+                      </Typography>
+                      <Typography variant="body2" fontWeight={500}>
+                        {lastContact ? lastContact.e_mail : "—"}
+                      </Typography>
+                    </Box>
+                    <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                      <Typography variant="body2" color="text.secondary">
+                        Datum:
+                      </Typography>
+                      <Typography variant="body2" fontWeight={500}>
+                        {lastContact
+                          ? // TODO: use date-fns to format this date
+                            formatDate(new Date(lastContact.date), "dd.MM.yyyy")
+                          : "—"}
+                      </Typography>
+                    </Box>
+                    <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                      <Typography variant="body2" color="text.secondary">
+                        Način:
+                      </Typography>
+                      <Typography variant="body2" fontWeight={500}>
+                        {lastContact ? lastContact.contact_type : "—"}
+                      </Typography>
+                    </Box>
+                  </Box>
+                </Grid>
+              </Grid>
+              <Grid size={{ xs: 12, md: 4, lg: 4 }}>
+                <Grid
+                  display="flex"
+                  alignItems="center"
+                  justifyContent="center"
+                >
+                  <Box sx={{ textAlign: "center" }}>
+                    <Typography variant="h4" fontWeight={700} color="primary">
+                      {numberOfContacts}
+                    </Typography>
+                    <Typography variant="body2" color="text.secondary">
+                      Ukupno kontakata
+                    </Typography>
+                  </Box>
+                </Grid>
               </Grid>
             </Box>
-            {
-              <Typography
-                variant="caption"
-                color="text.secondary"
-                display="block"
-                sx={{ mt: 0.5 }}
-              >
-                Označite ako ste kontaktirali ovu firmu
-              </Typography>
-            }
           </Box>
         </Grid>
         <Divider sx={{ width: "100%", my: 4 }} />
