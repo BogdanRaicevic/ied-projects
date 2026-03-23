@@ -16,6 +16,7 @@ import { differenceInCalendarDays, formatDate } from "date-fns";
 import { FirmaSchema, type FirmaType, type ZaposleniType } from "ied-shared";
 import { Activity, type FC, useEffect } from "react";
 import { useForm } from "react-hook-form";
+import type { z } from "zod";
 import { useEmailSuppression } from "../../hooks/firma/useEmailSuppression";
 import {
   useAddLastContact,
@@ -38,6 +39,8 @@ type FirmaFormProps = {
   inputCompany: FirmaType;
 };
 
+type FirmaFormInput = z.input<typeof FirmaSchema>;
+
 export const FirmaForm: FC<FirmaFormProps> = ({ inputCompany }) => {
   const {
     register,
@@ -47,7 +50,7 @@ export const FirmaForm: FC<FirmaFormProps> = ({ inputCompany }) => {
     watch,
     setValue,
     trigger,
-  } = useForm<FirmaType>({
+  } = useForm<FirmaFormInput, unknown, FirmaType>({
     resolver: zodResolver(FirmaSchema),
     defaultValues: inputCompany,
   });
@@ -93,8 +96,13 @@ export const FirmaForm: FC<FirmaFormProps> = ({ inputCompany }) => {
     };
 
     if (isEditing) {
-      // We have an ID, so we are updating (exclude zaposleni; use dedicated mutations)
-      const { zaposleni: _omit, ...firmaOnly } = cleanData;
+      // We have an ID, so we are updating (exclude data maintained by dedicated mutations)
+      const {
+        zaposleni: _omitZaposleni,
+        last_contacted: _omitLastContacted,
+        ...firmaOnly
+      } = cleanData;
+
       updateFirmaMutation.mutate(firmaOnly, {
         onSuccess: (savedCompany) => {
           reset(savedCompany);
