@@ -1,3 +1,9 @@
+## [1.18.1](https://github.com/BogdanRaicevic/ied-projects/compare/v1.18.0...v1.18.1) (2026-03-23)
+
+### Bug Fixes
+
+* remove redundant word ([569ccd8](https://github.com/BogdanRaicevic/ied-projects/commit/569ccd8fc95f13d4b98a71eca45bda8850aa622b))
+
 ## [1.18.0](https://github.com/BogdanRaicevic/ied-projects/compare/v1.17.1...v1.18.0) (2026-03-23)
 
 ### Features
