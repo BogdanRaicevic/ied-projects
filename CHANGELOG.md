@@ -1,3 +1,13 @@
+## [1.18.0](https://github.com/BogdanRaicevic/ied-projects/compare/v1.17.1...v1.18.0) (2026-03-23)
+
+### Features
+
+* add komentari to firma and zaposleni ([a8dc811](https://github.com/BogdanRaicevic/ied-projects/commit/a8dc811795f6d0c9365cfea68395b2c032e3df22))
+
+### Bug Fixes
+
+* last contacted should have informativni and komercijalni poziv ([13f2287](https://github.com/BogdanRaicevic/ied-projects/commit/13f228742bd81f40d9afd44c5b0ee9112c9db755))
+
 ## [1.17.1](https://github.com/BogdanRaicevic/ied-projects/compare/v1.17.0...v1.17.1) (2026-03-23)
 
 ### Bug Fixes
