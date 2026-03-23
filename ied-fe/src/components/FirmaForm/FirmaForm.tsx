@@ -12,7 +12,12 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import { differenceInCalendarDays, formatDate, isToday } from "date-fns";
+import {
+  differenceInCalendarDays,
+  format,
+  formatDate,
+  isToday,
+} from "date-fns";
 import { isNil } from "es-toolkit";
 import {
   ContactTypes,
@@ -20,7 +25,7 @@ import {
   type FirmaType,
   type ZaposleniType,
 } from "ied-shared";
-import { Activity, type FC, useEffect } from "react";
+import { Activity, type FC, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import type { z } from "zod";
 import { useEmailSuppression } from "../../hooks/firma/useEmailSuppression";
@@ -29,6 +34,7 @@ import {
   useCreateNewFirma,
   useDeleteFirma,
   useUpdateFirma,
+  useUpdateZaposleni,
 } from "../../hooks/firma/useFirmaMutations";
 import { useGetMesta } from "../../hooks/mesto/useMestoQueries";
 import { useFetchPretragaData } from "../../hooks/useFetchData";
@@ -38,6 +44,7 @@ import {
   type Metadata,
 } from "../../schemas/metadata";
 import AutocompleteSingle from "../Autocomplete/Single";
+import KontaktKomentarDialog from "../Dialogs/KontaktKomentarDialog";
 import MailingListSwitch from "../MailingListSwitch";
 import { firmaFormMetadata } from "./firmaFormMetadata";
 
@@ -73,6 +80,9 @@ export const FirmaForm: FC<FirmaFormProps> = ({ inputCompany }) => {
   const updateFirmaMutation = useUpdateFirma(currentFirmaId);
   const deleteFirmaMutation = useDeleteFirma(currentFirmaId);
   const updateLastContactMutation = useAddLastContact(currentFirmaId);
+  const updateZaposleniMutation = useUpdateZaposleni(currentFirmaId ?? "");
+
+  const [isKontaktDialogOpen, setIsKontaktDialogOpen] = useState(false);
 
   const isSubmitting =
     createFirmaMutation.isPending || updateFirmaMutation.isPending;
@@ -139,6 +149,27 @@ export const FirmaForm: FC<FirmaFormProps> = ({ inputCompany }) => {
         },
       });
     }
+  };
+
+  const handleKontaktConfirm = (
+    text: string,
+    selectedZaposleni: ZaposleniType | null,
+  ) => {
+    const newEntry = `\n${format(new Date(), "dd.MM.yyyy")} - ${text}`;
+    const existingFirmaKomentar = watch("komentar") ?? "";
+
+    updateFirmaMutation.mutate({ komentar: existingFirmaKomentar + newEntry });
+
+    if (selectedZaposleni?._id) {
+      const existingZaposleniKomentar = selectedZaposleni.komentar ?? "";
+      updateZaposleniMutation.mutate({
+        _id: selectedZaposleni._id,
+        komentar: existingZaposleniKomentar + newEntry,
+      });
+    }
+
+    updateLastContactMutation.mutate(ContactTypes.informativni_poziv);
+    setIsKontaktDialogOpen(false);
   };
 
   function renderFiled(item: Metadata, errors: any) {
@@ -323,11 +354,7 @@ export const FirmaForm: FC<FirmaFormProps> = ({ inputCompany }) => {
                       updateLastContactMutation.isPending ||
                       isLastContactToday
                     }
-                    onClick={() =>
-                      updateLastContactMutation.mutate(
-                        ContactTypes.informativni_poziv,
-                      )
-                    }
+                    onClick={() => setIsKontaktDialogOpen(true)}
                     variant="outlined"
                   >
                     Kontaktirana informativno
@@ -581,6 +608,12 @@ export const FirmaForm: FC<FirmaFormProps> = ({ inputCompany }) => {
           </Alert>
         )}
       </Grid>
+      <KontaktKomentarDialog 
+        open={isKontaktDialogOpen}
+        onClose={() => setIsKontaktDialogOpen(false)}
+        zaposleniList={inputCompany?.zaposleni ?? []}
+        onConfirm={handleKontaktConfirm}
+      />
     </Box>
   );
 };
