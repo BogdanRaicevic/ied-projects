@@ -7,7 +7,12 @@ export const Email = z
   .optional();
 export type Email = z.infer<typeof Email>;
 
-export const ContactTypeEnum = z.enum(["email", "telefon"]);
+export const ContactTypes = {
+  informativni_poziv: "informativni_poziv",
+  komercijalni_poziv: "komercijalni_poziv",
+} as const;
+
+export const ContactTypeEnum = z.enum(ContactTypes);
 export type ContactTypeEnum = z.infer<typeof ContactTypeEnum>;
 
 export const LastContactedFromDB = z.object({
