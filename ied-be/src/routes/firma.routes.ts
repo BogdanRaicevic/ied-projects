@@ -4,7 +4,11 @@ import {
   type Response,
   Router,
 } from "express";
-import type { ContactTypeEnum, ParametriPretrage } from "ied-shared";
+import {
+  type ContactTypeEnum,
+  ContactTypes,
+  type ParametriPretrage,
+} from "ied-shared";
 import { createAuditMiddleware } from "../middleware/audit";
 import { Firma, type FirmaType } from "../models/firma.model";
 import {
@@ -235,7 +239,8 @@ router.put(
 
     if (
       !contactType ||
-      (contactType !== "telefon" && contactType !== "email")
+      (contactType !== ContactTypes.informativni_poziv &&
+        contactType !== ContactTypes.komercijalni_poziv)
     ) {
       res.status(400).send("Invalid contact type");
       return;

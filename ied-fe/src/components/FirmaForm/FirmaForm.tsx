@@ -12,8 +12,14 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import { differenceInCalendarDays, formatDate } from "date-fns";
-import { FirmaSchema, type FirmaType, type ZaposleniType } from "ied-shared";
+import { differenceInCalendarDays, formatDate, isToday } from "date-fns";
+import { isNil } from "es-toolkit";
+import {
+  ContactTypes,
+  FirmaSchema,
+  type FirmaType,
+  type ZaposleniType,
+} from "ied-shared";
 import { Activity, type FC, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import type { z } from "zod";
@@ -253,13 +259,15 @@ export const FirmaForm: FC<FirmaFormProps> = ({ inputCompany }) => {
     useEmailSuppression(email, setValue);
 
   const previousContacts = inputCompany?.last_contacted || [];
-  const numberOfContacts = previousContacts.length;
   const lastContact = previousContacts[previousContacts.length - 1];
   const contactedAgo = lastContact
     ? differenceInCalendarDays(new Date(), new Date(lastContact.date))
     : 0;
-  const wasContactedWithin30Days =
-    lastContact?.date !== undefined && contactedAgo <= 30;
+  const wasContactedWithin180Days =
+    lastContact?.date !== undefined && contactedAgo <= 180;
+  const isLastContactToday = isNil(lastContact?.date)
+    ? false
+    : isToday(lastContact.date);
 
   return (
     <Box
@@ -311,22 +319,20 @@ export const FirmaForm: FC<FirmaFormProps> = ({ inputCompany }) => {
                 >
                   <Button
                     disabled={
-                      !currentFirmaId || updateLastContactMutation.isPending
+                      !currentFirmaId ||
+                      updateLastContactMutation.isPending ||
+                      isLastContactToday
                     }
-                    onClick={() => updateLastContactMutation.mutate("telefon")}
+                    onClick={() =>
+                      updateLastContactMutation.mutate(
+                        ContactTypes.informativni_poziv,
+                      )
+                    }
                     variant="outlined"
                   >
-                    Kontaktirana Telefonom
+                    Kontaktirana informativno
                   </Button>
-                  <Button
-                    disabled={
-                      !currentFirmaId || updateLastContactMutation.isPending
-                    }
-                    onClick={() => updateLastContactMutation.mutate("email")}
-                    variant="outlined"
-                  >
-                    Kontaktirana Emailom
-                  </Button>
+
                   {updateLastContactMutation.isError && (
                     <Typography variant="caption" color="error.main">
                       Greška: {updateLastContactMutation.error?.message}
@@ -335,22 +341,22 @@ export const FirmaForm: FC<FirmaFormProps> = ({ inputCompany }) => {
                 </Box>
 
                 <Activity
-                  mode={wasContactedWithin30Days ? "visible" : "hidden"}
+                  mode={wasContactedWithin180Days ? "visible" : "hidden"}
                 >
                   <Typography variant="body2" color="success.main">
-                    ✓ Kontaktirana u poslednjih 30 dana ({contactedAgo})
+                    ✓ Kontaktirana u poslednjih 180 dana ({contactedAgo})
                   </Typography>
                 </Activity>
                 <Activity
                   mode={
-                    !wasContactedWithin30Days && lastContact
+                    !wasContactedWithin180Days && lastContact
                       ? "visible"
                       : "hidden"
                   }
                 >
                   <Typography variant="body2" color="error.main">
-                    ✗ Nije kontaktirana u poslednjih 30 dana{" "}
-                    {contactedAgo <= 30 ? "" : `(${contactedAgo} dana)`}
+                    ✗ Nije kontaktirana u poslednjih 180 dana{" "}
+                    {contactedAgo <= 180 ? "" : `(${contactedAgo} dana)`}
                   </Typography>
                 </Activity>
 
@@ -364,16 +370,20 @@ export const FirmaForm: FC<FirmaFormProps> = ({ inputCompany }) => {
                 </Typography>
               </Grid>
               <Grid size={{ xs: 12, md: 4, lg: 4 }}>
-                <Grid
-                  container
-                  spacing={2}
-                  alignItems="center"
-                  justifyContent="center"
+                <Box
+                  sx={{
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    height: "100%", // Helps keep it vertically centered with the columns next to it
+                  }}
                 >
                   <Typography
                     variant="body2"
                     color="text.secondary"
                     gutterBottom
+                    sx={{ mb: 1.5 }}
                   >
                     Poslednji kontakt
                   </Typography>
@@ -394,8 +404,7 @@ export const FirmaForm: FC<FirmaFormProps> = ({ inputCompany }) => {
                       </Typography>
                       <Typography variant="body2" fontWeight={500}>
                         {lastContact
-                          ? // TODO: use date-fns to format this date
-                            formatDate(new Date(lastContact.date), "dd.MM.yyyy")
+                          ? formatDate(new Date(lastContact.date), "dd.MM.yyyy")
                           : "—"}
                       </Typography>
                     </Box>
@@ -408,7 +417,7 @@ export const FirmaForm: FC<FirmaFormProps> = ({ inputCompany }) => {
                       </Typography>
                     </Box>
                   </Box>
-                </Grid>
+                </Box>
               </Grid>
               <Grid size={{ xs: 12, md: 4, lg: 4 }}>
                 <Grid
@@ -417,12 +426,22 @@ export const FirmaForm: FC<FirmaFormProps> = ({ inputCompany }) => {
                   justifyContent="center"
                 >
                   <Box sx={{ textAlign: "center" }}>
-                    <Typography variant="h4" fontWeight={700} color="primary">
-                      {numberOfContacts}
-                    </Typography>
-                    <Typography variant="body2" color="text.secondary">
-                      Ukupno kontakata
-                    </Typography>
+                    <Button
+                      disabled={
+                        !currentFirmaId ||
+                        !lastContact ||
+                        lastContact.contact_type ===
+                          ContactTypes.komercijalni_poziv
+                      }
+                      onClick={() =>
+                        updateLastContactMutation.mutate(
+                          ContactTypes.komercijalni_poziv,
+                        )
+                      }
+                      variant="outlined"
+                    >
+                      Obavljen Komercijalni Razgovor
+                    </Button>
                   </Box>
                 </Grid>
               </Grid>
