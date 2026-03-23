@@ -1,3 +1,9 @@
+## [1.17.1](https://github.com/BogdanRaicevic/ied-projects/compare/v1.17.0...v1.17.1) (2026-03-23)
+
+### Bug Fixes
+
+* saving firma failed due to type mismatch for last_contacted date ([46abb93](https://github.com/BogdanRaicevic/ied-projects/commit/46abb93f48bfcd714e397736ae1b69fa8629d216))
+
 ## [1.17.0](https://github.com/BogdanRaicevic/ied-projects/compare/v1.16.0...v1.17.0) (2026-03-22)
 
 ### Features
