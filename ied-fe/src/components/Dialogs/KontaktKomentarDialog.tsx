@@ -48,11 +48,15 @@ export default function KontaktKomentarDialog({
 
   return (
     <Dialog open={open} onClose={onClose} maxWidth="sm" fullWidth>
-      <DialogTitle>Dodaj komentar kontakta</DialogTitle>
+      <DialogTitle>Dodaj komentar</DialogTitle>
       <DialogContent>
         <Box sx={{ display: "flex", flexDirection: "column", gap: 2, mt: 1 }}>
           <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-            <Typography variant="body2" color="text.secondary" sx={{ whiteSpace: "nowrap" }}>
+            <Typography
+              variant="body2"
+              color="text.secondary"
+              sx={{ whiteSpace: "nowrap" }}
+            >
               Datum:
             </Typography>
             <Typography variant="body2" fontWeight={500}>
@@ -72,7 +76,10 @@ export default function KontaktKomentarDialog({
           />
 
           <Typography variant="caption" color="text.secondary">
-            Komentar koji će biti dodat firmi: <strong>{todayFormatted} - {customText || "..."}</strong>
+            Komentar koji će biti dodat firmi:{" "}
+            <strong>
+              {todayFormatted} - {customText || "..."}
+            </strong>
           </Typography>
 
           <Autocomplete
