@@ -1,3 +1,9 @@
+## [1.18.2](https://github.com/BogdanRaicevic/ied-projects/compare/v1.18.1...v1.18.2) (2026-03-24)
+
+### Bug Fixes
+
+* change module resolution to bundler instead of old/deprecated Node ([cc88fea](https://github.com/BogdanRaicevic/ied-projects/commit/cc88fea015a0706d827068715b37ec9be982fabe))
+
 ## [1.18.1](https://github.com/BogdanRaicevic/ied-projects/compare/v1.18.0...v1.18.1) (2026-03-23)
 
 ### Bug Fixes
