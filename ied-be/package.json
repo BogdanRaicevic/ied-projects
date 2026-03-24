@@ -24,7 +24,7 @@
   },
   "devDependencies": {
     "@biomejs/biome": "^2.4.8",
-    "@faker-js/faker": "^10.3.0",
+    "@faker-js/faker": "^10.4.0",
     "@types/cors": "^2.8.19",
     "@types/express": "^5.0.6",
     "@types/node": "^24.10.15",
