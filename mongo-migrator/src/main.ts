@@ -1,10 +1,12 @@
 import fs from "node:fs";
 import path from "node:path";
+import { pathToFileURL } from "node:url";
 import type { Connection } from "mongoose";
 import { mongoDbConnection } from "./config";
 import { Migration } from "./models/Migration";
 
-const migrationsDir = path.join(__dirname, "migrations");
+const currentDir = import.meta.dirname;
+const migrationsDir = path.join(currentDir, "migrations");
 
 interface MigrationFile {
   timestamp: number;
@@ -30,21 +32,27 @@ const executeMigration = async (migration: MigrationFile, db: Connection) => {
   }
 };
 
-const loadMigrations = (): MigrationFile[] => {
+const loadMigrations = async (): Promise<MigrationFile[]> => {
   console.log(`[MIGRATOR] Scanning for migration files in: ${migrationsDir}`);
   const files = fs.readdirSync(migrationsDir);
-  return files
+
+  const migrationPromises = files
     .filter((file) => file.endsWith(".ts"))
-    .map((file) => {
+    .map(async (file) => {
       const [timestamp, ...nameParts] = file.split("_");
       const name = nameParts.join("_").replace(".ts", "");
+      const filePath = path.join(migrationsDir, file);
+      const module = await import(pathToFileURL(filePath).href);
+
       return {
         timestamp: parseInt(timestamp!, 10),
         name,
-        up: require(path.join(migrationsDir, file)).up,
+        up: module.up,
       };
-    })
-    .sort((a, b) => a.timestamp - b.timestamp);
+    });
+
+  const migrations = await Promise.all(migrationPromises);
+  return migrations.sort((a, b) => a.timestamp - b.timestamp);
 };
 
 const runMigrations = async () => {
@@ -54,7 +62,7 @@ const runMigrations = async () => {
     console.log(
       `[MIGRATOR] Successfully connected to database: ${mongoConnection.name} at ${mongoConnection.host}:${mongoConnection.port}`,
     );
-    const migrations = loadMigrations();
+    const migrations = await loadMigrations();
     const executedMigrations = await Migration.find().sort({ timestamp: 1 });
     const executedTimestamps = executedMigrations.map((m) => m.timestamp);
 

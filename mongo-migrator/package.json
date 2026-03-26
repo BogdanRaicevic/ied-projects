@@ -4,7 +4,7 @@
   "description": "",
   "scripts": {
     "build": "tsc",
-    "dev": "tsc && ts-node src/main.ts",
+    "dev": "tsx src/main.ts",
     "biome:format": "npx biome format --write ./src",
     "biome:check": "npx biome check --write ./src",
     "lint": "npx biome lint ./src",
@@ -24,8 +24,9 @@
   },
   "devDependencies": {
     "@types/node": "^24.10.15",
-    "ts-node": "^10.9.2",
     "typescript": "^5.9.3",
-    "@biomejs/biome": "^2.4.9"
-  }
+    "@biomejs/biome": "^2.4.9",
+    "tsx": "^4.21.0"
+  },
+  "type": "module"
 }
