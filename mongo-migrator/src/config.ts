@@ -25,4 +25,4 @@ const mongoDbConnection = async () => {
   return mongoose.connection;
 };
 
-export { mysqlConnection, mongoDbConnection };
+export { mongoDbConnection, mysqlConnection };
