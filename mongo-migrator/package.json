@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
-    "build": "tsc",
+    "typecheck": "tsc --noEmit",
     "dev": "tsx src/main.ts",
     "biome:format": "npx biome format --write ./src",
     "biome:check": "npx biome check --write ./src",

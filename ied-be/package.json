@@ -5,7 +5,7 @@
   "type": "module",
   "main": "dist/server.js",
   "scripts": {
-    "build": "tsc",
+    "typecheck": "tsc --noEmit",
     "start": "cross-env NODE_ENV=production tsx --import ./src/instrument.ts src/server.ts",
     "dev": "cross-env NODE_ENV=development tsx watch --inspect --import ./src/instrument.ts src/server.ts",
     "test": "vitest",
