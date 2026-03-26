@@ -1,3 +1,10 @@
+## [1.18.3](https://github.com/BogdanRaicevic/ied-projects/compare/v1.18.2...v1.18.3) (2026-03-26)
+
+### Bug Fixes
+
+* correctly setup main file for ied-be after refactoring ([a860aa6](https://github.com/BogdanRaicevic/ied-projects/commit/a860aa67d4b9f0512bdd19f81d8e63d68f77fd94))
+* use correct react plugin for vite configuration ([bd29f6c](https://github.com/BogdanRaicevic/ied-projects/commit/bd29f6c1e60b5d31057fdc9e410e143b7cc5a925))
+
 ## [1.18.2](https://github.com/BogdanRaicevic/ied-projects/compare/v1.18.1...v1.18.2) (2026-03-24)
 
 ### Bug Fixes
