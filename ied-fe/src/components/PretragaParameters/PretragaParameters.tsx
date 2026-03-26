@@ -74,8 +74,8 @@ export default function PretragaParameters() {
     loadFromStorage,
   } = usePretragaStore();
 
-  const { control, handleSubmit, reset } = useForm({
-    defaultValues: defaultPretrageParameters as ParametriPretrage,
+  const { control, handleSubmit, reset } = useForm<ParametriPretrage>({
+    defaultValues: defaultPretrageParameters,
   });
 
   useEffect(() => {
@@ -401,17 +401,6 @@ export default function PretragaParameters() {
             unsubscribed: "Odjavljeni",
           }}
         />
-
-        {/* <PrijaveRadioButtons
-          name="prijaveNaSeminare"
-          control={control}
-          label="Firme sa prijavama na seminare:"
-          options={{
-            all: "Sve",
-            subscribed: "Sa prijavama",
-            unsubscribed: "Bez prijava",
-          }}
-        /> */}
       </Grid>
 
       <Grid container spacing={2} columns={12} mt={4} mb={4}>

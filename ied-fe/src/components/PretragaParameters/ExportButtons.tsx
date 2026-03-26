@@ -1,7 +1,12 @@
+import type { ParametriPretrage } from "ied-shared";
 import { type Control, useWatch } from "react-hook-form";
 import ExportDataButton from "../SaveDataButton";
 
-export function ExportButtons({ control }: { control: Control }) {
+export function ExportButtons({
+  control,
+}: {
+  control: Control<ParametriPretrage>;
+}) {
   const formValues = useWatch({ control }); // Only this component re-renders on change
 
   return (

@@ -6,12 +6,12 @@ import {
   RadioGroup,
 } from "@mui/material";
 import { Grid } from "@mui/system";
-import { PRIJAVA_STATUS } from "ied-shared";
+import { type ParametriPretrage, PRIJAVA_STATUS } from "ied-shared";
 import { type Control, Controller } from "react-hook-form";
 
 interface PrijaveRadioButtonsProps {
-  name: string;
-  control: Control;
+  name: "firmaPrijavljeni" | "zaposleniPrijavljeni";
+  control: Control<ParametriPretrage>;
   label: string;
   options: {
     all: string;
