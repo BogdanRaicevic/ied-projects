@@ -233,8 +233,8 @@ importers:
         specifier: ^17.4.0
         version: 17.4.0
       typescript:
-        specifier: ^5.9.3
-        version: 5.9.3
+        specifier: ^6.0.2
+        version: 6.0.2
       vite:
         specifier: ^8.0.3
         version: 8.0.3(@types/node@24.10.15)(esbuild@0.27.1)(jiti@2.6.0)(tsx@4.21.0)(yaml@2.8.2)
