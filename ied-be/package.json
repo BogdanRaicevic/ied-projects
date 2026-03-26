@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "READ ME stuff",
   "type": "module",
-  "main": "dist/server.js",
+  "main": "src/server.ts",
   "scripts": {
     "typecheck": "tsc --noEmit",
     "start": "cross-env NODE_ENV=production tsx --import ./src/instrument.ts src/server.ts",

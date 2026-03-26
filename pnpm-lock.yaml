@@ -171,9 +171,6 @@ importers:
       '@tanstack/react-query':
         specifier: ^5.95.2
         version: 5.95.2(react@19.2.4)
-      '@vitejs/plugin-react':
-        specifier: ^6.0.1
-        version: 6.0.1(vite@8.0.3(@types/node@24.10.15)(esbuild@0.27.1)(jiti@2.6.0)(tsx@4.21.0)(yaml@2.8.2))
       axios:
         specifier: ^1.13.6
         version: 1.13.6
@@ -229,6 +226,9 @@ importers:
       '@types/react-router-dom':
         specifier: ^5.3.3
         version: 5.3.3
+      '@vitejs/plugin-react':
+        specifier: ^6.0.1
+        version: 6.0.1(vite@8.0.3(@types/node@24.10.15)(esbuild@0.27.1)(jiti@2.6.0)(tsx@4.21.0)(yaml@2.8.2))
       globals:
         specifier: ^17.4.0
         version: 17.4.0
