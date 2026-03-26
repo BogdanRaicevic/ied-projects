@@ -13,7 +13,10 @@ export default defineConfig({
   server: {
     allowedHosts: ["ied-baza.xyz", "bs-baza.xyz"],
     fs: {
-      allow: [path.resolve(__dirname), searchForWorkspaceRoot(process.cwd())],
+      allow: [
+        path.resolve(import.meta.dirname),
+        searchForWorkspaceRoot(process.cwd()),
+      ],
     },
   },
 });
