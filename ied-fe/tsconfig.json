@@ -4,8 +4,6 @@
     "target": "ESNext",
     "useDefineForClassFields": true,
     "lib": ["DOM", "DOM.Iterable", "ESNext"],
-    "allowJs": true,
-    "allowSyntheticDefaultImports": true,
     "module": "ESNext",
     "moduleResolution": "bundler",
     "resolveJsonModule": true,
@@ -16,7 +14,8 @@
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "sourceMap": true,
-    "inlineSources": true
+    "inlineSources": true,
+    "verbatimModuleSyntax": true
   },
   "include": ["src", "vite.config.ts"]
 }
