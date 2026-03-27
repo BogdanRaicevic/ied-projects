@@ -608,7 +608,7 @@ export const FirmaForm: FC<FirmaFormProps> = ({ inputCompany }) => {
           </Alert>
         )}
       </Grid>
-      <KontaktKomentarDialog 
+      <KontaktKomentarDialog
         open={isKontaktDialogOpen}
         onClose={() => setIsKontaktDialogOpen(false)}
         zaposleniList={inputCompany?.zaposleni ?? []}

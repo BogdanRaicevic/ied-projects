@@ -1,11 +1,11 @@
-import type {
-  ContactTypeEnum,
-  Email,
-  ExportFirma,
-  ExportZaposlenih,
-  ParametriPretrage,
+import {
+  type ContactTypeEnum,
+  type Email,
+  type ExportFirma,
+  type ExportZaposlenih,
+  NEGACIJA,
+  type ParametriPretrage,
 } from "ied-shared";
-import { NEGACIJA } from "ied-shared";
 import { Firma, type FirmaType } from "../models/firma.model";
 import type { Zaposleni } from "../models/zaposleni.model";
 import { createFirmaQuery } from "../queryBuilders/firmaQueryBuilder";
