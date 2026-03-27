@@ -3,15 +3,11 @@
   "private": true,
   "version": "1.18.4",
   "description": "Monorepo for IED projects",
-  "workspaces": [
-    "ied-fe",
-    "ied-be",
-    "ied-shared",
-    "mongo-migrator"
-  ],
   "scripts": {
     "build": "turbo run build",
+    "typecheck": "turbo run typecheck",
     "dev": "turbo run dev",
+    "clean": "turbo run clean && rm -rf node_modules",
     "test": "turbo run test",
     "test:run": "turbo run test:run",
     "test:coverage": "turbo run test:coverage",
@@ -28,7 +24,6 @@
     "@semantic-release/git": "^10.0.1",
     "@semantic-release/github": "^12.0.6",
     "@semantic-release/npm": "^13.1.5",
-    "@types/node": "^24.10.15",
     "conventional-changelog-conventionalcommits": "^9.3.0",
     "knip": "^6.0.6",
     "semantic-release": "^25.0.3",
