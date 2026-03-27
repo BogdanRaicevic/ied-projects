@@ -1,3 +1,10 @@
+## [1.18.5](https://github.com/BogdanRaicevic/ied-projects/compare/v1.18.4...v1.18.5) (2026-03-27)
+
+### Bug Fixes
+
+* Remove root TS 5 definition ([ef218c1](https://github.com/BogdanRaicevic/ied-projects/commit/ef218c1b5731813da528937411051acdd644e0a9))
+* remove surplus code ([112594a](https://github.com/BogdanRaicevic/ied-projects/commit/112594a9b2476ee85e3f92e6349b6f54c173f385))
+
 ## [1.18.4](https://github.com/BogdanRaicevic/ied-projects/compare/v1.18.3...v1.18.4) (2026-03-26)
 
 ### Bug Fixes
