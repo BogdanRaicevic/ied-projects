@@ -424,10 +424,10 @@ export const getUserChangesByDate = async (params: AuditLogQueryParams) => {
 
     // Helper function to get or create date stats
     const getOrCreateDateStats = (date: string): DailyStat => {
-      return dateMap.getOrInsertComputed(date, () => ({
-        ...defaultDateStats,
-        date,
-      }));
+      if (!dateMap.has(date)) {
+        dateMap.set(date, { ...defaultDateStats, date });
+      }
+      return dateMap.get(date)!;
     };
 
     // Process total counts
