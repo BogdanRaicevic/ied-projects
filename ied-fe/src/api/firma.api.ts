@@ -61,11 +61,11 @@ export const exportFirmaData = async (
       if (!element.e_mail) {
         continue; // Skip if e_mail is not present
       }
-      if (firmeMap.has(element.e_mail)) {
-        firmeMap.set(element.e_mail, firmeMap.get(element.e_mail)! + 1);
-      } else {
-        firmeMap.set(element.e_mail, 1);
-      }
+
+      firmeMap.set(
+        element.e_mail,
+        firmeMap.getOrInsertComputed(element.e_mail, () => 0) + 1,
+      );
     }
 
     const duplicates = Array.from(firmeMap.entries())
