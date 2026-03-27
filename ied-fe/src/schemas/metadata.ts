@@ -1,4 +1,4 @@
-import * as z from "zod";
+import { z } from "zod";
 
 const inputTypes = ["Text", "Switch", "Select", "TextMultiline"] as const;
 export const InputTypesSchema = z.enum(inputTypes);
