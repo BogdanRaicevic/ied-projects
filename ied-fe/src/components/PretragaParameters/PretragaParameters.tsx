@@ -2,6 +2,7 @@ import AddBoxIcon from "@mui/icons-material/AddBox";
 import SearchIcon from "@mui/icons-material/Search";
 import {
   Autocomplete,
+  Badge,
   Box,
   Button,
   Chip,
@@ -16,7 +17,7 @@ import type {
 } from "ied-shared";
 import { NEGACIJA } from "ied-shared";
 import { useCallback, useEffect, useMemo } from "react";
-import { Controller, useForm } from "react-hook-form";
+import { Controller, useForm, useWatch } from "react-hook-form";
 import { useGetMesta } from "../../hooks/mesto/useMestoQueries";
 import { useGetRadnaMestaNames } from "../../hooks/radnoMesto/useRadnoMestoQueries";
 import { useSearchSeminari } from "../../hooks/seminar/useSeminarQueries";
@@ -32,6 +33,62 @@ import CheckboxList from "../CheckboxList";
 import NegationCheckbox from "../NegationCheckbox";
 import { ExportButtons } from "./ExportButtons";
 import { PrijaveRadioButtons } from "./PrijaveRadioButtons";
+
+function countUsedPretragaParameters(params: ParametriPretrage): number {
+  let filterCount = 0;
+
+  const stringKeys = [
+    "imeFirme",
+    "pib",
+    "email",
+    "jbkjs",
+    "maticniBroj",
+    "komentar",
+    "imePrezime",
+    "emailZaposlenog",
+  ] as const satisfies readonly (keyof ParametriPretrage)[];
+  for (const key of stringKeys) {
+    const v = params[key];
+    if (typeof v === "string" && v.trim() !== "") {
+      filterCount++;
+    }
+  }
+
+  const arrayKeys = [
+    "velicineFirme",
+    "radnaMesta",
+    "tipoviFirme",
+    "delatnosti",
+    "mesta",
+    "negacije",
+    "stanjaFirme",
+    "seminari",
+    "tipoviSeminara",
+  ] as const satisfies readonly (keyof ParametriPretrage)[];
+  for (const key of arrayKeys) {
+    const v = params[key];
+    if (Array.isArray(v) && v.length > 0) {
+      filterCount++;
+    }
+  }
+
+  if (
+    (params.firmaPrijavljeni ?? defaultPretrageParameters.firmaPrijavljeni) !==
+    defaultPretrageParameters.firmaPrijavljeni
+  ) {
+    filterCount++;
+  }
+
+  if (
+    (params.zaposleniPrijavljeni ??
+      defaultPretrageParameters.zaposleniPrijavljeni) !==
+    defaultPretrageParameters.zaposleniPrijavljeni
+  ) {
+    filterCount++;
+  }
+
+  return filterCount;
+}
 
 export default function PretragaParameters() {
   const { delatnosti, tipoviFirme, velicineFirme, stanjaFirme } =
@@ -77,6 +134,16 @@ export default function PretragaParameters() {
   const { control, handleSubmit, reset } = useForm<ParametriPretrage>({
     defaultValues: defaultPretrageParameters,
   });
+
+  const watchedPretragaParameters = useWatch({ control });
+  const selectedPretragaFilterCount = useMemo(
+    () =>
+      countUsedPretragaParameters({
+        ...defaultPretrageParameters,
+        ...watchedPretragaParameters,
+      }),
+    [watchedPretragaParameters],
+  );
 
   useEffect(() => {
     loadFromStorage();
@@ -491,16 +558,29 @@ export default function PretragaParameters() {
         <Box>
           <ExportButtons control={control} />
 
-          <Button
-            sx={{ m: 1 }}
-            variant="contained"
-            size="large"
-            color="info"
-            startIcon={<SearchIcon />}
-            type="submit"
+          <Badge
+            badgeContent={selectedPretragaFilterCount}
+            color="warning"
+            overlap="circular"
+            invisible={selectedPretragaFilterCount === 0}
+            sx={{
+              m: 1,
+              "& .MuiBadge-badge": {
+                right: 0,
+                top: 0,
+              },
+            }}
           >
-            Pretraži
-          </Button>
+            <Button
+              variant="contained"
+              size="large"
+              color="info"
+              startIcon={<SearchIcon />}
+              type="submit"
+            >
+              Pretraži
+            </Button>
+          </Badge>
         </Box>
 
         <Box>
