@@ -1,3 +1,9 @@
+## [1.18.6](https://github.com/BogdanRaicevic/ied-projects/compare/v1.18.5...v1.18.6) (2026-04-01)
+
+### Bug Fixes
+
+* expand komentar size for firma ([631843a](https://github.com/BogdanRaicevic/ied-projects/commit/631843af4acd5d25e8d964dae814f7f40230e6b3))
+
 ## [1.18.5](https://github.com/BogdanRaicevic/ied-projects/compare/v1.18.4...v1.18.5) (2026-03-27)
 
 ### Bug Fixes
