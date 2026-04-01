@@ -50,7 +50,7 @@ export const FirmaSchema = z.object({
     .optional(),
   tip_firme: z.string().optional(),
   delatnost: z.string().optional(),
-  komentar: z.string().max(1000).optional(),
+  komentar: z.string().max(10000).optional(),
   stanje_firme: z.string().max(50).optional(),
   velicina_firme: z.string().optional(),
   zaposleni: z.array(ZaposleniSchema).optional(),
