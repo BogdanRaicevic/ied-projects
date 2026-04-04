@@ -2,8 +2,11 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import ForwardToInboxIcon from "@mui/icons-material/ForwardToInbox";
 import TableViewIcon from "@mui/icons-material/TableView";
+import WorkspacePremiumIcon from "@mui/icons-material/WorkspacePremium";
 import { IconButton, Tooltip } from "@mui/material";
 import { Box } from "@mui/system";
+import { formatDate } from "date-fns";
+import { srLatn } from "date-fns/locale";
 import type { SeminarZodType } from "ied-shared";
 import { memo } from "react";
 import { useDeleteSeminarMutation } from "../../hooks/seminar/useSeminarMutations";
@@ -75,11 +78,64 @@ const SeminariTableActionCell = memo(
       exportDataToCSV(seminar, "seminar", csvRows);
     };
 
+    const handleGenerateCertificates = (seminar: Partial<SeminarZodType>) => {
+      const errors: string[] = [];
+      const sertifikatData = {
+        prijave:
+          seminar.prijave?.reduce(
+            (acc, p) => {
+              const s = {
+                ime_prezime: `${p.zaposleni_ime} ${p.zaposleni_prezime}`,
+                naziv_seminara: seminar.naziv,
+                datum: formatDate(seminar.datum!, "dd. MMMM yyyy.", {
+                  locale: srLatn,
+                }),
+                godina: formatDate(seminar.datum!, "yyyy", { locale: srLatn }),
+              };
+
+              const nameParts = s.ime_prezime.trim().split(" ");
+              if (nameParts.length <= 1) {
+                errors.push(
+                  `Ime i prezime nisu validni za firmu: ${p.firma_naziv}`,
+                );
+                return acc;
+              }
+
+              acc.push(s);
+              return acc;
+            },
+            [] as Array<{
+              ime_prezime: string;
+              naziv_seminara: string | undefined;
+              datum: string;
+              godina: string;
+            }>,
+          ) || [],
+      };
+
+      if (errors.length > 0) {
+        alert(
+          "Greška pri generisanju sertifikata.\nZa sledeće klijente nisu generisani sertifikati:\n" +
+            errors.join("\n"),
+        );
+      }
+
+      return sertifikatData;
+    };
+
     return (
       <Box sx={{ display: "flex", gap: "1rem" }}>
         <Tooltip title="Edit">
           <IconButton color="info" onClick={() => onEdit(seminar)}>
             <EditIcon />
+          </IconButton>
+        </Tooltip>
+        <Tooltip title="Generiši sertifikate">
+          <IconButton
+            color="success"
+            onClick={() => handleGenerateCertificates(seminar)}
+          >
+            <WorkspacePremiumIcon />
           </IconButton>
         </Tooltip>
         <Tooltip title="Export učesnika">
