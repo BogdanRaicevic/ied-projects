@@ -7,12 +7,9 @@ import { IconButton, Tooltip } from "@mui/material";
 import { Box } from "@mui/system";
 import { formatDate } from "date-fns";
 import { srLatn } from "date-fns/locale";
-import type { SeminarZodType } from "ied-shared";
+import type { SeminarZodType, SertifikatType } from "ied-shared";
 import { memo } from "react";
-import {
-  generateSertifikatDocument,
-  type SertifikatDocumentRequest,
-} from "../../api/docx.api";
+import { generateSertifikatDocument } from "../../api/docx.api";
 import { useDeleteSeminarMutation } from "../../hooks/seminar/useSeminarMutations";
 
 const exportDataToCSV = async (
@@ -82,6 +79,10 @@ const SeminariTableActionCell = memo(
       exportDataToCSV(seminar, "seminar", csvRows);
     };
 
+    const getCurrentYearLastTwoDigits = () => {
+      return String(new Date().getFullYear()).slice(-2);
+    };
+
     const handleGenerateCertificates = async (
       seminar: Partial<SeminarZodType>,
     ) => {
@@ -126,39 +127,39 @@ const SeminariTableActionCell = memo(
         return;
       }
 
-      const sertifikatData: SertifikatDocumentRequest[] =
-        seminar.prijave?.reduce(
-          (acc, p) => {
-            const ime_prezime =
-              `${p.zaposleni_ime} ${p.zaposleni_prezime}`.trim();
-            const nameParts = ime_prezime.split(" ");
+      const sertifikatData: SertifikatType[] =
+        seminar.prijave?.reduce((acc, p) => {
+          const ime_prezime =
+            `${p.zaposleni_ime} ${p.zaposleni_prezime}`.trim();
+          const nameParts = ime_prezime.split(" ");
 
-            if (nameParts.length <= 1) {
-              errors.push(
-                `Ime i prezime nisu validni za firmu: ${p.firma_naziv}`,
-              );
-              return acc;
-            }
-            if (!p.firma_naziv?.trim()) {
-              errors.push(`Naziv firme nije validan za korisnika: ${ime_prezime}`);
-              return acc;
-            }
-            acc.push({
-              sertifikat_broj: startingCertificateNumber + acc.length,
-              firma_naziv: p.firma_naziv.trim(),
-              ime_prezime,
-              seminar_naziv: seminarName,
-              datum_seminara: formatDate(seminarDate, "dd. MMMM yyyy.", {
-                locale: srLatn,
-              }),
-              godina_seminara: formatDate(seminarDate, "yyyy", {
-                locale: srLatn,
-              }),
-            });
+          if (nameParts.length <= 1) {
+            errors.push(
+              `Ime i prezime nisu validni za firmu: ${p.firma_naziv}`,
+            );
             return acc;
-          },
-          [] as SertifikatDocumentRequest[],
-        ) || [];
+          }
+          if (!p.firma_naziv?.trim()) {
+            errors.push(
+              `Naziv firme nije validan za korisnika: ${ime_prezime}`,
+            );
+            return acc;
+          }
+          acc.push({
+            broj_sertifikata: startingCertificateNumber + acc.length,
+            firma_naziv: p.firma_naziv.trim(),
+            ime_prezime,
+            seminar_naziv: seminarName,
+            datum_seminara: formatDate(seminarDate, "dd. MMMM yyyy.", {
+              locale: srLatn,
+            }),
+            godina_seminara: formatDate(seminarDate, "yyyy", {
+              locale: srLatn,
+            }),
+            godina_sertifikata: getCurrentYearLastTwoDigits(),
+          } satisfies SertifikatType);
+          return acc;
+        }, [] as SertifikatType[]) || [];
 
       if (errors.length > 0) {
         alert(

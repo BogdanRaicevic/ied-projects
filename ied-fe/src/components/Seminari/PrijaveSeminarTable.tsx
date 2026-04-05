@@ -2,6 +2,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import MonetizationOnIcon from "@mui/icons-material/MonetizationOn";
+import WorkspacePremiumIcon from "@mui/icons-material/WorkspacePremium";
 import {
   Box,
   Collapse,
@@ -14,16 +15,23 @@ import {
   Tooltip,
   Typography,
 } from "@mui/material";
-import type { PrijavaZodType } from "ied-shared";
+import { formatDate } from "date-fns";
+import { srLatn } from "date-fns/locale";
+import type { PrijavaZodType, SertifikatType } from "ied-shared";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { generateSingleSertifikatDocument } from "../../api/docx.api";
 import { useDeletePrijavaMutation } from "../../hooks/seminar/useSeminarMutations";
 
 export default function PrijaveSeminarTable({
   seminarId,
+  seminarDate,
+  seminarName,
   prijave,
 }: {
   seminarId: string;
+  seminarDate: Date;
+  seminarName: string;
   prijave: PrijavaZodType[];
 }) {
   const [open, setOpen] = useState(false);
@@ -45,6 +53,64 @@ export default function PrijaveSeminarTable({
   const navigate = useNavigate();
   const handleCreateRacun = () => {
     navigate("/racuni", { state: { prijave, seminarId } });
+  };
+
+  const handleGenerateSingleCertificate = async (prijava: PrijavaZodType) => {
+    const ime_prezime =
+      `${prijava.zaposleni_ime || ""} ${prijava.zaposleni_prezime || ""}`.trim();
+    const nameParts = ime_prezime.split(" ").filter(Boolean);
+
+    if (nameParts.length <= 1) {
+      alert(
+        `Ime i prezime nisu validni za firmu: ${prijava.firma_naziv || "Nepoznata firma"}`,
+      );
+      return;
+    }
+
+    if (!prijava.firma_naziv?.trim()) {
+      alert(`Naziv firme nije validan za korisnika: ${ime_prezime}`);
+      return;
+    }
+
+    const startingNumberInput = window.prompt("Unesite broj sertifikata:");
+    if (startingNumberInput === null) {
+      return;
+    }
+
+    const sertifikatBroj = Number.parseInt(startingNumberInput.trim(), 10);
+    if (!Number.isInteger(sertifikatBroj) || sertifikatBroj <= 0) {
+      alert("Broj sertifikata mora biti pozitivan ceo broj.");
+      return;
+    }
+
+    const getCurrentYearLastTwoDigits = () => {
+      return String(new Date().getFullYear()).slice(-2);
+    };
+
+    const sertifikatData = {
+      broj_sertifikata: sertifikatBroj,
+      firma_naziv: prijava.firma_naziv.trim(),
+      ime_prezime,
+      seminar_naziv: seminarName,
+      datum_seminara: formatDate(seminarDate, "dd. MMMM yyyy.", {
+        locale: srLatn,
+      }),
+      godina_seminara: formatDate(seminarDate, "yyyy", {
+        locale: srLatn,
+      }),
+      godina_sertifikata: getCurrentYearLastTwoDigits(),
+    } satisfies SertifikatType;
+
+    try {
+      await generateSingleSertifikatDocument(sertifikatData);
+    } catch (error) {
+      console.error("Error generating certificate:", error);
+      alert(
+        error instanceof Error
+          ? error.message
+          : "Došlo je do greške prilikom generisanja sertifikata.",
+      );
+    }
   };
 
   return (
@@ -100,14 +166,26 @@ export default function PrijaveSeminarTable({
                   {prijave.map((prijava) => (
                     <TableRow key={prijava.zaposleni_id}>
                       <TableCell>
-                        <IconButton
-                          color="error"
-                          onClick={() =>
-                            onPrijavaDelete(prijava.zaposleni_id, seminarId)
-                          }
-                        >
-                          <DeleteIcon />
-                        </IconButton>
+                        <Box sx={{ display: "flex", gap: 1 }}>
+                          <Tooltip title="Generiši sertifikat">
+                            <IconButton
+                              color="success"
+                              onClick={() =>
+                                handleGenerateSingleCertificate(prijava)
+                              }
+                            >
+                              <WorkspacePremiumIcon />
+                            </IconButton>
+                          </Tooltip>
+                          <IconButton
+                            color="error"
+                            onClick={() =>
+                              onPrijavaDelete(prijava.zaposleni_id, seminarId)
+                            }
+                          >
+                            <DeleteIcon />
+                          </IconButton>
+                        </Box>
                       </TableCell>
                       <TableCell>{prijava.zaposleni_ime}</TableCell>
                       <TableCell>{prijava.zaposleni_prezime}</TableCell>

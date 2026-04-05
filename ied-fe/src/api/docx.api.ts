@@ -1,15 +1,11 @@
-import { type RacunType, RacunZod, TipRacuna } from "ied-shared";
+import {
+  type RacunType,
+  RacunZod,
+  type SertifikatType,
+  TipRacuna,
+} from "ied-shared";
 import { validateOrThrow } from "../utils/zodErrorHelper";
 import axiosInstanceWithAuth from "./interceptors/auth";
-
-export type SertifikatDocumentRequest = {
-  sertifikat_broj: number;
-  datum_seminara: string;
-  firma_naziv: string;
-  godina_seminara: string;
-  ime_prezime: string;
-  seminar_naziv: string;
-};
 
 export const generateRacunDocument = async (racunData: RacunType) => {
   const tipRacuna = racunData.tipRacuna;
@@ -51,7 +47,7 @@ export const generateRacunDocument = async (racunData: RacunType) => {
 };
 
 export const generateSertifikatDocument = async (
-  sertifikatData: SertifikatDocumentRequest[],
+  sertifikatData: SertifikatType[],
 ) => {
   const response = await axiosInstanceWithAuth.post(
     `/api/docx/generate-sertifikat`,
@@ -61,15 +57,40 @@ export const generateSertifikatDocument = async (
     },
   );
 
-  if (response.headers["content-type"]?.includes("application/json")) {
-    const errorData = JSON.parse(await response.data.text());
-    throw new Error(errorData.error || "Failed to generate certificates");
-  }
+  await throwBlobResponseError(
+    response.data,
+    response.headers["content-type"],
+    "Failed to generate certificates",
+  );
 
   triggerBlobDownload(
     response.data,
     response.headers["content-disposition"],
     "sertifikati.zip",
+  );
+};
+
+export const generateSingleSertifikatDocument = async (
+  sertifikatData: SertifikatType,
+) => {
+  const response = await axiosInstanceWithAuth.post(
+    `/api/docx/generate-sertifikat-single`,
+    sertifikatData,
+    {
+      responseType: "blob",
+    },
+  );
+
+  await throwBlobResponseError(
+    response.data,
+    response.headers["content-type"],
+    "Failed to generate certificate",
+  );
+
+  triggerBlobDownload(
+    response.data,
+    response.headers["content-disposition"],
+    `${sertifikatData.broj_sertifikata}${sertifikatData.godina_sertifikata}_${sanitizeFilename(sertifikatData.ime_prezime)}_${sanitizeFilename(sertifikatData.firma_naziv)}.docx`,
   );
 };
 
@@ -107,6 +128,24 @@ const getFileNameFromDisposition = (contentDispositionHeader?: string) => {
     /filename=["']?([^"';\n]+)["']?/i,
   );
   return standardMatch?.[1] || null;
+};
+
+const throwBlobResponseError = async (
+  data: Blob,
+  contentTypeHeader: string | undefined,
+  fallbackMessage: string,
+) => {
+  if (!contentTypeHeader?.includes("application/json")) {
+    return;
+  }
+
+  const errorData = JSON.parse(await data.text());
+  throw new Error(
+    errorData.details ||
+      errorData.error ||
+      errorData.message ||
+      fallbackMessage,
+  );
 };
 
 const sanitizeFilename = (str: string) => {

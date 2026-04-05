@@ -62,6 +62,8 @@ const SeminarSubTable = ({ row }: { row: MRT_Row<SeminarZodType> }) => {
               <PrijaveSeminarTable
                 key={naziv_firme}
                 seminarId={row.original._id || ""}
+                seminarDate={row.original.datum}
+                seminarName={row.original.naziv}
                 prijave={prijave}
               />
             );

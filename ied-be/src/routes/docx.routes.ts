@@ -9,6 +9,7 @@ import {
   RacunZod,
   SertifikatBatchZod,
   type SertifikatType,
+  SertifikatZod,
   TipRacuna,
 } from "ied-shared";
 import PizZip from "pizzip";
@@ -103,6 +104,13 @@ const renderDocxTemplate = (
 
 const getCurrentYearLastTwoDigits = (): string =>
   String(new Date().getFullYear()).slice(-2);
+
+const getSertifikatDocxFileName = (sertifikat: SertifikatType): string => {
+  const currentYearLastTwoDigits = getCurrentYearLastTwoDigits();
+  return sanitizeFilename(
+    `${sertifikat.broj_sertifikata}${currentYearLastTwoDigits}_${sertifikat.ime_prezime}_${sertifikat.firma_naziv}.docx`,
+  );
+};
 
 router.post(
   "/modify-template",
@@ -218,6 +226,36 @@ router.post(
 );
 
 router.post(
+  "/generate-sertifikat-single",
+  validateRequestBody(SertifikatZod),
+  async (req: Request<{}, any, SertifikatType>, res) => {
+    const sertifikatData = req.body;
+    const templatePath = getTemplatePath("SERTIFIKAT IED.docx");
+
+    try {
+      const docxBuffer = renderDocxTemplate(templatePath, sertifikatData);
+
+      res.setHeader(
+        "Content-Type",
+        "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+      );
+      res.setHeader(
+        "Content-Disposition",
+        `attachment; filename=${getSertifikatDocxFileName(sertifikatData)}`,
+      );
+
+      res.send(docxBuffer);
+    } catch (error) {
+      console.error("Template processing error:", error);
+      res.status(500).json({
+        error: "Error processing template",
+        details: getTemplateErrorDetails(error),
+      });
+    }
+  },
+);
+
+router.post(
   "/generate-sertifikat",
   validateRequestBody(SertifikatBatchZod),
   async (req: Request<{}, any, SertifikatType[]>, res) => {
@@ -229,16 +267,8 @@ router.post(
       const currentYearLastTwoDigits = getCurrentYearLastTwoDigits();
 
       for (const sertifikat of sertifikatData) {
-        const documentData = {
-          ...sertifikat,
-          broj_Seminara: String(sertifikat.sertifikat_broj),
-          sertifikat_broj: String(sertifikat.sertifikat_broj),
-        };
-
-        const docxBuffer = renderDocxTemplate(templatePath, documentData);
-        const fileName = sanitizeFilename(
-          `${sertifikat.sertifikat_broj}${currentYearLastTwoDigits}_${sertifikat.ime_prezime}_${sertifikat.firma_naziv}.docx`,
-        );
+        const docxBuffer = renderDocxTemplate(templatePath, sertifikat);
+        const fileName = getSertifikatDocxFileName(sertifikat);
 
         archive.file(fileName, docxBuffer);
       }
