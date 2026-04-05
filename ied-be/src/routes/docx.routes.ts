@@ -6,8 +6,41 @@ import Docxtemplater from "docxtemplater";
 import { type Request, Router } from "express";
 import { IzdavacRacuna, type RacunType, RacunZod, TipRacuna } from "ied-shared";
 import PizZip from "pizzip";
+import { z } from "zod";
 import { izdavacRacuna } from "../constants/izdavacRacuna.const";
 import { validateRequestBody } from "../middleware/validateSchema";
+
+// Zod schema for certificate generation
+export const SertifikatZod = z.object({
+  broj_Seminara: z.string().min(1, { message: "Broj seminara je obavezan" }),
+  datum_seminara: z.string().min(1, { message: "Datum seminara je obavezan" }),
+  godina_seminara: z
+    .string()
+    .min(1, { message: "Godina seminara je obavezna" }),
+  ime_prezime: z.string().min(1, { message: "Ime i prezime je obavezno" }),
+  seminar_naziv: z.string().min(1, { message: "Naziv seminara je obavezan" }),
+});
+
+export type SertifikatType = z.infer<typeof SertifikatZod>;
+
+export const SertifikatBatchItemZod = z.object({
+  sertifikat_broj: z.number().int().positive({
+    message: "Broj sertifikata mora biti pozitivan ceo broj",
+  }),
+  datum_seminara: z.string().min(1, { message: "Datum seminara je obavezan" }),
+  firma_naziv: z.string().min(1, { message: "Naziv firme je obavezan" }),
+  godina_seminara: z
+    .string()
+    .min(1, { message: "Godina seminara je obavezna" }),
+  ime_prezime: z.string().min(1, { message: "Ime i prezime je obavezno" }),
+  seminar_naziv: z.string().min(1, { message: "Naziv seminara je obavezan" }),
+});
+
+export const SertifikatBatchZod = z
+  .array(SertifikatBatchItemZod)
+  .min(1, { message: "Potreban je bar jedan sertifikat za generisanje" });
+
+export type SertifikatBatchItemType = z.infer<typeof SertifikatBatchItemZod>;
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -47,6 +80,60 @@ const sanitizeFilename = (str: string): string => {
 const formatToLocalDate = (date: Date): string =>
   formatDate(date, "dd.MM.yyyy");
 
+const templatesDir = path.resolve(__dirname, "../../src/templates");
+
+const getTemplatePath = (templateName: string): string => {
+  const templatePath = path.resolve(templatesDir, templateName);
+  if (!templatePath.startsWith(templatesDir)) {
+    throw new Error("Invalid template path");
+  }
+  return templatePath;
+};
+
+const getTemplateErrorDetails = (error: unknown): string => {
+  let errorDetails = error instanceof Error ? error.message : "Unknown error";
+  if (error && typeof error === "object" && "properties" in error) {
+    const err = error as {
+      properties?: {
+        errors?: Array<{
+          name?: string;
+          message?: string;
+          properties?: { id?: string };
+        }>;
+      };
+    };
+    if (err.properties?.errors) {
+      errorDetails = err.properties.errors
+        .map(
+          (e) =>
+            `${e.name || "Error"}: ${e.message || ""} (${e.properties?.id || "unknown"})`,
+        )
+        .join("; ");
+    }
+  }
+  return errorDetails;
+};
+
+const renderDocxTemplate = (
+  templatePath: string,
+  templateData: Record<string, unknown>,
+): Buffer => {
+  const content = fs.readFileSync(templatePath, "binary");
+  const zip = new PizZip(content);
+  const doc = new Docxtemplater(zip, {
+    paragraphLoop: true,
+    linebreaks: true,
+    errorLogging: true,
+  });
+
+  doc.render(templateData);
+
+  return doc.getZip().generate({ type: "nodebuffer" });
+};
+
+const getCurrentYearLastTwoDigits = (): string =>
+  String(new Date().getFullYear()).slice(-2);
+
 router.post(
   "/modify-template",
   validateRequestBody(RacunZod),
@@ -78,7 +165,6 @@ router.post(
     );
 
     // Additional check to ensure the resolved path is within the templates directory
-    const templatesDir = path.resolve(__dirname, "../../src/templates");
     if (!templatePath.startsWith(templatesDir)) {
       res.status(400).json({ error: "Invalid template path" });
       return;
@@ -87,7 +173,11 @@ router.post(
     try {
       const content = fs.readFileSync(templatePath, "binary");
       const zip = new PizZip(content);
-      const doc = new Docxtemplater(zip);
+      const doc = new Docxtemplater(zip, {
+        paragraphLoop: true,
+        linebreaks: true,
+        errorLogging: true,
+      });
 
       const dataForDocumentRednering = {
         ...racunData,
@@ -128,9 +218,79 @@ router.post(
       res.send(buf);
     } catch (error) {
       console.error("Template processing error:", error);
+      // Docxtemplater multi-error handling
+      let errorDetails =
+        error instanceof Error ? error.message : "Unknown error";
+      if (error && typeof error === "object" && "properties" in error) {
+        const err = error as {
+          properties?: {
+            errors?: Array<{
+              name?: string;
+              message?: string;
+              properties?: { id?: string };
+            }>;
+          };
+        };
+        if (err.properties?.errors) {
+          errorDetails = err.properties.errors
+            .map(
+              (e) =>
+                `${e.name || "Error"}: ${e.message || ""} (${e.properties?.id || "unknown"})`,
+            )
+            .join("; ");
+        }
+      }
       res.status(500).json({
         error: "Error processing template",
-        details: error instanceof Error ? error.message : "Unknown error",
+        details: errorDetails,
+      });
+    }
+  },
+);
+
+router.post(
+  "/generate-sertifikat",
+  validateRequestBody(SertifikatBatchZod),
+  async (req: Request<{}, any, SertifikatBatchItemType[]>, res) => {
+    const sertifikatData = req.body;
+    const templatePath = getTemplatePath("SERTIFIKAT IED.docx");
+
+    try {
+      const archive = new PizZip();
+      const currentYearLastTwoDigits = getCurrentYearLastTwoDigits();
+
+      for (const sertifikat of sertifikatData) {
+        const documentData = {
+          ...sertifikat,
+          broj_Seminara: String(sertifikat.sertifikat_broj),
+          sertifikat_broj: String(sertifikat.sertifikat_broj),
+        };
+
+        const docxBuffer = renderDocxTemplate(templatePath, documentData);
+        const fileName = sanitizeFilename(
+          `${sertifikat.sertifikat_broj}${currentYearLastTwoDigits}_${sertifikat.ime_prezime}_${sertifikat.firma_naziv}.docx`,
+        );
+
+        archive.file(fileName, docxBuffer);
+      }
+
+      const zipBuffer = archive.generate({
+        compression: "DEFLATE",
+        type: "nodebuffer",
+      });
+
+      res.setHeader("Content-Type", "application/zip");
+      const fileName = sanitizeFilename(
+        `Sertifikati_${currentYearLastTwoDigits}_${sertifikatData[0]?.seminar_naziv || "IED"}.zip`,
+      );
+      res.setHeader("Content-Disposition", `attachment; filename=${fileName}`);
+
+      res.send(zipBuffer);
+    } catch (error) {
+      console.error("Template processing error:", error);
+      res.status(500).json({
+        error: "Error processing template",
+        details: getTemplateErrorDetails(error),
       });
     }
   },

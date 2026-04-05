@@ -9,6 +9,10 @@ import { formatDate } from "date-fns";
 import { srLatn } from "date-fns/locale";
 import type { SeminarZodType } from "ied-shared";
 import { memo } from "react";
+import {
+  generateSertifikatDocument,
+  type SertifikatDocumentRequest,
+} from "../../api/docx.api";
 import { useDeleteSeminarMutation } from "../../hooks/seminar/useSeminarMutations";
 
 const exportDataToCSV = async (
@@ -78,40 +82,83 @@ const SeminariTableActionCell = memo(
       exportDataToCSV(seminar, "seminar", csvRows);
     };
 
-    const handleGenerateCertificates = (seminar: Partial<SeminarZodType>) => {
+    const handleGenerateCertificates = async (
+      seminar: Partial<SeminarZodType>,
+    ) => {
       const errors: string[] = [];
-      const sertifikatData = {
-        prijave:
-          seminar.prijave?.reduce(
-            (acc, p) => {
-              const s = {
-                ime_prezime: `${p.zaposleni_ime} ${p.zaposleni_prezime}`,
-                naziv_seminara: seminar.naziv,
-                datum: formatDate(seminar.datum!, "dd. MMMM yyyy.", {
-                  locale: srLatn,
-                }),
-                godina: formatDate(seminar.datum!, "yyyy", { locale: srLatn }),
-              };
+      if (!seminar.prijave) {
+        alert("Nema prijava za seminar. Sertifikati ne mogu biti generisani.");
+        return;
+      }
+      if (!seminar.naziv) {
+        alert(
+          "Naziv seminara nije validan. Sertifikati ne mogu biti generisani.",
+        );
+        return;
+      }
+      if (!seminar.datum) {
+        alert(
+          "Datum seminara nije validan. Sertifikati ne mogu biti generisani.",
+        );
+        return;
+      }
 
-              const nameParts = s.ime_prezime.trim().split(" ");
-              if (nameParts.length <= 1) {
-                errors.push(
-                  `Ime i prezime nisu validni za firmu: ${p.firma_naziv}`,
-                );
-                return acc;
-              }
+      const seminarName = seminar.naziv;
+      const seminarDate = seminar.datum;
 
-              acc.push(s);
+      const startingNumberInput = window.prompt(
+        "Unesite početni broj sertifikata:",
+      );
+      if (startingNumberInput === null) {
+        return;
+      }
+
+      const startingCertificateNumber = Number.parseInt(
+        startingNumberInput.trim(),
+        10,
+      );
+
+      if (
+        !Number.isInteger(startingCertificateNumber) ||
+        startingCertificateNumber <= 0
+      ) {
+        alert("Početni broj sertifikata mora biti pozitivan ceo broj.");
+        return;
+      }
+
+      const sertifikatData: SertifikatDocumentRequest[] =
+        seminar.prijave?.reduce(
+          (acc, p) => {
+            const ime_prezime =
+              `${p.zaposleni_ime} ${p.zaposleni_prezime}`.trim();
+            const nameParts = ime_prezime.split(" ");
+
+            if (nameParts.length <= 1) {
+              errors.push(
+                `Ime i prezime nisu validni za firmu: ${p.firma_naziv}`,
+              );
               return acc;
-            },
-            [] as Array<{
-              ime_prezime: string;
-              naziv_seminara: string | undefined;
-              datum: string;
-              godina: string;
-            }>,
-          ) || [],
-      };
+            }
+            if (!p.firma_naziv?.trim()) {
+              errors.push(`Naziv firme nije validan za korisnika: ${ime_prezime}`);
+              return acc;
+            }
+            acc.push({
+              sertifikat_broj: startingCertificateNumber + acc.length,
+              firma_naziv: p.firma_naziv.trim(),
+              ime_prezime,
+              seminar_naziv: seminarName,
+              datum_seminara: formatDate(seminarDate, "dd. MMMM yyyy.", {
+                locale: srLatn,
+              }),
+              godina_seminara: formatDate(seminarDate, "yyyy", {
+                locale: srLatn,
+              }),
+            });
+            return acc;
+          },
+          [] as SertifikatDocumentRequest[],
+        ) || [];
 
       if (errors.length > 0) {
         alert(
@@ -120,7 +167,16 @@ const SeminariTableActionCell = memo(
         );
       }
 
-      return sertifikatData;
+      if (sertifikatData.length === 0) {
+        return;
+      }
+
+      try {
+        await generateSertifikatDocument(sertifikatData);
+      } catch (error) {
+        console.error("Error generating certificates:", error);
+        alert("Došlo je do greške prilikom generisanja sertifikata.");
+      }
     };
 
     return (

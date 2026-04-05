@@ -2,6 +2,15 @@ import { type RacunType, RacunZod, TipRacuna } from "ied-shared";
 import { validateOrThrow } from "../utils/zodErrorHelper";
 import axiosInstanceWithAuth from "./interceptors/auth";
 
+export type SertifikatDocumentRequest = {
+  sertifikat_broj: number;
+  datum_seminara: string;
+  firma_naziv: string;
+  godina_seminara: string;
+  ime_prezime: string;
+  seminar_naziv: string;
+};
+
 export const generateRacunDocument = async (racunData: RacunType) => {
   const tipRacuna = racunData.tipRacuna;
   if (!Object.values(TipRacuna).includes(tipRacuna)) {
@@ -30,33 +39,74 @@ export const generateRacunDocument = async (racunData: RacunType) => {
       throw new Error(errorData.error || "Failed to generate document");
     }
 
-    // Create and trigger download
-    const url = window.URL.createObjectURL(new Blob([response.data]));
-    const link = document.createElement("a");
-    link.href = url;
-
-    // Try to get filename from Content-Disposition header
-    let fileName = "document.docx";
-    const disposition = response.headers["content-disposition"];
-    if (disposition?.includes("filename=")) {
-      const match = disposition.match(/filename=["']?([^"';\n]+)["']?/);
-      if (match?.[1]) {
-        fileName = match[1];
-      }
-    } else {
-      // fallback if header is missing
-      fileName = `${racunData.pozivNaBroj}_${sanitizeFilename(racunData.primalacRacuna.naziv)}.docx`;
-    }
-
-    link.setAttribute("download", `${fileName}`);
-    document.body.appendChild(link);
-    link.click();
-    link.remove();
-    window.URL.revokeObjectURL(url);
+    triggerBlobDownload(
+      response.data,
+      response.headers["content-disposition"],
+      `${racunData.pozivNaBroj}_${sanitizeFilename(racunData.primalacRacuna.naziv)}.docx`,
+    );
   } catch (error) {
     console.error("Generate racun API eror:", error);
     throw error;
   }
+};
+
+export const generateSertifikatDocument = async (
+  sertifikatData: SertifikatDocumentRequest[],
+) => {
+  const response = await axiosInstanceWithAuth.post(
+    `/api/docx/generate-sertifikat`,
+    sertifikatData,
+    {
+      responseType: "blob",
+    },
+  );
+
+  if (response.headers["content-type"]?.includes("application/json")) {
+    const errorData = JSON.parse(await response.data.text());
+    throw new Error(errorData.error || "Failed to generate certificates");
+  }
+
+  triggerBlobDownload(
+    response.data,
+    response.headers["content-disposition"],
+    "sertifikati.zip",
+  );
+};
+
+const triggerBlobDownload = (
+  data: BlobPart,
+  contentDispositionHeader?: string,
+  fallbackFileName = "download.bin",
+) => {
+  const url = window.URL.createObjectURL(new Blob([data]));
+  const link = document.createElement("a");
+  link.href = url;
+  link.setAttribute(
+    "download",
+    getFileNameFromDisposition(contentDispositionHeader) || fallbackFileName,
+  );
+  document.body.appendChild(link);
+  link.click();
+  link.remove();
+  window.URL.revokeObjectURL(url);
+};
+
+const getFileNameFromDisposition = (contentDispositionHeader?: string) => {
+  if (!contentDispositionHeader) {
+    return null;
+  }
+
+  const utf8Match = contentDispositionHeader.match(
+    /filename\*=UTF-8''([^;\n]+)/i,
+  );
+  if (utf8Match?.[1]) {
+    return decodeURIComponent(utf8Match[1]);
+  }
+
+  const standardMatch = contentDispositionHeader.match(
+    /filename=["']?([^"';\n]+)["']?/i,
+  );
+  return standardMatch?.[1] || null;
 };
 
 const sanitizeFilename = (str: string) => {
