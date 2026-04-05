@@ -1,6 +1,5 @@
 import fs from "node:fs";
 import path from "node:path";
-import { fileURLToPath } from "node:url";
 import { formatDate } from "date-fns";
 import Docxtemplater from "docxtemplater";
 import { type Request, Router } from "express";
@@ -42,9 +41,6 @@ export const SertifikatBatchZod = z
 
 export type SertifikatBatchItemType = z.infer<typeof SertifikatBatchItemZod>;
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
 const router = Router();
 
 const sanitizeFilename = (str: string): string => {
@@ -80,7 +76,7 @@ const sanitizeFilename = (str: string): string => {
 const formatToLocalDate = (date: Date): string =>
   formatDate(date, "dd.MM.yyyy");
 
-const templatesDir = path.resolve(__dirname, "../../src/templates");
+const templatesDir = path.resolve(import.meta.dirname, "../../src/templates");
 
 const getTemplatePath = (templateName: string): string => {
   const templatePath = path.resolve(templatesDir, templateName);
@@ -159,8 +155,7 @@ router.post(
     }
 
     const templatePath = path.resolve(
-      __dirname,
-      "../../src/templates",
+      templatesDir,
       sanitizedTemplateName.concat(".docx"),
     );
 
