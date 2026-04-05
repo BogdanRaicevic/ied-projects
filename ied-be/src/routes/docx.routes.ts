@@ -139,7 +139,8 @@ const resolveSertifikatTemplatePath = (
     );
   }
 
-  return templatePath;
+  // TODO: Remove this after testing
+  return templatePath.replace("ied.docx", "ied_regal_blue.docx");
 };
 
 router.post(
@@ -263,6 +264,7 @@ router.post(
     const templatePath = resolveSertifikatTemplatePath(
       sertifikatData.templateKey,
     );
+    console.log("templatePath", templatePath);
 
     try {
       const docxBuffer = renderDocxTemplate(templatePath, sertifikatData);
