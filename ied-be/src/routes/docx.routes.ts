@@ -3,43 +3,17 @@ import path from "node:path";
 import { formatDate } from "date-fns";
 import Docxtemplater from "docxtemplater";
 import { type Request, Router } from "express";
-import { IzdavacRacuna, type RacunType, RacunZod, TipRacuna } from "ied-shared";
+import {
+  IzdavacRacuna,
+  type RacunType,
+  RacunZod,
+  SertifikatBatchZod,
+  type SertifikatType,
+  TipRacuna,
+} from "ied-shared";
 import PizZip from "pizzip";
-import { z } from "zod";
 import { izdavacRacuna } from "../constants/izdavacRacuna.const";
 import { validateRequestBody } from "../middleware/validateSchema";
-
-// Zod schema for certificate generation
-export const SertifikatZod = z.object({
-  broj_Seminara: z.string().min(1, { message: "Broj seminara je obavezan" }),
-  datum_seminara: z.string().min(1, { message: "Datum seminara je obavezan" }),
-  godina_seminara: z
-    .string()
-    .min(1, { message: "Godina seminara je obavezna" }),
-  ime_prezime: z.string().min(1, { message: "Ime i prezime je obavezno" }),
-  seminar_naziv: z.string().min(1, { message: "Naziv seminara je obavezan" }),
-});
-
-export type SertifikatType = z.infer<typeof SertifikatZod>;
-
-export const SertifikatBatchItemZod = z.object({
-  sertifikat_broj: z.number().int().positive({
-    message: "Broj sertifikata mora biti pozitivan ceo broj",
-  }),
-  datum_seminara: z.string().min(1, { message: "Datum seminara je obavezan" }),
-  firma_naziv: z.string().min(1, { message: "Naziv firme je obavezan" }),
-  godina_seminara: z
-    .string()
-    .min(1, { message: "Godina seminara je obavezna" }),
-  ime_prezime: z.string().min(1, { message: "Ime i prezime je obavezno" }),
-  seminar_naziv: z.string().min(1, { message: "Naziv seminara je obavezan" }),
-});
-
-export const SertifikatBatchZod = z
-  .array(SertifikatBatchItemZod)
-  .min(1, { message: "Potreban je bar jedan sertifikat za generisanje" });
-
-export type SertifikatBatchItemType = z.infer<typeof SertifikatBatchItemZod>;
 
 const router = Router();
 
@@ -246,7 +220,7 @@ router.post(
 router.post(
   "/generate-sertifikat",
   validateRequestBody(SertifikatBatchZod),
-  async (req: Request<{}, any, SertifikatBatchItemType[]>, res) => {
+  async (req: Request<{}, any, SertifikatType[]>, res) => {
     const sertifikatData = req.body;
     const templatePath = getTemplatePath("SERTIFIKAT IED.docx");
 
