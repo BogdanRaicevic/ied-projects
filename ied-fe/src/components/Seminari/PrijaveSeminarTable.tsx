@@ -15,13 +15,17 @@ import {
   Tooltip,
   Typography,
 } from "@mui/material";
-import { formatDate } from "date-fns";
-import { srLatn } from "date-fns/locale";
-import type { PrijavaZodType, SertifikatType } from "ied-shared";
+import type { PrijavaZodType } from "ied-shared";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { generateSingleSertifikatDocument } from "../../api/docx.api";
 import { useDeletePrijavaMutation } from "../../hooks/seminar/useSeminarMutations";
+import CertificateNumberDialog from "./CertificateNumberDialog";
+import {
+  buildSingleSertifikat,
+  getCertificateWarning,
+  getPrijavaFullName,
+} from "./certificate.utils";
 
 export default function PrijaveSeminarTable({
   seminarId,
@@ -35,6 +39,12 @@ export default function PrijaveSeminarTable({
   prijave: PrijavaZodType[];
 }) {
   const [open, setOpen] = useState(false);
+  const [selectedPrijava, setSelectedPrijava] = useState<PrijavaZodType | null>(
+    null,
+  );
+  const [isCertificateDialogOpen, setIsCertificateDialogOpen] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const deletePrijava = useDeletePrijavaMutation();
 
@@ -55,61 +65,61 @@ export default function PrijaveSeminarTable({
     navigate("/racuni", { state: { prijave, seminarId } });
   };
 
-  const handleGenerateSingleCertificate = async (prijava: PrijavaZodType) => {
-    const ime_prezime =
-      `${prijava.zaposleni_ime || ""} ${prijava.zaposleni_prezime || ""}`.trim();
-    const nameParts = ime_prezime.split(" ").filter(Boolean);
+  const handleOpenCertificateDialog = (prijava: PrijavaZodType) => {
+    setSelectedPrijava(prijava);
+    setSubmitError(null);
+    setIsCertificateDialogOpen(true);
+  };
 
-    if (nameParts.length <= 1) {
-      alert(
-        `Ime i prezime nisu validni za firmu: ${prijava.firma_naziv || "Nepoznata firma"}`,
-      );
+  const handleCloseCertificateDialog = () => {
+    if (isSubmitting) {
       return;
     }
 
-    if (!prijava.firma_naziv?.trim()) {
-      alert(`Naziv firme nije validan za korisnika: ${ime_prezime}`);
+    setSelectedPrijava(null);
+    setSubmitError(null);
+    setIsCertificateDialogOpen(false);
+  };
+
+  const selectedWarning = selectedPrijava
+    ? getCertificateWarning(selectedPrijava)
+    : "Prijava nije izabrana.";
+
+  const dialogMessages = [
+    ...(submitError ? [submitError] : []),
+    ...(selectedWarning ? [selectedWarning] : []),
+  ];
+
+  const handleGenerateSingleCertificate = async (sertifikatBroj: number) => {
+    if (!selectedPrijava) {
       return;
     }
 
-    const startingNumberInput = window.prompt("Unesite broj sertifikata:");
-    if (startingNumberInput === null) {
+    const { sertifikat, warning } = buildSingleSertifikat(selectedPrijava, {
+      brojSertifikata: sertifikatBroj,
+      seminarDate,
+      seminarName,
+    });
+
+    if (warning || !sertifikat) {
       return;
     }
-
-    const sertifikatBroj = Number.parseInt(startingNumberInput.trim(), 10);
-    if (!Number.isInteger(sertifikatBroj) || sertifikatBroj <= 0) {
-      alert("Broj sertifikata mora biti pozitivan ceo broj.");
-      return;
-    }
-
-    const getCurrentYearLastTwoDigits = () => {
-      return String(new Date().getFullYear()).slice(-2);
-    };
-
-    const sertifikatData = {
-      broj_sertifikata: sertifikatBroj,
-      firma_naziv: prijava.firma_naziv.trim(),
-      ime_prezime,
-      seminar_naziv: seminarName,
-      datum_seminara: formatDate(seminarDate, "dd. MMMM yyyy.", {
-        locale: srLatn,
-      }),
-      godina_seminara: formatDate(seminarDate, "yyyy", {
-        locale: srLatn,
-      }),
-      godina_sertifikata: getCurrentYearLastTwoDigits(),
-    } satisfies SertifikatType;
 
     try {
-      await generateSingleSertifikatDocument(sertifikatData);
+      setIsSubmitting(true);
+      setSubmitError(null);
+      await generateSingleSertifikatDocument(sertifikat);
+      setSelectedPrijava(null);
+      setIsCertificateDialogOpen(false);
     } catch (error) {
       console.error("Error generating certificate:", error);
-      alert(
+      setSubmitError(
         error instanceof Error
           ? error.message
           : "Došlo je do greške prilikom generisanja sertifikata.",
       );
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -171,7 +181,7 @@ export default function PrijaveSeminarTable({
                             <IconButton
                               color="success"
                               onClick={() =>
-                                handleGenerateSingleCertificate(prijava)
+                                handleOpenCertificateDialog(prijava)
                               }
                             >
                               <WorkspacePremiumIcon />
@@ -201,6 +211,22 @@ export default function PrijaveSeminarTable({
           </Collapse>
         </TableCell>
       </TableRow>
+      <CertificateNumberDialog
+        open={isCertificateDialogOpen}
+        title="Za jedan sertifikat, postavi broj sertifikata"
+        description={
+          selectedPrijava
+            ? `${getPrijavaFullName(selectedPrijava) || "Nepoznat korisnik"} - ${selectedPrijava.firma_naziv || "Nepoznata firma"}`
+            : undefined
+        }
+        inputLabel="Broj sertifikata"
+        alertMessages={dialogMessages}
+        alertSeverity={dialogMessages.length > 0 ? "error" : "warning"}
+        disableConfirm={Boolean(selectedWarning)}
+        isSubmitting={isSubmitting}
+        onClose={handleCloseCertificateDialog}
+        onConfirm={handleGenerateSingleCertificate}
+      />
     </>
   );
 }

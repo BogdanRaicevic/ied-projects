@@ -5,12 +5,15 @@ import TableViewIcon from "@mui/icons-material/TableView";
 import WorkspacePremiumIcon from "@mui/icons-material/WorkspacePremium";
 import { IconButton, Tooltip } from "@mui/material";
 import { Box } from "@mui/system";
-import { formatDate } from "date-fns";
-import { srLatn } from "date-fns/locale";
-import type { SeminarZodType, SertifikatType } from "ied-shared";
-import { memo } from "react";
+import type { SeminarZodType } from "ied-shared";
+import { memo, useMemo, useState } from "react";
 import { generateSertifikatDocument } from "../../api/docx.api";
 import { useDeleteSeminarMutation } from "../../hooks/seminar/useSeminarMutations";
+import CertificateNumberDialog from "./CertificateNumberDialog";
+import {
+  buildBatchSertifikati,
+  getCertificateWarning,
+} from "./certificate.utils";
 
 const exportDataToCSV = async (
   seminar: Partial<SeminarZodType>,
@@ -47,6 +50,10 @@ const SeminariTableActionCell = memo(
     onEdit: (seminar: Partial<SeminarZodType>) => void;
   }) => {
     const deleteSeminarMutation = useDeleteSeminarMutation();
+    const [isCertificateDialogOpen, setIsCertificateDialogOpen] = useState(false);
+    const [submitError, setSubmitError] = useState<string | null>(null);
+    const [isSubmitting, setIsSubmitting] = useState(false);
+
     const handleDelete = async (id: string) => {
       if (window.confirm("Da li ste sigurni da želite da obrišete seminar?")) {
         await deleteSeminarMutation.mutateAsync(id);
@@ -79,104 +86,107 @@ const SeminariTableActionCell = memo(
       exportDataToCSV(seminar, "seminar", csvRows);
     };
 
-    const getCurrentYearLastTwoDigits = () => {
-      return String(new Date().getFullYear()).slice(-2);
-    };
+    const dialogMessages = useMemo(() => {
+      const messages: string[] = [];
 
-    const handleGenerateCertificates = async (
-      seminar: Partial<SeminarZodType>,
-    ) => {
-      const errors: string[] = [];
-      if (!seminar.prijave) {
-        alert("Nema prijava za seminar. Sertifikati ne mogu biti generisani.");
-        return;
+      if (!seminar.prijave?.length) {
+        messages.push("Nema prijava za seminar. Sertifikati ne mogu biti generisani.");
       }
+
       if (!seminar.naziv) {
-        alert(
-          "Naziv seminara nije validan. Sertifikati ne mogu biti generisani.",
-        );
-        return;
+        messages.push("Naziv seminara nije validan. Sertifikati ne mogu biti generisani.");
       }
+
       if (!seminar.datum) {
-        alert(
-          "Datum seminara nije validan. Sertifikati ne mogu biti generisani.",
+        messages.push("Datum seminara nije validan. Sertifikati ne mogu biti generisani.");
+      }
+
+      const warningMessages = (seminar.prijave || [])
+        .map((prijava) => getCertificateWarning(prijava))
+        .filter((message): message is string => Boolean(message));
+
+      if (warningMessages.length > 0) {
+        messages.push(
+          "Za navedene korisnike nije bilo moguće generisati sertifikat:",
         );
-        return;
+        messages.push(...warningMessages);
       }
-
-      const seminarName = seminar.naziv;
-      const seminarDate = seminar.datum;
-
-      const startingNumberInput = window.prompt(
-        "Unesite početni broj sertifikata:",
-      );
-      if (startingNumberInput === null) {
-        return;
-      }
-
-      const startingCertificateNumber = Number.parseInt(
-        startingNumberInput.trim(),
-        10,
-      );
 
       if (
-        !Number.isInteger(startingCertificateNumber) ||
-        startingCertificateNumber <= 0
+        seminar.prijave?.length &&
+        warningMessages.length === seminar.prijave.length
       ) {
-        alert("Početni broj sertifikata mora biti pozitivan ceo broj.");
-        return;
-      }
-
-      const sertifikatData: SertifikatType[] =
-        seminar.prijave?.reduce((acc, p) => {
-          const ime_prezime =
-            `${p.zaposleni_ime} ${p.zaposleni_prezime}`.trim();
-          const nameParts = ime_prezime.split(" ");
-
-          if (nameParts.length <= 1) {
-            errors.push(
-              `Ime i prezime nisu validni za firmu: ${p.firma_naziv}`,
-            );
-            return acc;
-          }
-          if (!p.firma_naziv?.trim()) {
-            errors.push(
-              `Naziv firme nije validan za korisnika: ${ime_prezime}`,
-            );
-            return acc;
-          }
-          acc.push({
-            broj_sertifikata: startingCertificateNumber + acc.length,
-            firma_naziv: p.firma_naziv.trim(),
-            ime_prezime,
-            seminar_naziv: seminarName,
-            datum_seminara: formatDate(seminarDate, "dd. MMMM yyyy.", {
-              locale: srLatn,
-            }),
-            godina_seminara: formatDate(seminarDate, "yyyy", {
-              locale: srLatn,
-            }),
-            godina_sertifikata: getCurrentYearLastTwoDigits(),
-          } satisfies SertifikatType);
-          return acc;
-        }, [] as SertifikatType[]) || [];
-
-      if (errors.length > 0) {
-        alert(
-          "Greška pri generisanju sertifikata.\nZa sledeće klijente nisu generisani sertifikati:\n" +
-            errors.join("\n"),
+        messages.unshift(
+          "Za nijednog prijavljenog korisnika nije moguće generisati sertifikat.",
         );
       }
 
-      if (sertifikatData.length === 0) {
+      if (submitError) {
+        messages.unshift(submitError);
+      }
+
+      return messages;
+    }, [seminar.datum, seminar.naziv, seminar.prijave, submitError]);
+
+    const disableDialogConfirm = useMemo(() => {
+      if (!seminar.prijave?.length || !seminar.naziv || !seminar.datum) {
+        return true;
+      }
+
+      const invalidCount = (seminar.prijave || []).filter((prijava) =>
+        Boolean(getCertificateWarning(prijava)),
+      ).length;
+
+      return invalidCount === seminar.prijave.length;
+    }, [seminar.datum, seminar.naziv, seminar.prijave]);
+
+    const handleOpenCertificateDialog = () => {
+      setSubmitError(null);
+      setIsCertificateDialogOpen(true);
+    };
+
+    const handleCloseCertificateDialog = () => {
+      if (isSubmitting) {
+        return;
+      }
+
+      setSubmitError(null);
+      setIsCertificateDialogOpen(false);
+    };
+
+    const handleGenerateCertificates = async (startingCertificateNumber: number) => {
+      if (!seminar.prijave?.length || !seminar.naziv || !seminar.datum) {
+        return;
+      }
+
+      const { sertifikati } = buildBatchSertifikati(
+        seminar.prijave,
+        startingCertificateNumber,
+        seminar.naziv,
+        seminar.datum,
+      );
+
+      if (sertifikati.length === 0) {
+        setSubmitError(
+          "Nije moguće generisati nijedan sertifikat za izabrani seminar.",
+        );
         return;
       }
 
       try {
-        await generateSertifikatDocument(sertifikatData);
+        setIsSubmitting(true);
+        setSubmitError(null);
+        await generateSertifikatDocument(sertifikati);
+        setIsCertificateDialogOpen(false);
       } catch (error) {
         console.error("Error generating certificates:", error);
-        alert("Došlo je do greške prilikom generisanja sertifikata.");
+        setSubmitError(
+          error instanceof Error
+            ? error.message
+            : "Došlo je do greške prilikom generisanja sertifikata.",
+        );
+      } finally {
+        setIsSubmitting(false);
       }
     };
 
@@ -190,7 +200,7 @@ const SeminariTableActionCell = memo(
         <Tooltip title="Generiši sertifikate">
           <IconButton
             color="success"
-            onClick={() => handleGenerateCertificates(seminar)}
+            onClick={handleOpenCertificateDialog}
           >
             <WorkspacePremiumIcon />
           </IconButton>
@@ -219,6 +229,18 @@ const SeminariTableActionCell = memo(
             <DeleteIcon />
           </IconButton>
         </Tooltip>
+        <CertificateNumberDialog
+          open={isCertificateDialogOpen}
+          title="Postavi početni broj za sertifikate"
+          description="Unesite broj od kog kreće numeracija sertifikata za validne prijave."
+          inputLabel="Početni broj sertifikata"
+          alertMessages={dialogMessages}
+          alertSeverity={disableDialogConfirm || submitError ? "error" : "warning"}
+          disableConfirm={disableDialogConfirm}
+          isSubmitting={isSubmitting}
+          onClose={handleCloseCertificateDialog}
+          onConfirm={handleGenerateCertificates}
+        />
       </Box>
     );
   },
