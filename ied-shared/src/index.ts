@@ -9,4 +9,5 @@ export * from "./types/pretrage.zod";
 export * from "./types/racuni.zod";
 export * from "./types/radno_mesto.zod";
 export * from "./types/seminar.zod";
+export * from "./types/sertifikat.zod";
 export * from "./types/tip_seminara.zod";
