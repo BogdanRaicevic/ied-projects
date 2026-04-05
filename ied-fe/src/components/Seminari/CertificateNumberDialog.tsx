@@ -8,14 +8,26 @@ import {
   DialogContent,
   DialogTitle,
   TextField,
+  ToggleButton,
+  ToggleButtonGroup,
   Typography,
 } from "@mui/material";
+import {
+  type SertifikatTemplateKeyType,
+  SertifikatTemplateKeyValues,
+} from "ied-shared";
 import { useEffect, useState } from "react";
+
+export type CertificateDialogSubmitValues = {
+  certificateNumber: number;
+  templateKey: SertifikatTemplateKeyType;
+};
 
 type CertificateNumberDialogProps = {
   open: boolean;
   title: string;
   inputLabel: string;
+  templateLabel?: string;
   description?: string;
   alertMessages?: string[];
   alertSeverity?: AlertColor;
@@ -23,13 +35,20 @@ type CertificateNumberDialogProps = {
   disableConfirm?: boolean;
   isSubmitting?: boolean;
   onClose: () => void;
-  onConfirm: (certificateNumber: number) => Promise<void> | void;
+  onConfirm: (values: CertificateDialogSubmitValues) => Promise<void> | void;
+};
+
+const templateLabels: Record<SertifikatTemplateKeyType, string> = {
+  bs: "BS",
+  ied: "IED",
+  perm: "PERM",
 };
 
 export default function CertificateNumberDialog({
   open,
   title,
   inputLabel,
+  templateLabel = "Šablon sertifikata",
   description,
   alertMessages = [],
   alertSeverity = "warning",
@@ -40,16 +59,26 @@ export default function CertificateNumberDialog({
   onConfirm,
 }: CertificateNumberDialogProps) {
   const [certificateNumber, setCertificateNumber] = useState("");
+  const [templateKey, setTemplateKey] =
+    useState<SertifikatTemplateKeyType | null>(null);
   const [inputError, setInputError] = useState("");
+  const [templateError, setTemplateError] = useState("");
 
   useEffect(() => {
     if (open) {
       setCertificateNumber("");
+      setTemplateKey(null);
       setInputError("");
+      setTemplateError("");
     }
   }, [open]);
 
   const handleConfirm = async () => {
+    if (!templateKey) {
+      setTemplateError("Izaberite šablon sertifikata.");
+      return;
+    }
+
     const parsedValue = Number.parseInt(certificateNumber.trim(), 10);
 
     if (!Number.isInteger(parsedValue) || parsedValue <= 0) {
@@ -58,7 +87,11 @@ export default function CertificateNumberDialog({
     }
 
     setInputError("");
-    await onConfirm(parsedValue);
+    setTemplateError("");
+    await onConfirm({
+      certificateNumber: parsedValue,
+      templateKey,
+    });
   };
 
   return (
@@ -88,6 +121,33 @@ export default function CertificateNumberDialog({
               </Box>
             </Alert>
           ) : null}
+
+          <Box sx={{ display: "flex", flexDirection: "column", gap: 1 }}>
+            <Typography variant="body2" color="text.secondary">
+              {templateLabel}
+            </Typography>
+            <ToggleButtonGroup
+              exclusive
+              value={templateKey}
+              onChange={(_, value: SertifikatTemplateKeyType | null) => {
+                setTemplateKey(value);
+                setTemplateError("");
+              }}
+              disabled={isSubmitting}
+              fullWidth
+            >
+              {SertifikatTemplateKeyValues.map((templateValue) => (
+                <ToggleButton key={templateValue} value={templateValue}>
+                  {templateLabels[templateValue]}
+                </ToggleButton>
+              ))}
+            </ToggleButtonGroup>
+            {templateError ? (
+              <Typography variant="caption" color="error">
+                {templateError}
+              </Typography>
+            ) : null}
+          </Box>
 
           <TextField
             autoFocus

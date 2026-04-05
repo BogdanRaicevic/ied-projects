@@ -1,11 +1,16 @@
 import { formatDate } from "date-fns";
 import { srLatn } from "date-fns/locale";
-import type { PrijavaZodType, SertifikatType } from "ied-shared";
+import type {
+  PrijavaZodType,
+  SertifikatTemplateKeyType,
+  SertifikatType,
+} from "ied-shared";
 
 type BuildSertifikatOptions = {
   brojSertifikata: number;
   seminarDate: Date;
   seminarName: string;
+  templateKey: SertifikatTemplateKeyType;
 };
 
 export const getCurrentYearLastTwoDigits = () => {
@@ -55,6 +60,7 @@ export const buildSingleSertifikat = (
         locale: srLatn,
       }),
       godina_sertifikata: getCurrentYearLastTwoDigits(),
+      templateKey: options.templateKey,
     } satisfies SertifikatType,
   };
 };
@@ -64,6 +70,7 @@ export const buildBatchSertifikati = (
   startingNumber: number,
   seminarName: string,
   seminarDate: Date,
+  templateKey: SertifikatTemplateKeyType,
 ) => {
   return prijave.reduce(
     (acc, prijava) => {
@@ -71,6 +78,7 @@ export const buildBatchSertifikati = (
         brojSertifikata: startingNumber + acc.sertifikati.length,
         seminarDate,
         seminarName,
+        templateKey,
       });
 
       if (warning) {

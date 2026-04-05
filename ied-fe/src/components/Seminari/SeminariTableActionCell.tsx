@@ -9,11 +9,13 @@ import type { SeminarZodType } from "ied-shared";
 import { memo, useMemo, useState } from "react";
 import { generateSertifikatDocument } from "../../api/docx.api";
 import { useDeleteSeminarMutation } from "../../hooks/seminar/useSeminarMutations";
-import CertificateNumberDialog from "./CertificateNumberDialog";
 import {
   buildBatchSertifikati,
   getCertificateWarning,
-} from "./certificate.utils";
+} from "../../utils/certificate";
+import CertificateNumberDialog, {
+  type CertificateDialogSubmitValues,
+} from "./CertificateNumberDialog";
 
 const exportDataToCSV = async (
   seminar: Partial<SeminarZodType>,
@@ -50,7 +52,8 @@ const SeminariTableActionCell = memo(
     onEdit: (seminar: Partial<SeminarZodType>) => void;
   }) => {
     const deleteSeminarMutation = useDeleteSeminarMutation();
-    const [isCertificateDialogOpen, setIsCertificateDialogOpen] = useState(false);
+    const [isCertificateDialogOpen, setIsCertificateDialogOpen] =
+      useState(false);
     const [submitError, setSubmitError] = useState<string | null>(null);
     const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -90,15 +93,21 @@ const SeminariTableActionCell = memo(
       const messages: string[] = [];
 
       if (!seminar.prijave?.length) {
-        messages.push("Nema prijava za seminar. Sertifikati ne mogu biti generisani.");
+        messages.push(
+          "Nema prijava za seminar. Sertifikati ne mogu biti generisani.",
+        );
       }
 
       if (!seminar.naziv) {
-        messages.push("Naziv seminara nije validan. Sertifikati ne mogu biti generisani.");
+        messages.push(
+          "Naziv seminara nije validan. Sertifikati ne mogu biti generisani.",
+        );
       }
 
       if (!seminar.datum) {
-        messages.push("Datum seminara nije validan. Sertifikati ne mogu biti generisani.");
+        messages.push(
+          "Datum seminara nije validan. Sertifikati ne mogu biti generisani.",
+        );
       }
 
       const warningMessages = (seminar.prijave || [])
@@ -154,16 +163,20 @@ const SeminariTableActionCell = memo(
       setIsCertificateDialogOpen(false);
     };
 
-    const handleGenerateCertificates = async (startingCertificateNumber: number) => {
+    const handleGenerateCertificates = async ({
+      certificateNumber,
+      templateKey,
+    }: CertificateDialogSubmitValues) => {
       if (!seminar.prijave?.length || !seminar.naziv || !seminar.datum) {
         return;
       }
 
       const { sertifikati } = buildBatchSertifikati(
         seminar.prijave,
-        startingCertificateNumber,
+        certificateNumber,
         seminar.naziv,
         seminar.datum,
+        templateKey,
       );
 
       if (sertifikati.length === 0) {
@@ -198,10 +211,7 @@ const SeminariTableActionCell = memo(
           </IconButton>
         </Tooltip>
         <Tooltip title="Generiši sertifikate">
-          <IconButton
-            color="success"
-            onClick={handleOpenCertificateDialog}
-          >
+          <IconButton color="success" onClick={handleOpenCertificateDialog}>
             <WorkspacePremiumIcon />
           </IconButton>
         </Tooltip>
@@ -235,7 +245,9 @@ const SeminariTableActionCell = memo(
           description="Unesite broj od kog kreće numeracija sertifikata za validne prijave."
           inputLabel="Početni broj sertifikata"
           alertMessages={dialogMessages}
-          alertSeverity={disableDialogConfirm || submitError ? "error" : "warning"}
+          alertSeverity={
+            disableDialogConfirm || submitError ? "error" : "warning"
+          }
           disableConfirm={disableDialogConfirm}
           isSubmitting={isSubmitting}
           onClose={handleCloseCertificateDialog}

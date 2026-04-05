@@ -1,5 +1,11 @@
 import { z } from "zod";
 
+export const SertifikatTemplateKeyValues = ["ied", "bs", "perm"] as const;
+const SertifikatTemplateKeyZod = z.enum(SertifikatTemplateKeyValues);
+export type SertifikatTemplateKeyType = z.infer<
+  typeof SertifikatTemplateKeyZod
+>;
+
 export const SertifikatZod = z.object({
   broj_sertifikata: z.int().positive({
     message: "Broj sertifikata mora biti pozitivan ceo broj",
@@ -14,6 +20,7 @@ export const SertifikatZod = z.object({
   godina_sertifikata: z
     .string()
     .min(1, { message: "Godina sertifikata je obavezna" }),
+  templateKey: SertifikatTemplateKeyZod,
 });
 
 export type SertifikatType = z.infer<typeof SertifikatZod>;
