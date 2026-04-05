@@ -8,6 +8,8 @@ import {
   type RacunType,
   RacunZod,
   SertifikatBatchZod,
+  type SertifikatTemplateKeyType,
+  SertifikatTemplateKeyValues,
   type SertifikatType,
   SertifikatZod,
   TipRacuna,
@@ -110,6 +112,34 @@ const getSertifikatDocxFileName = (sertifikat: SertifikatType): string => {
   return sanitizeFilename(
     `${sertifikat.broj_sertifikata}${currentYearLastTwoDigits}_${sertifikat.ime_prezime}_${sertifikat.firma_naziv}.docx`,
   );
+};
+
+const sertifikatTemplatePathMap: Record<SertifikatTemplateKeyType, string> = {
+  bs: "certificates/bs.docx",
+  ied: "certificates/ied.docx",
+  perm: "certificates/perm.docx",
+};
+
+const resolveSertifikatTemplatePath = (
+  templateKey: SertifikatTemplateKeyType,
+): string => {
+  const templateFileName = sertifikatTemplatePathMap[templateKey];
+
+  if (!templateFileName) {
+    throw new Error(
+      `Nepodržan šablon sertifikata. Dozvoljene vrednosti su: ${SertifikatTemplateKeyValues.join(", ")}`,
+    );
+  }
+
+  const templatePath = getTemplatePath(templateFileName);
+
+  if (!fs.existsSync(templatePath)) {
+    throw new Error(
+      `Template file not found for certificate template: ${templateKey}`,
+    );
+  }
+
+  return templatePath;
 };
 
 router.post(
@@ -230,7 +260,9 @@ router.post(
   validateRequestBody(SertifikatZod),
   async (req: Request<{}, any, SertifikatType>, res) => {
     const sertifikatData = req.body;
-    const templatePath = getTemplatePath("SERTIFIKAT IED.docx");
+    const templatePath = resolveSertifikatTemplatePath(
+      sertifikatData.templateKey,
+    );
 
     try {
       const docxBuffer = renderDocxTemplate(templatePath, sertifikatData);
@@ -260,7 +292,16 @@ router.post(
   validateRequestBody(SertifikatBatchZod),
   async (req: Request<{}, any, SertifikatType[]>, res) => {
     const sertifikatData = req.body;
-    const templatePath = getTemplatePath("SERTIFIKAT IED.docx");
+
+    const selectedTemplateKey = sertifikatData[0]?.templateKey;
+    if (!selectedTemplateKey) {
+      res.status(400).json({
+        error: "Template key is required for certificate generation",
+      });
+      return;
+    }
+
+    const templatePath = resolveSertifikatTemplatePath(selectedTemplateKey);
 
     try {
       const archive = new PizZip();

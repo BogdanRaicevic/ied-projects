@@ -20,12 +20,14 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { generateSingleSertifikatDocument } from "../../api/docx.api";
 import { useDeletePrijavaMutation } from "../../hooks/seminar/useSeminarMutations";
-import CertificateNumberDialog from "./CertificateNumberDialog";
 import {
   buildSingleSertifikat,
   getCertificateWarning,
   getPrijavaFullName,
-} from "./certificate.utils";
+} from "../../utils/certificate";
+import CertificateNumberDialog, {
+  type CertificateDialogSubmitValues,
+} from "./CertificateNumberDialog";
 
 export default function PrijaveSeminarTable({
   seminarId,
@@ -90,15 +92,19 @@ export default function PrijaveSeminarTable({
     ...(selectedWarning ? [selectedWarning] : []),
   ];
 
-  const handleGenerateSingleCertificate = async (sertifikatBroj: number) => {
+  const handleGenerateSingleCertificate = async ({
+    certificateNumber,
+    templateKey,
+  }: CertificateDialogSubmitValues) => {
     if (!selectedPrijava) {
       return;
     }
 
     const { sertifikat, warning } = buildSingleSertifikat(selectedPrijava, {
-      brojSertifikata: sertifikatBroj,
+      brojSertifikata: certificateNumber,
       seminarDate,
       seminarName,
+      templateKey,
     });
 
     if (warning || !sertifikat) {
