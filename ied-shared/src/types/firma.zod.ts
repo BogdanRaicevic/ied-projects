@@ -2,10 +2,13 @@ import z from "zod";
 import { SUPPRESSION_REASONS } from "../constants/email";
 import { LastContactedFromDB } from "./last_contacted.zod";
 
+
+export const EmailSchema = z.email("Neispravna email adresa").max(100, "Predugacka email adresa");
+
 export const ExportZaposlenihSchema = z.array(
   z.object({
     imePrezime: z.string().optional(),
-    e_mail: z.string().optional(),
+    e_mail: EmailSchema.optional(),
     naziv_firme: z.string().optional(),
     radno_mesto: z.string().optional(),
   }),
@@ -14,7 +17,7 @@ export const ExportZaposlenihSchema = z.array(
 export const ExportFirmaSchema = z.array(
   z.object({
     naziv_firme: z.string().optional(),
-    e_mail: z.string().optional(),
+    e_mail: EmailSchema.optional(),
     delatnost: z.string().optional(),
     tip_firme: z.string().optional(),
   }),
@@ -25,11 +28,7 @@ export const ZaposleniSchema = z.object({
   ID_kontakt_osoba: z.number().optional(),
   ime: z.string().optional(),
   prezime: z.string().optional(),
-  e_mail: z
-    .email("Neispravna email adresa")
-    .max(100, "Predugacka email adresa")
-    .or(z.literal(""))
-    .optional(),
+  e_mail: EmailSchema.or(z.literal("")).optional(),
   telefon: z.string().optional(),
   komentar: z.string().max(10000).optional(),
   radno_mesto: z.string().optional(),
@@ -43,11 +42,7 @@ export const FirmaSchema = z.object({
   adresa: z.string().max(150).optional(),
   PIB: z.string().or(z.literal("")).optional(),
   telefon: z.string().optional(),
-  e_mail: z
-    .email("Neispravna email adresa")
-    .max(100, "Predugacka email adresa")
-    .or(z.literal(""))
-    .optional(),
+  e_mail: EmailSchema.or(z.literal("")).optional(),
   tip_firme: z.string().optional(),
   delatnost: z.string().optional(),
   komentar: z.string().max(10000).optional(),
