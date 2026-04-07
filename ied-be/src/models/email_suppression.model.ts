@@ -8,7 +8,12 @@ export type EmailSuppression = {
 
 const emailSuppressionSchema = new Schema<EmailSuppression>(
   {
-    email: { type: String, required: true, unique: true, lowercase: true },
+    email: {
+      type: String,
+      required: true,
+      lowercase: true,
+      trim: true,
+    },
     reason: {
       type: String,
       enum: Object.values(SUPPRESSION_REASONS),
@@ -19,6 +24,8 @@ const emailSuppressionSchema = new Schema<EmailSuppression>(
     collection: "email_suppressions",
   },
 );
+
+emailSuppressionSchema.index({ email: 1 }, { unique: true });
 
 export const EmailSuppression = model<EmailSuppression>(
   "EmailSuppression",

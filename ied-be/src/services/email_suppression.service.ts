@@ -1,82 +1,131 @@
-import type { SuppressedEmail } from "ied-shared";
+import {
+  SUPPRESSION_REASONS,
+  type SuppressedEmail,
+  type SuppressionReasons,
+} from "ied-shared";
 import { EmailSuppression } from "../models/email_suppression.model";
 import { Firma } from "../models/firma.model";
+
+const VALID_SUPPRESSION_REASONS = new Set<SuppressionReasons>(
+  Object.values(SUPPRESSION_REASONS),
+);
+const BULK_WRITE_CHUNK_SIZE = 500;
+
+type SuppressedEmailFailure = {
+  row: number;
+  email: string | null;
+  reason: string | null;
+  error: string;
+};
+
+export type AddSuppressedEmailResult = {
+  totalRows: number;
+  uniqueRows: number;
+  duplicateRows: number;
+  invalidRows: number;
+  upsertedCount: number;
+  matchedCount: number;
+  modifiedCount: number;
+  failures: SuppressedEmailFailure[];
+};
+
+const normalizeEmail = (email: string | undefined | null) =>
+  email?.trim().toLowerCase() ?? "";
+
+const normalizeReason = (reason: string | undefined | null) =>
+  reason?.trim().toUpperCase() ?? "";
+
+const chunkArray = <T>(items: T[], chunkSize: number) => {
+  const chunks: T[][] = [];
+
+  for (let index = 0; index < items.length; index += chunkSize) {
+    chunks.push(items.slice(index, index + chunkSize));
+  }
+
+  return chunks;
+};
 
 export const addSuppressedEmail = async (
   suppressedEmails: SuppressedEmail[],
 ) => {
-  // Sanitize entries - strip BOM and normalize keys
-  const sanitizedEmails = suppressedEmails.map((entry) => {
-    const clean: Record<string, string> = {};
-    for (const [key, value] of Object.entries(entry)) {
-      // Strip BOM and whitespace from keys
-      const cleanKey = key
-        .replace(/^\uFEFF/, "")
-        .trim()
-        .toLowerCase();
-      clean[cleanKey] = value;
+  const failures: SuppressedEmailFailure[] = [];
+  const dedupedEntries = new Map<string, SuppressionReasons>();
+
+  suppressedEmails.forEach((suppressedEmail, index) => {
+    const normalizedEmail = normalizeEmail(suppressedEmail?.email);
+    const normalizedReason = normalizeReason(suppressedEmail?.reason);
+
+    if (!normalizedEmail) {
+      failures.push({
+        row: index + 1,
+        email: null,
+        reason: normalizedReason || null,
+        error: "Missing email",
+      });
+      return;
     }
-    return clean as SuppressedEmail;
+
+    if (
+      !VALID_SUPPRESSION_REASONS.has(normalizedReason as SuppressionReasons)
+    ) {
+      failures.push({
+        row: index + 1,
+        email: normalizedEmail,
+        reason: normalizedReason || null,
+        error: "Invalid suppression reason",
+      });
+      return;
+    }
+
+    // Last occurrence wins so repeated CSV rows collapse deterministically.
+    dedupedEntries.set(normalizedEmail, normalizedReason as SuppressionReasons);
   });
 
-  const results = {
-    total: sanitizedEmails.length,
-    succeeded: 0,
-    failed: [] as { email: string; reason: string; error: string }[],
+  const operations = Array.from(dedupedEntries.entries()).map(
+    ([email, reason]) => ({
+      updateOne: {
+        filter: { email },
+        update: {
+          $set: {
+            email,
+            reason,
+          },
+        },
+        upsert: true,
+      },
+    }),
+  );
+
+  const result: AddSuppressedEmailResult = {
+    totalRows: suppressedEmails.length,
+    uniqueRows: dedupedEntries.size,
+    duplicateRows:
+      suppressedEmails.length - failures.length - dedupedEntries.size,
+    invalidRows: failures.length,
+    upsertedCount: 0,
+    matchedCount: 0,
+    modifiedCount: 0,
+    failures,
   };
 
+  if (operations.length === 0) {
+    return result;
+  }
+
   try {
-    const promises = sanitizedEmails.map(async (suppressedEmail, index) => {
-      // Validate before attempting
-      if (!suppressedEmail?.email) {
-        const rawValue = JSON.stringify(suppressedEmail);
-        console.error(
-          `❌ Skipping entry #${index}: missing email. Raw value: ${rawValue}`,
-        );
-        results.failed.push({
-          email: "(missing)",
-          reason: suppressedEmail?.reason || "(missing)",
-          error: `Email is undefined/null. Full entry: ${rawValue}`,
-        });
-        return;
-      }
+    const chunks = chunkArray(operations, BULK_WRITE_CHUNK_SIZE);
 
-      try {
-        await EmailSuppression.updateOne(
-          { email: suppressedEmail.email.toLowerCase() },
-          {
-            $set: {
-              reason: suppressedEmail.reason?.toUpperCase() || "UNKNOWN",
-            },
-          },
-          { upsert: true },
-        ).exec();
+    for (const chunk of chunks) {
+      const bulkResult = await EmailSuppression.bulkWrite(chunk, {
+        ordered: false,
+      });
 
-        results.succeeded++;
-      } catch (error) {
-        console.error(
-          `❌ Failed to upsert email "${suppressedEmail.email}":`,
-          error,
-        );
-        results.failed.push({
-          email: suppressedEmail.email,
-          reason: suppressedEmail.reason,
-          error: error instanceof Error ? error.message : String(error),
-        });
-      }
-    });
-
-    await Promise.all(promises); // Don't use Promise.allSettled here because we catch internally
-
-    // Summary log
-    if (results.failed.length > 0) {
-      console.warn(
-        `⚠️ Email suppression partial failure: ${results.succeeded} succeeded, ${results.failed.length} failed`,
-      );
-      console.warn("Failed entries:", results.failed);
-    } else {
-      console.log(`✅ All ${results.succeeded} emails processed successfully`);
+      result.upsertedCount += bulkResult.upsertedCount ?? 0;
+      result.matchedCount += bulkResult.matchedCount ?? 0;
+      result.modifiedCount += bulkResult.modifiedCount ?? 0;
     }
+
+    return result;
   } catch (error) {
     // This only catches unexpected errors in the orchestration, not individual items
     console.error("Unexpected error in addSuppressedEmail:", error);
