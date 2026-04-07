@@ -25,6 +25,13 @@ import {
 
 const router = Router();
 const rawCsvParser = raw({ type: "text/csv", limit: "10mb" });
+const normalizeCsvHeader = (header: string[]) =>
+  header.map((column) =>
+    column
+      .replace(/^\uFEFF/, "")
+      .trim()
+      .toLowerCase(),
+  );
 
 router.put(
   "/add-csv-list",
@@ -40,7 +47,7 @@ router.put(
           parse(
             req.body,
             {
-              columns: (header) => header.map((col) => col.toLowerCase()),
+              columns: normalizeCsvHeader,
               trim: true,
               skip_empty_lines: true,
             },
@@ -54,7 +61,7 @@ router.put(
 
       await addSuppressedEmail(records);
 
-      res.status(201).send("Suppressed emails added successfully");
+      res.status(202).send("Suppressed emails added successfully");
     } catch (error) {
       next(error);
     }
@@ -67,9 +74,12 @@ router.put(
   async (req: Request, res: Response, next: NextFunction) => {
     const { email, reason } = req.body as SuppressedEmail;
     try {
-      await addSuppressedEmail([{ email, reason }]);
+      const result = await addSuppressedEmail([{ email, reason }]);
 
-      res.status(200).send("Suppressed email added successfully");
+      res.status(200).json({
+        message: "Suppressed email added successfully",
+        ...result,
+      });
     } catch (error) {
       next(error);
     }
@@ -84,7 +94,7 @@ router.delete(
     try {
       await deleteEmails(emails);
 
-      res.status(200).send("Suppressed emails deleted successfully");
+      res.status(202).send("Suppressed emails deleted successfully");
     } catch (error) {
       next(error);
     }
