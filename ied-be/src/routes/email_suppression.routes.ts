@@ -84,7 +84,7 @@ router.delete(
     try {
       await deleteEmails(emails);
 
-      res.status(200).send("Suppressed emails removed successfully");
+      res.status(200).send("Suppressed emails deleted successfully");
     } catch (error) {
       next(error);
     }
