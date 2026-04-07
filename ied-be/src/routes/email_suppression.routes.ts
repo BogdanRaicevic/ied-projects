@@ -109,7 +109,7 @@ router.delete(
     try {
       await removeSuppressedEmail(email);
 
-      res.status(200).send("Suppressed email removed successfully");
+      res.status(202).send("Suppressed email removed successfully");
     } catch (error) {
       next(error);
     }
