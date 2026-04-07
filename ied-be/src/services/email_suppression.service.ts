@@ -5,18 +5,81 @@ import { Firma } from "../models/firma.model";
 export const addSuppressedEmail = async (
   suppressedEmails: SuppressedEmail[],
 ) => {
+  // Sanitize entries - strip BOM and normalize keys
+  const sanitizedEmails = suppressedEmails.map((entry) => {
+    const clean: Record<string, string> = {};
+    for (const [key, value] of Object.entries(entry)) {
+      // Strip BOM and whitespace from keys
+      const cleanKey = key
+        .replace(/^\uFEFF/, "")
+        .trim()
+        .toLowerCase();
+      clean[cleanKey] = value;
+    }
+    return clean as SuppressedEmail;
+  });
+
+  const results = {
+    total: sanitizedEmails.length,
+    succeeded: 0,
+    failed: [] as { email: string; reason: string; error: string }[],
+  };
+
   try {
-    await Promise.all(
-      suppressedEmails.map(async (suppressedEmail) => {
-        EmailSuppression.updateOne(
+    const promises = sanitizedEmails.map(async (suppressedEmail, index) => {
+      // Validate before attempting
+      if (!suppressedEmail?.email) {
+        const rawValue = JSON.stringify(suppressedEmail);
+        console.error(
+          `❌ Skipping entry #${index}: missing email. Raw value: ${rawValue}`,
+        );
+        results.failed.push({
+          email: "(missing)",
+          reason: suppressedEmail?.reason || "(missing)",
+          error: `Email is undefined/null. Full entry: ${rawValue}`,
+        });
+        return;
+      }
+
+      try {
+        await EmailSuppression.updateOne(
           { email: suppressedEmail.email.toLowerCase() },
-          { $set: { reason: suppressedEmail.reason.toUpperCase() } },
+          {
+            $set: {
+              reason: suppressedEmail.reason?.toUpperCase() || "UNKNOWN",
+            },
+          },
           { upsert: true },
         ).exec();
-      }),
-    );
+
+        results.succeeded++;
+      } catch (error) {
+        console.error(
+          `❌ Failed to upsert email "${suppressedEmail.email}":`,
+          error,
+        );
+        results.failed.push({
+          email: suppressedEmail.email,
+          reason: suppressedEmail.reason,
+          error: error instanceof Error ? error.message : String(error),
+        });
+      }
+    });
+
+    await Promise.all(promises); // Don't use Promise.allSettled here because we catch internally
+
+    // Summary log
+    if (results.failed.length > 0) {
+      console.warn(
+        `⚠️ Email suppression partial failure: ${results.succeeded} succeeded, ${results.failed.length} failed`,
+      );
+      console.warn("Failed entries:", results.failed);
+    } else {
+      console.log(`✅ All ${results.succeeded} emails processed successfully`);
+    }
   } catch (error) {
-    console.error("Error adding suppressed emails:", error);
+    // This only catches unexpected errors in the orchestration, not individual items
+    console.error("Unexpected error in addSuppressedEmail:", error);
     throw error;
   }
 };
