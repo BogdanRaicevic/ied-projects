@@ -139,8 +139,7 @@ const resolveSertifikatTemplatePath = (
     );
   }
 
-  // TODO: Remove this after testing
-  return templatePath.replace("ied.docx", "ied_regal_blue.docx");
+  return templatePath;
 };
 
 router.post(
