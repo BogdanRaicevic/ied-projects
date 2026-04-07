@@ -1,4 +1,4 @@
-import { EmailSchema, type SuppressedEmail } from "ied-shared";
+import type { SuppressedEmail } from "ied-shared";
 import { EmailSuppression } from "../models/email_suppression.model";
 import { Firma } from "../models/firma.model";
 
@@ -33,35 +33,13 @@ export const removeSuppressedEmail = async (email: string) => {
 export const deleteEmails = async (emails: string[]) => {
   const results = {
     suggested: emails.length,
-    valid: 0,
     deleted: 0,
-    invalid: [] as { email: string; reason: string }[],
   };
 
   try {
-    // Validate each email individually
-    const validEmails: string[] = [];
-
-    for (const email of emails) {
-      const parseResult = EmailSchema.safeParse(email);
-      if (parseResult.success) {
-        validEmails.push(parseResult.data.toLowerCase());
-        results.valid++;
-      } else {
-        results.invalid.push({
-          email,
-          reason: parseResult.error.issues.map((e) => e.message).join(", "),
-        });
-      }
-    }
-
-    // Remove duplicates
-    const normalizedEmails = [...new Set(validEmails)];
-
-    if (normalizedEmails.length === 0) {
-      console.log("No valid emails to delete", results);
-      return results;
-    }
+    const normalizedEmails = [
+      ...new Set(emails.map((email) => email.toLowerCase())),
+    ];
 
     // Perform deletions
     const [firmaResult, zaposleniResult] = await Promise.all([
@@ -82,17 +60,8 @@ export const deleteEmails = async (emails: string[]) => {
     // Log the summary
     console.log(`Email deletion results:`, {
       suggested: results.suggested,
-      valid: results.valid,
       deleted: results.deleted,
-      invalid: results.invalid,
     });
-
-    // Log individual failures
-    for (const invalid of results.invalid) {
-      console.log(
-        `  ❌ Failed validation: "${invalid.email}" - ${invalid.reason}`,
-      );
-    }
 
     return results;
   } catch (error) {
