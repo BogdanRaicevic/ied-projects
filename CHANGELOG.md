@@ -1,3 +1,13 @@
+## [1.19.0](https://github.com/BogdanRaicevic/ied-projects/compare/v1.18.6...v1.19.0) (2026-04-07)
+
+### Features
+
+* add bulk email deletion endpoint ([a9dea60](https://github.com/BogdanRaicevic/ied-projects/commit/a9dea6010ee4b0762717a030399fb43cbece1beb))
+
+### Bug Fixes
+
+* type mismatch ([75afc94](https://github.com/BogdanRaicevic/ied-projects/commit/75afc945454cd332cf293df152aacc3e29f017ce))
+
 ## [1.18.6](https://github.com/BogdanRaicevic/ied-projects/compare/v1.18.5...v1.18.6) (2026-04-01)
 
 ### Bug Fixes
