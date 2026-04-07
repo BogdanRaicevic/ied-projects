@@ -6,7 +6,11 @@ import {
   Router,
   raw,
 } from "express";
-import { EmailSchema, type SuppressedEmail, SuppressedEmailSchema } from "ied-shared";
+import {
+  EmailSchema,
+  type SuppressedEmail,
+  SuppressedEmailSchema,
+} from "ied-shared";
 import { z } from "zod";
 import {
   validateRequestBody,
@@ -14,8 +18,8 @@ import {
 } from "../middleware/validateSchema";
 import {
   addSuppressedEmail,
-  isEmailSuppressed,
   deleteEmails,
+  isEmailSuppressed,
   removeSuppressedEmail,
 } from "../services/email_suppression.service";
 
@@ -72,15 +76,11 @@ router.put(
   },
 );
 
-const RemoveEmailsSchema = z.object({
-  emails: z.array(EmailSchema),
-});
-
 router.delete(
   "/delete-emails",
-  validateRequestBody(RemoveEmailsSchema),
+  validateRequestBody(z.array(EmailSchema)),
   async (req: Request, res: Response, next: NextFunction) => {
-    const { emails } = req.body as { emails: string[] };
+    const emails = req.body as string[];
     try {
       await deleteEmails(emails);
 
@@ -95,7 +95,7 @@ router.delete(
   "/remove-email",
   validateRequestBody(EmailSchema),
   async (req: Request, res: Response, next: NextFunction) => {
-    const { email } = req.body as { email: string };
+    const email = req.body as string;
     try {
       await removeSuppressedEmail(email);
 
