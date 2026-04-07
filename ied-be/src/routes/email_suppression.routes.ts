@@ -78,7 +78,7 @@ router.put(
 
 router.delete(
   "/delete-emails",
-  validateRequestBody(z.array(EmailSchema)),
+  validateRequestBody(z.array(z.string())),
   async (req: Request, res: Response, next: NextFunction) => {
     const emails = req.body as string[];
     try {

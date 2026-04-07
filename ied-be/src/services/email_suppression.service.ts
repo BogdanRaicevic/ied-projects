@@ -1,4 +1,4 @@
-import type { SuppressedEmail } from "ied-shared";
+import { EmailSchema, type SuppressedEmail } from "ied-shared";
 import { EmailSuppression } from "../models/email_suppression.model";
 import { Firma } from "../models/firma.model";
 
@@ -31,18 +31,39 @@ export const removeSuppressedEmail = async (email: string) => {
 };
 
 export const deleteEmails = async (emails: string[]) => {
-  const suggestedCount = emails.length;
+  const results = {
+    suggested: emails.length,
+    valid: 0,
+    deleted: 0,
+    invalid: [] as { email: string; reason: string }[],
+  };
 
   try {
-    const normalizedEmails = [
-      ...new Set(emails.map((email) => email.toLowerCase())),
-    ];
+    // Validate each email individually
+    const validEmails: string[] = [];
 
-    if (normalizedEmails.length === 0) {
-      return;
+    for (const email of emails) {
+      const parseResult = EmailSchema.safeParse(email);
+      if (parseResult.success) {
+        validEmails.push(parseResult.data.toLowerCase());
+        results.valid++;
+      } else {
+        results.invalid.push({
+          email,
+          reason: parseResult.error.issues.map((e) => e.message).join(", "),
+        });
+      }
     }
 
-    // Capture results from both operations
+    // Remove duplicates
+    const normalizedEmails = [...new Set(validEmails)];
+
+    if (normalizedEmails.length === 0) {
+      console.log("No valid emails to delete", results);
+      return results;
+    }
+
+    // Perform deletions
     const [firmaResult, zaposleniResult] = await Promise.all([
       Firma.updateMany(
         { e_mail: { $in: normalizedEmails } },
@@ -51,23 +72,31 @@ export const deleteEmails = async (emails: string[]) => {
       Firma.updateMany(
         { "zaposleni.e_mail": { $in: normalizedEmails } },
         { $set: { "zaposleni.$[employee].e_mail": "" } },
-        {
-          arrayFilters: [{ "employee.e_mail": { $in: normalizedEmails } }],
-        },
+        { arrayFilters: [{ "employee.e_mail": { $in: normalizedEmails } }] },
       ).exec(),
     ]);
-    // Sum up total modified documents
-    const deletedCount =
+
+    results.deleted =
       (firmaResult.modifiedCount || 0) + (zaposleniResult.modifiedCount || 0);
 
-    console.log(
-      `Email deletion: ${suggestedCount} suggested, ${deletedCount} deleted`,
-    );
+    // Log the summary
+    console.log(`Email deletion results:`, {
+      suggested: results.suggested,
+      valid: results.valid,
+      deleted: results.deleted,
+      invalid: results.invalid,
+    });
+
+    // Log individual failures
+    for (const invalid of results.invalid) {
+      console.log(
+        `  ❌ Failed validation: "${invalid.email}" - ${invalid.reason}`,
+      );
+    }
+
+    return results;
   } catch (error) {
-    console.error(
-      `Email deletion failed for ${suggestedCount} suggested emails:`,
-      error,
-    );
+    console.error(`Email deletion error:`, error);
     throw error;
   }
 };
