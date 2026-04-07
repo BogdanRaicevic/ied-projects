@@ -31,14 +31,19 @@ export const removeSuppressedEmail = async (email: string) => {
 };
 
 export const deleteEmails = async (emails: string[]) => {
+  const suggestedCount = emails.length;
+
   try {
-    const normalizedEmails = [...new Set(emails.map((email) => email.toLowerCase()))];
+    const normalizedEmails = [
+      ...new Set(emails.map((email) => email.toLowerCase())),
+    ];
 
     if (normalizedEmails.length === 0) {
       return;
     }
 
-    await Promise.all([
+    // Capture results from both operations
+    const [firmaResult, zaposleniResult] = await Promise.all([
       Firma.updateMany(
         { e_mail: { $in: normalizedEmails } },
         { $set: { e_mail: "" } },
@@ -51,8 +56,18 @@ export const deleteEmails = async (emails: string[]) => {
         },
       ).exec(),
     ]);
+    // Sum up total modified documents
+    const deletedCount =
+      (firmaResult.modifiedCount || 0) + (zaposleniResult.modifiedCount || 0);
+
+    console.log(
+      `Email deletion: ${suggestedCount} suggested, ${deletedCount} deleted`,
+    );
   } catch (error) {
-    console.error("Error removing suppressed emails:", error);
+    console.error(
+      `Email deletion failed for ${suggestedCount} suggested emails:`,
+      error,
+    );
     throw error;
   }
 };
