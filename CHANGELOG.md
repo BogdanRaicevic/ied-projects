@@ -1,3 +1,9 @@
+## [1.19.1](https://github.com/BogdanRaicevic/ied-projects/compare/v1.19.0...v1.19.1) (2026-04-15)
+
+### Bug Fixes
+
+* update axios to remove vulnerability ([3e389db](https://github.com/BogdanRaicevic/ied-projects/commit/3e389db0df1af323b9140ac447c232b4a2a8cdee))
+
 ## [1.19.0](https://github.com/BogdanRaicevic/ied-projects/compare/v1.18.6...v1.19.0) (2026-04-07)
 
 ### Features
