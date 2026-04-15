@@ -1,10 +1,11 @@
-import { clerkMiddleware, requireAuth } from "@clerk/express";
+import { clerkMiddleware } from "@clerk/express";
 import * as Sentry from "@sentry/node";
 import cors from "cors";
 import express from "express";
 import { connectDB } from "./database/db";
 import { errorWrapper } from "./middleware/errorWrapper";
 import { hasPermission } from "./middleware/hasPermission";
+import { requireApiAuth } from "./middleware/requireApiAuth";
 import delatnostiRoutes from "./routes/delatnost.routes";
 import docxRoutes from "./routes/docx.routes";
 import firmaRoutes from "./routes/firma.routes";
@@ -46,30 +47,30 @@ app.use(
 
 app.use(express.json({ limit: "1mb" }));
 
-app.use("/api/firma", requireAuth(), hasPermission, firmaRoutes);
+app.use("/api/firma", requireApiAuth, hasPermission, firmaRoutes);
 app.use(
   "/api/velicine-firmi",
-  requireAuth(),
+  requireApiAuth,
   hasPermission,
   velicineFirmiRoutes,
 );
-app.use("/api/radna-mesta", requireAuth(), hasPermission, radnaMestaRoutes);
-app.use("/api/tip-firme", requireAuth(), hasPermission, tipFirmeRoutes);
-app.use("/api/delatnost", requireAuth(), hasPermission, delatnostiRoutes);
-app.use("/api/mesto", requireAuth(), hasPermission, mestoRoutes);
-app.use("/api/pretrage", requireAuth(), hasPermission, pretrageRoutes);
-app.use("/api/stanja-firmi", requireAuth(), hasPermission, stanjaFirmeRoutes);
-app.use("/api/seminari", requireAuth(), hasPermission, seminarRoutes);
-app.use("/api/docx", requireAuth(), hasPermission, docxRoutes);
-app.use("/api/racuni", requireAuth(), hasPermission, racuniRoutes);
-app.use("/api/audit-log", requireAuth(), hasPermission, auditLogRoutes);
+app.use("/api/radna-mesta", requireApiAuth, hasPermission, radnaMestaRoutes);
+app.use("/api/tip-firme", requireApiAuth, hasPermission, tipFirmeRoutes);
+app.use("/api/delatnost", requireApiAuth, hasPermission, delatnostiRoutes);
+app.use("/api/mesto", requireApiAuth, hasPermission, mestoRoutes);
+app.use("/api/pretrage", requireApiAuth, hasPermission, pretrageRoutes);
+app.use("/api/stanja-firmi", requireApiAuth, hasPermission, stanjaFirmeRoutes);
+app.use("/api/seminari", requireApiAuth, hasPermission, seminarRoutes);
+app.use("/api/docx", requireApiAuth, hasPermission, docxRoutes);
+app.use("/api/racuni", requireApiAuth, hasPermission, racuniRoutes);
+app.use("/api/audit-log", requireApiAuth, hasPermission, auditLogRoutes);
 app.use(
   "/api/email-suppression",
-  requireAuth(),
+  requireApiAuth,
   hasPermission,
   emailSuppressionRoutes,
 );
-app.use("/api/tip-seminara", requireAuth(), hasPermission, tipSeminaraRoutes);
+app.use("/api/tip-seminara", requireApiAuth, hasPermission, tipSeminaraRoutes);
 app.use("/api/test", testRoutes);
 
 Sentry.setupExpressErrorHandler(app);
