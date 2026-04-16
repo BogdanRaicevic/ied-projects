@@ -47,7 +47,7 @@
     "@types/react-dom": "19.2.3",
     "@types/react-router-dom": "^5.3.3",
     "@vitejs/plugin-react": "^6.0.1",
-    "globals": "^17.4.0",
+    "globals": "^17.5.0",
     "typescript": "^6.0.2",
     "vite": "^8.0.8"
   },

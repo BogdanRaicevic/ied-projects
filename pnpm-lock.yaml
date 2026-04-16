@@ -112,8 +112,8 @@ importers:
         specifier: ^10.1.0
         version: 10.1.0
       globals:
-        specifier: ^17.4.0
-        version: 17.4.0
+        specifier: ^17.5.0
+        version: 17.5.0
       mongodb-memory-server:
         specifier: ^11.0.1
         version: 11.0.1
@@ -224,8 +224,8 @@ importers:
         specifier: ^6.0.1
         version: 6.0.1(vite@8.0.8(@types/node@24.10.15)(esbuild@0.27.1)(jiti@2.6.0)(tsx@4.21.0)(yaml@2.8.2))
       globals:
-        specifier: ^17.4.0
-        version: 17.4.0
+        specifier: ^17.5.0
+        version: 17.5.0
       typescript:
         specifier: ^6.0.2
         version: 6.0.2
@@ -3018,8 +3018,8 @@ packages:
   glob-to-regexp@0.4.1:
     resolution: {integrity: sha512-lkX1HJXwyMcprw/5YUZc2s7DrpAiHB21/V+E1rHUrVNokkvB6bqMzT0VfV6/86ZNabt1k14YOIaT7nDvOX3Iiw==}
 
-  globals@17.4.0:
-    resolution: {integrity: sha512-hjrNztw/VajQwOLsMNT1cbJiH2muO3OROCHnbehc8eY5JyD2gqz4AcMHPqgaOR59DjgUjYAYLeH699g/eWi2jw==}
+  globals@17.5.0:
+    resolution: {integrity: sha512-qoV+HK2yFl/366t2/Cb3+xxPUo5BuMynomoDmiaZBIdbs+0pYbjfZU+twLhGKp4uCZ/+NbtpVepH5bGCxRyy2g==}
     engines: {node: '>=18'}
 
   gopd@1.2.0:
@@ -7819,7 +7819,7 @@ snapshots:
 
   glob-to-regexp@0.4.1: {}
 
-  globals@17.4.0: {}
+  globals@17.5.0: {}
 
   gopd@1.2.0: {}
 
