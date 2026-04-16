@@ -45,7 +45,7 @@
     "cron": "^4.4.0",
     "csv-parse": "^6.2.1",
     "date-fns": "^4.1.0",
-    "docxtemplater": "^3.68.4",
+    "docxtemplater": "^3.68.5",
     "dotenv": "^17.4.2",
     "es-toolkit": "^1.45.1",
     "express": "^5.2.1",
