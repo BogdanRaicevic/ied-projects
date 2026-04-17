@@ -36,10 +36,10 @@ This rewrite resolves all of the above and cuts Phase 1 to what's actually neede
 - PDV rate (`stopaPdv`) is **per-stavka** (supports mixed-rate invoices like seminar 20% + book 10%). Default 20 on new stavke. Invoice-level "default PDV rate" is a UI convenience only — not stored on the invoice. Rounding is per-line, matching V1 accounting behavior.
 - **PDV obveznik:** `izdavac.pdvObveznik: boolean` is snapshotted from the izdavac configuration. When `false` (e.g. `permanent` currently), calculators force all stavka PDV to 0 and DOCX omits the PDV block. Replaces V1's DOCX-render-time `shouldRenderPdvBlock` hack with a proper data-level field.
 - **Primalac can be firma OR physical person.** `primalacRacuna.tipPrimaoca: "firma" | "fizicko"`. `firma`: `pib` + `maticniBroj` + `naziv` required; `firma_id` optional ref. `fizicko`: `naziv` + `adresa` required; `pib`/`maticniBroj` absent; `jmbg` optional (only needed over legal threshold).
-- **Konacni ↔ avansni is N-to-1.** A konacni can reference MULTIPLE avansni payments (`linkedAvansniIds: ObjectId[]` in Phase 3, `linkedPozivNaBrojevi: string[]` in Phase 1). Sum of referenced `avans` amounts is deducted from konacni totals.
+- **Konacni links to multiple avansni (1 konacni -> N avansni).** A konacni can reference MULTIPLE avansni payments (`linkedAvansniIds: ObjectId[]` in Phase 3, `linkedPozivNaBrojevi: string[]` in Phase 1). Sum of referenced `avans` amounts is deducted from konacni totals.
 - **`jedinicaMere`:** every stavka has a unit-of-measure label for DOCX rendering. Seminar defaults to `"učesnik"` (hidden in UI). Proizvod defaults to `"komad"` (editable in UI).
 - Avansni math: user types `avansBezPdv`; `avansPdv` and `avans` are derived read-only.
-- **Currency (Phase 1 — inert scaffold only):** `valuta` picker with exactly two options, `RSD` (default) and `EUR`. The picker is a visual scaffold: it stores the chosen value in form state, the summary panel renders the selected symbol/code next to totals, and selecting `EUR` shows a dismissible warning banner at the top of the form: *"Prikaz valute je samo vizuelni. NBS kurs, PDV režim izvoza (mesto prometa) i dvojezičan DOCX dolaze u Phase 6."* No NBS kurs input, no `pdvRezim` selector, no RSD rekapitulacija, no calculator behavior change. Real foreign-currency export lives in **Phase 6**; Phase 2 lands only the defensive schema hooks so Phase 6 is not a migration. Rationale: avoids shipping a "looks-functional, computes-wrong" state — the worst possible UX for an accounting tool.
+- **Currency (Phase 1-2 — inert scaffold + blocked submit):** `valuta` picker has exactly two options, `RSD` (default) and `EUR`. The picker is a visual scaffold: it stores the chosen value in form state, the summary panel renders the selected symbol/code next to totals, and selecting `EUR` shows a dismissible warning banner at the top of the form: *"Prikaz valute je samo vizuelni. NBS kurs, PDV režim izvoza (mesto prometa) i dvojezičan DOCX dolaze u Phase 6."* No NBS kurs input, no `pdvRezim` selector, no RSD rekapitulacija, no calculator behavior change. **Until Phase 6, submit is blocked when `valuta === "EUR"`; user must switch back to `RSD` to continue.** Real foreign-currency export lives in **Phase 6**; Phase 2 lands only defensive schema hooks so Phase 6 is not a migration. Rationale: avoids shipping a "looks-functional, computes-wrong" state — the worst possible UX for an accounting tool.
 - No persistence between refreshes.
 
 ### UX behavior
@@ -50,10 +50,24 @@ This rewrite resolves all of the above and cuts Phase 1 to what's actually neede
 - **Add proizvod:** "+ Dodaj proizvod" appends an empty proizvod stavka.
 - **Remove stavka:** simple instant remove. No confirmation, no undo.
 - **Stavka cards (Phase 1):** all stavke **always expanded**. No collapse logic. Accordion polish is Phase 4.
-- **Tab switch preservation:** preserve **only `izdavacRacuna`, `tekuciRacun`, and `valuta`**. Everything else resets. Rationale: currency is a per-session issuer decision, not a per-invoice-type decision — forcing the user to re-pick `EUR` on every tab switch is user-hostile.
+- **Tab switch preservation:** preserve **only `izdavacRacuna`, `tekuciRacun`, and `valuta`**. Everything else resets, including `defaultStopaPdv` (returns to default for the target tab). Rationale: currency is a per-session issuer decision, not a per-invoice-type decision — forcing the user to re-pick `EUR` on every tab switch is user-hostile.
 - **Validation mode:** `onTouched` — field validates on first blur, then live on every keystroke once touched. Implemented via RHF `mode: "onTouched"` + `shouldFocusError: true`.
 - **Validation display:** inline per-field errors (RHF standard). On submit with errors: RHF auto-focuses first invalid field, toast shows summary count.
 - **Final CTA:** "Potvrdi i pregledaj" — on success, shows a success toast + payload drawer (JSON, DEV-only). Polished read-only preview screen is Phase 4; real save flow arrives in Phase 2.
+
+### MUI interaction contract (locked)
+
+- `Pretrage` tab stays disabled in Phase 1-2 and keeps tooltip `"Uskoro"` using a wrapper element (`span`/`Box`) so tooltip works on disabled controls.
+- Currency warning is a global MUI `Alert` above the form cards, not hidden in a field helper text.
+- Submit guard for EUR is visible and explicit: inline `Alert` + submit-level feedback; no silent fallback to RSD.
+- Duplicate `linkedPozivNaBroj` warning (Phase 3) is non-blocking UX copy with explicit user confirmation path.
+
+### UX acceptance criteria for locked behavior
+
+- If `valuta === "EUR"`, submit cannot complete and the user sees clear guidance to switch to `RSD`.
+- If `valuta === "RSD"`, submit follows normal validation flow (`onTouched`, focus first invalid field, summary toast).
+- Switching tabs preserves only `izdavacRacuna`, `tekuciRacun`, `valuta`; `defaultStopaPdv` is reset.
+- The summary panel always shows selected currency code, but never implies conversion before Phase 6.
 
 ### Engineering
 
@@ -111,7 +125,7 @@ Target: desktop admin tool, dense but scannable, running totals always visible.
 - All stavka cards are **always expanded** (no accordion collapse).
 - Each card is a bordered `Card` with the form fields visible.
 - Delete button on each card does an instant remove.
-- Collapsible/accordion polish with smart auto-expand is Phase 2.
+- Collapsible/accordion polish with smart auto-expand is Phase 4.
 
 ### Avansni tab layout
 
@@ -260,7 +274,7 @@ No new backend files in Phase 1.
 
 #### Story 1.2: Tabs shell
 - [ ] **Ticket 1.2.1:** Build `RacunV2TabsShell.tsx` with 5 tabs: `Pretrage (disabled, tooltip: Uskoro)`, `Predracun`, `Avansni`, `Konacni`, `Racun`.
-- [ ] **Ticket 1.2.2:** Tab change updates form state's `tipRacuna` and resets everything except `izdavacRacuna`, `tekuciRacun`, and `valuta`.
+- [ ] **Ticket 1.2.2:** Tab change updates form state's `tipRacuna` and resets everything except `izdavacRacuna`, `tekuciRacun`, and `valuta` (explicitly resets `defaultStopaPdv`).
 
 ### Epic 2: Form engine and schema
 
@@ -272,7 +286,7 @@ No new backend files in Phase 1.
 #### Story 2.2: Zod schema
 - [ ] **Ticket 2.2.1:** Create `schema/racunV2.schema.ts` with `StavkaSeminarZod`, `StavkaProizvodZod`, `StavkaZod` (discriminated on `tipStavke`). Both stavka types include `jedinicaMere: z.string().min(1)` and `stopaPdv: z.coerce.number().min(0).default(20)`.
 - [ ] **Ticket 2.2.2:** Create `PrimalacFirmaZod` (`tipPrimaoca: "firma"`, requires `naziv`, `pib`, `maticniBroj`) and `PrimalacFizickoZod` (`tipPrimaoca: "fizicko"`, requires `naziv`, `adresa`). `PrimalacRacunaZod = z.discriminatedUnion("tipPrimaoca", [...])`.
-- [ ] **Ticket 2.2.3:** Create `RacunV2Zod` (discriminated on `tipRacuna`): predracun/konacni/racun require `stavke.min(1)`; avansni disallows `stavke` and requires `avansBezPdv`. `pozivNaBroj` required and non-empty. `valuta: z.enum(["RSD", "EUR"]).default("RSD")` at the top level. Phase 1 does NOT add a cross-field refine on `valuta` — the picker is inert; validating anything currency-dependent here would be premature and misleading.
+- [ ] **Ticket 2.2.3:** Create `RacunV2Zod` (discriminated on `tipRacuna`): predracun/konacni/racun require `stavke.min(1)`; avansni disallows `stavke` and requires `avansBezPdv`. `pozivNaBroj` required and non-empty. `valuta: z.enum(["RSD", "EUR"]).default("RSD")` at the top level. Phase 1 does NOT add a schema refine on `valuta` — EUR blocking is handled at submit UX level (see Epic 8), while Phase 2 API adds the strict refine.
 - [ ] **Ticket 2.2.4:** Konacni accepts `linkedPozivNaBrojevi: z.array(z.string().min(1))` (can be empty in Phase 1; enforced at least 1 in Phase 3).
 - [ ] **Ticket 2.2.5:** Enforce `popust` 0-100, `kolicina`/`cena` non-negative, `stopaPdv` non-negative.
 
@@ -301,7 +315,7 @@ No new backend files in Phase 1.
 - [ ] **Ticket 4.1.3:** `tekuciRacun` autocomplete fed by existing `useFetchIzdavaciRacuna` (read-only reuse).
 - [ ] **Ticket 4.1.4:** `pozivNaBroj` text input, required (manual in Phase 1; becomes auto-generated in Phase 2).
 - [ ] **Ticket 4.1.5:** `defaultStopaPdv` number input, default 20. Labeled "Podrazumevana stopa PDV-a (za nove stavke)". On change, does NOT mutate existing stavke — only auto-fills new ones when added. Hidden when izdavac is not a PDV obveznik (read from izdavac config).
-- [ ] **Ticket 4.1.6:** `valuta` `Select` (MUI), two options only: `RSD` and `EUR`. Labeled "Valuta". Default `RSD`. Placed in the Izdavac card, immediately after `tekuciRacun`. **Inert scaffold** — does NOT change calculator behavior, does NOT affect per-stavka inputs, does NOT render kurs/NBS fields. Selecting `EUR` renders a dismissible `Alert severity="warning"` banner at the top of the form (above all cards): *"Prikaz valute je samo vizuelni. NBS kurs, PDV režim izvoza i dvojezičan DOCX dolaze u Phase 6."* Banner dismissal is session-local (not persisted). Selecting `RSD` hides the banner.
+- [ ] **Ticket 4.1.6:** `valuta` `Select` (MUI), two options only: `RSD` and `EUR`. Labeled "Valuta". Default `RSD`. Placed in the Izdavac card, immediately after `tekuciRacun`. **Inert scaffold** — does NOT change calculator behavior, does NOT affect per-stavka inputs, does NOT render kurs/NBS fields. Selecting `EUR` renders a dismissible `Alert severity="warning"` banner at the top of the form (above all cards): *"Prikaz valute je samo vizuelni. NBS kurs, PDV režim izvoza i dvojezičan DOCX dolaze u Phase 6."* Banner dismissal is session-local (not persisted). Selecting `RSD` hides the banner. Until Phase 6, selected `EUR` also activates submit blocking in Epic 8.
 
 #### Story 4.2: Primalac Racuna section
 - [ ] **Ticket 4.2.1:** Build `PrimalacRacunaSection.tsx` (card). Top-of-card toggle (MUI `ToggleButtonGroup` or `RadioGroup`): **Firma** / **Fizičko lice**. Binds to `primalacRacuna.tipPrimaoca`.
@@ -378,7 +392,8 @@ No new backend files in Phase 1.
 
 #### Story 8.2: Submit flow
 - [ ] **Ticket 8.2.1:** "Potvrdi i pregledaj" triggers `handleSubmit`. On errors: RHF auto-focuses first invalid field; toast shows summary ("Ispravite označena polja (N)").
-- [ ] **Ticket 8.2.2:** On success: show success toast and open `PayloadDrawer`.
+- [ ] **Ticket 8.2.2:** Add currency guard before success path: if `valuta === "EUR"`, block submit, keep form in edit mode, and show explicit guidance (`Alert` + toast) that EUR saves activate in Phase 6.
+- [ ] **Ticket 8.2.3:** On success (only when `valuta === "RSD"`): show success toast and open `PayloadDrawer`.
 
 #### Story 8.3: Payload drawer (Phase 1 deliverable, DEV-ONLY)
 - [ ] **Ticket 8.3.1:** Build `PayloadDrawer.tsx` — MUI Drawer with pretty-printed JSON of the validated payload.
@@ -415,10 +430,10 @@ Goal: V2 can be saved, loaded, edited, and searched against a brand-new `racuni_
 - **`izdavac` is snapshotted** on the invoice from `izdavacRacuna.const.ts` at save time (including `pdvObveznik`), NOT resolved at DOCX-render time. Makes historical invoices stable against issuer info changes.
 - **PDV rate is per-stavka** (`stopaPdv` on each stavka sub-doc). No invoice-level `stopaPdv` stored. Avansni, which has no stavke, stores one `stopaPdv` on the invoice document (it's the exception).
 - **Primalac uses a `tipPrimaoca` discriminator** (`"firma" | "fizicko"`) with per-branch required fields.
-- **Konacni→avansni linking is N-to-1.** `linkedAvansniIds: ObjectId[]` on konacni. Phase 2 just stores the array; real lookup + constraints in Phase 3.
+- **Konacni→avansni linking is 1 konacni -> N avansni.** `linkedAvansniIds: ObjectId[]` on konacni. Phase 2 just stores the array; real lookup + constraints in Phase 3.
 - **No stored `calculations` bucket.** Totals are derived on read via the shared calculators. Popust is an input on the stavka, never inside a "calculations" object.
 - **No FE-vs-BE calculation comparison.** BE is the source of truth; it ignores any totals the FE sends.
-- **Currency is an enum, locked to RSD at the API boundary.** `valuta: z.enum(["RSD", "EUR"])` in Zod, matching Mongoose enum. Phase 2 adds a Zod `.refine(v => v === "RSD")` that rejects EUR at the API layer, so Phase 1's inert `EUR` scaffold cannot accidentally land in the database. Phase 6 lifts the refine. Defensive hooks that land now (and only now, because changing them later is a schema migration): (a) `valuta` as enum not literal; (b) calculators accept `{ valuta }` in their context, unused internally; (c) optional reserved `pdvRezim` + `pdvRezimOsnov` on stavka; (d) optional reserved `izdavac.imaInostraniPromet` + `izdavac.ibanEur` on the izdavac snapshot; (e) DOCX templates render currency code from the invoice, never hardcode `"RSD"`/`"dinara"`. Zero runtime behavior change from any of these in Phase 2.
+- **Currency is an enum, locked to RSD at the API boundary.** `valuta: z.enum(["RSD", "EUR"])` in Zod, matching Mongoose enum. Phase 2 adds a Zod `.refine(v => v === "RSD")` that rejects EUR at the API layer, and FE submit remains blocked when EUR is selected (defense in depth). Phase 6 lifts both guards. Defensive hooks that land now (and only now, because changing them later is a schema migration): (a) `valuta` as enum not literal; (b) calculators accept `{ valuta }` in their context, unused internally; (c) optional reserved `pdvRezim` + `pdvRezimOsnov` on stavka; (d) optional reserved `izdavac.imaInostraniPromet` + `izdavac.ibanEur` on the izdavac snapshot; (e) DOCX templates render currency code from the invoice, never hardcode `"RSD"`/`"dinara"`. Zero runtime behavior change from any of these in Phase 2.
 
 ### Phase 2 data model (target shape for `racuni_v2`)
 
@@ -585,10 +600,10 @@ Goal: V2 has feature parity with V1 for the actual user workflow — search exis
 - [ ] **Ticket P3-A.2.2:** Columns: `pozivNaBroj`, `tipRacuna`, `primalac.naziv`, `stavke count` + first stavka naziv, `ukupnaNaknada` (derived), `status`, `created_at`, actions (otvori / izmeni).
 - [ ] **Ticket P3-A.2.3:** Row action "Otvori" → `/racuni-v2/:id`; "Izmeni" → `/racuni-v2/:id/edit`.
 
-### Epic P3-B: Konacni ↔ Avansni linking (real refs, N:1)
+### Epic P3-B: Konacni ↔ Avansni linking (real refs, 1 konacni -> N avansni)
 
 #### Story P3-B.1: BE lookup service
-- [ ] **Ticket P3-B.1.1:** `getAvansniForLinking(pozivNaBroj, izdavacId)` — returns `{ _id, primalac, stavkeSummary, avansBezPdv, avansPdv, avans, stopaPdvAvansni, status }` for an avansni racun matched by `(izdavac.id, pozivNaBroj)` with `tipRacuna === "avansniRacun"`. 404 if no match, 409 if status is `void`.
+- [ ] **Ticket P3-B.1.1:** `getAvansniForLinking(pozivNaBroj, izdavacId)` — returns `{ _id, primalac, stavkeSummary, avansBezPdv, avansPdv, avans, stopaPdvAvansni, status, linkedKonacniPozivNaBroj? }` for an avansni racun matched by `(izdavac.id, pozivNaBroj)` with `tipRacuna === "avansniRacun"`. 404 if no match, 409 if status is `void`.
 - [ ] **Ticket P3-B.1.2:** `GET /api/racuni-v2/link/avansni?pozivNaBroj=...&izdavacId=...` route.
 - [ ] **Ticket P3-B.1.3:** On konacni save, resolve every entry of `linkedPozivNaBrojevi` to a real `linkedAvansniIds` ObjectId. Validate:
   - All referenced avansni exist and are not `void`.
@@ -601,6 +616,7 @@ Goal: V2 has feature parity with V1 for the actual user workflow — search exis
 - [ ] **Ticket P3-B.2.2:** "+ Dodaj još jedan avans" adds another row. Remove icon per row (unlinks that avansni).
 - [ ] **Ticket P3-B.2.3:** Inline error per row for 404 / 409 / primalac-mismatch responses.
 - [ ] **Ticket P3-B.2.4:** Summary panel shows an "Avansno plaćeno" subtotal = sum of all linked avans amounts.
+- [ ] **Ticket P3-B.2.5:** If lookup returns `linkedKonacniPozivNaBroj`, show a non-blocking warning callout in that row ("Ovaj avans je već povezan sa konacnim {pozivNaBroj}."). User may still proceed after explicit confirmation (no hard block in this phase).
 
 #### Story P3-B.3: Konacni calculator (wire real deduction)
 - [ ] **Ticket P3-B.3.1:** `calcKonacniDeduction` (Phase 1 stub) becomes real: sums `avansBezPdv`, `avansPdv`, `avans` across all linked avansni. PDV-rate breakdown aggregates by each avansni's `stopaPdvAvansni`.
@@ -813,5 +829,5 @@ These are questions I refuse to answer in advance of the business need; flagged 
 | Invoice lifecycle | None; anything can be edited anytime | `status` field from day one; transitions + immutability in Phase 5 |
 | Legal date fields | `datumUplateAvansa` only; `rokZaUplatu` as days, no frozen due date | `datumIzdavanja` always; `datumValute` frozen in Phase 5; `datumPrometa` deliberately deferred |
 | Currency | Implicit RSD | Phase 1: inert `valuta` picker (RSD default, EUR scaffold-only, warning banner). Phase 2: `valuta: z.enum(["RSD","EUR"])` with API refine locking to RSD. Phase 6: EUR saves activate with NBS kurs snapshot, per-stavka `pdvRezim`, bilingual DOCX |
-| Tab-switch behavior | Partial reset, confusing | Preserve only izdavac+tekuci, predictable |
+| Tab-switch behavior | Partial reset, confusing | Preserve only `izdavacRacuna` + `tekuciRacun` + `valuta`; reset everything else (including `defaultStopaPdv`) |
 | Stavka cards | N/A | Always expanded in Phase 1; accordion in Phase 4 |
