@@ -29,15 +29,15 @@ This rewrite resolves all of the above and cuts Phase 1 to what's actually neede
 - V1 `/racuni` stays untouched and continues to be the production flow.
 - **All 4 invoice types** have tabs: `predracun`, `avansniRacun`, `konacniRacun`, `racun`.
 - `Pretrage` tab is rendered as **disabled** with "Uskoro" tooltip (placeholder).
-- Line item types for Phase 1: `seminar` (service with online/offline split) and `proizvod` (physical goods). Discriminator (`tipStavke`) is extensible for future types.
+- Line item types for Phase 1: `usluga` (service with online/offline split, optionally sourced from seminar) and `proizvod` (physical goods). Discriminator (`tipStavke`) is extensible for future types.
 - `pozivNaBroj` in **Phase 1**: manual text input, required, no DB so no uniqueness check. In **Phase 2** it flips to auto-generated via V1's existing sequence mechanism (`SequenceModel` + pre-save hook), and uniqueness is enforced via compound unique index `{ "izdavac.id", tipRacuna, pozivNaBroj }`.
 - Avansni in Phase 1 is **amount-only**: no stavke section.
 - Konacni's `linkedPozivNaBrojevi` is a dynamic list of plain text inputs (multi-avansni support); no lookup/validation yet. Real avansni lookup, ObjectId linking (`linkedAvansniIds`), and primalac+izdavac-match constraints all land in Phase 3.
-- PDV rate (`stopaPdv`) is **per-stavka** (supports mixed-rate invoices like seminar 20% + book 10%). Default 20 on new stavke. Invoice-level "default PDV rate" is a UI convenience only — not stored on the invoice. Rounding is per-line, matching V1 accounting behavior.
+- PDV rate (`stopaPdv`) is **per-stavka** (supports mixed-rate invoices like usluga 20% + proizvod 10%). Default 20 on new stavke. Invoice-level "default PDV rate" is a UI convenience only — not stored on the invoice. Rounding is per-line, matching V1 accounting behavior.
 - **PDV obveznik:** `izdavac.pdvObveznik: boolean` is snapshotted from the izdavac configuration. When `false` (e.g. `permanent` currently), calculators force all stavka PDV to 0 and DOCX omits the PDV block. Replaces V1's DOCX-render-time `shouldRenderPdvBlock` hack with a proper data-level field.
 - **Primalac can be firma OR physical person.** `primalacRacuna.tipPrimaoca: "firma" | "fizicko"`. `firma`: `pib` + `maticniBroj` + `naziv` required; `firma_id` optional ref. `fizicko`: `naziv` + `adresa` required; `pib`/`maticniBroj` absent; `jmbg` optional (only needed over legal threshold).
 - **Konacni links to multiple avansni (1 konacni -> N avansni).** A konacni can reference MULTIPLE avansni payments (`linkedAvansniIds: ObjectId[]` in Phase 3, `linkedPozivNaBrojevi: string[]` in Phase 1). Sum of referenced `avans` amounts is deducted from konacni totals.
-- **`jedinicaMere`:** every stavka has a unit-of-measure label for DOCX rendering. Seminar defaults to `"učesnik"` (hidden in UI). Proizvod defaults to `"komad"` (editable in UI).
+- **`jedinicaMere`:** every stavka has a unit-of-measure label for DOCX rendering. `usluga` defaults to `"Broj ucesnika"` (hidden in UI). `proizvod` defaults to `"Broj primeraka"` (editable in UI).
 - Avansni math: user types `avansBezPdv`; `avansPdv` and `avans` are derived read-only.
 - **Currency (Phase 1-2 — inert scaffold + blocked submit):** `valuta` picker has exactly two options, `RSD` (default) and `EUR`. The picker is a visual scaffold: it stores the chosen value in form state, the summary panel renders the selected symbol/code next to totals, and selecting `EUR` shows a dismissible warning banner at the top of the form: *"Prikaz valute je samo vizuelni. NBS kurs, PDV režim izvoza (mesto prometa) i dvojezičan DOCX dolaze u Phase 6."* No NBS kurs input, no `pdvRezim` selector, no RSD rekapitulacija, no calculator behavior change. **Until Phase 6, submit is blocked when `valuta === "EUR"`; user must switch back to `RSD` to continue.** Real foreign-currency export lives in **Phase 6**; Phase 2 lands only defensive schema hooks so Phase 6 is not a migration. Rationale: avoids shipping a "looks-functional, computes-wrong" state — the worst possible UX for an accounting tool.
 - No persistence between refreshes.
@@ -45,8 +45,8 @@ This rewrite resolves all of the above and cuts Phase 1 to what's actually neede
 ### UX behavior
 
 - **Entry points:** direct `/racuni-v2` (blank form) AND from Seminari page with prefill.
-- **Prefill:** when arriving from Seminari/prijave, auto-fill primalac from firma, first seminar stavka from seminar, and `onlineKolicina`/`offlineKolicina` from count of `prijave.prisustvo`. All fields remain editable.
-- **Add seminar (Phase 1):** "+ Dodaj seminar" appends an empty manual seminar stavka. (Seminar search dialog with DB prefill is Phase 4 polish.)
+- **Prefill:** when arriving from Seminari/prijave, auto-fill primalac from firma, first `usluga` stavka from seminar, and `onlineKolicina`/`offlineKolicina` from count of `prijave.prisustvo`. All fields remain editable.
+- **Add usluga (Phase 1):** "+ Dodaj uslugu" appends an empty manual `usluga` stavka. (Seminar search dialog with DB prefill is Phase 4 polish.)
 - **Add proizvod:** "+ Dodaj proizvod" appends an empty proizvod stavka.
 - **Remove stavka:** simple instant remove. No confirmation, no undo.
 - **Stavka cards (Phase 1):** all stavke **always expanded**. No collapse logic. Accordion polish is Phase 4.
@@ -100,13 +100,13 @@ Target: desktop admin tool, dense but scannable, running totals always visible.
 |  - pozivNaBroj              |    ukupna naknada      |
 |  - defaultStopaPdv          |                        |
 |    (prefills new stavke)    |  Po stavci:            |
-|                             |    seminar A ... XYZ   |
-|  [ Primalac Racuna card ]   |    seminar B ... XYZ   |
+|                             |    usluga A ... XYZ    |
+|  [ Primalac Racuna card ]   |    usluga B ... XYZ    |
 |  - tipPrimaoca toggle       |    proizvod C ... XYZ  |
 |  - naziv, pib/jmbg, ...     |                        |
 |                             |                        |
 |  [ Stavke card ]            |                        |
-|   [+ Dodaj seminar]         |  Validacija:           |
+|   [+ Dodaj uslugu]          |  Validacija:           |
 |   [+ Dodaj proizvod]        |    2 polja nisu        |
 |                             |    ispravna            |
 |   [ Seminar 1 (expanded) ]  |                        |
@@ -148,15 +148,15 @@ Summary column still present with the 3 avans values.
 ## Data model (Phase 1, frontend-only)
 
 ```ts
-type TipStavke = "seminar" | "proizvod"; // extensible
+type TipStavke = "usluga" | "proizvod"; // extensible
 
-type StavkaSeminar = {
-  tipStavke: "seminar";
+type StavkaUsluga = {
+  tipStavke: "usluga";
   seminar_id?: string;
   naziv: string;
   datum: Date;
   lokacija?: string;
-  jedinicaMere: string;         // default "učesnik", hidden in UI
+  jedinicaMere: string;         // default "Broj ucesnika", hidden in UI
   onlineKolicina: number;
   onlineCena: number;
   offlineKolicina: number;
@@ -168,14 +168,14 @@ type StavkaSeminar = {
 type StavkaProizvod = {
   tipStavke: "proizvod";
   naziv: string;
-  jedinicaMere: string;         // default "komad", editable
+  jedinicaMere: string;         // default "Broj primeraka", editable
   kolicina: number;
   cena: number;
   popust: number;
   stopaPdv: number;             // per-stavka; default 20
 };
 
-type Stavka = StavkaSeminar | StavkaProizvod;
+type Stavka = StavkaUsluga | StavkaProizvod;
 
 type PrimalacFirma = {
   tipPrimaoca: "firma";
@@ -248,7 +248,7 @@ ied-fe/src/
         TypeSpecificSection.tsx       # rokZaUplatu / placeno / linkedPozivNaBroj
         SummaryPanel.tsx              # sticky right column
       stavke/
-        SeminarStavkaCard.tsx
+        UslugaStavkaCard.tsx
         ProizvodStavkaCard.tsx
       forms/
         PredracunLayout.tsx
@@ -284,7 +284,7 @@ No new backend files in Phase 1.
 - [ ] **Ticket 2.1.3:** Create `schema/defaults.ts` with `getDefaultValues(tipRacuna)` returning correct defaults per type.
 
 #### Story 2.2: Zod schema
-- [ ] **Ticket 2.2.1:** Create `schema/racunV2.schema.ts` with `StavkaSeminarZod`, `StavkaProizvodZod`, `StavkaZod` (discriminated on `tipStavke`). Both stavka types include `jedinicaMere: z.string().min(1)` and `stopaPdv: z.coerce.number().min(0).default(20)`.
+- [ ] **Ticket 2.2.1:** Create `schema/racunV2.schema.ts` with `StavkaUslugaZod`, `StavkaProizvodZod`, `StavkaZod` (discriminated on `tipStavke`). Set defaults: `usluga.jedinicaMere = "Broj ucesnika"` (hidden in UI), `proizvod.jedinicaMere = "Broj primeraka"` (editable in UI). Both stavka types include `stopaPdv: z.coerce.number().min(0).default(20)`.
 - [ ] **Ticket 2.2.2:** Create `PrimalacFirmaZod` (`tipPrimaoca: "firma"`, requires `naziv`, `pib`, `maticniBroj`) and `PrimalacFizickoZod` (`tipPrimaoca: "fizicko"`, requires `naziv`, `adresa`). `PrimalacRacunaZod = z.discriminatedUnion("tipPrimaoca", [...])`.
 - [ ] **Ticket 2.2.3:** Create `RacunV2Zod` (discriminated on `tipRacuna`): predracun/konacni/racun require `stavke.min(1)`; avansni disallows `stavke` and requires `avansBezPdv`. `pozivNaBroj` required and non-empty. `valuta: z.enum(["RSD", "EUR"]).default("RSD")` at the top level. Phase 1 does NOT add a schema refine on `valuta` — EUR blocking is handled at submit UX level (see Epic 8), while Phase 2 API adds the strict refine.
 - [ ] **Ticket 2.2.4:** Konacni accepts `linkedPozivNaBrojevi: z.array(z.string().min(1))` (can be empty in Phase 1; enforced at least 1 in Phase 3).
@@ -335,22 +335,22 @@ No new backend files in Phase 1.
 
 #### Story 5.1: Stavke container and add buttons
 - [ ] **Ticket 5.1.1:** Build `StavkeSection.tsx` using `useFieldArray({ name: "stavke" })`.
-- [ ] **Ticket 5.1.2:** Two inline buttons: "+ Dodaj seminar" appends empty seminar stavka with `stopaPdv = defaultStopaPdv` and `jedinicaMere = "učesnik"`; "+ Dodaj proizvod" appends empty proizvod stavka with `stopaPdv = defaultStopaPdv` and `jedinicaMere = "komad"`.
+- [ ] **Ticket 5.1.2:** Two inline buttons: "+ Dodaj uslugu" appends empty `usluga` stavka with `stopaPdv = defaultStopaPdv` and `jedinicaMere = "Broj ucesnika"`; "+ Dodaj proizvod" appends empty `proizvod` stavka with `stopaPdv = defaultStopaPdv` and `jedinicaMere = "Broj primeraka"`.
 - [ ] **Ticket 5.1.3:** Remove action per stavka: instant remove, no confirmation.
 
-#### Story 5.2: Seminar stavka card
-- [ ] **Ticket 5.2.1:** Build `SeminarStavkaCard.tsx` — bordered MUI `Card`, always expanded.
+#### Story 5.2: Usluga stavka card
+- [ ] **Ticket 5.2.1:** Build `UslugaStavkaCard.tsx` — bordered MUI `Card`, always expanded.
 - [ ] **Ticket 5.2.2:** Fields: `naziv`, `datum` (MUI DatePicker), `lokacija`, `popust`.
 - [ ] **Ticket 5.2.3:** Online group: `onlineKolicina`, `onlineCena`.
 - [ ] **Ticket 5.2.4:** Offline group: `offlineKolicina`, `offlineCena`.
 - [ ] **Ticket 5.2.5:** `stopaPdv` number input (per-stavka PDV rate). Hidden when izdavac is not a PDV obveznik.
-- [ ] **Ticket 5.2.6:** `jedinicaMere` stays hardcoded to `"učesnik"` (no UI). Value is still written to form state so it survives to DOCX later.
+- [ ] **Ticket 5.2.6:** `jedinicaMere` stays hardcoded to `"Broj ucesnika"` (no UI). Value is still written to form state so it survives to DOCX later.
 - [ ] **Ticket 5.2.7:** Inline per-stavka subtotal display (bruto, popust, osnovica, PDV, ukupno).
 - [ ] **Ticket 5.2.8:** Delete icon button in card header.
 
 #### Story 5.3: Proizvod stavka card
 - [ ] **Ticket 5.3.1:** Build `ProizvodStavkaCard.tsx` — bordered MUI `Card`, always expanded.
-- [ ] **Ticket 5.3.2:** Fields: `naziv`, `jedinicaMere` (text input, default `"komad"`), `kolicina`, `cena`, `popust`.
+- [ ] **Ticket 5.3.2:** Fields: `naziv`, `jedinicaMere` (text input, default `"Broj primeraka"`), `kolicina`, `cena`, `popust`.
 - [ ] **Ticket 5.3.3:** `stopaPdv` number input (per-stavka PDV rate). Hidden when izdavac is not a PDV obveznik.
 - [ ] **Ticket 5.3.4:** Inline subtotal display.
 - [ ] **Ticket 5.3.5:** Delete icon button in card header.
@@ -381,7 +381,7 @@ No new backend files in Phase 1.
 #### Story 7.2: Entry from Seminari page
 - [ ] **Ticket 7.2.1:** Add "Kreiraj V2 račun" action on `PrijaveSeminarTable` (alongside existing V1 action).
 - [ ] **Ticket 7.2.2:** Navigate to `/racuni-v2` with `{ seminarId, prijave, firmaId }` in location state.
-- [ ] **Ticket 7.2.3:** On mount in `RacuniV2.tsx`, if navigation state present: fetch firma (`fetchSingleFirma`), fetch seminar (`fetchSeminarById`), prefill `primalacRacuna` and first seminar stavka.
+- [ ] **Ticket 7.2.3:** On mount in `RacuniV2.tsx`, if navigation state present: fetch firma (`fetchSingleFirma`), fetch seminar (`fetchSeminarById`), prefill `primalacRacuna` and first `usluga` stavka.
 - [ ] **Ticket 7.2.4:** Prefill `onlineKolicina` from count of `prijave.prisustvo === "online"`, same for offline. All fields remain editable.
 
 ### Epic 8: Validation and submit
@@ -407,7 +407,7 @@ No new backend files in Phase 1.
 1. Epic 1 (route, page shell, tabs)
 2. Epic 2 (RHF + schema) + Epic 3 (calculators + tests) in parallel
 3. Epic 4 (Izdavac, Primalac, Summary panel)
-4. Epic 5 (Stavke cards — seminar + proizvod)
+4. Epic 5 (Stavke cards — usluga + proizvod)
 5. Epic 6 (four type layouts — Avansni is a different shape, flag it)
 6. Epic 7 (seminari prefill flow)
 7. Epic 8 (validation wiring + payload drawer)
@@ -425,7 +425,7 @@ Goal: V2 can be saved, loaded, edited, and searched against a brand-new `racuni_
 - **New collection:** `racuni_v2`. V1 `racuni` is read-only legacy. A unified collection is a later phase.
 - **Money type:** keep JS `Number` + `roundToTwoDecimals` helper, matching V1 exactly. Decimal128 migration is deferred to Phase 5.
 - **Single Mongoose model, no `discriminator()` on `tipRacuna`.** The `tipRacuna` field itself is preserved — required, enum-validated, indexed, searchable. What changes is that V1's four sub-schemas (each redeclaring `calculations`) collapse into one schema with optional fields per type, validated by Zod's discriminated union at the API boundary. All 4 legal invoice types remain distinct on every document.
-- **Stavke use Mongoose sub-document discriminator on `tipStavke`** (seminar vs proizvod) — shapes genuinely differ, and new types are planned.
+- **Stavke use Mongoose sub-document discriminator on `tipStavke`** (`usluga` vs `proizvod`) — shapes genuinely differ, and new types are planned.
 - **`status` field exists, no enforcement.** All new V2 docs default to `"draft"`. Transitions and immutability arrive in Phase 5.
 - **`izdavac` is snapshotted** on the invoice from `izdavacRacuna.const.ts` at save time (including `pdvObveznik`), NOT resolved at DOCX-render time. Makes historical invoices stable against issuer info changes.
 - **PDV rate is per-stavka** (`stopaPdv` on each stavka sub-doc). No invoice-level `stopaPdv` stored. Avansni, which has no stavke, stores one `stopaPdv` on the invoice document (it's the exception).
@@ -456,9 +456,9 @@ Goal: V2 can be saved, loaded, edited, and searched against a brand-new `racuni_
     | { tipPrimaoca: "fizicko",  naziv, adresa, mesto?, jmbg? },
 
   stavke: [                      // discriminated on tipStavke
-    { tipStavke: "seminar", seminar_id?, naziv, datum, lokacija?, jedinicaMere,
+    { tipStavke: "usluga", seminar_id?, naziv, datum, lokacija?, jedinicaMere,   // default "Broj ucesnika"
       onlineKolicina, onlineCena, offlineKolicina, offlineCena, popust, stopaPdv },
-    { tipStavke: "proizvod", naziv, jedinicaMere, kolicina, cena, popust, stopaPdv }
+    { tipStavke: "proizvod", naziv, jedinicaMere, kolicina, cena, popust, stopaPdv } // default "Broj primeraka"
     // future: | { tipStavke: "...", ... }
   ],
 
@@ -488,12 +488,12 @@ Goal: V2 can be saved, loaded, edited, and searched against a brand-new `racuni_
 ### Epic P2-A: Shared schema and types
 
 #### Story P2-A.1: Promote Phase 1 Zod schema to `ied-shared`
-- [ ] **Ticket P2-A.1.1:** Create `ied-shared/src/types/racuniV2.zod.ts`. Move `StavkaSeminarZod`, `StavkaProizvodZod`, `StavkaZod` (discriminated on `tipStavke`, each with `jedinicaMere` + `stopaPdv`), `PrimalacFirmaZod`, `PrimalacFizickoZod`, `PrimalacRacunaZod` (discriminated on `tipPrimaoca`), `IzdavacSnapshotZod` (with `pdvObveznik`), and `RacunV2Zod` (discriminated on `tipRacuna`).
+- [ ] **Ticket P2-A.1.1:** Create `ied-shared/src/types/racuniV2.zod.ts`. Move `StavkaUslugaZod`, `StavkaProizvodZod`, `StavkaZod` (discriminated on `tipStavke`, each with `jedinicaMere` + `stopaPdv`), `PrimalacFirmaZod`, `PrimalacFizickoZod`, `PrimalacRacunaZod` (discriminated on `tipPrimaoca`), `IzdavacSnapshotZod` (with `pdvObveznik`), and `RacunV2Zod` (discriminated on `tipRacuna`).
 - [ ] **Ticket P2-A.1.2:** Add to `RacunV2Zod`: `status` enum (`draft | issued | paid | void`, default `draft`), `valuta: z.enum(["RSD", "EUR"]).default("RSD").refine(v => v === "RSD", "EUR saves land in Phase 6")`, `datumIzdavanja`, optional `datumValute`. Avansni branch: `avansBezPdv` + `stopaPdvAvansni`. Konacni branch: `linkedAvansniIds: z.array(ObjectIdString).default([])` and `linkedPozivNaBrojevi: z.array(z.string()).default([])`.
-- [ ] **Ticket P2-A.1.2a:** Reserve optional `pdvRezim` and `pdvRezimOsnov` on `StavkaSeminarZod` and `StavkaProizvodZod`: `pdvRezim: z.enum(["redovan20", "redovan10", "izvozUsluga", "izvozDobara", "izuzetoBezPrava", "izuzetoSaPravom"]).optional()`, `pdvRezimOsnov: z.string().optional()`. Phase 2 FE/BE does not read, write, validate, or display these — they exist so Phase 6 backfills in a single `updateMany` rather than a sub-document schema migration.
+- [ ] **Ticket P2-A.1.2a:** Reserve optional `pdvRezim` and `pdvRezimOsnov` on `StavkaUslugaZod` and `StavkaProizvodZod`: `pdvRezim: z.enum(["redovan20", "redovan10", "izvozUsluga", "izvozDobara", "izuzetoBezPrava", "izuzetoSaPravom"]).optional()`, `pdvRezimOsnov: z.string().optional()`. Phase 2 FE/BE does not read, write, validate, or display these — they exist so Phase 6 backfills in a single `updateMany` rather than a sub-document schema migration.
 - [ ] **Ticket P2-A.1.2b:** Reserve optional `imaInostraniPromet: z.boolean().optional()` and `ibanEur: z.string().optional()` on `IzdavacSnapshotZod`. Same rationale: defensive, unused in Phase 2.
 - [ ] **Ticket P2-A.1.3:** Invariant check in `RacunV2Zod`: when `izdavac.pdvObveznik === false`, every `stavke[].stopaPdv` must be `0` AND `stopaPdvAvansni` must be `0`. Fail parse otherwise (BE is strict; FE mirrors the rule).
-- [ ] **Ticket P2-A.1.4:** Export inferred TS types: `RacunV2Type`, `StavkaType`, `StavkaSeminarType`, `StavkaProizvodType`, `PrimalacRacunaType`, `PrimalacFirmaType`, `PrimalacFizickoType`, `IzdavacSnapshotType`, `PretrageRacunaV2Type`.
+- [ ] **Ticket P2-A.1.4:** Export inferred TS types: `RacunV2Type`, `StavkaType`, `StavkaUslugaType`, `StavkaProizvodType`, `PrimalacRacunaType`, `PrimalacFirmaType`, `PrimalacFizickoType`, `IzdavacSnapshotType`, `PretrageRacunaV2Type`.
 - [ ] **Ticket P2-A.1.5:** Delete the FE `components/RacunV2/schema/racunV2.schema.ts` and replace with a thin re-export from `ied-shared`. Update all FE imports.
 
 #### Story P2-A.2: Shared calculators already in place
@@ -507,12 +507,12 @@ Goal: V2 can be saved, loaded, edited, and searched against a brand-new `racuni_
 - [ ] **Ticket P2-B.1.1:** Create `ied-be/src/models/racunV2.model.ts` with the schema shape above. **Single schema, no Mongoose `discriminator()` on `tipRacuna`.** `tipRacuna` is still a required, indexed enum field on every document. Collection name `racuni_v2`.
 - [ ] **Ticket P2-B.1.2:** Define `izdavacSnapshotSchema` (sub-document) and embed it as `izdavac`. Fields: `id: { type: String, enum: [...], required: true, immutable: true }`, `naziv`, `adresa`, `pib`, `maticniBroj`, `tekuciRacun`, `pdvObveznik: { type: Boolean, required: true }`.
 - [ ] **Ticket P2-B.1.3:** Define `primalacFirmaSchema` and `primalacFizickoSchema`. Embed `primalac` with `{ discriminatorKey: "tipPrimaoca" }`. Firma branch: `naziv`, `pib`, `maticniBroj` required, `firma_id` optional ref, `adresa`/`mesto` optional. Fizicko branch: `naziv`, `adresa` required, `mesto`, `jmbg` optional.
-- [ ] **Ticket P2-B.1.4:** Define `stavkaSeminarSchema` and `stavkaProizvodSchema` with `{ discriminatorKey: "tipStavke" }`. Both include `jedinicaMere: { type: String, required: true }` and `stopaPdv: { type: Number, required: true, min: 0 }`. Stavke is a sub-document array.
+- [ ] **Ticket P2-B.1.4:** Define `stavkaUslugaSchema` and `stavkaProizvodSchema` with `{ discriminatorKey: "tipStavke" }`. Set schema defaults for `jedinicaMere`: `stavkaUslugaSchema -> "Broj ucesnika"`, `stavkaProizvodSchema -> "Broj primeraka"`. Keep `jedinicaMere: { type: String, required: true }` and `stopaPdv: { type: Number, required: true, min: 0 }` on both branches. Stavke is a sub-document array.
 - [ ] **Ticket P2-B.1.5:** Add `status` field with enum + default `"draft"`. Add TODO comment: *"Phase 5: enforce `status !== 'draft'` => immutable via pre-update hook."*
 - [ ] **Ticket P2-B.1.6:** Add timestamp options (`created_at`, `updated_at`). Add optional `issued_at`, `voided_at` fields (reserved, not populated).
 - [ ] **Ticket P2-B.1.7:** Add `valuta: { type: String, enum: ["RSD", "EUR"], default: "RSD", required: true }`. Mongoose enum matches the Zod enum; the API-layer Zod `.refine` is the only thing preventing EUR writes in Phase 2.
 - [ ] **Ticket P2-B.1.7a:** On `izdavacSnapshotSchema`, add optional `imaInostraniPromet: Boolean` and `ibanEur: String`. Not set by Phase 2 save flow; reserved for Phase 6.
-- [ ] **Ticket P2-B.1.7b:** On `stavkaSeminarSchema` and `stavkaProizvodSchema`, add optional `pdvRezim: { type: String, enum: ["redovan20", "redovan10", "izvozUsluga", "izvozDobara", "izuzetoBezPrava", "izuzetoSaPravom"] }` and optional `pdvRezimOsnov: String`. Not populated in Phase 2.
+- [ ] **Ticket P2-B.1.7b:** On `stavkaUslugaSchema` and `stavkaProizvodSchema`, add optional `pdvRezim: { type: String, enum: ["redovan20", "redovan10", "izvozUsluga", "izvozDobara", "izuzetoBezPrava", "izuzetoSaPravom"] }` and optional `pdvRezimOsnov: String`. Not populated in Phase 2.
 - [ ] **Ticket P2-B.1.8:** Avansni-specific fields at the invoice level: `stopaPdvAvansni: Number`, `avansBezPdv: Number`, `datumUplateAvansa: Date` (all optional on the schema; enforced per-type by Zod at the API layer).
 - [ ] **Ticket P2-B.1.9:** Konacni-specific fields: `linkedAvansniIds: [{ type: Types.ObjectId, ref: "RacunV2" }]`, `linkedPozivNaBrojevi: [String]`. Both default to empty arrays.
 - [ ] **Ticket P2-B.1.10:** Pre-save hook: if `izdavac.pdvObveznik === false`, zero out `stavke[*].stopaPdv` and `stopaPdvAvansni` as a belt-and-suspenders guard (Zod already enforces this; double-check at persistence).
@@ -540,7 +540,7 @@ Goal: V2 can be saved, loaded, edited, and searched against a brand-new `racuni_
 
 #### Story P2-C.2: Query builder
 - [ ] **Ticket P2-C.2.1:** Create `ied-be/src/queryBuilders/racuniV2QueryBuilder.ts`. Clone V1 logic, adapt field paths:
-  - `seminar.naziv` → `{ stavke: { $elemMatch: { naziv: { $regex, $options: "i" } } } }` (matches seminar OR proizvod by naziv).
+  - `seminar.naziv` → `{ stavke: { $elemMatch: { naziv: { $regex, $options: "i" } } } }` (matches usluga OR proizvod by naziv).
   - Primalac paths: `primalac.naziv`, `primalac.pib` (both branches have `naziv`; only `firma` branch has `pib`, so pib-search implicitly filters to firma primalac).
   - `izdavacRacuna` filter maps to `"izdavac.id"`.
   - Add optional `tipPrimaoca` filter (`"firma" | "fizicko"`).
@@ -627,7 +627,7 @@ Goal: V2 has feature parity with V1 for the actual user workflow — search exis
 
 #### Story P3-C.1: Template strategy
 - [ ] **Ticket P3-C.1.1:** Design new templates per tipRacuna: `predracunV2.docx`, `avansniV2.docx`, `konacniV2.docx`, `racunV2.docx`. Keep V1 templates untouched for V1 route.
-- [ ] **Ticket P3-C.1.2:** Define `flattenStavkeForDocx(stavke)` in `ied-shared` — seminar with both online/offline kolicina > 0 → 2 rows; seminar with only one → 1 row; proizvod → 1 row. Each row: `{ naziv, jedinicaMere, kolicina, cena, popust, poreskaOsnovica, pdv, ukupno }`.
+- [ ] **Ticket P3-C.1.2:** Define `flattenStavkeForDocx(stavke)` in `ied-shared` — `usluga` with both online/offline kolicina > 0 → 2 rows; `usluga` with only one → 1 row; `proizvod` → 1 row. Each row: `{ naziv, jedinicaMere, kolicina, cena, popust, poreskaOsnovica, pdv, ukupno }`.
 - [ ] **Ticket P3-C.1.3:** DOCX renderer reads `izdavac` snapshot from the invoice (NOT from `izdavacRacuna.const.ts`). This is the fix for the V1 "changed address mutates old invoices" bug.
 - [ ] **Ticket P3-C.1.4:** When `izdavac.pdvObveznik === false`, DOCX omits the entire PDV block and PDV rekapitulacija. Replaces V1's `shouldRenderPdvBlock` render-time conditional with a data-driven one.
 - [ ] **Ticket P3-C.1.5:** Mixed-rate rekapitulacija: iterate over `pdvPoStopama` map from the calculator, render one row per distinct stopa (`"PDV 20%: osnovica X / PDV Y"`, etc.).
@@ -655,7 +655,7 @@ Goal: V2 has feature parity with V1 for the actual user workflow — search exis
   - Newly added stavka auto-expands; previous auto-collapses if valid.
   - On submit with errors, cards with invalid fields auto-expand.
   - Collapsed card header shows naziv, subtotal, error badge.
-- **Seminar search dialog** on "+ Dodaj seminar" — search existing DB seminars, prefill stavka from selection.
+- **Seminar search dialog** on "+ Dodaj uslugu" — search existing DB seminars, prefill stavka from selection.
 - **Undo toast** on stavka removal (5s window to restore).
 - **Drag-to-reorder** stavke.
 
@@ -712,7 +712,7 @@ Everything in this phase is *correctness / integrity* work that we deliberately 
 
 #### Story P5-C.1: Backfill
 - [ ] **Ticket P5-C.1.1:** One-shot migrator: read every `racuni` doc, transform to V2 shape.
-  - V1's single `seminar` embedded object becomes `stavke: [{ tipStavke: "seminar", stopaPdv: <V1 invoice-level stopaPdv>, jedinicaMere: "učesnik", ... }]`.
+  - V1's single `seminar` embedded object becomes `stavke: [{ tipStavke: "usluga", stopaPdv: <V1 invoice-level stopaPdv>, jedinicaMere: "Broj ucesnika", ... }]`.
   - V1's invoice-level `stopaPdv` pushes down onto the single stavka; invoice-level `stopaPdv` is dropped.
   - V1's stored `calculations` is discarded (recomputed on demand).
   - V1's `linkedPozivNaBroj: string` becomes `linkedPozivNaBrojevi: [value]` (wrapped to array) and resolved to `linkedAvansniIds: [ObjectId]` where a match exists (`izdavacRacuna + pozivNaBroj`); unresolved entries stay as strings only.
@@ -761,7 +761,7 @@ Track this as a possibility, not a commitment. The V1 conflation has not caused 
 
 ### Epic P6-B: PDV regime per stavka
 
-- [ ] **Ticket P6-B.1.1:** FE: add `pdvRezim` `Select` to `SeminarStavkaCard` and `ProizvodStavkaCard`. Options with labels:
+- [ ] **Ticket P6-B.1.1:** FE: add `pdvRezim` `Select` to `UslugaStavkaCard` and `ProizvodStavkaCard`. Options with labels:
   - `redovan20` — "20% PDV (redovna stopa)" (default)
   - `redovan10` — "10% PDV (snižena stopa)"
   - `izvozUsluga` — "Izvoz usluga (mesto prometa inostranstvo)"
@@ -809,7 +809,7 @@ These are questions I refuse to answer in advance of the business need; flagged 
 
 | Aspect | V1 | V2 |
 |--------|-----|----|
-| Seminar per invoice | 1 embedded | N via `stavke[]` discriminated on `tipStavke` (seminar, proizvod, future types) |
+| Service/product per invoice | 1 embedded seminar | N via `stavke[]` discriminated on `tipStavke` (usluga, proizvod, future types) |
 | Form state | Zustand + manual `updateNestedField` | react-hook-form + useFieldArray |
 | Calculations | `useEffect` side-effect chain, duplicated FE+BE | pure functions in `ied-shared`, consumed by FE + BE |
 | Stored `calculations` bucket | Yes (with popust inside, taxonomy mistake) | No — derived on read; snapshot only on issuance in Phase 5 |
@@ -825,7 +825,7 @@ These are questions I refuse to answer in advance of the business need; flagged 
 | `izdavac` data | Resolved from constants at DOCX-render time (leaky) | Snapshotted on the invoice at save time (incl. `pdvObveznik`) |
 | Primalac modeling | Implicit firma, all fields optional, `firma_id` loose ref | `tipPrimaoca: "firma" \| "fizicko"` discriminator; required fields per branch |
 | Konacni ↔ Avansni link | Single `linkedPozivNaBroj` string | Multi: `linkedAvansniIds: ObjectId[]` + `linkedPozivNaBrojevi: string[]`; primalac+izdavac match enforced |
-| Stavka unit of measure | On seminar only (`jedinicaMere`) | Required on every stavka (seminar defaults "učesnik", proizvod defaults "komad") |
+| Stavka unit of measure | On seminar only (`jedinicaMere`) | Required on every stavka (`usluga` defaults `"Broj ucesnika"`, `proizvod` defaults `"Broj primeraka"`) |
 | Invoice lifecycle | None; anything can be edited anytime | `status` field from day one; transitions + immutability in Phase 5 |
 | Legal date fields | `datumUplateAvansa` only; `rokZaUplatu` as days, no frozen due date | `datumIzdavanja` always; `datumValute` frozen in Phase 5; `datumPrometa` deliberately deferred |
 | Currency | Implicit RSD | Phase 1: inert `valuta` picker (RSD default, EUR scaffold-only, warning banner). Phase 2: `valuta: z.enum(["RSD","EUR"])` with API refine locking to RSD. Phase 6: EUR saves activate with NBS kurs snapshot, per-stavka `pdvRezim`, bilingual DOCX |
