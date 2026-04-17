@@ -426,7 +426,7 @@ Goal: V2 can be saved, loaded, edited, and searched against a brand-new `racuni_
 - **Money type:** keep JS `Number` + `roundToTwoDecimals` helper, matching V1 exactly. Decimal128 migration is deferred to Phase 5.
 - **Single Mongoose model, no `discriminator()` on `tipRacuna`.** The `tipRacuna` field itself is preserved — required, enum-validated, indexed, searchable. What changes is that V1's four sub-schemas (each redeclaring `calculations`) collapse into one schema with optional fields per type, validated by Zod's discriminated union at the API boundary. All 4 legal invoice types remain distinct on every document.
 - **Stavke use Mongoose sub-document discriminator on `tipStavke`** (`usluga` vs `proizvod`) — shapes genuinely differ, and new types are planned.
-- **`status` field exists, no enforcement.** All new V2 docs default to `"draft"`. Transitions and immutability arrive in Phase 5.
+- **`status` field exists, no enforcement.** All new V2 docs default to `"izdat"`. Transitions and immutability hardening arrive in Phase 5.
 - **`izdavac` is snapshotted** on the invoice from `izdavacRacuna.const.ts` at save time (including `pdvObveznik`), NOT resolved at DOCX-render time. Makes historical invoices stable against issuer info changes.
 - **PDV rate is per-stavka** (`stopaPdv` on each stavka sub-doc). No invoice-level `stopaPdv` stored. Avansni, which has no stavke, stores one `stopaPdv` on the invoice document (it's the exception).
 - **Primalac uses a `tipPrimaoca` discriminator** (`"firma" | "fizicko"`) with per-branch required fields.
@@ -440,10 +440,10 @@ Goal: V2 can be saved, loaded, edited, and searched against a brand-new `racuni_
 ```ts
 {
   _id,
-  brojRacuna?: string,           // reserved; set in Phase 5 on status -> issued
+  brojRacuna?: string,           // reserved; rollout completed in Phase 5
   pozivNaBroj: string,           // auto-generated via V1-style SequenceModel pre-save hook
   tipRacuna: "predracun" | "avansniRacun" | "konacniRacun" | "racun",  // required, indexed, searchable
-  status: "draft" | "issued" | "paid" | "void",   // default "draft", no enforcement in Phase 2
+  status: "izdat" | "placen" | "ponisten",   // default "izdat", no enforcement in Phase 2
 
   izdavac: {                     // SNAPSHOT, not a lookup
     id: "ied" | "permanent" | "bs",
@@ -481,7 +481,7 @@ Goal: V2 can be saved, loaded, edited, and searched against a brand-new `racuni_
   placeno?: number,              // racun
 
   created_at, updated_at,
-  issued_at?, voided_at?         // reserved; populated by Phase 5 transitions
+  izdat_at?, ponisten_at?        // reserved; populated by Phase 5 transitions
 }
 ```
 
@@ -489,7 +489,7 @@ Goal: V2 can be saved, loaded, edited, and searched against a brand-new `racuni_
 
 #### Story P2-A.1: Promote Phase 1 Zod schema to `ied-shared`
 - [ ] **Ticket P2-A.1.1:** Create `ied-shared/src/types/racuniV2.zod.ts`. Move `StavkaUslugaZod`, `StavkaProizvodZod`, `StavkaZod` (discriminated on `tipStavke`, each with `jedinicaMere` + `stopaPdv`), `PrimalacFirmaZod`, `PrimalacFizickoZod`, `PrimalacRacunaZod` (discriminated on `tipPrimaoca`), `IzdavacSnapshotZod` (with `pdvObveznik`), and `RacunV2Zod` (discriminated on `tipRacuna`).
-- [ ] **Ticket P2-A.1.2:** Add to `RacunV2Zod`: `status` enum (`draft | issued | paid | void`, default `draft`), `valuta: z.enum(["RSD", "EUR"]).default("RSD").refine(v => v === "RSD", "EUR saves land in Phase 6")`, `datumIzdavanja`, optional `datumValute`. Avansni branch: `avansBezPdv` + `stopaPdvAvansni`. Konacni branch: `linkedAvansniIds: z.array(ObjectIdString).default([])` and `linkedPozivNaBrojevi: z.array(z.string()).default([])`.
+- [ ] **Ticket P2-A.1.2:** Add to `RacunV2Zod`: `status` enum (`izdat | placen | ponisten`, default `izdat`), `valuta: z.enum(["RSD", "EUR"]).default("RSD").refine(v => v === "RSD", "EUR saves land in Phase 6")`, `datumIzdavanja`, optional `datumValute`. Avansni branch: `avansBezPdv` + `stopaPdvAvansni`. Konacni branch: `linkedAvansniIds: z.array(ObjectIdString).default([])` and `linkedPozivNaBrojevi: z.array(z.string()).default([])`.
 - [ ] **Ticket P2-A.1.2a:** Reserve optional `pdvRezim` and `pdvRezimOsnov` on `StavkaUslugaZod` and `StavkaProizvodZod`: `pdvRezim: z.enum(["redovan20", "redovan10", "izvozUsluga", "izvozDobara", "izuzetoBezPrava", "izuzetoSaPravom"]).optional()`, `pdvRezimOsnov: z.string().optional()`. Phase 2 FE/BE does not read, write, validate, or display these — they exist so Phase 6 backfills in a single `updateMany` rather than a sub-document schema migration.
 - [ ] **Ticket P2-A.1.2b:** Reserve optional `imaInostraniPromet: z.boolean().optional()` and `ibanEur: z.string().optional()` on `IzdavacSnapshotZod`. Same rationale: defensive, unused in Phase 2.
 - [ ] **Ticket P2-A.1.3:** Invariant check in `RacunV2Zod`: when `izdavac.pdvObveznik === false`, every `stavke[].stopaPdv` must be `0` AND `stopaPdvAvansni` must be `0`. Fail parse otherwise (BE is strict; FE mirrors the rule).
@@ -508,8 +508,8 @@ Goal: V2 can be saved, loaded, edited, and searched against a brand-new `racuni_
 - [ ] **Ticket P2-B.1.2:** Define `izdavacSnapshotSchema` (sub-document) and embed it as `izdavac`. Fields: `id: { type: String, enum: [...], required: true, immutable: true }`, `naziv`, `adresa`, `pib`, `maticniBroj`, `tekuciRacun`, `pdvObveznik: { type: Boolean, required: true }`.
 - [ ] **Ticket P2-B.1.3:** Define `primalacFirmaSchema` and `primalacFizickoSchema`. Embed `primalac` with `{ discriminatorKey: "tipPrimaoca" }`. Firma branch: `naziv`, `pib`, `maticniBroj` required, `firma_id` optional ref, `adresa`/`mesto` optional. Fizicko branch: `naziv`, `adresa` required, `mesto`, `jmbg` optional.
 - [ ] **Ticket P2-B.1.4:** Define `stavkaUslugaSchema` and `stavkaProizvodSchema` with `{ discriminatorKey: "tipStavke" }`. Set schema defaults for `jedinicaMere`: `stavkaUslugaSchema -> "Broj ucesnika"`, `stavkaProizvodSchema -> "Broj primeraka"`. Keep `jedinicaMere: { type: String, required: true }` and `stopaPdv: { type: Number, required: true, min: 0 }` on both branches. Stavke is a sub-document array.
-- [ ] **Ticket P2-B.1.5:** Add `status` field with enum + default `"draft"`. Add TODO comment: *"Phase 5: enforce `status !== 'draft'` => immutable via pre-update hook."*
-- [ ] **Ticket P2-B.1.6:** Add timestamp options (`created_at`, `updated_at`). Add optional `issued_at`, `voided_at` fields (reserved, not populated).
+- [ ] **Ticket P2-B.1.5:** Add `status` field with enum + default `"izdat"`. Add TODO comment: *"Phase 5: enforce immutable docs for `status in ['placen','ponisten']`."*
+- [ ] **Ticket P2-B.1.6:** Add timestamp options (`created_at`, `updated_at`). Add optional `izdat_at`, `ponisten_at` fields (reserved, not populated).
 - [ ] **Ticket P2-B.1.7:** Add `valuta: { type: String, enum: ["RSD", "EUR"], default: "RSD", required: true }`. Mongoose enum matches the Zod enum; the API-layer Zod `.refine` is the only thing preventing EUR writes in Phase 2.
 - [ ] **Ticket P2-B.1.7a:** On `izdavacSnapshotSchema`, add optional `imaInostraniPromet: Boolean` and `ibanEur: String`. Not set by Phase 2 save flow; reserved for Phase 6.
 - [ ] **Ticket P2-B.1.7b:** On `stavkaUslugaSchema` and `stavkaProizvodSchema`, add optional `pdvRezim: { type: String, enum: ["redovan20", "redovan10", "izvozUsluga", "izvozDobara", "izuzetoBezPrava", "izuzetoSaPravom"] }` and optional `pdvRezimOsnov: String`. Not populated in Phase 2.
@@ -532,11 +532,11 @@ Goal: V2 can be saved, loaded, edited, and searched against a brand-new `racuni_
 - [ ] **Ticket P2-C.1.1:** Create `ied-be/src/services/racuniV2.service.ts`. Do NOT touch the V1 `racuni.service.ts`.
 - [ ] **Ticket P2-C.1.2:** `saveRacunV2(racun)` — snapshot `izdavac` from `izdavacRacuna.const.ts` at save time (INCLUDING `pdvObveznik`; don't trust FE payload's `izdavac`). Compute `datumIzdavanja` server-side if not provided. Save document. Return the DTO with derived totals.
 - [ ] **Ticket P2-C.1.2a:** Extend `izdavacRacuna.const.ts` with `pdvObveznik: boolean` per entry (`ied: true`, `bs: true`, `permanent: false`). One source of truth.
-- [ ] **Ticket P2-C.1.3:** `updateRacunV2ById(id, racun)` — full update in Phase 2. Add a comment: *"Phase 5: reject if status !== 'draft'."* Re-snapshot `izdavac` if `izdavac.id` changed.
+- [ ] **Ticket P2-C.1.3:** `updateRacunV2ById(id, racun)` — full update in Phase 2. Add a comment: *"Phase 5: reject updates for `status in ['placen','ponisten']`."* Re-snapshot `izdavac` if `izdavac.id` changed.
 - [ ] **Ticket P2-C.1.4:** `getRacunV2ById(id)` — `findById`, attach derived `totals` via `calcRacunTotals`, return DTO.
-- [ ] **Ticket P2-C.1.5:** `searchRacuniV2(pageIndex, pageSize, params)` — mirrors V1 `searchRacuni`, adds optional `status` filter (default: exclude `"void"`). Returns `{ racuni, totalDocuments, totalPages }`.
+- [ ] **Ticket P2-C.1.5:** `searchRacuniV2(pageIndex, pageSize, params)` — mirrors V1 `searchRacuni`, adds optional `status` filter (default: exclude `"ponisten"`). Returns `{ racuni, totalDocuments, totalPages }`.
 - [ ] **Ticket P2-C.1.6:** `getRacunV2ByPozivNaBrojAndIzdavac(...)` — parity with V1, used by konacni linking in Phase 3.
-- [ ] **Ticket P2-C.1.7:** Delete-method policy: do NOT add a hard-delete endpoint. Hard deletes on invoices are never correct; Phase 5 adds `voidRacunV2`.
+- [ ] **Ticket P2-C.1.7:** Delete-method policy: do NOT add a hard-delete endpoint. Hard deletes on invoices are never correct; Phase 5 adds `ponistiRacunV2`.
 
 #### Story P2-C.2: Query builder
 - [ ] **Ticket P2-C.2.1:** Create `ied-be/src/queryBuilders/racuniV2QueryBuilder.ts`. Clone V1 logic, adapt field paths:
@@ -544,7 +544,7 @@ Goal: V2 can be saved, loaded, edited, and searched against a brand-new `racuni_
   - Primalac paths: `primalac.naziv`, `primalac.pib` (both branches have `naziv`; only `firma` branch has `pib`, so pib-search implicitly filters to firma primalac).
   - `izdavacRacuna` filter maps to `"izdavac.id"`.
   - Add optional `tipPrimaoca` filter (`"firma" | "fizicko"`).
-  - Add `status` filter (default: exclude `"void"`).
+  - Add `status` filter (default: exclude `"ponisten"`).
 
 ### Epic P2-D: Routes
 
@@ -575,7 +575,7 @@ Goal: V2 can be saved, loaded, edited, and searched against a brand-new `racuni_
 
 ### Phase 2 definition of done
 
-- `/racuni-v2` creates a doc in `racuni_v2`, returns with server-generated `pozivNaBroj`, stored with `status: "draft"`, `izdavac` snapshotted.
+- `/racuni-v2` creates a doc in `racuni_v2`, returns with server-generated `pozivNaBroj`, stored with `status: "izdat"`, `izdavac` snapshotted.
 - `/racuni-v2/:id` loads and renders it.
 - `/racuni-v2/:id/edit` updates it.
 - `POST /api/racuni-v2/search` returns paged results.
@@ -603,10 +603,10 @@ Goal: V2 has feature parity with V1 for the actual user workflow — search exis
 ### Epic P3-B: Konacni ↔ Avansni linking (real refs, 1 konacni -> N avansni)
 
 #### Story P3-B.1: BE lookup service
-- [ ] **Ticket P3-B.1.1:** `getAvansniForLinking(pozivNaBroj, izdavacId)` — returns `{ _id, primalac, stavkeSummary, avansBezPdv, avansPdv, avans, stopaPdvAvansni, status, linkedKonacniPozivNaBroj? }` for an avansni racun matched by `(izdavac.id, pozivNaBroj)` with `tipRacuna === "avansniRacun"`. 404 if no match, 409 if status is `void`.
+- [ ] **Ticket P3-B.1.1:** `getAvansniForLinking(pozivNaBroj, izdavacId)` — returns `{ _id, primalac, stavkeSummary, avansBezPdv, avansPdv, avans, stopaPdvAvansni, status, linkedKonacniPozivNaBroj? }` for an avansni racun matched by `(izdavac.id, pozivNaBroj)` with `tipRacuna === "avansniRacun"`. 404 if no match, 409 if status is `ponisten`.
 - [ ] **Ticket P3-B.1.2:** `GET /api/racuni-v2/link/avansni?pozivNaBroj=...&izdavacId=...` route.
 - [ ] **Ticket P3-B.1.3:** On konacni save, resolve every entry of `linkedPozivNaBrojevi` to a real `linkedAvansniIds` ObjectId. Validate:
-  - All referenced avansni exist and are not `void`.
+  - All referenced avansni exist and are not `ponisten`.
   - All share the same `primalac` identity as the konacni (firma: same `firma_id`/`pib`; fizicko: same `naziv` + `jmbg` or a best-effort match the user confirms).
   - All share the same `izdavac.id`.
   - Reject 422 on any mismatch with a per-row error map.
@@ -695,18 +695,18 @@ Everything in this phase is *correctness / integrity* work that we deliberately 
 ### Epic P5-B: Invoice lifecycle and immutability
 
 #### Story P5-B.1: Transitions
-- [ ] **Ticket P5-B.1.1:** `issueRacunV2(id)` service — validates status is `"draft"`, generates `brojRacuna` via a new sequence `${izdavac.id}_racun_${year}`, snapshots derived totals into a stored `totals` sub-doc, sets `issued_at`, flips status to `"issued"`.
-- [ ] **Ticket P5-B.1.2:** `voidRacunV2(id, reason)` — allowed from `"issued" | "paid"`; sets status `"void"`, `voided_at`, stores reason in audit log.
-- [ ] **Ticket P5-B.1.3:** `markPaidRacunV2(id, paymentRef?)` — allowed from `"issued"`.
+- [ ] **Ticket P5-B.1.1:** `finalizeBrojRacunaV2(id)` service — validates status is `"izdat"` and `brojRacuna` is missing, generates `brojRacuna` via a new sequence `${izdavac.id}_racun_${year}`, snapshots derived totals into a stored `totals` sub-doc, sets `izdat_at` if missing.
+- [ ] **Ticket P5-B.1.2:** `ponistiRacunV2(id, reason)` — allowed from `"izdat" | "placen"`; sets status `"ponisten"`, `ponisten_at`, stores reason in audit log.
+- [ ] **Ticket P5-B.1.3:** `oznaciKaoPlacenRacunV2(id, paymentRef?)` — allowed from `"izdat"`, sets status `"placen"`.
 
 #### Story P5-B.2: Immutability enforcement
-- [ ] **Ticket P5-B.2.1:** `updateRacunV2ById` rejects with 409 if `status !== "draft"`.
+- [ ] **Ticket P5-B.2.1:** `updateRacunV2ById` rejects with 409 if `status in ("placen", "ponisten")`.
 - [ ] **Ticket P5-B.2.2:** Pre-update Mongoose hook as a belt-and-suspenders guard.
 - [ ] **Ticket P5-B.2.3:** Append-only audit log collection `racuniV2_audit` — one doc per transition with `{ racunId, fromStatus, toStatus, actor, reason?, at }`.
 
 #### Story P5-B.3: FE lifecycle actions
-- [ ] **Ticket P5-B.3.1:** Read view shows status badge and contextual actions (Izdaj / Označi plaćenim / Storniraj).
-- [ ] **Ticket P5-B.3.2:** Disable "Izmeni" when status is not `"draft"`; show tooltip explaining why.
+- [ ] **Ticket P5-B.3.1:** Read view shows status badge and contextual actions (Označi plaćenim / Poništi).
+- [ ] **Ticket P5-B.3.2:** Disable "Izmeni" when status is `"placen"` or `"ponisten"`; show tooltip explaining why.
 
 ### Epic P5-C: V1 → V2 unified collection migration
 
@@ -718,7 +718,7 @@ Everything in this phase is *correctness / integrity* work that we deliberately 
   - V1's `linkedPozivNaBroj: string` becomes `linkedPozivNaBrojevi: [value]` (wrapped to array) and resolved to `linkedAvansniIds: [ObjectId]` where a match exists (`izdavacRacuna + pozivNaBroj`); unresolved entries stay as strings only.
   - V1's `primalacRacuna` (no `tipPrimaoca`) becomes `{ tipPrimaoca: "firma", ... }` wholesale — legacy V1 data is always firma-shaped.
   - `izdavac.pdvObveznik` backfilled from the izdavac constant of the same era.
-- [ ] **Ticket P5-C.1.2:** Status strategy for legacy docs: set `status: "issued"` (they're historical / real), not `"draft"`.
+- [ ] **Ticket P5-C.1.2:** Status strategy for legacy docs: set `status: "izdat"` (they're historical / real).
 - [ ] **Ticket P5-C.1.3:** Dry-run mode with a diff report. Accounting signs off before writing.
 - [ ] **Ticket P5-C.1.4:** Execute against staging, validate sample DOCX output matches historical.
 - [ ] **Ticket P5-C.1.5:** Execute in production behind a maintenance window. Keep V1 collection as `racuni_legacy` for 1 year.
