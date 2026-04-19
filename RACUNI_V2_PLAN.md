@@ -268,27 +268,27 @@ No new backend files in Phase 1.
 ### Epic 1: Route, page shell, and tabs
 
 #### Story 1.1: Add route and navigation
-- [ ] **Ticket 1.1.1:** Add `/racuni-v2` route in `ied-fe/src/App.tsx`.
-- [ ] **Ticket 1.1.2:** Create `ied-fe/src/pages/RacuniV2.tsx` with `PageTitle` and layout slot.
-- [ ] **Ticket 1.1.3:** Add nav entry "Racuni V2" next to existing "Racuni" link.
+- [x] **Ticket 1.1.1:** Add `/racuni-v2` route in `ied-fe/src/App.tsx`.
+- [x] **Ticket 1.1.2:** Create `ied-fe/src/pages/RacuniV2.tsx` with `PageTitle` and layout slot.
+- [x] **Ticket 1.1.3:** Add nav entry "Racuni V2" next to existing "Racuni" link.
 
 #### Story 1.2: Tabs shell
-- [ ] **Ticket 1.2.1:** Build `RacunV2TabsShell.tsx` with 5 tabs: `Pretrage (disabled, tooltip: Uskoro)`, `Predracun`, `Avansni`, `Konacni`, `Racun`.
-- [ ] **Ticket 1.2.2:** Tab change updates form state's `tipRacuna` and resets everything except `izdavacRacuna`, `tekuciRacun`, and `valuta` (explicitly resets `defaultStopaPdv`).
+- [x] **Ticket 1.2.1:** Build `RacunV2TabsShell.tsx` with 5 tabs: `Pretrage (disabled, tooltip: Uskoro)`, `Predracun`, `Avansni`, `Konacni`, `Racun`.
+- [x] **Ticket 1.2.2:** Tab change updates form state's `tipRacuna` and resets everything except `izdavacRacuna`, `tekuciRacun`, and `valuta` (explicitly resets `defaultStopaPdv`).
 
 ### Epic 2: Form engine and schema
 
 #### Story 2.1: RHF provider and typed helpers
-- [ ] **Ticket 2.1.1:** Create `RacunV2FormProvider.tsx` with `useForm<RacunV2Form>({ resolver: zodResolver(...), mode: "onTouched", shouldFocusError: true })`.
-- [ ] **Ticket 2.1.2:** Create `useRacunV2Form.ts` — typed `useFormContext<RacunV2Form>()` wrapper.
-- [ ] **Ticket 2.1.3:** Create `schema/defaults.ts` with `getDefaultValues(tipRacuna)` returning correct defaults per type.
+- [x] **Ticket 2.1.1:** Create `RacunV2FormProvider.tsx` with `useForm<RacunV2Form>({ resolver: zodResolver(...), mode: "onTouched", shouldFocusError: true })`.
+- [x] **Ticket 2.1.2:** Create `useRacunV2Form.ts` — typed `useFormContext<RacunV2Form>()` wrapper.
+- [x] **Ticket 2.1.3:** Create `schema/defaults.ts` with `getDefaultValues(tipRacuna)` returning correct defaults per type.
 
 #### Story 2.2: Zod schema
-- [ ] **Ticket 2.2.1:** Create `schema/racunV2.schema.ts` with `StavkaUslugaZod`, `StavkaProizvodZod`, `StavkaZod` (discriminated on `tipStavke`). Set defaults: `usluga.jedinicaMere = "Broj ucesnika"` (hidden in UI), `proizvod.jedinicaMere = "Broj primeraka"` (editable in UI). Both stavka types include `stopaPdv: z.coerce.number().min(0).default(20)`.
-- [ ] **Ticket 2.2.2:** Create `PrimalacFirmaZod` (`tipPrimaoca: "firma"`, requires `naziv`, `pib`, `maticniBroj`) and `PrimalacFizickoZod` (`tipPrimaoca: "fizicko"`, requires `naziv`, `adresa`). `PrimalacRacunaZod = z.discriminatedUnion("tipPrimaoca", [...])`.
-- [ ] **Ticket 2.2.3:** Create `RacunV2Zod` (discriminated on `tipRacuna`): predracun/konacni/racun require `stavke.min(1)`; avansni disallows `stavke` and requires `avansBezPdv`. `pozivNaBroj` required and non-empty. `valuta: z.enum(["RSD", "EUR"]).default("RSD")` at the top level. Phase 1 does NOT add a schema refine on `valuta` — EUR blocking is handled at submit UX level (see Epic 8), while Phase 2 API adds the strict refine.
-- [ ] **Ticket 2.2.4:** Konacni accepts `linkedPozivNaBrojevi: z.array(z.string().min(1))` (can be empty in Phase 1; enforced at least 1 in Phase 3).
-- [ ] **Ticket 2.2.5:** Enforce `popust` 0-100, `kolicina`/`cena` non-negative, `stopaPdv` non-negative.
+- [x] **Ticket 2.2.1:** Create `schema/racunV2.schema.ts` with `StavkaUslugaZod`, `StavkaProizvodZod`, `StavkaZod` (discriminated on `tipStavke`). Set defaults: `usluga.jedinicaMere = "Broj ucesnika"` (hidden in UI), `proizvod.jedinicaMere = "Broj primeraka"` (editable in UI). Both stavka types include `stopaPdv: z.coerce.number().min(0).default(20)`.
+- [x] **Ticket 2.2.2:** Create `PrimalacFirmaZod` (`tipPrimaoca: "firma"`, requires `naziv`, `pib`, `maticniBroj`) and `PrimalacFizickoZod` (`tipPrimaoca: "fizicko"`, requires `naziv`, `adresa`). `PrimalacRacunaZod = z.discriminatedUnion("tipPrimaoca", [...])`.
+- [x] **Ticket 2.2.3:** Create `RacunV2Zod` (discriminated on `tipRacuna`): predracun/konacni/racun require `stavke.min(1)`; avansni disallows `stavke` and requires `avansBezPdv`. `pozivNaBroj` required and non-empty. `valuta: z.enum(["RSD", "EUR"]).default("RSD")` at the top level. Phase 1 does NOT add a schema refine on `valuta` — EUR blocking is handled at submit UX level (see Epic 8), while Phase 2 API adds the strict refine.
+- [x] **Ticket 2.2.4:** Konacni accepts `linkedPozivNaBrojevi: z.array(z.string().min(1))` (can be empty in Phase 1; enforced at least 1 in Phase 3).
+- [x] **Ticket 2.2.5:** Enforce `popust` 0-100, `kolicina`/`cena` non-negative, `stopaPdv` non-negative.
 
 ### Epic 3: Calculations (pure, testable, in ied-shared)
 
