@@ -1,7 +1,0 @@
-{
-  "plugins": {
-    "sentry": { "enabled": true },
-    "vercel": { "enabled": false },
-    "clerk": { "enabled": false }
-  }
-}
