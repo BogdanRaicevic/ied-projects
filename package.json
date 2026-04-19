@@ -16,7 +16,8 @@
     "biome:format": "turbo run biome:format",
     "biome:check": "turbo run biome:check",
     "knip": "knip",
-    "release": "semantic-release"
+    "release": "semantic-release",
+    "skills:update": "npx skills update -p -y"
   },
   "devDependencies": {
     "@biomejs/biome": "^2.4.12",
