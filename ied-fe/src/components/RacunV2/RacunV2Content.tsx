@@ -7,6 +7,7 @@ import { RacunV2TabsShell } from "./RacunV2TabsShell";
 import { SummaryPanel } from "./SummaryPanel";
 import { IzdavacRacunaSection } from "./sections/IzdavacRacunaSection";
 import { PrimalacRacunaSection } from "./sections/PrimalacRacunaSection";
+import { StavkeSection } from "./sections/StavkeSection";
 
 /**
  * Phase 1 stub submit handler. Wired so RHF's `handleSubmit` actually fires
@@ -61,8 +62,10 @@ export function RacunV2Content() {
 
               <PrimalacRacunaSection />
 
+              <StavkeSection />
+
               <Alert severity="info">
-                Aktivan tab: <strong>{tipRacuna}</strong>. Story 4.3 je aktivna;
+                Aktivan tab: <strong>{tipRacuna}</strong>. Story 5.1 je aktivna;
                 ostale sekcije dolaze kroz naredne epike.
               </Alert>
             </Stack>

@@ -344,9 +344,16 @@ No new backend files in Phase 1.
 ### Epic 5: Stavke (line items)
 
 #### Story 5.1: Stavke container and add buttons
-- [ ] **Ticket 5.1.1:** Build `StavkeSection.tsx` using `useFieldArray({ name: "stavke" })`.
-- [ ] **Ticket 5.1.2:** Two inline buttons: "+ Dodaj uslugu" appends empty `usluga` stavka with `stopaPdv = defaultStopaPdv` and `jedinicaMere = "Broj ucesnika"`; "+ Dodaj proizvod" appends empty `proizvod` stavka with `stopaPdv = defaultStopaPdv` and `jedinicaMere = "Broj primeraka"`.
-- [ ] **Ticket 5.1.3:** Remove action per stavka: instant remove, no confirmation.
+
+**Avansni self-guard (Phase 1):** the discriminated-union schema declares `stavke: z.never().optional()` on the avansni branch (no line items by design — single avans amount + rate live directly on the invoice). Layout switching in Epic 6 will conditionally render this section per layout component. Until then, `StavkeSection` self-guards with `if (tipRacuna === AVANSNI_RACUN) return null;` so users can pick the avansni tab without seeing nonsensical "+ Dodaj uslugu" buttons. Form state for `stavke` survives across tab switches between stavke-having branches (e.g. predracun → konacni preserves work). Cleanup of out-of-band fields when crossing into avansni belongs to Epic 6 / Epic 8.
+
+**Empty-stavka factories (`schema/stavkaDefaults.ts`):** `getEmptyUslugaStavka(defaultStopaPdv)` and `getEmptyProizvodStavka(defaultStopaPdv)` snapshot `defaultStopaPdv` from form state at append time (read non-reactively via `getValues`). Existing stavke do NOT re-sync when `defaultStopaPdv` later changes — each stavka has its own editable per-stavka rate (Stories 5.2.5 / 5.3.3). `naziv: ""`, `datum: null` (DatePicker convention), all numeric fields `0`. Schema's `z.coerce.{number,date}` make `z.input` accept these literals cleanly.
+
+**Phase 1 placeholder row:** until Stories 5.2/5.3 land the real `UslugaStavkaCard` / `ProizvodStavkaCard`, each `useFieldArray` field renders a minimal inline row (index + type label + delete icon) so ticket 5.1.3's remove action has a visible target. Single-component swap when 5.2/5.3 ship; container, field array, add/remove handlers all stay.
+
+- [x] **Ticket 5.1.1:** Build `StavkeSection.tsx` using `useFieldArray({ name: "stavke" })`.
+- [x] **Ticket 5.1.2:** Two inline buttons: "+ Dodaj uslugu" appends empty `usluga` stavka with `stopaPdv = defaultStopaPdv` and `jedinicaMere = "Broj ucesnika"`; "+ Dodaj proizvod" appends empty `proizvod` stavka with `stopaPdv = defaultStopaPdv` and `jedinicaMere = "Broj primeraka"`.
+- [x] **Ticket 5.1.3:** Remove action per stavka: instant remove, no confirmation.
 
 #### Story 5.2: Usluga stavka card
 - [ ] **Ticket 5.2.1:** Build `UslugaStavkaCard.tsx` — bordered MUI `Card`, always expanded.
