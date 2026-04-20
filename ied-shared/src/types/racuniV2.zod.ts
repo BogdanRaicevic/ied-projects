@@ -41,6 +41,11 @@ export const StavkaV2Zod = z.discriminatedUnion("tipStavke", [
 export const PrimalacFirmaV2Zod = z.object({
   tipPrimaoca: z.literal("firma"),
   firma_id: z.string().optional(),
+  // `naziv` (firma branch) and `imeIPrezime` (fizicko branch) are the two
+  // distinct name fields. Keeping `naziv` here matches V1's BE schema (Phase 2
+  // will map V2 → BE 1:1 for the firma case). The collision that the V1 model
+  // would have caused — same key meaning two different things on a union — is
+  // already prevented by giving fizicko its own dedicated `imeIPrezime` key.
   naziv: z.string().min(1, "Naziv firme je obavezan"),
   pib: z.string().min(1, "PIB je obavezan"),
   maticniBroj: z.string().min(1, "Matični broj je obavezan"),
@@ -50,7 +55,7 @@ export const PrimalacFirmaV2Zod = z.object({
 
 export const PrimalacFizickoV2Zod = z.object({
   tipPrimaoca: z.literal("fizicko"),
-  naziv: z.string().min(1, "Ime i prezime je obavezno"),
+  imeIPrezime: z.string().min(1, "Ime i prezime je obavezno"),
   adresa: z.string().min(1, "Adresa je obavezna"),
   mesto: z.string().optional(),
   jmbg: z.string().optional(),
@@ -117,9 +122,9 @@ export type StavkaUslugaV2Parsed = z.output<typeof StavkaUslugaV2Zod>;
 export type StavkaProizvodV2Parsed = z.output<typeof StavkaProizvodV2Zod>;
 export type StavkaRacunaV2Parsed = z.output<typeof StavkaV2Zod>;
 
-export type PrimalacFirmaV2Form = z.infer<typeof PrimalacFirmaV2Zod>;
-export type PrimalacFizickoV2Form = z.infer<typeof PrimalacFizickoV2Zod>;
-export type PrimalacRacunaV2Form = z.infer<typeof PrimalacRacunaV2Zod>;
+export type PrimalacFirmaV2Form = z.input<typeof PrimalacFirmaV2Zod>;
+export type PrimalacFizickoV2Form = z.input<typeof PrimalacFizickoV2Zod>;
+export type PrimalacRacunaV2Form = z.input<typeof PrimalacRacunaV2Zod>;
 
 export type RacunV2Form = z.input<typeof RacunV2Zod>;
 export type RacunV2Parsed = z.output<typeof RacunV2Zod>;

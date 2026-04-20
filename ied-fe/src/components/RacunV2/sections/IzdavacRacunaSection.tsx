@@ -54,15 +54,15 @@ export function IzdavacRacunaSection() {
   return (
     <Card variant="outlined">
       <CardHeader
-        title="Izdavac racuna"
-        subheader="Osnovni podaci o izdavaocu, tekucem racunu i valuti prikaza."
+        title="Izdavač računa"
+        subheader="Osnovni podaci o izdavaocu, tekućem računu i valuti prikaza."
       />
       <Divider />
       <CardContent>
         <Stack spacing={2.5}>
           {isError ? (
             <Alert severity="error">
-              Greska pri ucitavanju izdavalaca racuna. Pokusajte ponovo.
+              Greška pri učitavanju izdavalaca računa. Pokušajte ponovo.
             </Alert>
           ) : null}
 
@@ -74,12 +74,12 @@ export function IzdavacRacunaSection() {
                 render={({ field, fieldState }) => (
                   <FormControl fullWidth error={!!fieldState.error}>
                     <InputLabel id="racun-v2-izdavac-label">
-                      Izdavac racuna
+                      Izdavač računa
                     </InputLabel>
                     <Select
                       {...field}
                       labelId="racun-v2-izdavac-label"
-                      label="Izdavac racuna"
+                      label="Izdavač računa"
                       onChange={(event) => {
                         const nextValue = event.target.value as IzdavacRacuna;
                         field.onChange(nextValue);
@@ -98,7 +98,7 @@ export function IzdavacRacunaSection() {
                     </Select>
                     <FormHelperText>
                       {fieldState.error?.message ??
-                        "Promena izdavaoca resetuje tekuci racun."}
+                        "Promena izdavaoca resetuje tekući račun."}
                     </FormHelperText>
                   </FormControl>
                 )}
@@ -120,18 +120,18 @@ export function IzdavacRacunaSection() {
                     renderInput={(params) => (
                       <TextField
                         {...params}
-                        label="Tekuci racun"
+                        label="Tekući račun"
                         error={!!fieldState.error}
                         helperText={
                           fieldState.error?.message ??
-                          "Lista dolazi iz postojeceg V1 read-only endpointa."
+                          "Lista dolazi iz postojećeg V1 read-only endpointa."
                         }
                       />
                     )}
                     noOptionsText={
                       isLoading
-                        ? "Ucitavanje..."
-                        : "Nema tekucih racuna za izabranog izdavaoca"
+                        ? "Učitavanje..."
+                        : "Nema tekućih računa za izabranog izdavaoca"
                     }
                   />
                 )}
@@ -178,7 +178,7 @@ export function IzdavacRacunaSection() {
                     error={!!fieldState.error}
                     helperText={
                       fieldState.error?.message ??
-                      "Phase 1: rucni unos. Automatsko generisanje dolazi u Phase 2."
+                      "Phase 1: ručni unos. Automatsko generisanje dolazi u Phase 2."
                     }
                   />
                 )}
