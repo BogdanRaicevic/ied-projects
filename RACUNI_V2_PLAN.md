@@ -297,15 +297,15 @@ No new backend files in Phase 1.
 #### Story 3.1: Pure calculators
 > All calculators take a `{ pdvObveznik: boolean }` context. When `pdvObveznik === false`, every per-stavka `stopaPdv` is forced to `0` internally — callers don't have to remember.
 
-- [ ] **Ticket 3.1.1:** `calcSeminarStavkaSubtotal(stavka, { pdvObveznik })` returns `{ bruto, popustIznos, poreskaOsnovica, pdv, ukupno }`. Reads `stavka.stopaPdv` (per-stavka). Per-line rounding to 2 decimals, matching V1.
-- [ ] **Ticket 3.1.2:** `calcProizvodStavkaSubtotal(stavka, { pdvObveznik })` same return shape.
-- [ ] **Ticket 3.1.3:** `calcInvoiceTotals(stavke, { pdvObveznik }, tipRacuna, extras)` aggregates stavke subtotals AND returns a PDV-rate breakdown (`pdvPoStopama: Record<string, { osnovica, pdv }>`) for DOCX rekapitulacija. Applies `placeno` deduction for `racun` type.
-- [ ] **Ticket 3.1.4:** `calcAvansDerived(avansBezPdv, stopaPdv, { pdvObveznik })` returns `{ avansPdv, avans }`. Avansni uses a single `stopaPdv` input at the invoice level (no stavke → no per-stavka rate).
-- [ ] **Ticket 3.1.5:** `calcKonacniDeduction(linkedAvansniAmounts: { avans, avansPdv, avansBezPdv }[])` returns the summed deduction for konacni totals. Phase 1 stub returns zeros (no real linking yet); Phase 3 wires real data.
-- [ ] **Ticket 3.1.6:** Add unit tests — these are the one correctness-critical piece. Include fixtures for: mixed-rate invoice, `pdvObveznik=false` invoice, multi-avansni konacni.
+- [x] **Ticket 3.1.1:** `calcSeminarStavkaSubtotal(stavka, { pdvObveznik })` returns `{ bruto, popustIznos, poreskaOsnovica, pdv, ukupno }`. Reads `stavka.stopaPdv` (per-stavka). Per-line rounding to 2 decimals, matching V1.
+- [x] **Ticket 3.1.2:** `calcProizvodStavkaSubtotal(stavka, { pdvObveznik })` same return shape.
+- [x] **Ticket 3.1.3:** `calcInvoiceTotals(stavke, { pdvObveznik }, tipRacuna, extras)` aggregates stavke subtotals AND returns a PDV-rate breakdown (`pdvPoStopama: Record<string, { osnovica, pdv }>`) for DOCX rekapitulacija. Applies `placeno` deduction for `racun` type.
+- [x] **Ticket 3.1.4:** `calcAvansDerived(avansBezPdv, stopaPdv, { pdvObveznik })` returns `{ avansPdv, avans }` (plus `avansBezPdv` echoed back for caller convenience). Avansni uses a single `stopaPdv` input at the invoice level (no stavke → no per-stavka rate). Phase 1 lands the dedicated `stopaPdvAvansni` form field on the avansni branch (default 20) one phase early so semantics are correct from day one — `defaultStopaPdv` stays as the "auto-fill new stavke" UI helper.
+- [x] **Ticket 3.1.5:** `calcKonacniDeduction(linkedAvansniAmounts: { avans, avansPdv, avansBezPdv }[])` returns the summed deduction for konacni totals. Phase 1 stub returns zeros (no real linking yet); Phase 3 wires real data. The `extras.konacniDeduction` injection point on `calcInvoiceTotals` is locked so Phase 3 wiring is a one-line change at the call site.
+- [x] **Ticket 3.1.6:** Add unit tests — these are the one correctness-critical piece. Include fixtures for: mixed-rate invoice, `pdvObveznik=false` invoice, multi-avansni konacni. (`ied-shared/src/calculations/racuniV2/calculators.test.ts`, 20 tests, runnable via `pnpm -F ied-shared test:run`.)
 
 #### Story 3.2: Calculation hook
-- [ ] **Ticket 3.2.1:** `useRacunV2Calculations()` subscribes via `watch` and returns totals + per-stavka subtotals. Memoized.
+- [x] **Ticket 3.2.1:** `useRacunV2Calculations()` subscribes via `watch` and returns totals + per-stavka subtotals. Memoized. Reads `pdvObveznik` from the shared `IZDAVAC_PDV_OBVEZNIK` map (single source of truth, ready for Phase 2's full izdavac config) and `stopaPdvAvansni` from form state for avansni invoices.
 
 ### Epic 4: Shared sections (Izdavac, Primalac, Summary)
 

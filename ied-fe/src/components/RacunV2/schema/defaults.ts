@@ -33,6 +33,7 @@ export const getDefaultValues = (tipRacuna: TipRacuna): RacunV2Form => {
         ...commonDefaults,
         tipRacuna: TipRacuna.AVANSNI_RACUN,
         avansBezPdv: 0,
+        stopaPdvAvansni: 20,
         datumUplateAvansa: null,
       };
     case TipRacuna.KONACNI_RACUN:
