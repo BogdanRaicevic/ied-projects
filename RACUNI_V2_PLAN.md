@@ -356,14 +356,25 @@ No new backend files in Phase 1.
 - [x] **Ticket 5.1.3:** Remove action per stavka: instant remove, no confirmation.
 
 #### Story 5.2: Usluga stavka card
-- [ ] **Ticket 5.2.1:** Build `UslugaStavkaCard.tsx` — bordered MUI `Card`, always expanded.
-- [ ] **Ticket 5.2.2:** Fields: `naziv`, `datum` (MUI DatePicker), `lokacija`, `popust`.
-- [ ] **Ticket 5.2.3:** Online group: `onlineKolicina`, `onlineCena`.
-- [ ] **Ticket 5.2.4:** Offline group: `offlineKolicina`, `offlineCena`.
-- [ ] **Ticket 5.2.5:** `stopaPdv` number input (per-stavka PDV rate). Hidden when izdavac is not a PDV obveznik.
-- [ ] **Ticket 5.2.6:** `jedinicaMere` stays hardcoded to `"Broj ucesnika"` (no UI). Value is still written to form state so it survives to DOCX later.
-- [ ] **Ticket 5.2.7:** Inline per-stavka subtotal display (bruto, popust, osnovica, PDV, ukupno).
-- [ ] **Ticket 5.2.8:** Delete icon button in card header.
+
+**Subtotal scope:** the inline subtotal (5.2.7) is computed via a card-local `useWatch({ name: "stavke.${stavkaIndex}" })` calling `calcSeminarStavkaSubtotal` directly, NOT via the page-level `useRacunV2Calculations()`. Reason: the page-level hook subscribes to ALL stavke (and is consumed by SummaryPanel), so reading from it inside each card would re-render every card on every keystroke in any card. Card-local watch confines re-renders to the stavka being edited. Same shared calculator function, no logic divergence.
+
+**`stopaPdv` visibility (5.2.5):** input is hidden when izdavac is not a PDV obveznik. Form value persists at the snapshot from append time (Story 5.1 factory wrote `defaultStopaPdv`); calculator forces 0 internally regardless. If the user later switches izdavac to a PDV obveznik, the rate is already in form state and the input reappears with the correct value.
+
+**`jedinicaMere` (5.2.6):** the empty-stavka factory writes `"Broj ucesnika"` into form state at append time; `UslugaStavkaCard` intentionally renders no control for it. Value survives through to Phase 6 DOCX rendering via standard form serialization.
+
+**DatePicker integration:** uses the project-wide `AdapterDateFns` mounted in `main.tsx`. Format `"yyyy.MM.dd"` matches V1 convention (`AvansSection.tsx`). RHF stores the `Date | null` value directly; a `toDateOrNull` helper coerces incoming string-shaped values (e.g. from Story 7.2 navigation prefill) defensively.
+
+**Field path typing:** `Controller name` uses template literals like `` `stavke.${stavkaIndex}.naziv` `` with a `baseName` prefix const for reuse. RHF's path types accept these cleanly; the discriminated-union widening on `field.value` is harmless because `TextField` accepts unknown values via its untyped `value` prop.
+
+- [x] **Ticket 5.2.1:** Build `UslugaStavkaCard.tsx` — bordered MUI `Card`, always expanded.
+- [x] **Ticket 5.2.2:** Fields: `naziv`, `datum` (MUI DatePicker), `lokacija`, `popust`.
+- [x] **Ticket 5.2.3:** Online group: `onlineKolicina`, `onlineCena`.
+- [x] **Ticket 5.2.4:** Offline group: `offlineKolicina`, `offlineCena`.
+- [x] **Ticket 5.2.5:** `stopaPdv` number input (per-stavka PDV rate). Hidden when izdavac is not a PDV obveznik. *(See "stopaPdv visibility" note above for value persistence semantics.)*
+- [x] **Ticket 5.2.6:** `jedinicaMere` stays hardcoded to `"Broj ucesnika"` (no UI). Value is still written to form state so it survives to DOCX later. *(See "jedinicaMere" note above — value originates from the empty-stavka factory in Story 5.1.)*
+- [x] **Ticket 5.2.7:** Inline per-stavka subtotal display (bruto, popust, osnovica, PDV, ukupno). *(Five-cell `SubtotalStrip` in `action.hover` background; `popust` cell shows the computed `popustIznos` in money form, not the percentage. All cells use the shared `formatMoney(amount, valuta)` helper from Story 4.3.)*
+- [x] **Ticket 5.2.8:** Delete icon button in card header. *(MUI `CardHeader.action` slot; same `onRemove` callback the placeholder row used.)*
 
 #### Story 5.3: Proizvod stavka card
 - [ ] **Ticket 5.3.1:** Build `ProizvodStavkaCard.tsx` — bordered MUI `Card`, always expanded.
