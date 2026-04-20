@@ -328,11 +328,18 @@ No new backend files in Phase 1.
 - [x] **Ticket 4.2.5:** Accepts prefill from navigation state. Seminari prefill always sets `tipPrimaoca = "firma"` and populates `firma_id` + firma fields. All fields remain editable after prefill. *(Section is a thin RHF view layer — prefill happens upstream via form `defaultValues` / `reset` in Story 7.2; no section-level work required beyond rendering whatever's in form state, which it does.)*
 
 #### Story 4.3: Summary panel (sticky right column)
-- [ ] **Ticket 4.3.1:** Build `SummaryPanel.tsx`. Sticky on desktop, below form on narrow screens.
-- [ ] **Ticket 4.3.2:** Show `ukupnaPoreskaOsnovica`, `ukupanPdv`, `ukupnaNaknada` (live from `useRacunV2Calculations`). Render the currency code next to each amount from `valuta` (e.g. `"1.234,00 RSD"` or `"1.234,00 EUR"`). Formatting uses a single shared `formatMoney(amount, valuta)` helper so Phase 6 has one place to add locale-aware formatting. Numbers themselves are not converted — the picker is inert.
-- [ ] **Ticket 4.3.3:** Show per-stavka subtotals list (display only, no click interaction in Phase 1).
-- [ ] **Ticket 4.3.4:** Show validation error count if form has errors.
-- [ ] **Ticket 4.3.5:** Primary CTA button: "Potvrdi i pregledaj" (disabled while `formState.isSubmitting`).
+
+**Layout decision:** sticky behavior requires the panel to live in a sibling column, not below the form. `RacunV2Content` was restructured from a single `<Stack>` into a responsive `<Grid container>` (`md=8` form column + `md=4` panel column). Below the `md` breakpoint the Grid wraps and the panel naturally falls under the form — no media queries needed, sticky becomes a no-op.
+
+**Submit wiring (4.3.5):** the CTA is `type="submit"` inside a `<Box component="form" onSubmit={handleSubmit(stubOnSubmit)}>` at the page level. `stubOnSubmit` is a placeholder `console.warn` (Epic 8 wires the real submit). RHF's `handleSubmit` still flips `formState.isSubmitting` correctly, so the disabled state is real even though the action isn't.
+
+**Module routing cleanup:** `formatMoney` lives at `ied-shared/src/calculations/racuniV2/formatMoney.ts`. The main `ied-shared` barrel was switched from `./calculations/calculations` (V1-named path containing V2 source) to `./calculations/racuniV2`, making the racuniV2 sub-barrel the single canonical entry for V2 calculator + formatter exports. The `calculations.ts` source location is unchanged (no risky moves) — only the barrel routing tightened. Cleaning up the file location to match the barrel name is a follow-up.
+
+- [x] **Ticket 4.3.1:** Build `SummaryPanel.tsx`. Sticky on desktop, below form on narrow screens.
+- [x] **Ticket 4.3.2:** Show `ukupnaPoreskaOsnovica`, `ukupanPdv`, `ukupnaNaknada` (live from `useRacunV2Calculations`). Render the currency code next to each amount from `valuta` (e.g. `"1.234,00 RSD"` or `"1.234,00 EUR"`). Formatting uses a single shared `formatMoney(amount, valuta)` helper so Phase 6 has one place to add locale-aware formatting. Numbers themselves are not converted — the picker is inert. *(Phase 1 implementation: `Intl.NumberFormat("sr-Latn-RS")` for digit grouping + currency code suffix; non-finite inputs collapse to `0,00 <valuta>`. Phase 6 swaps the body for `style: "currency"` + NBS exchange-rate handling, signature unchanged.)*
+- [x] **Ticket 4.3.3:** Show per-stavka subtotals list (display only, no click interaction in Phase 1). *(For avansni — which has no stavke — the list renders an empty-state "Nema stavki." string. Item keys use `tipStavke + index + naziv`; calculator output has no stable ids so a biome `noArrayIndexKey` suppression is used with rationale. Real `useFieldArray` ids land with StavkeSection in Epic 5.)*
+- [x] **Ticket 4.3.4:** Show validation error count if form has errors. *(Counted via a recursive `countFormErrors(errors)` util in `ied-fe/src/components/RacunV2/utils/countFormErrors.ts` — top-level `Object.keys(errors).length` undercounts nested errors like `primalacRacuna.{naziv, pib}`. Leaf detection: any object with a string|number `type` field is treated as one RHF `FieldError`. Singular/plural Serbian message handled inline.)*
+- [x] **Ticket 4.3.5:** Primary CTA button: "Potvrdi i pregledaj" (disabled while `formState.isSubmitting`). *(Wired to RHF `handleSubmit` via the page-level `<form>` — see "Submit wiring" note above.)*
 
 ### Epic 5: Stavke (line items)
 
