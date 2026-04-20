@@ -1,4 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
+import type { IzdavacRacunaOption } from "ied-shared";
 import { fetchAllDelatnosti } from "../api/delatnosti.api";
 import { getIzdavaciRacuna } from "../api/racuni.api";
 import { fetchAllStanjaFirme } from "../api/stanja_firme.api";
@@ -37,8 +38,6 @@ export function useFetchPretragaData() {
 export const useFetchIzdavaciRacuna = () => {
   return useQuery({
     queryKey: ["izdavaciRacuna"],
-    queryFn: () => {
-      return getIzdavaciRacuna();
-    },
+    queryFn: (): Promise<IzdavacRacunaOption[]> => getIzdavaciRacuna(),
   });
 };

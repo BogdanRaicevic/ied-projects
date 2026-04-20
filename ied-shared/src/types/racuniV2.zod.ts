@@ -1,5 +1,6 @@
 import { z } from "zod";
-import { IzdavacRacuna, TipRacuna } from "../index";
+import { VALUTA_VALUES } from "../constants/racuni";
+import { IzdavacRacuna, TipRacuna } from "./racuni.zod";
 
 const nonNegativeNumber = z.coerce.number().min(0, "Vrednost mora biti >= 0");
 const percentage = z.coerce
@@ -64,7 +65,7 @@ const BaseRacunV2Zod = z.object({
   izdavacRacuna: z.enum(IzdavacRacuna),
   tekuciRacun: z.string().min(1, "Tekući račun je obavezan"),
   pozivNaBroj: z.string().trim().min(1, "Poziv na broj je obavezan"),
-  valuta: z.enum(["RSD", "EUR"]).default("RSD"),
+  valuta: z.enum(VALUTA_VALUES).default("RSD"),
   defaultStopaPdv: nonNegativeNumber.default(20),
   primalacRacuna: PrimalacRacunaV2Zod,
 });
