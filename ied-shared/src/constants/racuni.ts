@@ -16,3 +16,28 @@ export const IZDAVAC_PDV_OBVEZNIK: Record<IzdavacRacuna, boolean> = {
 
 export const isIzdavacPdvObveznik = (izdavac: IzdavacRacuna): boolean =>
   IZDAVAC_PDV_OBVEZNIK[izdavac];
+
+/**
+ * Display labels for the izdavac dropdown. Used by V2 form (and future V2
+ * search filters / DOCX rekapitulacija). V1 uses logos instead.
+ */
+export const IZDAVAC_RACUNA_LABELS: Record<IzdavacRacuna, string> = {
+  [IzdavacRacuna.IED]: "IED",
+  [IzdavacRacuna.PERMANENT]: "Permanent",
+  [IzdavacRacuna.BS]: "BS",
+};
+
+/**
+ * Single source of truth for the supported invoice currencies.
+ *
+ * The Zod schema (`RacunV2Zod.valuta`) builds its enum from this tuple, so
+ * adding a currency in Phase 6 is a one-line change here. UI iterates over
+ * this tuple to render the `<Select>` options.
+ */
+export const VALUTA_VALUES = ["RSD", "EUR"] as const;
+export type Valuta = (typeof VALUTA_VALUES)[number];
+
+export const VALUTA_LABELS: Record<Valuta, string> = {
+  RSD: "RSD",
+  EUR: "EUR",
+};
