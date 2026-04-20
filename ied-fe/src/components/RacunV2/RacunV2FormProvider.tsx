@@ -15,7 +15,7 @@ export function RacunV2FormProvider({
 }: Props) {
   const methods = useForm<RacunV2Form>({
     resolver: zodResolver(RacunV2Zod),
-    mode: "onTouched",
+    mode: "onBlur",
     shouldFocusError: true,
     defaultValues: getDefaultValues(initialTipRacuna),
   });

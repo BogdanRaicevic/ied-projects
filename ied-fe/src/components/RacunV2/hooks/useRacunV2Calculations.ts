@@ -8,27 +8,49 @@ import {
   TipRacuna,
 } from "ied-shared";
 import { useMemo } from "react";
+import { useWatch } from "react-hook-form";
 import { useRacunV2Form } from "./useRacunV2Form";
 
 const EMPTY_LINKED_AVANSI: ReadonlyArray<RacunV2KonacniDeduction> = [];
 
 /**
- * Subscribes to RHF form state via `watch` and returns memoized totals +
+ * Subscribes to RHF form state via `useWatch` and returns memoized totals +
  * per-stavka subtotals. Pure projection — never mutates the form. Phase 3
  * will replace EMPTY_LINKED_AVANSI with real linked-avansni amounts; the
  * shape this hook returns does not change.
+ *
+ * Uses `useWatch({ control, name })` (not `watch(name)` from
+ * `useFormContext`) because `watch` does not reliably re-render on deep
+ * array element mutations under discriminated-union schemas — leading to
+ * stale totals in SummaryPanel. `useWatch` is the documented reactive API.
  */
 export const useRacunV2Calculations = () => {
-  const { watch } = useRacunV2Form();
+  const { control } = useRacunV2Form();
 
-  const tipRacuna = watch("tipRacuna", TipRacuna.PREDRACUN);
-  const izdavacRacuna = watch("izdavacRacuna", IzdavacRacuna.IED);
-  const stavke = watch("stavke", []);
-  const placeno = watch("placeno", 0);
-  const avansBezPdv = watch("avansBezPdv", 0);
+  const tipRacuna = useWatch({
+    control,
+    name: "tipRacuna",
+    defaultValue: TipRacuna.PREDRACUN,
+  });
+  const izdavacRacuna = useWatch({
+    control,
+    name: "izdavacRacuna",
+    defaultValue: IzdavacRacuna.IED,
+  });
+  const stavke = useWatch({ control, name: "stavke", defaultValue: [] });
+  const placeno = useWatch({ control, name: "placeno", defaultValue: 0 });
+  const avansBezPdv = useWatch({
+    control,
+    name: "avansBezPdv",
+    defaultValue: 0,
+  });
   // Avansni invoices have no stavke; their PDV rate lives on the invoice.
   // Defaults to 20 in the schema; hook reads from form state.
-  const stopaPdvAvansni = watch("stopaPdvAvansni", 20);
+  const stopaPdvAvansni = useWatch({
+    control,
+    name: "stopaPdvAvansni",
+    defaultValue: 20,
+  });
 
   const pdvObveznik = isIzdavacPdvObveznik(izdavacRacuna);
   const context = useMemo(() => ({ pdvObveznik }), [pdvObveznik]);

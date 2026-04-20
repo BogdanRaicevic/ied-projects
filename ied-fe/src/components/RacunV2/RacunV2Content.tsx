@@ -1,6 +1,7 @@
 import { Alert, Box, Grid, Stack } from "@mui/material";
 import { type RacunV2Form, TipRacuna } from "ied-shared";
 import { useState } from "react";
+import { useWatch } from "react-hook-form";
 import PageTitle from "../PageTitle";
 import { useRacunV2Form } from "./hooks/useRacunV2Form";
 import { RacunV2TabsShell } from "./RacunV2TabsShell";
@@ -23,11 +24,15 @@ const stubOnSubmit = async (data: RacunV2Form): Promise<void> => {
 };
 
 export function RacunV2Content() {
-  const { handleSubmit, setValue, watch } = useRacunV2Form();
+  const { control, handleSubmit, setValue } = useRacunV2Form();
   const [currencyWarningDismissed, setCurrencyWarningDismissed] =
     useState(false);
-  const tipRacuna = watch("tipRacuna", TipRacuna.PREDRACUN);
-  const valuta = watch("valuta", "RSD");
+  const tipRacuna = useWatch({
+    control,
+    name: "tipRacuna",
+    defaultValue: TipRacuna.PREDRACUN,
+  });
+  const valuta = useWatch({ control, name: "valuta", defaultValue: "RSD" });
 
   const handleTabChange = (nextTab: TipRacuna) => {
     setValue("tipRacuna", nextTab, { shouldDirty: true, shouldTouch: true });
