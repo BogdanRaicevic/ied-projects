@@ -1,5 +1,5 @@
-import { IzdavacRacuna, TipRacuna } from "ied-shared";
 import { z } from "zod";
+import { IzdavacRacuna, TipRacuna } from "../index";
 
 const nonNegativeNumber = z.coerce.number().min(0, "Vrednost mora biti >= 0");
 const percentage = z.coerce
@@ -78,6 +78,13 @@ const PredracunRacunV2Zod = BaseRacunV2Zod.extend({
 const AvansniRacunV2Zod = BaseRacunV2Zod.extend({
   tipRacuna: z.literal(TipRacuna.AVANSNI_RACUN),
   avansBezPdv: nonNegativeNumber,
+  // Avansni has no stavke, so the PDV rate lives on the invoice. Default 20.
+  // Plan-aligned name (Phase 2 promotes this verbatim to the BE schema as
+  // `stopaPdvAvansni`). When izdavac.pdvObveznik === false, the calculator
+  // forces this to 0 internally, so callers don't have to remember.
+  stopaPdvAvansni: nonNegativeNumber
+    .max(50, "Stopa PDV-a mora biti <= 50")
+    .default(20),
   datumUplateAvansa: z.coerce.date().nullable().optional(),
   stavke: z.never().optional(),
 });
@@ -101,9 +108,13 @@ export const RacunV2Zod = z.discriminatedUnion("tipRacuna", [
   RacunRacunV2Zod,
 ]);
 
-export type StavkaUslugaV2Form = z.infer<typeof StavkaUslugaV2Zod>;
-export type StavkaProizvodV2Form = z.infer<typeof StavkaProizvodV2Zod>;
-export type StavkaRacunaV2Form = z.infer<typeof StavkaV2Zod>;
+export type StavkaUslugaV2Form = z.input<typeof StavkaUslugaV2Zod>;
+export type StavkaProizvodV2Form = z.input<typeof StavkaProizvodV2Zod>;
+export type StavkaRacunaV2Form = z.input<typeof StavkaV2Zod>;
+
+export type StavkaUslugaV2Parsed = z.output<typeof StavkaUslugaV2Zod>;
+export type StavkaProizvodV2Parsed = z.output<typeof StavkaProizvodV2Zod>;
+export type StavkaRacunaV2Parsed = z.output<typeof StavkaV2Zod>;
 
 export type PrimalacFirmaV2Form = z.infer<typeof PrimalacFirmaV2Zod>;
 export type PrimalacFizickoV2Form = z.infer<typeof PrimalacFizickoV2Zod>;
