@@ -13,6 +13,7 @@ import {
   Typography,
 } from "@mui/material";
 import { formatMoney, type Valuta } from "ied-shared";
+import { useFormState, useWatch } from "react-hook-form";
 import { useRacunV2Calculations } from "./hooks/useRacunV2Calculations";
 import { useRacunV2Form } from "./hooks/useRacunV2Form";
 import { countFormErrors } from "./utils/countFormErrors";
@@ -32,13 +33,16 @@ import { countFormErrors } from "./utils/countFormErrors";
  * panel naturally falls under the form sections and sticky becomes a no-op.
  */
 export function SummaryPanel() {
-  const { watch, formState } = useRacunV2Form();
+  const { control } = useRacunV2Form();
+  const { errors, isSubmitting } = useFormState({ control });
+  const valuta = useWatch({
+    control,
+    name: "valuta",
+    defaultValue: "RSD",
+  }) as Valuta;
   const { totals, stavkaSubtotali } = useRacunV2Calculations();
 
-  const valuta = watch("valuta", "RSD") as Valuta;
-
-  const errorCount = countFormErrors(formState.errors);
-  console.error(formState.errors); // TODO: remove this later after testing
+  const errorCount = countFormErrors(errors);
 
   return (
     <Box sx={{ position: { md: "sticky" }, top: { md: 16 } }}>
@@ -125,7 +129,7 @@ export function SummaryPanel() {
               variant="contained"
               size="large"
               fullWidth
-              disabled={formState.isSubmitting}
+              disabled={isSubmitting}
             >
               Potvrdi i pregledaj
             </Button>
