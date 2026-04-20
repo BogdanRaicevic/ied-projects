@@ -17,6 +17,7 @@ import {
   getEmptyProizvodStavka,
   getEmptyUslugaStavka,
 } from "../schema/stavkaDefaults";
+import { UslugaStavkaCard } from "./stavke/UslugaStavkaCard";
 
 /**
  * Container for invoice line items. Wraps `useFieldArray({ name: "stavke" })`
@@ -87,14 +88,22 @@ export function StavkeSection() {
             </Typography>
           ) : (
             <Stack spacing={1.5}>
-              {fields.map((field, index) => (
-                <StavkaPlaceholderRow
-                  key={field.id}
-                  index={index}
-                  tipStavke={field.tipStavke}
-                  onRemove={() => remove(index)}
-                />
-              ))}
+              {fields.map((field, index) =>
+                field.tipStavke === "usluga" ? (
+                  <UslugaStavkaCard
+                    key={field.id}
+                    stavkaIndex={index}
+                    onRemove={() => remove(index)}
+                  />
+                ) : (
+                  <StavkaPlaceholderRow
+                    key={field.id}
+                    index={index}
+                    tipStavke={field.tipStavke}
+                    onRemove={() => remove(index)}
+                  />
+                ),
+              )}
             </Stack>
           )}
 
