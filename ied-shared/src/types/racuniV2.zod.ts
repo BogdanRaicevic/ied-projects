@@ -98,7 +98,14 @@ const AvansniRacunV2Zod = BaseRacunV2Zod.extend({
 const KonacniRacunV2Zod = BaseRacunV2Zod.extend({
   tipRacuna: z.literal(TipRacuna.KONACNI_RACUN),
   stavke: z.array(StavkaV2Zod).min(1, "Dodajte bar jednu stavku"),
-  linkedPozivNaBrojevi: z.array(z.string().trim().min(1)).default([]),
+  // Single linked avansni (V1 parity). Required at the schema level — Pregled
+  // surfaces the error when blank. Phase 3 will additionally validate that
+  // this resolves to a real avansni by (izdavac + pozivNaBroj); Phase 1 only
+  // requires a non-empty string and console.log's the lookup intent.
+  linkedPozivNaBroj: z
+    .string()
+    .trim()
+    .min(1, "Poziv na broj avansnog računa je obavezan"),
   rokZaUplatu: nonNegativeNumber.optional(),
 });
 

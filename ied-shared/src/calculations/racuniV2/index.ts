@@ -1,2 +1,2 @@
-export * from "../calculations";
+export * from "./calculators";
 export * from "./formatMoney";

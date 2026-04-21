@@ -95,6 +95,13 @@ export function SummaryPanel() {
                 amount={totals.ukupanPdv}
                 valuta={valuta}
               />
+              {tipRacuna === TipRacuna.KONACNI_RACUN ? (
+                <DeductionRow
+                  label="Avans"
+                  amount={totals.odbitak}
+                  valuta={valuta}
+                />
+              ) : null}
               <Divider />
               <SummaryRow
                 label="Ukupna naknada"
@@ -227,6 +234,37 @@ function SummaryRow({ label, amount, valuta, emphasize }: SummaryRowProps) {
       </Typography>
       <Typography variant={variant} fontWeight={emphasize ? 700 : 500}>
         {formatMoney(amount, valuta)}
+      </Typography>
+    </Stack>
+  );
+}
+
+/**
+ * Deduction row used by konacni's `− Avans` line (Phase 1: stub returns 0;
+ * Phase 3 wires real linked-avansni data through the same `totals.odbitak`).
+ *
+ * Renders the value with an explicit minus prefix so the visual reads as a
+ * subtraction even when the value is 0,00 ("−0,00 RSD" makes intent obvious
+ * — it's the slot the avans will land in once Phase 3 ships). The math
+ * displayed in Pregled stays honest: `osnovica + pdv − odbitak` equals the
+ * `Ukupna naknada` row directly below.
+ *
+ * Same component will work for racun's `− Plaćeno` row in Story 6.4.
+ */
+type DeductionRowProps = {
+  label: string;
+  amount: number;
+  valuta: Valuta;
+};
+
+function DeductionRow({ label, amount, valuta }: DeductionRowProps) {
+  return (
+    <Stack direction="row" justifyContent="space-between" alignItems="baseline">
+      <Typography variant="body2" color="text.secondary">
+        {label}
+      </Typography>
+      <Typography variant="body2" color="text.secondary" fontWeight={500}>
+        {`- ${formatMoney(amount, valuta)}`}
       </Typography>
     </Stack>
   );

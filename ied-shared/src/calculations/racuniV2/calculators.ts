@@ -1,8 +1,8 @@
-import { TipRacuna } from "../types/racuni.zod";
+import { TipRacuna } from "../../types/racuni.zod";
 import type {
   StavkaProizvodV2Parsed,
   StavkaUslugaV2Parsed,
-} from "../types/racuniV2.zod";
+} from "../../types/racuniV2.zod";
 
 /**
  * Pure calculators for racuni V2. No FE-only deps, no DOM refs — both the FE
@@ -276,17 +276,20 @@ export const calcInvoiceTotals = (
   const placeno =
     tipRacuna === TipRacuna.RACUN ? toNonNegativeNumber(extras.placeno) : 0;
 
-  // Konacni: avansBezPdv reduces taxable base, avansPdv reduces total PDV.
-  // Racun: placeno does NOT reduce base/PDV, only ukupnaNaknada (it's a
-  // payment, not a tax adjustment). Matches V1 useRacunCalculations.
-  const ukupnaPoreskaOsnovica =
-    tipRacuna === TipRacuna.KONACNI_RACUN
-      ? roundToTwoDecimals(osnovicaTotal - konacniDeduction.avansBezPdv)
-      : osnovicaTotal;
-  const ukupanPdv =
-    tipRacuna === TipRacuna.KONACNI_RACUN
-      ? roundToTwoDecimals(pdvTotal - konacniDeduction.avansPdv)
-      : pdvTotal;
+  // Both the avans (konacni) and placeno (racun) deductions reduce only
+  // ukupnaNaknada via `odbitak`; ukupnaPoreskaOsnovica and ukupanPdv are
+  // always the FULL stavke aggregates (pre-deduction). This keeps the
+  // displayed math honest: `osnovica + pdv - odbitak === ukupnaNaknada`,
+  // so Pregled can render the avans as an explicit line item without
+  // double-counting. V1's konacni pre-subtracted avansBezPdv from base and
+  // avansPdv from PDV, then displayed only the final `ukupnaNaknada` — that
+  // worked there because V1 never displayed the avans deduction explicitly.
+  // V2 does, so the calculator returns primitives and the UI composes the
+  // story it wants. (Phase 2 DOCX templates can still re-derive a
+  // post-deducted base/PDV from these primitives if a printed račun needs
+  // that view.)
+  const ukupnaPoreskaOsnovica = osnovicaTotal;
+  const ukupanPdv = pdvTotal;
 
   const odbitak = roundToTwoDecimals(konacniDeduction.avans + placeno);
   const ukupnaNaknada = roundToTwoDecimals(ukupnoPreOdbitaka - odbitak);
