@@ -427,8 +427,23 @@ Why the form column: a single source-of-truth for an input belongs in the form, 
 - [x] **Ticket 6.1.1:** `PredracunLayout.tsx` composes Izdavac + Primalac + Stavke + `UsloviPlacanjaSection`. Pregled shows the value read-only under "Ukupna naknada".
 
 #### Story 6.2: Avansni layout (special case, no stavke)
-- [ ] **Ticket 6.2.1:** `AvansniLayout.tsx` composes Izdavac + Primalac + AvansAmountsSection.
-- [ ] **Ticket 6.2.2:** `AvansAmountsSection.tsx`: `avansBezPdv` editable; `avansPdv` + `avans` read-only derived via `calcAvansDerived`; `datumUplateAvansa` DatePicker.
+
+**No `StavkeSection`, no `UsloviPlacanjaSection`.** The avansni branch declares `stavke: z.never().optional()` so stavke don't apply, and `rokZaUplatu` is replaced by `datumUplateAvansa` (the date the avans was actually paid — a recorded event, not a future deadline). Layout is therefore the leanest of the four: Izdavac + Primalac + AvansAmountsSection.
+
+**`AvansAmountsSection` shape:** three inputs in one row (`avansBezPdv`, `stopaPdvAvansni` when izdavac is a PDV obveznik, `datumUplateAvansa`), followed by a derived-totals strip (`Avans bez PDV-a`, `PDV avansa`, `UKUPAN AVANS`). The strip mirrors `SubtotalStrip`'s visual grammar (caption + value cells with the UKUPNO emphasis treatment) but is implemented inline as a small `AvansDerivedStrip`/`DerivedCell` pair — `SubtotalStrip` is built around stavka subtotals (Popust + Poreska osnovica + PDV + UKUPNO), and bending it to fit avansni's no-popust shape would be more friction than the local 3-cell component.
+
+**`stopaPdvAvansni` visibility:** hidden when izdavac is not a PDV obveznik — same pattern as per-stavka `stopaPdv` in `UslugaStavkaCard`. The form value persists; the calculator (`calcAvansDerived` → `resolveStopaPdv`) forces 0 internally so the derived strip and the SummaryPanel totals stay correct regardless of UI state. The strip's PDV cell hides with the input and the remaining cells expand to fill (md=6 each instead of md=4).
+
+**Page-level vs card-local subtotal:** `AvansAmountsSection` runs `calcAvansDerived` against its own card-local `useWatch` for `avansBezPdv` + `stopaPdvAvansni` (same pattern as the stavka cards). The page-level `useRacunV2Calculations` runs the *same* function for `SummaryPanel` totals, so there's no logic divergence — only the subscription scope differs (the section watches just the avansni inputs, not the whole form).
+
+**Pregled mirror for `datumUplateAvansa`:** `SummaryPanel` adds a read-only `DatumUplateAvansaRow` directly under "Ukupna naknada", gated on `tipRacuna === AVANSNI_RACUN`. Mutually exclusive with the existing `RokZaUplatuRow` mirror (the schema guarantees you have one or the other, never both). Format `yyyy.MM.dd` matches the DatePicker's input format. When the user hasn't picked a date yet, the row renders "—" so the layout doesn't shift when a value lands.
+
+**SummaryPanel "Stavke" block on avansni:** falls through unchanged, displays "Nema stavki." since `useRacunV2Calculations` returns an empty `stavkaSubtotali` array on this branch (the totals themselves are remapped to avansni-derived values via the existing `useRacunV2Calculations` switch). Could be hidden on avansni for a tighter Pregled, but left as-is — Story 6.2 is about the layout, not Pregled section visibility, and the empty-state copy is informative for the user who switched tabs and forgot.
+
+**Form-state defaults on tab switch:** `getDefaultValues(AVANSNI_RACUN)` already seeds `avansBezPdv: 0`, `stopaPdvAvansni: 20`, `datumUplateAvansa: null`. That seeding only runs on initial mount, though — if the user lands on Predracun and then switches to Avansni mid-session, those fields stay undefined in form state. Controllers handle undefined gracefully (`value={field.value ?? 0}` / `??20` / `toDateOrNull` collapses to null), and the page-level `useWatch` falls back to the same defaults for the calculator. The cross-tab field-reset is the Epic 7 cleanup — same as for `rokZaUplatu` survival across tabs.
+
+- [x] **Ticket 6.2.1:** `AvansniLayout.tsx` composes Izdavac + Primalac + AvansAmountsSection. *(No Stavke, no UsloviPlacanja — see footnote above.)*
+- [x] **Ticket 6.2.2:** `AvansAmountsSection.tsx`: `avansBezPdv` editable; `stopaPdvAvansni` editable (hidden when not PDV obveznik); `avansPdv` + `avans` read-only derived via `calcAvansDerived` and rendered in a 3-cell `AvansDerivedStrip`; `datumUplateAvansa` DatePicker (`yyyy.MM.dd` format). Pregled mirrors `datumUplateAvansa` read-only under "Ukupna naknada".
 
 #### Story 6.3: Konacni layout
 - [ ] **Ticket 6.3.1:** `KonacniLayout.tsx` composes Izdavac + Primalac + Stavke + `LinkedAvansniSection` (multi) + `UsloviPlacanjaSection` (shared with 6.1/6.4 — `rokZaUplatu`).

@@ -12,6 +12,7 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
+import { format as formatDate } from "date-fns";
 import {
   formatMoney,
   TipRacuna,
@@ -22,6 +23,7 @@ import { useFormState, useWatch } from "react-hook-form";
 import { useRacunV2Calculations } from "./hooks/useRacunV2Calculations";
 import { useRacunV2Form } from "./hooks/useRacunV2Form";
 import { collectFormErrors, formatErrorPath } from "./utils/collectFormErrors";
+import { toDateOrNull } from "./utils/date";
 
 /**
  * Sticky right-column summary for RacunV2. Reads totals + per-stavka
@@ -59,6 +61,15 @@ export function SummaryPanel() {
     name: "rokZaUplatu",
     defaultValue: 0,
   });
+  // `datumUplateAvansa` exists only on the avansni branch. Mirror is gated
+  // on `tipRacuna === AVANSNI_RACUN` below; on other branches RHF returns
+  // undefined (which `toDateOrNull` collapses to `null` → renders the
+  // dash placeholder, but it's never actually mounted off-tab).
+  const datumUplateAvansa = useWatch({
+    control,
+    name: "datumUplateAvansa",
+    defaultValue: null,
+  });
   const { totals, stavkaSubtotali } = useRacunV2Calculations();
 
   const formErrors = collectFormErrors(errors);
@@ -93,6 +104,9 @@ export function SummaryPanel() {
               />
               {tipRacunaHasRokZaUplatu(tipRacuna) ? (
                 <RokZaUplatuRow days={Number(rokZaUplatu) || 0} />
+              ) : null}
+              {tipRacuna === TipRacuna.AVANSNI_RACUN ? (
+                <DatumUplateAvansaRow date={toDateOrNull(datumUplateAvansa)} />
               ) : null}
             </Stack>
 
@@ -219,10 +233,11 @@ function SummaryRow({ label, amount, valuta, emphasize }: SummaryRowProps) {
 }
 
 /**
- * Read-only display of `rokZaUplatu` (predracun only). The editable input is
- * the source of truth in `PredracunUsloviSection`; this row is a sticky
- * mirror so the user can see the current term while typing in stavke without
- * scrolling. Singular/plural Serbian inflection: 1 dan, 2-4 dana, 5+ dana.
+ * Read-only display of `rokZaUplatu` (Predracun, Konacni racun, Racun —
+ * see `tipRacunaHasRokZaUplatu`). The editable input is the source of
+ * truth in `UsloviPlacanjaSection`; this row is a sticky mirror so the
+ * user can see the current term while typing in stavke without scrolling.
+ * Singular/plural Serbian inflection: 1 dan, 2+ dana.
  */
 function RokZaUplatuRow({ days }: { days: number }) {
   return (
@@ -247,3 +262,28 @@ const formatDays = (n: number): string => {
   const useDan = safe === 1;
   return `${safe} ${useDan ? "dan" : "dana"}`;
 };
+
+/**
+ * Read-only display of `datumUplateAvansa` (avansni only). Source of truth
+ * is the DatePicker inside `AvansAmountsSection`; this row mirrors the
+ * value under "Ukupna naknada", same slot the rok-za-uplatu mirror uses on
+ * the other tabs (the two are mutually exclusive — avansni doesn't have
+ * `rokZaUplatu`, the others don't have `datumUplateAvansa`).
+ *
+ * Format `yyyy.MM.dd` matches the DatePicker input format. When the user
+ * hasn't picked a date yet, renders "—" so the row is always present
+ * (avoids layout shift when the value lands).
+ */
+function DatumUplateAvansaRow({ date }: { date: Date | null }) {
+  const display = date ? formatDate(date, "yyyy.MM.dd") : "—";
+  return (
+    <Stack direction="row" justifyContent="space-between" alignItems="baseline">
+      <Typography variant="body2" color="text.secondary">
+        Datum uplate avansa
+      </Typography>
+      <Typography variant="body2" fontWeight={500}>
+        {display}
+      </Typography>
+    </Stack>
+  );
+}

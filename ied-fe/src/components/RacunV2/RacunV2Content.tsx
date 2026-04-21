@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useWatch } from "react-hook-form";
 import PageTitle from "../PageTitle";
 import { useRacunV2Form } from "./hooks/useRacunV2Form";
+import { AvansniLayout } from "./layouts/AvansniLayout";
 import { PredracunLayout } from "./layouts/PredracunLayout";
 import { RacunV2TabsShell } from "./RacunV2TabsShell";
 import { SummaryPanel } from "./SummaryPanel";
@@ -78,20 +79,22 @@ export function RacunV2Content() {
 }
 
 /**
- * Dispatches the form-column content by `tipRacuna`. Story 6.1 ships
- * `PredracunLayout`; 6.2 (avansni) and 6.3 (konacni) replace the respective
- * fallback branches below. `TipRacuna.RACUN` (final račun after konacni)
- * will follow the konacni layout once 6.3 lands — falls back for now.
+ * Dispatches the form-column content by `tipRacuna`. Stories 6.1 and 6.2
+ * ship `PredracunLayout` and `AvansniLayout`; 6.3 (konacni) and 6.4 (racun)
+ * replace the respective fallback branches below.
  *
  * The fallback still renders the three general sections so every tab is
  * usable during the transition. `StavkeSection` self-guards against the
  * avansni branch (no stavke on that type), so the fallback is safe across
- * all tabs.
+ * all tabs — though once 6.2 ships, the avansni branch never reaches the
+ * fallback anyway.
  */
 function FormColumnForTab({ tipRacuna }: { tipRacuna: TipRacuna }) {
   switch (tipRacuna) {
     case TipRacuna.PREDRACUN:
       return <PredracunLayout />;
+    case TipRacuna.AVANSNI_RACUN:
+      return <AvansniLayout />;
     default:
       return (
         <Stack spacing={3}>
