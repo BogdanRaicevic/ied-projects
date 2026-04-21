@@ -210,7 +210,7 @@ type RacunV2Form = {
   stavke?: Stavka[];
 
   // Type-specific:
-  rokZaUplatu?: number;         // predracun
+  rokZaUplatu?: number;         // predracun, konacni, racun (everything except avansni)
   avansBezPdv?: number;         // avansni (avansPdv + avans derived; uses izdavac-default PDV rate)
   datumUplateAvansa?: Date;     // avansni
   linkedPozivNaBrojevi?: string[]; // konacni (text array in Phase 1; becomes ObjectId[] ref in Phase 3)
@@ -398,20 +398,46 @@ No new backend files in Phase 1.
 ### Epic 6: Type-specific layouts
 
 #### Story 6.1: Predracun layout
-- [ ] **Ticket 6.1.1:** `PredracunLayout.tsx` composes Izdavac + Primalac + Stavke + TypeSpecific(`rokZaUplatu`).
+
+**`rokZaUplatu` placement — final decision (revised twice):** the field is **edited in the form column** inside `UsloviPlacanjaSection` and **mirrored read-only in Pregled** under "Ukupna naknada". History of the iteration:
+
+1. *Original plan:* `TypeSpecificSection(rokZaUplatu)` in the form column, predracun-only.
+2. *First implementation:* moved fully into Pregled as an editable input (sticky-column convenience).
+3. *Second iteration:* edit in form column inside a `PredracunUsloviSection`, display read-only in Pregled.
+4. *Final:* same shape, but the section is shared across **all three tipRacuna that carry `rokZaUplatu`** — Predracun, Konacni racun, Racun — and renamed to `UsloviPlacanjaSection`. Avansni racun is the exception: it has `datumUplateAvansa` (a recorded event date) instead of `rokZaUplatu` (a future deadline).
+
+Why the form column: a single source-of-truth for an input belongs in the form, alongside the other invoice content the user is composing — reading top-to-bottom (Izdavac → Primalac → Stavke → Uslovi plaćanja) matches how an invoice is mentally constructed and keeps Pregled's role purely "derived view + CTA". The Pregled mirror is then a passive *display* (no Controller, no validation surface), so the user still sees the agreed payment term while scrolling through long stavke lists without losing the sticky-context benefit.
+
+**Schema reflection of the same rule:** `rokZaUplatu: nonNegativeNumber.optional()` is added to `PredracunRacunV2Zod`, `KonacniRacunV2Zod`, and `RacunRacunV2Zod`. Not extracted into a shared fragment (one-line dup × 3 is cheaper than a fragment) and explicitly *not* hoisted onto `BaseRacunV2Zod` (avansni doesn't have it). The "which tipRacuna carries rokZaUplatu" rule is then re-encoded once in `tipRacunaHasRokZaUplatu` so UI gates don't drift from schema reality.
+
+**Single source of truth for the gate:** `ied-shared/src/constants/racuni.ts` exports `TIP_RACUNA_HAS_ROK_ZA_UPLATU: Record<TipRacuna, boolean>` and a thin `tipRacunaHasRokZaUplatu(tip)` predicate. Used by:
+- `SummaryPanel`'s read-only `RokZaUplatuRow` rendering gate.
+- (Future) `KonacniLayout` and `RacunLayout` mounting decisions, if those layouts ever need to gate the section conditionally — currently they unconditionally mount it, since reaching the layout means the schema includes the field.
+
+**Placement rule going into 6.2 / 6.3 / 6.4:** type-specific *editable* fields live in the form column inside a dedicated `*Section` (mirroring `UsloviPlacanjaSection`'s pattern). Pregled may *display* select scalars read-only (currently only `rokZaUplatu`), but never owns the input. Concretely — `datumUplateAvansa` (6.2, DatePicker) and `linkedPozivNaBrojevi[]` (6.3, field array) live in their layout's form column; whether they get a Pregled mirror is a per-field UX call (probably yes for `datumUplateAvansa`, no for the field array — too much content to mirror compactly). Sharing across layouts is the new normal where it makes sense: `UsloviPlacanjaSection` is the first such shared section.
+
+**Form-column section naming:** plan-level `TypeSpecificSection.tsx` is intentionally not a single shared file. Each section is purpose-named: `UsloviPlacanjaSection` (this story, shared by 3 tabs), `AvansAmountsSection` (6.2, avansni-only), `LinkedAvansniSection` (6.3, konacni-only). Different field shapes (number vs DatePicker vs FieldArray) make a single dispatcher more friction than benefit.
+
+**Pregled read-only display details:** rendered inline with the totals stack (not a separate section), conditionally on `tipRacunaHasRokZaUplatu(tipRacuna)`. Uses Serbian cardinal-plural inflection ("1 dan" vs "2 dana"/"5 dana") via a small `formatDays` helper local to `SummaryPanel`. The display reads through `useWatch({ name: "rokZaUplatu" })`, so it updates live as the user types in the form column.
+
+**Layout dispatcher:** `RacunV2Content` now routes the form-column content through a `FormColumnForTab` switch on `tipRacuna`. Only `TipRacuna.PREDRACUN` maps to `PredracunLayout` today; other tabs fall through to a temporary `Izdavac + Primalac + Stavke` stub with an info Alert. Stories 6.2, 6.3, and 6.4 replace those branches; the konacni and racun branches will mount `UsloviPlacanjaSection` as part of their layouts. `StavkeSection` already self-guards against the avansni branch, so the fallback is safe on all tabs.
+
+**Form-state hygiene across tabs:** tab switch mutates only `tipRacuna` via `setValue`. `rokZaUplatu` written during a session stays in form state when the user switches between rok-bearing tabs (predracun ↔ konacni ↔ racun) — that's intentional, the value carries over since all three branches have the field. Switching to/from avansni unmounts the section and the Pregled mirror; the value is preserved in form state but neither rendered nor validated. The broader cross-tab reset ("preserve only `izdavacRacuna` + `tekuciRacun` + `valuta`, reset everything else") is the Epic 7 cleanup — not a regression introduced here.
+
+- [x] **Ticket 6.1.1:** `PredracunLayout.tsx` composes Izdavac + Primalac + Stavke + `UsloviPlacanjaSection`. Pregled shows the value read-only under "Ukupna naknada".
 
 #### Story 6.2: Avansni layout (special case, no stavke)
 - [ ] **Ticket 6.2.1:** `AvansniLayout.tsx` composes Izdavac + Primalac + AvansAmountsSection.
 - [ ] **Ticket 6.2.2:** `AvansAmountsSection.tsx`: `avansBezPdv` editable; `avansPdv` + `avans` read-only derived via `calcAvansDerived`; `datumUplateAvansa` DatePicker.
 
 #### Story 6.3: Konacni layout
-- [ ] **Ticket 6.3.1:** `KonacniLayout.tsx` composes Izdavac + Primalac + Stavke + `LinkedAvansniSection` (multi).
+- [ ] **Ticket 6.3.1:** `KonacniLayout.tsx` composes Izdavac + Primalac + Stavke + `LinkedAvansniSection` (multi) + `UsloviPlacanjaSection` (shared with 6.1/6.4 — `rokZaUplatu`).
 - [ ] **Ticket 6.3.2:** `LinkedAvansniSection.tsx` uses `useFieldArray({ name: "linkedPozivNaBrojevi" })` — user can add N rows, each a plain text input. "+ Dodaj avansni" appends empty. Remove icon per row.
 - [ ] **Ticket 6.3.3:** Helper text under the list: "Veza sa avansnim računima (Phase 3: automatska validacija i oduzimanje avansa iz ukupne naknade)".
 - [ ] **Ticket 6.3.4:** Phase 1 does NOT deduct avans from konacni totals (stub calculator returns zeros). The UI shows a note: "Avans se automatski oduzima od Phase 3".
 
 #### Story 6.4: Racun layout
-- [ ] **Ticket 6.4.1:** `RacunLayout.tsx` composes Izdavac + Primalac + Stavke + TypeSpecific(`placeno`).
+- [ ] **Ticket 6.4.1:** `RacunLayout.tsx` composes Izdavac + Primalac + Stavke + a small section for `placeno` + `UsloviPlacanjaSection` (shared with 6.1/6.3 — `rokZaUplatu`).
 
 ### Epic 7: Entry flow and prefill
 
@@ -508,7 +534,7 @@ Goal: V2 can be saved, loaded, edited, and searched against a brand-new `racuni_
   datumValute?: Date,            // optional in Phase 2; frozen on issuance in Phase 5
   // datumPrometa: intentionally deferred (see Phase 5 / legal-hardening notes)
 
-  rokZaUplatu?: number,          // predracun input (days)
+  rokZaUplatu?: number,          // predracun, konacni, racun input (days)
 
   // Avansni is the exception — no stavke, so PDV rate lives on the invoice:
   avansBezPdv?: number,          // avansni

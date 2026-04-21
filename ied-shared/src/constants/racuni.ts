@@ -1,4 +1,4 @@
-import { IzdavacRacuna } from "../types/racuni.zod";
+import { IzdavacRacuna, TipRacuna } from "../types/racuni.zod";
 
 /**
  * Whether each izdavac is a PDV obveznik. Single source of truth for both V1 and V2.
@@ -41,3 +41,32 @@ export const VALUTA_LABELS: Record<Valuta, string> = {
   RSD: "RSD",
   EUR: "EUR",
 };
+
+/**
+ * Which `tipRacuna` branches carry a `rokZaUplatu` field on their schema.
+ *
+ * `rokZaUplatu` is the number of days the client has to pay the invoice. It
+ * lives on:
+ *   - PREDRACUN — proforma; payment terms are the whole point.
+ *   - KONACNI_RACUN — final invoice after avans; still has a due date.
+ *   - RACUN — regular invoice; standard payment terms apply.
+ *
+ * Avansni racun is the exception: it doesn't have `rokZaUplatu`. Instead it
+ * carries `datumUplateAvansa` (the actual date the avans was paid), which
+ * is a different concept (a recorded event, not a future deadline).
+ *
+ * Single source of truth so the rule isn't re-encoded as scattered
+ * `tipRacuna === PREDRACUN || tipRacuna === KONACNI_RACUN || ...` checks.
+ * Used by:
+ *   - the form-column `UsloviPlacanjaSection` mounting decision (per layout);
+ *   - the Pregled read-only `RokZaUplatuRow` rendering gate.
+ */
+export const TIP_RACUNA_HAS_ROK_ZA_UPLATU: Record<TipRacuna, boolean> = {
+  [TipRacuna.PREDRACUN]: true,
+  [TipRacuna.AVANSNI_RACUN]: false,
+  [TipRacuna.KONACNI_RACUN]: true,
+  [TipRacuna.RACUN]: true,
+};
+
+export const tipRacunaHasRokZaUplatu = (tip: TipRacuna): boolean =>
+  TIP_RACUNA_HAS_ROK_ZA_UPLATU[tip];
