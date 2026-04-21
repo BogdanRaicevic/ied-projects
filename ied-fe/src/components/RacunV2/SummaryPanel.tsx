@@ -74,6 +74,8 @@ export function SummaryPanel() {
 
   const formErrors = collectFormErrors(errors);
 
+  const isAvansniRacun = tipRacuna === TipRacuna.AVANSNI_RACUN;
+
   return (
     <Box sx={{ position: { md: "sticky" }, top: { md: 16 } }}>
       <Card variant="outlined">
@@ -116,48 +118,49 @@ export function SummaryPanel() {
                 <DatumUplateAvansaRow date={toDateOrNull(datumUplateAvansa)} />
               ) : null}
             </Stack>
-
-            <Box>
-              <Typography
-                variant="subtitle2"
-                color="text.secondary"
-                gutterBottom
-              >
-                Stavke
-              </Typography>
-              {stavkaSubtotali.length === 0 ? (
-                <Typography variant="body2" color="text.secondary">
-                  Nema stavki.
+            {isAvansniRacun ? null : (
+              <Box>
+                <Typography
+                  variant="subtitle2"
+                  color="text.secondary"
+                  gutterBottom
+                >
+                  Stavke
                 </Typography>
-              ) : (
-                <List dense disablePadding>
-                  {stavkaSubtotali.map((stavka, index) => (
-                    <ListItem
-                      // biome-ignore lint/suspicious/noArrayIndexKey: calculator output is a derived flat array without stable ids; SummaryPanel is read-only display, no drag/reorder. RHF `useFieldArray` ids live in StavkeSection (Epic 5).
-                      key={`${stavka.tipStavke}-${index}-${stavka.naziv}`}
-                      disableGutters
-                      sx={{ py: 0.5 }}
-                    >
-                      <ListItemText
-                        primary={stavka.naziv || "(bez naziva)"}
-                        secondary={`${stavka.tipStavke === "usluga" ? "Usluga" : "Proizvod"} · PDV ${stavka.stopaPdv}%`}
-                        slotProps={{
-                          primary: {
-                            variant: "body2",
-                          },
-                          secondary: {
-                            variant: "caption",
-                          },
-                        }}
-                      />
-                      <Typography variant="body2" sx={{ ml: 2 }}>
-                        {formatMoney(stavka.ukupno, valuta)}
-                      </Typography>
-                    </ListItem>
-                  ))}
-                </List>
-              )}
-            </Box>
+                {stavkaSubtotali.length === 0 ? (
+                  <Typography variant="body2" color="text.secondary">
+                    Nema stavki.
+                  </Typography>
+                ) : (
+                  <List dense disablePadding>
+                    {stavkaSubtotali.map((stavka, index) => (
+                      <ListItem
+                        // biome-ignore lint/suspicious/noArrayIndexKey: calculator output is a derived flat array without stable ids; SummaryPanel is read-only display, no drag/reorder. RHF `useFieldArray` ids live in StavkeSection (Epic 5).
+                        key={`${stavka.tipStavke}-${index}-${stavka.naziv}`}
+                        disableGutters
+                        sx={{ py: 0.5 }}
+                      >
+                        <ListItemText
+                          primary={stavka.naziv || "(bez naziva)"}
+                          secondary={`${stavka.tipStavke === "usluga" ? "Usluga" : "Proizvod"} · PDV ${stavka.stopaPdv}%`}
+                          slotProps={{
+                            primary: {
+                              variant: "body2",
+                            },
+                            secondary: {
+                              variant: "caption",
+                            },
+                          }}
+                        />
+                        <Typography variant="body2" sx={{ ml: 2 }}>
+                          {formatMoney(stavka.ukupno, valuta)}
+                        </Typography>
+                      </ListItem>
+                    ))}
+                  </List>
+                )}
+              </Box>
+            )}
 
             {formErrors.length > 0 ? (
               <Alert severity="error" variant="outlined">
