@@ -12,14 +12,16 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
-import { formatMoney, type Valuta } from "ied-shared";
+import {
+  formatMoney,
+  TipRacuna,
+  tipRacunaHasRokZaUplatu,
+  type Valuta,
+} from "ied-shared";
 import { useFormState, useWatch } from "react-hook-form";
 import { useRacunV2Calculations } from "./hooks/useRacunV2Calculations";
 import { useRacunV2Form } from "./hooks/useRacunV2Form";
-import {
-  collectFormErrors,
-  formatErrorPath,
-} from "./utils/collectFormErrors";
+import { collectFormErrors, formatErrorPath } from "./utils/collectFormErrors";
 
 /**
  * Sticky right-column summary for RacunV2. Reads totals + per-stavka
@@ -43,6 +45,20 @@ export function SummaryPanel() {
     name: "valuta",
     defaultValue: "RSD",
   }) as Valuta;
+  const tipRacuna = useWatch({
+    control,
+    name: "tipRacuna",
+    defaultValue: TipRacuna.PREDRACUN,
+  });
+  // `rokZaUplatu` exists on the predracun, konacni, and racun branches of
+  // the discriminated union (see `tipRacunaHasRokZaUplatu`). On the avansni
+  // branch the field doesn't exist and RHF returns undefined; the display is
+  // gated below so the value is only rendered when valid for the current tab.
+  const rokZaUplatu = useWatch({
+    control,
+    name: "rokZaUplatu",
+    defaultValue: 0,
+  });
   const { totals, stavkaSubtotali } = useRacunV2Calculations();
 
   const formErrors = collectFormErrors(errors);
@@ -75,6 +91,9 @@ export function SummaryPanel() {
                 valuta={valuta}
                 emphasize
               />
+              {tipRacunaHasRokZaUplatu(tipRacuna) ? (
+                <RokZaUplatuRow days={Number(rokZaUplatu) || 0} />
+              ) : null}
             </Stack>
 
             <Box>
@@ -198,3 +217,33 @@ function SummaryRow({ label, amount, valuta, emphasize }: SummaryRowProps) {
     </Stack>
   );
 }
+
+/**
+ * Read-only display of `rokZaUplatu` (predracun only). The editable input is
+ * the source of truth in `PredracunUsloviSection`; this row is a sticky
+ * mirror so the user can see the current term while typing in stavke without
+ * scrolling. Singular/plural Serbian inflection: 1 dan, 2-4 dana, 5+ dana.
+ */
+function RokZaUplatuRow({ days }: { days: number }) {
+  return (
+    <Stack direction="row" justifyContent="space-between" alignItems="baseline">
+      <Typography variant="body2" color="text.secondary">
+        Rok za uplatu
+      </Typography>
+      <Typography variant="body2" fontWeight={500}>
+        {formatDays(days)}
+      </Typography>
+    </Stack>
+  );
+}
+
+/**
+ * Serbian plural rules (cardinal): 1 → "dan", 2-4 → "dana", everything else
+ * → "dana". (5+, 0, and the teens 11-14 also take "dana".) Implementation
+ * checks the last two digits to handle teens correctly.
+ */
+const formatDays = (n: number): string => {
+  const safe = Number.isFinite(n) ? Math.max(0, Math.trunc(n)) : 0;
+  const useDan = safe === 1;
+  return `${safe} ${useDan ? "dan" : "dana"}`;
+};

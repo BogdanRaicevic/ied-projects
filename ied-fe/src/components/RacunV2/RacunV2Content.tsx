@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useWatch } from "react-hook-form";
 import PageTitle from "../PageTitle";
 import { useRacunV2Form } from "./hooks/useRacunV2Form";
+import { PredracunLayout } from "./layouts/PredracunLayout";
 import { RacunV2TabsShell } from "./RacunV2TabsShell";
 import { SummaryPanel } from "./SummaryPanel";
 import { IzdavacRacunaSection } from "./sections/IzdavacRacunaSection";
@@ -63,16 +64,7 @@ export function RacunV2Content() {
                 </Alert>
               ) : null}
 
-              <IzdavacRacunaSection />
-
-              <PrimalacRacunaSection />
-
-              <StavkeSection />
-
-              <Alert severity="info">
-                Aktivan tab: <strong>{tipRacuna}</strong>. Story 5.3 je aktivna;
-                ostale sekcije dolaze kroz naredne epike.
-              </Alert>
+              <FormColumnForTab tipRacuna={tipRacuna} />
             </Stack>
           </Grid>
 
@@ -83,4 +75,34 @@ export function RacunV2Content() {
       </Box>
     </>
   );
+}
+
+/**
+ * Dispatches the form-column content by `tipRacuna`. Story 6.1 ships
+ * `PredracunLayout`; 6.2 (avansni) and 6.3 (konacni) replace the respective
+ * fallback branches below. `TipRacuna.RACUN` (final račun after konacni)
+ * will follow the konacni layout once 6.3 lands — falls back for now.
+ *
+ * The fallback still renders the three general sections so every tab is
+ * usable during the transition. `StavkeSection` self-guards against the
+ * avansni branch (no stavke on that type), so the fallback is safe across
+ * all tabs.
+ */
+function FormColumnForTab({ tipRacuna }: { tipRacuna: TipRacuna }) {
+  switch (tipRacuna) {
+    case TipRacuna.PREDRACUN:
+      return <PredracunLayout />;
+    default:
+      return (
+        <Stack spacing={3}>
+          <Alert severity="info">
+            Layout za <strong>{tipRacuna}</strong> dolazi kroz naredne epike. Za
+            sada se prikazuju zajedničke sekcije.
+          </Alert>
+          <IzdavacRacunaSection />
+          <PrimalacRacunaSection />
+          <StavkeSection />
+        </Stack>
+      );
+  }
 }

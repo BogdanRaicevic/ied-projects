@@ -99,12 +99,14 @@ const KonacniRacunV2Zod = BaseRacunV2Zod.extend({
   tipRacuna: z.literal(TipRacuna.KONACNI_RACUN),
   stavke: z.array(StavkaV2Zod).min(1, "Dodajte bar jednu stavku"),
   linkedPozivNaBrojevi: z.array(z.string().trim().min(1)).default([]),
+  rokZaUplatu: nonNegativeNumber.optional(),
 });
 
 const RacunRacunV2Zod = BaseRacunV2Zod.extend({
   tipRacuna: z.literal(TipRacuna.RACUN),
   stavke: z.array(StavkaV2Zod).min(1, "Dodajte bar jednu stavku"),
   placeno: nonNegativeNumber.optional(),
+  rokZaUplatu: nonNegativeNumber.optional(),
 });
 
 export const RacunV2Zod = z.discriminatedUnion("tipRacuna", [
