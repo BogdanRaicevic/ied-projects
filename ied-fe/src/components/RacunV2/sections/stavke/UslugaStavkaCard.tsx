@@ -4,6 +4,7 @@ import {
   Card,
   CardContent,
   CardHeader,
+  Chip,
   Divider,
   Grid,
   IconButton,
@@ -12,6 +13,7 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
+import { alpha } from "@mui/material/styles";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import {
   calcSeminarStavkaSubtotal,
@@ -78,12 +80,50 @@ export function UslugaStavkaCard({ stavkaIndex, onRemove }: Props) {
   const baseName = `stavke.${stavkaIndex}` as const;
 
   return (
-    <Card variant="outlined">
+    <Card
+      variant="outlined"
+      sx={{
+        overflow: "hidden",
+        borderLeft: 4,
+        borderColor: "info.main",
+        boxShadow: "0 1px 2px rgba(15, 23, 42, 0.06)",
+      }}
+    >
       <CardHeader
-        title={`Stavka ${stavkaIndex + 1} — Usluga`}
+        title={
+          <Stack spacing={1}>
+            <Stack
+              direction="row"
+              spacing={1}
+              alignItems="center"
+              flexWrap="wrap"
+            >
+              <Chip label="Usluga" color="info" variant="filled" />
+              <Typography
+                variant="overline"
+                sx={{
+                  color: "info.main",
+                  fontWeight: 700,
+                  letterSpacing: "0.08em",
+                }}
+              >
+                Stavka #{stavkaIndex + 1}
+              </Typography>
+            </Stack>
+            <Typography variant="subtitle1" fontWeight={700}>
+              {stavka?.naziv?.trim() || "Nova usluga"}
+            </Typography>
+          </Stack>
+        }
         slotProps={{
           title: {
-            variant: "subtitle1",
+            component: "div",
+          },
+        }}
+        sx={{
+          bgcolor: (theme) => alpha(theme.palette.info.main, 0.05),
+          "& .MuiCardHeader-action": {
+            alignSelf: "center",
           },
         }}
         action={
@@ -91,6 +131,7 @@ export function UslugaStavkaCard({ stavkaIndex, onRemove }: Props) {
             aria-label={`Obriši stavku ${stavkaIndex + 1}`}
             onClick={onRemove}
             size="small"
+            color="error"
           >
             <DeleteOutlineIcon fontSize="small" />
           </IconButton>
@@ -158,7 +199,14 @@ export function UslugaStavkaCard({ stavkaIndex, onRemove }: Props) {
             </Grid>
           </Grid>
 
-          <Box>
+          <Box
+            sx={{
+              bgcolor: (theme) => alpha(theme.palette.info.main, 0.04),
+              borderRadius: 2,
+              px: 2,
+              py: 1.5,
+            }}
+          >
             <Typography variant="overline" color="text.secondary" gutterBottom>
               Online
             </Typography>
@@ -209,7 +257,14 @@ export function UslugaStavkaCard({ stavkaIndex, onRemove }: Props) {
             </Grid>
           </Box>
 
-          <Box>
+          <Box
+            sx={{
+              bgcolor: (theme) => alpha(theme.palette.info.main, 0.04),
+              borderRadius: 2,
+              px: 2,
+              py: 1.5,
+            }}
+          >
             <Typography variant="overline" color="text.secondary" gutterBottom>
               Offline
             </Typography>
@@ -319,6 +374,7 @@ export function UslugaStavkaCard({ stavkaIndex, onRemove }: Props) {
             pdv={subtotal.pdv}
             ukupno={subtotal.ukupno}
             valuta={valuta}
+            accentColor="info"
           />
         </Stack>
       </CardContent>

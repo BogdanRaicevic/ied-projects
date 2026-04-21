@@ -1,12 +1,15 @@
 import {
+  Box,
   Button,
   Card,
   CardContent,
   CardHeader,
+  Chip,
   Divider,
   Stack,
   Typography,
 } from "@mui/material";
+import { alpha } from "@mui/material/styles";
 import { TipRacuna } from "ied-shared";
 import { useFieldArray, useWatch } from "react-hook-form";
 import { useRacunV2Form } from "../hooks/useRacunV2Form";
@@ -47,6 +50,11 @@ export function StavkeSection() {
     name: "stavke",
   });
 
+  const uslugaCount = fields.filter(
+    (field) => field.tipStavke === "usluga",
+  ).length;
+  const proizvodCount = fields.length - uslugaCount;
+
   if (tipRacuna === TipRacuna.AVANSNI_RACUN) {
     return null;
   }
@@ -74,50 +82,118 @@ export function StavkeSection() {
       <CardHeader
         title="Stavke"
         subheader="Usluge i proizvodi koji se fakturišu."
+        action={
+          <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap>
+            {uslugaCount > 0 ? (
+              <Chip
+                label={
+                  uslugaCount === 1
+                    ? `${uslugaCount} usluga`
+                    : `${uslugaCount} usluge`
+                }
+                color="info"
+              />
+            ) : null}
+            {proizvodCount > 0 ? (
+              <Chip
+                label={
+                  proizvodCount === 1
+                    ? `${proizvodCount} proizvod`
+                    : `${proizvodCount} proizvodi`
+                }
+                color="success"
+              />
+            ) : null}
+          </Stack>
+        }
+        sx={{
+          "& .MuiCardHeader-action": {
+            alignSelf: "center",
+            m: 0,
+          },
+        }}
       />
       <Divider />
       <CardContent>
-        <Stack spacing={2}>
-          {fields.length === 0 ? (
-            <Typography variant="body2" color="text.secondary">
-              Nema stavki. Dodajte uslugu ili proizvod ispod.
-            </Typography>
-          ) : (
-            <Stack spacing={1.5}>
-              {fields.map((field, index) =>
-                field.tipStavke === "usluga" ? (
-                  <UslugaStavkaCard
-                    key={field.id}
-                    stavkaIndex={index}
-                    onRemove={() => remove(index)}
-                  />
-                ) : (
-                  <ProizvodStavkaCard
-                    key={field.id}
-                    stavkaIndex={index}
-                    onRemove={() => remove(index)}
-                  />
-                ),
-              )}
-            </Stack>
-          )}
+        <Stack spacing={2.5}>
+          <Box
+            sx={{
+              bgcolor: (theme) => alpha(theme.palette.info.main, 0.035),
+              border: 1,
+              borderColor: (theme) => alpha(theme.palette.info.main, 0.12),
+              borderRadius: 3,
+              p: { xs: 1.5, md: 2 },
+            }}
+          >
+            {fields.length === 0 ? (
+              <Box
+                sx={{
+                  borderRadius: 2,
+                  bgcolor: "common.white",
+                  border: 1,
+                  borderStyle: "dashed",
+                  borderColor: "divider",
+                  p: 3,
+                }}
+              >
+                <Typography variant="body2" color="text.secondary">
+                  Nema stavki. Dodajte uslugu ili proizvod ispod.
+                </Typography>
+              </Box>
+            ) : (
+              <Stack spacing={1.5}>
+                {fields.map((field, index) =>
+                  field.tipStavke === "usluga" ? (
+                    <UslugaStavkaCard
+                      key={field.id}
+                      stavkaIndex={index}
+                      onRemove={() => remove(index)}
+                    />
+                  ) : (
+                    <ProizvodStavkaCard
+                      key={field.id}
+                      stavkaIndex={index}
+                      onRemove={() => remove(index)}
+                    />
+                  ),
+                )}
+              </Stack>
+            )}
+          </Box>
 
-          <Stack direction="row" spacing={1} flexWrap="wrap">
-            <Button
-              variant="outlined"
-              onClick={handleAddUsluga}
-              aria-label="Dodaj uslugu"
-            >
-              + Dodaj uslugu
-            </Button>
-            <Button
-              variant="outlined"
-              onClick={handleAddProizvod}
-              aria-label="Dodaj proizvod"
-            >
-              + Dodaj proizvod
-            </Button>
-          </Stack>
+          <Box
+            sx={{
+              borderRadius: 2.5,
+              border: 1,
+              borderColor: "divider",
+              bgcolor: "grey.50",
+              p: 2,
+            }}
+          >
+            <Stack spacing={1.5}>
+              <Typography variant="subtitle2">Dodaj novu stavku</Typography>
+              <Stack direction={{ xs: "column", sm: "row" }} spacing={1.25}>
+                <Button
+                  variant="contained"
+                  color="info"
+                  onClick={handleAddUsluga}
+                  aria-label="Dodaj uslugu"
+                  fullWidth
+                >
+                  + Dodaj uslugu
+                </Button>
+                <Button
+                  variant="contained"
+                  color="success"
+                  onClick={handleAddProizvod}
+                  aria-label="Dodaj proizvod"
+                  fullWidth
+                >
+                  + Dodaj proizvod
+                </Button>
+              </Stack>
+            </Stack>
+          </Box>
         </Stack>
       </CardContent>
     </Card>
