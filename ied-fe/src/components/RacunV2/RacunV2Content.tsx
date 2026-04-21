@@ -70,7 +70,7 @@ export function RacunV2Content() {
               <StavkeSection />
 
               <Alert severity="info">
-                Aktivan tab: <strong>{tipRacuna}</strong>. Story 5.2 je aktivna;
+                Aktivan tab: <strong>{tipRacuna}</strong>. Story 5.3 je aktivna;
                 ostale sekcije dolaze kroz naredne epike.
               </Alert>
             </Stack>

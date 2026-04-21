@@ -377,11 +377,23 @@ No new backend files in Phase 1.
 - [x] **Ticket 5.2.8:** Delete icon button in card header. *(MUI `CardHeader.action` slot; same `onRemove` callback the placeholder row used.)*
 
 #### Story 5.3: Proizvod stavka card
-- [ ] **Ticket 5.3.1:** Build `ProizvodStavkaCard.tsx` — bordered MUI `Card`, always expanded.
-- [ ] **Ticket 5.3.2:** Fields: `naziv`, `jedinicaMere` (text input, default `"Broj primeraka"`), `kolicina`, `cena`, `popust`.
-- [ ] **Ticket 5.3.3:** `stopaPdv` number input (per-stavka PDV rate). Hidden when izdavac is not a PDV obveznik.
-- [ ] **Ticket 5.3.4:** Inline subtotal display.
-- [ ] **Ticket 5.3.5:** Delete icon button in card header.
+
+**Mirrors 5.2 patterns:** Card-local `useWatch` scope (only the edited card re-renders, not all stavke), `Controller` per field with consistent `error` + `helperText` rendering, conditional `stopaPdv` hidden when izdavac is not a PDV obveznik (form value persists at append-time snapshot, calculator forces 0 anyway). Same `SubtotalStrip` display component as usluga — the strip is calculator-agnostic.
+
+**Diverges from usluga:**
+- No `datum`/`lokacija`, no online/offline split — products are a single `kolicina × cena` line.
+- `jedinicaMere` is an editable `TextField` (5.3.2), not hardcoded. Usluga locks it to "Broj ucesnika"; proizvod commonly varies (kom, kg, l, primerak, licenca…), so the user controls it. Default "Broj primeraka" comes from the empty-stavka factory.
+- Subtotal uses `calcProizvodStavkaSubtotal` instead of `calcSeminarStavkaSubtotal`.
+
+**Layout:** Row 1 `naziv` (md=8) + `jedinicaMere` (md=4). Row 2 `kolicina` + `cena` (md=6 each). Row 3 `popust` + conditional `stopaPdv` (md=6/6 when shown, md=12 for popust when hidden — same expansion pattern as usluga).
+
+**Dispatch cleanup:** with both card types now real, `StavkeSection`'s `StavkaPlaceholderRow` was removed (dead code; the dispatcher's else-branch now points at `ProizvodStavkaCard`). The "kartica dolazi u Story 5.x" placeholder is gone for good.
+
+- [x] **Ticket 5.3.1:** Build `ProizvodStavkaCard.tsx` — bordered MUI `Card`, always expanded.
+- [x] **Ticket 5.3.2:** Fields: `naziv`, `jedinicaMere` (text input, default `"Broj primeraka"`), `kolicina`, `cena`, `popust`. *(`jedinicaMere` uses `placeholder="Broj primeraka"` rather than displaying the default in-input — the schema/factory writes the default into form state, so the input is empty visually only if the user clears it.)*
+- [x] **Ticket 5.3.3:** `stopaPdv` number input (per-stavka PDV rate). Hidden when izdavac is not a PDV obveznik.
+- [x] **Ticket 5.3.4:** Inline subtotal display. *(Same `SubtotalStrip` component as usluga — 4 cells: Popust, Poreska osnovica, PDV, UKUPNO with the emphasis treatment.)*
+- [x] **Ticket 5.3.5:** Delete icon button in card header. *(`CardHeader` `action` slot, `aria-label` includes 1-based index.)*
 
 ### Epic 6: Type-specific layouts
 
