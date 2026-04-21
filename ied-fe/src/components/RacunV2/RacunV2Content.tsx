@@ -51,7 +51,13 @@ export function RacunV2Content() {
         component="form"
         onSubmit={handleSubmit(stubOnSubmit)}
         noValidate
-        sx={{ mt: 3 }}
+        sx={{
+          mt: 3,
+          bgcolor: "grey.50",
+          borderRadius: 4,
+          px: { xs: 0, md: 2.5 },
+          py: { xs: 0, md: 2.5 },
+        }}
       >
         <Grid container spacing={3}>
           <Grid size={{ xs: 12, md: 8 }}>

@@ -3,13 +3,16 @@ import {
   Card,
   CardContent,
   CardHeader,
+  Chip,
   Divider,
   Grid,
   IconButton,
   InputAdornment,
   Stack,
   TextField,
+  Typography,
 } from "@mui/material";
+import { alpha } from "@mui/material/styles";
 import {
   calcProizvodStavkaSubtotal,
   isIzdavacPdvObveznik,
@@ -71,12 +74,50 @@ export function ProizvodStavkaCard({ stavkaIndex, onRemove }: Props) {
   const baseName = `stavke.${stavkaIndex}` as const;
 
   return (
-    <Card variant="outlined">
+    <Card
+      variant="outlined"
+      sx={{
+        overflow: "hidden",
+        borderLeft: 4,
+        borderColor: "success.main",
+        boxShadow: "0 1px 2px rgba(15, 23, 42, 0.06)",
+      }}
+    >
       <CardHeader
-        title={`Stavka ${stavkaIndex + 1} — Proizvod`}
+        title={
+          <Stack spacing={1}>
+            <Stack
+              direction="row"
+              spacing={1}
+              alignItems="center"
+              flexWrap="wrap"
+            >
+              <Chip label="Proizvod" color="success" variant="filled" />
+              <Typography
+                variant="overline"
+                sx={{
+                  color: "success.main",
+                  fontWeight: 700,
+                  letterSpacing: "0.08em",
+                }}
+              >
+                Stavka #{stavkaIndex + 1}
+              </Typography>
+            </Stack>
+            <Typography variant="subtitle1" fontWeight={700}>
+              {stavka?.naziv?.trim() || "Novi proizvod"}
+            </Typography>
+          </Stack>
+        }
         slotProps={{
           title: {
-            variant: "subtitle1",
+            component: "div",
+          },
+        }}
+        sx={{
+          bgcolor: (theme) => alpha(theme.palette.success.main, 0.05),
+          "& .MuiCardHeader-action": {
+            alignSelf: "center",
           },
         }}
         action={
@@ -84,6 +125,7 @@ export function ProizvodStavkaCard({ stavkaIndex, onRemove }: Props) {
             aria-label={`Obriši stavku ${stavkaIndex + 1}`}
             onClick={onRemove}
             size="small"
+            color="error"
           >
             <DeleteOutlineIcon fontSize="small" />
           </IconButton>
@@ -233,6 +275,7 @@ export function ProizvodStavkaCard({ stavkaIndex, onRemove }: Props) {
             pdv={subtotal.pdv}
             ukupno={subtotal.ukupno}
             valuta={valuta}
+            accentColor="success"
           />
         </Stack>
       </CardContent>

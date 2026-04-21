@@ -5,13 +5,12 @@ import {
   Card,
   CardContent,
   CardHeader,
+  Chip,
   Divider,
-  List,
-  ListItem,
-  ListItemText,
   Stack,
   Typography,
 } from "@mui/material";
+import { alpha } from "@mui/material/styles";
 import { format as formatDate } from "date-fns";
 import {
   formatMoney,
@@ -75,115 +74,208 @@ export function SummaryPanel() {
   const formErrors = collectFormErrors(errors);
 
   const isAvansniRacun = tipRacuna === TipRacuna.AVANSNI_RACUN;
+  const stavkePreview = stavkaSubtotali.slice(0, 3);
+  const remainingStavkeCount = Math.max(
+    stavkaSubtotali.length - stavkePreview.length,
+    0,
+  );
+  const errorPreview = formErrors.slice(0, 4);
+  const hiddenErrorsCount = Math.max(
+    formErrors.length - errorPreview.length,
+    0,
+  );
+  const hasMetadata =
+    tipRacunaHasRokZaUplatu(tipRacuna) || tipRacuna === TipRacuna.AVANSNI_RACUN;
 
   return (
     <Box sx={{ position: { md: "sticky" }, top: { md: 16 } }}>
-      <Card variant="outlined">
+      <Card
+        variant="outlined"
+        sx={{
+          borderColor: (theme) => alpha(theme.palette.success.main, 0.16),
+          boxShadow: "0 10px 24px rgba(15, 23, 42, 0.06)",
+        }}
+      >
         <CardHeader
           title="Pregled"
-          subheader="Totali se ažuriraju u realnom vremenu."
+          action={
+            <Stack direction="row" spacing={1} alignItems="center">
+              {!isAvansniRacun ? (
+                <Chip
+                  label={
+                    stavkaSubtotali.length === 1
+                      ? "1 stavka"
+                      : stavkaSubtotali.length <= 4
+                        ? `${stavkaSubtotali.length} stavke`
+                        : `${stavkaSubtotali.length} stavki`
+                  }
+                  variant="outlined"
+                />
+              ) : null}
+            </Stack>
+          }
+          sx={{
+            bgcolor: (theme) => alpha(theme.palette.success.main, 0.04),
+            "& .MuiCardHeader-action": {
+              alignSelf: "center",
+              m: 0,
+            },
+          }}
         />
         <Divider />
         <CardContent>
-          <Stack spacing={2.5}>
-            <Stack spacing={1}>
-              <SummaryRow
-                label="Ukupna poreska osnovica"
-                amount={totals.ukupnaPoreskaOsnovica}
-                valuta={valuta}
-              />
-              <SummaryRow
-                label="Ukupan PDV"
-                amount={totals.ukupanPdv}
-                valuta={valuta}
-              />
-              {tipRacuna === TipRacuna.KONACNI_RACUN ? (
-                <DeductionRow
-                  label="Avans"
-                  amount={totals.odbitak}
+          <Stack spacing={2}>
+            <Box
+              sx={{
+                borderRadius: 3,
+                border: 1,
+                borderColor: (theme) => alpha(theme.palette.primary.main, 0.14),
+                bgcolor: (theme) => alpha(theme.palette.primary.main, 0.035),
+                p: 2,
+              }}
+            >
+              <Typography
+                variant="overline"
+                sx={{
+                  color: "primary.main",
+                  fontWeight: 700,
+                  letterSpacing: "0.08em",
+                }}
+              >
+                Finansijski pregled
+              </Typography>
+              <Stack spacing={1.1} sx={{ mt: 1 }}>
+                <SummaryRow
+                  label="Ukupna poreska osnovica"
+                  amount={totals.ukupnaPoreskaOsnovica}
                   valuta={valuta}
                 />
-              ) : null}
-              <Divider />
-              <SummaryRow
-                label="Ukupna naknada"
-                amount={totals.ukupnaNaknada}
-                valuta={valuta}
-                emphasize
-              />
-              {tipRacunaHasRokZaUplatu(tipRacuna) ? (
-                <RokZaUplatuRow days={Number(rokZaUplatu) || 0} />
-              ) : null}
-              {tipRacuna === TipRacuna.AVANSNI_RACUN ? (
-                <DatumUplateAvansaRow date={toDateOrNull(datumUplateAvansa)} />
-              ) : null}
-            </Stack>
-            {isAvansniRacun ? null : (
-              <Box>
+                <SummaryRow
+                  label="Ukupan PDV"
+                  amount={totals.ukupanPdv}
+                  valuta={valuta}
+                />
+                {tipRacuna === TipRacuna.KONACNI_RACUN ? (
+                  <DeductionRow
+                    label="Avans"
+                    amount={totals.odbitak}
+                    valuta={valuta}
+                  />
+                ) : null}
+              </Stack>
+
+              <Box
+                sx={{
+                  mt: 2,
+                  borderRadius: 2.5,
+                  border: 1,
+                  borderColor: (theme) =>
+                    alpha(theme.palette.success.main, 0.26),
+                  bgcolor: (theme) => alpha(theme.palette.success.main, 0.08),
+                  p: 2,
+                }}
+              >
                 <Typography
-                  variant="subtitle2"
-                  color="text.secondary"
-                  gutterBottom
+                  variant="caption"
+                  sx={{
+                    display: "block",
+                    color: "success.dark",
+                    fontWeight: 700,
+                    textTransform: "uppercase",
+                    letterSpacing: "0.08em",
+                  }}
                 >
-                  Stavke
+                  Ukupna naknada
                 </Typography>
+                <Typography
+                  variant="h4"
+                  sx={{
+                    mt: 0.5,
+                    fontWeight: 800,
+                    color: "success.dark",
+                    lineHeight: 1.1,
+                  }}
+                >
+                  {formatMoney(totals.ukupnaNaknada, valuta)}
+                </Typography>
+              </Box>
+            </Box>
+
+            {hasMetadata ? (
+              <InfoBlock title="Rok i naplata">
+                {tipRacunaHasRokZaUplatu(tipRacuna) ? (
+                  <RokZaUplatuRow days={Number(rokZaUplatu) || 0} />
+                ) : null}
+                {tipRacuna === TipRacuna.AVANSNI_RACUN ? (
+                  <DatumUplateAvansaRow
+                    date={toDateOrNull(datumUplateAvansa)}
+                  />
+                ) : null}
+              </InfoBlock>
+            ) : null}
+
+            {isAvansniRacun ? null : (
+              <InfoBlock
+                title="Stavke"
+                action={
+                  <Chip
+                    label={
+                      stavkaSubtotali.length === 1
+                        ? "1 stavka"
+                        : `${stavkaSubtotali.length} stavki`
+                    }
+                    variant="outlined"
+                  />
+                }
+              >
                 {stavkaSubtotali.length === 0 ? (
                   <Typography variant="body2" color="text.secondary">
                     Nema stavki.
                   </Typography>
                 ) : (
-                  <List dense disablePadding>
-                    {stavkaSubtotali.map((stavka, index) => (
-                      <ListItem
-                        // biome-ignore lint/suspicious/noArrayIndexKey: calculator output is a derived flat array without stable ids; SummaryPanel is read-only display, no drag/reorder. RHF `useFieldArray` ids live in StavkeSection (Epic 5).
+                  <Stack spacing={1}>
+                    {stavkePreview.map((stavka, index) => (
+                      <StavkaPreviewRow
+                        // biome-ignore lint/suspicious/noArrayIndexKey: calculator output is a derived flat array without stable ids; SummaryPanel is read-only display, no drag/reorder. RHF `useFieldArray` ids live in StavkeSection.
                         key={`${stavka.tipStavke}-${index}-${stavka.naziv}`}
-                        disableGutters
-                        sx={{ py: 0.5 }}
-                      >
-                        <ListItemText
-                          primary={stavka.naziv || "(bez naziva)"}
-                          secondary={`${stavka.tipStavke === "usluga" ? "Usluga" : "Proizvod"} · PDV ${stavka.stopaPdv}%`}
-                          slotProps={{
-                            primary: {
-                              variant: "body2",
-                            },
-                            secondary: {
-                              variant: "caption",
-                            },
-                          }}
-                        />
-                        <Typography variant="body2" sx={{ ml: 2 }}>
-                          {formatMoney(stavka.ukupno, valuta)}
-                        </Typography>
-                      </ListItem>
+                        label={stavka.naziv || "(bez naziva)"}
+                        typeLabel={
+                          stavka.tipStavke === "usluga" ? "Usluga" : "Proizvod"
+                        }
+                        typeColor={
+                          stavka.tipStavke === "usluga" ? "info" : "success"
+                        }
+                        amount={formatMoney(stavka.ukupno, valuta)}
+                      />
                     ))}
-                  </List>
+                    {remainingStavkeCount > 0 ? (
+                      <Typography variant="caption" color="text.secondary">
+                        +{remainingStavkeCount} još u glavnoj listi stavki
+                      </Typography>
+                    ) : null}
+                  </Stack>
                 )}
-              </Box>
+              </InfoBlock>
             )}
 
             {formErrors.length > 0 ? (
-              <Alert severity="error" variant="outlined">
+              <Alert
+                severity="error"
+                variant="outlined"
+                sx={{ borderRadius: 2.5 }}
+              >
                 <Typography
                   variant="body2"
-                  fontWeight={600}
+                  fontWeight={700}
                   gutterBottom
                   component="div"
                 >
                   {formErrors.length === 1
-                    ? "1 greška u formi:"
-                    : `${formErrors.length} grešaka u formi:`}
+                    ? "1 greška blokira pregled"
+                    : `${formErrors.length} grešaka blokira pregled`}
                 </Typography>
-                <Box
-                  component="ul"
-                  sx={{
-                    m: 0,
-                    pl: 2.5,
-                    maxHeight: 220,
-                    overflowY: "auto",
-                  }}
-                >
-                  {formErrors.map((err) => {
+                <Box component="ul" sx={{ m: 0, pl: 2.5 }}>
+                  {errorPreview.map((err) => {
                     const label = formatErrorPath(err.path);
                     return (
                       <Typography
@@ -198,18 +290,38 @@ export function SummaryPanel() {
                     );
                   })}
                 </Box>
+                {hiddenErrorsCount > 0 ? (
+                  <Typography
+                    variant="caption"
+                    color="error.main"
+                    sx={{ display: "block", mt: 1 }}
+                  >
+                    +{hiddenErrorsCount} dodatnih grešaka u formi
+                  </Typography>
+                ) : null}
               </Alert>
             ) : null}
 
-            <Button
-              type="submit"
-              variant="contained"
-              size="large"
-              fullWidth
-              disabled={isSubmitting}
+            <Box
+              sx={{
+                borderRadius: 2.5,
+                border: 1,
+                borderColor: "divider",
+                bgcolor: "grey.50",
+                p: 1.5,
+              }}
             >
-              Potvrdi i pregledaj
-            </Button>
+              <Button
+                type="submit"
+                variant="contained"
+                size="large"
+                fullWidth
+                disabled={isSubmitting}
+                color="success"
+              >
+                Potvrdi i pregledaj
+              </Button>
+            </Box>
           </Stack>
         </CardContent>
       </Card>
@@ -227,7 +339,12 @@ type SummaryRowProps = {
 function SummaryRow({ label, amount, valuta, emphasize }: SummaryRowProps) {
   const variant = emphasize ? "subtitle1" : "body2";
   return (
-    <Stack direction="row" justifyContent="space-between" alignItems="baseline">
+    <Stack
+      direction="row"
+      justifyContent="space-between"
+      alignItems="baseline"
+      spacing={2}
+    >
       <Typography
         variant={variant}
         color={emphasize ? "text.primary" : "text.secondary"}
@@ -262,7 +379,12 @@ type DeductionRowProps = {
 
 function DeductionRow({ label, amount, valuta }: DeductionRowProps) {
   return (
-    <Stack direction="row" justifyContent="space-between" alignItems="baseline">
+    <Stack
+      direction="row"
+      justifyContent="space-between"
+      alignItems="baseline"
+      spacing={2}
+    >
       <Typography variant="body2" color="text.secondary">
         {label}
       </Typography>
@@ -282,7 +404,12 @@ function DeductionRow({ label, amount, valuta }: DeductionRowProps) {
  */
 function RokZaUplatuRow({ days }: { days: number }) {
   return (
-    <Stack direction="row" justifyContent="space-between" alignItems="baseline">
+    <Stack
+      direction="row"
+      justifyContent="space-between"
+      alignItems="baseline"
+      spacing={2}
+    >
       <Typography variant="body2" color="text.secondary">
         Rok za uplatu
       </Typography>
@@ -318,12 +445,93 @@ const formatDays = (n: number): string => {
 function DatumUplateAvansaRow({ date }: { date: Date | null }) {
   const display = date ? formatDate(date, "yyyy.MM.dd") : "—";
   return (
-    <Stack direction="row" justifyContent="space-between" alignItems="baseline">
+    <Stack
+      direction="row"
+      justifyContent="space-between"
+      alignItems="baseline"
+      spacing={2}
+    >
       <Typography variant="body2" color="text.secondary">
         Datum uplate avansa
       </Typography>
       <Typography variant="body2" fontWeight={500}>
         {display}
+      </Typography>
+    </Stack>
+  );
+}
+
+function InfoBlock({
+  title,
+  action,
+  children,
+}: {
+  title: string;
+  action?: React.ReactNode;
+  children: React.ReactNode;
+}) {
+  return (
+    <Box
+      sx={{
+        borderRadius: 2.5,
+        border: 1,
+        borderColor: "divider",
+        bgcolor: "common.white",
+        p: 1.75,
+      }}
+    >
+      <Stack
+        direction="row"
+        justifyContent="space-between"
+        alignItems="center"
+        spacing={1}
+        sx={{ mb: 1.25 }}
+      >
+        <Typography variant="subtitle2" color="text.secondary">
+          {title}
+        </Typography>
+        {action}
+      </Stack>
+      <Stack spacing={1}>{children}</Stack>
+    </Box>
+  );
+}
+
+function StavkaPreviewRow({
+  label,
+  typeLabel,
+  typeColor,
+  amount,
+}: {
+  label: string;
+  typeLabel: string;
+  typeColor: "info" | "success";
+  amount: string;
+}) {
+  return (
+    <Stack
+      direction="row"
+      justifyContent="space-between"
+      alignItems="center"
+      spacing={1.5}
+      sx={{
+        borderRadius: 2,
+        border: 1,
+        borderColor: "divider",
+        px: 1.25,
+        py: 1,
+      }}
+    >
+      <Box sx={{ minWidth: 0 }}>
+        <Stack direction="row" spacing={1} alignItems="center" flexWrap="wrap">
+          <Chip label={typeLabel} color={typeColor} variant="outlined" />
+        </Stack>
+        <Typography variant="body2" fontWeight={600} noWrap sx={{ mt: 0.75 }}>
+          {label}
+        </Typography>
+      </Box>
+      <Typography variant="body2" fontWeight={700}>
+        {amount}
       </Typography>
     </Stack>
   );
