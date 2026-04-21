@@ -15,14 +15,15 @@ import {
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import {
   calcSeminarStavkaSubtotal,
-  formatMoney,
   isIzdavacPdvObveznik,
   type StavkaUslugaV2Form,
   type Valuta,
 } from "ied-shared";
 import { useMemo } from "react";
 import { Controller, useWatch } from "react-hook-form";
+import { SubtotalStrip } from "../../components/SubtotalStrip";
 import { useRacunV2Form } from "../../hooks/useRacunV2Form";
+import { toDateOrNull } from "../../utils/date";
 
 type Props = {
   stavkaIndex: number;
@@ -157,7 +158,10 @@ export function UslugaStavkaCard({ stavkaIndex, onRemove }: Props) {
             </Grid>
           </Grid>
 
-          <FieldGroup label="Online">
+          <Box>
+            <Typography variant="overline" color="text.secondary" gutterBottom>
+              Online
+            </Typography>
             <Grid container spacing={2}>
               <Grid size={{ xs: 12, sm: 6 }}>
                 <Controller
@@ -203,9 +207,12 @@ export function UslugaStavkaCard({ stavkaIndex, onRemove }: Props) {
                 />
               </Grid>
             </Grid>
-          </FieldGroup>
+          </Box>
 
-          <FieldGroup label="Offline">
+          <Box>
+            <Typography variant="overline" color="text.secondary" gutterBottom>
+              Offline
+            </Typography>
             <Grid container spacing={2}>
               <Grid size={{ xs: 12, sm: 6 }}>
                 <Controller
@@ -251,7 +258,7 @@ export function UslugaStavkaCard({ stavkaIndex, onRemove }: Props) {
                 />
               </Grid>
             </Grid>
-          </FieldGroup>
+          </Box>
 
           <Grid container spacing={2}>
             <Grid size={{ xs: 12, sm: 6, md: pdvObveznik ? 6 : 12 }}>
@@ -316,126 +323,5 @@ export function UslugaStavkaCard({ stavkaIndex, onRemove }: Props) {
         </Stack>
       </CardContent>
     </Card>
-  );
-}
-
-/**
- * Coerces RHF's loose form value (z.input for z.coerce.date is `unknown`)
- * into the `Date | null` shape MUI DatePicker expects. Strings (e.g. from
- * navigation prefill in Story 7.2) get parsed; invalid → null.
- */
-const toDateOrNull = (value: unknown): Date | null => {
-  if (value instanceof Date) {
-    return Number.isNaN(value.getTime()) ? null : value;
-  }
-  if (typeof value === "string" && value !== "") {
-    const parsed = new Date(value);
-    return Number.isNaN(parsed.getTime()) ? null : parsed;
-  }
-  return null;
-};
-
-function FieldGroup({
-  label,
-  children,
-}: {
-  label: string;
-  children: React.ReactNode;
-}) {
-  return (
-    <Box>
-      <Typography variant="overline" color="text.secondary" gutterBottom>
-        {label}
-      </Typography>
-      {children}
-    </Box>
-  );
-}
-
-type SubtotalStripProps = {
-  popustIznos: number;
-  poreskaOsnovica: number;
-  pdv: number;
-  ukupno: number;
-  valuta: Valuta;
-};
-
-function SubtotalStrip({
-  popustIznos,
-  poreskaOsnovica,
-  pdv,
-  ukupno,
-  valuta,
-}: SubtotalStripProps) {
-  return (
-    <Box
-      sx={{
-        bgcolor: "action.hover",
-        borderRadius: 1,
-        p: 1.5,
-      }}
-    >
-      <Grid container spacing={2} alignItems="center">
-        <SubtotalCell label="Popust" value={formatMoney(popustIznos, valuta)} />
-        <SubtotalCell
-          label="Poreska osnovica"
-          value={formatMoney(poreskaOsnovica, valuta)}
-        />
-        <SubtotalCell label="PDV" value={formatMoney(pdv, valuta)} />
-        <SubtotalCell
-          label="Ukupno"
-          value={formatMoney(ukupno, valuta)}
-          emphasize
-        />
-      </Grid>
-    </Box>
-  );
-}
-
-function SubtotalCell({
-  label,
-  value,
-  emphasize,
-}: {
-  label: string;
-  value: string;
-  emphasize?: boolean;
-}) {
-  return (
-    <Grid
-      size={{ xs: 6, md: 3 }}
-      sx={
-        emphasize
-          ? {
-              borderLeft: { md: 2 },
-              borderColor: { md: "primary.main" },
-              pl: { md: 2 },
-            }
-          : undefined
-      }
-    >
-      <Typography
-        variant="caption"
-        display="block"
-        sx={{
-          color: emphasize ? "primary.main" : "text.secondary",
-          fontWeight: emphasize ? 600 : 400,
-          textTransform: emphasize ? "uppercase" : "none",
-          letterSpacing: emphasize ? "0.08em" : "normal",
-        }}
-      >
-        {label}
-      </Typography>
-      <Typography
-        variant={emphasize ? "h6" : "body2"}
-        sx={{
-          color: emphasize ? "primary.main" : "text.primary",
-          fontWeight: emphasize ? 700 : 500,
-          lineHeight: emphasize ? 1.2 : undefined,
-        }}
-      >
-        {value}
-      </Typography>
-    </Grid>
   );
 }
