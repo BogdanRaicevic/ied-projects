@@ -41,7 +41,11 @@ export const getDefaultValues = (tipRacuna: TipRacuna): RacunV2Form => {
         ...commonDefaults,
         tipRacuna: TipRacuna.KONACNI_RACUN,
         stavke: [],
-        linkedPozivNaBrojevi: [],
+        // Schema requires non-empty; blank seed lets the user start with a
+        // visible "obavezan" error in Pregled rather than a silent failure
+        // on first submit.
+        linkedPozivNaBroj: "",
+        rokZaUplatu: 0,
       };
     case TipRacuna.RACUN:
       return {
@@ -49,6 +53,7 @@ export const getDefaultValues = (tipRacuna: TipRacuna): RacunV2Form => {
         tipRacuna: TipRacuna.RACUN,
         stavke: [],
         placeno: 0,
+        rokZaUplatu: 0,
       };
     default:
       return {

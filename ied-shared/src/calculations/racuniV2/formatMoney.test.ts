@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { formatMoney } from "../../src/calculations/racuniV2/formatMoney";
+import { formatMoney } from "./formatMoney";
 
 describe("racuniV2 formatMoney — basic formatting", () => {
   it.each([

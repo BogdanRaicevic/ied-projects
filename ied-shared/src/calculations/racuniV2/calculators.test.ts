@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { TipRacuna } from "../../src";
+import { TipRacuna } from "../../types/racuni.zod";
 import {
   calcAvansDerived,
   calcInvoiceTotals,
@@ -7,7 +7,7 @@ import {
   calcProizvodStavkaSubtotal,
   calcSeminarStavkaSubtotal,
   roundToTwoDecimals,
-} from "../../src/calculations/calculations";
+} from "./calculators";
 
 describe("racuniV2 calculators — roundToTwoDecimals", () => {
   it.each([
@@ -304,8 +304,10 @@ describe("racuniV2 calculators — calcInvoiceTotals", () => {
     expect(stubTotals.ukupnaNaknada).toBe(240);
 
     // Phase 3 simulation: caller injects a real deduction. The calculator
-    // honors it. This is the contract Phase 3 will rely on; locking it now
-    // means the Phase 3 wiring is one-line: replace the stub with real data.
+    // honors it on `odbitak` / `ukupnaNaknada` only — `ukupnaPoreskaOsnovica`
+    // and `ukupanPdv` stay PRE-deduction so Pregled can show an explicit
+    // avans line without double-counting (osnovica + pdv − odbitak ===
+    // ukupnaNaknada). This is the contract Phase 3 wires real data into.
     const phase3Deduction = {
       avans: 180,
       avansPdv: 30,
@@ -328,8 +330,9 @@ describe("racuniV2 calculators — calcInvoiceTotals", () => {
       { konacniDeduction: phase3Deduction },
     );
 
-    expect(wiredTotals.ukupnaPoreskaOsnovica).toBe(50);
-    expect(wiredTotals.ukupanPdv).toBe(10);
+    expect(wiredTotals.ukupnaPoreskaOsnovica).toBe(200);
+    expect(wiredTotals.ukupanPdv).toBe(40);
+    expect(wiredTotals.ukupnoPreOdbitaka).toBe(240);
     expect(wiredTotals.odbitak).toBe(180);
     expect(wiredTotals.ukupnaNaknada).toBe(60);
   });
@@ -375,8 +378,9 @@ describe("racuniV2 calculators — calcInvoiceTotals", () => {
       { konacniDeduction: aggregated },
     );
 
-    expect(totals.ukupnaPoreskaOsnovica).toBe(840);
-    expect(totals.ukupanPdv).toBe(169);
+    expect(totals.ukupnaPoreskaOsnovica).toBe(1000);
+    expect(totals.ukupanPdv).toBe(200);
+    expect(totals.ukupnoPreOdbitaka).toBe(1200);
     expect(totals.odbitak).toBe(191);
     expect(totals.ukupnaNaknada).toBe(1009);
   });
