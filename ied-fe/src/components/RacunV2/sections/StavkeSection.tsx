@@ -1,12 +1,9 @@
-import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import {
-  Box,
   Button,
   Card,
   CardContent,
   CardHeader,
   Divider,
-  IconButton,
   Stack,
   Typography,
 } from "@mui/material";
@@ -17,14 +14,13 @@ import {
   getEmptyProizvodStavka,
   getEmptyUslugaStavka,
 } from "../schema/stavkaDefaults";
+import { ProizvodStavkaCard } from "./stavke/ProizvodStavkaCard";
 import { UslugaStavkaCard } from "./stavke/UslugaStavkaCard";
 
 /**
  * Container for invoice line items. Wraps `useFieldArray({ name: "stavke" })`
- * and exposes the two add buttons + per-row remove. Per-stavka editing UI
- * (UslugaStavkaCard / ProizvodStavkaCard) lands in Stories 5.2/5.3 — only
- * the inline placeholder row below gets swapped; container, field array,
- * and add/remove handlers stay.
+ * and exposes the two add buttons + per-row remove. Dispatches to
+ * `UslugaStavkaCard` / `ProizvodStavkaCard` based on `tipStavke`.
  *
  * **Avansni self-guard.** The `RacunV2Form` discriminated union has
  * `stavke: z.never().optional()` on the avansni branch — that variant has
@@ -96,10 +92,9 @@ export function StavkeSection() {
                     onRemove={() => remove(index)}
                   />
                 ) : (
-                  <StavkaPlaceholderRow
+                  <ProizvodStavkaCard
                     key={field.id}
-                    index={index}
-                    tipStavke={field.tipStavke}
+                    stavkaIndex={index}
                     onRemove={() => remove(index)}
                   />
                 ),
@@ -129,55 +124,3 @@ export function StavkeSection() {
   );
 }
 
-type StavkaPlaceholderRowProps = {
-  index: number;
-  tipStavke: "usluga" | "proizvod";
-  onRemove: () => void;
-};
-
-/**
- * Phase 1 placeholder until Story 5.2 (UslugaStavkaCard) and Story 5.3
- * (ProizvodStavkaCard) land. Renders the bare minimum needed for ticket
- * 5.1.3's remove action to have a visible target: index, type label, and
- * a delete icon. Single-component swap when 5.2/5.3 ship.
- */
-function StavkaPlaceholderRow({
-  index,
-  tipStavke,
-  onRemove,
-}: StavkaPlaceholderRowProps) {
-  const typeLabel = tipStavke === "usluga" ? "Usluga" : "Proizvod";
-  const upcomingStory = tipStavke === "usluga" ? "5.2" : "5.3";
-
-  return (
-    <Box
-      sx={{
-        p: 1.5,
-        border: 1,
-        borderColor: "divider",
-        borderRadius: 1,
-        display: "flex",
-        justifyContent: "space-between",
-        alignItems: "center",
-        gap: 1,
-      }}
-    >
-      <Typography variant="body2">
-        <strong>
-          {index + 1}. {typeLabel}
-        </strong>{" "}
-        <Typography component="span" variant="caption" color="text.secondary">
-          (kartica dolazi u Story {upcomingStory})
-        </Typography>
-      </Typography>
-      <IconButton
-        aria-label={`Obriši stavku ${index + 1}`}
-        onClick={onRemove}
-        size="small"
-        edge="end"
-      >
-        <DeleteOutlineIcon fontSize="small" />
-      </IconButton>
-    </Box>
-  );
-}
