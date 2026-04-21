@@ -16,7 +16,10 @@ import { formatMoney, type Valuta } from "ied-shared";
 import { useFormState, useWatch } from "react-hook-form";
 import { useRacunV2Calculations } from "./hooks/useRacunV2Calculations";
 import { useRacunV2Form } from "./hooks/useRacunV2Form";
-import { countFormErrors } from "./utils/countFormErrors";
+import {
+  collectFormErrors,
+  formatErrorPath,
+} from "./utils/collectFormErrors";
 
 /**
  * Sticky right-column summary for RacunV2. Reads totals + per-stavka
@@ -42,7 +45,7 @@ export function SummaryPanel() {
   }) as Valuta;
   const { totals, stavkaSubtotali } = useRacunV2Calculations();
 
-  const errorCount = countFormErrors(errors);
+  const formErrors = collectFormErrors(errors);
 
   return (
     <Box sx={{ position: { md: "sticky" }, top: { md: 16 } }}>
@@ -116,11 +119,42 @@ export function SummaryPanel() {
               )}
             </Box>
 
-            {errorCount > 0 ? (
+            {formErrors.length > 0 ? (
               <Alert severity="error" variant="outlined">
-                {errorCount === 1
-                  ? "1 greška u formi."
-                  : `${errorCount} grešaka u formi.`}
+                <Typography
+                  variant="body2"
+                  fontWeight={600}
+                  gutterBottom
+                  component="div"
+                >
+                  {formErrors.length === 1
+                    ? "1 greška u formi:"
+                    : `${formErrors.length} grešaka u formi:`}
+                </Typography>
+                <Box
+                  component="ul"
+                  sx={{
+                    m: 0,
+                    pl: 2.5,
+                    maxHeight: 220,
+                    overflowY: "auto",
+                  }}
+                >
+                  {formErrors.map((err) => {
+                    const label = formatErrorPath(err.path);
+                    return (
+                      <Typography
+                        key={err.path.join(".")}
+                        component="li"
+                        variant="caption"
+                        sx={{ display: "list-item" }}
+                      >
+                        <strong>{label}</strong>
+                        {err.message ? `: ${err.message}` : null}
+                      </Typography>
+                    );
+                  })}
+                </Box>
               </Alert>
             ) : null}
 
