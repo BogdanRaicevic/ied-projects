@@ -58,7 +58,7 @@ export function SummaryPanel() {
   const rokZaUplatu = useWatch({
     control,
     name: "rokZaUplatu",
-    defaultValue: 0,
+    defaultValue: undefined,
   });
   // `datumUplateAvansa` exists only on the avansni branch. Mirror is gated
   // on `tipRacuna === AVANSNI_RACUN` below; on other branches RHF returns
@@ -204,7 +204,7 @@ export function SummaryPanel() {
             {hasMetadata ? (
               <InfoBlock title="Rok i naplata">
                 {tipRacunaHasRokZaUplatu(tipRacuna) ? (
-                  <RokZaUplatuRow days={Number(rokZaUplatu) || 0} />
+                  <RokZaUplatuRow days={Number(rokZaUplatu) || null} />
                 ) : null}
                 {tipRacuna === TipRacuna.AVANSNI_RACUN ? (
                   <DatumUplateAvansaRow
@@ -402,7 +402,9 @@ function DeductionRow({ label, amount, valuta }: DeductionRowProps) {
  * user can see the current term while typing in stavke without scrolling.
  * Singular/plural Serbian inflection: 1 dan, 2+ dana.
  */
-function RokZaUplatuRow({ days }: { days: number }) {
+function RokZaUplatuRow({ days }: { days: number | null }) {
+  const display =
+    days === null || !Number.isFinite(days) ? "—" : formatDays(days);
   return (
     <Stack
       direction="row"
@@ -414,7 +416,7 @@ function RokZaUplatuRow({ days }: { days: number }) {
         Rok za uplatu
       </Typography>
       <Typography variant="body2" fontWeight={500}>
-        {formatDays(days)}
+        {display}
       </Typography>
     </Stack>
   );
