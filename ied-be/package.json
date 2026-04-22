@@ -47,7 +47,7 @@
     "date-fns": "^4.1.0",
     "docxtemplater": "^3.68.5",
     "dotenv": "^17.4.2",
-    "es-toolkit": "^1.45.1",
+    "es-toolkit": "^1.46.0",
     "express": "^5.2.1",
     "ied-shared": "workspace:^",
     "mongoose": "^9.5.0",
