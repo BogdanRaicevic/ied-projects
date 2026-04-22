@@ -11,25 +11,14 @@ import { Controller } from "react-hook-form";
 import { useRacunV2Form } from "../hooks/useRacunV2Form";
 
 /**
- * Payment-terms section, shared by all `tipRacuna` branches that carry
- * `rokZaUplatu` — currently Predracun, Konacni racun, Racun. (Avansni racun
- * is the exception: it has `datumUplateAvansa` instead, edited inside its
- * own `AvansAmountsSection`.)
+ * Shared payment-terms section for racun types that carry `rokZaUplatu`.
  *
- * Currently a single field — `rokZaUplatu` (number of days the client has
- * to pay) — but kept as a standalone section so additional commercial-terms
- * fields (e.g. late-payment penalties, discount-on-early-payment) can land
- * here without growing other sections.
+ * The form state keeps `rokZaUplatu` as `number | null`:
+ * - `null` means "empty / not filled in yet"
+ * - any number (including 0) is an intentional value
  *
- * Mounting is the layout's responsibility (`PredracunLayout`,
- * `KonacniLayout`, `RacunLayout`). The shared rule lives in
- * `tipRacunaHasRokZaUplatu` — sections themselves are dumb and just render
- * the input; layouts decide whether to mount them.
- *
- * Read-only mirror of the value lives in `SummaryPanel` under "Ukupna
- * naknada" so the user can see the agreed term while typing in stavke
- * without scrolling. The input here is the source of truth; the Pregled
- * display reads from RHF state.
+ * This keeps the domain meaning clearer than a raw-string input model while
+ * still letting the MUI field render blank on first paint.
  */
 export function UsloviPlacanjaSection() {
   const { control } = useRacunV2Form();
@@ -38,7 +27,7 @@ export function UsloviPlacanjaSection() {
     <Card variant="outlined">
       <CardHeader
         title="Uslovi plaćanja"
-        subheader="Rok za uplatu i ostali komercijalni uslovi."
+        subheader="Koliko dana primalac ima za uplatu."
       />
       <Divider />
       <CardContent>
@@ -49,9 +38,20 @@ export function UsloviPlacanjaSection() {
               control={control}
               render={({ field, fieldState }) => (
                 <TextField
-                  {...field}
-                  value={field.value ?? 0}
+                  value={field.value === null ? "" : field.value}
+                  onChange={(event) => {
+                    const raw = event.target.value;
+                    if (raw === "") {
+                      field.onChange(null);
+                      return;
+                    }
+
+                    const nextValue = Number(raw);
+                    field.onChange(Number.isNaN(nextValue) ? null : nextValue);
+                  }}
+                  onBlur={field.onBlur}
                   fullWidth
+                  required
                   type="number"
                   label="Rok za uplatu"
                   slotProps={{
@@ -63,7 +63,10 @@ export function UsloviPlacanjaSection() {
                     },
                   }}
                   error={!!fieldState.error}
-                  helperText={fieldState.error?.message ?? " "}
+                  helperText={
+                    fieldState.error?.message ??
+                    "Broj dana do uplate. Dozvoljena vrednost je 0 ili više."
+                  }
                 />
               )}
             />

@@ -3,6 +3,14 @@ import { VALUTA_VALUES } from "../constants/racuni";
 import { IzdavacRacuna, TipRacuna } from "./racuni.zod";
 
 const nonNegativeNumber = z.coerce.number().min(0, "Vrednost mora biti >= 0");
+const requiredNullableNonNegativeNumber = (requiredMessage: string) =>
+  z
+    .number()
+    .min(0, "Vrednost mora biti >= 0")
+    .nullable()
+    .refine((value): value is number => value !== null, {
+      message: requiredMessage,
+    });
 const percentage = z.coerce
   .number()
   .min(0, "Popust mora biti između 0 i 100")
@@ -78,7 +86,7 @@ const BaseRacunV2Zod = z.object({
 const PredracunRacunV2Zod = BaseRacunV2Zod.extend({
   tipRacuna: z.literal(TipRacuna.PREDRACUN),
   stavke: z.array(StavkaV2Zod).min(1, "Dodajte bar jednu stavku"),
-  rokZaUplatu: nonNegativeNumber.optional(),
+  rokZaUplatu: requiredNullableNonNegativeNumber("Rok za uplatu je obavezan"),
 });
 
 const AvansniRacunV2Zod = BaseRacunV2Zod.extend({
@@ -106,14 +114,14 @@ const KonacniRacunV2Zod = BaseRacunV2Zod.extend({
     .string()
     .trim()
     .min(1, "Poziv na broj avansnog računa je obavezan"),
-  rokZaUplatu: nonNegativeNumber.optional(),
+  rokZaUplatu: requiredNullableNonNegativeNumber("Rok za uplatu je obavezan"),
 });
 
 const RacunRacunV2Zod = BaseRacunV2Zod.extend({
   tipRacuna: z.literal(TipRacuna.RACUN),
   stavke: z.array(StavkaV2Zod).min(1, "Dodajte bar jednu stavku"),
   placeno: nonNegativeNumber.optional(),
-  rokZaUplatu: nonNegativeNumber.optional(),
+  rokZaUplatu: requiredNullableNonNegativeNumber("Rok za uplatu je obavezan"),
 });
 
 export const RacunV2Zod = z.discriminatedUnion("tipRacuna", [

@@ -26,7 +26,7 @@ export const getDefaultValues = (tipRacuna: TipRacuna): RacunV2Form => {
         ...commonDefaults,
         tipRacuna: TipRacuna.PREDRACUN,
         stavke: [],
-        rokZaUplatu: 0,
+        rokZaUplatu: null,
       };
     case TipRacuna.AVANSNI_RACUN:
       return {
@@ -45,7 +45,7 @@ export const getDefaultValues = (tipRacuna: TipRacuna): RacunV2Form => {
         // visible "obavezan" error in Pregled rather than a silent failure
         // on first submit.
         linkedPozivNaBroj: "",
-        rokZaUplatu: 0,
+        rokZaUplatu: null,
       };
     case TipRacuna.RACUN:
       return {
@@ -53,13 +53,14 @@ export const getDefaultValues = (tipRacuna: TipRacuna): RacunV2Form => {
         tipRacuna: TipRacuna.RACUN,
         stavke: [],
         placeno: 0,
-        rokZaUplatu: 0,
+        rokZaUplatu: null,
       };
     default:
       return {
         ...commonDefaults,
         tipRacuna: TipRacuna.PREDRACUN,
         stavke: [],
+        rokZaUplatu: null,
       };
   }
 };
