@@ -14,15 +14,26 @@ import { alpha } from "@mui/material/styles";
 import { format as formatDate } from "date-fns";
 import {
   formatMoney,
+  IZDAVAC_RACUNA_LABELS,
+  IzdavacRacuna,
   TipRacuna,
   tipRacunaHasRokZaUplatu,
   type Valuta,
 } from "ied-shared";
 import { useFormState, useWatch } from "react-hook-form";
+import bsLogo from "../../images/bs-logo.png";
+import iedLogo from "../../images/ied-logo.png";
+import permanentLogo from "../../images/permanent-logo.png";
 import { useRacunV2Calculations } from "./hooks/useRacunV2Calculations";
 import { useRacunV2Form } from "./hooks/useRacunV2Form";
 import { collectFormErrors, formatErrorPath } from "./utils/collectFormErrors";
 import { toDateOrNull } from "./utils/date";
+
+const IZDAVAC_LOGOS: Record<IzdavacRacuna, string> = {
+  [IzdavacRacuna.IED]: iedLogo,
+  [IzdavacRacuna.PERMANENT]: permanentLogo,
+  [IzdavacRacuna.BS]: bsLogo,
+};
 
 /**
  * Sticky right-column summary for RacunV2. Reads totals + per-stavka
@@ -50,6 +61,11 @@ export function SummaryPanel() {
     control,
     name: "tipRacuna",
     defaultValue: TipRacuna.PREDRACUN,
+  });
+  const izdavacRacuna = useWatch({
+    control,
+    name: "izdavacRacuna",
+    defaultValue: IzdavacRacuna.IED,
   });
   // `rokZaUplatu` exists on the predracun, konacni, and racun branches of
   // the discriminated union (see `tipRacunaHasRokZaUplatu`). On the avansni
@@ -125,6 +141,8 @@ export function SummaryPanel() {
         <Divider />
         <CardContent>
           <Stack spacing={2}>
+            <IzdavacBadge izdavac={izdavacRacuna} />
+
             <Box
               sx={{
                 borderRadius: 3,
@@ -335,6 +353,43 @@ type SummaryRowProps = {
   valuta: Valuta;
   emphasize?: boolean;
 };
+
+/**
+ * Identity strip at the top of Pregled showing which `izdavac` this racun is
+ * being created under. Helps the user catch wrong-izdavac mistakes early —
+ * the financial total below is meaningful only in the context of a specific
+ * issuer (different PDV regime, different tekuci racun, different branding
+ * on the final DOCX).
+ */
+function IzdavacBadge({ izdavac }: { izdavac: IzdavacRacuna }) {
+  const logoSrc = IZDAVAC_LOGOS[izdavac];
+
+  return (
+    <Box
+      sx={{
+        borderRadius: 2.5,
+        border: 1,
+        borderColor: "divider",
+        bgcolor: "common.white",
+        p: 1,
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+      }}
+    >
+      <Box
+        component="img"
+        src={logoSrc}
+        sx={{
+          maxWidth: "100%",
+          maxHeight: "40px",
+          objectFit: "contain",
+          display: "block",
+        }}
+      />
+    </Box>
+  );
+}
 
 function SummaryRow({ label, amount, valuta, emphasize }: SummaryRowProps) {
   const variant = emphasize ? "subtitle1" : "body2";
