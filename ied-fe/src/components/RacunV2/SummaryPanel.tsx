@@ -14,7 +14,6 @@ import { alpha } from "@mui/material/styles";
 import { format as formatDate } from "date-fns";
 import {
   formatMoney,
-  IZDAVAC_RACUNA_LABELS,
   IzdavacRacuna,
   TipRacuna,
   tipRacunaHasRokZaUplatu,

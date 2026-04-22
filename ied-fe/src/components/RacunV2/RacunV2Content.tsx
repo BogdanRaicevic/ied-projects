@@ -7,11 +7,9 @@ import { useRacunV2Form } from "./hooks/useRacunV2Form";
 import { AvansniLayout } from "./layouts/AvansniLayout";
 import { KonacniLayout } from "./layouts/KonacniLayout";
 import { PredracunLayout } from "./layouts/PredracunLayout";
+import { RacunLayout } from "./layouts/RacunLayout";
 import { RacunV2TabsShell } from "./RacunV2TabsShell";
 import { SummaryPanel } from "./SummaryPanel";
-import { IzdavacRacunaSection } from "./sections/IzdavacRacunaSection";
-import { PrimalacRacunaSection } from "./sections/PrimalacRacunaSection";
-import { StavkeSection } from "./sections/StavkeSection";
 
 /**
  * Phase 1 stub submit handler. Wired so RHF's `handleSubmit` actually fires
@@ -86,14 +84,11 @@ export function RacunV2Content() {
 }
 
 /**
- * Dispatches the form-column content by `tipRacuna`. Stories 6.1 / 6.2 / 6.3
- * ship `PredracunLayout`, `AvansniLayout`, and `KonacniLayout`; 6.4 (racun)
- * replaces the remaining fallback branch below.
- *
- * The fallback still renders the three general sections so the racun tab is
- * usable during the transition. `StavkeSection` self-guards against the
- * avansni branch (no stavke on that type), so the fallback is safe — though
- * with 6.1–6.3 shipped, only `RACUN` reaches it.
+ * Dispatches the form-column content by `tipRacuna`. With Stories 6.1 / 6.2 /
+ * 6.3 / 6.4 shipped, every branch of the `TipRacuna` discriminated union has
+ * a dedicated layout, so the switch is exhaustive and the `_exhaustive` const
+ * doubles as a TS-level guard: adding a new `TipRacuna` member without a
+ * corresponding case will fail to compile here.
  */
 function FormColumnForTab({ tipRacuna }: { tipRacuna: TipRacuna }) {
   switch (tipRacuna) {
@@ -103,17 +98,11 @@ function FormColumnForTab({ tipRacuna }: { tipRacuna: TipRacuna }) {
       return <AvansniLayout />;
     case TipRacuna.KONACNI_RACUN:
       return <KonacniLayout />;
-    default:
-      return (
-        <Stack spacing={3}>
-          <Alert severity="info">
-            Layout za <strong>{tipRacuna}</strong> dolazi kroz naredne epike. Za
-            sada se prikazuju zajedničke sekcije.
-          </Alert>
-          <IzdavacRacunaSection />
-          <PrimalacRacunaSection />
-          <StavkeSection />
-        </Stack>
-      );
+    case TipRacuna.RACUN:
+      return <RacunLayout />;
+    default: {
+      const _exhaustive: never = tipRacuna;
+      return _exhaustive;
+    }
   }
 }
