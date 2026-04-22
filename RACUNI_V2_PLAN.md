@@ -473,7 +473,15 @@ Why the form column: a single source-of-truth for an input belongs in the form, 
 - [x] **Ticket 6.3.4:** Phase 1 does NOT deduct avans from konacni totals (stub calculator returns zeros) — but Pregled now renders an explicit `− Avans` row showing 0,00 so the visual slot is present. When Phase 3 wires the real lookup, the row's value updates without any layout change.
 
 #### Story 6.4: Racun layout
-- [ ] **Ticket 6.4.1:** `RacunLayout.tsx` composes Izdavac + Primalac + Stavke + a small section for `placeno` + `UsloviPlacanjaSection` (shared with 6.1/6.3 — `rokZaUplatu`).
+
+**`placeno` deferred:** the racun-only `placeno` field (and its corresponding `− Plaćeno` deduction row in Pregled, which would reuse `DeductionRow` from Story 6.3) is intentionally NOT shipped in this story. Schema-side this is safe: `RacunRacunV2Zod.placeno` is `nonNegativeNumber.optional()` and `getDefaultValues(RACUN)` already seeds `placeno: 0`, so the form parses, validates, and would submit cleanly without a UI for the field. The calculator currently treats racun like predracun (no deduction applied), which matches the seeded default of 0 — when `PlacenoSection` lands later, the only changes will be (a) a new section in `RacunLayout` between Stavke and Uslovi, (b) wiring `placeno` into `useRacunV2Calculations` for racun's `odbitak`, and (c) mounting `DeductionRow` in `SummaryPanel` gated on `tipRacuna === RACUN`. No schema or default churn needed at that point.
+
+**Layout shape (post-deferral):** with `placeno` out, racun's editable surface is identical to predracun's — same four sections in the same order. `RacunLayout` still gets its own file rather than aliasing `PredracunLayout` so (a) the dispatcher in `RacunV2Content` stays a clean 1-tab → 1-layout map, and (b) when `PlacenoSection` lands it slots in without disturbing predracun.
+
+**Dispatcher exhaustiveness:** with all four layouts shipped, `FormColumnForTab` switches over every member of the `TipRacuna` discriminated union. The fallback branch (previously a "general sections" stub for the racun tab) is replaced with a `const _exhaustive: never = tipRacuna` guard so adding a fifth `TipRacuna` member without a corresponding case becomes a compile error rather than a silent UI regression.
+
+- [x] **Ticket 6.4.1:** `RacunLayout.tsx` composes Izdavac + Primalac + Stavke + `UsloviPlacanjaSection` (shared with 6.1/6.3 — `rokZaUplatu`). *(`placeno` section deferred — see footnote above.)*
+- [ ] **Ticket 6.4.2 (deferred):** `PlacenoSection` (single `placeno` numeric input) + Pregled `− Plaćeno` row reusing `DeductionRow`. Lands when payment-tracking work begins; not blocking the rest of Phase 1.
 
 ### Epic 7: Entry flow and prefill
 
