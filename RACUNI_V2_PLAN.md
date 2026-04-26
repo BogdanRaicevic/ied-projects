@@ -51,7 +51,7 @@ This rewrite resolves all of the above and cuts Phase 1 to what's actually neede
 - **Remove stavka:** simple instant remove. No confirmation, no undo.
 - **Stavka cards (Phase 1):** all stavke **always expanded**. No collapse logic. Accordion polish is Phase 4.
 - **Tab switch preservation:** preserve **only `izdavacRacuna`, `tekuciRacun`, and `valuta`**. Everything else resets, including `defaultStopaPdv` (returns to default for the target tab). Rationale: currency is a per-session issuer decision, not a per-invoice-type decision — forcing the user to re-pick `EUR` on every tab switch is user-hostile.
-- **Validation mode:** `onTouched` — field validates on first blur, then live on every keystroke once touched. Implemented via RHF `mode: "onTouched"` + `shouldFocusError: true`.
+- **Validation mode:** `onBlur` — field validates when the user leaves it. Implemented via RHF `mode: "onBlur"` + `shouldFocusError: true`; this avoids per-keystroke Zod validation on larger invoices with multiple stavke.
 - **Validation display:** inline per-field errors (RHF standard). On submit with errors: RHF auto-focuses first invalid field, toast shows summary count.
 - **Final CTA:** "Potvrdi i pregledaj" — on success, shows a success toast + payload drawer (JSON, DEV-only). Polished read-only preview screen is Phase 4; real save flow arrives in Phase 2.
 
@@ -65,7 +65,7 @@ This rewrite resolves all of the above and cuts Phase 1 to what's actually neede
 ### UX acceptance criteria for locked behavior
 
 - If `valuta === "EUR"`, submit cannot complete and the user sees clear guidance to switch to `RSD`.
-- If `valuta === "RSD"`, submit follows normal validation flow (`onTouched`, focus first invalid field, summary toast).
+- If `valuta === "RSD"`, submit follows normal validation flow (`onBlur`, focus first invalid field, summary toast).
 - Switching tabs preserves only `izdavacRacuna`, `tekuciRacun`, `valuta`; `defaultStopaPdv` is reset.
 - The summary panel always shows selected currency code, but never implies conversion before Phase 6.
 
@@ -279,7 +279,7 @@ No new backend files in Phase 1.
 ### Epic 2: Form engine and schema
 
 #### Story 2.1: RHF provider and typed helpers
-- [x] **Ticket 2.1.1:** Create `RacunV2FormProvider.tsx` with `useForm<RacunV2Form>({ resolver: zodResolver(...), mode: "onTouched", shouldFocusError: true })`.
+- [x] **Ticket 2.1.1:** Create `RacunV2FormProvider.tsx` with `useForm<RacunV2Form>({ resolver: zodResolver(...), mode: "onBlur", shouldFocusError: true })`.
 - [x] **Ticket 2.1.2:** Create `useRacunV2Form.ts` — typed `useFormContext<RacunV2Form>()` wrapper.
 - [x] **Ticket 2.1.3:** Create `schema/defaults.ts` with `getDefaultValues(tipRacuna)` returning correct defaults per type.
 
@@ -500,7 +500,7 @@ Why the form column: a single source-of-truth for an input belongs in the form, 
 
 **Pure prefill builder (`buildPrefillFromSeminari.ts`):** maps `{ firma, seminar, prijave }` → `{ primalacRacuna: PrimalacFirmaV2Form, stavke: [StavkaUslugaV2Form] }` in one pure function so the mapping is testable in isolation and impossible to half-apply. Mirrors V1's `Racuni.tsx` prefill effect (`updateNestedField` cascade) but expressed as a single value. Field-name divergences from V1 (`firma.PIB` → `primalacRacuna.pib`, `firma.naziv_firme` → `primalacRacuna.naziv`, `firma.maticni_broj` → `primalacRacuna.maticniBroj`, `firma.mesto.naziv_mesto` → `primalacRacuna.mesto`) are documented inline in the builder. Returns a STRICT shape (not `Partial<RacunV2Form>`) so the merge in `getDefaultValues` stays a flat spread and callers can't accidentally inject avansni-only or konacni-only fields through this path.
 
-**Required-field prefill (`pib`, `maticniBroj` empty case):** the V2 schema marks both as required, but firma data legitimately may have them blank. We prefill the empty string anyway (per ticket 7.2.4: *all fields remain editable*) — the user fills in what's missing, and `mode: "onTouched"` (Story 8.1) keeps the error from showing until they touch the field. Forcing a fallback would silently mask data quality issues we want to surface.
+**Required-field prefill (`pib`, `maticniBroj` empty case):** the V2 schema marks both as required, but firma data legitimately may have them blank. We prefill the empty string anyway (per ticket 7.2.4: *all fields remain editable*) — the user fills in what's missing, and `mode: "onBlur"` keeps the error from showing until they leave the field. Forcing a fallback would silently mask data quality issues we want to surface.
 
 **`getDefaultValues` extension:** picks up an optional second arg `prefill?: RacunV2SeminariPrefill`. When present, **`tipRacuna` is forced to PREDRACUN** regardless of the first arg (the prefill shape can only satisfy the predracun branch, and predracun-only is V1's contract for Seminari entry). The merge is a flat spread because the builder returns complete sub-objects; deep-merging would only re-do work and risk subtle "which side wins per-leaf" bugs.
 
@@ -519,9 +519,9 @@ Why the form column: a single source-of-truth for an input belongs in the form, 
 
 ### Epic 8: Validation and submit
 
-#### Story 8.1: Inline validation (onTouched mode)
-- [ ] **Ticket 8.1.1:** All `Controller`-wrapped fields show helper text with error from RHF fieldState.
-- [ ] **Ticket 8.1.2:** Confirm `mode: "onTouched"` is wired in the form provider (field validates on first blur, then live on every keystroke).
+#### Story 8.1: Inline validation (onBlur mode)
+- [x] **Ticket 8.1.1:** All `Controller`-wrapped fields show helper text with error from RHF fieldState. *(Confirmed across `RacunV2` sections; `tekuciRacun` Autocomplete now forwards `field.onBlur` so blur validation is not skipped.)*
+- [x] **Ticket 8.1.2:** Confirm `mode: "onBlur"` is wired in the form provider. *(Intentionally not `onTouched`: live validation on every keystroke is unnecessary here and gets expensive once multiple stavke are mounted. Trade-off: an existing error can remain visible until the field blurs again.)*
 
 #### Story 8.2: Submit flow
 - [ ] **Ticket 8.2.1:** "Potvrdi i pregledaj" triggers `handleSubmit`. On errors: RHF auto-focuses first invalid field; toast shows summary ("Ispravite označena polja (N)").
@@ -949,7 +949,7 @@ These are questions I refuse to answer in advance of the business need; flagged 
 | PDV rate | Single `stopaPdv` per invoice | Per-stavka `stopaPdv` (supports mixed rates); avansni keeps single rate as the exception |
 | PDV obveznik handling | DOCX-render-time `shouldRenderPdvBlock` hack | `izdavac.pdvObveznik: boolean` snapshotted on the invoice; drives calculators + DOCX uniformly |
 | Money type | JS `Number` + EPSILON rounding | Same in Phase 2 (match V1); `Decimal128` in Phase 5 |
-| Validation | On submit only | Real-time via `zodResolver`, `mode: "onTouched"` |
+| Validation | On submit only | Inline via `zodResolver`, `mode: "onBlur"` |
 | Layout | Single column, totals at bottom | Two-column with sticky summary |
 | Route | `/racuni` | `/racuni-v2` |
 | DB collection | `racuni` | `racuni_v2` (Phase 2), unified in Phase 5 |
