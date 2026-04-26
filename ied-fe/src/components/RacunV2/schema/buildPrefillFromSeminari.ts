@@ -48,9 +48,9 @@ const PREFILL_STOPA_PDV = 20;
  * **Required-field handling:** the V2 schema marks `pib` and `maticniBroj` as
  * required, but firma data may legitimately have them blank. We prefill the
  * empty string anyway (per ticket 7.2.4: "all fields remain editable") — the
- * user fills in what's missing, and `mode: "onTouched"` (Story 8.1) keeps
- * the error from showing until they touch the field. Forcing a fallback
- * value here would silently mask data quality issues.
+ * user fills in what's missing, and `mode: "onBlur"` keeps the error from
+ * showing until they leave the field. Forcing a fallback value here would
+ * silently mask data quality issues.
  */
 export function buildPrefillFromSeminari({
   firma,

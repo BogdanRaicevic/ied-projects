@@ -121,6 +121,7 @@ export function IzdavacRacunaSection() {
                       <TextField
                         {...params}
                         label="Tekući račun"
+                        onBlur={field.onBlur}
                         error={!!fieldState.error}
                         helperText={
                           fieldState.error?.message ??
