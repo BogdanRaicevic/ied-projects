@@ -1,3 +1,4 @@
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import {
   Alert,
   Box,
@@ -25,6 +26,7 @@ import iedLogo from "../../images/ied-logo.png";
 import permanentLogo from "../../images/permanent-logo.png";
 import { useRacunV2Calculations } from "./hooks/useRacunV2Calculations";
 import { useRacunV2Form } from "./hooks/useRacunV2Form";
+import { useRacunV2ReviewConfirmation } from "./hooks/useRacunV2ReviewConfirmation";
 import { collectFormErrors, formatErrorPath } from "./utils/collectFormErrors";
 import { toDateOrNull } from "./utils/date";
 
@@ -39,10 +41,18 @@ const IZDAVAC_LOGOS: Record<IzdavacRacuna, string> = {
  * subtotals from `useRacunV2Calculations` (which subscribes to RHF state via
  * `watch`), so it re-renders live as the user types.
  *
- * The CTA is a `type="submit"` button — the wrapping `<form>` lives in
- * `RacunV2Content`. Clicking it triggers RHF's `handleSubmit`, which sets
- * `formState.isSubmitting` and disables the button. The actual submit
- * payload + navigation are wired in Epic 8.
+ * **Two-step submit gate.** The footer renders two stacked buttons backed
+ * by `useRacunV2ReviewConfirmation`:
+ *   1. *Potvrdi i pregledaj* — runs a full-form `trigger()` pass. With
+ *      `mode: "onBlur"` untouched fields don't surface errors until visited,
+ *      so this forces the SummaryPanel's error count to reflect reality
+ *      before commit. On success, the button collapses to a confirmed state.
+ *   2. *Generiši račun* — `type="submit"`, disabled until step 1 succeeds.
+ *      The wrapping `<form>` in `RacunV2Content` handles the actual payload
+ *      via RHF's `handleSubmit`.
+ *
+ * Editing any field after step 1 auto-invalidates the confirmation (handled
+ * inside the hook), so step 2 can never fire on stale-validated data.
  *
  * Sticky behavior is set on the panel root; the parent in `RacunV2Content`
  * is a Grid that wraps below the `md` breakpoint, so on narrow screens the
@@ -51,6 +61,12 @@ const IZDAVAC_LOGOS: Record<IzdavacRacuna, string> = {
 export function SummaryPanel() {
   const { control } = useRacunV2Form();
   const { errors, isSubmitting } = useFormState({ control });
+  const {
+    status: reviewStatus,
+    isValidating,
+    confirm,
+  } = useRacunV2ReviewConfirmation();
+  const isConfirmed = reviewStatus === "confirmed";
   const valuta = useWatch({
     control,
     name: "valuta",
@@ -328,16 +344,41 @@ export function SummaryPanel() {
                 p: 1.5,
               }}
             >
-              <Button
-                type="submit"
-                variant="contained"
-                size="large"
-                fullWidth
-                disabled={isSubmitting}
-                color="success"
-              >
-                Potvrdi i pregledaj
-              </Button>
+              <Stack spacing={1}>
+                <Button
+                  type="button"
+                  variant="outlined"
+                  color={isConfirmed ? "success" : "primary"}
+                  size="large"
+                  fullWidth
+                  disabled={isSubmitting || isValidating || isConfirmed}
+                  startIcon={isConfirmed ? <CheckCircleIcon /> : undefined}
+                  onClick={() => {
+                    void confirm();
+                  }}
+                >
+                  {isConfirmed ? "Pregled potvrđen" : "Potvrdi i pregledaj"}
+                </Button>
+                <Button
+                  type="submit"
+                  variant="contained"
+                  color="success"
+                  size="large"
+                  fullWidth
+                  disabled={!isConfirmed || isSubmitting || isValidating}
+                >
+                  Generiši račun
+                </Button>
+                {!isConfirmed ? (
+                  <Typography
+                    variant="caption"
+                    color="text.secondary"
+                    sx={{ display: "block", textAlign: "center" }}
+                  >
+                    Potvrdite pregled da biste generisali račun.
+                  </Typography>
+                ) : null}
+              </Stack>
             </Box>
           </Stack>
         </CardContent>
