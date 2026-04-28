@@ -18,7 +18,6 @@ import {
 import type { PrijavaZodType } from "ied-shared";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { generateSingleSertifikatDocument } from "../../api/docx.api";
 import { useDeletePrijavaMutation } from "../../hooks/seminar/useSeminarMutations";
 import {
   buildSingleSertifikat,
@@ -117,7 +116,6 @@ export default function PrijaveSeminarTable({
     try {
       setIsSubmitting(true);
       setSubmitError(null);
-      await generateSingleSertifikatDocument(sertifikat);
       setSelectedPrijava(null);
       setIsCertificateDialogOpen(false);
     } catch (error) {
