@@ -10,6 +10,9 @@
   },
   "scripts": {
     "typecheck": "tsc --noEmit",
+    "test": "vitest",
+    "test:run": "vitest run",
+    "test:coverage": "vitest run --coverage",
     "biome:format": "npx biome format --write ./src",
     "biome:check": "npx biome check --write ./src",
     "lint": "npx biome lint ./src",
@@ -23,9 +26,11 @@
   },
   "devDependencies": {
     "@types/node": "^24.12.2",
+    "@vitest/coverage-v8": "^4.1.4",
     "tsx": "^4.21.0",
     "typescript": "^6.0.3",
-    "@biomejs/biome": "^2.4.13"
+    "@biomejs/biome": "^2.4.13",
+    "vitest": "^4.1.4"
   },
   "dependencies": {
     "zod": "^4.3.6"

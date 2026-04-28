@@ -1,4 +1,9 @@
-import { SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/clerk-react";
+import {
+  SignedIn,
+  SignedOut,
+  SignInButton,
+  UserButton,
+} from "@clerk/clerk-react";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
@@ -11,6 +16,7 @@ export default function ApplicationNavBar() {
     { text: "Pretrage", linkPath: "/pretrage" },
     { text: "Seminari", linkPath: "/seminari" },
     { text: "Računi", linkPath: "/racuni" },
+    { text: "Računi V2", linkPath: "/racuni-v2" },
     { text: "Evidencija Promena", linkPath: "/audit-log" },
   ];
 

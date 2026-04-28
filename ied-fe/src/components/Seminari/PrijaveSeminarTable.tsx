@@ -3,9 +3,11 @@ import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import MonetizationOnIcon from "@mui/icons-material/MonetizationOn";
 import {
+  Badge,
   Box,
   Collapse,
   IconButton,
+  Stack,
   Table,
   TableBody,
   TableCell,
@@ -47,6 +49,14 @@ export default function PrijaveSeminarTable({
     navigate("/racuni", { state: { prijave, seminarId } });
   };
 
+  // Story 7.2.1/7.2.2: V2 entry mirrors V1's nav-state shape
+  // (`{ prijave, seminarId }`) so the same handler signature works for both.
+  // `firmaId` is intentionally not passed separately — V2's prefill hook
+  // reads it from `prijave[0].firma_id` to match V1's existing convention.
+  const handleCreateRacunV2 = () => {
+    navigate("/racuni-v2", { state: { prijave, seminarId } });
+  };
+
   return (
     <>
       <TableRow sx={{ backgroundColor: "#95bb9f" }}>
@@ -61,16 +71,50 @@ export default function PrijaveSeminarTable({
           </IconButton>
         </TableCell>
         <TableCell>
-          <Tooltip title="Kreiraj račun">
-            <IconButton
-              color="success"
-              onClick={() => {
-                handleCreateRacun();
-              }}
-            >
-              <MonetizationOnIcon />
-            </IconButton>
-          </Tooltip>
+          <Stack direction="row" spacing={0.5} alignItems="center">
+            <Tooltip title="Kreiraj račun (V1)">
+              <IconButton
+                color="success"
+                onClick={() => {
+                  handleCreateRacun();
+                }}
+              >
+                <MonetizationOnIcon />
+              </IconButton>
+            </Tooltip>
+            <Tooltip title="Kreiraj V2 račun">
+              {/* Same icon as V1 keeps the action recognizable as "create
+                  račun"; the small "V2" badge is the only visual
+                  differentiator. Different icon would suggest a different
+                  action — these do the same thing on different stacks. */}
+              <IconButton
+                color="primary"
+                onClick={() => {
+                  handleCreateRacunV2();
+                }}
+              >
+                <Badge
+                  badgeContent="V2"
+                  color="primary"
+                  overlap="circular"
+                  anchorOrigin={{
+                    vertical: "bottom",
+                    horizontal: "right",
+                  }}
+                  sx={{
+                    "& .MuiBadge-badge": {
+                      fontSize: "0.55rem",
+                      height: 14,
+                      minWidth: 18,
+                      padding: "0 4px",
+                    },
+                  }}
+                >
+                  <MonetizationOnIcon />
+                </Badge>
+              </IconButton>
+            </Tooltip>
+          </Stack>
         </TableCell>
         <TableCell>{prijave[0]?.firma_naziv}</TableCell>
         <TableCell>{prijave[0]?.firma_email}</TableCell>
