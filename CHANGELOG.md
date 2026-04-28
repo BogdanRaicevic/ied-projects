@@ -1,3 +1,23 @@
+## [1.20.0](https://github.com/BogdanRaicevic/ied-projects/compare/v1.19.2...v1.20.0) (2026-04-28)
+
+### Features
+
+* add certificate button on seminari table ([0982032](https://github.com/BogdanRaicevic/ied-projects/commit/0982032ce4805ed47d72e6e1d917846a80b10bae))
+* add endpoint and functionality for generating single certificate ([07da193](https://github.com/BogdanRaicevic/ied-projects/commit/07da193783b97f27d5f5fafe1f24c1501681234a))
+* add new template for ied ([ebd7866](https://github.com/BogdanRaicevic/ied-projects/commit/ebd786644ae1b6dd6671abfb847ff332ec76e7d3))
+* add sertifikat template for BS ([5a2d8fc](https://github.com/BogdanRaicevic/ied-projects/commit/5a2d8fc0cdc2f58638ef6eae73a835cf596be51c))
+* download files in zip ([d8ac41d](https://github.com/BogdanRaicevic/ied-projects/commit/d8ac41dfbf175116c086d0929260c0025c466003))
+* enhance certificate generation with template selection and validation ([2685c25](https://github.com/BogdanRaicevic/ied-projects/commit/2685c25a9634aee258d221017c207f5a9f3741dc))
+* implement certificate generation dialog ([aa6826a](https://github.com/BogdanRaicevic/ied-projects/commit/aa6826aa2213c2067499d0c10f0332637414a0e3))
+
+### Bug Fixes
+
+* build ([d4a09fe](https://github.com/BogdanRaicevic/ied-projects/commit/d4a09fe862173d4eb5d6e89b2f23cee87483bafe))
+* minor refactoring ([c463fc1](https://github.com/BogdanRaicevic/ied-projects/commit/c463fc16e9a304e3f1a6c5c7b4d7c99dbf10992f))
+* refactor duplicate code ([d4a3bea](https://github.com/BogdanRaicevic/ied-projects/commit/d4a3bea36241f5701a4ee68f488f62f8dc338449))
+* show error for sertifikate generation ([9286e9e](https://github.com/BogdanRaicevic/ied-projects/commit/9286e9eeb14e03c602c61d351ae2c43363c8388a))
+* update input properties for MUI ([b35e83b](https://github.com/BogdanRaicevic/ied-projects/commit/b35e83bffa518346eb3e629ab40e6c1664f2e0f6))
+
 ## [1.19.2](https://github.com/BogdanRaicevic/ied-projects/compare/v1.19.1...v1.19.2) (2026-04-28)
 
 ### Bug Fixes
