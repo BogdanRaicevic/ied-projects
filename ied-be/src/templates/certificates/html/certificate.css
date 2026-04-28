@@ -1,0 +1,262 @@
+@page {
+  size: A4 landscape;
+  margin: 0;
+}
+
+:root {
+  --page-width: 297mm;
+  --page-height: 210mm;
+  --page-padding: 12mm;
+  --border-color: #173c3a;
+  --border-accent: #c9a34e;
+  --ink: #16302f;
+  --muted-ink: #596b68;
+  --paper: #fffdf7;
+  --paper-warm: #f8f0de;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  width: var(--page-width);
+  min-height: var(--page-height);
+  margin: 0;
+  background: #d8d2c4;
+  color: var(--ink);
+  font-family: Georgia, "Times New Roman", serif;
+}
+
+body {
+  display: grid;
+  place-items: center;
+}
+
+.certificate-page {
+  position: relative;
+  width: var(--page-width);
+  height: var(--page-height);
+  padding: var(--page-padding);
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 12% 18%, rgba(201, 163, 78, 0.18), transparent 28%),
+    radial-gradient(circle at 86% 82%, rgba(23, 60, 58, 0.12), transparent 30%),
+    linear-gradient(135deg, var(--paper), var(--paper-warm));
+  page-break-after: always;
+  break-after: page;
+}
+
+.certificate-page::before {
+  position: absolute;
+  inset: 8mm;
+  border: 0.45mm solid rgba(23, 60, 58, 0.28);
+  content: "";
+  pointer-events: none;
+}
+
+.certificate-border {
+  position: relative;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  width: 100%;
+  height: 100%;
+  padding: 16mm 20mm 13mm;
+  overflow: hidden;
+  border: 2.4mm double var(--border-color);
+  outline: 0.7mm solid var(--border-accent);
+  outline-offset: -6mm;
+}
+
+.certificate-border::before,
+.certificate-border::after {
+  position: absolute;
+  width: 44mm;
+  height: 44mm;
+  border: 0.45mm solid rgba(201, 163, 78, 0.5);
+  content: "";
+  pointer-events: none;
+}
+
+.certificate-border::before {
+  top: 8mm;
+  left: 8mm;
+  border-right: 0;
+  border-bottom: 0;
+}
+
+.certificate-border::after {
+  right: 8mm;
+  bottom: 8mm;
+  border-top: 0;
+  border-left: 0;
+}
+
+.certificate-header {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 8mm;
+  min-height: 24mm;
+  text-transform: uppercase;
+  letter-spacing: 0.22em;
+}
+
+.issuer-mark {
+  display: grid;
+  place-items: center;
+  width: 27mm;
+  height: 27mm;
+  border: 0.5mm solid var(--border-color);
+  border-radius: 999px;
+  color: var(--border-color);
+  font-size: 9mm;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+
+.header-rule {
+  height: 0.45mm;
+  background: linear-gradient(90deg, transparent, var(--border-accent), transparent);
+}
+
+.certificate-body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 0;
+  padding: 5mm 9mm 3mm;
+  text-align: center;
+}
+
+.eyebrow {
+  margin: 0 0 4mm;
+  color: var(--muted-ink);
+  font-family: "Trebuchet MS", Verdana, sans-serif;
+  font-size: 4.1mm;
+  font-weight: 700;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+}
+
+.certificate-title {
+  margin: 0;
+  color: var(--ink);
+  font-size: clamp(15mm, 7vw, 22mm);
+  font-weight: 400;
+  line-height: 0.95;
+}
+
+.statement {
+  max-width: 176mm;
+  margin: 8mm 0 4mm;
+  color: var(--muted-ink);
+  font-family: "Trebuchet MS", Verdana, sans-serif;
+  font-size: 4.7mm;
+  line-height: 1.45;
+}
+
+.recipient-name {
+  width: min(182mm, 100%);
+  margin: 1mm 0 2mm;
+  padding-bottom: 2mm;
+  overflow-wrap: anywhere;
+  border-bottom: 0.45mm solid rgba(23, 60, 58, 0.38);
+  color: var(--ink);
+  font-size: clamp(11mm, 5vw, 17mm);
+  font-weight: 700;
+  line-height: 1.05;
+}
+
+.company-name {
+  margin: 0 0 6mm;
+  color: var(--muted-ink);
+  font-family: "Trebuchet MS", Verdana, sans-serif;
+  font-size: 4.4mm;
+  line-height: 1.2;
+}
+
+.seminar-name {
+  max-width: 188mm;
+  margin: 0;
+  overflow-wrap: anywhere;
+  color: var(--ink);
+  font-size: clamp(7mm, 3vw, 10.5mm);
+  font-weight: 700;
+  line-height: 1.18;
+}
+
+.seminar-date {
+  margin: 5mm 0 0;
+  color: var(--muted-ink);
+  font-family: "Trebuchet MS", Verdana, sans-serif;
+  font-size: 4.2mm;
+  letter-spacing: 0.06em;
+}
+
+.certificate-footer {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: end;
+  gap: 10mm;
+  min-height: 24mm;
+  font-family: "Trebuchet MS", Verdana, sans-serif;
+  font-size: 3.7mm;
+}
+
+.footer-field {
+  display: grid;
+  gap: 2mm;
+  color: var(--muted-ink);
+}
+
+.footer-field strong {
+  color: var(--ink);
+  font-size: 4.2mm;
+}
+
+.signature {
+  min-width: 56mm;
+  padding-top: 7mm;
+  border-top: 0.35mm solid rgba(23, 60, 58, 0.55);
+  text-align: center;
+}
+
+.certificate-number {
+  justify-self: start;
+}
+
+.certificate-year {
+  justify-self: end;
+  text-align: right;
+}
+
+@media screen {
+  body {
+    padding: 12mm;
+  }
+
+  .certificate-page {
+    box-shadow: 0 10mm 24mm rgba(24, 27, 24, 0.22);
+  }
+}
+
+@media print {
+  html,
+  body {
+    width: var(--page-width);
+    height: var(--page-height);
+    background: white;
+  }
+
+  body {
+    display: block;
+    padding: 0;
+  }
+
+  .certificate-page {
+    box-shadow: none;
+  }
+}

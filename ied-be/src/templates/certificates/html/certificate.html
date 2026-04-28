@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="sr-Latn">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=1123, initial-scale=1" />
+    <title>Sertifikat __BROJ_SERTIFIKATA____GODINA_SERTIFIKATA__</title>
+    <link rel="stylesheet" href="./certificate.css" />
+  </head>
+  <body>
+    <section class="certificate-page" data-template-key="__TEMPLATE_KEY__">
+      <div class="certificate-border">
+        <header class="certificate-header" aria-label="Izdavalac sertifikata">
+          <div class="header-rule"></div>
+          <div class="issuer-mark">IED</div>
+          <div class="header-rule"></div>
+        </header>
+
+        <main class="certificate-body">
+          <p class="eyebrow">Potvrda o uspešno završenoj obuci</p>
+          <h1 class="certificate-title">Sertifikat</h1>
+
+          <p class="statement">
+            Ovim se potvrđuje da je polaznik uspešno prisustvovao seminaru i
+            ispunio uslove za izdavanje sertifikata.
+          </p>
+
+          <h2 class="recipient-name">__IME_PREZIME__</h2>
+          <p class="company-name">__FIRMA_NAZIV__</p>
+
+          <h3 class="seminar-name">__SEMINAR_NAZIV__</h3>
+          <p class="seminar-date">__DATUM_SEMINARA__</p>
+        </main>
+
+        <footer class="certificate-footer">
+          <div class="footer-field certificate-number">
+            <span>Broj sertifikata</span>
+            <strong>__BROJ_SERTIFIKATA____GODINA_SERTIFIKATA__</strong>
+          </div>
+
+          <div class="signature">Ovlašćeno lice</div>
+
+          <div class="footer-field certificate-year">
+            <span>Godina seminara</span>
+            <strong>__GODINA_SEMINARA__</strong>
+          </div>
+        </footer>
+      </div>
+    </section>
+  </body>
+</html>
