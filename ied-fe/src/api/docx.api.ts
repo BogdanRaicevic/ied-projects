@@ -22,7 +22,10 @@ export const generateRacunDocument = async (racunData: RacunType) => {
     );
 
     // Check if the response is an error message
-    if (response.headers["content-type"]?.includes("application/json")) {
+    const contentTypeHeader = response.headers["content-type"];
+    const contentType =
+      typeof contentTypeHeader === "string" ? contentTypeHeader : undefined;
+    if (contentType?.includes("application/json")) {
       const errorData = JSON.parse(await response.data.text());
       throw new Error(errorData.error || "Failed to generate document");
     }
