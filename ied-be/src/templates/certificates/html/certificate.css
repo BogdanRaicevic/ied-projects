@@ -108,23 +108,7 @@ body {
   width: 42mm;
   height: 22mm;
   margin-bottom: 2mm;
-}
-
-.logo-pyramid {
-  fill: #0b5a78;
-}
-
-.logo-cutout {
-  fill: none;
-  stroke: var(--paper);
-  stroke-width: 5;
-}
-
-.logo-stripes {
-  fill: none;
-  stroke: #0b5a78;
-  stroke-linecap: square;
-  stroke-width: 3;
+  object-fit: contain;
 }
 
 .institute-name {
