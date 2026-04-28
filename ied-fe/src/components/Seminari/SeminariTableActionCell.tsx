@@ -1,13 +1,17 @@
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import ForwardToInboxIcon from "@mui/icons-material/ForwardToInbox";
+import PictureAsPdfIcon from "@mui/icons-material/PictureAsPdf";
 import TableViewIcon from "@mui/icons-material/TableView";
 import WorkspacePremiumIcon from "@mui/icons-material/WorkspacePremium";
 import { IconButton, Tooltip } from "@mui/material";
 import { Box } from "@mui/system";
 import type { SeminarZodType } from "ied-shared";
 import { memo, useMemo, useState } from "react";
-import { generateSertifikatDocument } from "../../api/docx.api";
+import {
+  generateSertifikatDocument,
+  generateSertifikatPdfDocument,
+} from "../../api/docx.api";
 import { useDeleteSeminarMutation } from "../../hooks/seminar/useSeminarMutations";
 import {
   buildBatchSertifikati,
@@ -54,6 +58,9 @@ const SeminariTableActionCell = memo(
     const deleteSeminarMutation = useDeleteSeminarMutation();
     const [isCertificateDialogOpen, setIsCertificateDialogOpen] =
       useState(false);
+    const [certificateExportFormat, setCertificateExportFormat] = useState<
+      "docx" | "pdf"
+    >("docx");
     const [submitError, setSubmitError] = useState<string | null>(null);
     const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -149,7 +156,8 @@ const SeminariTableActionCell = memo(
       return invalidCount === seminar.prijave.length;
     }, [seminar.datum, seminar.naziv, seminar.prijave]);
 
-    const handleOpenCertificateDialog = () => {
+    const handleOpenCertificateDialog = (format: "docx" | "pdf") => {
+      setCertificateExportFormat(format);
       setSubmitError(null);
       setIsCertificateDialogOpen(true);
     };
@@ -189,7 +197,11 @@ const SeminariTableActionCell = memo(
       try {
         setIsSubmitting(true);
         setSubmitError(null);
-        await generateSertifikatDocument(sertifikati);
+        if (certificateExportFormat === "pdf") {
+          await generateSertifikatPdfDocument(sertifikati);
+        } else {
+          await generateSertifikatDocument(sertifikati);
+        }
         setIsCertificateDialogOpen(false);
       } catch (error) {
         console.error("Error generating certificates:", error);
@@ -210,9 +222,20 @@ const SeminariTableActionCell = memo(
             <EditIcon />
           </IconButton>
         </Tooltip>
-        <Tooltip title="Generiši sertifikate">
-          <IconButton color="success" onClick={handleOpenCertificateDialog}>
+        <Tooltip title="Generiši DOCX sertifikate">
+          <IconButton
+            color="success"
+            onClick={() => handleOpenCertificateDialog("docx")}
+          >
             <WorkspacePremiumIcon />
+          </IconButton>
+        </Tooltip>
+        <Tooltip title="Generiši PDF sertifikate">
+          <IconButton
+            color="secondary"
+            onClick={() => handleOpenCertificateDialog("pdf")}
+          >
+            <PictureAsPdfIcon />
           </IconButton>
         </Tooltip>
         <Tooltip title="Export učesnika">
@@ -241,8 +264,8 @@ const SeminariTableActionCell = memo(
         </Tooltip>
         <CertificateNumberDialog
           open={isCertificateDialogOpen}
-          title="Postavi početni broj za sertifikate"
-          description="Unesite broj od kog kreće numeracija sertifikata za validne prijave."
+          title={`Postavi početni broj za ${certificateExportFormat.toUpperCase()} sertifikate`}
+          description={`Unesite broj od kog kreće numeracija sertifikata za validne prijave. Izvoz će biti ZIP ${certificateExportFormat.toUpperCase()} fajlova.`}
           inputLabel="Početni broj sertifikata"
           alertMessages={dialogMessages}
           alertSeverity={
