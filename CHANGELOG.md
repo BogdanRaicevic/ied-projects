@@ -1,3 +1,9 @@
+## [1.19.2](https://github.com/BogdanRaicevic/ied-projects/compare/v1.19.1...v1.19.2) (2026-04-28)
+
+### Bug Fixes
+
+* improve content type handling for axios ([fcd628d](https://github.com/BogdanRaicevic/ied-projects/commit/fcd628d64541356c24e87da98eb2aa4d7788c953))
+
 ## [1.19.1](https://github.com/BogdanRaicevic/ied-projects/compare/v1.19.0...v1.19.1) (2026-04-15)
 
 ### Bug Fixes
