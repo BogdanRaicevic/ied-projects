@@ -225,31 +225,10 @@ router.post(
       res.send(buf);
     } catch (error) {
       console.error("Template processing error:", error);
-      // Docxtemplater multi-error handling
-      let errorDetails =
-        error instanceof Error ? error.message : "Unknown error";
-      if (error && typeof error === "object" && "properties" in error) {
-        const err = error as {
-          properties?: {
-            errors?: Array<{
-              name?: string;
-              message?: string;
-              properties?: { id?: string };
-            }>;
-          };
-        };
-        if (err.properties?.errors) {
-          errorDetails = err.properties.errors
-            .map(
-              (e) =>
-                `${e.name || "Error"}: ${e.message || ""} (${e.properties?.id || "unknown"})`,
-            )
-            .join("; ");
-        }
-      }
+      const details = getTemplateErrorDetails(error);
       res.status(500).json({
         error: "Error processing template",
-        details: errorDetails,
+        details,
       });
     }
   },
