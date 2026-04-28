@@ -158,7 +158,7 @@ export default function CertificateNumberDialog({
             onChange={(event) => setCertificateNumber(event.target.value)}
             error={Boolean(inputError)}
             helperText={inputError}
-            inputProps={{ min: 1, step: 1 }}
+            slotProps={{ htmlInput: { min: 1, step: 1 } }}
             disabled={isSubmitting}
           />
         </Box>
