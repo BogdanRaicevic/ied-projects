@@ -26,14 +26,11 @@ export const generateRacunDocument = async (racunData: RacunType) => {
       },
     );
 
-    // Check if the response is an error message
-    const contentTypeHeader = response.headers["content-type"];
-    const contentType =
-      typeof contentTypeHeader === "string" ? contentTypeHeader : undefined;
-    if (contentType?.includes("application/json")) {
-      const errorData = JSON.parse(await response.data.text());
-      throw new Error(errorData.error || "Failed to generate document");
-    }
+    await throwBlobResponseError(
+      response.data,
+      response.headers["content-type"],
+      "Failed to generate document",
+    );
 
     triggerBlobDownload(
       response.data,
@@ -94,9 +91,12 @@ export const generateSingleSertifikatDocument = async (
   );
 };
 
+const headerToString = (headerValue: unknown): string | undefined =>
+  typeof headerValue === "string" ? headerValue : undefined;
+
 const triggerBlobDownload = (
   data: BlobPart,
-  contentDispositionHeader?: string,
+  contentDispositionHeader: unknown,
   fallbackFileName = "download.bin",
 ) => {
   const url = window.URL.createObjectURL(new Blob([data]));
@@ -112,30 +112,28 @@ const triggerBlobDownload = (
   window.URL.revokeObjectURL(url);
 };
 
-const getFileNameFromDisposition = (contentDispositionHeader?: string) => {
-  if (!contentDispositionHeader) {
+const getFileNameFromDisposition = (contentDispositionHeader: unknown) => {
+  const disposition = headerToString(contentDispositionHeader);
+  if (!disposition) {
     return null;
   }
 
-  const utf8Match = contentDispositionHeader.match(
-    /filename\*=UTF-8''([^;\n]+)/i,
-  );
+  const utf8Match = disposition.match(/filename\*=UTF-8''([^;\n]+)/i);
   if (utf8Match?.[1]) {
     return decodeURIComponent(utf8Match[1]);
   }
 
-  const standardMatch = contentDispositionHeader.match(
-    /filename=["']?([^"';\n]+)["']?/i,
-  );
+  const standardMatch = disposition.match(/filename=["']?([^"';\n]+)["']?/i);
   return standardMatch?.[1] || null;
 };
 
 const throwBlobResponseError = async (
   data: Blob,
-  contentTypeHeader: string | undefined,
+  contentTypeHeader: unknown,
   fallbackMessage: string,
 ) => {
-  if (!contentTypeHeader?.includes("application/json")) {
+  const contentType = headerToString(contentTypeHeader);
+  if (!contentType?.includes("application/json")) {
     return;
   }
 
