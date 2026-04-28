@@ -238,13 +238,12 @@ router.post(
   "/generate-sertifikat-single",
   validateRequestBody(SertifikatZod),
   async (req: Request<{}, any, SertifikatType>, res) => {
-    const sertifikatData = req.body;
-    const templatePath = resolveSertifikatTemplatePath(
-      sertifikatData.templateKey,
-    );
-    console.log("templatePath", templatePath);
-
     try {
+      const sertifikatData = req.body;
+      const templatePath = resolveSertifikatTemplatePath(
+        sertifikatData.templateKey,
+      );
+
       const docxBuffer = renderDocxTemplate(templatePath, sertifikatData);
 
       res.setHeader(
@@ -281,9 +280,9 @@ router.post(
       return;
     }
 
-    const templatePath = resolveSertifikatTemplatePath(selectedTemplateKey);
-
     try {
+      const templatePath = resolveSertifikatTemplatePath(selectedTemplateKey);
+
       const archive = new PizZip();
       const currentYearLastTwoDigits = getCurrentYearLastTwoDigits();
 
