@@ -108,6 +108,9 @@ export default function PrijaveSeminarTable({
     });
 
     if (warning || !sertifikat) {
+      setSubmitError(
+        warning ?? "Nije moguće generisati sertifikat za izabranu prijavu.",
+      );
       return;
     }
 
