@@ -1,6 +1,7 @@
 import {
   type RacunType,
   RacunZod,
+  SertifikatBatchZod,
   type SertifikatType,
   TipRacuna,
 } from "ied-shared";
@@ -43,52 +44,35 @@ export const generateRacunDocument = async (racunData: RacunType) => {
   }
 };
 
-export const generateSertifikatDocument = async (
-  sertifikatData: SertifikatType[],
+export const generateSertifikatPdfBatch = async (
+  sertifikati: SertifikatType[],
 ) => {
-  const response = await axiosInstanceWithAuth.post(
-    `/api/docx/generate-sertifikat`,
-    sertifikatData,
-    {
-      responseType: "blob",
-    },
-  );
+  try {
+    validateOrThrow(SertifikatBatchZod, sertifikati);
 
-  await throwBlobResponseError(
-    response.data,
-    response.headers["content-type"],
-    "Failed to generate certificates",
-  );
+    const response = await axiosInstanceWithAuth.post(
+      `/api/docx/generate-pdf-files`,
+      sertifikati,
+      { responseType: "blob" },
+    );
 
-  triggerBlobDownload(
-    response.data,
-    response.headers["content-disposition"],
-    "sertifikati.zip",
-  );
-};
+    await throwBlobResponseError(
+      response.data,
+      response.headers["content-type"],
+      "Failed to generate PDF certificates",
+    );
 
-export const generateSingleSertifikatDocument = async (
-  sertifikatData: SertifikatType,
-) => {
-  const response = await axiosInstanceWithAuth.post(
-    `/api/docx/generate-sertifikat-single`,
-    sertifikatData,
-    {
-      responseType: "blob",
-    },
-  );
+    const fallbackName = `Sertifikati_${sanitizeFilename(sertifikati[0]?.seminar_naziv || "IED")}.zip`;
 
-  await throwBlobResponseError(
-    response.data,
-    response.headers["content-type"],
-    "Failed to generate certificate",
-  );
-
-  triggerBlobDownload(
-    response.data,
-    response.headers["content-disposition"],
-    `${sertifikatData.broj_sertifikata}${sertifikatData.godina_sertifikata}_${sanitizeFilename(sertifikatData.ime_prezime)}_${sanitizeFilename(sertifikatData.firma_naziv)}.docx`,
-  );
+    triggerBlobDownload(
+      response.data,
+      response.headers["content-disposition"],
+      fallbackName,
+    );
+  } catch (error) {
+    console.error("Generate sertifikat PDF API error:", error);
+    throw error;
+  }
 };
 
 const headerToString = (headerValue: unknown): string | undefined =>

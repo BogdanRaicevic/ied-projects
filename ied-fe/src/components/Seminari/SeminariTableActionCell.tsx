@@ -8,10 +8,7 @@ import { IconButton, Tooltip } from "@mui/material";
 import { Box } from "@mui/system";
 import type { SeminarZodType } from "ied-shared";
 import { memo, useMemo, useState } from "react";
-import {
-  generateSertifikatDocument,
-  generateSertifikatPdfDocument,
-} from "../../api/docx.api";
+import { generateSertifikatPdfBatch } from "../../api/docx.api";
 import { useDeleteSeminarMutation } from "../../hooks/seminar/useSeminarMutations";
 import {
   buildBatchSertifikati,
@@ -197,11 +194,11 @@ const SeminariTableActionCell = memo(
       try {
         setIsSubmitting(true);
         setSubmitError(null);
+
         if (certificateExportFormat === "pdf") {
-          await generateSertifikatPdfDocument(sertifikati);
-        } else {
-          await generateSertifikatDocument(sertifikati);
+          await generateSertifikatPdfBatch(sertifikati);
         }
+
         setIsCertificateDialogOpen(false);
       } catch (error) {
         console.error("Error generating certificates:", error);

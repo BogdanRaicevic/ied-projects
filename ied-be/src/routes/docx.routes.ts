@@ -15,6 +15,7 @@ import {
   TipRacuna,
 } from "ied-shared";
 import PizZip from "pizzip";
+import puppeteer, { type Browser } from "puppeteer";
 import { izdavacRacuna } from "../constants/izdavacRacuna.const";
 import { validateRequestBody } from "../middleware/validateSchema";
 
@@ -260,6 +261,162 @@ router.post(
       console.error("Template processing error:", error);
       res.status(500).json({
         error: "Error processing template",
+        details: getTemplateErrorDetails(error),
+      });
+    }
+  },
+);
+
+const htmlTemplatesDir = path.resolve(templatesDir, "certificates/html");
+
+const escapeHtml = (value: string): string =>
+  value
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+
+let cachedCertificateHtml: string | null = null;
+
+const buildCertificateHtmlBase = (): string => {
+  if (cachedCertificateHtml) {
+    return cachedCertificateHtml;
+  }
+
+  const rawHtml = fs.readFileSync(
+    path.resolve(htmlTemplatesDir, "certificate-print.html"),
+    "utf-8",
+  );
+  const baseCss = fs.readFileSync(
+    path.resolve(htmlTemplatesDir, "certificate.css"),
+    "utf-8",
+  );
+  const printCss = fs.readFileSync(
+    path.resolve(htmlTemplatesDir, "certificate-print.css"),
+    "utf-8",
+  );
+  const logoBase64 = fs
+    .readFileSync(path.resolve(htmlTemplatesDir, "logo-ied.png"))
+    .toString("base64");
+  const logoDataUrl = `data:image/png;base64,${logoBase64}`;
+
+  cachedCertificateHtml = rawHtml
+    .replace(
+      /<link rel="stylesheet" href="\.\/certificate\.css"\s*\/?>/,
+      `<style>${baseCss}</style>`,
+    )
+    .replace(
+      /<link rel="stylesheet" href="\.\/certificate-print\.css"\s*\/?>/,
+      `<style>${printCss}</style>`,
+    )
+    .replace(/\.\/logo-ied\.png/g, logoDataUrl);
+
+  return cachedCertificateHtml;
+};
+
+const renderCertificateHtml = (sertifikat: SertifikatType): string => {
+  const base = buildCertificateHtmlBase();
+  const replacements: Record<string, string> = {
+    __BROJ_SERTIFIKATA__: escapeHtml(String(sertifikat.broj_sertifikata)),
+    __GODINA_SERTIFIKATA__: escapeHtml(sertifikat.godina_sertifikata),
+    __IME_PREZIME__: escapeHtml(sertifikat.ime_prezime),
+    __SEMINAR_NAZIV__: escapeHtml(sertifikat.seminar_naziv),
+    __DATUM_SEMINARA__: escapeHtml(sertifikat.datum_seminara),
+    __TEMPLATE_KEY__: escapeHtml(sertifikat.templateKey),
+  };
+
+  return Object.entries(replacements).reduce(
+    (html, [token, value]) => html.replaceAll(token, value),
+    base,
+  );
+};
+
+const getSertifikatPdfFileName = (sertifikat: SertifikatType): string => {
+  const currentYearLastTwoDigits = getCurrentYearLastTwoDigits();
+  return sanitizeFilename(
+    `${sertifikat.broj_sertifikata}${currentYearLastTwoDigits}_${sertifikat.ime_prezime}_${sertifikat.firma_naziv}.pdf`,
+  );
+};
+
+let browserPromise: Promise<Browser> | null = null;
+
+const getBrowser = async (): Promise<Browser> => {
+  if (!browserPromise) {
+    browserPromise = puppeteer
+      .launch({
+        headless: true,
+        args: ["--no-sandbox", "--disable-setuid-sandbox"],
+      })
+      .then((browser) => {
+        browser.once("disconnected", () => {
+          browserPromise = null;
+        });
+        return browser;
+      })
+      .catch((error) => {
+        browserPromise = null;
+        throw error;
+      });
+  }
+
+  return browserPromise;
+};
+
+const renderCertificatePdf = async (
+  browser: Browser,
+  sertifikat: SertifikatType,
+): Promise<Buffer> => {
+  const page = await browser.newPage();
+  try {
+    await page.setContent(renderCertificateHtml(sertifikat), {
+      waitUntil: "load",
+    });
+    const pdf = await page.pdf({
+      format: "A4",
+      landscape: true,
+      printBackground: true,
+      preferCSSPageSize: true,
+      margin: { top: 0, right: 0, bottom: 0, left: 0 },
+    });
+    return Buffer.from(pdf);
+  } finally {
+    await page.close();
+  }
+};
+
+router.post(
+  "/generate-pdf-files",
+  validateRequestBody(SertifikatBatchZod),
+  async (req: Request<{}, any, SertifikatType[]>, res) => {
+    const sertifikatData = req.body;
+
+    try {
+      const browser = await getBrowser();
+      const archive = new PizZip();
+      const currentYearLastTwoDigits = getCurrentYearLastTwoDigits();
+
+      for (const sertifikat of sertifikatData) {
+        const pdfBuffer = await renderCertificatePdf(browser, sertifikat);
+        archive.file(getSertifikatPdfFileName(sertifikat), pdfBuffer);
+      }
+
+      const zipBuffer = archive.generate({
+        compression: "DEFLATE",
+        type: "nodebuffer",
+      });
+
+      res.setHeader("Content-Type", "application/zip");
+      const fileName = sanitizeFilename(
+        `Sertifikati_${currentYearLastTwoDigits}_${sertifikatData[0]?.seminar_naziv || "IED"}.zip`,
+      );
+      res.setHeader("Content-Disposition", `attachment; filename=${fileName}`);
+
+      res.send(zipBuffer);
+    } catch (error) {
+      console.error("PDF certificate generation error:", error);
+      res.status(500).json({
+        error: "Error generating PDF certificates",
         details: getTemplateErrorDetails(error),
       });
     }
