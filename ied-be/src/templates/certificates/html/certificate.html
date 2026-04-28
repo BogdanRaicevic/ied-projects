@@ -10,25 +10,22 @@
     <section class="certificate-page" data-template-key="__TEMPLATE_KEY__">
       <div class="certificate-border">
         <header class="certificate-header" aria-label="Izdavalac sertifikata">
-          <div class="header-rule"></div>
-          <div class="issuer-mark">IED</div>
-          <div class="header-rule"></div>
+          <svg class="institute-logo" viewBox="0 0 180 92" role="img" aria-label="Institut za ekonomsku diplomatiju">
+            <path class="logo-pyramid" d="M90 8 28 78h124L90 8Z" />
+            <path class="logo-cutout" d="M90 8v70h62L90 8Z" />
+            <path class="logo-stripes" d="M97 20h20M97 28h27M97 36h34M97 44h41M97 52h48M97 60h55M97 68h62" />
+          </svg>
+          <p class="institute-name">Institut za ekonomsku diplomatiju</p>
+          <p class="institute-location">Beograd · Srbija</p>
         </header>
 
         <main class="certificate-body">
-          <p class="eyebrow">Potvrda o uspešno završenoj obuci</p>
           <h1 class="certificate-title">Sertifikat</h1>
-
-          <p class="statement">
-            Ovim se potvrđuje da je polaznik uspešno prisustvovao seminaru i
-            ispunio uslove za izdavanje sertifikata.
-          </p>
+          <p class="eyebrow">O odslušanom programu profesionalnog usavršavanja</p>
 
           <h2 class="recipient-name">__IME_PREZIME__</h2>
-          <p class="company-name">__FIRMA_NAZIV__</p>
 
           <h3 class="seminar-name">__SEMINAR_NAZIV__</h3>
-          <p class="seminar-date">__DATUM_SEMINARA__</p>
         </main>
 
         <footer class="certificate-footer">
@@ -37,11 +34,13 @@
             <strong>__BROJ_SERTIFIKATA____GODINA_SERTIFIKATA__</strong>
           </div>
 
-          <div class="signature">Ovlašćeno lice</div>
+          <div class="footer-field certificate-date">
+            <span>Datum seminara</span>
+            <strong>__DATUM_SEMINARA__</strong>
+          </div>
 
-          <div class="footer-field certificate-year">
-            <span>Godina seminara</span>
-            <strong>__GODINA_SEMINARA__</strong>
+          <div class="footer-field institute-footer">
+            <span>Institut za ekonomsku diplomatiju</span>
           </div>
         </footer>
       </div>
