@@ -1,0 +1,396 @@
+@page {
+  size: A4 landscape;
+  margin: 0;
+}
+
+:root {
+  --page-width: 297mm;
+  --page-height: 210mm;
+  --page-padding: 11mm;
+  --ink: #1e1f24;
+  --muted-ink: #5e5a54;
+  --bronze: #b2874a;
+  --bronze-dark: #7c5529;
+  --paper: #fffdf7;
+  --paper-warm: #f8efe2;
+  --line: #2d3037;
+  --border-gold: #c9952a;
+  --navy: #1e2d40;
+  /* Both arms of every navy L are the same: half the page width */
+  --corner-arm: calc(var(--page-width) / 2);
+  --corner-thick: 13mm;
+  --corner-overflow: 20px;
+  /* Gold accents: shorter and thinner than the navy blocks */
+  --accent-arm: 80mm;
+  --accent-thick: 4mm;
+}
+
+* {
+  box-sizing: border-box;
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+
+html,
+body {
+  width: var(--page-width);
+  min-height: var(--page-height);
+  margin: 0;
+  background: #d8d2c8;
+  color: var(--ink);
+  font-family: Georgia, "Times New Roman", serif;
+}
+
+body {
+  display: grid;
+  place-items: center;
+}
+
+.certificate-page {
+  position: relative;
+  width: var(--page-width);
+  height: var(--page-height);
+  padding: var(--page-padding);
+  overflow: hidden;
+  background: linear-gradient(
+    135deg,
+    var(--paper),
+    var(--paper-warm) 52%,
+    var(--paper)
+  );
+  page-break-after: always;
+  break-after: page;
+}
+
+/* ─── Gold border line — drawn as pseudo-element so navy sits above it ── */
+
+.certificate-border {
+  position: relative;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  width: 100%;
+  height: 100%;
+  padding: 20mm 24mm 16mm;
+  /* overflow visible so corner blocks can extend past the border edge;
+     .certificate-page above already clips to the page boundary */
+  /* no CSS border here — the gold line is a child pseudo-element at z-index 0 */
+}
+
+.certificate-border::before {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  border: 1.6mm solid var(--border-gold);
+  content: "";
+  pointer-events: none;
+}
+
+/* ─── Navy corner blocks — z-index 1, covers gold border at corners ──── */
+
+.corner-block {
+  position: absolute;
+  z-index: 1;
+  /* bounding box = arm × arm so both pseudo-elements are anchored correctly */
+  width: var(--corner-arm);
+  height: var(--corner-arm);
+  pointer-events: none;
+}
+
+/* ::before = horizontal arm   ::after = vertical arm */
+.corner-block::before,
+.corner-block::after {
+  position: absolute;
+  background: var(--navy);
+  content: "";
+}
+
+.corner-block::before {
+  width: 100%;
+  height: var(--corner-thick);
+}
+
+.corner-block::after {
+  width: var(--corner-thick);
+  height: 100%;
+}
+
+.corner-block-tl {
+  top: calc(-1 * var(--corner-overflow));
+  left: calc(-1 * var(--corner-overflow));
+}
+
+.corner-block-tl::before,
+.corner-block-tl::after {
+  top: 0;
+  left: 0;
+}
+
+.corner-block-tr {
+  top: calc(-1 * var(--corner-overflow));
+  right: calc(-1 * var(--corner-overflow));
+}
+
+.corner-block-tr::before,
+.corner-block-tr::after {
+  top: 0;
+  right: 0;
+  left: auto;
+}
+
+.corner-block-bl {
+  bottom: calc(-1 * var(--corner-overflow));
+  left: calc(-1 * var(--corner-overflow));
+}
+
+.corner-block-bl::before,
+.corner-block-bl::after {
+  bottom: 0;
+  left: 0;
+  top: auto;
+}
+
+.corner-block-br {
+  right: calc(-1 * var(--corner-overflow));
+  bottom: calc(-1 * var(--corner-overflow));
+}
+
+.corner-block-br::before,
+.corner-block-br::after {
+  right: 0;
+  bottom: 0;
+  top: auto;
+  left: auto;
+}
+
+/* ─── Gold corner accents — z-index 2, thinner + shorter, inner edge of navy ── */
+
+.corner-accent {
+  position: absolute;
+  z-index: 2;
+  width: var(--accent-arm);
+  height: var(--accent-arm);
+  pointer-events: none;
+}
+
+/* ::before = horizontal arm   ::after = vertical arm */
+.corner-accent::before,
+.corner-accent::after {
+  position: absolute;
+  background: var(--border-gold);
+  content: "";
+}
+
+.corner-accent::before {
+  width: 100%;
+  height: var(--accent-thick);
+}
+
+.corner-accent::after {
+  width: var(--accent-thick);
+  height: 60%;
+}
+
+/* Positioned at the inner edge of the navy block */
+.corner-accent-tl {
+  top: var(--corner-thick);
+  left: var(--corner-thick);
+}
+
+.corner-accent-tl::before,
+.corner-accent-tl::after {
+  top: 0;
+  left: 0;
+}
+
+.corner-accent-tr {
+  top: var(--corner-thick);
+  right: var(--corner-thick);
+}
+
+.corner-accent-tr::before,
+.corner-accent-tr::after {
+  top: 0;
+  right: 0;
+  left: auto;
+}
+
+.corner-accent-bl {
+  bottom: var(--corner-thick);
+  left: var(--corner-thick);
+}
+
+.corner-accent-bl::before,
+.corner-accent-bl::after {
+  bottom: 0;
+  left: 0;
+  top: auto;
+}
+
+.corner-accent-br {
+  right: var(--corner-thick);
+  bottom: var(--corner-thick);
+}
+
+.corner-accent-br::before,
+.corner-accent-br::after {
+  right: 0;
+  bottom: 0;
+  top: auto;
+  left: auto;
+}
+
+/* ─── Content layers ───────────────────────────────────────── */
+
+.certificate-header,
+.certificate-body,
+.certificate-footer {
+  position: relative;
+  z-index: 3;
+}
+
+.certificate-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 43mm;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.company-logo {
+  width: 31mm;
+  height: 24mm;
+  margin-bottom: 1.5mm;
+  object-fit: contain;
+}
+
+.company-name {
+  margin: 0;
+  font-family: "Trebuchet MS", Verdana, sans-serif;
+  font-size: 7mm;
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: 0.18em;
+}
+
+.company-location {
+  margin: 2mm 0 0;
+  color: var(--bronze-dark);
+  font-family: "Trebuchet MS", Verdana, sans-serif;
+  font-size: 3.4mm;
+  font-weight: 700;
+  letter-spacing: 0.34em;
+}
+
+.certificate-body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 0;
+  padding: 2mm 11mm 3mm;
+  text-align: center;
+}
+
+.certificate-title {
+  margin: 0;
+  color: var(--line);
+  font-size: clamp(14mm, 5.8vw, 20mm);
+  font-weight: 700;
+  line-height: 0.95;
+  letter-spacing: 0.4em;
+  text-transform: uppercase;
+}
+
+.eyebrow {
+  max-width: 196mm;
+  margin: 5mm 0 8mm;
+  color: var(--muted-ink);
+  font-family: "Trebuchet MS", Verdana, sans-serif;
+  font-size: 4mm;
+  line-height: 1.35;
+}
+
+.recipient-name {
+  width: min(178mm, 100%);
+  margin: 0 0 6mm;
+  padding-bottom: 2mm;
+  overflow-wrap: anywhere;
+  border-bottom: 0.4mm solid rgba(45, 48, 55, 0.62);
+  color: var(--ink);
+  font-size: clamp(10mm, 4.7vw, 15.5mm);
+  font-weight: 700;
+  line-height: 1.05;
+}
+
+.program-label {
+  margin: 0 0 3mm;
+  color: var(--bronze-dark);
+  font-family: "Trebuchet MS", Verdana, sans-serif;
+  font-size: 4mm;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+}
+
+.seminar-name {
+  max-width: 188mm;
+  margin: 0;
+  overflow-wrap: anywhere;
+  color: var(--ink);
+  font-size: clamp(7mm, 3vw, 10.4mm);
+  font-weight: 700;
+  line-height: 1.18;
+}
+
+.certificate-footer {
+  display: grid;
+  grid-template-columns: 1fr;
+  align-items: end;
+  min-height: 25mm;
+  font-family: "Trebuchet MS", Verdana, sans-serif;
+  font-size: 3.7mm;
+  padding: 2mm 11mm 3mm;
+}
+
+.footer-field {
+  display: grid;
+  gap: 1.7mm;
+  color: var(--muted-ink);
+}
+
+.footer-field strong {
+  color: var(--ink);
+  font-size: 4.3mm;
+}
+
+.certificate-place-date {
+  justify-self: start;
+}
+
+@media screen {
+  body {
+    padding: 12mm;
+  }
+
+  .certificate-page {
+    box-shadow: 0 10mm 24mm rgba(24, 27, 24, 0.22);
+  }
+}
+
+@media print {
+  html,
+  body {
+    width: var(--page-width);
+    height: var(--page-height);
+    background: white;
+  }
+
+  body {
+    display: block;
+    padding: 0;
+  }
+
+  .certificate-page {
+    box-shadow: none;
+  }
+}
