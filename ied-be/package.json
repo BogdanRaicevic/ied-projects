@@ -50,7 +50,7 @@
     "es-toolkit": "^1.46.0",
     "express": "^5.2.1",
     "ied-shared": "workspace:^",
-    "mongoose": "^9.5.0",
+    "mongoose": "^9.6.0",
     "node-cache": "^5.1.2",
     "pizzip": "^3.2.0",
     "zod": "^4.3.6"
