@@ -1,0 +1,230 @@
+@page {
+  size: A4 landscape;
+  margin: 0;
+}
+
+:root {
+  --page-width: 297mm;
+  --page-height: 210mm;
+  --page-padding: 10mm;
+  --ink: #1f1f1f;
+  --muted-ink: #555;
+  --green: #369b3b;
+  --paper: #fafff8;
+  --paper-warm: #eef7ec;
+  --ornament: #6a6a6a;
+}
+
+* {
+  box-sizing: border-box;
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+
+html,
+body {
+  width: var(--page-width);
+  min-height: var(--page-height);
+  margin: 0;
+  background: #c8d8c6;
+  color: var(--ink);
+  font-family: Georgia, "Times New Roman", serif;
+}
+
+body {
+  display: grid;
+  place-items: center;
+}
+
+.certificate-page {
+  position: relative;
+  width: var(--page-width);
+  height: var(--page-height);
+  padding: var(--page-padding);
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 8% 12%, rgba(54, 155, 59, 0.14), transparent 30%),
+    radial-gradient(circle at 90% 85%, rgba(54, 155, 59, 0.09), transparent 28%),
+    radial-gradient(circle at 52% 48%, rgba(255, 255, 248, 0.55), transparent 55%),
+    linear-gradient(145deg, var(--paper), var(--paper-warm));
+  page-break-after: always;
+  break-after: page;
+}
+
+.certificate-border {
+  position: relative;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  width: 100%;
+  height: 100%;
+  padding: 14mm 22mm 26mm;
+  overflow: hidden;
+}
+
+.certificate-border::before {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background-image: url("./bs-emblem.png");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 100% 100%;
+  content: "";
+  pointer-events: none;
+}
+
+.certificate-header,
+.certificate-body,
+.certificate-footer {
+  position: relative;
+  z-index: 1;
+}
+
+.certificate-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 42mm;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.council-logo {
+  width: 30mm;
+  height: 30mm;
+  margin-bottom: 2mm;
+  object-fit: contain;
+}
+
+.council-name {
+  max-width: 190mm;
+  margin: 0;
+  font-family: "Trebuchet MS", Verdana, sans-serif;
+  font-size: 6.2mm;
+  font-weight: 700;
+  line-height: 1.15;
+  letter-spacing: 0.06em;
+}
+
+.council-location {
+  margin: 1mm 0 0;
+  color: var(--muted-ink);
+  font-family: "Trebuchet MS", Verdana, sans-serif;
+  font-size: 3.8mm;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+}
+
+.certificate-body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 0;
+  padding: 4mm 12mm 2mm;
+  text-align: center;
+}
+
+.certificate-title {
+  margin: 0;
+  font-size: clamp(13mm, 5.6vw, 19mm);
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: 0.38em;
+  text-transform: uppercase;
+}
+
+.eyebrow {
+  max-width: 190mm;
+  margin: 6mm 0 8mm;
+  color: var(--muted-ink);
+  font-family: "Trebuchet MS", Verdana, sans-serif;
+  font-size: 4.2mm;
+  line-height: 1.35;
+}
+
+.recipient-name {
+  width: min(178mm, 100%);
+  margin: 0 0 6mm;
+  padding-bottom: 1.5mm;
+  overflow-wrap: anywhere;
+  border-bottom: 0.35mm solid var(--ornament);
+  color: var(--ink);
+  font-size: clamp(10mm, 4.6vw, 15mm);
+  font-weight: 700;
+  line-height: 1.05;
+}
+
+.program-label {
+  margin: 0 0 3mm;
+  color: var(--muted-ink);
+  font-family: "Trebuchet MS", Verdana, sans-serif;
+  font-size: 4mm;
+  font-weight: 700;
+}
+
+.seminar-name {
+  max-width: 188mm;
+  margin: 0;
+  overflow-wrap: anywhere;
+  color: var(--ink);
+  font-size: clamp(7mm, 3vw, 10.2mm);
+  font-weight: 700;
+  line-height: 1.18;
+}
+
+.certificate-footer {
+  display: flex;
+  justify-content: center;
+  align-items: end;
+  gap: 18mm;
+  min-height: 18mm;
+  padding-top: 4mm;
+  font-family: "Trebuchet MS", Verdana, sans-serif;
+  font-size: 3.8mm;
+}
+
+.footer-field {
+  display: grid;
+  gap: 1.6mm;
+  color: var(--muted-ink);
+  text-align: center;
+}
+
+.footer-field strong {
+  color: var(--ink);
+  font-size: 4.5mm;
+}
+
+.certificate-number,
+.certificate-date {
+  min-width: 52mm;
+}
+
+@media screen {
+  body {
+    padding: 12mm;
+  }
+
+  .certificate-page {
+    box-shadow: 0 10mm 24mm rgba(24, 27, 24, 0.22);
+  }
+}
+
+@media print {
+  html,
+  body {
+    width: var(--page-width);
+    height: var(--page-height);
+    background: white;
+  }
+
+  body {
+    display: block;
+    padding: 0;
+  }
+
+  .certificate-page {
+    box-shadow: none;
+  }
+}
