@@ -277,49 +277,104 @@ const escapeHtml = (value: string): string =>
     .replace(/"/g, "&quot;")
     .replace(/'/g, "&#39;");
 
-let cachedCertificateHtml: string | null = null;
+type CertificatePdfVariant = "print" | "email";
 
-const buildCertificateHtmlBase = (): string => {
-  if (cachedCertificateHtml) {
-    return cachedCertificateHtml;
-  }
+// Cache key = "<templateKey>:<variant>"
+const cachedCertificateHtmlByTemplate = new Map<string, string>();
 
-  const rawHtml = fs.readFileSync(
-    path.resolve(htmlTemplatesDir, "certificate-print.html"),
-    "utf-8",
-  );
-  const baseCss = fs.readFileSync(
-    path.resolve(htmlTemplatesDir, "certificate.css"),
-    "utf-8",
-  );
-  const printCss = fs.readFileSync(
-    path.resolve(htmlTemplatesDir, "certificate-print.css"),
-    "utf-8",
-  );
-  const logoBase64 = fs
-    .readFileSync(path.resolve(htmlTemplatesDir, "logo-ied.png"))
-    .toString("base64");
-  const logoDataUrl = `data:image/png;base64,${logoBase64}`;
-
-  cachedCertificateHtml = rawHtml
-    .replace(
-      /<link rel="stylesheet" href="\.\/certificate\.css"\s*\/?>/,
-      `<style>${baseCss}</style>`,
-    )
-    .replace(
-      /<link rel="stylesheet" href="\.\/certificate-print\.css"\s*\/?>/,
-      `<style>${printCss}</style>`,
-    )
-    .replace(/\.\/logo-ied\.png/g, logoDataUrl);
-
-  return cachedCertificateHtml;
+const mimeTypeForExt: Record<string, string> = {
+  png: "image/png",
+  jpg: "image/jpeg",
+  jpeg: "image/jpeg",
+  svg: "image/svg+xml",
+  gif: "image/gif",
+  webp: "image/webp",
 };
 
-const renderCertificateHtml = (sertifikat: SertifikatType): string => {
-  const base = buildCertificateHtmlBase();
+const inlineLocalAsset = (assetPath: string): string | null => {
+  if (!fs.existsSync(assetPath)) return null;
+  const ext = path.extname(assetPath).toLowerCase().slice(1);
+  const mime = mimeTypeForExt[ext] ?? "application/octet-stream";
+  const base64 = fs.readFileSync(assetPath).toString("base64");
+  return `data:${mime};base64,${base64}`;
+};
+
+const buildCertificateHtmlBase = (
+  templateKey: SertifikatTemplateKeyType,
+  variant: CertificatePdfVariant,
+): string => {
+  const cacheKey = `${templateKey}:${variant}`;
+  const cached = cachedCertificateHtmlByTemplate.get(cacheKey);
+  if (cached) return cached;
+
+  const templateDir = path.resolve(htmlTemplatesDir, templateKey);
+
+  const rawHtml = fs.readFileSync(
+    path.resolve(templateDir, "certificate-print.html"),
+    "utf-8",
+  );
+
+  // Inline local url() references in CSS before embedding the stylesheet
+  let baseCss = fs.readFileSync(
+    path.resolve(templateDir, "certificate.css"),
+    "utf-8",
+  );
+  baseCss = baseCss.replace(
+    /url\(["']?\.\/([^"')]+)["']?\)/g,
+    (match, filename: string) => {
+      const dataUrl = inlineLocalAsset(path.resolve(templateDir, filename));
+      return dataUrl ? `url("${dataUrl}")` : match;
+    },
+  );
+
+  // Replace <link> tags with inlined <style> blocks
+  let html = rawHtml.replace(
+    /<link rel="stylesheet" href="\.\/certificate\.css"\s*\/?>/,
+    `<style>${baseCss}</style>`,
+  );
+
+  if (variant === "print") {
+    // Include print CSS — strips background gradient, good for physical printing
+    const printCss = fs.readFileSync(
+      path.resolve(templateDir, "certificate-print.css"),
+      "utf-8",
+    );
+    html = html.replace(
+      /<link rel="stylesheet" href="\.\/certificate-print\.css"\s*\/?>/,
+      `<style>${printCss}</style>`,
+    );
+  } else {
+    // Email variant — drop the print CSS link so the gradient background is kept
+    html = html.replace(
+      /<link rel="stylesheet" href="\.\/certificate-print\.css"\s*\/?>/,
+      "",
+    );
+  }
+
+  // Inline all local <img src="./..."> references
+  html = html.replace(
+    /src="\.\/([^"]+\.(png|svg|jpg|jpeg|gif|webp))"/gi,
+    (match, filename: string) => {
+      const dataUrl = inlineLocalAsset(path.resolve(templateDir, filename));
+      return dataUrl ? `src="${dataUrl}"` : match;
+    },
+  );
+
+  cachedCertificateHtmlByTemplate.set(cacheKey, html);
+  return html;
+};
+
+const renderCertificateHtml = (
+  sertifikat: SertifikatType,
+  variant: CertificatePdfVariant,
+): string => {
+  const base = buildCertificateHtmlBase(sertifikat.templateKey, variant);
   const replacements: Record<string, string> = {
     __BROJ_SERTIFIKATA__: escapeHtml(String(sertifikat.broj_sertifikata)),
+    // IED template uses __GODINA_SERTIFIKATA__ (2-digit year, no separator)
     __GODINA_SERTIFIKATA__: escapeHtml(sertifikat.godina_sertifikata),
+    // BS / PERM templates use __GODINA_SEMINARA__ (4-digit year, with "/" separator)
+    __GODINA_SEMINARA__: escapeHtml(sertifikat.godina_seminara),
     __IME_PREZIME__: escapeHtml(sertifikat.ime_prezime),
     __SEMINAR_NAZIV__: escapeHtml(sertifikat.seminar_naziv),
     __DATUM_SEMINARA__: escapeHtml(sertifikat.datum_seminara),
@@ -366,10 +421,13 @@ const getBrowser = async (): Promise<Browser> => {
 const renderCertificatePdf = async (
   browser: Browser,
   sertifikat: SertifikatType,
+  variant: CertificatePdfVariant,
 ): Promise<Buffer> => {
   const page = await browser.newPage();
   try {
-    await page.setContent(renderCertificateHtml(sertifikat), {
+    // Use print media so @media screen padding/shadow rules are suppressed
+    await page.emulateMediaType("print");
+    await page.setContent(renderCertificateHtml(sertifikat, variant), {
       waitUntil: "load",
     });
     const pdf = await page.pdf({
@@ -397,8 +455,21 @@ router.post(
       const currentYearLastTwoDigits = getCurrentYearLastTwoDigits();
 
       for (const sertifikat of sertifikatData) {
-        const pdfBuffer = await renderCertificatePdf(browser, sertifikat);
-        archive.file(getSertifikatPdfFileName(sertifikat), pdfBuffer);
+        const fileName = getSertifikatPdfFileName(sertifikat);
+
+        const printPdf = await renderCertificatePdf(
+          browser,
+          sertifikat,
+          "print",
+        );
+        archive.file(`stampa/${fileName}`, printPdf);
+
+        const emailPdf = await renderCertificatePdf(
+          browser,
+          sertifikat,
+          "email",
+        );
+        archive.file(`email/${fileName}`, emailPdf);
       }
 
       const zipBuffer = archive.generate({
