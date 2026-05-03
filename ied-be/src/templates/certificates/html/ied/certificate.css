@@ -41,9 +41,7 @@ body {
   padding: var(--page-padding);
   overflow: hidden;
   background:
-    radial-gradient(circle at 12% 18%, rgba(201, 163, 78, 0.18), transparent 28%),
-    radial-gradient(circle at 86% 82%, rgba(23, 60, 58, 0.12), transparent 30%),
-    linear-gradient(135deg, var(--paper), var(--paper-warm));
+    linear-gradient(135deg, var(--paper) 0%, var(--paper-warm) 55%, rgba(201, 163, 78, 0.14) 100%);
   page-break-after: always;
   break-after: page;
 }
