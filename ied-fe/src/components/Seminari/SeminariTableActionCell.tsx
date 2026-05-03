@@ -237,7 +237,7 @@ const SeminariTableActionCell = memo(
     ];
 
     return (
-      <Box sx={{ position: "relative", height: 40, width: 40 }}>
+      <Box sx={{ position: "relative", height: 50, width: 50 }}>
         <SpeedDial
           ariaLabel="Akcije za seminar"
           direction="right"
@@ -250,7 +250,14 @@ const SeminariTableActionCell = memo(
             position: "absolute",
             top: 0,
             left: 0,
-            "& .MuiSpeedDial-actions": { paddingLeft: 1 },
+            "& .MuiSpeedDial-actions": {
+              alignItems: "center",
+              backgroundColor: "rgba(33, 33, 33, 0.94)",
+              borderRadius: 999,
+            },
+            "& .MuiSpeedDial-actionsClosed": {
+              backgroundColor: "transparent",
+            },
           }}
         >
           {speedDialActions.map((action) => (
