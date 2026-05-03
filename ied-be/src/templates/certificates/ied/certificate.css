@@ -1,5 +1,5 @@
 @page {
-  size: A4 landscape;
+  size: a4 landscape;
   margin: 0;
 }
 
@@ -42,7 +42,6 @@ body {
   overflow: hidden;
   background:
     linear-gradient(135deg, var(--paper) 0%, var(--paper-warm) 55%, rgba(201, 163, 78, 0.14) 100%);
-  page-break-after: always;
   break-after: page;
 }
 
