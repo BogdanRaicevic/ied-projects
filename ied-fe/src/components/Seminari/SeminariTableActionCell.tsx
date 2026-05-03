@@ -232,7 +232,7 @@ const SeminariTableActionCell = memo(
       {
         icon: <DeleteIcon color="error" />,
         name: "Obriši",
-        onClick: () => handleDelete(seminar._id || ""),
+        onClick: () => seminar._id && handleDelete(seminar._id),
       },
     ];
 
