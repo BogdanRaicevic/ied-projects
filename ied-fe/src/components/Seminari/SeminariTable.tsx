@@ -64,7 +64,14 @@ export default function SeminariTable({
     {
       id: "actions",
       header: "Akcije",
-      size: 100,
+      size: 60,
+      muiTableBodyCellProps: {
+        sx: {
+          overflow: "visible",
+          position: "relative",
+          zIndex: 1,
+        },
+      },
       Cell: ({ row }) => (
         <SeminariTableActionCell
           seminar={row.original}
