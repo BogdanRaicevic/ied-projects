@@ -78,6 +78,11 @@ export default function SeminariTable({
           onEdit={handleEditSeminar}
         />
       ),
+      enableSorting: false,
+      enableColumnActions: false,
+      enableColumnFilter: false,
+      enableColumnOrdering: false,
+      enableHiding: false,
     },
     {
       header: "Naziv Seminara",
@@ -101,10 +106,7 @@ export default function SeminariTable({
       },
       sortingFn: "datetime",
     },
-    {
-      header: "Detalji",
-      accessorKey: "detalji",
-    },
+
     {
       header: "Broj Učesnika",
       accessorFn: (row) => row.prijave?.length || 0,
