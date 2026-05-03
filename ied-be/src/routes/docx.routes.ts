@@ -9,9 +9,7 @@ import {
   RacunZod,
   SertifikatBatchZod,
   type SertifikatTemplateKeyType,
-  SertifikatTemplateKeyValues,
   type SertifikatType,
-  SertifikatZod,
   TipRacuna,
 } from "ied-shared";
 import PizZip from "pizzip";
@@ -56,14 +54,6 @@ const formatToLocalDate = (date: Date): string =>
 
 const templatesDir = path.resolve(import.meta.dirname, "../../src/templates");
 
-const getTemplatePath = (templateName: string): string => {
-  const templatePath = path.resolve(templatesDir, templateName);
-  if (!templatePath.startsWith(templatesDir)) {
-    throw new Error("Invalid template path");
-  }
-  return templatePath;
-};
-
 const getTemplateErrorDetails = (error: unknown): string => {
   let errorDetails = error instanceof Error ? error.message : "Unknown error";
   if (error && typeof error === "object" && "properties" in error) {
@@ -88,60 +78,8 @@ const getTemplateErrorDetails = (error: unknown): string => {
   return errorDetails;
 };
 
-const renderDocxTemplate = (
-  templatePath: string,
-  templateData: Record<string, unknown>,
-): Buffer => {
-  const content = fs.readFileSync(templatePath, "binary");
-  const zip = new PizZip(content);
-  const doc = new Docxtemplater(zip, {
-    paragraphLoop: true,
-    linebreaks: true,
-    errorLogging: true,
-  });
-
-  doc.render(templateData);
-
-  return doc.getZip().generate({ type: "nodebuffer" });
-};
-
 const getCurrentYearLastTwoDigits = (): string =>
   String(new Date().getFullYear()).slice(-2);
-
-const getSertifikatDocxFileName = (sertifikat: SertifikatType): string => {
-  const currentYearLastTwoDigits = getCurrentYearLastTwoDigits();
-  return sanitizeFilename(
-    `${sertifikat.broj_sertifikata}${currentYearLastTwoDigits}_${sertifikat.ime_prezime}_${sertifikat.firma_naziv}.docx`,
-  );
-};
-
-const sertifikatTemplatePathMap: Record<SertifikatTemplateKeyType, string> = {
-  bs: "certificates/bs.docx",
-  ied: "certificates/ied.docx",
-  perm: "certificates/perm.docx",
-};
-
-const resolveSertifikatTemplatePath = (
-  templateKey: SertifikatTemplateKeyType,
-): string => {
-  const templateFileName = sertifikatTemplatePathMap[templateKey];
-
-  if (!templateFileName) {
-    throw new Error(
-      `Nepodržan šablon sertifikata. Dozvoljene vrednosti su: ${SertifikatTemplateKeyValues.join(", ")}`,
-    );
-  }
-
-  const templatePath = getTemplatePath(templateFileName);
-
-  if (!fs.existsSync(templatePath)) {
-    throw new Error(
-      `Template file not found for certificate template: ${templateKey}`,
-    );
-  }
-
-  return templatePath;
-};
 
 router.post(
   "/modify-template",
@@ -230,38 +168,6 @@ router.post(
       res.status(500).json({
         error: "Error processing template",
         details,
-      });
-    }
-  },
-);
-
-router.post(
-  "/generate-sertifikat-single",
-  validateRequestBody(SertifikatZod),
-  async (req: Request<{}, any, SertifikatType>, res) => {
-    try {
-      const sertifikatData = req.body;
-      const templatePath = resolveSertifikatTemplatePath(
-        sertifikatData.templateKey,
-      );
-
-      const docxBuffer = renderDocxTemplate(templatePath, sertifikatData);
-
-      res.setHeader(
-        "Content-Type",
-        "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-      );
-      res.setHeader(
-        "Content-Disposition",
-        `attachment; filename=${getSertifikatDocxFileName(sertifikatData)}`,
-      );
-
-      res.send(docxBuffer);
-    } catch (error) {
-      console.error("Template processing error:", error);
-      res.status(500).json({
-        error: "Error processing template",
-        details: getTemplateErrorDetails(error),
       });
     }
   },
@@ -488,55 +394,6 @@ router.post(
       console.error("PDF certificate generation error:", error);
       res.status(500).json({
         error: "Error generating PDF certificates",
-        details: getTemplateErrorDetails(error),
-      });
-    }
-  },
-);
-
-router.post(
-  "/generate-sertifikat",
-  validateRequestBody(SertifikatBatchZod),
-  async (req: Request<{}, any, SertifikatType[]>, res) => {
-    const sertifikatData = req.body;
-
-    const selectedTemplateKey = sertifikatData[0]?.templateKey;
-    if (!selectedTemplateKey) {
-      res.status(400).json({
-        error: "Template key is required for certificate generation",
-      });
-      return;
-    }
-
-    try {
-      const templatePath = resolveSertifikatTemplatePath(selectedTemplateKey);
-
-      const archive = new PizZip();
-      const currentYearLastTwoDigits = getCurrentYearLastTwoDigits();
-
-      for (const sertifikat of sertifikatData) {
-        const docxBuffer = renderDocxTemplate(templatePath, sertifikat);
-        const fileName = getSertifikatDocxFileName(sertifikat);
-
-        archive.file(fileName, docxBuffer);
-      }
-
-      const zipBuffer = archive.generate({
-        compression: "DEFLATE",
-        type: "nodebuffer",
-      });
-
-      res.setHeader("Content-Type", "application/zip");
-      const fileName = sanitizeFilename(
-        `Sertifikati_${currentYearLastTwoDigits}_${sertifikatData[0]?.seminar_naziv || "IED"}.zip`,
-      );
-      res.setHeader("Content-Disposition", `attachment; filename=${fileName}`);
-
-      res.send(zipBuffer);
-    } catch (error) {
-      console.error("Template processing error:", error);
-      res.status(500).json({
-        error: "Error processing template",
         details: getTemplateErrorDetails(error),
       });
     }

@@ -3,7 +3,6 @@ import EditIcon from "@mui/icons-material/Edit";
 import ForwardToInboxIcon from "@mui/icons-material/ForwardToInbox";
 import PictureAsPdfIcon from "@mui/icons-material/PictureAsPdf";
 import TableViewIcon from "@mui/icons-material/TableView";
-import WorkspacePremiumIcon from "@mui/icons-material/WorkspacePremium";
 import { IconButton, Tooltip } from "@mui/material";
 import { Box } from "@mui/system";
 import type { SeminarZodType } from "ied-shared";
@@ -55,9 +54,6 @@ const SeminariTableActionCell = memo(
     const deleteSeminarMutation = useDeleteSeminarMutation();
     const [isCertificateDialogOpen, setIsCertificateDialogOpen] =
       useState(false);
-    const [certificateExportFormat, setCertificateExportFormat] = useState<
-      "docx" | "pdf"
-    >("docx");
     const [submitError, setSubmitError] = useState<string | null>(null);
     const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -153,8 +149,7 @@ const SeminariTableActionCell = memo(
       return invalidCount === seminar.prijave.length;
     }, [seminar.datum, seminar.naziv, seminar.prijave]);
 
-    const handleOpenCertificateDialog = (format: "docx" | "pdf") => {
-      setCertificateExportFormat(format);
+    const handleOpenCertificateDialog = () => {
       setSubmitError(null);
       setIsCertificateDialogOpen(true);
     };
@@ -195,9 +190,7 @@ const SeminariTableActionCell = memo(
         setIsSubmitting(true);
         setSubmitError(null);
 
-        if (certificateExportFormat === "pdf") {
-          await generateSertifikatPdfBatch(sertifikati);
-        }
+        await generateSertifikatPdfBatch(sertifikati);
 
         setIsCertificateDialogOpen(false);
       } catch (error) {
@@ -219,19 +212,8 @@ const SeminariTableActionCell = memo(
             <EditIcon />
           </IconButton>
         </Tooltip>
-        <Tooltip title="Generiši DOCX sertifikate">
-          <IconButton
-            color="success"
-            onClick={() => handleOpenCertificateDialog("docx")}
-          >
-            <WorkspacePremiumIcon />
-          </IconButton>
-        </Tooltip>
         <Tooltip title="Generiši PDF sertifikate">
-          <IconButton
-            color="secondary"
-            onClick={() => handleOpenCertificateDialog("pdf")}
-          >
+          <IconButton color="secondary" onClick={handleOpenCertificateDialog}>
             <PictureAsPdfIcon />
           </IconButton>
         </Tooltip>
@@ -261,8 +243,8 @@ const SeminariTableActionCell = memo(
         </Tooltip>
         <CertificateNumberDialog
           open={isCertificateDialogOpen}
-          title={`Postavi početni broj za ${certificateExportFormat.toUpperCase()} sertifikate`}
-          description={`Unesite broj od kog kreće numeracija sertifikata za validne prijave. Izvoz će biti ZIP ${certificateExportFormat.toUpperCase()} fajlova.`}
+          title="Postavi početni broj za PDF sertifikate"
+          description="Unesite broj od kog kreće numeracija sertifikata za validne prijave. Izvoz će biti ZIP PDF fajlova."
           inputLabel="Početni broj sertifikata"
           alertMessages={dialogMessages}
           alertSeverity={
