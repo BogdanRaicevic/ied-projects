@@ -1,5 +1,5 @@
 @page {
-  size: A4 landscape;
+  size: a4 landscape;
   margin: 0;
 }
 
@@ -58,7 +58,6 @@ body {
     var(--paper-warm) 52%,
     var(--paper)
   );
-  page-break-after: always;
   break-after: page;
 }
 
