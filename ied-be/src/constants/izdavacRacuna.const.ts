@@ -1,6 +1,6 @@
 const ied = {
   id: "ied",
-  naziv: "Institut za ekonomsku diplomatiju d.o.o, 11080 Zemun, Bezanijska 30",
+  naziv: "Institut za Ekonomsku Diplomatiju d.o.o, 11080 Zemun, Bezanijska 30",
   kontaktTelefoni: ["011/307-76-12", "011/307-76-13"],
   pib: 103159254,
   maticniBroj: 17518313,
