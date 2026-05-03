@@ -7,7 +7,7 @@ Turborepo with four workspaces:
 - `ied-shared/` — Zod schemas + shared types
 - `mongo-migrator/` — Mongoose + mysql2 migration tool
 
-Package manager: `pnpm@10.33.0`. Linter/formatter: Biome. Test runner: Vitest (per workspace via `turbo test`).
+Package manager: `pnpm`. Linter/formatter: Biome. Test runner: Vitest (per workspace via `turbo test`).
 
 ## Skills
 
