@@ -173,7 +173,7 @@ router.post(
   },
 );
 
-const htmlTemplatesDir = path.resolve(templatesDir, "certificates/html");
+const htmlTemplatesDir = path.resolve(templatesDir, "certificates");
 
 const escapeHtml = (value: string): string =>
   value
@@ -277,9 +277,6 @@ const renderCertificateHtml = (
   const base = buildCertificateHtmlBase(sertifikat.templateKey, variant);
   const replacements: Record<string, string> = {
     __BROJ_SERTIFIKATA__: escapeHtml(String(sertifikat.broj_sertifikata)),
-    // IED template uses __GODINA_SERTIFIKATA__ (2-digit year, no separator)
-    __GODINA_SERTIFIKATA__: escapeHtml(sertifikat.godina_sertifikata),
-    // BS / PERM templates use __GODINA_SEMINARA__ (4-digit year, with "/" separator)
     __GODINA_SEMINARA__: escapeHtml(sertifikat.godina_seminara),
     __IME_PREZIME__: escapeHtml(sertifikat.ime_prezime),
     __SEMINAR_NAZIV__: escapeHtml(sertifikat.seminar_naziv),

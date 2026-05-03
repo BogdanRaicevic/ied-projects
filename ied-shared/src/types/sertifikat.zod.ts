@@ -17,9 +17,6 @@ export const SertifikatZod = z.object({
   ime_prezime: z.string().min(1, { message: "Ime i prezime je obavezno" }),
   seminar_naziv: z.string().min(1, { message: "Naziv seminara je obavezan" }),
   firma_naziv: z.string().min(1, { message: "Naziv firme je obavezan" }),
-  godina_sertifikata: z
-    .string()
-    .min(1, { message: "Godina sertifikata je obavezna" }),
   templateKey: SertifikatTemplateKeyZod,
 });
 
