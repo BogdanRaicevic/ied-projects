@@ -59,7 +59,6 @@ export const buildSingleSertifikat = (
       godina_seminara: formatDate(options.seminarDate, "yyyy", {
         locale: srLatn,
       }),
-      godina_sertifikata: getCurrentYearLastTwoDigits(),
       templateKey: options.templateKey,
     } satisfies SertifikatType,
   };
