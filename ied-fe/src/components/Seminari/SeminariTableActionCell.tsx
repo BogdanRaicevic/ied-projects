@@ -3,8 +3,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import ForwardToInboxIcon from "@mui/icons-material/ForwardToInbox";
 import PictureAsPdfIcon from "@mui/icons-material/PictureAsPdf";
 import TableViewIcon from "@mui/icons-material/TableView";
-import { IconButton, Tooltip } from "@mui/material";
-import { Box } from "@mui/system";
+import { Box, SpeedDial, SpeedDialAction, SpeedDialIcon } from "@mui/material";
 import type { SeminarZodType } from "ied-shared";
 import { memo, useMemo, useState } from "react";
 import { generateSertifikatPdfBatch } from "../../api/docx.api";
@@ -54,8 +53,12 @@ const SeminariTableActionCell = memo(
     const deleteSeminarMutation = useDeleteSeminarMutation();
     const [isCertificateDialogOpen, setIsCertificateDialogOpen] =
       useState(false);
+    const [isSpeedDialOpen, setIsSpeedDialOpen] = useState(false);
     const [submitError, setSubmitError] = useState<string | null>(null);
     const [isSubmitting, setIsSubmitting] = useState(false);
+
+    const closeSpeedDial = () => setIsSpeedDialOpen(false);
+    const openSpeedDial = () => setIsSpeedDialOpen(true);
 
     const handleDelete = async (id: string) => {
       if (window.confirm("Da li ste sigurni da želite da obrišete seminar?")) {
@@ -205,42 +208,67 @@ const SeminariTableActionCell = memo(
       }
     };
 
+    const speedDialActions = [
+      {
+        icon: <EditIcon color="info" />,
+        name: "Izmeni",
+        onClick: () => onEdit(seminar),
+      },
+      {
+        icon: <PictureAsPdfIcon color="secondary" />,
+        name: "Generiši PDF sertifikate",
+        onClick: handleOpenCertificateDialog,
+      },
+      {
+        icon: <ForwardToInboxIcon color="secondary" />,
+        name: "Export učesnika",
+        onClick: () => handleExportUcesnikaSeminara(seminar),
+      },
+      {
+        icon: <TableViewIcon color="secondary" />,
+        name: "Export tabele",
+        onClick: () => handleExportSeminarTable(seminar),
+      },
+      {
+        icon: <DeleteIcon color="error" />,
+        name: "Obriši",
+        onClick: () => handleDelete(seminar._id || ""),
+      },
+    ];
+
     return (
-      <Box sx={{ display: "flex", gap: "1rem" }}>
-        <Tooltip title="Edit">
-          <IconButton color="info" onClick={() => onEdit(seminar)}>
-            <EditIcon />
-          </IconButton>
-        </Tooltip>
-        <Tooltip title="Generiši PDF sertifikate">
-          <IconButton color="secondary" onClick={handleOpenCertificateDialog}>
-            <PictureAsPdfIcon />
-          </IconButton>
-        </Tooltip>
-        <Tooltip title="Export učesnika">
-          <IconButton
-            color="secondary"
-            onClick={() => handleExportUcesnikaSeminara(seminar)}
-          >
-            <ForwardToInboxIcon />
-          </IconButton>
-        </Tooltip>
-        <Tooltip title="Export tabele">
-          <IconButton
-            color="secondary"
-            onClick={() => handleExportSeminarTable(seminar)}
-          >
-            <TableViewIcon />
-          </IconButton>
-        </Tooltip>
-        <Tooltip title="Delete">
-          <IconButton
-            color="error"
-            onClick={() => handleDelete(seminar._id || "")}
-          >
-            <DeleteIcon />
-          </IconButton>
-        </Tooltip>
+      <Box sx={{ position: "relative", height: 40, width: 40 }}>
+        <SpeedDial
+          ariaLabel="Akcije za seminar"
+          direction="right"
+          icon={<SpeedDialIcon />}
+          open={isSpeedDialOpen}
+          onOpen={openSpeedDial}
+          onClose={closeSpeedDial}
+          FabProps={{ size: "small" }}
+          sx={{
+            position: "absolute",
+            top: 0,
+            left: 0,
+            "& .MuiSpeedDial-actions": { paddingLeft: 1 },
+          }}
+        >
+          {speedDialActions.map((action) => (
+            <SpeedDialAction
+              key={action.name}
+              icon={action.icon}
+              slotProps={{
+                tooltip: {
+                  title: action.name,
+                },
+              }}
+              onClick={() => {
+                closeSpeedDial();
+                action.onClick();
+              }}
+            />
+          ))}
+        </SpeedDial>
         <CertificateNumberDialog
           open={isCertificateDialogOpen}
           title="Postavi početni broj za PDF sertifikate"
