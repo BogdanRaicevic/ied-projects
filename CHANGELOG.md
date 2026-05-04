@@ -1,3 +1,22 @@
+## [1.21.0](https://github.com/BogdanRaicevic/ied-projects/compare/v1.20.0...v1.21.0) (2026-05-04)
+
+### Features
+
+* add certificate templates for PDF generation ([a59c443](https://github.com/BogdanRaicevic/ied-projects/commit/a59c4430fa236b3280bf2785dd85a690eda1be9a))
+* add PDF folders for print and email ([313a871](https://github.com/BogdanRaicevic/ied-projects/commit/313a8717806b7088c66faa2061ac7f0cd8f609e9))
+* add PDF generation for certificates using Puppeteer ([4d0d8c4](https://github.com/BogdanRaicevic/ied-projects/commit/4d0d8c4f90faff42ae93fbe60ec3f7787fbadc46))
+* add speed dial for seminar actions cell ([57d2462](https://github.com/BogdanRaicevic/ied-projects/commit/57d246245850774171c712c0f42b9f5709fc10e5))
+
+### Bug Fixes
+
+* add missing / ([d6f9da5](https://github.com/BogdanRaicevic/ied-projects/commit/d6f9da59d697c05f7b067b9fcff3368304334232))
+* cleanup the certificates templates ([c95c811](https://github.com/BogdanRaicevic/ied-projects/commit/c95c811d97da5b1cd95c0e9da889df7c01c5e85f))
+* hide unnecessary column ([2a96aff](https://github.com/BogdanRaicevic/ied-projects/commit/2a96affa74413b68058ddd8061669099bd34f1dd))
+* minor cleanup ([043cdae](https://github.com/BogdanRaicevic/ied-projects/commit/043cdaef8517a2514af67da1aa673fe8382f8d7b))
+* remove docx generation ([9e9b588](https://github.com/BogdanRaicevic/ied-projects/commit/9e9b588d5b516657a6572caf52820c91fdee9ad7))
+* typos ([5fa8f7a](https://github.com/BogdanRaicevic/ied-projects/commit/5fa8f7a01779b288cfce282fbbded01e5a590ab6))
+* typos ([9fe9fbc](https://github.com/BogdanRaicevic/ied-projects/commit/9fe9fbc8deb0158979d7a1bd5406770cb0425ae7))
+
 ## [1.20.0](https://github.com/BogdanRaicevic/ied-projects/compare/v1.19.2...v1.20.0) (2026-04-28)
 
 ### Features
