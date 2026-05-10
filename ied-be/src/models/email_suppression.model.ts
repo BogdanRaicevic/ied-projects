@@ -1,7 +1,8 @@
 import { SUPPRESSION_REASONS, type SuppressionReasons } from "ied-shared";
-import { model, Schema } from "mongoose";
+import { model, Schema, type Types } from "mongoose";
 
 export type EmailSuppression = {
+  _id: Types.ObjectId;
   email: string;
   reason: SuppressionReasons;
 };
