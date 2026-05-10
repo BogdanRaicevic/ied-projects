@@ -1,6 +1,7 @@
-import { type Document, model, Schema, Types } from "mongoose";
+import { model, Schema, Types } from "mongoose";
 
-export type SeminarType = Document & {
+export type SeminarType = {
+  _id: Types.ObjectId;
   naziv: string;
   predavac?: string;
   lokacija?: string;
