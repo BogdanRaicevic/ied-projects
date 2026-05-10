@@ -343,7 +343,7 @@ body {
 
 .certificate-footer {
   display: grid;
-  grid-template-columns: 1fr;
+  grid-template-columns: 1fr 1fr;
   align-items: end;
   min-height: 25mm;
   font-family: "Trebuchet MS", Verdana, sans-serif;
@@ -364,6 +364,22 @@ body {
 
 .certificate-place-date {
   justify-self: start;
+}
+
+.certificate-issuer {
+  justify-self: end;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-end;
+  text-align: right;
+  min-height: 10mm;
+}
+
+.certificate-issuer em {
+  font-style: italic;
+  color: var(--ink);
+  font-size: 4mm;
 }
 
 @media screen {
