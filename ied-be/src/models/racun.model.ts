@@ -1,4 +1,4 @@
-import { type Document, model, Schema, Types } from "mongoose";
+import { model, Schema, Types } from "mongoose";
 import { SequenceModel } from "./sequence.model";
 
 const racunBaseSchema = new Schema(
@@ -166,7 +166,8 @@ RacunBaseModel.discriminator(
   }),
 );
 
-export type RacunBaseType = Document & {
+export type RacunBaseType = {
+  _id: Types.ObjectId;
   izdavacRacuna: "ied" | "permanent" | "bs";
   tipRacuna: "predracun" | "racun" | "avansniRacun" | "konacniRacun";
   tekuciRacun: string;
