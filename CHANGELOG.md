@@ -1,3 +1,9 @@
+## [1.21.1](https://github.com/BogdanRaicevic/ied-projects/compare/v1.21.0...v1.21.1) (2026-05-10)
+
+### Bug Fixes
+
+* build ([5e38738](https://github.com/BogdanRaicevic/ied-projects/commit/5e38738c36fc21b594a936b4e58b621584aedf1a))
+
 ## [1.21.0](https://github.com/BogdanRaicevic/ied-projects/compare/v1.20.0...v1.21.0) (2026-05-04)
 
 ### Features
