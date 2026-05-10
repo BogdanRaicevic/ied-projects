@@ -1,11 +1,11 @@
-import { type Document, model, Schema } from "mongoose";
+import { model, Schema } from "mongoose";
 
-type SequenceModelType = Document & {
+type SequenceModelType = {
   _id: string;
   sequenceNumber: number;
 };
 
-const sequenceSchema = new Schema({
+const sequenceSchema = new Schema<SequenceModelType>({
   _id: { type: String, required: true },
   sequenceNumber: { type: Number, default: 0 },
 });
