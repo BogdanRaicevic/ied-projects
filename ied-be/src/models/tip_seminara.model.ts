@@ -1,6 +1,7 @@
-import { type Document, model, Schema } from "mongoose";
+import { model, Schema, type Types } from "mongoose";
 
-export type TipSeminaraType = Document & {
+export type TipSeminaraType = {
+  _id: Types.ObjectId;
   tipSeminara: string;
 };
 
