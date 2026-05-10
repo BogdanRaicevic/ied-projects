@@ -187,10 +187,10 @@ importers:
         specifier: ^3.2.1
         version: 3.2.1(00f784969fc143003d337c37caace70c)
       react:
-        specifier: ^19.2.5
+        specifier: ^19.2.6
         version: 19.2.6
       react-dom:
-        specifier: ^19.2.5
+        specifier: ^19.2.6
         version: 19.2.6(react@19.2.6)
       react-hook-form:
         specifier: ^7.75.0
