@@ -4,9 +4,10 @@ import {
   PRIJAVA_STATUS,
   type PrijavaStatusType,
 } from "ied-shared";
-import { type Document, model, Schema, type Types } from "mongoose";
+import { model, Schema, type Types } from "mongoose";
 
-export type PretrageType = Document & {
+export type PretrageType = {
+  _id: Types.ObjectId;
   nazivPretrage: string;
   mesta: Types.ObjectId[];
   delatnosti: string[];
