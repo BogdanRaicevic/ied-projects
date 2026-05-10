@@ -1,6 +1,7 @@
-import { type Document, model, Schema } from "mongoose";
+import { model, Schema, type Types } from "mongoose";
 
-export type VelicineFirmiType = Document & {
+export type VelicineFirmiType = {
+  _id: Types.ObjectId;
   ID_velicina_firme: number;
   velicina_firme: string;
 };
