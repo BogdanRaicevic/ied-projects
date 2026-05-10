@@ -1,11 +1,12 @@
-import { type Document, model, Schema, type Types } from "mongoose";
+import { model, Schema, type Types } from "mongoose";
 import {
   type LastContactedType,
   lastContactedSchema,
 } from "./last_contacted.model";
 import { type Zaposleni, zaposleniSchema } from "./zaposleni.model";
 
-type FirmaType = Document & {
+type FirmaType = {
+  _id: Types.ObjectId;
   ID_firma: number;
   naziv_firme: string;
   adresa: string;
