@@ -9,7 +9,7 @@ importers:
   .:
     devDependencies:
       '@biomejs/biome':
-        specifier: ^2.4.14
+        specifier: ^2.4.15
         version: 2.4.15
       '@semantic-release/changelog':
         specifier: ^6.0.3
@@ -94,7 +94,7 @@ importers:
         version: 4.4.3
     devDependencies:
       '@biomejs/biome':
-        specifier: ^2.4.14
+        specifier: ^2.4.15
         version: 2.4.15
       '@faker-js/faker':
         specifier: ^10.4.0
@@ -209,7 +209,7 @@ importers:
         version: 5.0.13(@types/react@19.2.14)(react@19.2.6)(use-sync-external-store@1.6.0(react@19.2.6))
     devDependencies:
       '@biomejs/biome':
-        specifier: ^2.4.14
+        specifier: ^2.4.15
         version: 2.4.15
       '@types/node':
         specifier: ^24.12.3
@@ -246,7 +246,7 @@ importers:
         version: 4.4.3
     devDependencies:
       '@biomejs/biome':
-        specifier: ^2.4.14
+        specifier: ^2.4.15
         version: 2.4.15
       '@types/node':
         specifier: ^24.12.3
@@ -274,7 +274,7 @@ importers:
         version: 3.22.3(@types/node@24.12.3)
     devDependencies:
       '@biomejs/biome':
-        specifier: ^2.4.14
+        specifier: ^2.4.15
         version: 2.4.15
       '@types/node':
         specifier: ^24.12.3
