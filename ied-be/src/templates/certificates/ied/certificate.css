@@ -219,6 +219,11 @@ body {
 
 .institute-footer {
   justify-self: end;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-end;
+  min-height: 10mm;
   color: var(--ink);
   font-family: Georgia, "Times New Roman", serif;
   font-style: italic;

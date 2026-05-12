@@ -1,3 +1,26 @@
+## [1.21.3](https://github.com/BogdanRaicevic/ied-projects/compare/v1.21.2...v1.21.3) (2026-05-10)
+
+### Bug Fixes
+
+* add _id field to EmailSuppression model ([da1d086](https://github.com/BogdanRaicevic/ied-projects/commit/da1d086ac6b716ef5f90958ec425900dd7fd9a6f))
+* drop Document & from audit_log and pretrage model types ([ad39703](https://github.com/BogdanRaicevic/ied-projects/commit/ad3970330399fc74c32f7f896dc5b5f31b4017db))
+* drop Document & from FirmaType ([1f9b6ad](https://github.com/BogdanRaicevic/ied-projects/commit/1f9b6ad292e349551548bfcdceceadd4a4cff6a5))
+* drop Document & from lookup-table model types ([59f5da3](https://github.com/BogdanRaicevic/ied-projects/commit/59f5da376ff10ac11abd6569c688082f532576d7))
+* drop Document & from racun model types ([efab94c](https://github.com/BogdanRaicevic/ied-projects/commit/efab94c17dc1b3ad1c5d29f12b27930ba7249fe7))
+* drop Document & from SeminarType ([7950c96](https://github.com/BogdanRaicevic/ied-projects/commit/7950c963f4d8ee9e114f17f729406c28709d14b1))
+
+## [1.21.2](https://github.com/BogdanRaicevic/ied-projects/compare/v1.21.1...v1.21.2) (2026-05-10)
+
+### Bug Fixes
+
+* build ([4f08ddd](https://github.com/BogdanRaicevic/ied-projects/commit/4f08dddbd5d69f27314ffe423b0d13c17ea94837))
+
+## [1.21.1](https://github.com/BogdanRaicevic/ied-projects/compare/v1.21.0...v1.21.1) (2026-05-10)
+
+### Bug Fixes
+
+* build ([5e38738](https://github.com/BogdanRaicevic/ied-projects/commit/5e38738c36fc21b594a936b4e58b621584aedf1a))
+
 ## [1.21.0](https://github.com/BogdanRaicevic/ied-projects/compare/v1.20.0...v1.21.0) (2026-05-04)
 
 ### Features

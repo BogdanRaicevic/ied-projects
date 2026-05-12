@@ -1,4 +1,4 @@
-import { type Document, model, Schema, Types } from "mongoose";
+import { model, Schema, Types } from "mongoose";
 import { SequenceModel } from "./sequence.model";
 
 const racunBaseSchema = new Schema(
@@ -70,11 +70,11 @@ racunBaseSchema.pre("save", async function () {
     const month = (today.getMonth() + 1).toString().padStart(2, "0"); // Month (01-12)
     const datePrefix = `${year}${month}`; // e.g., "2504"
 
-    const sequenceDoc = await SequenceModel.findOneAndUpdate(
-      { _id: `${this.izdavacRacuna}_${this.tipRacuna}_${datePrefix}` },
+    const sequenceDoc = await SequenceModel.findByIdAndUpdate(
+      `${this.izdavacRacuna}_${this.tipRacuna}_${datePrefix}`,
       { $inc: { sequenceNumber: 1 } },
       {
-        returnDocument: "after",
+        new: true,
         upsert: true,
         setDefaultsOnInsert: true,
       },
@@ -166,7 +166,8 @@ RacunBaseModel.discriminator(
   }),
 );
 
-export type RacunBaseType = Document & {
+export type RacunBaseType = {
+  _id: Types.ObjectId;
   izdavacRacuna: "ied" | "permanent" | "bs";
   tipRacuna: "predracun" | "racun" | "avansniRacun" | "konacniRacun";
   tekuciRacun: string;

@@ -1,6 +1,7 @@
-import { type Document, model, Schema } from "mongoose";
+import { model, Schema, type Types } from "mongoose";
 
-export type RadnoMestoType = Document & {
+export type RadnoMestoType = {
+  _id: Types.ObjectId;
   radno_mesto: string;
 };
 

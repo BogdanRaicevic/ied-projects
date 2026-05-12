@@ -53,7 +53,7 @@ body {
   grid-template-rows: auto 1fr auto;
   width: 100%;
   height: 100%;
-  padding: 14mm 22mm 26mm;
+  padding: 14mm 22mm 20mm;
   overflow: hidden;
 }
 
@@ -170,10 +170,12 @@ body {
 }
 
 .certificate-footer {
-  display: flex;
-  justify-content: center;
+  display: grid;
+  width: min(160mm, 100%);
+  margin: 0 auto;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
   align-items: end;
-  gap: 18mm;
+  gap: 6mm;
   min-height: 18mm;
   padding-top: 4mm;
   font-family: "Trebuchet MS", Verdana, sans-serif;
@@ -195,6 +197,30 @@ body {
 .certificate-number,
 .certificate-date {
   min-width: 52mm;
+}
+
+.certificate-number {
+  justify-self: start;
+  text-align: left;
+}
+
+.certificate-date {
+  justify-self: center;
+  text-align: center;
+}
+
+.certificate-issuer {
+  justify-self: end;
+  text-align: right;
+  min-height: 10mm;
+  display: flex;
+  align-items: flex-start;
+}
+
+.certificate-issuer em {
+  color: var(--ink);
+  font-style: italic;
+  font-size: 4.2mm;
 }
 
 @media screen {
