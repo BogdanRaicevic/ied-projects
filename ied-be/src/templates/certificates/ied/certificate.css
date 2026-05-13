@@ -158,7 +158,7 @@ body {
 
 .recipient-name {
   width: min(182mm, 100%);
-  margin: 0 0 8mm;
+  margin: 0;
   padding-bottom: 2mm;
   overflow-wrap: anywhere;
   border-bottom: 0.45mm solid rgba(23, 60, 58, 0.38);
@@ -169,13 +169,13 @@ body {
 }
 
 .seminar-name {
-  max-width: 188mm;
-  margin: 0;
+  max-width: 198mm;
+  margin: 0 0 7mm;
   overflow-wrap: anywhere;
   color: var(--ink);
-  font-size: clamp(7mm, 3vw, 10.5mm);
+  font-size: clamp(6.3mm, 2.45vw, 8.8mm);
   font-weight: 700;
-  line-height: 1.18;
+  line-height: 1.2;
 }
 
 .seminar-date {

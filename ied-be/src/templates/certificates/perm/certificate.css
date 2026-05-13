@@ -312,7 +312,7 @@ body {
 
 .recipient-name {
   width: min(178mm, 100%);
-  margin: 0 0 6mm;
+  margin: 0;
   padding-bottom: 2mm;
   overflow-wrap: anywhere;
   border-bottom: 0.4mm solid rgba(45, 48, 55, 0.62);
@@ -332,13 +332,13 @@ body {
 }
 
 .seminar-name {
-  max-width: 188mm;
-  margin: 0;
+  max-width: 198mm;
+  margin: 0 0 6mm;
   overflow-wrap: anywhere;
   color: var(--ink);
-  font-size: clamp(7mm, 3vw, 10.4mm);
+  font-size: clamp(6.2mm, 2.45vw, 8.8mm);
   font-weight: 700;
-  line-height: 1.18;
+  line-height: 1.2;
 }
 
 .certificate-footer {
