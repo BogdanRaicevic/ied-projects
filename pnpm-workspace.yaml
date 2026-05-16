@@ -4,10 +4,8 @@ packages:
   - ied-shared
   - mongo-migrator
 
-ignoredBuiltDependencies:
-  - esbuild
-
-onlyBuiltDependencies:
-  - '@clerk/shared'
-  - mongodb-memory-server
-  - puppeteer
+allowBuilds:
+  '@clerk/shared': true
+  mongodb-memory-server: true
+  puppeteer: true
+  esbuild: false
