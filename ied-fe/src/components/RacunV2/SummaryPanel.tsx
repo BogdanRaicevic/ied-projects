@@ -133,13 +133,7 @@ export function SummaryPanel() {
             <Stack direction="row" spacing={1} alignItems="center">
               {!isAvansniRacun ? (
                 <Chip
-                  label={
-                    stavkaSubtotali.length === 1
-                      ? "1 stavka"
-                      : stavkaSubtotali.length <= 4
-                        ? `${stavkaSubtotali.length} stavke`
-                        : `${stavkaSubtotali.length} stavki`
-                  }
+                  label={formatStavkeCount(stavkaSubtotali.length)}
                   variant="outlined"
                 />
               ) : null}
@@ -252,11 +246,7 @@ export function SummaryPanel() {
                 title="Stavke"
                 action={
                   <Chip
-                    label={
-                      stavkaSubtotali.length === 1
-                        ? "1 stavka"
-                        : `${stavkaSubtotali.length} stavki`
-                    }
+                    label={formatStavkeCount(stavkaSubtotali.length)}
                     variant="outlined"
                   />
                 }
@@ -526,6 +516,31 @@ const formatDays = (n: number): string => {
   const safe = Number.isFinite(n) ? Math.max(0, Math.trunc(n)) : 0;
   const useDan = safe === 1;
   return `${safe} ${useDan ? "dan" : "dana"}`;
+};
+
+/**
+ * Serbian plural for "stavka" (three forms unlike "dan/dana"):
+ *   - last digit 1 (not 11)        → "stavka"  (1, 21, 31, ...)
+ *   - last digit 2-4 (not 12-14)   → "stavke"  (2, 3, 4, 22-24, ...)
+ *   - everything else (incl. teens) → "stavki" (0, 5-20, 25-30, ...)
+ *
+ * Chip-label use only — keep this co-located with `formatDays` so all
+ * Pregled-side inflection helpers live together.
+ */
+const formatStavkeCount = (count: number): string => {
+  const safe = Number.isFinite(count) ? Math.max(0, Math.trunc(count)) : 0;
+  const lastTwo = safe % 100;
+  const lastOne = safe % 10;
+  const isTeen = lastTwo >= 11 && lastTwo <= 14;
+  let suffix: "stavka" | "stavke" | "stavki";
+  if (!isTeen && lastOne === 1) {
+    suffix = "stavka";
+  } else if (!isTeen && lastOne >= 2 && lastOne <= 4) {
+    suffix = "stavke";
+  } else {
+    suffix = "stavki";
+  }
+  return `${safe} ${suffix}`;
 };
 
 /**
