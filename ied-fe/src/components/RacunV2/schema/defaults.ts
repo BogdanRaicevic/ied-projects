@@ -1,12 +1,14 @@
 import { IzdavacRacuna, type RacunV2Form, TipRacuna } from "ied-shared";
 import type { RacunV2SeminariPrefill } from "./buildPrefillFromSeminari";
 
+const DEFAULT_STOPA_PDV = 20;
+
 const getCommonDefaults = () => ({
   izdavacRacuna: IzdavacRacuna.IED,
   tekuciRacun: "",
   pozivNaBroj: "",
   valuta: "RSD" as const,
-  defaultStopaPdv: 20,
+  defaultStopaPdv: DEFAULT_STOPA_PDV,
   primalacRacuna: {
     tipPrimaoca: "firma" as const,
     firma_id: "",
@@ -60,7 +62,7 @@ export const getDefaultValues = (
         ...commonDefaults,
         tipRacuna: TipRacuna.AVANSNI_RACUN,
         avansBezPdv: 0,
-        stopaPdvAvansni: 20,
+        stopaPdvAvansni: DEFAULT_STOPA_PDV,
         datumUplateAvansa: null,
       };
     case TipRacuna.KONACNI_RACUN:

@@ -20,7 +20,7 @@ export default function ApplicationNavBar() {
     {
       text: "Računi V2",
       linkPath: "/racuni-v2",
-      condition: env.ffRacuniV2 ? true : false,
+      condition: env.ffRacuniV2,
     },
     { text: "Evidencija Promena", linkPath: "/audit-log", condition: true },
   ];
