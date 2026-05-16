@@ -38,7 +38,7 @@ export function UsloviPlacanjaSection() {
               control={control}
               render={({ field, fieldState }) => (
                 <TextField
-                  value={field.value === null ? "" : field.value}
+                  value={field.value ?? ""}
                   onChange={(event) => {
                     const raw = event.target.value;
                     if (raw === "") {

@@ -6,6 +6,7 @@ const nonNegativeNumber = z.coerce.number().min(0, "Vrednost mora biti >= 0");
 const requiredNullableNonNegativeNumber = (requiredMessage: string) =>
   z
     .number()
+    .int("Rok za uplatu mora biti ceo broj")
     .min(0, "Vrednost mora biti >= 0")
     .nullable()
     .refine((value): value is number => value !== null, {
