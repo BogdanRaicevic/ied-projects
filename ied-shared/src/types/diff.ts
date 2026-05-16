@@ -38,4 +38,9 @@ type ArrayChange = {
   arrayChanges: IArrayChange[];
 };
 
-export type IChange = NewChange | DeletedChange | EditedChange | TextChange | ArrayChange;
+export type IChange =
+  | NewChange
+  | DeletedChange
+  | EditedChange
+  | TextChange
+  | ArrayChange;
