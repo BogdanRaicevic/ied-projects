@@ -1,4 +1,4 @@
-import { RedirectToSignIn, SignedIn, SignedOut } from "@clerk/clerk-react";
+import { RedirectToSignIn, Show } from "@clerk/react";
 import Container from "@mui/material/Container";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Navigate, Route, Routes } from "react-router-dom";
@@ -22,10 +22,10 @@ function App() {
     <QueryClientProvider client={queryClient}>
       <Container component="main" maxWidth="lg">
         <Navigation />
-        <SignedOut>
+        <Show when="signed-out">
           <RedirectToSignIn />
-        </SignedOut>
-        <SignedIn>
+        </Show>
+        <Show when="signed-in">
           <Routes>
             <Route path="/" element={<Navigate to="/pretrage" />} />
             <Route path="/pretrage" element={<Pretrage />} />
@@ -38,7 +38,7 @@ function App() {
             <Route path="/seminari" element={<Seminari />} />
             <Route path="/audit-log" element={<AuditLog />} />
           </Routes>
-        </SignedIn>
+        </Show>
       </Container>
     </QueryClientProvider>
   );
