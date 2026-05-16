@@ -1,9 +1,4 @@
-import {
-  SignedIn,
-  SignedOut,
-  SignInButton,
-  UserButton,
-} from "@clerk/clerk-react";
+import { Show, SignInButton, UserButton } from "@clerk/react";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
@@ -44,12 +39,12 @@ export default function ApplicationNavBar() {
               ))}
           </Box>
           <Link component={RouteLink} to={"/pretrage"} sx={{ color: "white" }}>
-            <SignedOut>
+            <Show when="signed-out">
               <SignInButton />
-            </SignedOut>
-            <SignedIn>
+            </Show>
+            <Show when="signed-in">
               <UserButton />
-            </SignedIn>
+            </Show>
           </Link>
         </Toolbar>
       </AppBar>
