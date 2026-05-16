@@ -10,14 +10,19 @@ import Button from "@mui/material/Button";
 import Link from "@mui/material/Link";
 import Toolbar from "@mui/material/Toolbar";
 import { Link as RouteLink } from "react-router-dom";
+import { env } from "../../utils/envVariables";
 
 export default function ApplicationNavBar() {
   const navItems = [
-    { text: "Pretrage", linkPath: "/pretrage" },
-    { text: "Seminari", linkPath: "/seminari" },
-    { text: "Računi", linkPath: "/racuni" },
-    { text: "Računi V2", linkPath: "/racuni-v2" },
-    { text: "Evidencija Promena", linkPath: "/audit-log" },
+    { text: "Pretrage", linkPath: "/pretrage", condition: true },
+    { text: "Seminari", linkPath: "/seminari", condition: true },
+    { text: "Računi", linkPath: "/racuni", condition: true },
+    {
+      text: "Računi V2",
+      linkPath: "/racuni-v2",
+      condition: env.ffRacuniV2 ? true : false,
+    },
+    { text: "Evidencija Promena", linkPath: "/audit-log", condition: true },
   ];
 
   return (
@@ -25,16 +30,18 @@ export default function ApplicationNavBar() {
       <AppBar position="static">
         <Toolbar>
           <Box sx={{ flexGrow: 1, display: { xs: "none", sm: "block" } }}>
-            {navItems.map((item) => (
-              <Link
-                key={item.text}
-                component={RouteLink}
-                to={item.linkPath}
-                sx={{ color: "white" }}
-              >
-                <Button sx={{ color: "#fff" }}>{item.text}</Button>
-              </Link>
-            ))}
+            {navItems
+              .filter((item) => item.condition)
+              .map((item) => (
+                <Link
+                  key={item.text}
+                  component={RouteLink}
+                  to={item.linkPath}
+                  sx={{ color: "white" }}
+                >
+                  <Button sx={{ color: "#fff" }}>{item.text}</Button>
+                </Link>
+              ))}
           </Box>
           <Link component={RouteLink} to={"/pretrage"} sx={{ color: "white" }}>
             <SignedOut>

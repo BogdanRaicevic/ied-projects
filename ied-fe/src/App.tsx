@@ -5,6 +5,7 @@ import { Navigate, Route, Routes } from "react-router-dom";
 import Navigation from "./components/Navigation";
 import { AuditLog, Pretrage, Racuni, RacuniV2, Seminari } from "./pages";
 import Firma from "./pages/Firma";
+import { env } from "./utils/envVariables";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -29,7 +30,9 @@ function App() {
             <Route path="/" element={<Navigate to="/pretrage" />} />
             <Route path="/pretrage" element={<Pretrage />} />
             <Route path="/racuni" element={<Racuni />} />
-            <Route path="/racuni-v2" element={<RacuniV2 />} />
+            {env.ffRacuniV2 && (
+              <Route path="/racuni-v2" element={<RacuniV2 />} />
+            )}
             <Route path="/firma" element={<Firma />} />
             <Route path="/firma/:id" element={<Firma />} />
             <Route path="/seminari" element={<Seminari />} />
