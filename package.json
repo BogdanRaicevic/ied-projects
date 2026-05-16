@@ -32,10 +32,5 @@
   "engines": {
     "node": ">=24.15.0"
   },
-  "packageManager": "pnpm@10.33.4",
-  "pnpm": {
-    "onlyBuiltDependencies": [
-      "puppeteer"
-    ]
-  }
+  "packageManager": "pnpm@10.33.4"
 }
