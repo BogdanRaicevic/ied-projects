@@ -42,7 +42,7 @@ describe("racuniV2 formatMoney — non-finite defensive fallback", () => {
   );
 });
 
-describe("racuniV2 formatMoney — fractional rounding (Intl banker's rounding)", () => {
+describe("racuniV2 formatMoney — fractional rounding (Intl's default rounding, halfExpand)", () => {
   // formatMoney does not pre-round — the calculators feed it
   // already-rounded values. These tests document Intl's display rounding so
   // future-us can spot drift if the locale changes.

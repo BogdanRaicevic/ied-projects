@@ -508,38 +508,56 @@ function RokZaUplatuRow({ days }: { days: number | null }) {
 }
 
 /**
- * Serbian plural rules (cardinal): 1 → "dan", 2-4 → "dana", everything else
- * → "dana". (5+, 0, and the teens 11-14 also take "dana".) Implementation
- * checks the last two digits to handle teens correctly.
+ * Serbian cardinal-plural classifier based on the last two digits:
+ *   - "one"  → last digit 1, except the teens (1, 21, 31, ... but NOT 11)
+ *   - "few"  → last digit 2-4, except the teens (2-4, 22-24, ... but NOT 12-14)
+ *   - "many" → everything else (0, 5-20, 25-30, 11-14, ...)
+ *
+ * The teen check (lastTwo 11-14) overrides the last-digit check; this is
+ * what catches "11 dana" / "13 stavki" instead of the wrong "11 dan" /
+ * "13 stavke". Input is expected to be a non-negative integer; both callers
+ * already truncate before invoking.
+ */
+const serbianCountCategory = (n: number): "one" | "few" | "many" => {
+  const lastTwo = n % 100;
+  const lastOne = n % 10;
+  const isTeen = lastTwo >= 11 && lastTwo <= 14;
+  if (isTeen) return "many";
+  if (lastOne === 1) return "one";
+  if (lastOne >= 2 && lastOne <= 4) return "few";
+  return "many";
+};
+
+/**
+ * Serbian plural for "dan/dana" based on the last two digits:
+ *   - 1, 21, 31, 101, ... (last digit 1, except teens) → "dan"
+ *   - everything else (incl. 11-14, 2-4, 5+)           → "dana"
+ *
+ * Note that "dana" doubles as both paucal (2-4) and plural (5+) — they
+ * happen to share the same spelling for "dan", which is why this only
+ * needs two output forms while `formatStavkeCount` needs three.
  */
 const formatDays = (n: number): string => {
   const safe = Number.isFinite(n) ? Math.max(0, Math.trunc(n)) : 0;
-  const useDan = safe === 1;
+  const useDan = serbianCountCategory(safe) === "one";
   return `${safe} ${useDan ? "dan" : "dana"}`;
 };
 
 /**
  * Serbian plural for "stavka" (three forms unlike "dan/dana"):
- *   - last digit 1 (not 11)        → "stavka"  (1, 21, 31, ...)
- *   - last digit 2-4 (not 12-14)   → "stavke"  (2, 3, 4, 22-24, ...)
- *   - everything else (incl. teens) → "stavki" (0, 5-20, 25-30, ...)
+ *   - last digit 1, except teens   → "stavka"  (1, 21, 31, ...)
+ *   - last digit 2-4, except teens → "stavke"  (2, 3, 4, 22-24, ...)
+ *   - everything else (incl. teens) → "stavki" (0, 5-20, 11-14, 25-30, ...)
  *
- * Chip-label use only — keep this co-located with `formatDays` so all
- * Pregled-side inflection helpers live together.
+ * Chip-label use only — co-located with `formatDays` so all Pregled-side
+ * inflection helpers live together and share the `serbianCountCategory`
+ * classifier.
  */
 const formatStavkeCount = (count: number): string => {
   const safe = Number.isFinite(count) ? Math.max(0, Math.trunc(count)) : 0;
-  const lastTwo = safe % 100;
-  const lastOne = safe % 10;
-  const isTeen = lastTwo >= 11 && lastTwo <= 14;
-  let suffix: "stavka" | "stavke" | "stavki";
-  if (!isTeen && lastOne === 1) {
-    suffix = "stavka";
-  } else if (!isTeen && lastOne >= 2 && lastOne <= 4) {
-    suffix = "stavke";
-  } else {
-    suffix = "stavki";
-  }
+  const category = serbianCountCategory(safe);
+  const suffix =
+    category === "one" ? "stavka" : category === "few" ? "stavke" : "stavki";
   return `${safe} ${suffix}`;
 };
 
