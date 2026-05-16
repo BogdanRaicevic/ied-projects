@@ -1,15 +1,18 @@
 import { Box, Tab, Tabs, Tooltip } from "@mui/material";
 import { TipRacuna } from "ied-shared";
 
-export type RacunV2Tab = TipRacuna | "pretrage";
+type RacunV2TabsValue = TipRacuna | "pretrage";
 
 type Props = {
-  currentTab: RacunV2Tab;
+  currentTab: TipRacuna;
   onTabChange: (tab: TipRacuna) => void;
 };
 
 export function RacunV2TabsShell({ currentTab, onTabChange }: Props) {
-  const handleChange = (_event: React.SyntheticEvent, newValue: RacunV2Tab) => {
+  const handleChange = (
+    _event: React.SyntheticEvent,
+    newValue: RacunV2TabsValue,
+  ) => {
     if (newValue === "pretrage") {
       return;
     }
