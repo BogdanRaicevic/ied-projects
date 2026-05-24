@@ -1,3 +1,4 @@
+import axios from "axios";
 import type { RacunV2Form } from "ied-shared";
 import axiosInstanceWithAuth from "./interceptors/auth";
 
@@ -26,6 +27,13 @@ export const generateAndDownloadRacunV2Pdf = async (
     );
   } catch (error) {
     console.error("Racun V2 PDF generation request error:", error);
+    if (axios.isAxiosError(error) && error.response?.data instanceof Blob) {
+      await throwBlobResponseError(
+        error.response.data,
+        error.response.headers?.["content-type"],
+        "Failed to generate Racun V2 PDF",
+      );
+    }
     throw error;
   }
 };
@@ -39,7 +47,9 @@ const triggerBlobDownload = (
   fallbackFileName: string,
 ) => {
   const contentType = headerToString(data.type) ?? "application/pdf";
-  const url = window.URL.createObjectURL(new Blob([data], { type: contentType }));
+  const url = window.URL.createObjectURL(
+    new Blob([data], { type: contentType }),
+  );
   const link = document.createElement("a");
   link.href = url;
   link.setAttribute(

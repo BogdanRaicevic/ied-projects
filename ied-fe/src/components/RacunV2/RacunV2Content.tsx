@@ -12,14 +12,14 @@ import { RacunLayout } from "./layouts/RacunLayout";
 import { RacunV2TabsShell } from "./RacunV2TabsShell";
 import { SummaryPanel } from "./SummaryPanel";
 
-const submitForGeneration = async (data: RacunV2Form): Promise<void> => {
-  await generateAndDownloadRacunV2Pdf(data);
-};
+const DEFAULT_SUBMIT_ERROR =
+  "Generisanje PDF-a nije uspelo. Pokušajte ponovo.";
 
 export function RacunV2Content() {
   const { control, handleSubmit, setValue } = useRacunV2Form();
   const [currencyWarningDismissed, setCurrencyWarningDismissed] =
     useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
   const tipRacuna = useWatch({
     control,
     name: "tipRacuna",
@@ -29,6 +29,22 @@ export function RacunV2Content() {
 
   const handleTabChange = (nextTab: TipRacuna) => {
     setValue("tipRacuna", nextTab, { shouldDirty: true, shouldTouch: true });
+  };
+
+  // Defined inside the component so we can surface failures via local state.
+  // RHF's `handleSubmit` already toggles `formState.isSubmitting` around this
+  // await, so no manual loading flag is needed.
+  const submitForGeneration = async (data: RacunV2Form): Promise<void> => {
+    setSubmitError(null);
+    try {
+      await generateAndDownloadRacunV2Pdf(data);
+    } catch (error) {
+      setSubmitError(
+        error instanceof Error && error.message
+          ? error.message
+          : DEFAULT_SUBMIT_ERROR,
+      );
+    }
   };
 
   return (
@@ -59,6 +75,15 @@ export function RacunV2Content() {
                 >
                   Prikaz valute je samo vizuelni. NBS kurs, PDV režim izvoza i
                   dvojezičan DOCX dolaze u Phase 6.
+                </Alert>
+              ) : null}
+
+              {submitError ? (
+                <Alert
+                  severity="error"
+                  onClose={() => setSubmitError(null)}
+                >
+                  {submitError}
                 </Alert>
               ) : null}
 
