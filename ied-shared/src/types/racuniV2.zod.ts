@@ -95,8 +95,20 @@ const PredracunRacunV2Zod = BaseRacunV2Zod.extend({
 const AvansniRacunV2Zod = BaseRacunV2Zod.extend({
   tipRacuna: z.literal(TipRacuna.AVANSNI_RACUN),
   stavke: z.array(StavkaV2Zod).min(1, "Dodajte bar jednu stavku"),
-  datumUplateAvansa: z.coerce
-    .date()
+  // Plain `z.date()` (no `z.coerce`) because the input always comes from the
+  // MUI DatePicker as a real `Date | null`. `z.coerce.date()` is actively
+  // harmful here: it does `new Date(input)` first, so any Invalid Date (which
+  // MUI fires on every partial keystroke) survives as another Invalid Date
+  // and trips Zod v4's `invalid_type` path with the cryptic
+  // "expected date, received Date" message. The picker's `onChange` already
+  // normalizes Invalid Date → null upstream, so this schema only ever sees
+  // a valid Date or null.
+  //
+  // The custom `error` message replaces Zod's default for *both* the missing
+  // value (`null`) and any Invalid Date that slips through (e.g. via a tab
+  // switch from a non-avansni branch that left the field `undefined`).
+  datumUplateAvansa: z
+    .date({ error: "Datum uplate avansa je obavezan" })
     .nullable()
     .refine((value): value is Date => value !== null, {
       message: "Datum uplate avansa je obavezan",

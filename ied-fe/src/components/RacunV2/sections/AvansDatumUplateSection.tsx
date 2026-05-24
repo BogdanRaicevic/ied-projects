@@ -33,7 +33,7 @@ export function AvansDatumUplateSection() {
                   label="Datum uplate avansa"
                   format="yyyy.MM.dd"
                   value={toDateOrNull(field.value)}
-                  onChange={(next) => field.onChange(next)}
+                  onChange={(next) => field.onChange(toDateOrNull(next))}
                   slotProps={{
                     textField: {
                       fullWidth: true,
