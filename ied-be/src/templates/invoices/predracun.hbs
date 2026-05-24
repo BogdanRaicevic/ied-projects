@@ -3,12 +3,11 @@
 <head>
   <meta charset="utf-8" />
   <title>Predračun {{pozivNaBroj}}</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link
-    rel="stylesheet"
-    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
-  />
+  {{! Inter is no longer fetched from fonts.googleapis.com — Puppeteer must
+      render deterministically without network access. The body falls back
+      to system-ui / -apple-system / Roboto from the CSS font stack.
+      To restore Inter, commit woff2 files (e.g. public/fonts/Inter-*.woff2)
+      and add @font-face blocks to invoice.css that point at them. }}
   {{{cssTag}}}
 </head>
 <body>
