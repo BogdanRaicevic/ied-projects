@@ -1,5 +1,5 @@
 import { Stack } from "@mui/material";
-import { AvansAmountsSection } from "../sections/AvansAmountsSection";
+import { AvansDatumUplateSection } from "../sections/AvansDatumUplateSection";
 import { IzdavacRacunaSection } from "../sections/IzdavacRacunaSection";
 import { PrimalacRacunaSection } from "../sections/PrimalacRacunaSection";
 import { StavkeSection } from "../sections/StavkeSection";
@@ -25,7 +25,7 @@ export function AvansniLayout() {
       <IzdavacRacunaSection />
       <PrimalacRacunaSection />
       <StavkeSection />
-      <AvansAmountsSection />
+      <AvansDatumUplateSection />
     </Stack>
   );
 }
