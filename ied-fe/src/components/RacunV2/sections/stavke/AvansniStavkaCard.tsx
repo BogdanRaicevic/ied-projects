@@ -42,6 +42,11 @@ export function AvansniStavkaCard({ stavkaIndex, onRemove }: Props) {
   const accentColor = isUsluga ? "info" : "success";
   const typeLabel = isUsluga ? "Usluga" : "Proizvod";
 
+  // calcAvansniStavkaSubtotal only reads `avansBezPdv` + `stopaPdv` from the
+  // stavka — both fields exist on every member of the discriminated union, so
+  // the cast to the union form type is safe regardless of which `tipStavke`
+  // the user added. (Mirrors the cast pattern in UslugaStavkaCard /
+  // ProizvodStavkaCard, where the card narrows by `tipStavke` instead.)
   const subtotal = useMemo(
     () =>
       calcAvansniStavkaSubtotal(stavka as StavkaRacunaV2Form, {
