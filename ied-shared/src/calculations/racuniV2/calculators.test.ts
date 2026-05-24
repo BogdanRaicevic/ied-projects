@@ -1,7 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { TipRacuna } from "../../types/racuni.zod";
 import {
-  calcAvansDerived,
   calcInvoiceTotals,
   calcKonacniDeduction,
   calcProizvodStavkaSubtotal,
@@ -442,41 +441,3 @@ describe("racuniV2 calculators — calcInvoiceTotals", () => {
   });
 });
 
-describe("racuniV2 calculators — calcAvansDerived", () => {
-  it("derives avansPdv + avans from avansBezPdv at given stopaPdv", () => {
-    expect(calcAvansDerived(100, 20, { pdvObveznik: true })).toEqual({
-      avansBezPdv: 100,
-      avansPdv: 20,
-      avans: 120,
-    });
-  });
-
-  it("forces 0% PDV when izdavac is not pdv obveznik", () => {
-    expect(calcAvansDerived(100, 20, { pdvObveznik: false })).toEqual({
-      avansBezPdv: 100,
-      avansPdv: 0,
-      avans: 100,
-    });
-  });
-
-  it("handles non-numeric input as 0", () => {
-    expect(calcAvansDerived(undefined, 20, { pdvObveznik: true })).toEqual({
-      avansBezPdv: 0,
-      avansPdv: 0,
-      avans: 0,
-    });
-    expect(calcAvansDerived("", 20, { pdvObveznik: true })).toEqual({
-      avansBezPdv: 0,
-      avansPdv: 0,
-      avans: 0,
-    });
-  });
-
-  it("rounds derived amounts per line", () => {
-    // 33.33 * 0.20 = 6.666 -> rounds to 6.67; total 39.99 + 0.01 floating slop
-    const derived = calcAvansDerived(33.33, 20, { pdvObveznik: true });
-    expect(derived.avansBezPdv).toBe(33.33);
-    expect(derived.avansPdv).toBe(6.67);
-    expect(derived.avans).toBe(40);
-  });
-});

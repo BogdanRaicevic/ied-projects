@@ -60,6 +60,11 @@ export type StavkaCalculationInput =
 // calculators can no longer handle, these fail to compile. Cheaper than a
 // runtime test, gives us the "single source of truth" intent without
 // fighting RHF's loose form-state typing.
+//
+// The runtime `const _x: T = true; void _x` shape (vs pure type aliases) is
+// deliberate: ied-fe's tsconfig has `noUnusedLocals: true`, which flags
+// unused type aliases but not `_`-prefixed locals. Two booleans of runtime
+// cost in exchange for portable drift detection across the workspace.
 type _AssertUslugaCompatible =
   StavkaUslugaV2Parsed extends UslugaStavkaCalculationInput ? true : never;
 type _AssertProizvodCompatible =
@@ -94,18 +99,6 @@ export type RacunV2PdvBreakdown = Record<
  * shape via {@link RacunV2InvoiceExtras.konacniDeduction}.
  */
 export type RacunV2KonacniDeduction = {
-  avans: number;
-  avansPdv: number;
-  avansBezPdv: number;
-};
-
-/**
- * Result of deriving avansPdv + avans from a user-typed avansBezPdv at a
- * given PDV rate. Same shape as {@link RacunV2KonacniDeduction} today, but
- * semantically distinct — keeping them apart so a future change to one
- * doesn't silently bleed into the other.
- */
-export type RacunV2AvansDerived = {
   avans: number;
   avansPdv: number;
   avansBezPdv: number;
@@ -316,19 +309,3 @@ export const calcInvoiceTotals = (
   };
 };
 
-export const calcAvansDerived = (
-  avansBezPdvInput: unknown,
-  stopaPdvInput: unknown,
-  context: RacunV2CalculationContext,
-): RacunV2AvansDerived => {
-  const avansBezPdv = roundToTwoDecimals(toNonNegativeNumber(avansBezPdvInput));
-  const stopaPdv = resolveStopaPdv(stopaPdvInput, context);
-  const avansPdv = roundToTwoDecimals((avansBezPdv * stopaPdv) / 100);
-  const avans = roundToTwoDecimals(avansBezPdv + avansPdv);
-
-  return {
-    avansBezPdv,
-    avansPdv,
-    avans,
-  };
-};

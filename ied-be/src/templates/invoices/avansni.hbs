@@ -71,15 +71,16 @@
       </div>
     </section>
 
-    <!-- ============ AVANS ============ -->
+    <!-- ============ AVANSNE STAVKE ============ -->
     <section class="stavke">
-      <p class="label">Avans</p>
+      <p class="label">Stavke avansa</p>
 
+      {{#each stavke}}
       <div class="stavka">
         <div class="stavka-head">
-          <h3>Uplaćeni avans</h3>
+          <h3>{{naziv}}</h3>
           <span class="grow"></span>
-          <span class="pill">Avans</span>
+          <span class="pill">{{#if (eq tipStavke "usluga")}}Usluga{{else}}Proizvod{{/if}}</span>
         </div>
 
         <table class="stavke-tbl">
@@ -99,14 +100,15 @@
           </thead>
           <tbody>
             <tr>
-              <td>{{formatMoney totals.ukupnaPoreskaOsnovica}}</td>
-              <td>{{formatQuantity stopaPdvAvansni}}%</td>
-              <td>{{formatMoney totals.ukupanPdv}}</td>
-              <td class="total">{{formatMoney totals.ukupnaNaknada}}</td>
+              <td>{{formatMoney subtotal.poreskaOsnovica}}</td>
+              <td>{{formatQuantity stopaPdv}}%</td>
+              <td>{{formatMoney subtotal.pdv}}</td>
+              <td class="total">{{formatMoney subtotal.ukupno}}</td>
             </tr>
           </tbody>
         </table>
       </div>
+      {{/each}}
     </section>
 
     <!-- ============ QR + TOTALS ============ -->
