@@ -12,6 +12,7 @@ import firmaRoutes from "./routes/firma.routes";
 import mestoRoutes from "./routes/mesto.routes";
 import pretrageRoutes from "./routes/pretrage.routes";
 import racuniRoutes from "./routes/racuni.routes";
+import racuniV2Routes from "./routes/racuni_v2.routes";
 import radnaMestaRoutes from "./routes/radno_mesto.routes";
 import seminarRoutes from "./routes/seminari.routes";
 import stanjaFirmeRoutes from "./routes/stanje_firme.routes";
@@ -63,6 +64,7 @@ app.use("/api/stanja-firmi", requireApiAuth, hasPermission, stanjaFirmeRoutes);
 app.use("/api/seminari", requireApiAuth, hasPermission, seminarRoutes);
 app.use("/api/docx", requireApiAuth, hasPermission, docxRoutes);
 app.use("/api/racuni", requireApiAuth, hasPermission, racuniRoutes);
+app.use("/api/racuni-v2", requireApiAuth, hasPermission, racuniV2Routes);
 app.use("/api/audit-log", requireApiAuth, hasPermission, auditLogRoutes);
 app.use(
   "/api/email-suppression",
