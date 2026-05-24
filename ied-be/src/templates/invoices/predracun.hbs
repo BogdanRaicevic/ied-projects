@@ -89,15 +89,17 @@
 
     <!-- ============ QR + TOTALS ============ -->
     <section class="pay">
-      <div class="qr">
-        <p class="label">Skeniraj za uplatu</p>
-        <img alt="QR kod za uplatu" src="{{qrSrc this}}" />
-      </div>
+      {{#if showQrCode}}
+        <div class="qr">
+          <p class="label">Skeniraj za uplatu</p>
+          <img alt="QR kod za uplatu" src="{{qrSrc this}}" />
+        </div>
+      {{/if}}
 
       <div class="totals">
-        <div class="line"><span>Poreska osnovica</span><span>{{formatRsd totals.ukupnaPoreskaOsnovica}}</span></div>
-        <div class="line"><span>{{pdvLabel totals.pdvPoStopama}}</span><span>{{formatRsd totals.ukupanPdv}}</span></div>
-        <div class="grand"><span class="k">Za uplatu</span><span class="v">{{formatRsd totals.ukupnaNaknada}}</span></div>
+        <div class="line"><span>Poreska osnovica</span><span>{{formatMoneyRsd totals.ukupnaPoreskaOsnovica}}</span></div>
+        <div class="line"><span>{{pdvLabel totals.pdvPoStopama}}</span><span>{{formatMoneyRsd totals.ukupanPdv}}</span></div>
+        <div class="grand"><span class="k">Za uplatu</span><span class="v">{{formatMoneyRsd totals.ukupnaNaknada}}</span></div>
       </div>
     </section>
 

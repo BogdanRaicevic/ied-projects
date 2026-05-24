@@ -11,6 +11,7 @@ import {
   renderPredracun,
 } from "../templates/predracun.template";
 import { sanitizeFilename } from "../utils/docx.utils";
+import { env } from "../utils/envVariables";
 import { renderHtmlToPdfBuffer } from "./docx.service";
 
 type PredracunV2Parsed = Extract<
@@ -58,6 +59,7 @@ const buildPredracunTemplateData = (
     uplata: parseTekuciRacun(racunData.tekuciRacun),
     stavke: racunData.stavke,
     totals,
+    showQrCode: env.features.racuniV2QrCode,
   };
 };
 

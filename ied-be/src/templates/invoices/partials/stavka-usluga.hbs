@@ -31,13 +31,13 @@
     <tbody>
       <tr>
         <td>{{jedinicaMere}}</td>
-        <td>{{formatNumber onlineKolicina}}</td>
-        <td>{{formatNumber offlineKolicina}}</td>
+        <td>{{formatQuantity onlineKolicina}}</td>
+        <td>{{formatQuantity offlineKolicina}}</td>
         <td>{{cenaPoJedinici this}}</td>
         <td>{{formatPercent popust}}</td>
-        <td>{{formatNumber subtotal.poreskaOsnovica}}</td>
-        <td>{{formatNumber subtotal.pdv}}</td>
-        <td class="total">{{formatNumber subtotal.ukupno}}</td>
+        <td>{{formatMoney subtotal.poreskaOsnovica}}</td>
+        <td>{{formatMoney subtotal.pdv}}</td>
+        <td class="total">{{formatMoney subtotal.ukupno}}</td>
       </tr>
     </tbody>
   </table>
