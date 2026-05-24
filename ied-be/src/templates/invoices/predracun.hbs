@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="sr">
+<head>
+  <meta charset="utf-8" />
+  <title>Predračun {{pozivNaBroj}}</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+  />
+  {{{cssTag}}}
+</head>
+<body>
+  <div class="page">
+    <!-- ============ TOP HEADER ============ -->
+    <header class="top">
+      <section class="izdavac">
+        <p class="label">Izdavalac</p>
+        <p class="name">{{izdavac.naziv}}</p>
+        <p class="meta">{{izdavac.adresa}}</p>
+        {{#if izdavac.telefoni.length}}
+          <p class="meta">tel. {{#each izdavac.telefoni}}{{this}}{{#unless @last}} · {{/unless}}{{/each}}</p>
+        {{/if}}
+        <p class="meta">PIB {{izdavac.pib}} · MB {{izdavac.maticniBroj}}</p>
+      </section>
+
+      <section class="doc-title">
+        <p class="label">Predračun</p>
+        <p class="number">№ {{pozivNaBroj}}</p>
+        <table class="doc-meta">
+          <thead>
+            <tr>
+              <th scope="col">Datum</th>
+              <th scope="col">Mesto</th>
+              <th scope="col">Rok</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>{{formatDate datum}}</td>
+              <td>{{mesto}}</td>
+              <td>{{rokZaUplatu}} dana</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+    </header>
+
+    <!-- ============ PRIMALAC + UPLATA ============ -->
+    <section class="row-2">
+      <div>
+        <p class="label">Primalac</p>
+        {{#if (eq primalac.tipPrimaoca "firma")}}
+          <p class="name">{{primalac.naziv}}</p>
+          <p class="meta">{{primalac.adresa}}</p>
+          <p class="meta">PIB {{primalac.pib}} · MB {{primalac.maticniBroj}}</p>
+        {{else}}
+          <p class="name">{{primalac.imeIPrezime}}</p>
+          <p class="meta">{{primalac.adresa}}</p>
+          {{#if primalac.jmbg}}
+            <p class="meta">JMBG {{primalac.jmbg}}</p>
+          {{/if}}
+        {{/if}}
+      </div>
+
+      <div>
+        <p class="label">Uplata</p>
+        <dl class="kv">
+          <dt>Tekući račun</dt><dd>{{uplata.tekuciRacun}}</dd>
+          <dt>Banka</dt><dd>{{uplata.banka}}</dd>
+          <dt>Poziv na broj</dt><dd>{{pozivNaBroj}}</dd>
+        </dl>
+      </div>
+    </section>
+
+    <!-- ============ STAVKE ============ -->
+    <section class="stavke">
+      <p class="label">Stavke</p>
+
+      {{#each stavke}}
+        {{#if (eq tipStavke "usluga")}}
+          {{> stavka-usluga}}
+        {{else}}
+          {{> stavka-proizvod}}
+        {{/if}}
+      {{/each}}
+    </section>
+
+    <!-- ============ QR + TOTALS ============ -->
+    <section class="pay">
+      <div class="qr">
+        <p class="label">Skeniraj za uplatu</p>
+        <img alt="QR kod za uplatu" src="{{qrSrc this}}" />
+      </div>
+
+      <div class="totals">
+        <div class="line"><span>Poreska osnovica</span><span>{{formatRsd totals.ukupnaPoreskaOsnovica}}</span></div>
+        <div class="line"><span>{{pdvLabel totals.pdvPoStopama}}</span><span>{{formatRsd totals.ukupanPdv}}</span></div>
+        <div class="grand"><span class="k">Za uplatu</span><span class="v">{{formatRsd totals.ukupnaNaknada}}</span></div>
+      </div>
+    </section>
+
+    <!-- ============ FOOTER ============ -->
+    <footer class="bottom">
+      <span>Predračun je urađen u elektronskoj formi i važi bez pečata i potpisa.</span>
+      <span class="right">Mesto i datum izdavanja predračuna: <strong>{{mesto}}, {{formatDate datum}}</strong></span>
+    </footer>
+  </div>
+</body>
+</html>

@@ -1,0 +1,285 @@
+/* ============================================================
+ * Shared stylesheet for invoice/predračun HTML templates.
+ *
+ * Used by:
+ *   - predracun_1_usluga_demo.html
+ *   - predracun_3_usluge_demo.html       (after refactor)
+ *   - predracun_proizvod_usluga_demo.html (after refactor)
+ *   - all future racun/predracun/avansni templates
+ *
+ * Design tokens live in :root so individual templates can
+ * override them per document type if needed (e.g. konacni
+ * could redefine --accent for a different highlight tone).
+ * ============================================================ */
+
+/* ---------- design tokens ---------- */
+:root {
+  --ink: #111;
+  --ink-soft: #444;
+  --muted: #888;
+  --rule: #e5e5e5;
+  --rule-soft: #efefef;
+  --bg: #fff;
+  --accent: #f6f6f6;
+
+  --fs-label: 9px;
+  --fs-body: 11px;
+  --fs-strong: 12px;
+  --fs-h1: 42px;
+
+  --tracking-label: 0.14em;
+
+  --page-w: 210mm;
+  --page-pad: 18mm;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  color: var(--ink);
+  font-size: var(--fs-body);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+.page {
+  width: var(--page-w);
+  min-height: 297mm;
+  margin: 24px auto;
+  padding: var(--page-pad);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+  display: flex;
+  flex-direction: column;
+}
+
+@media print {
+  html
+  .page { margin: 0; box-shadow: none; }
+  @page { size: A4; margin: 0; }
+}
+
+/* ---------- shared bits ---------- */
+.label {
+  font-size: var(--fs-label);
+  font-weight: 500;
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+  color: var(--muted);
+  margin: 0 0 6px;
+}
+
+.name {
+  font-size: var(--fs-strong);
+  font-weight: 600;
+  margin: 0 0 4px;
+}
+
+.meta {
+  color: var(--ink-soft);
+  margin: 0;
+}
+.meta + .meta { margin-top: 1px; }
+
+.grow { flex: 1; }
+
+/* ---------- top header ---------- */
+header.top {
+  display: flex;
+  justify-content: space-between;
+  gap: 24px;
+  margin-bottom: 20px;
+}
+
+.doc-title {
+  text-align: right;
+}
+
+.doc-title .number {
+  font-size: var(--fs-h1);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  margin: 0;
+  line-height: 1.1;
+}
+
+table.doc-meta {
+  margin: 14px 0 0 auto;
+  border-collapse: collapse;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+table.doc-meta th,
+table.doc-meta td {
+  padding: 0 0 0 28px;
+  text-align: right;
+  vertical-align: baseline;
+}
+table.doc-meta th:first-child,
+table.doc-meta td:first-child {
+  padding-left: 0;
+}
+table.doc-meta th {
+  font-size: var(--fs-label);
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+  color: var(--muted);
+  font-weight: 500;
+  padding-bottom: 4px;
+}
+table.doc-meta td {
+  color: var(--ink);
+}
+
+/* ---------- secondary header (primalac + uplata) ---------- */
+.row-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  margin-bottom: 20px;
+  padding-top: 20px;
+  border-top: 1px solid var(--rule);
+}
+
+.kv {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  gap: 4px 14px;
+}
+.kv dt { color: var(--ink-soft); }
+.kv dd { margin: 0; }
+
+/* ---------- stavke ---------- */
+.stavke > .label {
+  margin: 0 0 14px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--ink);
+}
+
+.stavka + .stavka {
+  margin-top: 24px;
+}
+
+.stavka-head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding-bottom: 10px;
+}
+.stavka-head h3 {
+  margin: 0;
+  font-size: var(--fs-strong);
+  font-weight: 600;
+}
+.pill {
+  font-size: var(--fs-label);
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+  color: var(--muted);
+  border: 1px solid var(--rule);
+  border-radius: 999px;
+  padding: 3px 8px;
+}
+
+table.stavke-tbl {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+table.stavke-tbl thead th {
+  font-size: var(--fs-label);
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+  color: var(--muted);
+  font-weight: 500;
+  text-align: center;
+  padding: 14px 10px;
+  border: 1px solid var(--rule);
+  vertical-align: middle;
+}
+table.stavke-tbl tbody td {
+  padding: 16px 10px;
+  text-align: center;
+  vertical-align: middle;
+  color: var(--ink-soft);
+  border: 1px solid var(--rule);
+}
+table.stavke-tbl th:first-child,
+table.stavke-tbl td:first-child {
+  text-align: left;
+}
+table.stavke-tbl th:last-child,
+table.stavke-tbl td:last-child {
+  text-align: right;
+  background: var(--accent);
+}
+table.stavke-tbl td.total {
+  font-weight: 600;
+  color: var(--ink);
+}
+
+/* ---------- QR + totals ---------- */
+.pay {
+  margin-top: 28px;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 48px;
+  align-items: start;
+}
+.qr img,
+.qr svg {
+  width: 110px;
+  height: 110px;
+  display: block;
+}
+
+.totals {
+  max-width: 360px;
+  margin-left: auto;
+  width: 100%;
+}
+.totals .line {
+  display: flex;
+  justify-content: space-between;
+  padding: 4px 0;
+  color: var(--ink-soft);
+}
+.totals .grand {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-top: 14px;
+  padding-top: 14px;
+  border-top: 1px solid var(--rule);
+}
+.totals .grand .k {
+  color: var(--ink);
+  font-weight: 500;
+}
+.totals .grand .v {
+  font-size: 22px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+/* ---------- footer ---------- */
+footer.bottom {
+  margin-top: auto;
+  padding-top: 32px;
+  display: flex;
+  justify-content: space-between;
+  gap: 24px;
+  color: var(--muted);
+  font-size: 10px;
+  border-top: 1px solid var(--rule-soft);
+}
+footer.bottom .right { text-align: right; }
+footer.bottom strong { color: var(--ink-soft); font-weight: 500; }

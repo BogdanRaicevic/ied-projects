@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="sr">
+<head>
+  <meta charset="utf-8" />
+  <title>Predračun 26030083</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+  />
+  <link rel="stylesheet" href="../invoice.css" />
+</head>
+<body>
+  <div class="page">
+    <!-- ============ TOP HEADER ============ -->
+    <header class="top">
+      <section class="izdavac">
+        <p class="label">Izdavalac</p>
+        <p class="name">Balkanski savet za održivi razvoj i edukaciju</p>
+        <p class="meta">Bežanijska 30, 11080 Zemun</p>
+          <p class="meta">tel. 011/655-83-05 · 064/821-33-22</p>
+        <p class="meta">PIB 108935581 · MB 28170866</p>
+      </section>
+
+      <section class="doc-title">
+        <p class="label">Predračun</p>
+        <p class="number">№ 26030083</p>
+        <table class="doc-meta">
+          <thead>
+            <tr>
+              <th scope="col">Datum</th>
+              <th scope="col">Mesto</th>
+              <th scope="col">Rok</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>13.05.2026</td>
+              <td>Beograd</td>
+              <td>10 dana</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+    </header>
+
+    <!-- ============ PRIMALAC + UPLATA ============ -->
+    <section class="row-2">
+      <div>
+        <p class="label">Primalac</p>
+          <p class="name">Zdravstveni centar Surdulica</p>
+          <p class="meta">Srpskih vladara 111, Surdulica</p>
+          <p class="meta">PIB 100948335 · MB 17191918</p>
+      </div>
+
+      <div>
+        <p class="label">Uplata</p>
+        <dl class="kv">
+          <dt>Tekući račun</dt><dd>325-9500600050635-47</dd>
+          <dt>Banka</dt><dd>OTP banka</dd>
+          <dt>Poziv na broj</dt><dd>26030083</dd>
+        </dl>
+      </div>
+    </section>
+
+    <!-- ============ STAVKE ============ -->
+    <section class="stavke">
+      <p class="label">Stavke</p>
+
+          <div class="stavka">
+            <div class="stavka-head">
+              <h3>Kotizacija za obuku: eBolovanje – poslodavac · Operativni rad i zakonske obaveze</h3>
+              <span class="grow"></span>
+              <span class="pill">Usluga</span>
+            </div>
+          
+            <table class="stavke-tbl">
+              <colgroup>
+                <col style="width: 11%" />
+                <col style="width: 11%" />
+                <col style="width: 9%" />
+                <col style="width: 12%" />
+                <col style="width: 10%" />
+                <col style="width: 13%" />
+                <col style="width: 10%" />
+                <col style="width: 24%" />
+              </colgroup>
+              <thead>
+                <tr>
+                  <th>Jedinica mere</th>
+                  <th>Onlajn</th>
+                  <th>U sali</th>
+                  <th>Cena po jedinici</th>
+                  <th>Popust</th>
+                  <th>Poreska osnovica</th>
+                  <th>PDV (20%)</th>
+                  <th>Ukupna naknada</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>broj učesnika</td>
+                  <td>1</td>
+                  <td>0</td>
+                  <td>21.500</td>
+                  <td>5%</td>
+                  <td>20.425</td>
+                  <td>4.085</td>
+                  <td class="total">24.510</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+    </section>
+
+    <!-- ============ QR + TOTALS ============ -->
+    <section class="pay">
+      <div class="qr">
+        <p class="label">Skeniraj za uplatu</p>
+        <img alt="QR kod za uplatu" src="https://api.qrserver.com/v1/create-qr-code/?size&#x3D;220x220&amp;margin&#x3D;0&amp;data&#x3D;BCD%0A001%0A1%0AICT%0ARSD24510%0A325-9500600050635-47%0AOTP%20banka%0A26030083%0APredracun" />
+      </div>
+
+      <div class="totals">
+        <div class="line"><span>Poreska osnovica</span><span>20.425 RSD</span></div>
+        <div class="line"><span>PDV (20%)</span><span>4.085 RSD</span></div>
+        <div class="grand"><span class="k">Za uplatu</span><span class="v">24.510 RSD</span></div>
+      </div>
+    </section>
+
+    <!-- ============ FOOTER ============ -->
+    <footer class="bottom">
+      <span>Predračun je urađen u elektronskoj formi i važi bez pečata i potpisa.</span>
+      <span class="right">Mesto i datum izdavanja predračuna: <strong>Beograd, 13.05.2026</strong></span>
+    </footer>
+  </div>
+</body>
+</html>
