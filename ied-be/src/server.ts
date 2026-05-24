@@ -35,7 +35,7 @@ app.use(
     origin: allowedOrigins,
     credentials: true,
     allowedHeaders: ["Authorization", "Content-Type"],
-    exposedHeaders: ["Authorization"],
+    exposedHeaders: ["Authorization", "Content-Disposition"],
   }),
 );
 

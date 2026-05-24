@@ -2,7 +2,7 @@ import { Alert, Box, Grid, Stack } from "@mui/material";
 import { type RacunV2Form, TipRacuna } from "ied-shared";
 import { useState } from "react";
 import { useWatch } from "react-hook-form";
-import { submitRacunV2ForGeneration } from "../../api/racuni_v2.api";
+import { generateAndDownloadRacunV2Pdf } from "../../api/racuni_v2.api";
 import PageTitle from "../PageTitle";
 import { useRacunV2Form } from "./hooks/useRacunV2Form";
 import { AvansniLayout } from "./layouts/AvansniLayout";
@@ -13,8 +13,7 @@ import { RacunV2TabsShell } from "./RacunV2TabsShell";
 import { SummaryPanel } from "./SummaryPanel";
 
 const submitForGeneration = async (data: RacunV2Form): Promise<void> => {
-  const response = await submitRacunV2ForGeneration(data);
-  console.log("[RacunV2] Generation request accepted:", response);
+  await generateAndDownloadRacunV2Pdf(data);
 };
 
 export function RacunV2Content() {
