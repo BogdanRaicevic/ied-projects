@@ -118,6 +118,16 @@ export function SummaryPanel() {
   const hasMetadata =
     tipRacunaHasRokZaUplatu(tipRacuna) || tipRacuna === TipRacuna.AVANSNI_RACUN;
 
+  // Avansni uses domain-specific labels for the three financial rows; the
+  // numbers themselves come from the same `calcInvoiceTotals` shape (the
+  // AVANSNI_RACUN branch in the calculator sums per-stavka `avansBezPdv`
+  // instead of quantity×cena, but the output fields are identical).
+  const baseLabel = isAvansniRacun
+    ? "Avans bez PDV-a"
+    : "Ukupna poreska osnovica";
+  const pdvSummaryLabel = isAvansniRacun ? "Iznos PDV-a" : "Ukupan PDV";
+  const totalLabel = isAvansniRacun ? "Uplaćen avans" : "Ukupna naknada";
+
   return (
     <Box sx={{ position: { md: "sticky" }, top: { md: 16 } }}>
       <Card
@@ -131,12 +141,10 @@ export function SummaryPanel() {
           title="Pregled"
           action={
             <Stack direction="row" spacing={1} alignItems="center">
-              {!isAvansniRacun ? (
-                <Chip
-                  label={formatStavkeCount(stavkaSubtotali.length)}
-                  variant="outlined"
-                />
-              ) : null}
+              <Chip
+                label={formatStavkeCount(stavkaSubtotali.length)}
+                variant="outlined"
+              />
             </Stack>
           }
           sx={{
@@ -173,12 +181,12 @@ export function SummaryPanel() {
               </Typography>
               <Stack spacing={1.1} sx={{ mt: 1 }}>
                 <SummaryRow
-                  label="Ukupna poreska osnovica"
+                  label={baseLabel}
                   amount={totals.ukupnaPoreskaOsnovica}
                   valuta={valuta}
                 />
                 <SummaryRow
-                  label="Ukupan PDV"
+                  label={pdvSummaryLabel}
                   amount={totals.ukupanPdv}
                   valuta={valuta}
                 />
@@ -212,7 +220,7 @@ export function SummaryPanel() {
                     letterSpacing: "0.08em",
                   }}
                 >
-                  Ukupna naknada
+                  {totalLabel}
                 </Typography>
                 <Typography
                   variant="h4"
@@ -241,45 +249,43 @@ export function SummaryPanel() {
               </InfoBlock>
             ) : null}
 
-            {isAvansniRacun ? null : (
-              <InfoBlock
-                title="Stavke"
-                action={
-                  <Chip
-                    label={formatStavkeCount(stavkaSubtotali.length)}
-                    variant="outlined"
-                  />
-                }
-              >
-                {stavkaSubtotali.length === 0 ? (
-                  <Typography variant="body2" color="text.secondary">
-                    Nema stavki.
-                  </Typography>
-                ) : (
-                  <Stack spacing={1}>
-                    {stavkePreview.map((stavka, index) => (
-                      <StavkaPreviewRow
-                        // biome-ignore lint/suspicious/noArrayIndexKey: calculator output is a derived flat array without stable ids; SummaryPanel is read-only display, no drag/reorder. RHF `useFieldArray` ids live in StavkeSection.
-                        key={`${stavka.tipStavke}-${index}-${stavka.naziv}`}
-                        label={stavka.naziv || "(bez naziva)"}
-                        typeLabel={
-                          stavka.tipStavke === "usluga" ? "Usluga" : "Proizvod"
-                        }
-                        typeColor={
-                          stavka.tipStavke === "usluga" ? "info" : "success"
-                        }
-                        amount={formatMoney(stavka.ukupno, valuta)}
-                      />
-                    ))}
-                    {remainingStavkeCount > 0 ? (
-                      <Typography variant="caption" color="text.secondary">
-                        +{remainingStavkeCount} još u glavnoj listi stavki
-                      </Typography>
-                    ) : null}
-                  </Stack>
-                )}
-              </InfoBlock>
-            )}
+            <InfoBlock
+              title="Stavke"
+              action={
+                <Chip
+                  label={formatStavkeCount(stavkaSubtotali.length)}
+                  variant="outlined"
+                />
+              }
+            >
+              {stavkaSubtotali.length === 0 ? (
+                <Typography variant="body2" color="text.secondary">
+                  Nema stavki.
+                </Typography>
+              ) : (
+                <Stack spacing={1}>
+                  {stavkePreview.map((stavka, index) => (
+                    <StavkaPreviewRow
+                      // biome-ignore lint/suspicious/noArrayIndexKey: calculator output is a derived flat array without stable ids; SummaryPanel is read-only display, no drag/reorder. RHF `useFieldArray` ids live in StavkeSection.
+                      key={`${stavka.tipStavke}-${index}-${stavka.naziv}`}
+                      label={stavka.naziv || "(bez naziva)"}
+                      typeLabel={
+                        stavka.tipStavke === "usluga" ? "Usluga" : "Proizvod"
+                      }
+                      typeColor={
+                        stavka.tipStavke === "usluga" ? "info" : "success"
+                      }
+                      amount={formatMoney(stavka.ukupno, valuta)}
+                    />
+                  ))}
+                  {remainingStavkeCount > 0 ? (
+                    <Typography variant="caption" color="text.secondary">
+                      +{remainingStavkeCount} još u glavnoj listi stavki
+                    </Typography>
+                  ) : null}
+                </Stack>
+              )}
+            </InfoBlock>
 
             {formErrors.length > 0 ? (
               <Alert
@@ -563,8 +569,8 @@ const formatStavkeCount = (count: number): string => {
 
 /**
  * Read-only display of `datumUplateAvansa` (avansni only). Source of truth
- * is the DatePicker inside `AvansAmountsSection`; this row mirrors the
- * value under "Ukupna naknada", same slot the rok-za-uplatu mirror uses on
+ * is the DatePicker inside `AvansDatumUplateSection`; this row mirrors the
+ * value under "Uplaćen avans", same slot the rok-za-uplatu mirror uses on
  * the other tabs (the two are mutually exclusive — avansni doesn't have
  * `rokZaUplatu`, the others don't have `datumUplateAvansa`).
  *
