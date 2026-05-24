@@ -2,18 +2,18 @@ import { Stack } from "@mui/material";
 import { AvansAmountsSection } from "../sections/AvansAmountsSection";
 import { IzdavacRacunaSection } from "../sections/IzdavacRacunaSection";
 import { PrimalacRacunaSection } from "../sections/PrimalacRacunaSection";
+import { StavkeSection } from "../sections/StavkeSection";
 
 /**
  * Form-column layout for the avansni racun tab.
  *
- * **No `StavkeSection`.** Avansni invoices have no line items by design —
- * the schema's avansni branch declares `stavke: z.never().optional()`. The
- * single avans amount + PDV rate live directly on the invoice via
- * `AvansAmountsSection`.
+ * Avansni now mirrors the predracun structure: the user adds service/product
+ * stavke, but each stavka uses reduced advance fields (avans bez PDV-a +
+ * PDV rate) instead of full quantity/cena/popust inputs.
  *
  * **No `UsloviPlacanjaSection`.** Avansni doesn't have `rokZaUplatu` (a
- * future deadline). It has `datumUplateAvansa` instead — the date the
- * avans was actually paid — which is part of `AvansAmountsSection`.
+ * future deadline). It has `datumUplateAvansa` instead — the date the avans
+ * was actually paid — collected by `AvansAmountsSection`.
  *
  * **Pregled mirror.** `SummaryPanel` mirrors `datumUplateAvansa` read-only
  * under "Ukupna naknada" (gated on `tipRacuna === AVANSNI_RACUN`). Same
@@ -24,6 +24,7 @@ export function AvansniLayout() {
     <Stack spacing={3}>
       <IzdavacRacunaSection />
       <PrimalacRacunaSection />
+      <StavkeSection />
       <AvansAmountsSection />
     </Stack>
   );

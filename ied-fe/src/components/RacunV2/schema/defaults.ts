@@ -61,8 +61,7 @@ export const getDefaultValues = (
       return {
         ...commonDefaults,
         tipRacuna: TipRacuna.AVANSNI_RACUN,
-        avansBezPdv: 0,
-        stopaPdvAvansni: DEFAULT_STOPA_PDV,
+        stavke: [],
         datumUplateAvansa: null,
       };
     case TipRacuna.KONACNI_RACUN:

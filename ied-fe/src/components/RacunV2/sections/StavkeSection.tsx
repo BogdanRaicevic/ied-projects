@@ -17,6 +17,7 @@ import {
   getEmptyProizvodStavka,
   getEmptyUslugaStavka,
 } from "../schema/stavkaDefaults";
+import { AvansniStavkaCard } from "./stavke/AvansniStavkaCard";
 import { ProizvodStavkaCard } from "./stavke/ProizvodStavkaCard";
 import { UslugaStavkaCard } from "./stavke/UslugaStavkaCard";
 
@@ -25,16 +26,9 @@ import { UslugaStavkaCard } from "./stavke/UslugaStavkaCard";
  * and exposes the two add buttons + per-row remove. Dispatches to
  * `UslugaStavkaCard` / `ProizvodStavkaCard` based on `tipStavke`.
  *
- * **Avansni self-guard.** The `RacunV2Form` discriminated union has
- * `stavke: z.never().optional()` on the avansni branch — that variant has
- * no line items by design (a single avans amount + rate lives directly on
- * the invoice). Layout switching in Epic 6 will conditionally render this
- * section per layout component; until then we self-guard so users can pick
- * the avansni tab without seeing nonsensical "+ Dodaj uslugu" buttons.
- *
- * Form state for `stavke` survives across tab switches (e.g.
- * predracun → konacni preserves the user's work). The cleanup of
- * out-of-band fields when crossing into avansni belongs to Epic 6.
+ * Avansni uses the same add/remove shell, but dispatches to a reduced card:
+ * naziv + avansBezPdv + stopaPdv, with derived PDV/uplacen avans display.
+ * Regular invoice types keep the full service/product cards.
  */
 export function StavkeSection() {
   const { control, getValues } = useRacunV2Form();
@@ -54,10 +48,6 @@ export function StavkeSection() {
     (field) => field.tipStavke === "usluga",
   ).length;
   const proizvodCount = fields.length - uslugaCount;
-
-  if (tipRacuna === TipRacuna.AVANSNI_RACUN) {
-    return null;
-  }
 
   // Snapshot defaultStopaPdv at click time. Non-reactive on purpose — once a
   // stavka is appended, its rate is independent (Story 5.2.5 / 5.3.3 expose
@@ -143,7 +133,13 @@ export function StavkeSection() {
             ) : (
               <Stack spacing={1.5}>
                 {fields.map((field, index) =>
-                  field.tipStavke === "usluga" ? (
+                  tipRacuna === TipRacuna.AVANSNI_RACUN ? (
+                    <AvansniStavkaCard
+                      key={field.id}
+                      stavkaIndex={index}
+                      onRemove={() => remove(index)}
+                    />
+                  ) : field.tipStavke === "usluga" ? (
                     <UslugaStavkaCard
                       key={field.id}
                       stavkaIndex={index}

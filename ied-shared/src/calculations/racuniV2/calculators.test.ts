@@ -171,6 +171,62 @@ describe("racuniV2 calculators — calcInvoiceTotals", () => {
     expect(totals.stavkaSubtotali).toHaveLength(3);
   });
 
+  it("aggregates avansni stavke from avansBezPdv and per-stavka PDV rates", () => {
+    const totals = calcInvoiceTotals(
+      [
+        {
+          tipStavke: "usluga",
+          naziv: "Avans za seminar",
+          datum: new Date("2026-01-15"),
+          jedinicaMere: "Broj ucesnika",
+          onlineKolicina: 999,
+          onlineCena: 999,
+          offlineKolicina: 999,
+          offlineCena: 999,
+          popust: 50,
+          stopaPdv: 20,
+          avansBezPdv: 100,
+        },
+        {
+          tipStavke: "proizvod",
+          naziv: "Avans za prirucnik",
+          jedinicaMere: "kom",
+          kolicina: 999,
+          cena: 999,
+          popust: 50,
+          stopaPdv: 10,
+          avansBezPdv: 50,
+        },
+      ],
+      { pdvObveznik: true },
+      TipRacuna.AVANSNI_RACUN,
+    );
+
+    expect(totals.ukupnaPoreskaOsnovica).toBe(150);
+    expect(totals.ukupanPdv).toBe(25);
+    expect(totals.ukupnaNaknada).toBe(175);
+    expect(totals.pdvPoStopama).toEqual({
+      "10": { osnovica: 50, pdv: 5 },
+      "20": { osnovica: 100, pdv: 20 },
+    });
+    expect(totals.stavkaSubtotali).toEqual([
+      expect.objectContaining({
+        naziv: "Avans za seminar",
+        stopaPdv: 20,
+        poreskaOsnovica: 100,
+        pdv: 20,
+        ukupno: 120,
+      }),
+      expect.objectContaining({
+        naziv: "Avans za prirucnik",
+        stopaPdv: 10,
+        poreskaOsnovica: 50,
+        pdv: 5,
+        ukupno: 55,
+      }),
+    ]);
+  });
+
   it("forces PDV to zero when izdavac is not PDV obveznik", () => {
     const totals = calcInvoiceTotals(
       [
