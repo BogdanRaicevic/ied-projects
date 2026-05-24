@@ -2,6 +2,7 @@ import { Alert, Box, Grid, Stack } from "@mui/material";
 import { type RacunV2Form, TipRacuna } from "ied-shared";
 import { useState } from "react";
 import { useWatch } from "react-hook-form";
+import { submitRacunV2ForGeneration } from "../../api/racuni_v2.api";
 import PageTitle from "../PageTitle";
 import { useRacunV2Form } from "./hooks/useRacunV2Form";
 import { AvansniLayout } from "./layouts/AvansniLayout";
@@ -11,17 +12,9 @@ import { RacunLayout } from "./layouts/RacunLayout";
 import { RacunV2TabsShell } from "./RacunV2TabsShell";
 import { SummaryPanel } from "./SummaryPanel";
 
-/**
- * Phase 1 stub submit handler. Wired so RHF's `handleSubmit` actually fires
- * (which is what flips `formState.isSubmitting`, which is what disables the
- * SummaryPanel CTA per ticket 4.3.5). Epic 8 replaces this with the real
- * submit (POST → BE → navigate to preview).
- */
-const stubOnSubmit = async (data: RacunV2Form): Promise<void> => {
-  console.warn(
-    "[RacunV2] Submit handler not implemented yet — Epic 8 will wire the real flow.",
-    data,
-  );
+const submitForGeneration = async (data: RacunV2Form): Promise<void> => {
+  const response = await submitRacunV2ForGeneration(data);
+  console.log("[RacunV2] Generation request accepted:", response);
 };
 
 export function RacunV2Content() {
@@ -47,7 +40,7 @@ export function RacunV2Content() {
 
       <Box
         component="form"
-        onSubmit={handleSubmit(stubOnSubmit)}
+        onSubmit={handleSubmit(submitForGeneration)}
         noValidate
         sx={{
           mt: 3,
