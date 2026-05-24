@@ -144,6 +144,7 @@ const buildSample = (stavke: SampleStavke): PredracunTemplateData => {
     uplata,
     stavke,
     totals,
+    showQrCode: true,
   };
 };
 

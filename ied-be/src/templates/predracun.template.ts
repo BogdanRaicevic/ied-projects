@@ -70,10 +70,19 @@ export type PredracunTemplateData = {
   totals: RacunV2InvoiceTotals;
 
   /**
+   * Feature gate for the QR payment block. The QR encoder is not yet
+   * implemented, so callers pass `false` in production to hide the block
+   * entirely. The preview script (and future QR work) can flip this to
+   * `true` to render the placeholder/encoded QR image.
+   */
+  showQrCode: boolean;
+
+  /**
    * Optional pre-encoded QR data URL (e.g. `data:image/png;base64,...`).
-   * When omitted, the renderer falls back to an api.qrserver.com placeholder
-   * that encodes the most relevant payment fields — useful for previews and
-   * for environments where QR generation isn't wired up yet.
+   * When omitted (and `showQrCode` is true), the renderer falls back to an
+   * api.qrserver.com placeholder that encodes the most relevant payment
+   * fields — useful for previews and for environments where real QR
+   * generation isn't wired up yet.
    */
   qrCodeDataUrl?: string;
 };
@@ -138,23 +147,40 @@ const annotateStavke = (
 
 const SR_LATN = "sr-Latn-RS";
 
-const numberFormatter = new Intl.NumberFormat(SR_LATN, {
+// Quantity formatter: flexible decimals (0-2) for counts (e.g. broj učesnika,
+// količina) where "3" and "3,5" both read naturally. Used by the partials for
+// non-monetary cells.
+const quantityFormatter = new Intl.NumberFormat(SR_LATN, {
   minimumFractionDigits: 0,
   maximumFractionDigits: 2,
 });
 
-const formatNumber = (value: unknown): string => {
+// Money formatter: Serbian/RSD accounting style — always two decimals, dot as
+// thousands separator, comma as decimal separator. `17107` → `17.107,00`.
+// Used everywhere a monetary value is rendered (cena, osnovica, PDV, totals).
+const moneyFormatter = new Intl.NumberFormat(SR_LATN, {
+  minimumFractionDigits: 2,
+  maximumFractionDigits: 2,
+});
+
+const formatQuantity = (value: unknown): string => {
   const num = typeof value === "number" ? value : Number(value);
   if (!Number.isFinite(num)) return "0";
-  return numberFormatter.format(num);
+  return quantityFormatter.format(num);
 };
 
-const formatRsd = (value: unknown): string => `${formatNumber(value)} RSD`;
+const formatMoney = (value: unknown): string => {
+  const num = typeof value === "number" ? value : Number(value);
+  if (!Number.isFinite(num)) return "0,00";
+  return moneyFormatter.format(num);
+};
+
+const formatMoneyRsd = (value: unknown): string => `${formatMoney(value)} RSD`;
 
 const formatPercent = (value: unknown): string => {
   const num = typeof value === "number" ? value : Number(value);
   if (!Number.isFinite(num) || num === 0) return "—";
-  return `${formatNumber(num)}%`;
+  return `${quantityFormatter.format(num)}%`;
 };
 
 const formatDate = (value: unknown): string => {
@@ -180,15 +206,15 @@ const cenaPoJedinici = (stavka: unknown): string => {
   const online = Number(s.onlineCena ?? 0);
   const offline = Number(s.offlineCena ?? 0);
 
-  // Both zero — show a single "0".
-  if (online === 0 && offline === 0) return formatNumber(0);
+  // Both zero — show a single "0,00".
+  if (online === 0 && offline === 0) return formatMoney(0);
   // Only one set — show it alone.
-  if (online === 0) return formatNumber(offline);
-  if (offline === 0) return formatNumber(online);
+  if (online === 0) return formatMoney(offline);
+  if (offline === 0) return formatMoney(online);
   // Both present and equal — single value.
-  if (online === offline) return formatNumber(online);
+  if (online === offline) return formatMoney(online);
   // Both present and different — show as "X / Y".
-  return `${formatNumber(online)} / ${formatNumber(offline)}`;
+  return `${formatMoney(online)} / ${formatMoney(offline)}`;
 };
 
 const pdvLabel = (pdvPoStopama: unknown): string => {
@@ -243,8 +269,9 @@ const getCompiledTemplate = (): CompiledTemplate => {
   const hbs = Handlebars.create();
 
   hbs.registerHelper("eq", (a: unknown, b: unknown) => a === b);
-  hbs.registerHelper("formatNumber", formatNumber);
-  hbs.registerHelper("formatRsd", formatRsd);
+  hbs.registerHelper("formatQuantity", formatQuantity);
+  hbs.registerHelper("formatMoney", formatMoney);
+  hbs.registerHelper("formatMoneyRsd", formatMoneyRsd);
   hbs.registerHelper("formatPercent", formatPercent);
   hbs.registerHelper("formatDate", formatDate);
   hbs.registerHelper("cenaPoJedinici", cenaPoJedinici);

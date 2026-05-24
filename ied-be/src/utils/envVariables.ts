@@ -30,4 +30,11 @@ export const env = {
   sentry: {
     dsn: config.SENTRY_DSN,
   },
+  features: {
+    // Hides the QR payment block on Racuni V2 PDFs until a real QR encoder
+    // ships. Defaults to false so production never renders the placeholder
+    // api.qrserver.com image. Set RACUNI_V2_QR_CODE_ENABLED=true to enable
+    // locally for QR layout work.
+    racuniV2QrCode: config.RACUNI_V2_QR_CODE_ENABLED === "true",
+  },
 };
