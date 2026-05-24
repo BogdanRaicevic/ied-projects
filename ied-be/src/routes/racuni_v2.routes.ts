@@ -1,8 +1,4 @@
-import {
-  type Request,
-  type Response,
-  Router,
-} from "express";
+import { type Request, type Response, Router } from "express";
 import { type RacunV2Form, RacunV2Zod, TipRacuna } from "ied-shared";
 import { generatePredracunV2Pdf } from "../services/racuni_v2.service";
 import { getTemplateErrorDetails } from "../utils/docx.utils";
@@ -11,12 +7,7 @@ const router = Router();
 
 router.post(
   "/generate",
-  async (
-    req: Request<{}, any, RacunV2Form>,
-    res: Response,
-  ) => {
-    console.log("[RacunV2] Generate request payload:", req.body);
-
+  async (req: Request<{}, any, RacunV2Form>, res: Response) => {
     try {
       const parsed = await RacunV2Zod.safeParseAsync(req.body);
 
