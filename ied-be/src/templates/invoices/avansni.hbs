@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="sr">
+
+<head>
+  <meta charset="utf-8" />
+  <title>Avansni račun {{pozivNaBroj}}</title>
+  {{{cssTag}}}
+</head>
+
+<body>
+  <div class="page">
+    <!-- ============ TOP HEADER ============ -->
+    <header class="top">
+      <section class="izdavac">
+        <p class="label">Izdavalac</p>
+        <p class="name">{{izdavac.naziv}}</p>
+        <p class="meta">{{izdavac.adresa}}</p>
+        {{#if izdavac.telefoni.length}}
+        <p class="meta">tel. {{#each izdavac.telefoni}}{{this}}{{#unless @last}} · {{/unless}}{{/each}}</p>
+        {{/if}}
+        <p class="meta">PIB {{izdavac.pib}} · MB {{izdavac.maticniBroj}}</p>
+      </section>
+
+      <section class="doc-title">
+        <p class="label">Avansni račun</p>
+        <p class="number">№ {{pozivNaBroj}}</p>
+        <table class="doc-meta">
+          <thead>
+            <tr>
+              <th scope="col">Datum</th>
+              <th scope="col">Mesto</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>{{formatDate datum}}</td>
+              <td>{{mesto}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+    </header>
+
+    <!-- ============ PRIMALAC + UPLATA ============ -->
+    <section class="row-2">
+      <div>
+        <p class="label">Primalac</p>
+        {{#if (eq primalac.tipPrimaoca "firma")}}
+        <p class="name">{{primalac.naziv}}</p>
+        <p class="meta">{{primalac.adresa}}</p>
+        <p class="meta">PIB {{primalac.pib}} · MB {{primalac.maticniBroj}}</p>
+        {{else}}
+        <p class="name">{{primalac.imeIPrezime}}</p>
+        <p class="meta">{{primalac.adresa}}</p>
+        {{#if primalac.jmbg}}
+        <p class="meta">JMBG {{primalac.jmbg}}</p>
+        {{/if}}
+        {{/if}}
+      </div>
+
+      <div>
+        <p class="label">Uplata</p>
+        <dl class="kv">
+          <dt>Tekući račun</dt>
+          <dd>{{uplata.tekuciRacun}}</dd>
+          <dt>Banka</dt>
+          <dd>{{uplata.banka}}</dd>
+          <dt>Poziv na broj</dt>
+          <dd>{{pozivNaBroj}}</dd>
+        </dl>
+      </div>
+    </section>
+
+    <!-- ============ AVANS ============ -->
+    <section class="stavke">
+      <p class="label">Avans</p>
+
+      <div class="stavka">
+        <div class="stavka-head">
+          <h3>Uplaćeni avans</h3>
+          <span class="grow"></span>
+          <span class="pill">Avans</span>
+        </div>
+
+        <table class="stavke-tbl">
+          <colgroup>
+            <col style="width: 25%" />
+            <col style="width: 25%" />
+            <col style="width: 25%" />
+            <col style="width: 25%" />
+          </colgroup>
+          <thead>
+            <tr>
+              <th>Avans bez PDV-a</th>
+              <th>Stopa PDV-a</th>
+              <th>Iznos PDV-a</th>
+              <th>Uplaćen avans</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>{{formatMoney totals.ukupnaPoreskaOsnovica}}</td>
+              <td>{{formatQuantity stopaPdvAvansni}}%</td>
+              <td>{{formatMoney totals.ukupanPdv}}</td>
+              <td class="total">{{formatMoney totals.ukupnaNaknada}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ============ QR + TOTALS ============ -->
+    <section class="pay">
+      {{#if showQrCode}}
+      <div class="qr">
+        <p class="label">Skeniraj za uplatu</p>
+        <img alt="QR kod za uplatu" src="{{qrSrc this}}" />
+      </div>
+      {{/if}}
+
+      <div class="totals">
+        <div class="line"><span>Avans bez PDV-a</span><span>{{formatMoneyRsd totals.ukupnaPoreskaOsnovica}}</span></div>
+        <div class="line"><span>{{pdvLabel totals.pdvPoStopama}}</span><span>{{formatMoneyRsd totals.ukupanPdv}}</span>
+        </div>
+        <div class="grand"><span class="k">Uplaćen avans</span><span class="v">{{formatMoneyRsd
+            totals.ukupnaNaknada}}</span></div>
+      </div>
+    </section>
+
+    <!-- ============ FOOTER ============ -->
+    <footer class="bottom">
+      <span>Avansni račun je urađen u elektronskoj formi i važi bez pečata i potpisa.</span>
+      <span class="right">Mesto i datum izdavanja avansnog računa: <strong>{{mesto}}, {{formatDate
+          datum}}</strong></span>
+    </footer>
+  </div>
+</body>
+
+</html>
