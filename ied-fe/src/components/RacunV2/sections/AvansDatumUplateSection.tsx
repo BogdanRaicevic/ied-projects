@@ -13,7 +13,7 @@ import { toDateOrNull } from "../utils/date";
  * `UsloviPlacanjaSection` / `rokZaUplatu`.
  */
 export function AvansDatumUplateSection() {
-  const { control } = useRacunV2Form();
+  const { control, trigger } = useRacunV2Form();
 
   return (
     <Card variant="outlined">
@@ -33,7 +33,15 @@ export function AvansDatumUplateSection() {
                   label="Datum uplate avansa"
                   format="yyyy.MM.dd"
                   value={toDateOrNull(field.value)}
-                  onChange={(next) => field.onChange(toDateOrNull(next))}
+                  onChange={(next) => {
+                    field.onChange(toDateOrNull(next));
+                    // Form mode is `onBlur`, so without an explicit trigger
+                    // the "obavezan" error wouldn't clear until the user
+                    // tabbed out of the picker (MUI doesn't blur when you
+                    // click a day in the popup, so RHF's reValidateMode
+                    // never gets a chance to fire on its own).
+                    void trigger("datumUplateAvansa");
+                  }}
                   slotProps={{
                     textField: {
                       fullWidth: true,
