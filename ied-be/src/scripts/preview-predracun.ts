@@ -20,12 +20,12 @@ import {
   TipRacuna,
 } from "ied-shared";
 import {
+  type InvoiceTemplateData,
   type IzdavacProfile,
-  type PredracunTemplateData,
   type PrimalacView,
-  renderPredracun,
+  renderInvoice,
   type UplataView,
-} from "../templates/predracun.template";
+} from "../templates/invoiceRenderer";
 
 // ---------------------------------------------------------------------------
 // Shared sample fragments (same issuer/recipient/payment across all demos)
@@ -129,7 +129,7 @@ type SampleStavke =
   | StavkaProizvodV2Parsed[]
   | (StavkaUslugaV2Parsed | StavkaProizvodV2Parsed)[];
 
-const buildSample = (stavke: SampleStavke): PredracunTemplateData => {
+const buildSample = (stavke: SampleStavke): InvoiceTemplateData => {
   const totals = calcInvoiceTotals(
     stavke,
     { pdvObveznik: true },
@@ -156,7 +156,7 @@ const buildSample = (stavke: SampleStavke): PredracunTemplateData => {
 // Sample datasets matching the existing demo HTMLs
 // ---------------------------------------------------------------------------
 
-const samples: Record<string, PredracunTemplateData> = {
+const samples: Record<string, InvoiceTemplateData> = {
   "1_usluga": buildSample([uslugaEbolovanje(1, 0, 5)]),
   "3_usluge": buildSample([
     uslugaEbolovanje(3, 2, 5),
@@ -183,7 +183,7 @@ for (const [name, data] of Object.entries(samples)) {
   // `link` mode lets you iterate on invoice.css without re-running the
   // script. `../invoice.css` because preview HTMLs sit one level deeper
   // than the stylesheet.
-  const html = renderPredracun(data, {
+  const html = renderInvoice("predracun", data, {
     css: "link",
     cssHref: "../invoice.css",
   });
