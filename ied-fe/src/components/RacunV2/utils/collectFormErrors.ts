@@ -64,7 +64,7 @@ const SEGMENT_LABELS: Record<string, string> = {
   stavke: "Stavke",
   placeno: "Plaćeno",
   avansBezPdv: "Avans bez PDV-a",
-  stopaPdvAvansni: "Stopa PDV-a (avans)",
+  datumUplateAvansa: "Datum uplate avansa",
   defaultStopaPdv: "Podrazumevana stopa PDV-a",
   naziv: "Naziv",
   imeIPrezime: "Ime i prezime",

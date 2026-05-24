@@ -1,5 +1,4 @@
 import {
-  calcAvansDerived,
   calcInvoiceTotals,
   calcKonacniDeduction,
   IzdavacRacuna,
@@ -39,18 +38,6 @@ export const useRacunV2Calculations = () => {
   });
   const stavke = useWatch({ control, name: "stavke", defaultValue: [] });
   const placeno = useWatch({ control, name: "placeno", defaultValue: 0 });
-  const avansBezPdv = useWatch({
-    control,
-    name: "avansBezPdv",
-    defaultValue: 0,
-  });
-  // Avansni invoices have no stavke; their PDV rate lives on the invoice.
-  // Defaults to 20 in the schema; hook reads from form state.
-  const stopaPdvAvansni = useWatch({
-    control,
-    name: "stopaPdvAvansni",
-    defaultValue: 20,
-  });
 
   const pdvObveznik = isIzdavacPdvObveznik(izdavacRacuna);
   const context = useMemo(() => ({ pdvObveznik }), [pdvObveznik]);
@@ -60,12 +47,7 @@ export const useRacunV2Calculations = () => {
     [],
   );
 
-  const avansDerived = useMemo(
-    () => calcAvansDerived(avansBezPdv, stopaPdvAvansni, context),
-    [avansBezPdv, stopaPdvAvansni, context],
-  );
-
-  const invoiceTotals = useMemo(
+  const totals = useMemo(
     () =>
       calcInvoiceTotals(stavke, context, tipRacuna, {
         placeno,
@@ -74,34 +56,10 @@ export const useRacunV2Calculations = () => {
     [stavke, context, tipRacuna, placeno, konacniDeduction],
   );
 
-  const totals = useMemo(() => {
-    if (tipRacuna !== TipRacuna.AVANSNI_RACUN) {
-      return invoiceTotals;
-    }
-
-    const effectiveStopa = pdvObveznik ? Number(stopaPdvAvansni) || 0 : 0;
-
-    return {
-      ...invoiceTotals,
-      ukupnaPoreskaOsnovica: avansDerived.avansBezPdv,
-      ukupanPdv: avansDerived.avansPdv,
-      ukupnaNaknada: avansDerived.avans,
-      ukupnoPreOdbitaka: avansDerived.avans,
-      odbitak: 0,
-      pdvPoStopama: {
-        [String(effectiveStopa)]: {
-          osnovica: avansDerived.avansBezPdv,
-          pdv: avansDerived.avansPdv,
-        },
-      },
-    };
-  }, [tipRacuna, invoiceTotals, avansDerived, pdvObveznik, stopaPdvAvansni]);
-
   return {
     pdvObveznik,
     totals,
     stavkaSubtotali: totals.stavkaSubtotali,
-    avansDerived,
     konacniDeduction,
   };
 };

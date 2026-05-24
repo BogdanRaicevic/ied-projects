@@ -76,6 +76,7 @@ const uslugaEbolovanje = (
   offlineCena: 21500,
   popust,
   stopaPdv: 20,
+  avansBezPdv: 0,
 });
 
 const uslugaGdpr: StavkaUslugaV2Parsed = {
@@ -90,6 +91,7 @@ const uslugaGdpr: StavkaUslugaV2Parsed = {
   offlineCena: 18500,
   popust: 10,
   stopaPdv: 20,
+  avansBezPdv: 0,
 };
 
 const uslugaBezbednost: StavkaUslugaV2Parsed = {
@@ -104,6 +106,7 @@ const uslugaBezbednost: StavkaUslugaV2Parsed = {
   offlineCena: 19000,
   popust: 0,
   stopaPdv: 20,
+  avansBezPdv: 0,
 };
 
 const proizvodPrirucnik: StavkaProizvodV2Parsed = {
@@ -114,6 +117,7 @@ const proizvodPrirucnik: StavkaProizvodV2Parsed = {
   cena: 1800,
   popust: 0,
   stopaPdv: 10,
+  avansBezPdv: 0,
 };
 
 // ---------------------------------------------------------------------------

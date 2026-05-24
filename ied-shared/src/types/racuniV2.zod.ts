@@ -30,6 +30,7 @@ export const StavkaUslugaV2Zod = z.object({
   offlineCena: nonNegativeNumber.default(0),
   popust: percentage.default(0),
   stopaPdv: nonNegativeNumber.default(20),
+  avansBezPdv: nonNegativeNumber.default(0),
 });
 
 export const StavkaProizvodV2Zod = z.object({
@@ -40,6 +41,7 @@ export const StavkaProizvodV2Zod = z.object({
   cena: nonNegativeNumber.default(0),
   popust: percentage.default(0),
   stopaPdv: nonNegativeNumber.default(20),
+  avansBezPdv: nonNegativeNumber.default(0),
 });
 
 export const StavkaV2Zod = z.discriminatedUnion("tipStavke", [
@@ -92,16 +94,13 @@ const PredracunRacunV2Zod = BaseRacunV2Zod.extend({
 
 const AvansniRacunV2Zod = BaseRacunV2Zod.extend({
   tipRacuna: z.literal(TipRacuna.AVANSNI_RACUN),
-  avansBezPdv: nonNegativeNumber,
-  // Avansni has no stavke, so the PDV rate lives on the invoice. Default 20.
-  // Plan-aligned name (Phase 2 promotes this verbatim to the BE schema as
-  // `stopaPdvAvansni`). When izdavac.pdvObveznik === false, the calculator
-  // forces this to 0 internally, so callers don't have to remember.
-  stopaPdvAvansni: nonNegativeNumber
-    .max(50, "Stopa PDV-a mora biti <= 50")
-    .default(20),
-  datumUplateAvansa: z.coerce.date().nullable().optional(),
-  stavke: z.never().optional(),
+  stavke: z.array(StavkaV2Zod).min(1, "Dodajte bar jednu stavku"),
+  datumUplateAvansa: z.coerce
+    .date()
+    .nullable()
+    .refine((value): value is Date => value !== null, {
+      message: "Datum uplate avansa je obavezan",
+    }),
 });
 
 const KonacniRacunV2Zod = BaseRacunV2Zod.extend({

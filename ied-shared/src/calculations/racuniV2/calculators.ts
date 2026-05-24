@@ -38,6 +38,7 @@ export type UslugaStavkaCalculationInput = {
   offlineCena?: unknown;
   popust?: unknown;
   stopaPdv?: unknown;
+  avansBezPdv?: unknown;
 };
 
 export type ProizvodStavkaCalculationInput = {
@@ -48,6 +49,7 @@ export type ProizvodStavkaCalculationInput = {
   cena?: unknown;
   popust?: unknown;
   stopaPdv?: unknown;
+  avansBezPdv?: unknown;
 };
 
 export type StavkaCalculationInput =
@@ -210,6 +212,13 @@ export const calcProizvodStavkaSubtotal = (
   return calculateSubtotal(bruto, stavka.popust, stavka.stopaPdv, context);
 };
 
+export const calcAvansniStavkaSubtotal = (
+  stavka: StavkaCalculationInput,
+  context: RacunV2CalculationContext,
+): RacunV2Subtotal => {
+  return calculateSubtotal(stavka.avansBezPdv, 0, stavka.stopaPdv, context);
+};
+
 /**
  * Phase 1 stub: konacni deduction is always zero. Phase 3 swaps the body to
  * actually sum across linked avansni; the public signature stays the same.
@@ -233,7 +242,9 @@ export const calcInvoiceTotals = (
   const stavkaSubtotali: RacunV2StavkaSubtotal[] = (stavke ?? []).map(
     (stavka) => {
       const subtotal =
-        stavka.tipStavke === "usluga"
+        tipRacuna === TipRacuna.AVANSNI_RACUN
+          ? calcAvansniStavkaSubtotal(stavka, context)
+          : stavka.tipStavke === "usluga"
           ? calcSeminarStavkaSubtotal(stavka, context)
           : calcProizvodStavkaSubtotal(stavka, context);
 

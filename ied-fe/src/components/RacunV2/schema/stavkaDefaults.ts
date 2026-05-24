@@ -34,6 +34,7 @@ export const getEmptyUslugaStavka = (
   offlineCena: 0,
   popust: 0,
   stopaPdv: defaultStopaPdv,
+  avansBezPdv: 0,
 });
 
 export const getEmptyProizvodStavka = (
@@ -46,4 +47,5 @@ export const getEmptyProizvodStavka = (
   cena: 0,
   popust: 0,
   stopaPdv: defaultStopaPdv,
+  avansBezPdv: 0,
 });
