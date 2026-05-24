@@ -1,0 +1,44 @@
+<div class="stavka">
+  <div class="stavka-head">
+    <h3>{{naziv}}</h3>
+    <span class="grow"></span>
+    <span class="pill">Usluga</span>
+  </div>
+
+  <table class="stavke-tbl">
+    <colgroup>
+      <col style="width: 11%" />
+      <col style="width: 11%" />
+      <col style="width: 9%" />
+      <col style="width: 12%" />
+      <col style="width: 10%" />
+      <col style="width: 13%" />
+      <col style="width: 10%" />
+      <col style="width: 24%" />
+    </colgroup>
+    <thead>
+      <tr>
+        <th>Jedinica mere</th>
+        <th>Onlajn</th>
+        <th>U sali</th>
+        <th>Cena po jedinici</th>
+        <th>Popust</th>
+        <th>Poreska osnovica</th>
+        <th>PDV ({{stopaPdv}}%)</th>
+        <th>Ukupna naknada</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>{{jedinicaMere}}</td>
+        <td>{{formatNumber onlineKolicina}}</td>
+        <td>{{formatNumber offlineKolicina}}</td>
+        <td>{{cenaPoJedinici this}}</td>
+        <td>{{formatPercent popust}}</td>
+        <td>{{formatNumber subtotal.poreskaOsnovica}}</td>
+        <td>{{formatNumber subtotal.pdv}}</td>
+        <td class="total">{{formatNumber subtotal.ukupno}}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
