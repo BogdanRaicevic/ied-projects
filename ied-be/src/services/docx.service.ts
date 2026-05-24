@@ -8,7 +8,7 @@ import {
   type SertifikatType,
 } from "ied-shared";
 import PizZip from "pizzip";
-import puppeteer, { type Browser } from "puppeteer";
+import puppeteer, { type Browser, type PDFOptions } from "puppeteer";
 import { izdavacRacuna } from "../constants/izdavacRacuna.const";
 import {
   escapeHtml,
@@ -198,25 +198,43 @@ const getBrowser = async (): Promise<Browser> => {
   return browserPromise;
 };
 
-const renderCertificatePdf = async (
+const renderHtmlPdf = async (
   browser: Browser,
   htmlContent: string,
+  pdfOptions: PDFOptions,
 ): Promise<Buffer> => {
   const page = await browser.newPage();
   try {
     await page.emulateMediaType("print");
     await page.setContent(htmlContent, { waitUntil: "load" });
     const pdf = await page.pdf({
-      format: "A4",
-      landscape: true,
       printBackground: true,
       preferCSSPageSize: true,
-      margin: { top: 0, right: 0, bottom: 0, left: 0 },
+      ...pdfOptions,
     });
     return Buffer.from(pdf);
   } finally {
     await page.close();
   }
+};
+
+export const renderHtmlToPdfBuffer = async (
+  htmlContent: string,
+  pdfOptions: PDFOptions = {},
+): Promise<Buffer> => {
+  const browser = await getBrowser();
+  return renderHtmlPdf(browser, htmlContent, pdfOptions);
+};
+
+const renderCertificatePdf = async (
+  browser: Browser,
+  htmlContent: string,
+): Promise<Buffer> => {
+  return renderHtmlPdf(browser, htmlContent, {
+    format: "A4",
+    landscape: true,
+    margin: { top: 0, right: 0, bottom: 0, left: 0 },
+  });
 };
 
 // ---------------------------------------------------------------------------

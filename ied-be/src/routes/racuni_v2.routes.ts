@@ -1,10 +1,11 @@
 import {
-  type NextFunction,
   type Request,
   type Response,
   Router,
 } from "express";
-import { type RacunV2Form, RacunV2Zod } from "ied-shared";
+import { type RacunV2Form, RacunV2Zod, TipRacuna } from "ied-shared";
+import { generatePredracunV2Pdf } from "../services/racuni_v2.service";
+import { getTemplateErrorDetails } from "../utils/docx.utils";
 
 const router = Router();
 
@@ -13,7 +14,6 @@ router.post(
   async (
     req: Request<{}, any, RacunV2Form>,
     res: Response,
-    next: NextFunction,
   ) => {
     console.log("[RacunV2] Generate request payload:", req.body);
 
@@ -28,14 +28,32 @@ router.post(
         return;
       }
 
-      res.json({
-        ok: true,
-        message: "Racun V2 payload received.",
-        tipRacuna: parsed.data.tipRacuna,
-        pozivNaBroj: parsed.data.pozivNaBroj,
-      });
+      if (parsed.data.tipRacuna !== TipRacuna.PREDRACUN) {
+        res.status(400).json({
+          message: "Racun V2 PDF POC currently supports only Predracun.",
+          tipRacuna: parsed.data.tipRacuna,
+        });
+        return;
+      }
+
+      if (parsed.data.valuta !== "RSD") {
+        res.status(400).json({
+          message: "Racun V2 PDF POC currently supports only RSD.",
+          valuta: parsed.data.valuta,
+        });
+        return;
+      }
+
+      const { buffer, fileName } = await generatePredracunV2Pdf(parsed.data);
+      res.setHeader("Content-Type", "application/pdf");
+      res.setHeader("Content-Disposition", `attachment; filename=${fileName}`);
+      res.send(buffer);
     } catch (error) {
-      next(error);
+      console.error("Racun V2 PDF generation error:", error);
+      res.status(500).json({
+        error: "Error generating Racun V2 PDF",
+        details: getTemplateErrorDetails(error),
+      });
     }
   },
 );
