@@ -12,7 +12,7 @@ import { toDateOrNull } from "../utils/date";
  * This section keeps only the avansni-specific payment date that replaces
  * `UsloviPlacanjaSection` / `rokZaUplatu`.
  */
-export function AvansAmountsSection() {
+export function AvansDatumUplateSection() {
   const { control } = useRacunV2Form();
 
   return (
