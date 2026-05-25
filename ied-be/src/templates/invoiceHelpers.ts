@@ -102,6 +102,7 @@ export const pdvLabel = (pdvPoStopama: unknown): string => {
   return "PDV";
 };
 
+// TODO: create a real QR code generator
 const buildPlaceholderQrUrl = (data: InvoiceTemplateData): string => {
   const ukupno = Math.round(data.totals.ukupnaNaknada);
   const params = [
