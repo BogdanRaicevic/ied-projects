@@ -756,26 +756,38 @@ Goal: V2 has feature parity with V1 for the actual user workflow — search exis
 - [ ] **Ticket P3-B.3.2:** Guard: total avansno plaćeno must not exceed the konacni's ukupna naknada. Soft warning (not a hard error) in the UI; user confirms with a checkbox to save.
 - [ ] **Ticket P3-B.3.3:** Unit tests: single avansni, multiple avansni with same rate, multiple avansni with mixed rates, avansno plaćeno > ukupna naknada edge case.
 
-### Epic P3-C: DOCX rendering
+### Epic P3-C: PDF rendering
 
-#### Story P3-C.1: Template strategy
-- [ ] **Ticket P3-C.1.1:** Design new templates per tipRacuna: `predracunV2.docx`, `avansniV2.docx`, `konacniV2.docx`, `racunV2.docx`. Keep V1 templates untouched for V1 route.
-- [ ] **Ticket P3-C.1.2:** Define `flattenStavkeForDocx(stavke)` in `ied-shared` — `usluga` with both online/offline kolicina > 0 → 2 rows; `usluga` with only one → 1 row; `proizvod` → 1 row. Each row: `{ naziv, jedinicaMere, kolicina, cena, popust, poreskaOsnovica, pdv, ukupno }`.
-- [ ] **Ticket P3-C.1.3:** DOCX renderer reads `izdavac` snapshot from the invoice (NOT from `izdavacRacuna.const.ts`). This is the fix for the V1 "changed address mutates old invoices" bug.
-- [ ] **Ticket P3-C.1.4:** When `izdavac.pdvObveznik === false`, DOCX omits the entire PDV block and PDV rekapitulacija. Replaces V1's `shouldRenderPdvBlock` render-time conditional with a data-driven one.
-- [ ] **Ticket P3-C.1.5:** Mixed-rate rekapitulacija: iterate over `pdvPoStopama` map from the calculator, render one row per distinct stopa (`"PDV 20%: osnovica X / PDV Y"`, etc.).
-- [ ] **Ticket P3-C.1.6:** **No hardcoded currency strings in templates.** Every occurrence of `"RSD"`, `"dinara"`, `"din."`, currency symbols, etc. in the four Phase 3 DOCX templates must be rendered from `{{valuta}}` (plus a `formatCurrencyLabel(valuta)` helper in `ied-shared`). Phase 3 only ever renders `"RSD"` at runtime; the discipline is to keep the templates currency-agnostic so Phase 6 bilingual/EUR templates do not require re-authoring the base templates. Add a grep check in CI: `rg -w "RSD|dinara|din\\." ied-be/src/docx/templates-v2/` must return zero.
+> **Pivot from the original DOCX plan.** V2 invoice rendering is implemented as Handlebars HTML → Puppeteer PDF instead of `docxtemplater`. The DOCX-specific pipeline (`flattenStavkeForDocx`, `.docx` per-tip templates, `/api/docx/v2/modify-template`) was abandoned in favor of HTML/CSS templates that render the same data into a PDF blob. The V1 DOCX path (`/api/docx/modify-template` + `docx.service.ts`) is left untouched and continues to serve V1 routes only.
+>
+> Preview scripts/fixtures (e.g. the predracun preview HTMLs and `preview-predracun.ts`) are **not** roadmap deliverables for any V2 tipRacuna. They were useful during the initial template authoring; going forward the real `POST /api/racuni-v2/generate` path is the source of truth.
+
+#### Story P3-C.1: Template + renderer strategy
+
+- [x] **Ticket P3-C.1.1:** Shared Handlebars renderer + view-model contract. `InvoiceTemplateData` is the single template-facing shape; `renderInvoice(name, data, opts)` reads the `.hbs` source, compiles it, and returns HTML. Helpers + partials registered once at module load. *(Implemented in `ied-be/src/templates/invoiceRenderer.ts`.)*
+- [x] **Ticket P3-C.1.2:** Shared stylesheet, formatting helpers, and stavka partials. `invoice.css` is the single design-token source; `invoiceHelpers.ts` exposes `formatMoney`, `formatMoneyRsd`, `formatDate`, `formatQuantity`, `formatPercent`, `cenaPoJedinici`, `pdvLabel`, `qrSrc`; partials `stavka-usluga.hbs` and `stavka-proizvod.hbs` hold the per-tipStavke table layout. *(All in `ied-be/src/templates/invoices/`.)*
+- [x] **Ticket P3-C.1.3:** `predracun.hbs` template covering izdavac/primalac/uplata header, stavke (mixed usluga + proizvod), QR + totals (poreska osnovica, PDV, za uplatu), footer. Driven entirely by `InvoiceTemplateData` — no per-template view-model branching.
+- [x] **Ticket P3-C.1.4:** `avansni.hbs` template with the avansni-shaped stavka table (avans bez PDV / stopa / iznos PDV / uplaćen avans), avansni totals (uplaćen avans grand line), and `datumUplateAvansa` row under totals. Shares the same `InvoiceTemplateData` shape; predracun-only `rokZaUplatu` is simply unused.
+- [ ] **Ticket P3-C.1.5:** `konacni.hbs` template. Must surface linked avansni deduction (per Story P3-B.3) in the totals block: `Ukupna naknada` → `Avansno plaćeno` (sum across linked avansni) → `Za uplatu` (delta). Mixed-rate PDV recap should fall out of the shared `totals.pdvPoStopama` map.
+- [ ] **Ticket P3-C.1.6:** `racun.hbs` template (regular račun, no linked avansni). Same totals shape as `predracun` plus an optional `placeno` line above `Za uplatu` when `placeno > 0`.
+- [ ] **Ticket P3-C.1.7:** Wire `pickTemplateName` and `TEMPLATE_NAME_BY_TIP_RACUNA` in `racuni_v2.service.ts` to include `konacniRacun` → `"konacni"` and `racun` → `"racun"`. Drop the temporary 400 in `routes/racuni_v2.routes.ts` that rejects everything except predracun + avansni.
+- [ ] **Ticket P3-C.1.8:** Issuer snapshot fix. Today `buildIzdavacProfile` looks up `izdavacRacuna.const.ts` by `racunData.izdavacRacuna` — same V1 "changed address mutates old invoices" bug. When persisted V2 racuni land (Phase 2), `IzdavacProfile` must be sourced from the per-invoice snapshot stored at save time. Generation paths that have only the form data (i.e. the current "generate without saving" flow) keep using the live constant.
+- [ ] **Ticket P3-C.1.9:** Data-driven PDV omission. When `izdavac.pdvObveznik === false`, the templates must omit the PDV column on stavka tables and the PDV line in totals. Replaces V1's render-time `shouldRenderPdvBlock` flag with a `{{#if pdvObveznik}}` guard inside the `.hbs` templates (and the matching partials).
+- [ ] **Ticket P3-C.1.10:** Mixed-rate PDV recap. The totals block currently renders one line via `{{pdvLabel totals.pdvPoStopama}}`. When `pdvPoStopama` has >1 distinct stopa, render one line per stopa (`PDV 10%: …`, `PDV 20%: …`) instead of the single collapsed `PDV` line.
+- [ ] **Ticket P3-C.1.11:** Currency-neutral templates. Every `"RSD"`, `"dinara"`, `"din."` literal in the V2 `.hbs` templates must be driven from `{{valuta}}` + a `formatCurrencyLabel(valuta)` helper. Phase 3 only emits `"RSD"` at runtime, but keeping templates currency-agnostic avoids re-authoring for Phase 6. Add a CI grep: `rg -w "RSD|dinara|din\\." ied-be/src/templates/invoices/` must return zero matches in `.hbs` files. *(Currently `formatMoneyRsd` hardcodes `"RSD"` — generalize to `formatMoneyValuta` taking valuta as input, called as `{{formatMoneyValuta totals.ukupnaNaknada valuta}}`.)*
 
 #### Story P3-C.2: Route + FE action
-- [ ] **Ticket P3-C.2.1:** `POST /api/docx/v2/modify-template` — validates body against `RacunV2Zod`, picks template by tipRacuna, renders. Sanitize filename same as V1.
-- [ ] **Ticket P3-C.2.2:** Enable "Preuzmi DOCX" button on the read view (`RacuniV2/:id`); blob download + filename from `pozivNaBroj_primalac`.
-- [ ] **Ticket P3-C.2.3:** Sanity test: render each tipRacuna against a golden fixture and diff visually.
+
+- [x] **Ticket P3-C.2.1:** `POST /api/racuni-v2/generate` BE route. Validates body against `RacunV2Zod`, picks template via `pickTemplateName`, builds view model, renders HTML, converts to PDF via Puppeteer, returns `application/pdf` blob with sanitized `Content-Disposition`. *(Implemented in `ied-be/src/routes/racuni_v2.routes.ts` + `ied-be/src/services/racuni_v2.service.ts`. Currently gated to predracun + avansni; P3-C.1.7 above lifts that gate.)*
+- [x] **Ticket P3-C.2.2:** FE blob download from the V2 create form. Form submit posts to `/api/racuni-v2/generate`, handles JSON-in-blob error envelope, triggers download with `${pozivNaBroj}_${primalac}.pdf` fallback. *(Implemented in `ied-fe/src/api/racuni_v2.api.ts` + `RacunV2Content.tsx`.)*
+- [ ] **Ticket P3-C.2.3:** Persisted V2 read view action. When the read view (`/racuni-v2/:id`) ships in Phase 2, add a "Preuzmi PDF" button there that POSTs the persisted racun to the same `/api/racuni-v2/generate` route. Same blob download flow; same filename rules.
+- [ ] **Ticket P3-C.2.4:** Lightweight smoke tests for the real PDF path — at minimum: `renderInvoice("<tipRacuna>", validFixture)` for each tipRacuna returns non-empty HTML containing expected anchors (pozivNaBroj, primalac naziv, ukupna naknada formatted). End-to-end Puppeteer PDF generation can stay manual unless flakiness shows up. **Do not** wire any "compare against preview HTML fixture" assertions — preview scripts/fixtures are explicitly out of P3-C scope.
 
 ### Phase 3 definition of done
 
 - V2 Pretrage tab works with server pagination.
 - Konacni can be created by linking to an existing avansni by `pozivNaBroj`; totals deduct the avans correctly.
-- Every V2 tipRacuna can be downloaded as a DOCX that uses the snapshotted `izdavac`.
+- Every V2 tipRacuna (`predracun`, `avansniRacun`, `konacniRacun`, `racun`) can be downloaded as a PDF via `POST /api/racuni-v2/generate`, with the PDV block driven by `izdavac.pdvObveznik` and currency labels driven by `valuta`.
 
 ---
 
