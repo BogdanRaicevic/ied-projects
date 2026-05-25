@@ -90,7 +90,7 @@ importers:
         specifier: ^3.2.0
         version: 3.2.0
       puppeteer:
-        specifier: ^25.0.2
+        specifier: ^25.0.4
         version: 25.0.4(typescript@6.0.3)
       zod:
         specifier: ^4.4.3
