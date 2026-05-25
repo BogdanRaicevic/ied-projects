@@ -14,7 +14,7 @@
   },
   "homepage": "http://BogdanRaicevic.github.io/ied-fe",
   "dependencies": {
-    "@clerk/react": "^6.6.4",
+    "@clerk/react": "^6.6.5",
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.1",
     "@fontsource/roboto": "^5.2.10",
