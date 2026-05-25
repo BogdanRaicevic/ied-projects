@@ -45,7 +45,7 @@ importers:
         specifier: ^3.1048.0
         version: 3.1052.0(@aws-sdk/client-s3@3.1052.0)
       '@clerk/express':
-        specifier: ^2.1.18
+        specifier: ^2.1.19
         version: 2.1.21(express@5.2.1)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
       '@sentry/node':
         specifier: ^10.53.1
