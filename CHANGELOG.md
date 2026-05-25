@@ -1,3 +1,18 @@
+## [1.22.0](https://github.com/BogdanRaicevic/ied-projects/compare/v1.21.3...v1.22.0) (2026-05-25)
+
+### Features
+
+* add  template for avansni racuni ([6273a67](https://github.com/BogdanRaicevic/ied-projects/commit/6273a67edb83284641a29dd4ee911a1bcea2a708))
+* implement avansni racun structure with stavke support and calculations ([fd06cb7](https://github.com/BogdanRaicevic/ied-projects/commit/fd06cb7a76b6c0e73edbca6532244b6dbc366d40))
+
+### Bug Fixes
+
+* add datum uplate avansa to avansni racun ([dbe64fc](https://github.com/BogdanRaicevic/ied-projects/commit/dbe64fc2e5a09c301d015c89ac20e8b3e35e9873))
+* adjust padding in invoice table and refine date handling in AvansDatumUplateSection ([51dedd0](https://github.com/BogdanRaicevic/ied-projects/commit/51dedd03e7d04473f90b0b9566d6e4da50ac8033))
+* enhance date handling in AvansDatumUplateSection to clear validation errors on date change ([e30cd64](https://github.com/BogdanRaicevic/ied-projects/commit/e30cd644f381830dc0df8c6d24d818d254a63c55))
+* implement custom date validation logic for datumUplateAvansa ([8126223](https://github.com/BogdanRaicevic/ied-projects/commit/81262237e1cf4b8782e9b26c190048d9686849e2))
+* minor refactoring ([3d186c1](https://github.com/BogdanRaicevic/ied-projects/commit/3d186c10b393bf41b83a7a8925d01da7f3076472))
+
 ## [1.21.3](https://github.com/BogdanRaicevic/ied-projects/compare/v1.21.2...v1.21.3) (2026-05-10)
 
 ### Bug Fixes
