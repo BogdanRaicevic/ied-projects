@@ -124,7 +124,7 @@ importers:
         specifier: ^11.1.0
         version: 11.1.0
       tsx:
-        specifier: ^4.22.2
+        specifier: ^4.22.3
         version: 4.22.3
       typescript:
         specifier: ^6.0.3
@@ -258,7 +258,7 @@ importers:
         specifier: ^4.1.6
         version: 4.1.6(vitest@4.1.6)
       tsx:
-        specifier: ^4.22.2
+        specifier: ^4.22.3
         version: 4.22.3
       typescript:
         specifier: ^6.0.3
@@ -289,7 +289,7 @@ importers:
         specifier: ^24.12.4
         version: 24.12.4
       tsx:
-        specifier: ^4.22.2
+        specifier: ^4.22.3
         version: 4.22.3
       typescript:
         specifier: ^6.0.3
