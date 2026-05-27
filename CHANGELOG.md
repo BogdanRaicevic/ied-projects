@@ -1,3 +1,9 @@
+## [1.22.1](https://github.com/BogdanRaicevic/ied-projects/compare/v1.22.0...v1.22.1) (2026-05-27)
+
+### Bug Fixes
+
+* pnpm package version ([00cfb62](https://github.com/BogdanRaicevic/ied-projects/commit/00cfb620237a32e7d1452d809d1f5e703e610a62))
+
 ## [1.22.0](https://github.com/BogdanRaicevic/ied-projects/compare/v1.21.3...v1.22.0) (2026-05-25)
 
 ### Features
