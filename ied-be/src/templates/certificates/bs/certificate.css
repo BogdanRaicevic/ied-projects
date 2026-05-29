@@ -210,6 +210,7 @@ body {
 }
 
 .certificate-issuer {
+  position: relative;
   justify-self: end;
   text-align: right;
   min-height: 10mm;
@@ -221,6 +222,26 @@ body {
   color: var(--ink);
   font-style: italic;
   font-size: 4.2mm;
+}
+
+.signature-mark,
+.stamp-mark {
+  position: absolute;
+  pointer-events: none;
+}
+
+.signature-mark {
+  top: 5mm;
+  right: 0;
+  width: 30mm;
+  height: auto;
+}
+
+.stamp-mark {
+  top: -7mm;
+  right: 25mm;
+  width: 26mm;
+  height: auto;
 }
 
 @media screen {
