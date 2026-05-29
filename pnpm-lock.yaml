@@ -136,7 +136,7 @@ importers:
   ied-fe:
     dependencies:
       '@clerk/react':
-        specifier: ^6.7.0
+        specifier: ^6.7.1
         version: 6.7.1(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
       '@emotion/react':
         specifier: ^11.14.0
