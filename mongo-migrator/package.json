@@ -14,7 +14,7 @@
   "author": "",
   "license": "ISC",
   "engines": {
-    "node": ">=24.15.0"
+    "node": ">=24.16.0"
   },
   "dependencies": {
     "mongoose": "^9.6.2",
