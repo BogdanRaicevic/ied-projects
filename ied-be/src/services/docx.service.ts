@@ -100,8 +100,10 @@ const buildCertificateHtmlBase = (
 
   const templateDir = path.resolve(htmlTemplatesDir, templateKey);
 
+  const htmlFileName =
+    variant === "print" ? "certificate-print.html" : "certificate.html";
   const rawHtml = fs.readFileSync(
-    path.resolve(templateDir, "certificate-print.html"),
+    path.resolve(templateDir, htmlFileName),
     "utf-8",
   );
 
