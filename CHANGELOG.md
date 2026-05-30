@@ -1,3 +1,16 @@
+## [1.23.0](https://github.com/BogdanRaicevic/ied-projects/compare/v1.22.1...v1.23.0) (2026-05-30)
+
+### Features
+
+* add IED signature and stamp ([fa5e9c2](https://github.com/BogdanRaicevic/ied-projects/commit/fa5e9c24abc66c9bd9bbef89e52067d67adf0818))
+* add signatrure and stamp to BS ([76484e9](https://github.com/BogdanRaicevic/ied-projects/commit/76484e90c1e49b0d91e112a07b79f54269835c3f))
+* add signature for Perm ([7680ba3](https://github.com/BogdanRaicevic/ied-projects/commit/7680ba3b7ae2989424a3644beeaf3527ee790634))
+
+### Bug Fixes
+
+* change signature for BS ([5e6fa51](https://github.com/BogdanRaicevic/ied-projects/commit/5e6fa51bd4745aafa52ae0c0f67c56f6e15253e6))
+* use of templates ([8482acf](https://github.com/BogdanRaicevic/ied-projects/commit/8482acfdd3a6ecbbfdce3d817097e5431ed5fe9d))
+
 ## [1.22.1](https://github.com/BogdanRaicevic/ied-projects/compare/v1.22.0...v1.22.1) (2026-05-27)
 
 ### Bug Fixes
