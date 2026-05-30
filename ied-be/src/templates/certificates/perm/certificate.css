@@ -342,6 +342,7 @@ body {
 }
 
 .certificate-footer {
+  position: relative;
   display: grid;
   grid-template-columns: 1fr 1fr;
   align-items: end;
@@ -367,6 +368,7 @@ body {
 }
 
 .certificate-issuer {
+  position: relative;
   justify-self: end;
   display: flex;
   flex-direction: column;
@@ -376,10 +378,24 @@ body {
   min-height: 10mm;
 }
 
-.certificate-issuer em {
-  font-style: italic;
-  color: var(--ink);
-  font-size: 4mm;
+.signature-mark,
+.stamp-mark {
+  position: absolute;
+  pointer-events: none;
+}
+
+.signature-mark {
+  top: 5mm;
+  right: 0;
+  width: 44mm;
+  height: auto;
+}
+
+.stamp-mark {
+  top: -6mm;
+  right: 50mm;
+  width: 24mm;
+  height: auto;
 }
 
 @media screen {
