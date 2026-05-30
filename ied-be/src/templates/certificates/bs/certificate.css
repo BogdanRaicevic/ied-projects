@@ -222,6 +222,7 @@ body {
   color: var(--ink);
   font-style: italic;
   font-size: 4.2mm;
+  text-decoration: underline;
 }
 
 .signature-mark,
@@ -231,9 +232,9 @@ body {
 }
 
 .signature-mark {
-  top: 5mm;
+  top: 3mm;
   right: 0;
-  width: 30mm;
+  width: 35mm;
   height: auto;
 }
 
