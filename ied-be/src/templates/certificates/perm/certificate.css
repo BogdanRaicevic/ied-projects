@@ -392,9 +392,9 @@ body {
 }
 
 .stamp-mark {
-  top: -6mm;
-  right: 50mm;
-  width: 24mm;
+  top: 10mm;
+  right: 40mm;
+  width: 40mm;
   height: auto;
 }
 
