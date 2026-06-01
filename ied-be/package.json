@@ -47,7 +47,7 @@
     "date-fns": "^4.3.0",
     "docxtemplater": "^3.68.7",
     "dotenv": "^17.4.2",
-    "es-toolkit": "^1.46.1",
+    "es-toolkit": "^1.47.0",
     "express": "^5.2.1",
     "handlebars": "^4.7.9",
     "ied-shared": "workspace:^",
