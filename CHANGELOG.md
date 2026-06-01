@@ -1,3 +1,9 @@
+## [1.23.1](https://github.com/BogdanRaicevic/ied-projects/compare/v1.23.0...v1.23.1) (2026-06-01)
+
+### Bug Fixes
+
+* Add stamp to permanent sertificates ([d0d8ef8](https://github.com/BogdanRaicevic/ied-projects/commit/d0d8ef8dc9a8e0a03cf16a8e38eec096fb9dc8f6))
+
 ## [1.23.0](https://github.com/BogdanRaicevic/ied-projects/compare/v1.22.1...v1.23.0) (2026-05-30)
 
 ### Features
