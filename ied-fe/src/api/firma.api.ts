@@ -42,10 +42,7 @@ export const fetchSingleFirma = async (id: string): Promise<FirmaType> => {
 
 export const exportFirmaData = async (
   queryParameters: ParametriPretrage,
-): Promise<{
-  data: ExportFirma;
-  duplicates: string[];
-}> => {
+): Promise<ExportFirma> => {
   try {
     const body = {
       queryParameters,
@@ -56,27 +53,7 @@ export const exportFirmaData = async (
       body,
     );
 
-    const firmeMap = new Map<string, number>();
-    for (const element of response.data) {
-      if (!element.e_mail) {
-        continue; // Skip if e_mail is not present
-      }
-
-      if (firmeMap.has(element.e_mail)) {
-        firmeMap.set(element.e_mail, firmeMap.get(element.e_mail)! + 1);
-      } else {
-        firmeMap.set(element.e_mail, 1);
-      }
-    }
-
-    const duplicates = Array.from(firmeMap.entries())
-      .filter(([_, count]) => count > 1)
-      .map(([e_mail]) => e_mail);
-
-    return {
-      data: response.data,
-      duplicates,
-    };
+    return response.data;
   } catch (error) {
     console.error("Error exporting firma data:", error);
     throw error;
@@ -85,10 +62,7 @@ export const exportFirmaData = async (
 
 export const exportZaposleniData = async (
   queryParameters: ParametriPretrage,
-): Promise<{
-  data: ExportZaposlenih;
-  duplicates: string[];
-}> => {
+): Promise<ExportZaposlenih> => {
   try {
     const body = {
       queryParameters,
@@ -99,26 +73,7 @@ export const exportZaposleniData = async (
       body,
     );
 
-    const zaposleniMap = new Map<string, number>();
-    for (const element of response.data) {
-      if (!element.e_mail) {
-        continue; // Skip if e_mail is not present
-      }
-      if (zaposleniMap.has(element.e_mail)) {
-        zaposleniMap.set(element.e_mail, zaposleniMap.get(element.e_mail)! + 1);
-      } else {
-        zaposleniMap.set(element.e_mail, 1);
-      }
-    }
-
-    const duplicates = Array.from(zaposleniMap.entries())
-      .filter(([_, count]) => count > 1)
-      .map(([e_mail]) => e_mail);
-
-    return {
-      data: response.data,
-      duplicates,
-    };
+    return response.data;
   } catch (error) {
     console.error("Error exporting zaposleni data:", error);
     throw error;
