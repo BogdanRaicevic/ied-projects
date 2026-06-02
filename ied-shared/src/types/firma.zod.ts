@@ -9,18 +9,14 @@ export const EmailSchema = z
 export const ExportZaposlenihSchema = z.array(
   z.object({
     imePrezime: z.string().optional(),
-    e_mail: EmailSchema.optional(),
-    naziv_firme: z.string().optional(),
-    radno_mesto: z.string().optional(),
+    e_mail: EmailSchema,
   }),
 );
 
 export const ExportFirmaSchema = z.array(
   z.object({
     naziv_firme: z.string().optional(),
-    e_mail: EmailSchema.optional(),
-    delatnost: z.string().optional(),
-    tip_firme: z.string().optional(),
+    e_mail: EmailSchema,
   }),
 );
 
