@@ -1,3 +1,10 @@
+## [1.23.2](https://github.com/BogdanRaicevic/ied-projects/compare/v1.23.1...v1.23.2) (2026-06-02)
+
+### Bug Fixes
+
+* handle special characters in Name cells ([2c25dd4](https://github.com/BogdanRaicevic/ied-projects/commit/2c25dd46ff08c2ebc14735fc4f6bffa73882ee40))
+* remove duplicates from email list ([1963e0d](https://github.com/BogdanRaicevic/ied-projects/commit/1963e0d6c2eb5990437c8d2d367975d5c7756d2f))
+
 ## [1.23.1](https://github.com/BogdanRaicevic/ied-projects/compare/v1.23.0...v1.23.1) (2026-06-01)
 
 ### Bug Fixes
