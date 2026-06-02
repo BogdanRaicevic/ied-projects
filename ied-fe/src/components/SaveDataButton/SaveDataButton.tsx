@@ -21,47 +21,24 @@ export default function ExportDataButton({
   // Prepend BOM to preserve Serbian Latin characters in Windows
   const bom = "\uFEFF";
 
-  const firmaData = (someData: { data: ExportFirma; duplicates: string[] }) => {
-    const headers = ["Naziv firme", "E-mail", "Delatnost", "Tip firme"];
+  const firmaData = (someData: ExportFirma) => {
+    const headers = ["Name", "Email"];
 
-    const rows = someData.data.map((item) => [
-      item.naziv_firme || "",
-      item.e_mail || "",
-      item.delatnost || "",
-      item.tip_firme || "",
-    ]);
+    const rows = someData.map((item) => [item.naziv_firme || "", item.e_mail]);
 
     const csvContent = [headers, ...rows].map((e) => e.join(",")).join("\n");
 
-    const headersForDuplicates = "Duplicate E-mails";
-    const duplicatesContent = someData.duplicates.length
-      ? [headersForDuplicates, ...someData.duplicates].join("\n")
-      : "";
-
-    return `${bom + csvContent}\n\n${duplicatesContent}`;
+    return bom + csvContent;
   };
 
-  const zaposleniData = (someData: {
-    data: ExportZaposlenih;
-    duplicates: string[];
-  }) => {
-    const headers = ["Ime i prezime", "E-mail", "Naziv firme", "Radno mesto"];
+  const zaposleniData = (someData: ExportZaposlenih) => {
+    const headers = ["Name", "Email"];
 
-    const rows = someData.data.map((item) => [
-      item.imePrezime || "",
-      item.e_mail || "",
-      item.naziv_firme || "",
-      item.radno_mesto || "",
-    ]);
+    const rows = someData.map((item) => [item.imePrezime || "", item.e_mail]);
 
     const csvContent = [headers, ...rows].map((e) => e.join(",")).join("\n");
 
-    const headersForDuplicates = "Duplicate E-mails";
-    const duplicatesContent = someData.duplicates.length
-      ? [headersForDuplicates, ...someData.duplicates].join("\n")
-      : "";
-
-    return `${bom + csvContent}\n\n${duplicatesContent}`;
+    return bom + csvContent;
   };
 
   const handleExport = async () => {
