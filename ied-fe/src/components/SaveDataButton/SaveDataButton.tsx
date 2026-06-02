@@ -21,24 +21,31 @@ export default function ExportDataButton({
   // Prepend BOM to preserve Serbian Latin characters in Windows
   const bom = "\uFEFF";
 
+  // RFC 4180: quote a field only when it contains a comma, double quote, or
+  // newline, and escape any embedded double quotes by doubling them.
+  const escapeCsvField = (field: string) => {
+    if (/[",\r\n]/.test(field)) {
+      return `"${field.replace(/"/g, '""')}"`;
+    }
+    return field;
+  };
+
+  const buildCsv = (rows: string[][]) =>
+    bom +
+    rows.map((row) => row.map(escapeCsvField).join(",")).join("\r\n");
+
   const firmaData = (someData: ExportFirma) => {
     const headers = ["Name", "Email"];
-
     const rows = someData.map((item) => [item.naziv_firme || "", item.e_mail]);
 
-    const csvContent = [headers, ...rows].map((e) => e.join(",")).join("\n");
-
-    return bom + csvContent;
+    return buildCsv([headers, ...rows]);
   };
 
   const zaposleniData = (someData: ExportZaposlenih) => {
     const headers = ["Name", "Email"];
-
     const rows = someData.map((item) => [item.imePrezime || "", item.e_mail]);
 
-    const csvContent = [headers, ...rows].map((e) => e.join(",")).join("\n");
-
-    return bom + csvContent;
+    return buildCsv([headers, ...rows]);
   };
 
   const handleExport = async () => {
