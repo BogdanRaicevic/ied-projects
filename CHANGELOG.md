@@ -1,3 +1,10 @@
+## [1.24.0](https://github.com/BogdanRaicevic/ied-projects/compare/v1.23.2...v1.24.0) (2026-06-03)
+
+### Features
+
+* add ecosystem config ([f3ef36c](https://github.com/BogdanRaicevic/ied-projects/commit/f3ef36c7e4982b8b6db602939296d3792d4101d5))
+* add pm2 ([6501c69](https://github.com/BogdanRaicevic/ied-projects/commit/6501c69810c6593fc4344a08006600c3fb6540a0))
+
 ## [1.23.2](https://github.com/BogdanRaicevic/ied-projects/compare/v1.23.1...v1.23.2) (2026-06-02)
 
 ### Bug Fixes
