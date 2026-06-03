@@ -62,7 +62,7 @@ export const generateSertifikatPdfBatch = async (
       "Failed to generate PDF certificates",
     );
 
-    const fallbackName = `Sertifikati_${sanitizeFilename(sertifikati[0]?.seminar_naziv || "IED")}.zip`;
+    const fallbackName = `sertifikati_${new Date().toISOString().split("T")[0]}.zip`;
 
     triggerBlobDownload(
       response.data,

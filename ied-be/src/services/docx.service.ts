@@ -13,7 +13,6 @@ import { izdavacRacuna } from "../constants/izdavacRacuna.const";
 import {
   escapeHtml,
   formatToLocalDate,
-  getCurrentYearLastTwoDigits,
   inlineLocalAsset,
   sanitizeFilename,
 } from "../utils/docx.utils";
@@ -245,7 +244,7 @@ const renderCertificatePdf = async (
 
 const getSertifikatPdfFileName = (sertifikat: SertifikatType): string =>
   sanitizeFilename(
-    `${sertifikat.broj_sertifikata}${getCurrentYearLastTwoDigits()}_${sertifikat.ime_prezime}_${sertifikat.firma_naziv}.pdf`,
+    `${sertifikat.ime_prezime}_${sertifikat.broj_sertifikata}.pdf`,
   );
 
 export const generateCertificatesZipBuffer = async (
@@ -275,9 +274,7 @@ export const generateCertificatesZipBuffer = async (
     type: "nodebuffer",
   });
 
-  const fileName = sanitizeFilename(
-    `Sertifikati_${getCurrentYearLastTwoDigits()}_${sertifikatData[0]?.seminar_naziv || "IED"}.zip`,
-  );
+  const fileName = `sertifikati_${new Date().toISOString().split("T")[0]}.zip`;
 
   return { buffer, fileName };
 };
