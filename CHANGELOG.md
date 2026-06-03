@@ -1,3 +1,9 @@
+## [1.24.1](https://github.com/BogdanRaicevic/ied-projects/compare/v1.24.0...v1.24.1) (2026-06-03)
+
+### Bug Fixes
+
+* shorten sertifikat file name ([cc4f319](https://github.com/BogdanRaicevic/ied-projects/commit/cc4f319f5467a34ef248b984038f3f7d8cf41175))
+
 ## [1.24.0](https://github.com/BogdanRaicevic/ied-projects/compare/v1.23.2...v1.24.0) (2026-06-03)
 
 ### Features
