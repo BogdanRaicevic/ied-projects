@@ -51,7 +51,7 @@ importers:
         specifier: ^2.1.22
         version: 2.1.22(express@5.2.1)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
       '@sentry/node':
-        specifier: ^10.54.0
+        specifier: ^10.55.0
         version: 10.55.0
       cors:
         specifier: ^2.8.6
