@@ -3,8 +3,11 @@ import { SUPPRESSION_REASONS } from "../constants/email";
 import { LastContactedFromDB } from "./last_contacted.zod";
 
 export const EmailSchema = z
-  .email("Neispravna email adresa")
-  .max(100, "Predugacka email adresa");
+  .string()
+  .trim()
+  .pipe(
+    z.email("Neispravna email adresa").max(100, "Predugacka email adresa"),
+  );
 
 export const ExportZaposlenihSchema = z.array(
   z.object({

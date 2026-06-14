@@ -7,7 +7,6 @@ import {
   raw,
 } from "express";
 import {
-  EmailSchema,
   type SuppressedEmail,
   SuppressedEmailSchema,
 } from "ied-shared";
@@ -103,9 +102,9 @@ router.delete(
 
 router.delete(
   "/remove-email",
-  validateRequestBody(EmailSchema),
+  validateRequestBody(SuppressedEmailSchema.pick({ email: true })),
   async (req: Request, res: Response, next: NextFunction) => {
-    const email = req.body as string;
+    const { email } = req.body as Pick<SuppressedEmail, "email">;
     try {
       await removeSuppressedEmail(email);
 
