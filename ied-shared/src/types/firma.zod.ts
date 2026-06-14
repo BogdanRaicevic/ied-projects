@@ -5,21 +5,20 @@ import { LastContactedFromDB } from "./last_contacted.zod";
 export const EmailSchema = z
   .string()
   .trim()
-  .pipe(
-    z.email("Neispravna email adresa").max(100, "Predugacka email adresa"),
-  );
+  .pipe(z.email("Neispravna email adresa").max(100, "Predugacka email adresa"));
 
 export const ExportZaposlenihSchema = z.array(
   z.object({
     imePrezime: z.string().optional(),
-    e_mail: EmailSchema,
+    e_mail: EmailSchema.or(z.literal("")).optional(),
+    firma_naziv: z.string().optional(),
   }),
 );
 
 export const ExportFirmaSchema = z.array(
   z.object({
     naziv_firme: z.string().optional(),
-    e_mail: EmailSchema,
+    e_mail: EmailSchema.or(z.literal("")).optional(),
   }),
 );
 

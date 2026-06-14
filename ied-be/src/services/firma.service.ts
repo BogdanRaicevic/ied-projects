@@ -103,14 +103,10 @@ export const exportSearchedFirmaData = async (
 
   const res: ExportFirma = [];
   cursor.on("data", (doc) => {
-    // Rows without an email are useless for the email-sending app.
-    if (!doc.e_mail) {
-      return;
-    }
-
+    // Rows without an email are kept so the export can list them separately.
     res.push({
       naziv_firme: doc.naziv_firme,
-      e_mail: doc.e_mail,
+      e_mail: doc.e_mail ?? "",
     });
   });
 
@@ -144,6 +140,7 @@ export const exportSearchedZaposleniData = async (
   }
 
   const cursor = Firma.find(mongoQuery, {
+    naziv_firme: 1,
     zaposleni: 1,
     _id: 0,
   })
@@ -158,11 +155,6 @@ export const exportSearchedZaposleniData = async (
       for (const z of doc.zaposleni) {
         if (!z._id?.toString()) {
           console.warn("Zaposleni missing _id:", z);
-          continue;
-        }
-
-        // Rows without an email are useless for the email-sending app.
-        if (!z.e_mail) {
           continue;
         }
 
@@ -207,7 +199,8 @@ export const exportSearchedZaposleniData = async (
         if (shouldAdd) {
           res.push({
             imePrezime: `${z.ime} ${z.prezime}`,
-            e_mail: z.e_mail,
+            firma_naziv: doc.naziv_firme,
+            e_mail: z.e_mail ?? "",
           });
         }
       }

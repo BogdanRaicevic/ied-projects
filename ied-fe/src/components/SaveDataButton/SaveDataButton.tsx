@@ -1,5 +1,6 @@
 import DownloadIcon from "@mui/icons-material/Download";
 import Button from "@mui/material/Button";
+import { strToU8, zipSync } from "fflate";
 import type {
   ExportFirma,
   ExportZaposlenih,
@@ -11,6 +12,14 @@ type SaveButton = {
   queryParameters: ParametriPretrage;
   fileName: string;
   exportSubject: "firma" | "zaposleni";
+};
+
+// Common shape so firma/zaposleni rows can share the partitioning logic.
+type NormalizedRow = {
+  name: string;
+  email: string;
+  firmaNaziv: string;
+  imePrezime: string;
 };
 
 export default function ExportDataButton({
@@ -31,43 +40,116 @@ export default function ExportDataButton({
   };
 
   const buildCsv = (rows: string[][]) =>
-    bom +
-    rows.map((row) => row.map(escapeCsvField).join(",")).join("\r\n");
+    bom + rows.map((row) => row.map(escapeCsvField).join(",")).join("\r\n");
 
-  const firmaData = (someData: ExportFirma) => {
-    const headers = ["Name", "Email"];
-    const rows = someData.map((item) => [item.naziv_firme || "", item.e_mail]);
+  const normalizeFirma = (someData: ExportFirma): NormalizedRow[] =>
+    someData.map((item) => ({
+      name: item.naziv_firme || "",
+      email: item.e_mail || "",
+      firmaNaziv: item.naziv_firme || "",
+      imePrezime: "",
+    }));
 
-    return buildCsv([headers, ...rows]);
+  const normalizeZaposleni = (someData: ExportZaposlenih): NormalizedRow[] =>
+    someData.map((item) => ({
+      name: item.imePrezime || "",
+      email: item.e_mail || "",
+      firmaNaziv: item.firma_naziv || "",
+      imePrezime: item.imePrezime || "",
+    }));
+
+  // Split rows into: deduplicated upload rows (first email wins), the dropped
+  // duplicate occurrences, and rows that have no email at all.
+  const partitionRows = (rows: NormalizedRow[]) => {
+    const seenEmails = new Set<string>();
+    const upload: NormalizedRow[] = [];
+    const duplicates: NormalizedRow[] = [];
+    const noEmail: NormalizedRow[] = [];
+
+    for (const row of rows) {
+      const normalizedEmail = row.email.trim().toLowerCase();
+
+      if (!normalizedEmail) {
+        noEmail.push(row);
+        continue;
+      }
+
+      if (seenEmails.has(normalizedEmail)) {
+        duplicates.push(row);
+        continue;
+      }
+
+      seenEmails.add(normalizedEmail);
+      upload.push(row);
+    }
+
+    return { upload, duplicates, noEmail };
   };
 
-  const zaposleniData = (someData: ExportZaposlenih) => {
-    const headers = ["Name", "Email"];
-    const rows = someData.map((item) => [item.imePrezime || "", item.e_mail]);
+  const buildUploadCsv = (rows: NormalizedRow[]) =>
+    buildCsv([["Name", "Email"], ...rows.map((row) => [row.name, row.email])]);
 
-    return buildCsv([headers, ...rows]);
+  const buildDuplicatesCsv = (rows: NormalizedRow[]) => {
+    if (exportSubject === "firma") {
+      return buildCsv([
+        ["firma_naziv", "email"],
+        ...rows.map((row) => [row.firmaNaziv, row.email]),
+      ]);
+    }
+
+    return buildCsv([
+      ["firma_naziv", "email", "ime_prezime"],
+      ...rows.map((row) => [row.firmaNaziv, row.email, row.imePrezime]),
+    ]);
+  };
+
+  const buildNoEmailCsv = (rows: NormalizedRow[]) => {
+    if (exportSubject === "firma") {
+      return buildCsv([
+        ["firma_naziv"],
+        ...rows.map((row) => [row.firmaNaziv]),
+      ]);
+    }
+
+    return buildCsv([
+      ["firma_naziv", "ime_prezime"],
+      ...rows.map((row) => [row.firmaNaziv, row.imePrezime]),
+    ]);
+  };
+
+  const downloadZip = (zipped: Uint8Array) => {
+    // Copy into a fresh ArrayBuffer so the Blob part is typed as ArrayBuffer
+    // (fflate returns Uint8Array<ArrayBufferLike>, which TS rejects directly).
+    const buffer = new ArrayBuffer(zipped.byteLength);
+    new Uint8Array(buffer).set(zipped);
+    const blob = new Blob([buffer], { type: "application/zip" });
+    const url = URL.createObjectURL(blob);
+
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `${fileName}.zip`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
   };
 
   const handleExport = async () => {
     try {
-      const data =
+      const rows =
         exportSubject === "firma"
-          ? await exportFirmaData(queryParameters)
-          : await exportZaposleniData(queryParameters);
+          ? normalizeFirma(await exportFirmaData(queryParameters))
+          : normalizeZaposleni(await exportZaposleniData(queryParameters));
 
-      const csvData =
-        exportSubject === "firma" ? firmaData(data) : zaposleniData(data);
+      const { upload, duplicates, noEmail } = partitionRows(rows);
 
-      const blob = new Blob([csvData], { type: "text/csv;charset=utf-8;" });
-      const url = URL.createObjectURL(blob);
+      const zipped = zipSync({
+        [`${fileName}_upload.csv`]: strToU8(buildUploadCsv(upload)),
+        [`${fileName}_duplikati.csv`]: strToU8(buildDuplicatesCsv(duplicates)),
+        [`${fileName}_bez_emaila.csv`]: strToU8(buildNoEmailCsv(noEmail)),
+      });
 
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = `${fileName}.csv`;
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      URL.revokeObjectURL(url);
+      downloadZip(zipped);
     } catch (error) {
       console.error("Error exporting data:", error);
     }
