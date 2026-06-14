@@ -1,3 +1,9 @@
+## [1.24.2](https://github.com/BogdanRaicevic/ied-projects/compare/v1.24.1...v1.24.2) (2026-06-14)
+
+### Bug Fixes
+
+* update email validation schema and adjust email removal route ([66a294c](https://github.com/BogdanRaicevic/ied-projects/commit/66a294c9e31b78e8358e2f7c072ac663f3fbcaf9))
+
 ## [1.24.1](https://github.com/BogdanRaicevic/ied-projects/compare/v1.24.0...v1.24.1) (2026-06-03)
 
 ### Bug Fixes
