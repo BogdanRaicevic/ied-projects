@@ -198,7 +198,7 @@ export const exportSearchedZaposleniData = async (
 
         if (shouldAdd) {
           res.push({
-            imePrezime: `${z.ime} ${z.prezime}`,
+            imePrezime: [z.ime, z.prezime].filter(Boolean).join(" "),
             firma_naziv: doc.naziv_firme,
             e_mail: z.e_mail ?? "",
           });
