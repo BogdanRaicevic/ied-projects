@@ -1,3 +1,13 @@
+## [1.25.0](https://github.com/BogdanRaicevic/ied-projects/compare/v1.24.2...v1.25.0) (2026-06-14)
+
+### Features
+
+* enhance data export functionality with email handling and CSV partitioning ([762141c](https://github.com/BogdanRaicevic/ied-projects/commit/762141c2687ed1caf16bf1341868c7ac885ab343))
+
+### Bug Fixes
+
+* improve name formatting in exported data ([c69bbbb](https://github.com/BogdanRaicevic/ied-projects/commit/c69bbbb56232dcd213e3c8ed8d6d9fd1d92663bc))
+
 ## [1.24.2](https://github.com/BogdanRaicevic/ied-projects/compare/v1.24.1...v1.24.2) (2026-06-14)
 
 ### Bug Fixes
