@@ -87,8 +87,8 @@ importers:
         specifier: workspace:^
         version: link:../ied-shared
       mongoose:
-        specifier: ^9.6.3
-        version: 9.6.3(socks@2.8.9)
+        specifier: ^9.7.1
+        version: 9.7.2(socks@2.8.9)
       node-cache:
         specifier: ^5.1.2
         version: 5.1.2
@@ -285,8 +285,8 @@ importers:
         specifier: workspace:^
         version: link:../ied-shared
       mongoose:
-        specifier: ^9.6.3
-        version: 9.6.3(socks@2.8.9)
+        specifier: ^9.7.1
+        version: 9.7.2(socks@2.8.9)
       mysql2:
         specifier: ^3.22.5
         version: 3.22.5(@types/node@24.13.2)
@@ -3360,8 +3360,8 @@ packages:
       socks:
         optional: true
 
-  mongoose@9.6.3:
-    resolution: {integrity: sha512-vI6dTTlQnfMCyyQ5TrvhG0bCRs4dq5e1uFNPtOOWsOhn0fSg8AoIHjfyyCYr8aybyvPs845dRHGxsC3w/fHcBA==}
+  mongoose@9.7.2:
+    resolution: {integrity: sha512-VxxS3tjOGRIvhBMd84RR7L1WbDdm08Qq6V88VMq6jP6aE1Q+NlbTZDBtye2NAyO48i5kBFxM2oxfX0CPKNwCMg==}
     engines: {node: '>=20.19.0'}
 
   mpath@0.9.0:
@@ -7631,7 +7631,7 @@ snapshots:
     optionalDependencies:
       socks: 2.8.9
 
-  mongoose@9.6.3(socks@2.8.9):
+  mongoose@9.7.2(socks@2.8.9):
     dependencies:
       kareem: 3.3.0
       mongodb: 7.2.0(socks@2.8.9)
