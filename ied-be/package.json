@@ -40,7 +40,7 @@
     "@aws-sdk/client-s3": "^3.1063.0",
     "@aws-sdk/lib-storage": "^3.1063.0",
     "@clerk/express": "^2.1.23",
-    "@sentry/node": "^10.56.0",
+    "@sentry/node": "^10.59.0",
     "cors": "^2.8.6",
     "cron": "^4.4.0",
     "csv-parse": "^6.2.1",
