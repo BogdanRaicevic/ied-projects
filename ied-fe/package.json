@@ -29,7 +29,7 @@
     "axios": "^1.17.0",
     "date-fns": "^4.4.0",
     "diff": "^9.0.0",
-    "es-toolkit": "^1.47.0",
+    "es-toolkit": "^1.47.1",
     "fflate": "^0.8.3",
     "ied-shared": "workspace:^",
     "material-react-table": "^3.2.1",
