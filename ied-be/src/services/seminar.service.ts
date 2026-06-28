@@ -302,8 +302,6 @@ const transformPrijavaToDb = (prijava: PrijavaZodType): PrijavaType => {
 
 const prepareSeminarData = (seminarData: SeminarZodType) => {
   const { tipSeminara, ...rest } = seminarData;
-  const datumi =
-    seminarData.datumi.length > 0 ? seminarData.datumi : [seminarData.datum];
 
   const transformedPrijave = (seminarData.prijave || []).map((prijava) =>
     transformPrijavaToDb(prijava as PrijavaZodType),
@@ -311,8 +309,6 @@ const prepareSeminarData = (seminarData: SeminarZodType) => {
 
   const data: any = {
     ...rest,
-    datum: datumi[0] ?? seminarData.datum,
-    datumi,
     prijave: transformedPrijave,
   };
 
@@ -374,13 +370,15 @@ const aggregateSeminarsByFirma = async (
   }
 
   if (queryParams.datumOd || queryParams.datumDo) {
-    seminarMatch.datum = {};
+    const range: { $gte?: Date; $lte?: Date } = {};
     if (queryParams.datumOd) {
-      seminarMatch.datum.$gte = new Date(queryParams.datumOd);
+      range.$gte = new Date(queryParams.datumOd);
     }
     if (queryParams.datumDo) {
-      seminarMatch.datum.$lte = new Date(queryParams.datumDo);
+      range.$lte = new Date(queryParams.datumDo);
     }
+    // Match if the legacy datum is in range OR any date in datumi is in range
+    seminarMatch.$or = [{ datum: range }, { datumi: { $elemMatch: range } }];
   }
 
   if (Object.keys(seminarMatch).length > 0) {

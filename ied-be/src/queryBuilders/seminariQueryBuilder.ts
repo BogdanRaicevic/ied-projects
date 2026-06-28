@@ -19,15 +19,16 @@ export function createSeminarQuery(
     query.predavac = { $regex: params.predavac, $options: "i" }; // Case-insensitive partial match
   }
 
-  if (params?.datumOd && params?.datumDo) {
-    query.datum = {
-      $gte: params.datumOd,
-      $lte: params.datumDo,
-    };
-  } else if (params?.datumOd) {
-    query.datum = { $gte: params.datumOd };
-  } else if (params?.datumDo) {
-    query.datum = { $lte: params.datumDo };
+  if (params?.datumOd || params?.datumDo) {
+    const range: { $gte?: Date; $lte?: Date } = {};
+    if (params.datumOd) {
+      range.$gte = params.datumOd;
+    }
+    if (params.datumDo) {
+      range.$lte = params.datumDo;
+    }
+    // Match if the legacy datum is in range OR any date in datumi is in range
+    query.$or = [{ datum: range }, { datumi: { $elemMatch: range } }];
   }
 
   if (params?.tipSeminara && params.tipSeminara.length > 0) {
