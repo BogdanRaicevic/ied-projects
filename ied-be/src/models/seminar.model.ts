@@ -8,6 +8,7 @@ export type SeminarType = {
   offlineCena?: number;
   onlineCena?: number;
   datum?: Date;
+  datumi?: Date[];
   detalji?: string;
   prijave: PrijavaType[];
   tipSeminara?: Types.ObjectId;
@@ -59,6 +60,7 @@ const seminarSchema = new Schema<SeminarType>(
     offlineCena: { type: Number, required: false },
     onlineCena: { type: Number, required: false },
     datum: { type: Date, required: false },
+    datumi: { type: [Date], default: [] },
     detalji: { type: String, required: false },
     prijave: [prijavaSchema],
     tipSeminara: {
