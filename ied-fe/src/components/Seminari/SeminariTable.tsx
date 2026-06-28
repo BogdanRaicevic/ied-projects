@@ -99,10 +99,21 @@ export default function SeminariTable({
     {
       header: "Datum",
       accessorKey: "datum",
-      Cell: ({ cell }) => {
-        const value = cell.getValue() as string | Date;
-        if (!value) return null;
-        return format(value, "yyyy-MM-dd");
+      Cell: ({ row }) => {
+        const { datum, datumi } = row.original;
+        const dates = [datum, ...(datumi ?? [])].filter(Boolean) as (
+          | string
+          | Date
+        )[];
+        if (dates.length === 0) {
+          return null;
+        }
+
+        return dates.map((date) => (
+          <div key={date.toString()}>
+            {format(new Date(date), "yyyy-MM-dd")}
+          </div>
+        ));
       },
       sortingFn: "datetime",
     },

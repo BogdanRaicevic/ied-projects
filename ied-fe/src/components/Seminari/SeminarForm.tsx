@@ -17,6 +17,7 @@ import {
   type Resolver,
   type SubmitHandler,
   useForm,
+  useWatch,
 } from "react-hook-form";
 import {
   useCreateSeminarMutation,
@@ -40,6 +41,7 @@ export default function SeminarForm({
     offlineCena: 0,
     onlineCena: 0,
     datum: new Date(),
+    datumi: [],
     detalji: "",
     prijave: [],
     tipSeminara: "",
@@ -49,15 +51,19 @@ export default function SeminarForm({
     control,
     handleSubmit,
     reset,
+    setValue,
     formState: { errors },
   } = useForm<SeminarZodType>({
     defaultValues: {
       ...defaultSeminarData,
       ...seminar, // Merge with existing seminar data if provided
       datum: seminar?.datum ? new Date(seminar.datum) : new Date(), // Ensure date is a Date object
+      datumi: seminar?.datumi?.map((datum) => new Date(datum)) ?? [],
     },
     resolver: zodResolver(SeminarSchema) as Resolver<SeminarZodType>,
   });
+
+  const datumi = useWatch({ control, name: "datumi" }) ?? [];
 
   if (Object.keys(errors).length > 0) {
     console.error("errors", errors);
@@ -85,6 +91,7 @@ export default function SeminarForm({
         datum: seminar.datum
           ? new Date(seminar.datum)
           : defaultSeminarData.datum,
+        datumi: seminar.datumi?.map((datum) => new Date(datum)) ?? [],
       });
     } else {
       reset(defaultSeminarData);
@@ -236,23 +243,6 @@ export default function SeminarForm({
           />
         </Grid>
 
-        <Grid size={3}>
-          <FormControl fullWidth sx={{ m: 1 }}>
-            <Controller
-              name="datum"
-              control={control}
-              render={({ field }) => (
-                <DatePicker
-                  format="yyyy-MM-dd"
-                  label="Datum održavanja"
-                  value={field.value ?? null}
-                  onChange={(date) => field.onChange(date)}
-                />
-              )}
-            />
-          </FormControl>
-        </Grid>
-
         <Grid size={3} sx={{ m: 1 }}>
           <Controller
             name="tipSeminara"
@@ -279,6 +269,63 @@ export default function SeminarForm({
               />
             )}
           />
+        </Grid>
+
+        <Grid size={3}>
+          <FormControl fullWidth sx={{ m: 1 }}>
+            <Controller
+              name="datum"
+              control={control}
+              render={({ field }) => (
+                <DatePicker
+                  format="yyyy-MM-dd"
+                  label="Datum održavanja"
+                  value={field.value ?? null}
+                  onChange={(date) => field.onChange(date)}
+                />
+              )}
+            />
+          </FormControl>
+        </Grid>
+
+        {datumi.map((datum, index) => (
+          <Grid size={3} key={datum?.toString() ?? `datum-${index}`}>
+            <FormControl fullWidth sx={{ m: 1 }}>
+              <Controller
+                name={`datumi.${index}`}
+                control={control}
+                render={({ field }) => (
+                  <DatePicker
+                    format="yyyy-MM-dd"
+                    label={`Dodatni datum ${index + 1}`}
+                    value={field.value ?? null}
+                    onChange={(date) => field.onChange(date)}
+                  />
+                )}
+              />
+              <Button
+                color="error"
+                onClick={() =>
+                  setValue(
+                    "datumi",
+                    datumi.filter((_, dateIndex) => dateIndex !== index),
+                  )
+                }
+              >
+                Ukloni datum
+              </Button>
+            </FormControl>
+          </Grid>
+        ))}
+
+        <Grid size={3}>
+          <Button
+            sx={{ m: 1 }}
+            variant="outlined"
+            onClick={() => setValue("datumi", [...datumi, new Date()])}
+          >
+            Dodaj datum
+          </Button>
         </Grid>
 
         <Grid size={12}>
