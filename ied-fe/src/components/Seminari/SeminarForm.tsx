@@ -40,8 +40,7 @@ export default function SeminarForm({
     lokacija: "",
     offlineCena: 0,
     onlineCena: 0,
-    datum: new Date(),
-    datumi: [],
+    datumi: [new Date()],
     detalji: "",
     prijave: [],
     tipSeminara: "",
@@ -57,7 +56,6 @@ export default function SeminarForm({
     defaultValues: {
       ...defaultSeminarData,
       ...seminar, // Merge with existing seminar data if provided
-      datum: seminar?.datum ? new Date(seminar.datum) : new Date(), // Ensure date is a Date object
       datumi: seminar?.datumi?.map((datum) => new Date(datum)) ?? [],
     },
     resolver: zodResolver(SeminarSchema) as Resolver<SeminarZodType>,
@@ -88,9 +86,6 @@ export default function SeminarForm({
       reset({
         ...defaultSeminarData,
         ...seminar,
-        datum: seminar.datum
-          ? new Date(seminar.datum)
-          : defaultSeminarData.datum,
         datumi: seminar.datumi?.map((datum) => new Date(datum)) ?? [],
       });
     } else {
@@ -271,23 +266,6 @@ export default function SeminarForm({
           />
         </Grid>
 
-        <Grid size={3}>
-          <FormControl fullWidth sx={{ m: 1 }}>
-            <Controller
-              name="datum"
-              control={control}
-              render={({ field }) => (
-                <DatePicker
-                  format="yyyy-MM-dd"
-                  label="Datum održavanja"
-                  value={field.value ?? null}
-                  onChange={(date) => field.onChange(date)}
-                />
-              )}
-            />
-          </FormControl>
-        </Grid>
-
         {datumi.map((datum, index) => (
           <Grid size={3} key={datum?.toString() ?? `datum-${index}`}>
             <FormControl fullWidth sx={{ m: 1 }}>
@@ -297,23 +275,25 @@ export default function SeminarForm({
                 render={({ field }) => (
                   <DatePicker
                     format="yyyy-MM-dd"
-                    label={`Dodatni datum ${index + 1}`}
+                    label={`Datum održavanja ${index + 1}`}
                     value={field.value ?? null}
                     onChange={(date) => field.onChange(date)}
                   />
                 )}
               />
-              <Button
-                color="error"
-                onClick={() =>
-                  setValue(
-                    "datumi",
-                    datumi.filter((_, dateIndex) => dateIndex !== index),
-                  )
-                }
-              >
-                Ukloni datum
-              </Button>
+              {datumi.length > 1 ? (
+                <Button
+                  color="error"
+                  onClick={() =>
+                    setValue(
+                      "datumi",
+                      datumi.filter((_, dateIndex) => dateIndex !== index),
+                    )
+                  }
+                >
+                  Ukloni datum
+                </Button>
+              ) : null}
             </FormControl>
           </Grid>
         ))}

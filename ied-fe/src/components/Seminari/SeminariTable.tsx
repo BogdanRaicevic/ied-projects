@@ -100,16 +100,13 @@ export default function SeminariTable({
       header: "Datum",
       accessorKey: "datum",
       Cell: ({ row }) => {
-        const { datum, datumi } = row.original;
-        const dates = [datum, ...(datumi ?? [])].filter(Boolean) as (
-          | string
-          | Date
-        )[];
-        if (dates.length === 0) {
+        const datumi = row.original.datumi;
+
+        if (datumi.length === 0) {
           return null;
         }
 
-        return dates.map((date) => (
+        return datumi.map((date) => (
           <div key={date.toString()}>
             {format(new Date(date), "yyyy-MM-dd")}
           </div>
