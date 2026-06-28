@@ -265,13 +265,11 @@ export default function PrijavaNaSeminarDialog({
             )}
             <Autocomplete
               options={seminari || []}
-              getOptionLabel={(option) =>
-                `${format(option.datum, "dd.MM.yyyy")} - ${option.naziv}`
-              }
+              getOptionLabel={(option) => `${option.naziv}`}
               renderOption={(params, option) => (
                 <Box component="li" {...params} key={option._id}>
                   <Box>
-                    {[option.datum, ...(option.datumi ?? [])].map((datum) => (
+                    {option.datumi.map((datum) => (
                       <Typography
                         key={datum?.toString()}
                         variant="caption"

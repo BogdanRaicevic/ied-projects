@@ -378,7 +378,7 @@ const aggregateSeminarsByFirma = async (
       range.$lte = new Date(queryParams.datumDo);
     }
     // Match if the legacy datum is in range OR any date in datumi is in range
-    seminarMatch.$or = [{ datum: range }, { datumi: { $elemMatch: range } }];
+    seminarMatch.datumi = { $elemMatch: range };
   }
 
   if (Object.keys(seminarMatch).length > 0) {
