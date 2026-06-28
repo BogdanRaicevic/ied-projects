@@ -78,7 +78,10 @@ export const getSeminarById = async (id: string) => {
 };
 
 export const getAllSeminars = async () => {
-  return await Seminar.find({}, { naziv: 1, datum: 1, _id: 1 }).lean();
+  return await Seminar.find(
+    {},
+    { naziv: 1, datum: 1, datumi: 1, _id: 1 },
+  ).lean();
 };
 
 export const createPrijava = async (
@@ -299,6 +302,8 @@ const transformPrijavaToDb = (prijava: PrijavaZodType): PrijavaType => {
 
 const prepareSeminarData = (seminarData: SeminarZodType) => {
   const { tipSeminara, ...rest } = seminarData;
+  const datumi =
+    seminarData.datumi.length > 0 ? seminarData.datumi : [seminarData.datum];
 
   const transformedPrijave = (seminarData.prijave || []).map((prijava) =>
     transformPrijavaToDb(prijava as PrijavaZodType),
@@ -306,6 +311,8 @@ const prepareSeminarData = (seminarData: SeminarZodType) => {
 
   const data: any = {
     ...rest,
+    datum: datumi[0] ?? seminarData.datum,
+    datumi,
     prijave: transformedPrijave,
   };
 
