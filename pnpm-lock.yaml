@@ -75,7 +75,7 @@ importers:
         specifier: ^17.4.2
         version: 17.4.2
       es-toolkit:
-        specifier: ^1.47.1
+        specifier: ^1.48.1
         version: 1.49.0
       express:
         specifier: ^5.2.1
@@ -187,7 +187,7 @@ importers:
         specifier: ^9.0.0
         version: 9.0.0
       es-toolkit:
-        specifier: ^1.47.1
+        specifier: ^1.48.1
         version: 1.49.0
       fflate:
         specifier: ^0.8.3
