@@ -271,9 +271,15 @@ export default function PrijavaNaSeminarDialog({
               renderOption={(params, option) => (
                 <Box component="li" {...params} key={option._id}>
                   <Box>
-                    <Typography variant="caption" display="block">
-                      {format(option.datum, "dd.MM.yyyy")}
-                    </Typography>
+                    {[option.datum, ...(option.datumi ?? [])].map((datum) => (
+                      <Typography
+                        key={datum?.toString()}
+                        variant="caption"
+                        display="block"
+                      >
+                        {format(new Date(datum), "dd.MM.yyyy")}
+                      </Typography>
+                    ))}
                     <Typography variant="body1" sx={{ pl: 3 }}>
                       {option.naziv}
                     </Typography>
