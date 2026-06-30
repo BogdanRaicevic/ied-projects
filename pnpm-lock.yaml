@@ -87,7 +87,7 @@ importers:
         specifier: workspace:^
         version: link:../ied-shared
       mongoose:
-        specifier: ^9.7.1
+        specifier: ^9.7.2
         version: 9.7.2(socks@2.8.9)
       node-cache:
         specifier: ^5.1.2
@@ -285,7 +285,7 @@ importers:
         specifier: workspace:^
         version: link:../ied-shared
       mongoose:
-        specifier: ^9.7.1
+        specifier: ^9.7.2
         version: 9.7.2(socks@2.8.9)
       mysql2:
         specifier: ^3.22.5
