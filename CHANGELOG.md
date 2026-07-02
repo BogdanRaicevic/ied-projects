@@ -1,3 +1,9 @@
+## [1.26.1](https://github.com/BogdanRaicevic/ied-projects/compare/v1.26.0...v1.26.1) (2026-07-02)
+
+### Bug Fixes
+
+* add fallow rc file ([74e0a4b](https://github.com/BogdanRaicevic/ied-projects/commit/74e0a4bd29cf0e6c4522f312af776e4c777939b0))
+
 ## [1.26.0](https://github.com/BogdanRaicevic/ied-projects/compare/v1.25.0...v1.26.0) (2026-07-02)
 
 ### Features
