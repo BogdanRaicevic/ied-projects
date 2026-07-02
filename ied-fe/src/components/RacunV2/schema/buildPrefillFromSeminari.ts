@@ -83,7 +83,7 @@ export function buildPrefillFromSeminari({
     ...baseStavka,
     seminar_id: seminar._id ?? "",
     naziv: seminar.naziv,
-    datum: seminar.datum,
+    datum: seminar.datumi[0], // TODO: fix this in the future update. In the future we will need to show all dates, not just the first one.
     lokacija: seminar.lokacija ?? "",
     onlineKolicina,
     onlineCena: seminar.onlineCena ?? 0,

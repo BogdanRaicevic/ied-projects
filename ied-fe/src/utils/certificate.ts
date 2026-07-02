@@ -8,9 +8,48 @@ import type {
 
 type BuildSertifikatOptions = {
   brojSertifikata: number;
-  seminarDate: Date;
+  seminarDates: Date[];
   seminarName: string;
   templateKey: SertifikatTemplateKeyType;
+};
+
+const formatDay = (date: Date) => formatDate(date, "d", { locale: srLatn });
+const formatMonth = (date: Date) =>
+  formatDate(date, "MMMM", { locale: srLatn });
+const formatYear = (date: Date) => formatDate(date, "yyyy", { locale: srLatn });
+
+// Serbian list join: ["a", "b", "c"] -> "a, b i c".
+const joinSerbian = (parts: string[]): string =>
+  parts.length <= 1
+    ? (parts[0] ?? "")
+    : `${parts.slice(0, -1).join(", ")} i ${parts[parts.length - 1]}`;
+
+// Consolidates seminar dates into a grammatically correct Serbian string:
+// - same month:  "1, 2 i 3 jun 2026"
+// - same year:   "31 januar i 1 februar 2026"
+// - diff years:  "31 decembar 2026 i 1 januar 2027"
+// Dates may arrive as Date objects or ISO strings (API data isn't always
+// coerced), so normalize to Date before doing any date math.
+export const formatSeminarDates = (dates: (Date | string)[]): string => {
+  const sorted = dates
+    .map((date) => new Date(date))
+    .sort((a, b) => a.getTime() - b.getTime());
+  const first = sorted[0];
+  if (!first) return "";
+
+  const sameYear = sorted.every((d) => d.getFullYear() === first.getFullYear());
+  const sameMonth =
+    sameYear && sorted.every((d) => d.getMonth() === first.getMonth());
+
+  if (sameMonth) {
+    return `${joinSerbian(sorted.map(formatDay))} ${formatMonth(first)} ${formatYear(first)}`;
+  }
+  if (sameYear) {
+    return `${joinSerbian(sorted.map((d) => `${formatDay(d)} ${formatMonth(d)}`))} ${formatYear(first)}`;
+  }
+  return joinSerbian(
+    sorted.map((d) => `${formatDay(d)} ${formatMonth(d)} ${formatYear(d)}`),
+  );
 };
 
 export const getCurrentYearLastTwoDigits = () => {
@@ -53,12 +92,10 @@ export const buildSingleSertifikat = (
       firma_naziv: prijava.firma_naziv.trim(),
       ime_prezime: getPrijavaFullName(prijava),
       seminar_naziv: options.seminarName,
-      datum_seminara: formatDate(options.seminarDate, "dd. MMMM yyyy.", {
-        locale: srLatn,
-      }),
-      godina_seminara: formatDate(options.seminarDate, "yyyy", {
-        locale: srLatn,
-      }),
+      datumi_seminara: formatSeminarDates(options.seminarDates),
+      godina_seminara: formatYear(
+        options.seminarDates[0] ? new Date(options.seminarDates[0]) : new Date(),
+      ),
       templateKey: options.templateKey,
     } satisfies SertifikatType,
   };
@@ -68,14 +105,14 @@ export const buildBatchSertifikati = (
   prijave: PrijavaZodType[],
   startingNumber: number,
   seminarName: string,
-  seminarDate: Date,
+  seminarDates: Date[],
   templateKey: SertifikatTemplateKeyType,
 ) => {
   return prijave.reduce(
     (acc, prijava) => {
       const { warning, sertifikat } = buildSingleSertifikat(prijava, {
         brojSertifikata: startingNumber + acc.sertifikati.length,
-        seminarDate,
+        seminarDates,
         seminarName,
         templateKey,
       });

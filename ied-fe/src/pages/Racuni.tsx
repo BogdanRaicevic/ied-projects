@@ -126,7 +126,7 @@ export default function Racuni() {
   const seminarOnlineCena = seminar?.onlineCena;
   const seminarOfflineCena = seminar?.offlineCena;
   const seminarNaziv = seminar?.naziv;
-  const seminarDatum = seminar?.datum; // Note: Date objects might still cause issues if new instances are created. Consider storing as string/timestamp if needed.
+  const seminarDatum = seminar?.datumi?.[0]; // TODO: fix this in the future update. In the future we will need to show all dates, not just the first one.
   const seminarLokacija = seminar?.lokacija;
 
   const firmaNaziv = firma?.naziv_firme;

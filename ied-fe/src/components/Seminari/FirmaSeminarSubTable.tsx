@@ -5,7 +5,7 @@ import {
   useMaterialReactTable,
 } from "material-react-table";
 import { useMemo } from "react";
-import { formatToRSDNumber } from "../../utils/helpers";
+import { formatDatumi, formatToRSDNumber } from "../../utils/helpers";
 
 export default function FirmaSeminarSubTable({
   seminars,
@@ -30,8 +30,7 @@ export default function FirmaSeminarSubTable({
         header: "Naziv seminara",
       },
       {
-        accessorFn: (originalRow) =>
-          new Date(originalRow.datum).toLocaleDateString(),
+        accessorFn: (originalRow) => formatDatumi(originalRow.datumi),
         header: "Datum",
         id: "datum",
       },

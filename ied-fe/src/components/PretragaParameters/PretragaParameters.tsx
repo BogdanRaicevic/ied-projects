@@ -9,7 +9,6 @@ import {
   Grid,
   TextField,
 } from "@mui/material";
-import { format } from "date-fns";
 import type {
   MestoFromDBType,
   ParametriPretrage,
@@ -27,6 +26,7 @@ import {
   defaultPretrageParameters,
   usePretragaStore,
 } from "../../store/pretragaParameters.store";
+import { formatDatumi } from "../../utils/helpers";
 import AutocompleteMultiple from "../Autocomplete/Multiple";
 import MultiSelectAutocomplete from "../Autocomplete/MultiSelectAutocomplete";
 import CheckboxList from "../CheckboxList";
@@ -118,7 +118,7 @@ export default function PretragaParameters() {
         .filter((seminar) => typeof seminar._id === "string")
         .map((seminar) => ({
           _id: seminar._id as string,
-          naziv: `${format(seminar.datum, "dd.MM.yyyy")} - ${seminar.naziv}`,
+          naziv: `${formatDatumi(seminar.datumi)} - ${seminar.naziv}`,
         })),
     [fetchedSeminars],
   );

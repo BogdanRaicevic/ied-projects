@@ -1,3 +1,4 @@
+import { format } from "date-fns";
 import { ZodError } from "zod";
 
 export const formatToRSDNumber = (value: number | string) => {
@@ -8,6 +9,13 @@ export const formatToRSDNumber = (value: number | string) => {
     minimumFractionDigits: 2,
   });
 };
+
+// All seminar dates as one display string, e.g. "01.06.2026, 02.06.2026".
+export const formatDatumi = (
+  datumi: (string | Date)[] | undefined,
+  pattern = "dd.MM.yyyy",
+): string =>
+  (datumi ?? []).map((datum) => format(new Date(datum), pattern)).join(", ");
 
 type ErrorResult = [string, null];
 type SuccessResult<T> = [null, T];

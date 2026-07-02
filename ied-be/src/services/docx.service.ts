@@ -161,7 +161,7 @@ const renderCertificateHtml = (
     __GODINA_SEMINARA__: escapeHtml(sertifikat.godina_seminara),
     __IME_PREZIME__: escapeHtml(sertifikat.ime_prezime),
     __SEMINAR_NAZIV__: escapeHtml(sertifikat.seminar_naziv),
-    __DATUM_SEMINARA__: escapeHtml(sertifikat.datum_seminara),
+    __DATUM_SEMINARA__: escapeHtml(sertifikat.datumi_seminara),
     __TEMPLATE_KEY__: escapeHtml(sertifikat.templateKey),
   };
 

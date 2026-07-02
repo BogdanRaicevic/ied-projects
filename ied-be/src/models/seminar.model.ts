@@ -7,7 +7,6 @@ export type SeminarType = {
   lokacija?: string;
   offlineCena?: number;
   onlineCena?: number;
-  datum?: Date;
   datumi?: Date[];
   detalji?: string;
   prijave: PrijavaType[];
@@ -59,7 +58,6 @@ const seminarSchema = new Schema<SeminarType>(
     lokacija: { type: String, required: false },
     offlineCena: { type: Number, required: false },
     onlineCena: { type: Number, required: false },
-    datum: { type: Date, required: false },
     datumi: { type: [Date], default: [] },
     detalji: { type: String, required: false },
     prijave: [prijavaSchema],
