@@ -9,3 +9,13 @@ export const fetchAllMesta = async () => {
     throw error;
   }
 };
+
+export const fetchAllMestaNames = async () => {
+  try {
+    const response = await axiosInstanceWithAuth.get(`/api/mesto/all-names`);
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching mesta names:", error);
+    throw error;
+  }
+};
