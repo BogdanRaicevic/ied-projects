@@ -98,9 +98,13 @@ export default function SeminariTable({
     },
     {
       header: "Datum",
-      accessorKey: "datum",
+      id: "datumi",
+      accessorFn: (row) =>
+        (row.datumi ?? [])
+          .map((date) => format(new Date(date), "yyyy-MM-dd"))
+          .join(", "),
       Cell: ({ row }) => {
-        const datumi = row.original.datumi;
+        const datumi = row.original.datumi ?? [];
 
         if (datumi.length === 0) {
           return null;
@@ -112,7 +116,6 @@ export default function SeminariTable({
           </div>
         ));
       },
-      sortingFn: "datetime",
     },
 
     {
