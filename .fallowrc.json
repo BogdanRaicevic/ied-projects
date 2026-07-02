@@ -1,0 +1,21 @@
+{
+  "$schema": "https://raw.githubusercontent.com/fallow-rs/fallow/main/config-schema.json",
+  "ignorePatterns": [
+    "mongo-migrator/src/migrations/**",
+    "ied-be/src/templates/**"
+  ],
+  "ignoreDependencies": [
+    "conventional-changelog-conventionalcommits"
+  ],
+  "duplicates": {
+    "ignore": [
+      "mongo-migrator/src/migrations/**",
+      "ied-be/src/templates/**"
+    ]
+  },
+  "health": {
+    "ignore": [
+      "mongo-migrator/src/migrations/**"
+    ]
+  }
+}
