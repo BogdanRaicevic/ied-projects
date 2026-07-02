@@ -34,7 +34,7 @@ export const SeminarSchema = z.object({
     .min(0)
     .nonnegative("Cena ne može biti negativna")
     .default(0),
-  datumi: z.array(z.coerce.date()).default([new Date()]),
+  datumi: z.array(z.coerce.date()).default(() => [new Date()]),
   detalji: z.string().optional(),
   prijave: z.array(PrijavaSchema).default([]),
   tipSeminara: z.string().nullable().optional(),

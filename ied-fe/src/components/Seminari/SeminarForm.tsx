@@ -56,7 +56,7 @@ export default function SeminarForm({
     defaultValues: {
       ...defaultSeminarData,
       ...seminar, // Merge with existing seminar data if provided
-      datumi: seminar?.datumi?.map((datum) => new Date(datum)) ?? [],
+      datumi: seminar?.datumi?.map((datum) => new Date(datum) ?? new Date()),
     },
     resolver: zodResolver(SeminarSchema) as Resolver<SeminarZodType>,
   });
@@ -277,7 +277,12 @@ export default function SeminarForm({
                     format="yyyy-MM-dd"
                     label={`Datum održavanja ${index + 1}`}
                     value={field.value ?? null}
-                    onChange={(date) => field.onChange(date)}
+                    onChange={(date) => {
+                      if (date === null) {
+                        return;
+                      }
+                      field.onChange(date);
+                    }}
                   />
                 )}
               />
