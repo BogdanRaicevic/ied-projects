@@ -1,3 +1,11 @@
+## [1.26.0](https://github.com/BogdanRaicevic/ied-projects/compare/v1.25.0...v1.26.0) (2026-07-02)
+
+### Features
+
+* add and display multiple dates ([86e428c](https://github.com/BogdanRaicevic/ied-projects/commit/86e428c4861f94bba4e19b308821e6c263f1806e))
+* add datumi to seminar model ([27795c3](https://github.com/BogdanRaicevic/ied-projects/commit/27795c3778237e3f54be57732700901a3323011d))
+* mange seminar search ([79b9b42](https://github.com/BogdanRaicevic/ied-projects/commit/79b9b42ca814b3a5d6a61d1997fee9d1eca6e6fa))
+
 ## [1.25.0](https://github.com/BogdanRaicevic/ied-projects/compare/v1.24.2...v1.25.0) (2026-06-14)
 
 ### Features
