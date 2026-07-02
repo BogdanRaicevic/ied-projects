@@ -30,7 +30,7 @@ const joinSerbian = (parts: string[]): string =>
 // - diff years:  "31 decembar 2026 i 1 januar 2027"
 // Dates may arrive as Date objects or ISO strings (API data isn't always
 // coerced), so normalize to Date before doing any date math.
-export const formatSeminarDates = (dates: (Date | string)[]): string => {
+const formatSeminarDates = (dates: (Date | string)[]): string => {
   const sorted = dates
     .map((date) => new Date(date))
     .sort((a, b) => a.getTime() - b.getTime());
@@ -50,10 +50,6 @@ export const formatSeminarDates = (dates: (Date | string)[]): string => {
   return joinSerbian(
     sorted.map((d) => `${formatDay(d)} ${formatMonth(d)} ${formatYear(d)}`),
   );
-};
-
-export const getCurrentYearLastTwoDigits = () => {
-  return String(new Date().getFullYear()).slice(-2);
 };
 
 export const getPrijavaFullName = (prijava: PrijavaZodType) => {

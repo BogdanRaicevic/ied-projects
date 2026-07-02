@@ -16,7 +16,7 @@ import {
  * it's already implicit in `prijave[0].firma_id` and duplicating it would
  * just create a "which one wins?" question on drift.
  */
-export type RacunV2SeminariNavState = {
+type RacunV2SeminariNavState = {
   seminarId: string;
   prijave: PrijavaZodType[];
 };

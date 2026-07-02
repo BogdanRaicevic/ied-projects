@@ -55,9 +55,6 @@ export const getTemplateErrorDetails = (error: unknown): string => {
   return errorDetails;
 };
 
-export const getCurrentYearLastTwoDigits = (): string =>
-  String(new Date().getFullYear()).slice(-2);
-
 export const escapeHtml = (value: string): string =>
   value
     .replace(/&/g, "&amp;")
