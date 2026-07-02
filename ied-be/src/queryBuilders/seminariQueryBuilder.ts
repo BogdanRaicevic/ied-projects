@@ -27,8 +27,8 @@ export function createSeminarQuery(
     if (params.datumDo) {
       range.$lte = params.datumDo;
     }
-    // Match if the legacy datum is in range OR any date in datumi is in range
-    query.$or = [{ datum: range }, { datumi: { $elemMatch: range } }];
+    // Match if any date in datumi falls within the range
+    query.datumi = { $elemMatch: range };
   }
 
   if (params?.tipSeminara && params.tipSeminara.length > 0) {

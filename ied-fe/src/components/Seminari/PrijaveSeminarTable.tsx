@@ -32,12 +32,12 @@ import CertificateNumberDialog, {
 
 export default function PrijaveSeminarTable({
   seminarId,
-  seminarDate,
+  seminarDates,
   seminarName,
   prijave,
 }: {
   seminarId: string;
-  seminarDate: Date;
+  seminarDates: Date[];
   seminarName: string;
   prijave: PrijavaZodType[];
 }) {
@@ -103,7 +103,7 @@ export default function PrijaveSeminarTable({
 
     const { sertifikat, warning } = buildSingleSertifikat(selectedPrijava, {
       brojSertifikata: certificateNumber,
-      seminarDate,
+      seminarDates,
       seminarName,
       templateKey,
     });

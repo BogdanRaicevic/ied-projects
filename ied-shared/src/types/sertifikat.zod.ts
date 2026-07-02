@@ -10,7 +10,7 @@ export const SertifikatZod = z.object({
   broj_sertifikata: z.int().positive({
     message: "Broj sertifikata mora biti pozitivan ceo broj",
   }),
-  datum_seminara: z.string().min(1, { message: "Datum seminara je obavezan" }),
+  datumi_seminara: z.string().min(1, { message: "Datum seminara je obavezan" }),
   godina_seminara: z
     .string()
     .min(1, { message: "Godina seminara je obavezna" }),

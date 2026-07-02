@@ -107,7 +107,7 @@ const SeminariTableActionCell = memo(
         );
       }
 
-      if (!seminar.datum) {
+      if (!seminar.datumi?.length) {
         messages.push(
           "Datum seminara nije validan. Sertifikati ne mogu biti generisani.",
         );
@@ -138,10 +138,14 @@ const SeminariTableActionCell = memo(
       }
 
       return messages;
-    }, [seminar.datum, seminar.naziv, seminar.prijave, submitError]);
+    }, [seminar.datumi, seminar.naziv, seminar.prijave, submitError]);
 
     const disableDialogConfirm = useMemo(() => {
-      if (!seminar.prijave?.length || !seminar.naziv || !seminar.datum) {
+      if (
+        !seminar.prijave?.length ||
+        !seminar.naziv ||
+        !seminar.datumi?.length
+      ) {
         return true;
       }
 
@@ -150,7 +154,7 @@ const SeminariTableActionCell = memo(
       ).length;
 
       return invalidCount === seminar.prijave.length;
-    }, [seminar.datum, seminar.naziv, seminar.prijave]);
+    }, [seminar.datumi, seminar.naziv, seminar.prijave]);
 
     const handleOpenCertificateDialog = () => {
       setSubmitError(null);
@@ -170,7 +174,8 @@ const SeminariTableActionCell = memo(
       certificateNumber,
       templateKey,
     }: CertificateDialogSubmitValues) => {
-      if (!seminar.prijave?.length || !seminar.naziv || !seminar.datum) {
+      const datumi = seminar.datumi ?? [];
+      if (!seminar.prijave?.length || !seminar.naziv || datumi.length === 0) {
         return;
       }
 
@@ -178,7 +183,7 @@ const SeminariTableActionCell = memo(
         seminar.prijave,
         certificateNumber,
         seminar.naziv,
-        seminar.datum,
+        datumi,
         templateKey,
       );
 

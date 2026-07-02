@@ -54,7 +54,6 @@ export const SeminarQueryParamsSchema = z.object({
   predavac: z.string().default(""),
   datumOd: z.coerce.date().optional(),
   datumDo: z.coerce.date().optional(),
-  datum: z.coerce.date().optional(), // to remove
   tipSeminara: z.array(z.string()).default([]),
 });
 

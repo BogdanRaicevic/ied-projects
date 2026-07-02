@@ -54,7 +54,7 @@ export const searchSeminars = async (qq: ExtendedSearchSeminarType) => {
   const totalDocuments = await Seminar.countDocuments(mongoQuery);
 
   const seminari = await Seminar.find(mongoQuery, { zaposleni: 0 })
-    .sort({ datum: -1 })
+    .sort({ datumi: -1 })
     .skip(skip)
     .limit(pageSize)
     .lean();
@@ -78,10 +78,7 @@ export const getSeminarById = async (id: string) => {
 };
 
 export const getAllSeminars = async () => {
-  return await Seminar.find(
-    {},
-    { naziv: 1, datum: 1, datumi: 1, _id: 1 },
-  ).lean();
+  return await Seminar.find({}, { naziv: 1, datumi: 1, _id: 1 }).lean();
 };
 
 export const createPrijava = async (
@@ -377,7 +374,7 @@ const aggregateSeminarsByFirma = async (
     if (queryParams.datumDo) {
       range.$lte = new Date(queryParams.datumDo);
     }
-    // Match if the legacy datum is in range OR any date in datumi is in range
+    // Match if any date in datumi falls within the range
     seminarMatch.datumi = { $elemMatch: range };
   }
 
@@ -406,7 +403,7 @@ const aggregateSeminarsByFirma = async (
       predavac: { $first: "$predavac" },
       onlineCena: { $first: "$onlineCena" },
       offlineCena: { $first: "$offlineCena" },
-      datum: { $first: "$datum" },
+      datumi: { $first: "$datumi" },
       lokacija: { $first: "$lokacija" },
       totalUcesniciSeminar: { $sum: 1 },
       onlineUcesniciSeminar: {
@@ -418,8 +415,7 @@ const aggregateSeminarsByFirma = async (
     },
   });
 
-  // Sort seminars by date
-  pipeline.push({ $sort: { datum: -1 } });
+  pipeline.push({ $sort: { datumi: -1 } });
 
   // Group by firma and collect seminars
   pipeline.push({
@@ -433,7 +429,7 @@ const aggregateSeminarsByFirma = async (
           lokacija: "$lokacija",
           onlineCena: "$onlineCena",
           offlineCena: "$offlineCena",
-          datum: "$datum",
+          datumi: "$datumi",
           totalUcesnici: "$totalUcesniciSeminar",
           onlineUcesnici: "$onlineUcesniciSeminar",
           offlineUcesnici: "$offlineUcesniciSeminar",
