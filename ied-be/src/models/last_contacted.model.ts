@@ -1,5 +1,5 @@
 import { type ContactTypeEnum, ContactTypes } from "ied-shared";
-import { model, Schema } from "mongoose";
+import { Schema } from "mongoose";
 
 type LastContactedType = {
   date: Date;
@@ -16,9 +16,4 @@ const lastContactedSchema = new Schema<LastContactedType>({
   },
 });
 
-const LastContacted = model<LastContactedType>(
-  "LastContacted",
-  lastContactedSchema,
-);
-
-export { LastContacted, type LastContactedType, lastContactedSchema };
+export { type LastContactedType, lastContactedSchema };
