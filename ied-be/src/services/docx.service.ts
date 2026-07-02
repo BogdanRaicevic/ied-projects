@@ -17,7 +17,7 @@ import {
   sanitizeFilename,
 } from "../utils/docx.utils";
 
-export type CertificatePdfVariant = "print" | "email";
+type CertificatePdfVariant = "print" | "email";
 
 const templatesDir = path.resolve(import.meta.dirname, "../templates");
 const htmlTemplatesDir = path.resolve(templatesDir, "certificates");

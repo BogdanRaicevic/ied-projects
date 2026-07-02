@@ -95,14 +95,6 @@ export type SeededData = {
   pretrage: PretrageType[];
 };
 
-export async function cursorToArray<T>(cursor: any): Promise<T[]> {
-  const results: T[] = [];
-  for await (const item of cursor) {
-    results.push(item);
-  }
-  return results;
-}
-
 function generateZaposleni(overrides: any = {}) {
   return {
     _id: deterministicObjectId(),

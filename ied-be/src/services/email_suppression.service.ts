@@ -18,7 +18,7 @@ type SuppressedEmailFailure = {
   error: string;
 };
 
-export type AddSuppressedEmailResult = {
+type AddSuppressedEmailResult = {
   totalRows: number;
   uniqueRows: number;
   duplicateRows: number;
