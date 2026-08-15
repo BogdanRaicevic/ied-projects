@@ -27,7 +27,7 @@ importers:
         specifier: ^10.2.1
         version: 10.3.0
       fallow:
-        specifier: ^2.103.0
+        specifier: ^2.104.0
         version: 2.104.0
       knip:
         specifier: ^6.23.0
