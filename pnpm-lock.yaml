@@ -54,7 +54,7 @@ importers:
         specifier: ^2.1.52
         version: 2.1.56(express@5.2.1(supports-color@7.2.0))(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
       '@sentry/node':
-        specifier: ^10.69.0
+        specifier: ^10.70.0
         version: 10.70.0(@opentelemetry/core@2.10.0(@opentelemetry/api@1.9.1))(supports-color@7.2.0)
       cors:
         specifier: ^2.8.6
