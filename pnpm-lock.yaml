@@ -24,7 +24,7 @@ importers:
         specifier: ^13.1.5
         version: 13.1.5(semantic-release@25.0.9(supports-color@7.2.0)(typescript@6.0.3))
       conventional-changelog-conventionalcommits:
-        specifier: ^10.2.1
+        specifier: ^10.3.0
         version: 10.3.0
       fallow:
         specifier: ^2.104.0
