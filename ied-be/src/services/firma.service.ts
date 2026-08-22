@@ -5,11 +5,15 @@ import {
   type ExportZaposlenih,
   NEGACIJA,
   type ParametriPretrage,
+  PRIJAVA_STATUS,
 } from "ied-shared";
 import { Firma, type FirmaType } from "../models/firma.model";
 import type { Zaposleni } from "../models/zaposleni.model";
 import { createFirmaQuery } from "../queryBuilders/firmaQueryBuilder";
-import { isEmailSuppressed } from "./email_suppression.service";
+import {
+  getSuppressedEmailsSet,
+  isEmailSuppressed,
+} from "./email_suppression.service";
 import { getZaposleniIdsFromSeminars } from "./seminar.service";
 
 export const findFirmaById = async (id: string): Promise<FirmaType | null> => {
@@ -113,7 +117,14 @@ export const exportSearchedFirmaData = async (
   return new Promise((resolve, reject) => {
     cursor.once("end", async () => {
       await cursor.close();
-      resolve(res);
+      const suppressedEmails = await getSuppressedEmailsSet(
+        res.map((r) => r.e_mail ?? ""),
+      );
+      resolve(
+        res.filter(
+          (r) => !r.e_mail || !suppressedEmails.has(r.e_mail.toLowerCase()),
+        ),
+      );
     });
 
     cursor.once("error", async (err) => {
@@ -159,9 +170,16 @@ export const exportSearchedZaposleniData = async (
         }
 
         if (
-          queryParameters.zaposleniPrijavljeni !== undefined &&
-          typeof queryParameters.zaposleniPrijavljeni === "boolean" &&
-          z.prijavljeni !== queryParameters.zaposleniPrijavljeni
+          queryParameters.zaposleniPrijavljeni === PRIJAVA_STATUS.subscribed &&
+          z.prijavljeni !== true
+        ) {
+          continue;
+        }
+
+        if (
+          queryParameters.zaposleniPrijavljeni ===
+            PRIJAVA_STATUS.unsubscribed &&
+          z.prijavljeni !== false
         ) {
           continue;
         }
@@ -210,7 +228,14 @@ export const exportSearchedZaposleniData = async (
   return new Promise((resolve, reject) => {
     cursor.once("end", async () => {
       await cursor.close();
-      resolve(res);
+      const suppressedEmails = await getSuppressedEmailsSet(
+        res.map((r) => r.e_mail ?? ""),
+      );
+      resolve(
+        res.filter(
+          (r) => !r.e_mail || !suppressedEmails.has(r.e_mail.toLowerCase()),
+        ),
+      );
     });
 
     cursor.once("error", async (err) => {
