@@ -8,11 +8,10 @@ import "@fontsource/roboto/300.css";
 import "@fontsource/roboto/400.css";
 import "@fontsource/roboto/500.css";
 import "@fontsource/roboto/700.css";
-import { ClerkProvider, useAuth } from "@clerk/react";
+import { ClerkProvider } from "@clerk/react";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { BrowserRouter } from "react-router-dom";
-import { setGetTokenFn } from "./utils/clerkClient";
 import { env } from "./utils/envVariables";
 
 const PUBLISHABLE_KEY = env.clerkPublishableKey;
@@ -21,19 +20,12 @@ if (!PUBLISHABLE_KEY) {
   throw new Error("Missing Publishable Key");
 }
 
-function TokenProviderInitializer() {
-  const { getToken } = useAuth();
-  setGetTokenFn(() => getToken());
-  return null;
-}
-
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
     <CssBaseline />
     <ClerkProvider publishableKey={PUBLISHABLE_KEY} afterSignOutUrl="/">
       <BrowserRouter>
         <LocalizationProvider dateAdapter={AdapterDateFns}>
-          <TokenProviderInitializer />
           <App />
         </LocalizationProvider>
       </BrowserRouter>
