@@ -37,7 +37,7 @@
     "react-dom": "^19.2.7",
     "react-hook-form": "^7.85.0",
     "react-router-dom": "^7.18.2",
-    "styled-components": "^6.4.3",
+    "styled-components": "^6.5.3",
     "zod": "^4.4.3",
     "zustand": "^5.0.15"
   },
