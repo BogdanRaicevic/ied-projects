@@ -3,9 +3,9 @@ import { isEqual } from "es-toolkit";
 import type { NextFunction, Request, Response } from "express";
 import { type Model, Types } from "mongoose";
 import { AuditLog } from "../models/audit_log.model";
-import { getClerkEmailFromRequest, type TODO_ANY } from "../utils/utils";
+import { getClerkEmailFromRequest } from "../utils/utils";
 
-export const createAuditMiddleware = (Model: Model<TODO_ANY>) => {
+export const createAuditMiddleware = <T>(Model: Model<T>) => {
   return async (req: Request, res: Response, next: NextFunction) => {
     const { method, originalUrl, params, body } = req;
     if (method === "GET") {
@@ -33,9 +33,9 @@ export const createAuditMiddleware = (Model: Model<TODO_ANY>) => {
     const documentBefore = await fetchDocumentBefore(Model, id);
 
     // Intercept response body
-    let responseBody: TODO_ANY = null;
+    let responseBody: T | null = null;
     const originalSend = res.send;
-    res.send = function (data: TODO_ANY) {
+    res.send = function (data: T | null) {
       if (res.statusCode >= 200 && res.statusCode < 300) {
         try {
           responseBody = typeof data === "string" ? JSON.parse(data) : data;
@@ -85,10 +85,10 @@ export const createAuditMiddleware = (Model: Model<TODO_ANY>) => {
   };
 };
 
-const fetchDocumentBefore = async (
-  Model: Model<TODO_ANY>,
+const fetchDocumentBefore = async <T>(
+  Model: Model<T>,
   id: string,
-): Promise<TODO_ANY> => {
+): Promise<T | null> => {
   if (id && Types.ObjectId.isValid(id)) {
     try {
       return await Model.findById(id).lean();
@@ -102,12 +102,12 @@ const fetchDocumentBefore = async (
   return null;
 };
 
-const fetchDocumentAfter = async (
-  Model: Model<TODO_ANY>,
+const fetchDocumentAfter = async <T>(
+  Model: Model<T>,
   method: string,
   id: string,
-  responseBody?: TODO_ANY,
-): Promise<TODO_ANY> => {
+  responseBody?: T | null,
+): Promise<T | null> => {
   if (method === "DELETE") {
     // If there's no parent ID, we can't fetch anything.
     if (!id) {
@@ -142,18 +142,22 @@ const fetchDocumentAfter = async (
   return null;
 };
 
-const removeMetadataFields = (document: TODO_ANY): TODO_ANY => {
+// Metadata fields aren't declared on every model's TS type, but Mongoose
+// adds them at runtime regardless (timestamps, __v) — cast is confined to
+// this one spot rather than constraining every generic in this file to a
+// shape most of them don't actually have.
+const removeMetadataFields = <T>(document: T | null): Partial<T> | null => {
   if (!document) {
     return document;
   }
-  const cleaned = { ...document };
+  const cleaned = { ...document } as Record<string, unknown>;
   delete cleaned.updated_at;
   delete cleaned.__v;
   delete cleaned.created_at;
-  return cleaned;
+  return cleaned as Partial<T>;
 };
 
-const shouldLogChange = (before: TODO_ANY, after: TODO_ANY): boolean => {
+const shouldLogChange = <T>(before: T | null, after: T | null): boolean => {
   if (!before && after) {
     // Document created
     return true;
