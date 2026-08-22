@@ -1,9 +1,9 @@
-import { clerkClient, getAuth } from "@clerk/express";
+import { getAuth } from "@clerk/express";
 import { isEqual } from "es-toolkit";
 import type { NextFunction, Request, Response } from "express";
 import { type Model, Types } from "mongoose";
 import { AuditLog } from "../models/audit_log.model";
-import type { TODO_ANY } from "../utils/utils";
+import { getClerkEmailFromRequest, type TODO_ANY } from "../utils/utils";
 
 export const createAuditMiddleware = (Model: Model<TODO_ANY>) => {
   return async (req: Request, res: Response, next: NextFunction) => {
@@ -13,8 +13,11 @@ export const createAuditMiddleware = (Model: Model<TODO_ANY>) => {
     }
 
     const auth = getAuth(req);
+    // Falls back to the raw Clerk userId (not "system") when the email
+    // lookup fails, so a Clerk hiccup is never mistaken for an actual
+    // system-initiated action in the audit trail.
     const userEmail = auth?.userId
-      ? await resolveUserEmail(auth.userId)
+      ? ((await getClerkEmailFromRequest(req)) ?? auth.userId)
       : "system";
 
     //TODO:  Great source of confusion, i need to fix this. This is pulling ids
@@ -80,19 +83,6 @@ export const createAuditMiddleware = (Model: Model<TODO_ANY>) => {
 
     next();
   };
-};
-
-const resolveUserEmail = async (userId: string): Promise<string> => {
-  try {
-    const user = await clerkClient.users.getUser(userId);
-    return user.primaryEmailAddress?.emailAddress ?? "system";
-  } catch (error) {
-    console.warn(
-      "Audit: unable to resolve user email; defaulting to 'system'",
-      error,
-    );
-    return "system";
-  }
 };
 
 const fetchDocumentBefore = async (
