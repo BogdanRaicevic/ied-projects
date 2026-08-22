@@ -32,7 +32,6 @@ console.log("Allowed Origins:", allowedOrigins);
 app.use(
   cors({
     origin: allowedOrigins,
-    credentials: true,
     allowedHeaders: ["Authorization", "Content-Type"],
     exposedHeaders: ["Authorization", "Content-Disposition"],
   }),
