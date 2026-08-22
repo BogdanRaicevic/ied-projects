@@ -10,7 +10,7 @@ import z from "zod";
 import { validateRequestQuery } from "../middleware/validateSchema";
 import {
   getAuditLogs,
-  getUserChanges2,
+  getUserChanges,
   getUserChangesByDate,
   getUserChangesStats,
 } from "../services/audit_log.service";
@@ -50,7 +50,7 @@ router.get(
     try {
       const { userEmail, dateFrom, dateTo, model } = req.query;
 
-      const result = await getUserChanges2({
+      const result = await getUserChanges({
         userEmail: userEmail as string,
         dateFrom: dateFrom ? new Date(dateFrom as string) : undefined,
         dateTo: dateTo ? new Date(dateTo as string) : undefined,
