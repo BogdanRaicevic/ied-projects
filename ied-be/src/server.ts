@@ -47,22 +47,26 @@ app.use(
 
 app.use(express.json({ limit: "1mb" }));
 
-app.use("/api/firma", requireApiAuth, firmaRoutes);
-app.use("/api/velicine-firmi", requireApiAuth, velicineFirmiRoutes);
-app.use("/api/radna-mesta", requireApiAuth, radnaMestaRoutes);
-app.use("/api/tip-firme", requireApiAuth, tipFirmeRoutes);
-app.use("/api/delatnost", requireApiAuth, delatnostiRoutes);
-app.use("/api/mesto", requireApiAuth, mestoRoutes);
-app.use("/api/pretrage", requireApiAuth, pretrageRoutes);
-app.use("/api/stanja-firmi", requireApiAuth, stanjaFirmeRoutes);
-app.use("/api/seminari", requireApiAuth, seminarRoutes);
-app.use("/api/docx", requireApiAuth, docxRoutes);
-app.use("/api/racuni", requireApiAuth, racuniRoutes);
-app.use("/api/racuni-v2", requireApiAuth, racuniV2Routes);
-app.use("/api/audit-log", requireApiAuth, auditLogRoutes);
-app.use("/api/email-suppression", requireApiAuth, emailSuppressionRoutes);
-app.use("/api/tip-seminara", requireApiAuth, tipSeminaraRoutes);
+// Mounted before the auth gate below: intentionally unauthenticated.
 app.use("/api/test", testRoutes);
+
+app.use(requireApiAuth);
+
+app.use("/api/firma", firmaRoutes);
+app.use("/api/velicine-firmi", velicineFirmiRoutes);
+app.use("/api/radna-mesta", radnaMestaRoutes);
+app.use("/api/tip-firme", tipFirmeRoutes);
+app.use("/api/delatnost", delatnostiRoutes);
+app.use("/api/mesto", mestoRoutes);
+app.use("/api/pretrage", pretrageRoutes);
+app.use("/api/stanja-firmi", stanjaFirmeRoutes);
+app.use("/api/seminari", seminarRoutes);
+app.use("/api/docx", docxRoutes);
+app.use("/api/racuni", racuniRoutes);
+app.use("/api/racuni-v2", racuniV2Routes);
+app.use("/api/audit-log", auditLogRoutes);
+app.use("/api/email-suppression", emailSuppressionRoutes);
+app.use("/api/tip-seminara", tipSeminaraRoutes);
 
 Sentry.setupExpressErrorHandler(app);
 

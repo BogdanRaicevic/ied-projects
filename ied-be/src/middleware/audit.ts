@@ -85,22 +85,29 @@ export const createAuditMiddleware = <T>(Model: Model<T>) => {
   };
 };
 
+const findLeanById = async <T>(
+  Model: Model<T>,
+  id: string,
+  context: string,
+): Promise<T | null> => {
+  if (!id || !Types.ObjectId.isValid(id)) {
+    return null;
+  }
+  try {
+    return await Model.findById(id).lean();
+  } catch (error) {
+    console.error(
+      `Audit middleware could not fetch ${Model.modelName} (${context}) with id: ${id}`,
+      error,
+    );
+    return null;
+  }
+};
+
 const fetchDocumentBefore = async <T>(
   Model: Model<T>,
   id: string,
-): Promise<T | null> => {
-  if (id && Types.ObjectId.isValid(id)) {
-    try {
-      return await Model.findById(id).lean();
-    } catch (error) {
-      console.error(
-        `Audit middleware could not find document in ${Model.modelName} with id: ${id}`,
-        error,
-      );
-    }
-  }
-  return null;
-};
+): Promise<T | null> => findLeanById(Model, id, "before");
 
 const fetchDocumentAfter = async <T>(
   Model: Model<T>,
@@ -109,37 +116,14 @@ const fetchDocumentAfter = async <T>(
   responseBody?: T | null,
 ): Promise<T | null> => {
   if (method === "DELETE") {
-    // If there's no parent ID, we can't fetch anything.
-    if (!id) {
-      return null;
-    }
-    try {
-      return await Model.findById(id).lean();
-    } catch (error) {
-      console.error(
-        `Error fetching document after DELETE in ${Model.modelName} with id: ${id}`,
-        error,
-      );
-      return null;
-    }
+    return findLeanById(Model, id, "after delete");
   }
 
   if (method === "POST" && responseBody) {
     return responseBody;
   }
 
-  if (id) {
-    try {
-      return await Model.findById(id).lean();
-    } catch (error) {
-      console.error(
-        `Error fetching updated document in ${Model.modelName} with id: ${id}`,
-        error,
-      );
-      return null;
-    }
-  }
-  return null;
+  return findLeanById(Model, id, "after update");
 };
 
 // Metadata fields aren't declared on every model's TS type, but Mongoose
