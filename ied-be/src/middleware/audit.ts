@@ -69,7 +69,7 @@ export const createAuditMiddleware = <T>(Model: Model<T>) => {
           route: originalUrl,
           resource: {
             model: Model.modelName,
-            id: id,
+            id: resolveResourceId(id, method, documentAfter),
           },
           before: removeMetadataFields(documentBefore),
           after: removeMetadataFields(documentAfter),
@@ -83,6 +83,25 @@ export const createAuditMiddleware = <T>(Model: Model<T>) => {
 
     next();
   };
+};
+
+// A top-level create (e.g. POST /) has no id anywhere on the request — the
+// only place it exists yet is on the document Mongo just assigned it, so
+// creates must fall back to documentAfter instead of the params/body lookup
+// above.
+const resolveResourceId = <T>(
+  id: string,
+  method: string,
+  documentAfter: T | null,
+): string | undefined => {
+  if (id) {
+    return id;
+  }
+  if (method === "POST" && documentAfter) {
+    const createdId = (documentAfter as Record<string, unknown>)._id;
+    return createdId ? String(createdId) : undefined;
+  }
+  return undefined;
 };
 
 const findLeanById = async <T>(
