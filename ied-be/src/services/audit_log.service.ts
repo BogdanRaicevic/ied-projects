@@ -155,7 +155,7 @@ export const getUserChangesStats = async (params: AuditLogQueryParams) => {
   }
 };
 
-export const getUserChanges2 = async (params: AuditLogQueryParams) => {
+export const getUserChanges = async (params: AuditLogQueryParams) => {
   try {
     const { userEmail, dateFrom, dateTo, model } = params;
 

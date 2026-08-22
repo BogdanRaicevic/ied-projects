@@ -247,26 +247,50 @@ const getSertifikatPdfFileName = (sertifikat: SertifikatType): string =>
     `${sertifikat.ime_prezime}_${sertifikat.broj_sertifikata}.pdf`,
   );
 
+// Caps how many certificates render at once so we don't open dozens of
+// Puppeteer pages concurrently for large seminars.
+const CERTIFICATE_RENDER_CONCURRENCY = 5;
+
+const chunkArray = <T>(items: T[], chunkSize: number): T[][] => {
+  const chunks: T[][] = [];
+  for (let index = 0; index < items.length; index += chunkSize) {
+    chunks.push(items.slice(index, index + chunkSize));
+  }
+  return chunks;
+};
+
+const renderCertificateFiles = async (
+  browser: Browser,
+  sertifikat: SertifikatType,
+): Promise<{ fileName: string; printPdf: Buffer; emailPdf: Buffer }> => {
+  const fileName = getSertifikatPdfFileName(sertifikat);
+
+  const [printPdf, emailPdf] = await Promise.all([
+    renderCertificatePdf(browser, renderCertificateHtml(sertifikat, "print")),
+    renderCertificatePdf(browser, renderCertificateHtml(sertifikat, "email")),
+  ]);
+
+  return { fileName, printPdf, emailPdf };
+};
+
 export const generateCertificatesZipBuffer = async (
   sertifikatData: SertifikatType[],
 ): Promise<{ buffer: Buffer; fileName: string }> => {
   const browser = await getBrowser();
   const archive = new PizZip();
 
-  for (const sertifikat of sertifikatData) {
-    const fileName = getSertifikatPdfFileName(sertifikat);
-
-    const printPdf = await renderCertificatePdf(
-      browser,
-      renderCertificateHtml(sertifikat, "print"),
+  for (const batch of chunkArray(
+    sertifikatData,
+    CERTIFICATE_RENDER_CONCURRENCY,
+  )) {
+    const rendered = await Promise.all(
+      batch.map((sertifikat) => renderCertificateFiles(browser, sertifikat)),
     );
-    archive.file(`stampa/${fileName}`, printPdf);
 
-    const emailPdf = await renderCertificatePdf(
-      browser,
-      renderCertificateHtml(sertifikat, "email"),
-    );
-    archive.file(`email/${fileName}`, emailPdf);
+    for (const { fileName, printPdf, emailPdf } of rendered) {
+      archive.file(`stampa/${fileName}`, printPdf);
+      archive.file(`email/${fileName}`, emailPdf);
+    }
   }
 
   const buffer = archive.generate({
