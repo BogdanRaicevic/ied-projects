@@ -116,21 +116,29 @@ export const exportSearchedFirmaData = async (
 
   return new Promise((resolve, reject) => {
     cursor.once("end", async () => {
-      await cursor.close();
-      const suppressedEmails = await getSuppressedEmailsSet(
-        res.map((r) => r.e_mail ?? ""),
-      );
-      resolve(
-        res.filter(
-          (r) => !r.e_mail || !suppressedEmails.has(r.e_mail.toLowerCase()),
-        ),
-      );
+      try {
+        await cursor.close();
+        const suppressedEmails = await getSuppressedEmailsSet(
+          res.map((r) => r.e_mail ?? ""),
+        );
+        resolve(
+          res.filter(
+            (r) => !r.e_mail || !suppressedEmails.has(r.e_mail.toLowerCase()),
+          ),
+        );
+      } catch (error) {
+        reject(error);
+      }
     });
 
     cursor.once("error", async (err) => {
-      await cursor.close();
-      console.error("Error reading data from the database:", err);
-      reject(err);
+      try {
+        await cursor.close();
+        console.error("Error reading data from the database:", err);
+        reject(err);
+      } catch (error) {
+        reject(error);
+      }
     });
   });
 };
@@ -227,21 +235,29 @@ export const exportSearchedZaposleniData = async (
 
   return new Promise((resolve, reject) => {
     cursor.once("end", async () => {
-      await cursor.close();
-      const suppressedEmails = await getSuppressedEmailsSet(
-        res.map((r) => r.e_mail ?? ""),
-      );
-      resolve(
-        res.filter(
-          (r) => !r.e_mail || !suppressedEmails.has(r.e_mail.toLowerCase()),
-        ),
-      );
+      try {
+        await cursor.close();
+        const suppressedEmails = await getSuppressedEmailsSet(
+          res.map((r) => r.e_mail ?? ""),
+        );
+        resolve(
+          res.filter(
+            (r) => !r.e_mail || !suppressedEmails.has(r.e_mail.toLowerCase()),
+          ),
+        );
+      } catch (error) {
+        reject(error);
+      }
     });
 
     cursor.once("error", async (err) => {
-      await cursor.close();
-      console.error("Error reading data from the database:", err);
-      reject(err);
+      try {
+        await cursor.close();
+        console.error("Error reading data from the database:", err);
+        reject(err);
+      } catch (error) {
+        reject(error);
+      }
     });
   });
 };
