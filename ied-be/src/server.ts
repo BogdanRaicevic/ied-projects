@@ -4,7 +4,6 @@ import cors from "cors";
 import express from "express";
 import { connectDB } from "./database/db";
 import { errorWrapper } from "./middleware/errorWrapper";
-import { hasPermission } from "./middleware/hasPermission";
 import { requireApiAuth } from "./middleware/requireApiAuth";
 import delatnostiRoutes from "./routes/delatnost.routes";
 import docxRoutes from "./routes/docx.routes";
@@ -48,31 +47,21 @@ app.use(
 
 app.use(express.json({ limit: "1mb" }));
 
-app.use("/api/firma", requireApiAuth, hasPermission, firmaRoutes);
-app.use(
-  "/api/velicine-firmi",
-  requireApiAuth,
-  hasPermission,
-  velicineFirmiRoutes,
-);
-app.use("/api/radna-mesta", requireApiAuth, hasPermission, radnaMestaRoutes);
-app.use("/api/tip-firme", requireApiAuth, hasPermission, tipFirmeRoutes);
-app.use("/api/delatnost", requireApiAuth, hasPermission, delatnostiRoutes);
-app.use("/api/mesto", requireApiAuth, hasPermission, mestoRoutes);
-app.use("/api/pretrage", requireApiAuth, hasPermission, pretrageRoutes);
-app.use("/api/stanja-firmi", requireApiAuth, hasPermission, stanjaFirmeRoutes);
-app.use("/api/seminari", requireApiAuth, hasPermission, seminarRoutes);
-app.use("/api/docx", requireApiAuth, hasPermission, docxRoutes);
-app.use("/api/racuni", requireApiAuth, hasPermission, racuniRoutes);
-app.use("/api/racuni-v2", requireApiAuth, hasPermission, racuniV2Routes);
-app.use("/api/audit-log", requireApiAuth, hasPermission, auditLogRoutes);
-app.use(
-  "/api/email-suppression",
-  requireApiAuth,
-  hasPermission,
-  emailSuppressionRoutes,
-);
-app.use("/api/tip-seminara", requireApiAuth, hasPermission, tipSeminaraRoutes);
+app.use("/api/firma", requireApiAuth, firmaRoutes);
+app.use("/api/velicine-firmi", requireApiAuth, velicineFirmiRoutes);
+app.use("/api/radna-mesta", requireApiAuth, radnaMestaRoutes);
+app.use("/api/tip-firme", requireApiAuth, tipFirmeRoutes);
+app.use("/api/delatnost", requireApiAuth, delatnostiRoutes);
+app.use("/api/mesto", requireApiAuth, mestoRoutes);
+app.use("/api/pretrage", requireApiAuth, pretrageRoutes);
+app.use("/api/stanja-firmi", requireApiAuth, stanjaFirmeRoutes);
+app.use("/api/seminari", requireApiAuth, seminarRoutes);
+app.use("/api/docx", requireApiAuth, docxRoutes);
+app.use("/api/racuni", requireApiAuth, racuniRoutes);
+app.use("/api/racuni-v2", requireApiAuth, racuniV2Routes);
+app.use("/api/audit-log", requireApiAuth, auditLogRoutes);
+app.use("/api/email-suppression", requireApiAuth, emailSuppressionRoutes);
+app.use("/api/tip-seminara", requireApiAuth, tipSeminaraRoutes);
 app.use("/api/test", testRoutes);
 
 Sentry.setupExpressErrorHandler(app);
