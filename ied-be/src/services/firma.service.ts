@@ -54,7 +54,14 @@ export const updateFirmaById = async (
   firmaData: Partial<FirmaType>,
 ): Promise<FirmaType | null> => {
   try {
-    const isSuppressed = await isEmailSuppressed(firmaData.e_mail);
+    // A partial update that omits e_mail must still be checked against the
+    // firma's actual persisted address, not skip suppression entirely.
+    const effectiveEmail =
+      firmaData.e_mail !== undefined
+        ? firmaData.e_mail
+        : (await Firma.findById(id, { e_mail: 1 }).lean())?.e_mail;
+
+    const isSuppressed = await isEmailSuppressed(effectiveEmail);
     if (isSuppressed) {
       firmaData.prijavljeni = false;
     }
@@ -301,7 +308,19 @@ export const updateZaposleni = async (
 
     const { firmaKomentar, ...zaposleniUpdateData } = zaposleniData;
 
-    const isSuppressed = await isEmailSuppressed(zaposleniData.e_mail);
+    // A partial update that omits e_mail must still be checked against the
+    // zaposleni's actual persisted address, not skip suppression entirely.
+    const effectiveEmail =
+      zaposleniData.e_mail !== undefined
+        ? zaposleniData.e_mail
+        : (
+            await Firma.findOne(
+              { _id: firmaId, "zaposleni._id": zaposleniId },
+              { "zaposleni.$": 1 },
+            ).lean()
+          )?.zaposleni?.[0]?.e_mail;
+
+    const isSuppressed = await isEmailSuppressed(effectiveEmail);
     if (isSuppressed) {
       zaposleniUpdateData.prijavljeni = false;
     }
