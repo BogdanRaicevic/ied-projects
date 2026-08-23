@@ -6,7 +6,6 @@
     "moduleResolution": "Bundler",
     "rootDir": ".",
     "lib": ["ESNext"],
-    "noImplicitAny": false,
     "allowJs": true,
     "resolveJsonModule": true,
     "noEmit": true

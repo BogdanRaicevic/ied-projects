@@ -44,7 +44,7 @@ export type IzdavacProfile = {
   maticniBroj: string;
 };
 
-export type PrimalacFirmaView = {
+type PrimalacFirmaView = {
   tipPrimaoca: "firma";
   naziv: string;
   adresa: string;
@@ -52,7 +52,7 @@ export type PrimalacFirmaView = {
   maticniBroj: string;
 };
 
-export type PrimalacFizickoView = {
+type PrimalacFizickoView = {
   tipPrimaoca: "fizicko";
   imeIPrezime: string;
   adresa: string;
@@ -61,7 +61,7 @@ export type PrimalacFizickoView = {
 
 export type PrimalacView = PrimalacFirmaView | PrimalacFizickoView;
 
-export type UplataView = {
+type UplataView = {
   tekuciRacun: string;
   banka: string;
 };

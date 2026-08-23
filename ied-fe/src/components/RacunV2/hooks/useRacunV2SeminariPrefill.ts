@@ -37,7 +37,7 @@ type RacunV2SeminariNavState = {
  * user can fall back to manual entry rather than being trapped on a dead
  * page).
  */
-export type SeminariPrefillStatus = "loading" | "ready";
+type SeminariPrefillStatus = "loading" | "ready";
 
 export type SeminariPrefillResult = {
   status: SeminariPrefillStatus;

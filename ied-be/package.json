@@ -23,23 +23,23 @@
     "node": ">=24.18.0"
   },
   "devDependencies": {
-    "@biomejs/biome": "^2.5.8",
+    "@biomejs/biome": "^2.5.10",
     "@faker-js/faker": "^10.6.0",
     "@types/cors": "^2.8.19",
     "@types/express": "^5.0.6",
-    "@types/node": "^24.13.2",
-    "@vitest/coverage-v8": "^4.1.10",
+    "@types/node": "^24.13.3",
+    "@vitest/coverage-v8": "^4.1.11",
     "cross-env": "^10.1.0",
     "globals": "^17.11.0",
     "mongodb-memory-server": "^11.2.0",
     "tsx": "^4.23.12",
     "typescript": "^6.0.3",
-    "vitest": "^4.1.10"
+    "vitest": "^4.1.11"
   },
   "dependencies": {
-    "@aws-sdk/client-s3": "^3.1111.0",
-    "@aws-sdk/lib-storage": "^3.1111.0",
-    "@clerk/express": "^2.1.57",
+    "@aws-sdk/client-s3": "^3.1116.0",
+    "@aws-sdk/lib-storage": "^3.1116.0",
+    "@clerk/express": "^2.1.61",
     "@sentry/node": "^10.70.0",
     "cors": "^2.8.6",
     "cron": "^4.4.0",
@@ -47,14 +47,14 @@
     "date-fns": "^4.4.0",
     "docxtemplater": "^3.69.3",
     "dotenv": "^17.4.2",
-    "es-toolkit": "^1.50.0",
+    "es-toolkit": "^1.51.0",
     "express": "^5.2.1",
     "handlebars": "^4.7.9",
     "ied-shared": "workspace:^",
-    "mongoose": "^9.9.2",
+    "mongoose": "^9.9.3",
     "node-cache": "^5.1.2",
     "pizzip": "^3.2.0",
-    "puppeteer": "^25.7.0",
+    "puppeteer": "^25.8.0",
     "zod": "^4.4.3"
   }
 }

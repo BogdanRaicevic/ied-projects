@@ -14,6 +14,25 @@
     "lineWidth": 80,
     "lineEnding": "lf"
   },
+  "linter": {
+    "enabled": true,
+    "rules": {
+      "preset": "recommended",
+      "a11y": "off",
+      "suspicious": {
+        "noExplicitAny": "info",
+        "noArrayIndexKey": "warn"
+      },
+      "correctness": {
+        "useExhaustiveDependencies": "warn",
+        "noNestedComponentDefinitions": "warn",
+        "useUniqueElementIds": "off"
+      },
+      "complexity": {
+        "noBannedTypes": "info"
+      }
+    }
+  },
   "javascript": {
     "formatter": {
       "quoteStyle": "double"
