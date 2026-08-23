@@ -1,3 +1,5 @@
+## [1.26.4](https://github.com/BogdanRaicevic/ied-projects/compare/v1.26.3...v1.26.4) (2026-08-23)
+
 ## [1.26.3](https://github.com/BogdanRaicevic/ied-projects/compare/v1.26.2...v1.26.3) (2026-08-22)
 
 ## [1.26.2](https://github.com/BogdanRaicevic/ied-projects/compare/v1.26.1...v1.26.2) (2026-08-22)
