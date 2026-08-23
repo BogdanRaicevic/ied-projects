@@ -324,9 +324,10 @@ export const updateZaposleni = async (
     if (isSuppressed) {
       zaposleniUpdateData.prijavljeni = false;
     }
-    const updateObject = {};
+    const updateObject: Record<string, unknown> = {};
     for (const key in zaposleniUpdateData) {
-      updateObject[`zaposleni.$.${key}`] = zaposleniUpdateData[key];
+      updateObject[`zaposleni.$.${key}`] =
+        zaposleniUpdateData[key as keyof typeof zaposleniUpdateData];
     }
 
     if (firmaKomentar) {

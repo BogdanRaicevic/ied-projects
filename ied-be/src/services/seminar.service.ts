@@ -359,6 +359,25 @@ const buildFirmaQuery = (queryParams: FirmaSeminarSearchParams) => {
   return query;
 };
 
+type SeminarAggregationItem = {
+  firmaId: Types.ObjectId;
+  seminars: {
+    seminar_id: Types.ObjectId;
+    naziv: string;
+    predavac?: string;
+    lokacija?: string;
+    onlineCena?: number;
+    offlineCena?: number;
+    datumi?: Date[];
+    totalUcesnici: number;
+    onlineUcesnici: number;
+    offlineUcesnici: number;
+  }[];
+  totalUcesnici: number;
+  onlineUcesnici: number;
+  offlineUcesnici: number;
+};
+
 // Helper: Aggregate seminars by firma
 const aggregateSeminarsByFirma = async (
   firmaIds: Types.ObjectId[],
@@ -470,7 +489,7 @@ const aggregateSeminarsByFirma = async (
     },
   });
 
-  return await Seminar.aggregate(pipeline);
+  return await Seminar.aggregate<SeminarAggregationItem>(pipeline);
 };
 
 // Helper: Fetch racuni for firma-seminar pairs with priority logic
