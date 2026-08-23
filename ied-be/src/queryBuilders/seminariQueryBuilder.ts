@@ -1,6 +1,7 @@
 import type { SeminarQueryParams } from "ied-shared";
 import type { QueryFilter } from "mongoose";
 import type { SeminarType } from "../models/seminar.model";
+import { escapeRegex } from "../utils/utils";
 
 export function createSeminarQuery(
   params: SeminarQueryParams,
@@ -8,15 +9,15 @@ export function createSeminarQuery(
   const query: QueryFilter<SeminarType> = {};
 
   if (params?.naziv && params.naziv.length > 0) {
-    query.naziv = { $regex: params.naziv, $options: "i" }; // Case-insensitive partial match
+    query.naziv = { $regex: escapeRegex(params.naziv), $options: "i" }; // Case-insensitive partial match
   }
 
   if (params?.lokacija && params.lokacija.length > 0) {
-    query.lokacija = { $regex: params.lokacija, $options: "i" }; // Case-insensitive partial match
+    query.lokacija = { $regex: escapeRegex(params.lokacija), $options: "i" }; // Case-insensitive partial match
   }
 
   if (params?.predavac && params.predavac.length > 0) {
-    query.predavac = { $regex: params.predavac, $options: "i" }; // Case-insensitive partial match
+    query.predavac = { $regex: escapeRegex(params.predavac), $options: "i" }; // Case-insensitive partial match
   }
 
   if (params?.datumOd || params?.datumDo) {

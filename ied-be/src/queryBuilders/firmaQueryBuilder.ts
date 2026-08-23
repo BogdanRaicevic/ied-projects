@@ -3,6 +3,7 @@ import { type QueryFilter, Types } from "mongoose";
 import type { FirmaType } from "../models/firma.model";
 import { Seminar, type SeminarType } from "../models/seminar.model";
 import type { Zaposleni } from "../models/zaposleni.model";
+import { escapeRegex } from "../utils/utils";
 
 export const createFirmaQuery = async (params: ParametriPretrage) => {
   const query: QueryFilter<FirmaType> = {};
@@ -16,15 +17,15 @@ export const createFirmaQuery = async (params: ParametriPretrage) => {
   const negateTipSeminara = negations.includes(NEGACIJA.tipSeminara);
 
   if (params?.imeFirme && params.imeFirme.length > 0) {
-    query.naziv_firme = { $regex: params.imeFirme, $options: "i" }; // Case-insensitive partial match
+    query.naziv_firme = { $regex: escapeRegex(params.imeFirme), $options: "i" }; // Case-insensitive partial match
   }
 
   if (params?.pib && params.pib.length > 0) {
-    query.PIB = { $regex: params.pib, $options: "i" }; // Case-insensitive partial match
+    query.PIB = { $regex: escapeRegex(params.pib), $options: "i" }; // Case-insensitive partial match
   }
 
   if (params?.email && params.email.length > 0) {
-    query.e_mail = { $regex: params.email, $options: "i" }; // Case-insensitive partial match
+    query.e_mail = { $regex: escapeRegex(params.email), $options: "i" }; // Case-insensitive partial match
   }
 
   if (Array.isArray(params?.delatnosti) && params.delatnosti.length > 0) {
@@ -63,16 +64,19 @@ export const createFirmaQuery = async (params: ParametriPretrage) => {
   }
 
   if (params?.jbkjs && params.jbkjs.length > 0) {
-    query.jbkjs = { $regex: params.jbkjs, $options: "i" };
+    query.jbkjs = { $regex: escapeRegex(params.jbkjs), $options: "i" };
   }
 
   if (params?.maticniBroj && params.maticniBroj.length > 0) {
-    query.maticni_broj = { $regex: params.maticniBroj, $options: "i" };
+    query.maticni_broj = {
+      $regex: escapeRegex(params.maticniBroj),
+      $options: "i",
+    };
   }
 
   if (params?.komentar && params.komentar.length > 0) {
     query.komentar = {
-      $regex: params.komentar.replace(/\s+/g, "\\s*"),
+      $regex: escapeRegex(params.komentar).replace(/\s+/g, "\\s*"),
       $options: "i",
     };
   }
@@ -128,8 +132,8 @@ export const createFirmaQuery = async (params: ParametriPretrage) => {
 
   if (params?.imePrezime && params.imePrezime.length > 0) {
     const nameParts = params.imePrezime.split(" ").filter(Boolean);
-    const ime = nameParts[0];
-    const prezime = nameParts[1] || "";
+    const ime = escapeRegex(nameParts[0] || "");
+    const prezime = escapeRegex(nameParts[1] || "");
 
     if (nameParts.length === 1) {
       zaposleniQuery.$or = [
@@ -152,7 +156,7 @@ export const createFirmaQuery = async (params: ParametriPretrage) => {
 
   if (params?.emailZaposlenog && params.emailZaposlenog.length > 0) {
     zaposleniQuery.e_mail = {
-      $regex: params.emailZaposlenog,
+      $regex: escapeRegex(params.emailZaposlenog),
       $options: "i",
     };
   }
