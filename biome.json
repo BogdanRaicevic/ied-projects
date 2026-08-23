@@ -1,9 +1,9 @@
 {
   "root": true,
   "vcs": {
-    "enabled": false,
+    "enabled": true,
     "clientKind": "git",
-    "useIgnoreFile": false
+    "useIgnoreFile": true
   },
   "files": {
     "ignoreUnknown": false
@@ -13,25 +13,6 @@
     "indentStyle": "space",
     "lineWidth": 80,
     "lineEnding": "lf"
-  },
-  "linter": {
-    "enabled": true,
-    "rules": {
-      "recommended": true,
-      "a11y": "off",
-      "suspicious": {
-        "noExplicitAny": "info",
-        "noArrayIndexKey": "warn"
-      },
-      "correctness": {
-        "useExhaustiveDependencies": "warn",
-        "noNestedComponentDefinitions": "warn",
-        "useUniqueElementIds": "off"
-      },
-      "complexity": {
-        "noBannedTypes": "info"
-      }
-    }
   },
   "javascript": {
     "formatter": {
