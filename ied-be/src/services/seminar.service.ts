@@ -13,7 +13,12 @@ import {
   type SeminarType,
 } from "./../models/seminar.model";
 import { createSeminarQuery } from "../queryBuilders/seminariQueryBuilder";
-import { escapeRegex, validateMongoId } from "../utils/utils";
+import { ErrorWithCause } from "../utils/customErrors";
+import {
+  escapeRegex,
+  toDateRangeFilter,
+  validateMongoId,
+} from "../utils/utils";
 
 export const createSeminar = async (
   seminarData: SeminarZodType,
@@ -114,6 +119,15 @@ export const createPrijava = async (
     { $push: { prijave: trasnformedPrijava } },
     { returnDocument: "after" },
   ).lean();
+
+  // Existence was already confirmed above, so a null result here means the
+  // $ne guard rejected the update: the zaposleni is already registered.
+  if (!updatedSeminar) {
+    throw new ErrorWithCause(
+      "Zaposleni is already registered for this seminar",
+      "duplicate",
+    );
+  }
 
   return updatedSeminar;
 };
@@ -375,16 +389,10 @@ const aggregateSeminarsByFirma = async (
     };
   }
 
-  if (queryParams.datumOd || queryParams.datumDo) {
-    const range: { $gte?: Date; $lte?: Date } = {};
-    if (queryParams.datumOd) {
-      range.$gte = new Date(queryParams.datumOd);
-    }
-    if (queryParams.datumDo) {
-      range.$lte = new Date(queryParams.datumDo);
-    }
+  const dateRange = toDateRangeFilter(queryParams.datumOd, queryParams.datumDo);
+  if (dateRange) {
     // Match if any date in datumi falls within the range
-    seminarMatch.datumi = { $elemMatch: range };
+    seminarMatch.datumi = { $elemMatch: dateRange };
   }
 
   if (Object.keys(seminarMatch).length > 0) {
@@ -546,7 +554,7 @@ async function removePrijavaComment(
 
   // Regex pattern:
   // dd.MM.yyyy - escaped(imePrezime) - escaped(seminarNaziv) - PRIJAVA
-  const patternString = `\\d{2}\\.\\d{2}\\.\\d{4} - ${escapeRegExp(imePrezime)} - ${escapeRegExp(seminarNaziv)} - PRIJAVA`;
+  const patternString = `\\d{2}\\.\\d{2}\\.\\d{4} - ${escapeRegex(imePrezime)} - ${escapeRegex(seminarNaziv)} - PRIJAVA`;
   const regex = new RegExp(patternString, "g");
 
   // Find and update Firma and Zaposleni comments
@@ -585,8 +593,4 @@ async function removePrijavaComment(
       updateOptions,
     );
   }
-}
-
-function escapeRegExp(string: string) {
-  return string.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"); // $& means the whole matched string
 }

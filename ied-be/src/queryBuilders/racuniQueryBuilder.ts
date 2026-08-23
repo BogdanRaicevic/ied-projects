@@ -1,7 +1,7 @@
 import type { PretrageRacunaType } from "ied-shared";
 import type { QueryFilter } from "mongoose";
 import type { RacunBaseType } from "../models/racun.model";
-import { escapeRegex } from "../utils/utils";
+import { escapeRegex, toDateRangeFilter } from "../utils/utils";
 
 export function createRacunQuery(
   params: PretrageRacunaType,
@@ -23,15 +23,9 @@ export function createRacunQuery(
     query.tipRacuna = { $in: params.tipRacuna }; // Match any of the values
   }
 
-  if (params?.datumOd && params?.datumDo) {
-    query.created_at = {
-      $gte: params.datumOd,
-      $lte: params.datumDo,
-    };
-  } else if (params?.datumOd) {
-    query.created_at = { $gte: params.datumOd };
-  } else if (params?.datumDo) {
-    query.created_at = { $lte: params.datumDo };
+  const dateRange = toDateRangeFilter(params?.datumOd, params?.datumDo);
+  if (dateRange) {
+    query.created_at = dateRange;
   }
 
   if (params?.izdavacRacuna && params.izdavacRacuna.length > 0) {

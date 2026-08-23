@@ -1,7 +1,7 @@
 import type { AuditLogQueryParams } from "ied-shared";
 import type { QueryFilter } from "mongoose";
 import type { AuditLogType } from "../models/audit_log.model";
-import { escapeRegex } from "../utils/utils";
+import { escapeRegex, toDateRangeFilter } from "../utils/utils";
 
 export function createAuditLogQuery(
   params: AuditLogQueryParams,
@@ -30,15 +30,9 @@ export function createAuditLogQuery(
     }; // Case-insensitive partial match
   }
 
-  if (params?.dateFrom && params?.dateTo) {
-    query.timestamp = {
-      $gte: params.dateFrom,
-      $lte: params.dateTo,
-    };
-  } else if (params?.dateFrom) {
-    query.timestamp = { $gte: params.dateFrom };
-  } else if (params?.dateTo) {
-    query.timestamp = { $lte: params.dateTo };
+  const dateRange = toDateRangeFilter(params?.dateFrom, params?.dateTo);
+  if (dateRange) {
+    query.timestamp = dateRange;
   }
 
   return query;

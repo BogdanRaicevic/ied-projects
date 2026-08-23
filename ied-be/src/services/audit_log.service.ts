@@ -8,6 +8,7 @@ import type {
 import { AuditLog } from "./../models/audit_log.model";
 import { Seminar } from "../models/seminar.model";
 import { createAuditLogQuery } from "../queryBuilders/auditLogQueryBuilder";
+import { toDateRangeFilter } from "../utils/utils";
 
 type AuditQuery = {
   pageIndex: number;
@@ -66,14 +67,9 @@ export const getUserChangesStats = async (params: AuditLogQueryParams) => {
       "resource.model": model,
     };
 
-    if (dateFrom || dateTo) {
-      matchConditions.timestamp = {};
-      if (dateFrom) {
-        (matchConditions.timestamp as Record<string, unknown>).$gte = dateFrom;
-      }
-      if (dateTo) {
-        (matchConditions.timestamp as Record<string, unknown>).$lte = dateTo;
-      }
+    const dateRange = toDateRangeFilter(dateFrom, dateTo);
+    if (dateRange) {
+      matchConditions.timestamp = dateRange;
     }
 
     const result = await AuditLog.aggregate([
@@ -165,14 +161,9 @@ export const getUserChanges = async (params: AuditLogQueryParams) => {
       "resource.model": model,
     };
 
-    if (dateFrom || dateTo) {
-      matchConditions.timestamp = {};
-      if (dateFrom) {
-        (matchConditions.timestamp as Record<string, unknown>).$gte = dateFrom;
-      }
-      if (dateTo) {
-        (matchConditions.timestamp as Record<string, unknown>).$lte = dateTo;
-      }
+    const dateRange = toDateRangeFilter(dateFrom, dateTo);
+    if (dateRange) {
+      matchConditions.timestamp = dateRange;
     }
 
     const result = await AuditLog.aggregate([
@@ -274,14 +265,9 @@ export const getUserChangesByDate = async (params: AuditLogQueryParams) => {
       "resource.model": model,
     };
 
-    if (dateFrom || dateTo) {
-      matchConditions.timestamp = {};
-      if (dateFrom) {
-        (matchConditions.timestamp as Record<string, unknown>).$gte = dateFrom;
-      }
-      if (dateTo) {
-        (matchConditions.timestamp as Record<string, unknown>).$lte = dateTo;
-      }
+    const dateRange = toDateRangeFilter(dateFrom, dateTo);
+    if (dateRange) {
+      matchConditions.timestamp = dateRange;
     }
 
     const seminarAggregatePromise = userEmail
@@ -292,14 +278,7 @@ export const getUserChangesByDate = async (params: AuditLogQueryParams) => {
           {
             $match: {
               "prijave.komercijalista": userEmail,
-              ...(dateFrom || dateTo
-                ? {
-                    "prijave.createdAt": {
-                      ...(dateFrom && { $gte: dateFrom }),
-                      ...(dateTo && { $lte: dateTo }),
-                    },
-                  }
-                : {}),
+              ...(dateRange && { "prijave.createdAt": dateRange }),
             },
           },
           // Extract the date part of createdAt

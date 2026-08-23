@@ -19,6 +19,30 @@ export const validateMongoId = (id: string) => {
 export const escapeRegex = (value: string): string =>
   value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 
+// Every date-range search filter (seminari, racuni, audit log) is fed a
+// "datumDo"/"dateTo" from a date-only picker, which is midnight of the
+// selected day. Comparing with $lte against that midnight excludes the
+// entire day the user picked. Shifting the upper bound to the start of the
+// next day and using an exclusive $lt instead covers the whole day
+// regardless of what timezone the server runs in (pure millisecond
+// arithmetic, no local-calendar mutation).
+export const toDateRangeFilter = (
+  from?: Date,
+  to?: Date,
+): { $gte?: Date; $lt?: Date } | undefined => {
+  if (!from && !to) {
+    return undefined;
+  }
+  const filter: { $gte?: Date; $lt?: Date } = {};
+  if (from) {
+    filter.$gte = from;
+  }
+  if (to) {
+    filter.$lt = new Date(to.getTime() + 24 * 60 * 60 * 1000);
+  }
+  return filter;
+};
+
 const CLERK_EMAIL_CACHE_TTL_SECONDS = 60 * 60 * 3; // 3 hours
 const clerkEmailCache = new NodeCache({
   stdTTL: CLERK_EMAIL_CACHE_TTL_SECONDS,

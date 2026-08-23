@@ -1,7 +1,7 @@
 import type { SeminarQueryParams } from "ied-shared";
 import type { QueryFilter } from "mongoose";
 import type { SeminarType } from "../models/seminar.model";
-import { escapeRegex } from "../utils/utils";
+import { escapeRegex, toDateRangeFilter } from "../utils/utils";
 
 export function createSeminarQuery(
   params: SeminarQueryParams,
@@ -20,16 +20,10 @@ export function createSeminarQuery(
     query.predavac = { $regex: escapeRegex(params.predavac), $options: "i" }; // Case-insensitive partial match
   }
 
-  if (params?.datumOd || params?.datumDo) {
-    const range: { $gte?: Date; $lte?: Date } = {};
-    if (params.datumOd) {
-      range.$gte = params.datumOd;
-    }
-    if (params.datumDo) {
-      range.$lte = params.datumDo;
-    }
+  const dateRange = toDateRangeFilter(params?.datumOd, params?.datumDo);
+  if (dateRange) {
     // Match if any date in datumi falls within the range
-    query.datumi = { $elemMatch: range };
+    query.datumi = { $elemMatch: dateRange };
   }
 
   if (params?.tipSeminara && params.tipSeminara.length > 0) {
