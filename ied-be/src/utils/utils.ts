@@ -12,6 +12,13 @@ export const validateMongoId = (id: string) => {
   }
 };
 
+// Every partial-match search filter builds a $regex straight from user
+// input; without escaping, metacharacters (parens, dots, +, etc.) either
+// throw "Regular expression is invalid" on Mongo's side or silently change
+// what matches (e.g. "." matching any character).
+export const escapeRegex = (value: string): string =>
+  value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+
 const CLERK_EMAIL_CACHE_TTL_SECONDS = 60 * 60 * 3; // 3 hours
 const clerkEmailCache = new NodeCache({
   stdTTL: CLERK_EMAIL_CACHE_TTL_SECONDS,

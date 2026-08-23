@@ -13,7 +13,7 @@ import {
   type SeminarType,
 } from "./../models/seminar.model";
 import { createSeminarQuery } from "../queryBuilders/seminariQueryBuilder";
-import { validateMongoId } from "../utils/utils";
+import { escapeRegex, validateMongoId } from "../utils/utils";
 
 export const createSeminar = async (
   seminarData: SeminarZodType,
@@ -321,7 +321,10 @@ const buildFirmaQuery = (queryParams: FirmaSeminarSearchParams) => {
   const query: any = {};
 
   if (queryParams.nazivFirme) {
-    query.naziv_firme = { $regex: queryParams.nazivFirme, $options: "i" };
+    query.naziv_firme = {
+      $regex: escapeRegex(queryParams.nazivFirme),
+      $options: "i",
+    };
   }
 
   if (queryParams.tipFirme && queryParams.tipFirme.length > 0) {
@@ -352,10 +355,16 @@ const aggregateSeminarsByFirma = async (
   // Match seminars based on filters
   const seminarMatch: any = {};
   if (queryParams.nazivSeminara) {
-    seminarMatch.naziv = { $regex: queryParams.nazivSeminara, $options: "i" };
+    seminarMatch.naziv = {
+      $regex: escapeRegex(queryParams.nazivSeminara),
+      $options: "i",
+    };
   }
   if (queryParams.predavac) {
-    seminarMatch.predavac = { $regex: queryParams.predavac, $options: "i" };
+    seminarMatch.predavac = {
+      $regex: escapeRegex(queryParams.predavac),
+      $options: "i",
+    };
   }
 
   if (queryParams.tipSeminara && queryParams.tipSeminara.length > 0) {

@@ -1,6 +1,7 @@
 import type { PretrageRacunaType } from "ied-shared";
 import type { QueryFilter } from "mongoose";
 import type { RacunBaseType } from "../models/racun.model";
+import { escapeRegex } from "../utils/utils";
 
 export function createRacunQuery(
   params: PretrageRacunaType,
@@ -8,7 +9,10 @@ export function createRacunQuery(
   const query: QueryFilter<RacunBaseType> = {};
 
   if (params?.pozivNaBroj) {
-    query.pozivNaBroj = { $regex: params.pozivNaBroj, $options: "i" }; // Case-insensitive partial match
+    query.pozivNaBroj = {
+      $regex: escapeRegex(params.pozivNaBroj),
+      $options: "i",
+    }; // Case-insensitive partial match
   }
 
   if (
@@ -35,15 +39,24 @@ export function createRacunQuery(
   }
 
   if (params?.imeFirme && params.imeFirme.length > 0) {
-    query["primalacRacuna.naziv"] = { $regex: params.imeFirme, $options: "i" }; // Case-insensitive partial match
+    query["primalacRacuna.naziv"] = {
+      $regex: escapeRegex(params.imeFirme),
+      $options: "i",
+    }; // Case-insensitive partial match
   }
 
   if (params?.pibFirme) {
-    query["primalacRacuna.pib"] = { $regex: params.pibFirme, $options: "i" }; // Case-insensitive partial match
+    query["primalacRacuna.pib"] = {
+      $regex: escapeRegex(params.pibFirme),
+      $options: "i",
+    }; // Case-insensitive partial match
   }
 
   if (params?.nazivSeminara) {
-    query["seminar.naziv"] = { $regex: params.nazivSeminara, $options: "i" }; // Case-insensitive partial match
+    query["seminar.naziv"] = {
+      $regex: escapeRegex(params.nazivSeminara),
+      $options: "i",
+    }; // Case-insensitive partial match
   }
   return query;
 }

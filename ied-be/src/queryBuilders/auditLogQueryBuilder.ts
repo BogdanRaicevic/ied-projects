@@ -1,6 +1,7 @@
 import type { AuditLogQueryParams } from "ied-shared";
 import type { QueryFilter } from "mongoose";
 import type { AuditLogType } from "../models/audit_log.model";
+import { escapeRegex } from "../utils/utils";
 
 export function createAuditLogQuery(
   params: AuditLogQueryParams,
@@ -8,19 +9,25 @@ export function createAuditLogQuery(
   const query: QueryFilter<AuditLogType> = {};
 
   if (params?.userEmail && params.userEmail.length > 0) {
-    query.userEmail = { $regex: params.userEmail, $options: "i" }; // Case-insensitive partial match
+    query.userEmail = { $regex: escapeRegex(params.userEmail), $options: "i" }; // Case-insensitive partial match
   }
 
   if (params?.method && params.method.length > 0) {
-    query.method = { $regex: params.method, $options: "i" }; // Case-insensitive partial match
+    query.method = { $regex: escapeRegex(params.method), $options: "i" }; // Case-insensitive partial match
   }
 
   if (params?.model && params.model.length > 0) {
-    query["resource.model"] = { $regex: params.model, $options: "i" }; // Case-insensitive partial match
+    query["resource.model"] = {
+      $regex: escapeRegex(params.model),
+      $options: "i",
+    }; // Case-insensitive partial match
   }
 
   if (params?.resourceId && params.resourceId.length > 0) {
-    query["resource.id"] = { $regex: params.resourceId, $options: "i" }; // Case-insensitive partial match
+    query["resource.id"] = {
+      $regex: escapeRegex(params.resourceId),
+      $options: "i",
+    }; // Case-insensitive partial match
   }
 
   if (params?.dateFrom && params?.dateTo) {
