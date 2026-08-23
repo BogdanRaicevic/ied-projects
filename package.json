@@ -20,17 +20,17 @@
     "release": "semantic-release"
   },
   "devDependencies": {
-    "@biomejs/biome": "^2.5.8",
+    "@biomejs/biome": "^2.5.10",
     "@semantic-release/changelog": "^6.0.3",
     "@semantic-release/git": "^10.0.1",
     "@semantic-release/github": "^12.0.9",
     "@semantic-release/npm": "^13.1.5",
-    "conventional-changelog-conventionalcommits": "^10.3.0",
-    "fallow": "^3.16.0",
+    "conventional-changelog-conventionalcommits": "^10.4.0",
+    "fallow": "^3.17.0",
     "knip": "^6.32.2",
     "pm2": "^7.0.3",
     "semantic-release": "^25.0.9",
-    "turbo": "^2.10.10"
+    "turbo": "^2.10.11"
   },
   "engines": {
     "node": ">=24.18.0"
