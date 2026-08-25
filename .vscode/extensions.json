@@ -1,0 +1,10 @@
+{
+  "recommendations": [
+    "TypeScriptTeam.native-preview",
+    "biomejs.biome",
+    "streetsidesoftware.code-spell-checker",
+    "mikestead.dotenv",
+    "eamodio.gitlens",
+    "vitest.explorer"
+  ]
+}

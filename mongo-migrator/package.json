@@ -17,16 +17,16 @@
     "node": ">=24.18.0"
   },
   "dependencies": {
-    "dotenv": "^17.4.2",
+    "dotenv": "catalog:",
     "ied-shared": "workspace:^",
-    "mongoose": "^9.9.3",
+    "mongoose": "catalog:",
     "mysql2": "^3.23.4"
   },
   "devDependencies": {
-    "@biomejs/biome": "^2.5.10",
-    "@types/node": "^24.13.3",
-    "tsx": "^4.23.12",
-    "typescript": "^6.0.3"
+    "@biomejs/biome": "catalog:",
+    "@types/node": "catalog:",
+    "tsx": "catalog:",
+    "typescript": "catalog:"
   },
   "type": "module"
 }
