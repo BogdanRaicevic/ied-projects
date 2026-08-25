@@ -23,18 +23,18 @@
     "node": ">=24.18.0"
   },
   "devDependencies": {
-    "@biomejs/biome": "^2.5.10",
+    "@biomejs/biome": "catalog:",
     "@faker-js/faker": "^10.6.0",
     "@types/cors": "^2.8.19",
     "@types/express": "^5.0.6",
-    "@types/node": "^24.13.3",
-    "@vitest/coverage-v8": "^4.1.11",
+    "@types/node": "catalog:",
+    "@vitest/coverage-v8": "catalog:",
     "cross-env": "^10.1.0",
-    "globals": "^17.11.0",
+    "globals": "catalog:",
     "mongodb-memory-server": "^11.2.0",
-    "tsx": "^4.23.12",
-    "typescript": "^6.0.3",
-    "vitest": "^4.1.11"
+    "tsx": "catalog:",
+    "typescript": "catalog:",
+    "vitest": "catalog:"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.1116.0",
@@ -44,17 +44,17 @@
     "cors": "^2.8.6",
     "cron": "^4.4.0",
     "csv-parse": "^7.0.2",
-    "date-fns": "^4.4.0",
+    "date-fns": "catalog:",
     "docxtemplater": "^3.69.3",
-    "dotenv": "^17.4.2",
-    "es-toolkit": "^1.51.0",
+    "dotenv": "catalog:",
+    "es-toolkit": "catalog:",
     "express": "^5.2.1",
     "handlebars": "^4.7.9",
     "ied-shared": "workspace:^",
-    "mongoose": "^9.9.3",
+    "mongoose": "catalog:",
     "node-cache": "^5.1.2",
     "pizzip": "^3.2.0",
     "puppeteer": "^25.8.0",
-    "zod": "^4.4.3"
+    "zod": "catalog:"
   }
 }

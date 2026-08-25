@@ -4,6 +4,20 @@ packages:
   - ied-shared
   - mongo-migrator
 
+catalog:
+  typescript: ^7.0.2
+  "@biomejs/biome": ^2.5.10
+  "@types/node": ^24.13.3
+  zod: ^4.4.3
+  tsx: ^4.23.12
+  globals: ^17.11.0
+  date-fns: ^4.4.0
+  es-toolkit: ^1.51.0
+  vitest: ^4.1.11
+  "@vitest/coverage-v8": ^4.1.11
+  dotenv: ^17.4.2
+  mongoose: ^9.9.3
+
 allowBuilds:
   '@clerk/shared': true
   mongodb-memory-server: true
