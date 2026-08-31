@@ -28,7 +28,7 @@
     "conventional-changelog-conventionalcommits": "^10.4.0",
     "fallow": "^3.17.0",
     "knip": "^6.32.2",
-    "pm2": "^7.0.3",
+    "pm2": "^7.0.4",
     "semantic-release": "^25.0.9",
     "turbo": "^2.10.11"
   },
