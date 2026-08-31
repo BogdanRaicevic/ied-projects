@@ -72,8 +72,8 @@ importers:
         specifier: ^6.32.2
         version: 6.32.2
       pm2:
-        specifier: ^7.0.3
-        version: 7.0.3(supports-color@7.2.0)
+        specifier: ^7.0.4
+        version: 7.0.4(supports-color@7.2.0)
       semantic-release:
         specifier: ^25.0.9
         version: 25.0.9(supports-color@7.2.0)(typescript@7.0.2)
@@ -3177,10 +3177,6 @@ packages:
   js-tokens@4.0.0:
     resolution: {integrity: sha512-RdJUflcE3cUzKiMqQgsCu06FPu9UdIJO0beYbPhHN4k6apgJtifcoCtT9bcxOpYBtpD2kCM6Sbzg4CausW/PKQ==}
 
-  js-yaml@4.3.0:
-    resolution: {integrity: sha512-1td788aAnnZ5qs7V2QIRl1owjtYpbKt749Y3xauqQgwIIGF/xXWz1wMTEBx5O3LK3lXLVuqXPdPxj2BoFHaW9Q==}
-    hasBin: true
-
   js-yaml@4.3.1:
     resolution: {integrity: sha512-CY6crGq313MX8GkwvB7tzgp99vjQxY1++5y10/BKN/GUfHqWaOGQMNZkBvqSzsZKWk/ijwHlWzzkLulsGHhjWQ==}
     hasBin: true
@@ -3860,8 +3856,8 @@ packages:
     resolution: {integrity: sha512-YJx6RXKrVrWaphEYf++EdOOx9EH18vM8RSZN/P1Y+NokTKqYAca/ejXwVLyiEpNju4HPZEk3Y2uZouwMqUlcgg==}
     engines: {node: '>=4.0.0'}
 
-  pm2@7.0.3:
-    resolution: {integrity: sha512-zRJOdburpb9OEPB0uqoNT8C1Gp7hPJPVy4Kr67XJNuT9UlMQcOt1WXrYQUmwqKPHk8FyauvP1CPhqoCrCaPw0Q==}
+  pm2@7.0.4:
+    resolution: {integrity: sha512-rMzoZmZlmJw7hoTbO9cOqcwj407TzUVc84JRaIjmnK8+808zldQT2Sd4rVcqVvXUcI2LoXEf1irMevWfOx5SEQ==}
     engines: {node: '>=18.0.0'}
     hasBin: true
 
@@ -7389,10 +7385,6 @@ snapshots:
 
   js-tokens@4.0.0: {}
 
-  js-yaml@4.3.0:
-    dependencies:
-      argparse: 2.0.1
-
   js-yaml@4.3.1:
     dependencies:
       argparse: 2.0.1
@@ -7996,7 +7988,7 @@ snapshots:
       run-series: 1.1.9
       tv4: 1.3.0
 
-  pm2@7.0.3(supports-color@7.2.0):
+  pm2@7.0.4(supports-color@7.2.0):
     dependencies:
       '@pm2/blessed': 0.1.81
       '@pm2/js-api': 0.8.1(supports-color@7.2.0)
@@ -8013,7 +8005,7 @@ snapshots:
       debug: 4.4.3(supports-color@7.2.0)
       eventemitter2: 6.4.9
       fast-json-patch: 3.1.1
-      js-yaml: 4.3.0
+      js-yaml: 4.3.1
       pidusage: 4.0.1
       pm2-deploy: 1.0.2
       proxy-agent: 6.5.0(supports-color@7.2.0)
