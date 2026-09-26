@@ -7,7 +7,7 @@ packages:
 catalog:
   typescript: ^7.0.2
   "@biomejs/biome": ^2.5.10
-  "@types/node": ^24.13.3
+  "@types/node": ^24.13.6
   zod: ^4.4.3
   tsx: ^4.23.12
   globals: ^17.11.0
