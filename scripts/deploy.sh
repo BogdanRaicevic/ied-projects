@@ -4,7 +4,7 @@
 #
 # By the time this runs the working tree is already at the commit we want to
 # deploy (the workflow does the git fetch/checkout before calling this), so this
-# script only has to install, build and restart.
+# script only has to stop the apps, install, build, migrate and restart.
 #
 # It is safe to run by hand too:  cd /path/to/ied-projects && bash scripts/deploy.sh
 #
@@ -59,6 +59,11 @@ fi
 
 echo "==> [${TARGET_NAME:-$(hostname)}] deploying $(git describe --tags --always) ($(node -v), pnpm $(pnpm -v))"
 
+if [ "${PM2_ALREADY_STOPPED:-0}" != "1" ]; then
+  echo "==> Stopping pm2"
+  pnpm exec pm2 stop all
+fi
+
 # NOT --prod: ied-be runs its TypeScript through tsx, and the builds need
 # typescript/vite, all of which are devDependencies.
 echo "==> Installing dependencies"
@@ -67,7 +72,10 @@ pnpm install --frozen-lockfile
 echo "==> Building"
 pnpm run build
 
-echo "==> Reloading pm2"
+echo "==> Running MongoDB migrations"
+pnpm --dir mongo-migrator run dev
+
+echo "==> Starting pm2"
 # startOrReload handles both the first deploy (apps not running yet) and every
 # one after it. --update-env re-reads the .env files on the box.
 pnpm exec pm2 startOrReload ecosystem.config.js --update-env

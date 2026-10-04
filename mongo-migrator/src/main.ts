@@ -78,6 +78,7 @@ const runMigrations = async () => {
       "[MIGRATOR] A critical error occurred during the migration process:",
       error,
     );
+    throw error;
   } finally {
     if (mongoConnection) {
       console.log("[MIGRATOR] Closing database connection.");
@@ -86,4 +87,4 @@ const runMigrations = async () => {
   }
 };
 
-runMigrations().catch(console.error);
+await runMigrations();
