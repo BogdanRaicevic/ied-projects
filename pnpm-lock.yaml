@@ -108,8 +108,8 @@ importers:
         specifier: 'catalog:'
         version: 4.4.0
       docxtemplater:
-        specifier: ^3.69.3
-        version: 3.69.3
+        specifier: ^3.71.0
+        version: 3.71.0
       dotenv:
         specifier: 'catalog:'
         version: 17.4.2
@@ -2577,8 +2577,8 @@ packages:
     resolution: {integrity: sha512-WkrWp9GR4KXfKGYzOLmTuGVi1UWFfws377n9cc55/tb6DuqyF6pcQ5AbiHEshaDpY9v6oaSr2XCDidGmMwdzIA==}
     engines: {node: '>=8'}
 
-  docxtemplater@3.69.3:
-    resolution: {integrity: sha512-z6IIXImBvOFudR1VHZIjIoewPd/xft/OVF1JT9eKgJLGWQaFZ8gPrjPuAnho0bbQEfKd5Ge7RPq+owqKLmC3PA==}
+  docxtemplater@3.71.0:
+    resolution: {integrity: sha512-4SyQzPVDrhsPb9vHNstxJpJWMLJvrbKEcXDRNBlb5Bnbjqm1T51PVt5r+iLVe1yAkmIvakk8M3KywO5m5LsUSA==}
     engines: {node: '>=0.10'}
 
   dom-helpers@5.2.1:
@@ -6660,7 +6660,7 @@ snapshots:
     dependencies:
       path-type: 4.0.0
 
-  docxtemplater@3.69.3:
+  docxtemplater@3.71.0:
     dependencies:
       '@xmldom/xmldom': 0.9.12
 
