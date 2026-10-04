@@ -227,7 +227,7 @@ importers:
         specifier: ^3.30.0
         version: 3.31.0
       knip:
-        specifier: ^6.38.0
+        specifier: ^6.39.0
         version: 6.39.0
       pm2:
         specifier: ^7.0.4
