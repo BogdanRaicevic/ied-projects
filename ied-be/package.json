@@ -43,7 +43,7 @@
     "@sentry/node": "^10.75.3",
     "cors": "^2.8.6",
     "cron": "^4.4.0",
-    "csv-parse": "^7.0.2",
+    "csv-parse": "^7.0.3",
     "date-fns": "catalog:",
     "docxtemplater": "^3.69.3",
     "dotenv": "catalog:",
