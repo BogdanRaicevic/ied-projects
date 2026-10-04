@@ -49,7 +49,7 @@
     "@vitejs/plugin-react": "^6.1.0",
     "globals": "catalog:",
     "typescript": "catalog:",
-    "vite": "^8.2.2"
+    "vite": "^8.3.1"
   },
   "engines": {
     "node": ">=24.18.0"
