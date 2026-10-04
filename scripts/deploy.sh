@@ -13,7 +13,8 @@ set -euo pipefail
 cd "$(dirname "$0")/.."
 
 # A non-interactive SSH session does NOT source ~/.zshrc or ~/.bashrc, so
-# anything installed through nvm (node, pnpm, pm2) is missing from PATH.
+# anything installed through nvm (node and Corepack's pnpm shim) is missing
+# from PATH.
 # This is the single most common reason a deploy that works by hand fails in CI.
 export NVM_DIR="${NVM_DIR:-$HOME/.nvm}"
 if [ -s "$NVM_DIR/nvm.sh" ]; then
@@ -23,7 +24,8 @@ if [ -s "$NVM_DIR/nvm.sh" ]; then
   set +u
   # shellcheck disable=SC1091
   . "$NVM_DIR/nvm.sh"
-  # Picks up .nvmrc (24.18.0). Do NOT swallow a failure here: silently falling
+  # Picks up the version declared in .nvmrc. Do NOT swallow a failure here:
+  # silently falling
   # back to whatever node happens to be on PATH means building and running
   # production on an unintended Node version.
   nvm_status=0
@@ -37,7 +39,7 @@ if [ -s "$NVM_DIR/nvm.sh" ]; then
   fi
 fi
 
-for cmd in node pnpm pm2 git; do
+for cmd in node pnpm git; do
   if ! command -v "$cmd" >/dev/null 2>&1; then
     echo "ERROR: '$cmd' is not on PATH for a non-interactive shell." >&2
     echo "       PATH=$PATH" >&2
@@ -68,8 +70,8 @@ pnpm run build
 echo "==> Reloading pm2"
 # startOrReload handles both the first deploy (apps not running yet) and every
 # one after it. --update-env re-reads the .env files on the box.
-pm2 startOrReload ecosystem.config.js --update-env
-pm2 save
+pnpm exec pm2 startOrReload ecosystem.config.js --update-env
+pnpm exec pm2 save
 
-pm2 list
+pnpm exec pm2 list
 echo "==> Deploy finished"
