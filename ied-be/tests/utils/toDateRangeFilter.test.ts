@@ -41,4 +41,29 @@ describe("toDateRangeFilter", () => {
       $lt: new Date("2026-08-24T00:00:00.000Z"),
     });
   });
+
+  // GET /audit-log spreads the raw req.query into the query builder and POST
+  // /racuni/search takes an unvalidated JSON body, so both hand this helper
+  // ISO strings rather than Dates.
+  it("accepts ISO strings for either bound", () => {
+    expect(
+      toDateRangeFilter("2026-08-01T00:00:00.000Z", "2026-08-23T00:00:00.000Z"),
+    ).toEqual({
+      $gte: new Date("2026-08-01T00:00:00.000Z"),
+      $lt: new Date("2026-08-24T00:00:00.000Z"),
+    });
+  });
+
+  it("accepts a date-only string for the upper bound", () => {
+    expect(toDateRangeFilter(undefined, "2026-08-23")).toEqual({
+      $lt: new Date("2026-08-24T00:00:00.000Z"),
+    });
+  });
+
+  it("ignores an unparseable bound instead of emitting an Invalid Date", () => {
+    expect(toDateRangeFilter("not-a-date", undefined)).toBeUndefined();
+    expect(toDateRangeFilter("2026-08-01T00:00:00.000Z", "not-a-date")).toEqual(
+      { $gte: new Date("2026-08-01T00:00:00.000Z") },
+    );
+  });
 });

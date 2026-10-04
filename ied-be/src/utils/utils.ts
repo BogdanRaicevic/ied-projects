@@ -26,10 +26,29 @@ export const escapeRegex = (value: string): string =>
 // next day and using an exclusive $lt instead covers the whole day
 // regardless of what timezone the server runs in (pure millisecond
 // arithmetic, no local-calendar mutation).
+// QUICK FIX: bounds arrive as ISO strings on paths where nothing parses them
+// into Dates before they reach here (GET /audit-log spreads the raw req.query
+// — validateRequestQuery never writes the parsed data back — and POST
+// /racuni/search has no body validation at all), which blew up on
+// `to.getTime()`. Normalizing here keeps both endpoints alive; the real fix is
+// to parse at the boundary so this helper can go back to taking Dates only.
+const toDate = (value?: Date | string): Date | undefined => {
+  if (!value) {
+    return undefined;
+  }
+  const date = value instanceof Date ? value : new Date(value);
+  // An unparseable bound would otherwise become an Invalid Date and make
+  // Mongo throw; dropping it degrades to "no bound" instead of a 500.
+  return Number.isNaN(date.getTime()) ? undefined : date;
+};
+
 export const toDateRangeFilter = (
-  from?: Date,
-  to?: Date,
+  fromInput?: Date | string,
+  toInput?: Date | string,
 ): { $gte?: Date; $lt?: Date } | undefined => {
+  const from = toDate(fromInput);
+  const to = toDate(toInput);
+
   if (!from && !to) {
     return undefined;
   }
