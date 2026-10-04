@@ -183,7 +183,7 @@ catalogs:
       specifier: ^1.52.0
       version: 1.52.0
     globals:
-      specifier: ^17.12.0
+      specifier: ^17.13.0
       version: 17.13.0
     mongoose:
       specifier: ^9.10.2
