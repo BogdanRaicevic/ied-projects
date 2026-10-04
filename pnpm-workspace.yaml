@@ -15,7 +15,7 @@ catalog:
   es-toolkit: ^1.52.0
   vitest: ^5.0.2
   "@vitest/coverage-v8": ^5.0.2
-  dotenv: ^18.0.4
+  dotenv: ^18.0.5
   mongoose: ^9.10.2
 
 allowBuilds:

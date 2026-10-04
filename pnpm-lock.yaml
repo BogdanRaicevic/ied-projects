@@ -177,7 +177,7 @@ catalogs:
       specifier: ^4.4.0
       version: 4.4.0
     dotenv:
-      specifier: ^18.0.4
+      specifier: ^18.0.5
       version: 18.0.5
     es-toolkit:
       specifier: ^1.52.0
