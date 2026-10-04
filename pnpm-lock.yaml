@@ -171,7 +171,7 @@ catalogs:
       specifier: ^26.6.4
       version: 26.6.4
     '@vitest/coverage-v8':
-      specifier: ^5.0.2
+      specifier: ^5.0.3
       version: 5.0.3
     date-fns:
       specifier: ^4.4.0
@@ -195,7 +195,7 @@ catalogs:
       specifier: ^7.0.2
       version: 7.0.2
     vitest:
-      specifier: ^5.0.2
+      specifier: ^5.0.3
       version: 5.0.3
     zod:
       specifier: ^4.6.5
