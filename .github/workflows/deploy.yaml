@@ -1,0 +1,161 @@
+name: Deploy to VPS
+
+# Manual only for now: Actions tab -> "Deploy to VPS" -> "Run workflow".
+# The button only shows up once this file is on the default branch (main).
+#
+# Servers are listed in the repository VARIABLE `VPS_TARGETS` (Settings ->
+# Secrets and variables -> Actions -> Variables), as a JSON array:
+#
+#   [
+#     {"name":"vps-1","host":"1.2.3.4","user":"bogdan","dir":"/home/bogdan/ied-projects"},
+#     {"name":"vps-2","host":"5.6.7.8","user":"bogdan","dir":"/home/bogdan/ied-projects","port":2222}
+#   ]
+#
+# Adding a third server later is a one-line edit to that variable. Nothing in
+# this file changes.
+on:
+  workflow_dispatch:
+    inputs:
+      ref:
+        description: "Branch, tag or commit SHA to deploy (e.g. main, v1.26.5)"
+        required: true
+        default: main
+      targets:
+        description: "Which servers: 'all', or comma-separated names from VPS_TARGETS (e.g. vps-1)"
+        required: true
+        default: all
+
+  # Flip this on when you want every semantic-release to ship automatically.
+  # release:
+  #   types: [published]
+
+# Never let two deploy RUNS overlap, regardless of which servers they target.
+concurrency:
+  group: deploy-production
+  cancel-in-progress: false
+
+jobs:
+  # Turns the VPS_TARGETS variable into a matrix, honouring the `targets` input
+  # so you can deploy to one box first and the rest afterwards.
+  plan:
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.plan.outputs.matrix }}
+    steps:
+      - id: plan
+        env:
+          ALL_TARGETS: ${{ vars.VPS_TARGETS }}
+          SELECTED: ${{ inputs.targets || 'all' }}
+        run: |
+          set -euo pipefail
+
+          if [ -z "${ALL_TARGETS:-}" ]; then
+            echo "::error::Repository variable VPS_TARGETS is not set."
+            exit 1
+          fi
+          if ! jq -e 'type == "array" and length > 0' >/dev/null <<<"$ALL_TARGETS"; then
+            echo "::error::VPS_TARGETS must be a non-empty JSON array."
+            exit 1
+          fi
+          if ! jq -e 'all(has("name") and has("host") and has("user") and has("dir"))' >/dev/null <<<"$ALL_TARGETS"; then
+            echo "::error::Every VPS_TARGETS entry needs name, host, user and dir."
+            exit 1
+          fi
+
+          if [ "$SELECTED" = "all" ]; then
+            matrix=$(jq -c . <<<"$ALL_TARGETS")
+          else
+            names=$(jq -Rc 'split(",") | map(gsub("^\\s+|\\s+$"; "")) | map(select(length > 0))' <<<"$SELECTED")
+            matrix=$(jq -c --argjson names "$names" \
+              '[ .[] | select(.name as $n | $names | index($n)) ]' <<<"$ALL_TARGETS")
+          fi
+
+          if ! jq -e 'length > 0' >/dev/null <<<"$matrix"; then
+            echo "::error::No server in VPS_TARGETS matched '$SELECTED'."
+            exit 1
+          fi
+
+          echo "matrix=$matrix" >> "$GITHUB_OUTPUT"
+          {
+            echo "### Deploy plan"
+            echo "Ref: \`${{ inputs.ref || github.event.release.tag_name || 'main' }}\`"
+            echo ""
+            jq -r '.[] | "- \(.name) — \(.user)@\(.host):\(.dir)"' <<<"$matrix"
+          } >> "$GITHUB_STEP_SUMMARY"
+
+  deploy:
+    needs: plan
+    runs-on: ubuntu-latest
+    name: deploy ${{ matrix.target.name }}
+
+    strategy:
+      matrix:
+        target: ${{ fromJSON(needs.plan.outputs.matrix) }}
+      # Rolling deploy: one server at a time, and stop the rollout the moment
+      # one fails. A bad commit then takes down the first box only — the rest
+      # keep serving the previous version. Set fail-fast: false and raise
+      # max-parallel if you would rather have every box end up in the same
+      # state, fast, even when that state is broken.
+      max-parallel: 1
+      fail-fast: true
+
+    # Uncomment once you create a "production" Environment in repo settings to
+    # get an approval gate + a deployment history page.
+    # environment: production
+
+    steps:
+      # Nothing is built here, so there is no checkout: this job's only job is
+      # to open an SSH session and hand the work to the VPS.
+      # Every value here goes through env:, never inline ${{ }}. GitHub pastes
+      # ${{ }} into the script TEXT before bash parses it, so a key containing a
+      # quote, a $ or a newline would write a corrupted file — or run as code.
+      # env: hands the value to the shell as data instead.
+      - name: Configure SSH
+        env:
+          SSH_KEY: ${{ secrets.VPS_SSH_KEY }}
+          KNOWN_HOSTS: ${{ secrets.VPS_KNOWN_HOSTS }}
+        run: |
+          mkdir -p ~/.ssh
+          chmod 700 ~/.ssh
+          printf '%s\n' "$SSH_KEY" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          # One known_hosts file holding the host key of EVERY server, so a
+          # man-in-the-middle cannot hand us a different box and collect the
+          # deploy key:  ssh-keyscan host1 host2 host3
+          printf '%s\n' "$KNOWN_HOSTS" > ~/.ssh/known_hosts
+          chmod 600 ~/.ssh/known_hosts
+
+      - name: Deploy over SSH
+        env:
+          REF: ${{ inputs.ref || github.event.release.tag_name || 'main' }}
+          APP_DIR: ${{ matrix.target.dir }}
+          TARGET_NAME: ${{ matrix.target.name }}
+          SSH_USER: ${{ matrix.target.user }}
+          SSH_HOST: ${{ matrix.target.host }}
+          SSH_PORT: ${{ matrix.target.port || 22 }}
+        run: |
+          # ssh needs the values as a single remote command string, so quote
+          # each one with printf %q — that survives spaces, quotes and $ in the
+          # path without the remote shell re-interpreting them.
+          remote_env=$(printf 'REF=%q APP_DIR=%q TARGET_NAME=%q' "$REF" "$APP_DIR" "$TARGET_NAME")
+          ssh -i ~/.ssh/deploy_key \
+              -p "$SSH_PORT" \
+              -o BatchMode=yes \
+              "$SSH_USER@$SSH_HOST" \
+              "$remote_env bash -s" <<'REMOTE'
+          set -euo pipefail
+          cd "$APP_DIR"
+
+          echo "==> [$TARGET_NAME] updating working tree to $REF"
+          git fetch --all --tags --prune
+          # --force discards local edits to TRACKED files. Your .env files are
+          # gitignored, so they are untouched — which is how each server keeps
+          # its own configuration.
+          git checkout --force --detach "origin/$REF" 2>/dev/null \
+            || git checkout --force --detach "$REF"
+          git --no-pager log -1 --oneline
+
+          # Run the freshly checked-out script, not the one that was on the box
+          # a second ago.
+          bash scripts/deploy.sh
+          REMOTE
