@@ -53,7 +53,7 @@
     "ied-shared": "workspace:^",
     "mongoose": "catalog:",
     "node-cache": "^5.1.2",
-    "pizzip": "^3.2.0",
+    "pizzip": "^3.3.0",
     "puppeteer": "^25.8.0",
     "zod": "catalog:"
   }
