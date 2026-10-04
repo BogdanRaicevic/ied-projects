@@ -186,8 +186,8 @@ catalogs:
       specifier: ^17.12.0
       version: 17.13.0
     mongoose:
-      specifier: ^9.9.3
-      version: 9.9.3
+      specifier: ^9.10.2
+      version: 9.10.4
     tsx:
       specifier: ^4.23.15
       version: 4.23.15
@@ -285,7 +285,7 @@ importers:
         version: link:../ied-shared
       mongoose:
         specifier: 'catalog:'
-        version: 9.9.3(socks@2.8.9)
+        version: 9.10.4(socks@2.8.9)
       node-cache:
         specifier: ^5.1.2
         version: 5.1.2
@@ -480,7 +480,7 @@ importers:
         version: link:../ied-shared
       mongoose:
         specifier: 'catalog:'
-        version: 9.9.3(socks@2.8.9)
+        version: 9.10.4(socks@2.8.9)
       mysql2:
         specifier: ^3.24.4
         version: 3.24.5(@types/node@26.6.4)
@@ -3323,8 +3323,8 @@ packages:
   jsonfile@6.2.1:
     resolution: {integrity: sha512-zwOTdL3rFQ/lRdBnntKVOX6k5cKJwEc1HdilT71BWEu7J41gXIB2MRp+vxduPSwZJPWBxEzv4yH1wYLJGUHX4Q==}
 
-  kareem@3.3.0:
-    resolution: {integrity: sha512-kpSuLD3/7RenBnjnJdOHXCKC8dTd1JzeOiJhN0necWWci6cC+qX+VuwPnMVgb+a4+KNJSfgqahpnfWaeDXCimw==}
+  kareem@3.4.0:
+    resolution: {integrity: sha512-JAKhnR4S027v/8949QXNInRskgETCg9rFUMi1VjhGbjX+XltCAAEFcXykkSocNkom1kc66EMJfjWvhj87BDQKg==}
     engines: {node: '>=18.0.0'}
 
   knip@6.39.0:
@@ -3612,8 +3612,35 @@ packages:
       socks:
         optional: true
 
-  mongoose@9.9.3:
-    resolution: {integrity: sha512-9dQaKct05LNgVkunDzFPZsGGBhinobl3Qc5B5KYJkLNG5lBLgqESUEItl1EUIkVaCwZJGBgTuvJiFAjjIATCiw==}
+  mongodb@7.6.0:
+    resolution: {integrity: sha512-WbZ6OCjYw2c53LOjfkQa+reXr7kIiOVpXXglnASFuiMtif0BvsMwHe3ClJHLm1/r7wJFwaasfFtD6iYIktB01g==}
+    engines: {node: '>=20.19.0'}
+    peerDependencies:
+      '@aws-sdk/credential-providers': ^3.806.0
+      '@mongodb-js/zstd': ^7.0.0
+      gcp-metadata: ^7.0.1
+      kerberos: ^7.0.0
+      mongodb-client-encryption: ^7.2.0
+      snappy: ^7.3.2
+      socks: ^2.8.6
+    peerDependenciesMeta:
+      '@aws-sdk/credential-providers':
+        optional: true
+      '@mongodb-js/zstd':
+        optional: true
+      gcp-metadata:
+        optional: true
+      kerberos:
+        optional: true
+      mongodb-client-encryption:
+        optional: true
+      snappy:
+        optional: true
+      socks:
+        optional: true
+
+  mongoose@9.10.4:
+    resolution: {integrity: sha512-p1hx2MSD4B+4shFTpRcd/uTwD6DtZeDJ+YxM9ja8/VBDH7vqqLynwGLA6rWa/tD7voOBoGqQR1wM3+/LcUoEfA==}
     engines: {node: '>=20.19.0'}
 
   mpath@0.9.0:
@@ -7446,7 +7473,7 @@ snapshots:
     optionalDependencies:
       graceful-fs: 4.2.11
 
-  kareem@3.3.0: {}
+  kareem@3.4.0: {}
 
   knip@6.39.0:
     dependencies:
@@ -7708,11 +7735,19 @@ snapshots:
     optionalDependencies:
       socks: 2.8.9
 
-  mongoose@9.9.3(socks@2.8.9):
+  mongodb@7.6.0(socks@2.8.9):
+    dependencies:
+      '@mongodb-js/saslprep': 1.5.0
+      bson: 7.3.2
+      mongodb-connection-string-url: 7.0.2
+    optionalDependencies:
+      socks: 2.8.9
+
+  mongoose@9.10.4(socks@2.8.9):
     dependencies:
       '@standard-schema/spec': 1.1.0
-      kareem: 3.3.0
-      mongodb: 7.5.0(socks@2.8.9)
+      kareem: 3.4.0
+      mongodb: 7.6.0(socks@2.8.9)
       mpath: 0.9.0
       mquery: 6.0.0
       ms: 2.1.3
