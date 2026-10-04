@@ -290,8 +290,8 @@ importers:
         specifier: ^5.1.2
         version: 5.1.2
       pizzip:
-        specifier: ^3.2.0
-        version: 3.2.0
+        specifier: ^3.3.0
+        version: 3.3.0
       puppeteer:
         specifier: ^25.8.0
         version: 25.8.0(yauzl@3.4.0)
@@ -3961,8 +3961,8 @@ packages:
     resolution: {integrity: sha512-C3FsVNH1udSEX48gGX1xfvwTWfsYWj5U+8/uK15BGzIGrKoUpghX8hWZwa/OFnakBiiVNmBvemTJR5mcy7iPcg==}
     engines: {node: '>=4'}
 
-  pizzip@3.2.0:
-    resolution: {integrity: sha512-X4NPNICxCfIK8VYhF6wbksn81vTiziyLbvKuORVAmolvnUzl1A1xmz9DAWKxPRq9lZg84pJOOAMq3OE61bD8IQ==}
+  pizzip@3.3.0:
+    resolution: {integrity: sha512-seR2ALUYS4Z0GCs0sVwXWImhBsoCImXpHr+ExNfIZ9G0czvHqpUxlJgwHCl1BBHFyU3nUFmZJPFEEWbpY8cKRg==}
 
   pkg-conf@2.1.0:
     resolution: {integrity: sha512-C+VUP+8jis7EsQZIhDYmS5qlNtjv2yP4SNtjXK9AP1ZcTRlnSfuumaTnRfYZnYgUUYVIKqL0fRvmUGDV2fmp6g==}
@@ -8055,7 +8055,7 @@ snapshots:
 
   pify@3.0.0: {}
 
-  pizzip@3.2.0:
+  pizzip@3.3.0:
     dependencies:
       pako: 2.2.0
 
