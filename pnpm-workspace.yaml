@@ -16,7 +16,7 @@ catalog:
   vitest: ^4.1.11
   "@vitest/coverage-v8": ^4.1.11
   dotenv: ^18.0.4
-  mongoose: ^9.9.3
+  mongoose: ^9.10.2
 
 allowBuilds:
   '@clerk/shared': true
