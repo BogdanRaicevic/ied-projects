@@ -31,7 +31,7 @@
     "@vitest/coverage-v8": "catalog:",
     "cross-env": "^10.1.0",
     "globals": "catalog:",
-    "mongodb-memory-server": "^11.2.0",
+    "mongodb-memory-server": "^11.3.0",
     "tsx": "catalog:",
     "typescript": "catalog:",
     "vitest": "catalog:"
