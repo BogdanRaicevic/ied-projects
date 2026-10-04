@@ -375,7 +375,7 @@ importers:
         specifier: ^5.104.0
         version: 5.104.0(react@19.3.0)
       axios:
-        specifier: ^1.19.0
+        specifier: ^1.20.0
         version: 1.20.0(debug@4.4.3(supports-color@7.2.0))(supports-color@7.2.0)
       date-fns:
         specifier: 'catalog:'
