@@ -27,7 +27,7 @@
     "@semantic-release/npm": "^13.2.0",
     "conventional-changelog-conventionalcommits": "^10.4.0",
     "fallow": "^3.30.0",
-    "knip": "^6.38.0",
+    "knip": "^6.39.0",
     "pm2": "^7.0.4",
     "semantic-release": "^25.0.9",
     "turbo": "^2.11.4"
