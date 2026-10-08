@@ -39,7 +39,7 @@
   "dependencies": {
     "@aws-sdk/client-s3": "^3.1141.0",
     "@aws-sdk/lib-storage": "^3.1141.0",
-    "@clerk/express": "^2.1.72",
+    "@clerk/express": "^2.1.75",
     "@sentry/node": "^10.75.3",
     "cors": "^2.8.6",
     "cron": "^4.4.0",
