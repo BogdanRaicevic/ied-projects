@@ -186,7 +186,7 @@ catalogs:
       specifier: ^17.12.0
       version: 17.13.0
     mongoose:
-      specifier: ^9.10.2
+      specifier: ^9.10.4
       version: 9.10.4
     tsx:
       specifier: ^4.23.15
