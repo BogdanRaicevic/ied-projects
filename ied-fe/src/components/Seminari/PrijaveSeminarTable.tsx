@@ -20,6 +20,7 @@ import {
 import type { PrijavaZodType } from "ied-shared";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { generateSertifikatPdfBatch } from "../../api/docx.api";
 import { useDeletePrijavaMutation } from "../../hooks/seminar/useSeminarMutations";
 import {
   buildSingleSertifikat,
@@ -46,6 +47,7 @@ export default function PrijaveSeminarTable({
     null,
   );
   const [isCertificateDialogOpen, setIsCertificateDialogOpen] = useState(false);
+  const [certificateName, setCertificateName] = useState("");
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -70,6 +72,7 @@ export default function PrijaveSeminarTable({
 
   const handleOpenCertificateDialog = (prijava: PrijavaZodType) => {
     setSelectedPrijava(prijava);
+    setCertificateName(getPrijavaFullName(prijava));
     setSubmitError(null);
     setIsCertificateDialogOpen(true);
   };
@@ -85,7 +88,7 @@ export default function PrijaveSeminarTable({
   };
 
   const selectedWarning = selectedPrijava
-    ? getCertificateWarning(selectedPrijava)
+    ? getCertificateWarning(selectedPrijava, certificateName)
     : "Prijava nije izabrana.";
 
   const dialogMessages = [
@@ -106,6 +109,7 @@ export default function PrijaveSeminarTable({
       seminarDates,
       seminarName,
       templateKey,
+      imePrezime: certificateName,
     });
 
     if (warning || !sertifikat) {
@@ -118,6 +122,9 @@ export default function PrijaveSeminarTable({
     try {
       setIsSubmitting(true);
       setSubmitError(null);
+
+      await generateSertifikatPdfBatch([sertifikat]);
+
       setSelectedPrijava(null);
       setIsCertificateDialogOpen(false);
     } catch (error) {
@@ -275,6 +282,14 @@ export default function PrijaveSeminarTable({
         alertSeverity={dialogMessages.length > 0 ? "error" : "warning"}
         disableConfirm={Boolean(selectedWarning)}
         isSubmitting={isSubmitting}
+        nameField={{
+          label: "Ime i prezime na sertifikatu",
+          value: certificateName,
+          onChange: (value) => {
+            setCertificateName(value);
+            setSubmitError(null);
+          },
+        }}
         onClose={handleCloseCertificateDialog}
         onConfirm={handleGenerateSingleCertificate}
       />
