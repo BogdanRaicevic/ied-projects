@@ -177,8 +177,8 @@ catalogs:
       specifier: ^4.4.0
       version: 4.4.0
     dotenv:
-      specifier: ^18.0.4
-      version: 18.0.5
+      specifier: ^18.0.7
+      version: 18.0.8
     es-toolkit:
       specifier: ^1.52.0
       version: 1.52.0
@@ -270,7 +270,7 @@ importers:
         version: 3.71.0
       dotenv:
         specifier: 'catalog:'
-        version: 18.0.5
+        version: 18.0.8
       es-toolkit:
         specifier: 'catalog:'
         version: 1.52.0
@@ -474,7 +474,7 @@ importers:
     dependencies:
       dotenv:
         specifier: 'catalog:'
-        version: 18.0.5
+        version: 18.0.8
       ied-shared:
         specifier: workspace:^
         version: link:../ied-shared
@@ -2771,8 +2771,8 @@ packages:
     resolution: {integrity: sha512-QM8q3zDe58hqUqjraQOmzZ1LIH9SWQJTlEKCH4kJ2oQvLZk7RbQXvtDM2XEq3fwkV9CCvvH4LA0AV+ogFsBM2Q==}
     engines: {node: '>=8'}
 
-  dotenv@18.0.5:
-    resolution: {integrity: sha512-aBrGvt6KhjxbEnatqMWOMidftwsrCiCvqh1yNIGB9QyF0J+VcWkKDMsvYOEm7ZS82oiV+BT1sTOtIlAmUlTpwQ==}
+  dotenv@18.0.8:
+    resolution: {integrity: sha512-2KDeoFoK/zRtcnbunCDlLG5VWVMcyqeQc6iK65o231nfNAcuGrKoqUQfJFUtBI+QlShk5HKIHxwebBtUl3rEfA==}
     engines: {node: '>=12'}
     hasBin: true
 
@@ -6874,7 +6874,7 @@ snapshots:
     dependencies:
       is-obj: 2.0.0
 
-  dotenv@18.0.5: {}
+  dotenv@18.0.8: {}
 
   dunder-proto@1.0.1:
     dependencies:
