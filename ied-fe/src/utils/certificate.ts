@@ -11,6 +11,7 @@ type BuildSertifikatOptions = {
   seminarDates: Date[];
   seminarName: string;
   templateKey: SertifikatTemplateKeyType;
+  imePrezime?: string;
 };
 
 const formatDay = (date: Date) => formatDate(date, "d", { locale: srLatn });
@@ -56,8 +57,10 @@ export const getPrijavaFullName = (prijava: PrijavaZodType) => {
   return `${prijava.zaposleni_ime || ""} ${prijava.zaposleni_prezime || ""}`.trim();
 };
 
-export const getCertificateWarning = (prijava: PrijavaZodType) => {
-  const fullName = getPrijavaFullName(prijava);
+export const getCertificateWarning = (
+  prijava: PrijavaZodType,
+  fullName = getPrijavaFullName(prijava),
+) => {
   const nameParts = fullName.split(" ").filter(Boolean);
 
   if (nameParts.length <= 1) {
@@ -75,7 +78,10 @@ export const buildSingleSertifikat = (
   prijava: PrijavaZodType,
   options: BuildSertifikatOptions,
 ) => {
-  const warning = getCertificateWarning(prijava);
+  const fullName = (options.imePrezime ?? getPrijavaFullName(prijava))
+    .replace(/\s+/g, " ")
+    .trim();
+  const warning = getCertificateWarning(prijava, fullName);
 
   if (warning) {
     return { warning, sertifikat: null };
@@ -86,7 +92,7 @@ export const buildSingleSertifikat = (
     sertifikat: {
       broj_sertifikata: options.brojSertifikata,
       firma_naziv: prijava.firma_naziv.trim(),
-      ime_prezime: getPrijavaFullName(prijava),
+      ime_prezime: fullName,
       seminar_naziv: options.seminarName,
       datumi_seminara: formatSeminarDates(options.seminarDates),
       godina_seminara: formatYear(

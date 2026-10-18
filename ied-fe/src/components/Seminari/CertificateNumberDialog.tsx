@@ -34,6 +34,11 @@ type CertificateNumberDialogProps = {
   confirmLabel?: string;
   disableConfirm?: boolean;
   isSubmitting?: boolean;
+  nameField?: {
+    label: string;
+    value: string;
+    onChange: (value: string) => void;
+  };
   onClose: () => void;
   onConfirm: (values: CertificateDialogSubmitValues) => Promise<void> | void;
 };
@@ -55,6 +60,7 @@ export default function CertificateNumberDialog({
   confirmLabel = "Generiši",
   disableConfirm = false,
   isSubmitting = false,
+  nameField,
   onClose,
   onConfirm,
 }: CertificateNumberDialogProps) {
@@ -148,6 +154,16 @@ export default function CertificateNumberDialog({
               </Typography>
             ) : null}
           </Box>
+
+          {nameField ? (
+            <TextField
+              fullWidth
+              label={nameField.label}
+              value={nameField.value}
+              onChange={(event) => nameField.onChange(event.target.value)}
+              disabled={isSubmitting}
+            />
+          ) : null}
 
           <TextField
             autoFocus
