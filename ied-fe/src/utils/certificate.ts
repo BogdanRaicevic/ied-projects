@@ -61,7 +61,7 @@ export const getCertificateWarning = (
   prijava: PrijavaZodType,
   fullName = getPrijavaFullName(prijava),
 ) => {
-  const nameParts = fullName.split(" ").filter(Boolean);
+  const nameParts = fullName.split(/\s+/).filter(Boolean);
 
   if (nameParts.length <= 1) {
     return `Ime i prezime nisu validni za firmu: ${prijava.firma_naziv || "Nepoznata firma"}`;
