@@ -37,8 +37,8 @@
     "vitest": "catalog:"
   },
   "dependencies": {
-    "@aws-sdk/client-s3": "^3.1149.0",
-    "@aws-sdk/lib-storage": "^3.1149.0",
+    "@aws-sdk/client-s3": "^3.1156.0",
+    "@aws-sdk/lib-storage": "^3.1156.0",
     "@clerk/express": "^2.1.78",
     "@sentry/node": "^10.76.2",
     "cors": "^2.8.6",
