@@ -29,7 +29,6 @@
       "cache": false
     },
     "biome:check": {},
-    "biome:format": {},
-    "knip": {}
+    "biome:format": {}
   }
 }

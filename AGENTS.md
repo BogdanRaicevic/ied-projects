@@ -29,7 +29,8 @@ pnpm lint:error                # Biome, errors only — this is what CI runs
 pnpm test:run                  # vitest (ied-be needs mongodb-memory-server)
 pnpm -F ied-be test:run tests/services/firma.service.test.ts   # one file (no `--`)
 pnpm -F <workspace> biome:check   # format + lint + organize imports (writes)
-pnpm knip                      # unused files/exports/deps
+pnpm fallow dead-code          # unused files/exports/deps
+pnpm fallow                    # + duplication and complexity
 pnpm -F mongo-migrator dev     # HUMANS ONLY: runs migrations against MONGO_URI
 ```
 
