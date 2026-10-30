@@ -182,7 +182,7 @@ export const getZaposleniIdsFromSeminars = async (
     const seminars = await Seminar.find(
       { _id: { $in: seminarIds } },
       { "prijave.zaposleni_id": 1 },
-    ).lean();
+    ).lean<Pick<SeminarType, "prijave">[]>();
 
     return seminars.flatMap((s) =>
       s.prijave.map((p) => p.zaposleni_id.toString()),
