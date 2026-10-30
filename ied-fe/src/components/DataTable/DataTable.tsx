@@ -1,4 +1,5 @@
 import {
+  Box,
   LinearProgress,
   Paper,
   Table,
@@ -82,7 +83,10 @@ export default function DataTable<T extends RowData>({
               <TableRow key={row.id} hover>
                 {row.getAllCells().map((cell) => (
                   <TableCell key={cell.id}>
-                    <FlexRender cell={cell} />
+                    {/* max-width on a <td> is ignored by browsers, so wrap the content */}
+                    <Box sx={{ maxWidth: 500, overflowWrap: "anywhere" }}>
+                      <FlexRender cell={cell} />
+                    </Box>
                   </TableCell>
                 ))}
               </TableRow>
