@@ -3,16 +3,14 @@ import { grey } from "@mui/material/colors";
 import { Box } from "@mui/system";
 import { endOfDay, formatDate, startOfDay, subMonths } from "date-fns";
 import type { AuditLogQueryParams, AuditLogType } from "ied-shared";
-import {
-  MaterialReactTable,
-  type MRT_ColumnDef,
-  useMaterialReactTable,
-} from "material-react-table";
 import { useMemo, useState } from "react";
 import { AuditChangesViewer } from "../components/AuditChangesViewer/AuditChangesViewer";
 import AuditLogSearchForm from "../components/AuditChangesViewer/AuditLogSearchForm";
 import AuditOverview from "../components/AuditChangesViewer/AuditOverview";
 import AuditOverviewDetails from "../components/AuditChangesViewer/AuditOverviewDetails";
+import DataTable, {
+  type DataTableColumn,
+} from "../components/DataTable/DataTable";
 import PageTitle from "../components/PageTitle";
 import AddedChip from "../components/styled/AddedChip";
 import RemovedChip from "../components/styled/RemovedChip";
@@ -21,6 +19,8 @@ import {
   useAuditLogs,
 } from "../hooks/auditLogs/useAuditLogQueries";
 import { generateStructuredDiff } from "../utils/diffGenerator";
+
+const noAuditLogs: AuditLogType[] = [];
 
 export default function AuditLog() {
   const [queryParams, setQueryParams] = useState<AuditLogQueryParams>({
@@ -48,29 +48,22 @@ export default function AuditLog() {
     totalDocuments: 0,
   };
 
-  const auditLogsColumns = useMemo<MRT_ColumnDef<AuditLogType>[]>(
+  const auditLogsColumns = useMemo<DataTableColumn<AuditLogType>[]>(
     () => [
       {
         header: "R. BR.",
-        accessorKey: "rowNumber",
+        id: "rowNumber",
         size: 20,
-        enableSorting: false,
-        enableColumnActions: false,
-        enableColumnFilter: false,
-        enableColumnOrdering: false,
-        enableHiding: false,
-
-        Cell: ({ row, table }) => {
-          const pageIndex = table.getState().pagination.pageIndex;
-          const pageSize = table.getState().pagination.pageSize;
+        cell: ({ row, table }) => {
+          const { pageIndex, pageSize } = table.atoms.pagination.get();
           return pageIndex * pageSize + row.index + 1;
         },
       },
       {
         accessorKey: "timestamp",
         header: "Timestamp",
-        Cell: ({ cell }) => {
-          const date = cell.getValue<Date>();
+        cell: ({ getValue }) => {
+          const date = getValue<Date>();
           return formatDate(date, "yyyy-MM-dd");
         },
       },
@@ -81,7 +74,7 @@ export default function AuditLog() {
       {
         accessorKey: "resource.model",
         header: "Tip resursa",
-        Cell: ({ row }) => {
+        cell: ({ row }) => {
           const { resource, before, after } = row.original;
           const doc = after || before;
           const model = resource.model;
@@ -118,7 +111,7 @@ export default function AuditLog() {
       {
         header: "Promene",
         minSize: 500,
-        Cell: ({ row }) => {
+        cell: ({ row }) => {
           const { before, after } = row.original;
 
           const changes = generateStructuredDiff(before, after);
@@ -152,25 +145,6 @@ export default function AuditLog() {
     [],
   );
 
-  const auditLogsTable = useMaterialReactTable({
-    columns: auditLogsColumns,
-    data: auditLogs || [],
-    state: {
-      isLoading,
-      showProgressBars: isLoading,
-      pagination,
-    },
-    enableColumnFilterModes: true,
-    enableColumnOrdering: true,
-    enableColumnPinning: true,
-    paginationDisplayMode: "default",
-    positionToolbarAlertBanner: "bottom",
-    manualPagination: true,
-    onPaginationChange: setPagination,
-    enablePagination: true,
-    rowCount: totalDocuments,
-  });
-
   const onSearch = (data: AuditLogQueryParams) => {
     setQueryParams(data);
   };
@@ -193,7 +167,14 @@ export default function AuditLog() {
       </Box>
       {activeTab === 1 && (
         <Box>
-          <MaterialReactTable table={auditLogsTable} />
+          <DataTable
+            columns={auditLogsColumns}
+            data={auditLogs ?? noAuditLogs}
+            isLoading={isLoading}
+            pagination={pagination}
+            onPaginationChange={setPagination}
+            rowCount={totalDocuments}
+          />
         </Box>
       )}
       {activeTab === 0 &&
