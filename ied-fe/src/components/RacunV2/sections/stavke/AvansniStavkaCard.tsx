@@ -1,4 +1,4 @@
-import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
+import DeleteOutlineIcon from "@mui/icons-material/DeleteOutlineOutlined";
 import {
   Box,
   Card,
@@ -277,8 +277,8 @@ function DerivedCell({ label, value, mdSize, emphasize }: DerivedCellProps) {
     >
       <Typography
         variant="caption"
-        display="block"
         sx={{
+          display: "block",
           color: emphasize ? "primary.main" : "text.secondary",
           fontWeight: 700,
           textTransform: "uppercase",

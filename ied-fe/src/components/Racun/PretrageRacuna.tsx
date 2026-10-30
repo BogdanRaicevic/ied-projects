@@ -316,7 +316,7 @@ const IzdavacFilterHeader = ({ column }: { column: any }) => {
 
   return (
     <Box>
-      <Box mb={1}>Izdavač računa</Box>
+      <Box sx={{ mb: 1 }}>Izdavač računa</Box>
       <FormControl fullWidth size="small">
         <Select
           value={value}
@@ -363,7 +363,7 @@ const TipRacunaFilterHeader = ({ column }: { column: any }) => {
 
   return (
     <Box>
-      <Box mb={1}>Tip računa</Box>
+      <Box sx={{ mb: 1 }}>Tip računa</Box>
       <FormControl fullWidth size="small">
         <Select
           value={value}

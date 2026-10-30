@@ -273,7 +273,7 @@ export default function PrijavaNaSeminarDialog({
                       <Typography
                         key={datum?.toString()}
                         variant="caption"
-                        display="block"
+                        sx={{ display: "block" }}
                       >
                         {format(new Date(datum), "dd.MM.yyyy")}
                       </Typography>

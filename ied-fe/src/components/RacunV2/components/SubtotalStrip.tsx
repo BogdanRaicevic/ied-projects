@@ -84,8 +84,8 @@ function SubtotalCell({
     >
       <Typography
         variant="caption"
-        display="block"
         sx={{
+          display: "block",
           color: emphasize ? `${accentColor}.main` : "text.secondary",
           fontWeight: emphasize ? 600 : 400,
           textTransform: emphasize ? "uppercase" : "none",

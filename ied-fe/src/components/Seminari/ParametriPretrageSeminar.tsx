@@ -169,10 +169,13 @@ export function ParametriPretrageSeminar({
 
         <Grid
           size={12}
-          sx={{ textAlign: "right", mb: 2 }}
-          display="flex"
-          justifyContent="space-between"
-          alignItems="center"
+          sx={{
+            textAlign: "right",
+            mb: 2,
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+          }}
         >
           <Button size="large" variant="contained" color="info" type="submit">
             Pretraži

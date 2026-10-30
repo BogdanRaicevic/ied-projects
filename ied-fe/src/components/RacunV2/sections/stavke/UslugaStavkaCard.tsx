@@ -1,4 +1,4 @@
-import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
+import DeleteOutlineIcon from "@mui/icons-material/DeleteOutlineOutlined";
 import {
   Box,
   Card,
@@ -95,8 +95,7 @@ export function UslugaStavkaCard({ stavkaIndex, onRemove }: Props) {
             <Stack
               direction="row"
               spacing={1}
-              alignItems="center"
-              flexWrap="wrap"
+              sx={{ alignItems: "center", flexWrap: "wrap" }}
             >
               <Chip label="Usluga" color="info" variant="filled" />
               <Typography

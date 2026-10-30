@@ -175,7 +175,7 @@ export default function PretragaParameters() {
     <form onSubmit={handleSubmit(onSubmit)}>
       <Grid container spacing={2} sx={{ marginTop: 2 }}>
         <Grid size={8}>
-          <Grid container direction="column" sx={{ gap: 2 }}>
+          <Grid container sx={{ flexDirection: "column", gap: 2 }}>
             <Grid container sx={{ alignItems: "center" }}>
               <Grid size={10} sx={{ width: "75%" }}>
                 <Controller
@@ -550,10 +550,12 @@ export default function PretragaParameters() {
       </Grid>
 
       <Box
-        display="flex"
-        justifyContent="space-between"
-        alignItems="center"
-        marginBottom={4}
+        sx={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          marginBottom: 4,
+        }}
       >
         <Box>
           <ExportButtons control={control} />
