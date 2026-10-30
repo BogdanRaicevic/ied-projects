@@ -79,5 +79,6 @@ from header UI, drag to reorder, remembering column state across reloads.
 
 ### 7. `chore(fe): remove material-react-table`
 - Delete `hooks/useTopScrollbar.tsx`, remove `material-react-table` from
-  `package.json`, `pnpm knip` clean.
-- **Review:** build passes; rebase the MUI 9 branch on top and confirm it builds.
+  `package.json`, `pnpm fallow dead-code` clean.
+- `docs/ui.md`: Tables row → `DataTable`; drop the MRT "Table defaults" item.
+- **Review:** build passes on MUI 9 with no MRT left.
