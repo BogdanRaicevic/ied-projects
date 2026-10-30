@@ -1,24 +1,47 @@
 {
   "$schema": "https://turbo.build/schema.json",
+  "agentGuidance": false,
   "tasks": {
     "build": {
-      "dependsOn": ["typecheck", "^typecheck", "^build"],
-      "outputs": ["dist/**"]
+      "dependsOn": [
+        "typecheck",
+        "^typecheck",
+        "^build"
+      ],
+      "outputs": [
+        "dist/**"
+      ]
     },
     "typecheck": {
-      "dependsOn": ["^typecheck"]
+      "dependsOn": [
+        "^typecheck"
+      ]
     },
     "test": {
-      "dependsOn": ["typecheck", "^typecheck", "^build"],
+      "dependsOn": [
+        "typecheck",
+        "^typecheck",
+        "^build"
+      ],
       "cache": false
     },
     "test:run": {
-      "dependsOn": ["typecheck", "^typecheck", "^build"],
+      "dependsOn": [
+        "typecheck",
+        "^typecheck",
+        "^build"
+      ],
       "cache": false
     },
     "test:coverage": {
-      "dependsOn": ["typecheck", "^typecheck", "^build"],
-      "outputs": ["coverage/**"],
+      "dependsOn": [
+        "typecheck",
+        "^typecheck",
+        "^build"
+      ],
+      "outputs": [
+        "coverage/**"
+      ],
       "cache": false
     },
     "lint": {},

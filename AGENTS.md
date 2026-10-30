@@ -55,11 +55,15 @@ build, lint and test on every PR to `main`.
   fails halfway is re-run from the start next time, so make it safe to re-run.
   Never edit a migration that has already run in production — add a new one.
 
+- **UI** → read [docs/ui.md](docs/ui.md) before building or changing a screen.
+
 Details: [docs/backend.md](docs/backend.md), [docs/frontend.md](docs/frontend.md),
 [docs/testing.md](docs/testing.md), [docs/architecture.md](docs/architecture.md).
 
 ## How to work in this repo
 
+- **Branch per task, one concern per PR.** For anything bigger than a small
+  fix, propose a plan first and wait for approval.
 - **Do only what the task asks.** If you spot another problem (including
   items in `docs/tech-debt.md`), mention it at the end — don't fix it in the
   same change.
@@ -104,14 +108,3 @@ Details: [docs/backend.md](docs/backend.md), [docs/frontend.md](docs/frontend.md
 The codebase was built fast. [docs/tech-debt.md](docs/tech-debt.md) lists
 known issues and the intended direction. Don't copy a pattern listed there
 into new code, and don't fix items from it unless the task asks.
-
-<!-- BEGIN:turborepo-agent-rules -->
-
-# This is NOT the Turborepo you know
-
-Turborepo configuration, task behavior, and CLI commands can vary between installed versions and may differ from your training data. Resolve the `turbo` package from this file's directory or relevant workspace; in monorepos, it may not be visible from the repository root. For example, run `node -p "require.resolve('turbo/package.json')"` from a workspace that depends on `turbo`.
-
-Read `docs/README.md` inside that installed package first, then read the relevant pages from its `docs/` directory before changing Turborepo configuration or commands. Heed deprecation notices. These bundled docs match the installed package version and are available without network access.
-
-This block is written and re-added by `turbo` before repository-scoped commands when an AI agent is detected. In the Turborepo source repository, its template is defined in `crates/turborepo-cli/src/cli/agent_guidance.rs`. Removing the managed block while updates are enabled means a later qualifying invocation will add it again. Set `"agentGuidance": false` in the root `turbo.json` or `turbo.jsonc` to opt out; this does not remove an existing block. Keep the block committed with your work to avoid an uncommitted change on the next agent invocation.
-<!-- END:turborepo-agent-rules -->

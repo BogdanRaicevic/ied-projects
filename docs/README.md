@@ -6,6 +6,7 @@
 | [domain-glossary.md](domain-glossary.md) | You hit a Serbian term you don't know |
 | [backend.md](backend.md) | Adding or changing an API endpoint, model or service |
 | [frontend.md](frontend.md) | Adding a page, form or data hook |
+| [ui.md](ui.md) | Building or changing a screen |
 | [testing.md](testing.md) | Writing or running tests |
 | [tech-debt.md](tech-debt.md) | Before fixing "weird" code — known issues and the cleanup plan |
 | [plans/](plans/) | Feature plans (Racuni V2) |

@@ -1,0 +1,4 @@
+# Secrets — keep out of Cursor AI context and indexing
+**/.env
+**/.env.*
+!**/.example.env
