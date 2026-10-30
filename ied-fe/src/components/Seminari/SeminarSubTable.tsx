@@ -8,12 +8,11 @@ import {
   TableRow,
 } from "@mui/material";
 import type { SeminarZodType } from "ied-shared";
-import type { MRT_Row } from "material-react-table";
 import { useMemo } from "react";
 import PrijaveSeminarTable from "./PrijaveSeminarTable";
 
-const SeminarSubTable = ({ row }: { row: MRT_Row<SeminarZodType> }) => {
-  const participants = row.original.prijave;
+const SeminarSubTable = ({ seminar }: { seminar: SeminarZodType }) => {
+  const participants = seminar.prijave;
 
   const groupedParticipants = useMemo(() => {
     if (!participants) return {};
@@ -61,9 +60,9 @@ const SeminarSubTable = ({ row }: { row: MRT_Row<SeminarZodType> }) => {
             return (
               <PrijaveSeminarTable
                 key={naziv_firme}
-                seminarId={row.original._id || ""}
-                seminarDates={row.original.datumi ?? []}
-                seminarName={row.original.naziv}
+                seminarId={seminar._id || ""}
+                seminarDates={seminar.datumi ?? []}
+                seminarName={seminar.naziv}
                 prijave={prijave}
               />
             );

@@ -27,13 +27,12 @@ filter modes, column actions menu.
 **Deferred (decide after migration, only if missed):** column hiding UI, pin
 from header UI, drag to reorder, remembering column state across reloads.
 
-**Open questions**
+**Decided**
 
-1. OK to add `@tanstack/react-table` as a direct dependency? (Already installed
-   through MRT.)
-2. OK to put it in `ied-fe/src/components/DataTable/DataTable.tsx`?
-3. MRT lets users sort by clicking any header today (on the current page only).
-   Keep sorting everywhere, only on Računi (where it's explicitly on), or drop?
+- `@tanstack/react-table` v9 is a direct `ied-fe` dependency.
+- `DataTable` lives in `ied-fe/src/components/DataTable/DataTable.tsx`.
+- Sorting by header click stays on every column that has a value (client-side,
+  current page only — same as MRT). Added in commit 3.
 
 ## Commits
 
