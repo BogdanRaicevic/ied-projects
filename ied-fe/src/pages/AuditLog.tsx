@@ -180,7 +180,7 @@ export default function AuditLog() {
   };
 
   return (
-    <Box mt={3} mb={5}>
+    <Box sx={{ mt: 3, mb: 5 }}>
       <PageTitle title="Evidencija Promena" />
       <AuditLogSearchForm onSearch={onSearch} defaultValues={queryParams} />
       <Box>

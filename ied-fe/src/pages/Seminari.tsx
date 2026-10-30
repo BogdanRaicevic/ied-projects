@@ -65,7 +65,7 @@ export default function Seminari() {
         <Tab label="Pregled po firmi" />
       </Tabs>
 
-      <Box mt={2}>
+      <Box sx={{ mt: 2 }}>
         {isPending ? (
           <Box>
             <Skeleton variant="rounded" height={60} animation="wave" />

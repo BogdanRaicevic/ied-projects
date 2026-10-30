@@ -70,7 +70,11 @@ export function AvansniStavkaCard({ stavkaIndex, onRemove }: Props) {
       <CardHeader
         title={
           <Stack spacing={1}>
-            <Stack direction="row" spacing={1} alignItems="center" flexWrap="wrap">
+            <Stack
+              direction="row"
+              spacing={1}
+              sx={{ alignItems: "center", flexWrap: "wrap" }}
+            >
               <Chip label={typeLabel} color={accentColor} variant="filled" />
               <Typography
                 variant="overline"
@@ -83,8 +87,9 @@ export function AvansniStavkaCard({ stavkaIndex, onRemove }: Props) {
                 Stavka #{stavkaIndex + 1}
               </Typography>
             </Stack>
-            <Typography variant="subtitle1" fontWeight={700}>
-              {stavka?.naziv?.trim() || `Nova ${isUsluga ? "usluga" : "stavka"}`}
+            <Typography variant="subtitle1" sx={{ fontWeight: 700 }}>
+              {stavka?.naziv?.trim() ||
+                `Nova ${isUsluga ? "usluga" : "stavka"}`}
             </Typography>
           </Stack>
         }
@@ -147,7 +152,9 @@ export function AvansniStavkaCard({ stavkaIndex, onRemove }: Props) {
                       htmlInput: { min: 0, step: "0.01" },
                       input: {
                         endAdornment: (
-                          <InputAdornment position="end">{valuta}</InputAdornment>
+                          <InputAdornment position="end">
+                            {valuta}
+                          </InputAdornment>
                         ),
                       },
                     }}
@@ -223,7 +230,7 @@ function AvansniDerivedStrip({
         p: 1.5,
       }}
     >
-      <Grid container spacing={2} alignItems="center">
+      <Grid container spacing={2} sx={{ alignItems: "center" }}>
         <DerivedCell
           label="Avans bez PDV-a"
           value={formatMoney(avansBezPdv, valuta)}
@@ -280,7 +287,7 @@ function DerivedCell({ label, value, mdSize, emphasize }: DerivedCellProps) {
       >
         {label}
       </Typography>
-      <Typography variant={emphasize ? "h6" : "body1"} fontWeight={700}>
+      <Typography variant={emphasize ? "h6" : "body1"} sx={{ fontWeight: 700 }}>
         {value}
       </Typography>
     </Grid>

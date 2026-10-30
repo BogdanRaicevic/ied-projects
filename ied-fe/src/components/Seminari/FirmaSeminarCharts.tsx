@@ -69,7 +69,7 @@ export default function FirmaSeminarCharts({
       }}
     >
       <Box sx={{ flex: 1, minWidth: 300 }}>
-        <Typography variant="h6" textAlign="center">
+        <Typography variant="h6" sx={{ textAlign: "center" }}>
           Ukupna Zarada: {totalRevenue.toLocaleString()} RSD
         </Typography>
         <PieChart

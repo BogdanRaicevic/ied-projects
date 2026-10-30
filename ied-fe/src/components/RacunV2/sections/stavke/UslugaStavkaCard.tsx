@@ -110,7 +110,7 @@ export function UslugaStavkaCard({ stavkaIndex, onRemove }: Props) {
                 Stavka #{stavkaIndex + 1}
               </Typography>
             </Stack>
-            <Typography variant="subtitle1" fontWeight={700}>
+            <Typography variant="subtitle1" sx={{ fontWeight: 700 }}>
               {stavka?.naziv?.trim() || "Nova usluga"}
             </Typography>
           </Stack>

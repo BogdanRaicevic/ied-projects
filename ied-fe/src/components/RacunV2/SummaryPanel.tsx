@@ -140,7 +140,7 @@ export function SummaryPanel() {
         <CardHeader
           title="Pregled"
           action={
-            <Stack direction="row" spacing={1} alignItems="center">
+            <Stack direction="row" spacing={1} sx={{ alignItems: "center" }}>
               <Chip
                 label={formatStavkeCount(stavkaSubtotali.length)}
                 variant="outlined"
@@ -443,7 +443,7 @@ function SummaryRow({ label, amount, valuta, emphasize }: SummaryRowProps) {
       >
         {label}
       </Typography>
-      <Typography variant={variant} fontWeight={emphasize ? 700 : 500}>
+      <Typography variant={variant} sx={{ fontWeight: emphasize ? 700 : 500 }}>
         {formatMoney(amount, valuta)}
       </Typography>
     </Stack>
@@ -479,7 +479,11 @@ function DeductionRow({ label, amount, valuta }: DeductionRowProps) {
       <Typography variant="body2" color="text.secondary">
         {label}
       </Typography>
-      <Typography variant="body2" color="text.secondary" fontWeight={500}>
+      <Typography
+        variant="body2"
+        color="text.secondary"
+        sx={{ fontWeight: 500 }}
+      >
         {`- ${formatMoney(amount, valuta)}`}
       </Typography>
     </Stack>
@@ -506,7 +510,7 @@ function RokZaUplatuRow({ days }: { days: number | null }) {
       <Typography variant="body2" color="text.secondary">
         Rok za uplatu
       </Typography>
-      <Typography variant="body2" fontWeight={500}>
+      <Typography variant="body2" sx={{ fontWeight: 500 }}>
         {display}
       </Typography>
     </Stack>
@@ -590,7 +594,7 @@ function DatumUplateAvansaRow({ date }: { date: Date | null }) {
       <Typography variant="body2" color="text.secondary">
         Datum uplate avansa
       </Typography>
-      <Typography variant="body2" fontWeight={500}>
+      <Typography variant="body2" sx={{ fontWeight: 500 }}>
         {display}
       </Typography>
     </Stack>
@@ -659,14 +663,18 @@ function StavkaPreviewRow({
       }}
     >
       <Box sx={{ minWidth: 0 }}>
-        <Stack direction="row" spacing={1} alignItems="center" flexWrap="wrap">
+        <Stack
+          direction="row"
+          spacing={1}
+          sx={{ alignItems: "center", flexWrap: "wrap" }}
+        >
           <Chip label={typeLabel} color={typeColor} variant="outlined" />
         </Stack>
         <Typography variant="body2" fontWeight={600} noWrap sx={{ mt: 0.75 }}>
           {label}
         </Typography>
       </Box>
-      <Typography variant="body2" fontWeight={700}>
+      <Typography variant="body2" sx={{ fontWeight: 700 }}>
         {amount}
       </Typography>
     </Stack>

@@ -73,7 +73,12 @@ export function StavkeSection() {
         title="Stavke"
         subheader="Usluge i proizvodi koji se fakturišu."
         action={
-          <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap>
+          <Stack
+            direction="row"
+            spacing={1}
+            useFlexGap
+            sx={{ flexWrap: "wrap" }}
+          >
             {uslugaCount > 0 ? (
               <Chip
                 label={

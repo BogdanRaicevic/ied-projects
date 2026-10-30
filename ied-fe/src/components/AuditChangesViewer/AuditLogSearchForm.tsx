@@ -24,7 +24,7 @@ export default function AuditLogSearchForm({
         Parametri pretrage
       </Typography>
       <Box component="form" onSubmit={handleSubmit(onSearch)}>
-        <Grid container spacing={2} alignItems="center">
+        <Grid container spacing={2} sx={{ alignItems: "center" }}>
           <Grid size={3}>
             <Controller
               name="userEmail"
@@ -94,7 +94,7 @@ export default function AuditLogSearchForm({
             />
           </Grid>
 
-          <Box display="flex" justifyContent="flex-end">
+          <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
             <Button type="submit" variant="contained" color="primary" fullWidth>
               Pretraga
             </Button>

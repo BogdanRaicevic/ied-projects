@@ -173,10 +173,10 @@ export default function PretragaParameters() {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <Grid container spacing={2} marginTop={2}>
+      <Grid container spacing={2} sx={{ marginTop: 2 }}>
         <Grid size={8}>
-          <Grid container direction="column" gap={2}>
-            <Grid container alignItems="center">
+          <Grid container direction="column" sx={{ gap: 2 }}>
+            <Grid container sx={{ alignItems: "center" }}>
               <Grid size={10} sx={{ width: "75%" }}>
                 <Controller
                   name="radnaMesta"
@@ -192,7 +192,7 @@ export default function PretragaParameters() {
                   )}
                 />
               </Grid>
-              <Grid px={2} size={2}>
+              <Grid size={2} sx={{ px: 2 }}>
                 <Controller
                   name="negacije"
                   control={control}
@@ -208,7 +208,7 @@ export default function PretragaParameters() {
                 />
               </Grid>
             </Grid>
-            <Grid container alignItems="center">
+            <Grid container sx={{ alignItems: "center" }}>
               <Grid size={10} sx={{ width: "75%" }}>
                 <Controller
                   name="tipoviFirme"
@@ -224,7 +224,7 @@ export default function PretragaParameters() {
                   )}
                 />
               </Grid>
-              <Grid px={2} size={2}>
+              <Grid size={2} sx={{ px: 2 }}>
                 <Controller
                   name="negacije"
                   control={control}
@@ -240,7 +240,7 @@ export default function PretragaParameters() {
                 />
               </Grid>
             </Grid>
-            <Grid container alignItems="center">
+            <Grid container sx={{ alignItems: "center" }}>
               <Grid size={10} sx={{ width: "75%" }}>
                 <Controller
                   name="delatnosti"
@@ -256,7 +256,7 @@ export default function PretragaParameters() {
                   )}
                 />
               </Grid>
-              <Grid px={2} size={2}>
+              <Grid size={2} sx={{ px: 2 }}>
                 <Controller
                   name="negacije"
                   control={control}
@@ -272,7 +272,7 @@ export default function PretragaParameters() {
                 />
               </Grid>
             </Grid>
-            <Grid container alignItems="center">
+            <Grid container sx={{ alignItems: "center" }}>
               <Grid size={10} sx={{ width: "75%" }}>
                 <Controller
                   name="mesta"
@@ -324,7 +324,7 @@ export default function PretragaParameters() {
                   }}
                 />
               </Grid>
-              <Grid px={2} size={2}>
+              <Grid size={2} sx={{ px: 2 }}>
                 <Controller
                   name="negacije"
                   control={control}
@@ -340,7 +340,7 @@ export default function PretragaParameters() {
                 />
               </Grid>
             </Grid>
-            <Grid container alignItems="center">
+            <Grid container sx={{ alignItems: "center" }}>
               <Grid size={10} sx={{ width: "75%" }}>
                 <Controller
                   name="seminari"
@@ -361,7 +361,7 @@ export default function PretragaParameters() {
                   )}
                 />
               </Grid>
-              <Grid px={2} size={2}>
+              <Grid size={2} sx={{ px: 2 }}>
                 <Controller
                   name="negacije"
                   control={control}
@@ -377,7 +377,7 @@ export default function PretragaParameters() {
                 />
               </Grid>
             </Grid>
-            <Grid container alignItems="center">
+            <Grid container sx={{ alignItems: "center" }}>
               <Grid size={10} sx={{ width: "75%" }}>
                 <Controller
                   name="tipoviSeminara"
@@ -398,7 +398,7 @@ export default function PretragaParameters() {
                   )}
                 />
               </Grid>
-              <Grid px={2} size={2}>
+              <Grid size={2} sx={{ px: 2 }}>
                 <Controller
                   name="negacije"
                   control={control}
@@ -446,7 +446,7 @@ export default function PretragaParameters() {
         </Grid>
       </Grid>
 
-      <Grid container spacing={2} mt={2}>
+      <Grid container spacing={2} sx={{ mt: 2 }}>
         <PrijaveRadioButtons
           name="firmaPrijavljeni"
           control={control}
@@ -470,7 +470,7 @@ export default function PretragaParameters() {
         />
       </Grid>
 
-      <Grid container spacing={2} columns={12} mt={4} mb={4}>
+      <Grid container spacing={2} columns={12} sx={{ mt: 4, mb: 4 }}>
         <Grid size={3}>
           <Controller
             name="imeFirme"

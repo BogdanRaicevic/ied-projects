@@ -44,7 +44,7 @@ export default function PretrageSaveDialog({
         {"Izaberite kako ćete sačuvati parametre pretrage?"}
       </DialogTitle>
       <DialogContent>
-        <Grid container spacing={2} alignItems="center">
+        <Grid container spacing={2} sx={{ alignItems: "center" }}>
           <Grid size={6}>
             <Box sx={{ m: 1 }}>
               <Button

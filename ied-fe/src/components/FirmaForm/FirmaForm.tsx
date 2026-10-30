@@ -310,7 +310,7 @@ export const FirmaForm: FC<FirmaFormProps> = ({ inputCompany }) => {
         isPrijavljen={isPrijavljen}
         onChange={handleMailingListChange}
       />
-      <Grid container m={0} spacing={2}>
+      <Grid container spacing={2} sx={{ m: 0 }}>
         {inputItems(InputTypesSchema.enum.Text).map((item) => {
           return (
             <Grid key={item.key} size={{ xs: 12, md: 6, lg: 4 }}>
@@ -421,7 +421,7 @@ export const FirmaForm: FC<FirmaFormProps> = ({ inputCompany }) => {
                       <Typography variant="body2" color="text.secondary">
                         Kontaktirao/la:
                       </Typography>
-                      <Typography variant="body2" fontWeight={500}>
+                      <Typography variant="body2" sx={{ fontWeight: 500 }}>
                         {lastContact ? lastContact.e_mail : "—"}
                       </Typography>
                     </Box>
@@ -429,7 +429,7 @@ export const FirmaForm: FC<FirmaFormProps> = ({ inputCompany }) => {
                       <Typography variant="body2" color="text.secondary">
                         Datum:
                       </Typography>
-                      <Typography variant="body2" fontWeight={500}>
+                      <Typography variant="body2" sx={{ fontWeight: 500 }}>
                         {lastContact
                           ? formatDate(new Date(lastContact.date), "dd.MM.yyyy")
                           : "—"}
@@ -439,7 +439,7 @@ export const FirmaForm: FC<FirmaFormProps> = ({ inputCompany }) => {
                       <Typography variant="body2" color="text.secondary">
                         Način:
                       </Typography>
-                      <Typography variant="body2" fontWeight={500}>
+                      <Typography variant="body2" sx={{ fontWeight: 500 }}>
                         {lastContact ? lastContact.contact_type : "—"}
                       </Typography>
                     </Box>

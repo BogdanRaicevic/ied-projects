@@ -125,7 +125,7 @@ export function ParametriPretrageSeminar({
           </Grid>
         </Grid>
 
-        <Grid size={3} columns={12} container alignItems="center">
+        <Grid size={3} columns={12} container sx={{ alignItems: "center" }}>
           <FormControl fullWidth>
             <Controller
               name="datumOd"
@@ -141,7 +141,13 @@ export function ParametriPretrageSeminar({
                 />
               )}
             />
-            <Box display="flex" alignItems="center" justifyContent="center">
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
               <UnfoldLess />
             </Box>
             <Controller
