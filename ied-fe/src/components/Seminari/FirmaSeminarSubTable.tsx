@@ -6,7 +6,7 @@ const seminariTableColumns: DataTableColumn<SeminarDetail>[] = [
   {
     header: "R. BR.",
     id: "rowNumber",
-    size: 20,
+    size: 90,
     cell: ({ row }) => row.index + 1,
   },
   {

@@ -81,3 +81,11 @@ from header UI, drag to reorder, remembering column state across reloads.
   `package.json`, `pnpm fallow dead-code` clean.
 - `docs/ui.md`: Tables row → `DataTable`; drop the MRT "Table defaults" item.
 - **Review:** build passes on MUI 9 with no MRT left.
+
+## After the migration
+
+- Audit `useEffect` hooks with missing deps (possible stale values), found
+  while checking memoized columns: `pages/Racuni.tsx` (lines ~68, 93, 119,
+  145 — 145 misses `firma`/`seminar`), `FirmasTable.tsx:21`,
+  `ParametriPretrageRacuna.tsx:61`, `useRacunCalculations.ts:20`,
+  `SeminarForm.tsx:83`. Separate change.

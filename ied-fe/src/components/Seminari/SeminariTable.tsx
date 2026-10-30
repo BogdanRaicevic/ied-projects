@@ -41,7 +41,7 @@ export default function SeminariTable({
     {
       header: "R. BR.",
       id: "rowNumber",
-      size: 20,
+      size: 90,
       cell: ({ row, table }) => {
         const { pageIndex, pageSize } = table.atoms.pagination.get();
         return pageIndex * pageSize + row.index + 1;
@@ -50,7 +50,7 @@ export default function SeminariTable({
     {
       id: "actions",
       header: "Akcije",
-      size: 60,
+      size: 90,
       cell: ({ row }) => (
         <SeminariTableActionCell
           seminar={row.original}

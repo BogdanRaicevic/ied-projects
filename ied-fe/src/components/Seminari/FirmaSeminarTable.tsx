@@ -13,7 +13,7 @@ const seminariTableColumns: DataTableColumn<FirmaSeminar>[] = [
   {
     header: "R. BR.",
     id: "rowNumber",
-    size: 20,
+    size: 90,
     cell: ({ row, table }) => {
       const { pageIndex, pageSize } = table.atoms.pagination.get();
       return pageIndex * pageSize + row.index + 1;

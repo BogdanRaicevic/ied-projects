@@ -1,7 +1,10 @@
+import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
+import PushPinIcon from "@mui/icons-material/PushPin";
 import {
   Box,
+  ButtonBase,
   IconButton,
   LinearProgress,
   Paper,
@@ -13,9 +16,14 @@ import {
   TablePagination,
   TableRow,
   TableSortLabel,
+  Tooltip,
 } from "@mui/material";
+import { alpha } from "@mui/material/styles";
+import type { SystemStyleObject, Theme } from "@mui/system";
 import {
+  type Column,
   type ColumnDef,
+  columnPinningFeature,
   columnSizingFeature,
   createSortedRowModel,
   FlexRender,
@@ -30,9 +38,16 @@ import {
   tableFeatures,
   useTable,
 } from "@tanstack/react-table";
-import { Fragment, type ReactNode } from "react";
+import { Fragment, type ReactNode, useState } from "react";
+
+type DataTableColumnMeta = {
+  // Click on the cell copies its value.
+  copy?: boolean;
+  cellSx?: (value: unknown) => SystemStyleObject<Theme>;
+};
 
 const features = tableFeatures({
+  columnPinningFeature,
   columnSizingFeature,
   rowExpandingFeature,
   rowPaginationFeature,
@@ -44,6 +59,7 @@ const features = tableFeatures({
     datetime: sortFn_datetime,
     text: sortFn_text,
   },
+  columnMeta: {} as DataTableColumnMeta,
 });
 
 export type DataTableColumn<T extends RowData> = ColumnDef<typeof features, T>;
@@ -58,6 +74,10 @@ type DataTableProps<T extends RowData> = {
   rowCount?: number;
   // Adds an expand button to each row; the panel renders in a full-width row below.
   renderDetailPanel?: (row: T) => ReactNode;
+  // Column ids that stick to the left while scrolling. They must be the first
+  // columns, and don't combine with renderDetailPanel (its button column is unaccounted for).
+  pinnedLeft?: string[];
+  getRowColor?: (row: T) => string | undefined;
 };
 
 export default function DataTable<T extends RowData>({
@@ -68,6 +88,8 @@ export default function DataTable<T extends RowData>({
   onPaginationChange,
   rowCount,
   renderDetailPanel,
+  pinnedLeft,
+  getRowColor,
 }: DataTableProps<T>) {
   const table = useTable({
     features,
@@ -77,41 +99,94 @@ export default function DataTable<T extends RowData>({
     manualPagination: true,
     rowCount,
     getRowCanExpand: () => !!renderDetailPanel,
+    initialState: { columnPinning: { start: pinnedLeft ?? [], end: [] } },
   });
   const rows = table.getRowModel().rows;
   const columnCount = columns.length + (renderDetailPanel ? 1 : 0);
+
+  // A column with `size` is exactly that wide (pinned ones always are, so their
+  // sticky offsets match the layout). Other columns grow with their content.
+  const fixedWidth = (column: Column<typeof features, T>) =>
+    column.getIsPinned() ? column.getSize() : column.columnDef.size;
+  const widthSx = (column: Column<typeof features, T>) => {
+    const width = fixedWidth(column);
+    return width
+      ? { width, minWidth: width }
+      : { minWidth: column.columnDef.minSize };
+  };
+  // Content max width: fixed columns subtract the 16px + 16px cell padding.
+  const contentWidth = (column: Column<typeof features, T>) => {
+    const width = fixedWidth(column);
+    return width ? width - 32 : 500;
+  };
+  const pinnedSx = (
+    column: Column<typeof features, T>,
+  ): SystemStyleObject<Theme> =>
+    column.getIsPinned()
+      ? {
+          position: "sticky",
+          left: column.getStart("start"),
+          zIndex: 1,
+          bgcolor: "inherit",
+          // Light tint on top of the row colour, so pinned columns stand out.
+          backgroundImage: (theme) => {
+            const tint = alpha(theme.palette.primary.main, 0.06);
+            return `linear-gradient(${tint}, ${tint})`;
+          },
+        }
+      : {};
 
   return (
     <Paper>
       {isLoading && <LinearProgress />}
       <TableContainer>
-        <Table size="small">
+        {/* separate borders: with collapse, sticky cells leave see-through seams */}
+        <Table size="small" sx={{ borderCollapse: "separate" }}>
           <TableHead>
             {table.getHeaderGroups().map((headerGroup) => (
-              <TableRow key={headerGroup.id}>
+              <TableRow
+                key={headerGroup.id}
+                sx={{ bgcolor: "background.paper" }}
+              >
                 {renderDetailPanel && <TableCell padding="checkbox" />}
                 {headerGroup.headers.map((header) => (
                   <TableCell
                     key={header.id}
                     sx={{
                       fontWeight: 700,
-                      width: header.column.columnDef.size,
-                      minWidth: header.column.columnDef.minSize,
+                      ...widthSx(header.column),
+                      ...pinnedSx(header.column),
                     }}
                   >
-                    {header.isPlaceholder ? null : header.column.getCanSort() ? (
-                      <TableSortLabel
-                        active={!!header.column.getIsSorted()}
-                        direction={header.column.getIsSorted() || "asc"}
-                        onClick={header.column.getToggleSortingHandler()}
-                        // MUI hides the icon until hover; keep it visible (sorted column is full opacity)
-                        sx={{ "& .MuiTableSortLabel-icon": { opacity: 0.4 } }}
-                      >
+                    <Box
+                      sx={{
+                        maxWidth: contentWidth(header.column),
+                        display: "flex",
+                        alignItems: "center",
+                        gap: 0.5,
+                      }}
+                    >
+                      {header.column.getIsPinned() && (
+                        <PushPinIcon
+                          color="primary"
+                          sx={{ fontSize: 14, opacity: 0.7 }}
+                          titleAccess="Zakačena kolona"
+                        />
+                      )}
+                      {header.isPlaceholder ? null : header.column.getCanSort() ? (
+                        <TableSortLabel
+                          active={!!header.column.getIsSorted()}
+                          direction={header.column.getIsSorted() || "asc"}
+                          onClick={header.column.getToggleSortingHandler()}
+                          // MUI hides the icon until hover; keep it visible (sorted column is full opacity)
+                          sx={{ "& .MuiTableSortLabel-icon": { opacity: 0.4 } }}
+                        >
+                          <FlexRender header={header} />
+                        </TableSortLabel>
+                      ) : (
                         <FlexRender header={header} />
-                      </TableSortLabel>
-                    ) : (
-                      <FlexRender header={header} />
-                    )}
+                      )}
+                    </Box>
                   </TableCell>
                 ))}
               </TableRow>
@@ -120,7 +195,14 @@ export default function DataTable<T extends RowData>({
           <TableBody>
             {rows.map((row) => (
               <Fragment key={row.id}>
-                <TableRow hover>
+                <TableRow
+                  sx={{
+                    bgcolor: getRowColor?.(row.original) ?? "background.paper",
+                    "&:hover": getRowColor?.(row.original)
+                      ? {}
+                      : { bgcolor: "grey.100" },
+                  }}
+                >
                   {renderDetailPanel && (
                     <TableCell padding="checkbox">
                       <IconButton
@@ -141,10 +223,30 @@ export default function DataTable<T extends RowData>({
                     </TableCell>
                   )}
                   {row.getAllCells().map((cell) => (
-                    <TableCell key={cell.id}>
+                    <TableCell
+                      key={cell.id}
+                      sx={{
+                        ...widthSx(cell.column),
+                        ...pinnedSx(cell.column),
+                        ...cell.column.columnDef.meta?.cellSx?.(
+                          cell.getValue(),
+                        ),
+                      }}
+                    >
                       {/* max-width on a <td> is ignored by browsers, so wrap the content */}
-                      <Box sx={{ maxWidth: 500, overflowWrap: "anywhere" }}>
-                        <FlexRender cell={cell} />
+                      <Box
+                        sx={{
+                          maxWidth: contentWidth(cell.column),
+                          overflowWrap: "anywhere",
+                        }}
+                      >
+                        {cell.column.columnDef.meta?.copy ? (
+                          <CopyOnClick value={String(cell.getValue() ?? "")}>
+                            <FlexRender cell={cell} />
+                          </CopyOnClick>
+                        ) : (
+                          <FlexRender cell={cell} />
+                        )}
                       </Box>
                     </TableCell>
                   ))}
@@ -188,5 +290,32 @@ export default function DataTable<T extends RowData>({
         />
       )}
     </Paper>
+  );
+}
+
+function CopyOnClick({
+  value,
+  children,
+}: {
+  value: string;
+  children: ReactNode;
+}) {
+  const [title, setTitle] = useState("Kopiraj");
+  const copy = async () => {
+    try {
+      await navigator.clipboard.writeText(value);
+      setTitle("Kopirano");
+    } catch {
+      setTitle("Kopiranje nije uspelo");
+    }
+  };
+
+  return (
+    <Tooltip title={title} onClose={() => setTitle("Kopiraj")}>
+      <ButtonBase onClick={copy} sx={{ font: "inherit", textAlign: "left" }}>
+        {children}
+        <ContentCopyIcon sx={{ fontSize: 14, ml: 0.5, opacity: 0.5 }} />
+      </ButtonBase>
+    </Tooltip>
   );
 }
