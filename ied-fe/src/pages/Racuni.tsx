@@ -263,7 +263,7 @@ export default function Racuni() {
 
   // Add this function to handle closing the Snackbar
   const handleAlertClose = (
-    _event?: React.SyntheticEvent | Event,
+    _event?: React.SyntheticEvent | Event | null,
     reason?: string,
   ) => {
     if (reason === "clickaway") {

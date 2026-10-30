@@ -52,7 +52,7 @@ export default function CheckboxList({
                   edge="start"
                   checked={checked.indexOf(value) !== -1}
                   disableRipple
-                  inputProps={{ "aria-labelledby": labelId }}
+                  slotProps={{ input: { "aria-labelledby": labelId } }}
                   id={labelId}
                 />
               </ListItemIcon>
