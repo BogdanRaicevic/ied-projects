@@ -18,8 +18,8 @@ Sentry init in `src/instrument.ts`, env in `src/utils/envVariables.ts`
 
 1. Schema in `ied-shared/src/types/<entity>.zod.ts`, export from `index.ts`.
 2. Service function in `services/<entity>.service.ts`. Throw
-   `ErrorWithCause(message, code)` for expected failures (→ 400). For
-   not-found, return `null` and let the route send 404.
+   `ErrorWithCause(message, code)` for expected failures. For not-found,
+   return `null` and let the route send 404.
 3. Route in `routes/<entity>.routes.ts`:
 
    ```ts
@@ -36,18 +36,18 @@ Sentry init in `src/instrument.ts`, env in `src/utils/envVariables.ts`
    );
    ```
 
-   Add `createAuditMiddleware(Model)` (after validation) if changes must
-   appear in the audit log.
+   Add `createAuditMiddleware(Model)` **before** `validateRequestBody`, as
+   existing routes do, if changes must appear in the audit log (it reads the
+   id from the raw body/params).
 4. Mount it in `server.ts` **after** `requireApiAuth`.
 5. Add a service test in `tests/services/`.
 
-Paths and verbs: match the router you're editing (most use `POST /create`,
-`POST /update/:id`). Status codes: 201 create, 200 update, 404 not found.
+Paths and verbs: match the router you're editing. Status codes: 201 create,
+200 update, 404 not found.
 
 ## Mongo
 
 - Validate ids with `validateMongoId` before querying.
-- Escape user strings used in `$regex` with `escapeRegex`.
 - Schema changes to existing data need a migration in `mongo-migrator`.
 
 ## Documents

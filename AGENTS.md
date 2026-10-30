@@ -27,10 +27,10 @@ pnpm dev                       # BE (:8000) + FE (vite) in watch mode
 pnpm typecheck                 # all workspaces
 pnpm lint:error                # Biome, errors only — this is what CI runs
 pnpm test:run                  # vitest (ied-be needs mongodb-memory-server)
-pnpm -F ied-be test:run -- tests/services/firma.service.test.ts   # one file
+pnpm -F ied-be test:run tests/services/firma.service.test.ts   # one file (no `--`)
 pnpm -F <workspace> biome:check   # format + lint + organize imports (writes)
 pnpm knip                      # unused files/exports/deps
-pnpm -F mongo-migrator dev     # run pending migrations against MONGO_URI
+pnpm -F mongo-migrator dev     # HUMANS ONLY: runs migrations against MONGO_URI
 ```
 
 **Before you say a change is done:** `pnpm typecheck && pnpm lint:error` and
@@ -54,6 +54,8 @@ build, lint and test on every PR to `main`.
   exporting `up(db)`. There is no `down` and no transaction: a migration that
   fails halfway is re-run from the start next time, so make it safe to re-run.
   Never edit a migration that has already run in production — add a new one.
+  Never change data or indexes directly (shell, MCP, scripts) — only through
+  a migration.
 
 - **UI** → read [docs/ui.md](docs/ui.md) before building or changing a screen.
 
@@ -62,6 +64,8 @@ Details: [docs/backend.md](docs/backend.md), [docs/frontend.md](docs/frontend.md
 
 ## How to work in this repo
 
+- **Ponytail, ultra level, on every coding task** — read and follow the
+  `ponytail` skill before writing or reviewing code.
 - **Branch per task, one concern per PR.** For anything bigger than a small
   fix, propose a plan first and wait for approval.
 - **Do only what the task asks.** If you spot another problem (including
@@ -85,18 +89,23 @@ Details: [docs/backend.md](docs/backend.md), [docs/frontend.md](docs/frontend.md
   `validateRequestBody` / `validateRequestQuery`. Don't pass `req.body`
   straight into Mongoose. Caveat: `validateRequestQuery` only checks — it
   does not replace `req.query` with the parsed (coerced) value, so query
-  values are still strings in the handler.
+  values are still strings in the handler. Don't "fix" it with
+  `req.query = …` — it's getter-only in Express 5. It's a tech-debt item;
+  ask before changing it.
 - Errors: `ErrorWithCause` always becomes a **400** and a plain `Error`
   becomes a **500** (`middleware/errorWrapper.ts`). For "not found", return
   `res.status(404)` from the route as existing routes do.
-- Every `/api/*` route is behind `requireApiAuth` (Clerk). Don't mount routes
-  before it in `server.ts`.
+- Every `/api/*` route is behind `requireApiAuth` (Clerk), except the
+  leftover `/api/test` (tech debt). Don't mount routes before it in
+  `server.ts`.
 - Biome is the only formatter/linter. Run `biome:check` instead of formatting
   by hand.
 - Commits follow Conventional Commits (`feat:`, `fix:`, `chore:` …) —
   semantic-release derives versions and `CHANGELOG.md` from them. Never edit
   `CHANGELOG.md` or the root `version` by hand.
-- Never read or print `.env` files; use `.example.env` to learn variable names.
+- Never read or print `.env` files, by any means (editor, `cat`, `grep`,
+  `env`); use `.example.env` to learn variable names. For Codex this line is
+  the only protection.
 - Invoices exist in two versions: **v1** (`/racuni`, docx templates, persisted)
   is live; **v2** (`/racuni-v2`, behind `VITE_FF_RACUNI_V2`, Handlebars →
   Puppeteer PDF, not persisted yet) is in progress. Plan:
@@ -111,6 +120,7 @@ Project skills live in `.agents/skills/` (Claude reads them via symlinks in
 
 | Skill | Use for |
 |---|---|
+| `ponytail` | Every coding task (see "How to work") |
 | `tanstack-query-best-practices` | Query keys, mutations, invalidation in `ied-fe` |
 | `mongodb-schema-design` | Changing Mongoose models / data shape |
 | `vercel-react-best-practices` | Re-renders, effects, bundle size in `ied-fe` |

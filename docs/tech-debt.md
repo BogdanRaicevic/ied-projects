@@ -28,7 +28,10 @@ Tick items off (or delete them) as they're fixed.
   `ErrorWithCause`) and map them.
 - [ ] **`validateRequestQuery` discards the parsed query** —
   `middleware/validateSchema.ts`.
-- [ ] **Audit runs before validation** on seminari routes.
+- [ ] **Audit middleware** must run before validation because it reads the
+  id from the raw body/params with a fallback chain (`middleware/audit.ts`),
+  so it does a DB read even for requests that then fail validation. Fix: one
+  id source per route.
 - [ ] **Firma search table never refreshes after mutations** — FE invalidates
   `["firme-pretrage"]` but the table isn't a query (`FirmasTable.tsx`,
   `useFirmaMutations.ts`).

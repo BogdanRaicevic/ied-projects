@@ -29,8 +29,7 @@
 5. Per route: optional `createAuditMiddleware(Model)` → `validateRequestBody(Schema)` → handler → service
 6. `Sentry.setupExpressErrorHandler`, then `errorWrapper`
 
-Errors: services throw `ErrorWithCause` (→ currently always 400) or plain
-`Error` (→ 500). See tech debt for the planned fix.
+Error → status mapping: see "Rules" in `AGENTS.md`.
 
 ## Frontend structure
 

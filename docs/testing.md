@@ -1,7 +1,7 @@
 # Testing
 
-Vitest everywhere. `pnpm test:run` runs all; `pnpm -F <ws> test:run -- <file>`
-runs one file.
+Vitest everywhere. `pnpm test:run` runs all; `pnpm -F <ws> test:run <file>`
+runs one file (with `--` it silently runs all of them).
 
 | Workspace | What's tested | Setup |
 |---|---|---|
