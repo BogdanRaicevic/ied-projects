@@ -8,6 +8,9 @@
     },
     "clerk": {
       "enabled": false
+    },
+    "atlassian": {
+      "enabled": false
     }
   }
 }
