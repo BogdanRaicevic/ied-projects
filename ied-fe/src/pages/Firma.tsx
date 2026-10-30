@@ -1,7 +1,6 @@
 import { Alert, Box, Button, CircularProgress } from "@mui/material";
 import { format } from "date-fns/format";
 import type { FirmaType, ZaposleniType } from "ied-shared";
-import type { MRT_Row } from "material-react-table";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import PrijavaNaSeminarDialog from "../components/Dialogs/PrijaviZaposlenogNaSeminar";
@@ -55,9 +54,7 @@ export default function Firma() {
   const [errorAlert, setErrorAlert] = useState<string | null>(null);
   const [warningAlert, setWarningAlert] = useState<string | null>(null);
 
-  const [selectedRow, setSelectedRow] = useState<MRT_Row<ZaposleniType> | null>(
-    null,
-  );
+  const [selectedZaposleni, setSelectedZaposleni] = useState<ZaposleniType>();
 
   useEffect(() => {
     // Only run the check if we have employee data
@@ -87,13 +84,13 @@ export default function Firma() {
     }
   }, [firmaData?.zaposleni]);
 
-  const handleEdit = (row: MRT_Row<ZaposleniType>) => {
-    setSelectedRow(row);
+  const handleEdit = (zaposleni: ZaposleniType) => {
+    setSelectedZaposleni(zaposleni);
     setOpenZaposelniDialog(true);
   };
 
-  const handleDeleteZaposleni = async (row: MRT_Row<ZaposleniType>) => {
-    deleteZaposleniMutation.mutate(row.original._id);
+  const handleDeleteZaposleni = async (zaposleni: ZaposleniType) => {
+    deleteZaposleniMutation.mutate(zaposleni._id);
   };
 
   const [openZaposleniDialog, setOpenZaposelniDialog] = useState(false);
@@ -102,8 +99,8 @@ export default function Firma() {
   const handleClosePrijavaDialog = () => setOpenPrijavaNaSeminarDialog(false);
   const handleClose = () => setOpenZaposelniDialog(false);
   const handlePrijavaSuccess = (seminar: string) => {
-    if (selectedRow) {
-      const zaposleni = selectedRow.original;
+    if (selectedZaposleni) {
+      const zaposleni = selectedZaposleni;
 
       const imePrezime =
         `${zaposleni.ime || ""} ${zaposleni.prezime || ""}`.trim();
@@ -191,7 +188,7 @@ export default function Firma() {
             color="secondary"
             type="button"
             onClick={() => {
-              setSelectedRow(null);
+              setSelectedZaposleni(undefined);
               setOpenZaposelniDialog(true);
             }}
           >
@@ -219,15 +216,15 @@ export default function Firma() {
             zaposleni={firmaData?.zaposleni || []}
             onEdit={handleEdit}
             onDelete={handleDeleteZaposleni}
-            onPrijaviNaSeminar={(row) => {
-              setSelectedRow(row);
+            onPrijaviNaSeminar={(zaposleni) => {
+              setSelectedZaposleni(zaposleni);
               handlePrijaviNaSeminar();
             }}
             isDeleting={deleteZaposleniMutation.isPending}
             deletingZaposleniId={deleteZaposleniMutation.variables}
           />
           <ZaposleniDialog
-            zaposleni={selectedRow?.original}
+            zaposleni={selectedZaposleni}
             open={openZaposleniDialog}
             onClose={handleClose}
             onSubmit={handleZaposleniSubmit}
@@ -236,7 +233,7 @@ export default function Firma() {
             open={openPrijavaNaSeminarDialog}
             onClose={handleClosePrijavaDialog}
             companyData={firmaData}
-            zaposleniData={selectedRow?.original ?? defaultZaposleniData}
+            zaposleniData={selectedZaposleni ?? defaultZaposleniData}
             onSuccess={handlePrijavaSuccess}
           />
         </>

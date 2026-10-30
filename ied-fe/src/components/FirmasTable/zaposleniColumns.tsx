@@ -1,23 +1,23 @@
-import { ContentCopy } from "@mui/icons-material";
 import { colors } from "@mui/material";
 import { ZaposleniSchema, type ZaposleniType } from "ied-shared";
-import type { MRT_ColumnDef } from "material-react-table";
+import type { ReactNode } from "react";
+import type { DataTableColumn } from "../DataTable/DataTable";
 
-export const zaposleniColumns: MRT_ColumnDef<ZaposleniType>[] = [
+export const getZaposleniColumns = (
+  renderActions: (zaposleni: ZaposleniType) => ReactNode,
+): DataTableColumn<ZaposleniType>[] => [
   {
     header: "R. BR.",
-    accessorKey: "rowNumber",
-    size: 20,
-    enableSorting: false,
-    enableColumnActions: false,
-    enableColumnFilter: false,
-    enableColumnOrdering: false,
-    enableHiding: false,
-    Cell: ({ row, table }) => {
-      const pageIndex = table.getState().pagination.pageIndex;
-      const pageSize = table.getState().pagination.pageSize;
-      return pageIndex * pageSize + row.index + 1;
-    },
+    id: "rowNumber",
+    size: 90,
+    // Client-side paging: row.index already counts across pages.
+    cell: ({ row }) => row.index + 1,
+  },
+  {
+    header: "Akcije",
+    id: "actions",
+    size: 190,
+    cell: ({ row }) => renderActions(row.original),
   },
   {
     header: "Ime i Prezime",
@@ -26,21 +26,12 @@ export const zaposleniColumns: MRT_ColumnDef<ZaposleniType>[] = [
   {
     header: "Email",
     accessorKey: "e_mail",
-    enableClickToCopy: true,
-    muiCopyButtonProps: {
-      fullWidth: true,
-      startIcon: <ContentCopy />,
-      sx: { justifyContent: "flex-start" },
-    },
-    muiTableBodyCellProps: ({ cell }) => {
-      const email = cell.getValue<string>();
-      const isValid = ZaposleniSchema.shape.e_mail.safeParse(email).success;
-
-      return {
-        sx: {
-          backgroundColor: isValid ? "inherit" : colors.red[100],
-        },
-      };
+    meta: {
+      copy: true,
+      cellSx: (email) =>
+        ZaposleniSchema.shape.e_mail.safeParse(email).success
+          ? {}
+          : { bgcolor: colors.red[100] },
     },
   },
   {
@@ -54,15 +45,9 @@ export const zaposleniColumns: MRT_ColumnDef<ZaposleniType>[] = [
   {
     header: "Komentari",
     accessorKey: "komentar",
-    muiTableHeadCellProps: {
-      sx: {
-        minWidth: "400px",
-      },
-    },
-    muiTableBodyCellProps: {
-      sx: {
-        whiteSpace: "pre-wrap", // Preserve line breaks and whitespace
-      },
+    minSize: 400,
+    meta: {
+      cellSx: () => ({ whiteSpace: "pre-wrap" }), // Preserve line breaks and whitespace
     },
   },
 ];

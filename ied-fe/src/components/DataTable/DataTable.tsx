@@ -25,6 +25,7 @@ import {
   type ColumnDef,
   columnPinningFeature,
   columnSizingFeature,
+  createPaginatedRowModel,
   createSortedRowModel,
   FlexRender,
   type PaginationState,
@@ -53,6 +54,7 @@ const features = tableFeatures({
   rowPaginationFeature,
   rowSortingFeature,
   sortedRowModel: createSortedRowModel(),
+  paginatedRowModel: createPaginatedRowModel(),
   // "auto" sorting only picks from registered fns
   sortFns: {
     alphanumeric: sortFn_alphanumeric,
@@ -68,7 +70,8 @@ type DataTableProps<T extends RowData> = {
   columns: DataTableColumn<T>[];
   data: T[];
   isLoading?: boolean;
-  // Server-side pagination: pass all three, or none for a table without paging.
+  // Paging: pass pagination + onPaginationChange. With rowCount the server
+  // pages the data; without it the table pages `data` itself.
   pagination?: PaginationState;
   onPaginationChange?: (pagination: PaginationState) => void;
   rowCount?: number;
@@ -96,7 +99,7 @@ export default function DataTable<T extends RowData>({
     columns,
     data,
     state: pagination && { pagination },
-    manualPagination: true,
+    manualPagination: rowCount !== undefined,
     rowCount,
     getRowCanExpand: () => !!renderDetailPanel,
     initialState: { columnPinning: { start: pinnedLeft ?? [], end: [] } },
@@ -273,7 +276,7 @@ export default function DataTable<T extends RowData>({
       {pagination && onPaginationChange && (
         <TablePagination
           component="div"
-          count={rowCount ?? 0}
+          count={rowCount ?? data.length}
           page={pagination.pageIndex}
           rowsPerPage={pagination.pageSize}
           rowsPerPageOptions={[5, 10, 20, 25, 50, 100]}
