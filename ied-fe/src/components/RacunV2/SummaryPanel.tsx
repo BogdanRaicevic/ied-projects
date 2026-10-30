@@ -295,7 +295,7 @@ export function SummaryPanel() {
               >
                 <Typography
                   variant="body2"
-                  fontWeight={700}
+                  sx={{ fontWeight: 700 }}
                   gutterBottom
                   component="div"
                 >
@@ -432,14 +432,13 @@ function SummaryRow({ label, amount, valuta, emphasize }: SummaryRowProps) {
   return (
     <Stack
       direction="row"
-      justifyContent="space-between"
-      alignItems="baseline"
       spacing={2}
+      sx={{ justifyContent: "space-between", alignItems: "baseline" }}
     >
       <Typography
         variant={variant}
         color={emphasize ? "text.primary" : "text.secondary"}
-        fontWeight={emphasize ? 600 : 400}
+        sx={{ fontWeight: emphasize ? 600 : 400 }}
       >
         {label}
       </Typography>
@@ -472,9 +471,8 @@ function DeductionRow({ label, amount, valuta }: DeductionRowProps) {
   return (
     <Stack
       direction="row"
-      justifyContent="space-between"
-      alignItems="baseline"
       spacing={2}
+      sx={{ justifyContent: "space-between", alignItems: "baseline" }}
     >
       <Typography variant="body2" color="text.secondary">
         {label}
@@ -503,9 +501,8 @@ function RokZaUplatuRow({ days }: { days: number | null }) {
   return (
     <Stack
       direction="row"
-      justifyContent="space-between"
-      alignItems="baseline"
       spacing={2}
+      sx={{ justifyContent: "space-between", alignItems: "baseline" }}
     >
       <Typography variant="body2" color="text.secondary">
         Rok za uplatu
@@ -587,9 +584,8 @@ function DatumUplateAvansaRow({ date }: { date: Date | null }) {
   return (
     <Stack
       direction="row"
-      justifyContent="space-between"
-      alignItems="baseline"
       spacing={2}
+      sx={{ justifyContent: "space-between", alignItems: "baseline" }}
     >
       <Typography variant="body2" color="text.secondary">
         Datum uplate avansa
@@ -622,10 +618,8 @@ function InfoBlock({
     >
       <Stack
         direction="row"
-        justifyContent="space-between"
-        alignItems="center"
         spacing={1}
-        sx={{ mb: 1.25 }}
+        sx={{ justifyContent: "space-between", alignItems: "center", mb: 1.25 }}
       >
         <Typography variant="subtitle2" color="text.secondary">
           {title}
@@ -651,10 +645,10 @@ function StavkaPreviewRow({
   return (
     <Stack
       direction="row"
-      justifyContent="space-between"
-      alignItems="center"
       spacing={1.5}
       sx={{
+        justifyContent: "space-between",
+        alignItems: "center",
         borderRadius: 2,
         border: 1,
         borderColor: "divider",
@@ -670,7 +664,7 @@ function StavkaPreviewRow({
         >
           <Chip label={typeLabel} color={typeColor} variant="outlined" />
         </Stack>
-        <Typography variant="body2" fontWeight={600} noWrap sx={{ mt: 0.75 }}>
+        <Typography variant="body2" noWrap sx={{ fontWeight: 600, mt: 0.75 }}>
           {label}
         </Typography>
       </Box>

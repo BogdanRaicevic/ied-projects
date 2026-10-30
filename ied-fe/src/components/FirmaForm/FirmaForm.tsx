@@ -390,8 +390,7 @@ export const FirmaForm: FC<FirmaFormProps> = ({ inputCompany }) => {
                 <Typography
                   variant="caption"
                   color="text.secondary"
-                  display="block"
-                  sx={{ mt: 0.5 }}
+                  sx={{ display: "block", mt: 0.5 }}
                 >
                   Kliknite na dugme ako ste kontaktirali ovu firmu
                 </Typography>
@@ -448,9 +447,11 @@ export const FirmaForm: FC<FirmaFormProps> = ({ inputCompany }) => {
               </Grid>
               <Grid size={{ xs: 12, md: 4, lg: 4 }}>
                 <Grid
-                  display="flex"
-                  alignItems="center"
-                  justifyContent="center"
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
                 >
                   <Box sx={{ textAlign: "center" }}>
                     <Button
@@ -513,9 +514,11 @@ export const FirmaForm: FC<FirmaFormProps> = ({ inputCompany }) => {
 
         <Grid
           size={{ xs: 12 }}
-          display="flex"
-          justifyContent="space-between"
-          alignItems="center"
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+          }}
         >
           <Box>
             <Button
