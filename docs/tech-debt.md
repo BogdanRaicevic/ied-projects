@@ -35,6 +35,13 @@ Tick items off (or delete them) as they're fixed.
 - [ ] **Firma search table never refreshes after mutations** — FE invalidates
   `["firme-pretrage"]` but the table isn't a query (`FirmasTable.tsx`,
   `useFirmaMutations.ts`).
+- [ ] **`useEffect` hooks with missing dependencies** (Biome
+  `useExhaustiveDependencies`) — may act on stale values. Not audited yet:
+  `pages/Racuni.tsx:68, 93, 119, 145` (145 misses `firma`/`seminar` — most
+  likely a real bug), `FirmasTable.tsx:16`, `ParametriPretrageRacuna.tsx:61`,
+  `Racun/hooks/useRacunCalculations.ts:20`, `Seminari/SeminarForm.tsx:83`.
+  For each: add the dep or prove it stable. (`SeminariTable.tsx:101` and
+  `AvansSection.tsx:39` were checked: harmless, only stable setters/actions.)
 - [ ] **No `pageSize` cap** on firma search streaming (`firma.routes.ts`).
 - [ ] **BE tests flaky locally** — MongoMemoryServer can exceed the default
   10s launch timeout. Raise `instance.launchTimeout` in `tests/setup.ts`.

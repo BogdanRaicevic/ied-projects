@@ -89,8 +89,4 @@ from header UI, drag to reorder, remembering column state across reloads.
 
 ## After the migration
 
-- Audit `useEffect` hooks with missing deps (possible stale values), found
-  while checking memoized columns: `pages/Racuni.tsx` (lines ~68, 93, 119,
-  145 — 145 misses `firma`/`seminar`), `FirmasTable.tsx:21`,
-  `ParametriPretrageRacuna.tsx:61`, `useRacunCalculations.ts:20`,
-  `SeminarForm.tsx:83`. Separate change.
+- `useEffect` missing-deps audit moved to `docs/tech-debt.md` (P1).
