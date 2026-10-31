@@ -15,6 +15,7 @@ import {
   rowPaginationFeature,
   rowSortingFeature,
   sortFn_alphanumeric,
+  sortFn_basic,
   sortFn_datetime,
   sortFn_text,
   tableFeatures,
@@ -42,6 +43,7 @@ export const features = tableFeatures({
   // "auto" sorting only picks from registered fns
   sortFns: {
     alphanumeric: sortFn_alphanumeric,
+    basic: sortFn_basic,
     datetime: sortFn_datetime,
     text: sortFn_text,
   },
