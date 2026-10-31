@@ -45,13 +45,8 @@ export const firmaColumns: DataTableColumn<FirmaType>[] = [
   },
   {
     header: "Mesto",
-    accessorKey: "mesto",
-    cell: ({ row }) => {
-      const mesto = row.original.mesto;
-      return typeof mesto === "object" && mesto !== null
-        ? mesto.naziv_mesto
-        : "";
-    },
+    id: "mesto",
+    accessorFn: (firma) => firma.mesto?.naziv_mesto ?? "",
   },
   {
     header: "Postanski broj",

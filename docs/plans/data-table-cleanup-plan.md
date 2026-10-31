@@ -1,7 +1,7 @@
 # DataTable — review & cleanup plan
 
 Critical review of the last 17 commits (MUI 9 fixes + MRT → DataTable).
-Status: **draft — awaiting review**. One step = one staged change to review.
+Status: **done**.
 
 ## Findings
 
@@ -63,27 +63,21 @@ Not splitting further: body row / detail row / pagination stay in
 `DataTable.tsx` — extracting them means threading 4–5 props each for ~20 lines.
 No `index.ts` barrel (callers import `DataTable/DataTable` today).
 
-## Steps (one staged change each)
+## Outcome
 
-1. `fix(fe): DataTable sub-tables show all rows` — no `pagination` prop → no
-   paging (`manualPagination: !pagination || rowCount !== undefined`).
-2. `fix(fe): sort/filter Firme by mesto name` — `accessorFn: (f) =>
-   f.mesto?.naziv_mesto ?? ""`, cell renders the value.
-3. `refactor(fe): shared row-number column` — `rowNumberColumn<T>()` counts
-   `row.index + 1`, plus the page offset only for server paging; replaces the 6
-   copies.
-4. `refactor(fe): split DataTable into files` — per the tree above. No
-   behaviour change.
-5. `refactor(fe): consistent column definitions` — module scope where no
-   closure (AuditLog); Seminari builds columns in one `useMemo` with real deps
-   (clears the Biome warning).
-6. *(optional)* `refactor: one tip/izdavač label map` — e.g. `TIP_RACUNA_LABELS`
-   next to `IZDAVAC_RACUNA_LABELS` in `ied-shared`, used by cells, filter
-   options and `ParametriPretrageRacuna`.
-7. Mark `data-table-plan.md` done (or delete both plans once merged).
-
-## Open questions
-
-1. Steps 1–2 are bugs — do them first, before the split?
-2. Step 6: worth it now, or tech-debt?
-3. Keep finished plans in `docs/plans/`, or delete them after merge?
+1. Done — no `pagination` prop → every row shows, no pager.
+2. Done — Mesto column value is `mesto?.naziv_mesto` (`accessorFn`), so
+   sort/filter/search see the name; default cell renders it.
+3. Done, differently — `DataTable` adds R. BR. to every table itself
+   (position on screen + page offset); the 6 copies are gone.
+4. Done — `DataTable/` split into DataTable, HeaderCell, ColumnFilter,
+   DebouncedTextField, CopyOnClick, columnSx, features. The R. BR. column
+   stayed in `DataTable.tsx` (its only user).
+5. Done, stricter — rule in `docs/ui.md`: columns live in
+   `<name>Columns.tsx`; `get<Name>Columns(handlers)` only when cells need the
+   table's handlers (Zaposleni, Seminari). Also typed
+   `SeminariTableActionCell` props as the full `SeminarZodType`.
+6. Done — `TIP_RACUNA_LABELS` in `ied-shared`; colours + `TipRacunaChip` /
+   `IzdavacRacunaChip` in `Racun/RacunChips.tsx`. Labels unified to the full
+   names ("Konačni račun", "Avansni račun").
+7. Done — both plans marked done and kept in `docs/plans/`.

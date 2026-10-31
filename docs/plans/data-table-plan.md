@@ -4,7 +4,7 @@ Replace `material-react-table` (MRT) with one shared `DataTable` built on
 `@tanstack/react-table` + MUI `Table`. Goal: unblock MUI 9 (MRT 3.2.1 passes
 props MUI 9 removed) and own a smaller table.
 
-Status: **draft — awaiting review**.
+Status: **done** — merged on the MUI 9 branch; follow-up review in `data-table-cleanup-plan.md`.
 
 ## Rules for this work
 
