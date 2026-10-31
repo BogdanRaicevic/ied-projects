@@ -23,6 +23,7 @@ export default function HeaderCell<T extends RowData>({
 
   return (
     <TableCell
+      sortDirection={column.getIsSorted() || false}
       sx={{ fontWeight: 700, ...widthSx(column), ...pinnedSx(column) }}
     >
       <Box sx={{ maxWidth: contentWidth(column) }}>
@@ -53,6 +54,7 @@ export default function HeaderCell<T extends RowData>({
               sx={{ p: 0.25 }}
               color={filterOpen ? "primary" : "default"}
               aria-label={filterOpen ? "Sakrij filter" : "Prikaži filter"}
+              aria-expanded={filterOpen}
               onClick={toggleFilter}
             >
               <SearchIcon sx={{ fontSize: 16 }} />

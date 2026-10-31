@@ -39,8 +39,10 @@ const rowNumberColumn = <T extends RowData>(): DataTableColumn<T> => ({
   size: 90,
   cell: ({ row, table }) => {
     const { pageIndex, pageSize } = table.atoms.pagination.get();
-    // getRowModel() is the current page in every paging mode.
-    return pageIndex * pageSize + table.getRowModel().rows.indexOf(row) + 1;
+    // Display index counts the sorted/filtered rows before paging; server pages
+    // only hold the current page, so add the page offset there.
+    const offset = table.options.manualPagination ? pageIndex * pageSize : 0;
+    return offset + row.getDisplayIndex() + 1;
   },
 });
 
@@ -147,6 +149,7 @@ export default function DataTable<T extends RowData>({
                     <TableCell padding="checkbox">
                       <IconButton
                         size="small"
+                        aria-expanded={row.getIsExpanded()}
                         aria-label={
                           row.getIsExpanded()
                             ? "Sakrij detalje"
@@ -213,7 +216,7 @@ export default function DataTable<T extends RowData>({
       {pagination && onPaginationChange && (
         <TablePagination
           component="div"
-          count={rowCount ?? data.length}
+          count={table.getRowCount()}
           page={pagination.pageIndex}
           rowsPerPage={pagination.pageSize}
           rowsPerPageOptions={[5, 10, 20, 25, 50, 100]}
