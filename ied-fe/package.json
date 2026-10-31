@@ -34,7 +34,6 @@
     "es-toolkit": "catalog:",
     "fflate": "^0.8.3",
     "ied-shared": "workspace:^",
-    "material-react-table": "^3.2.1",
     "react": "^19.3.0",
     "react-dom": "^19.3.0",
     "react-hook-form": "^7.90.0",

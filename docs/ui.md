@@ -8,7 +8,7 @@ companies all day. Favour dense, predictable screens over pretty ones.
 | Topic | Convention | Example |
 |---|---|---|
 | Components | MUI only; style with `sx` | everywhere |
-| Tables | `material-react-table` (`useMaterialReactTable`) | `Seminari/SeminariTable.tsx` |
+| Tables | `DataTable` (TanStack Table v9 + MUI `Table`): sorting, search + column filters, paging, `pinnedLeft`, `meta.copy` — props documented on `DataTableProps` in `components/DataTable/DataTable.tsx` | `Seminari/SeminariTable.tsx` |
 | Forms | RHF + zodResolver; multi-section forms like RacunV2 | `RacunV2/` |
 | Dialogs | MUI `Dialog`, one component per dialog in `components/Dialogs/` | `Dialogs/PretragaSaveDialog.tsx` |
 | Error / info inside a screen | MUI `<Alert severity=…>` near what failed | `FirmaForm.tsx` |
@@ -32,7 +32,5 @@ one of the existing ones; ask.
   direction: one app-wide snackbar.
 - **Theme** — none (`createTheme` is never used); colours are hardcoded in
   places (e.g. `ApplicationNavBar.tsx`).
-- **Table defaults** — each table sets its own `enable*` options and there's
-  no Serbian localization for material-react-table.
 
 When one of these is decided, move it to the table above.
