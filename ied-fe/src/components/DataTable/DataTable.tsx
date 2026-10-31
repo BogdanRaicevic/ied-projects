@@ -51,7 +51,14 @@ import {
   tableFeatures,
   useTable,
 } from "@tanstack/react-table";
-import { Fragment, type ReactNode, useEffect, useRef, useState } from "react";
+import {
+  Fragment,
+  type ReactNode,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 
 type DataTableColumnMeta = {
   // Click on the cell copies its value.
@@ -87,6 +94,19 @@ const features = tableFeatures({
 
 export type DataTableColumn<T extends RowData> = ColumnDef<typeof features, T>;
 
+// Every table gets an "R. BR." column: position on screen + page offset, so it
+// stays 1, 2, 3… after sorting/filtering. Pin it with pinnedLeft "rowNumber".
+const rowNumberColumn = <T extends RowData>(): DataTableColumn<T> => ({
+  id: "rowNumber",
+  header: "R. BR.",
+  size: 90,
+  cell: ({ row, table }) => {
+    const { pageIndex, pageSize } = table.atoms.pagination.get();
+    // getRowModel() is the current page in every paging mode.
+    return pageIndex * pageSize + table.getRowModel().rows.indexOf(row) + 1;
+  },
+});
+
 type DataTableProps<T extends RowData> = {
   columns: DataTableColumn<T>[];
   data: T[];
@@ -115,15 +135,20 @@ export default function DataTable<T extends RowData>({
   pinnedLeft,
   getRowColor,
 }: DataTableProps<T>) {
+  const allColumns = useMemo(
+    () => [rowNumberColumn<T>(), ...columns],
+    [columns],
+  );
   const table = useTable({
     features,
-    columns,
+    columns: allColumns,
     data,
     state: pagination && { pagination },
     // Lets the table jump back to page 1 when filters change (client paging only).
     onPaginationChange: (updater) =>
       pagination && onPaginationChange?.(functionalUpdate(updater, pagination)),
-    manualPagination: rowCount !== undefined,
+    // No pagination prop → show every row; with rowCount the server pages.
+    manualPagination: !pagination || rowCount !== undefined,
     rowCount,
     getRowCanExpand: () => !!renderDetailPanel,
     initialState: { columnPinning: { start: pinnedLeft ?? [], end: [] } },
@@ -142,7 +167,7 @@ export default function DataTable<T extends RowData>({
     }
   };
   const rows = table.getRowModel().rows;
-  const columnCount = columns.length + (renderDetailPanel ? 1 : 0);
+  const columnCount = allColumns.length + (renderDetailPanel ? 1 : 0);
 
   // A column with `size` is exactly that wide (pinned ones always are, so their
   // sticky offsets match the layout). Other columns grow with their content.

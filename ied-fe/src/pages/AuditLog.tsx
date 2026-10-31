@@ -51,15 +51,6 @@ export default function AuditLog() {
   const auditLogsColumns = useMemo<DataTableColumn<AuditLogType>[]>(
     () => [
       {
-        header: "R. BR.",
-        id: "rowNumber",
-        size: 90,
-        cell: ({ row, table }) => {
-          const { pageIndex, pageSize } = table.atoms.pagination.get();
-          return pageIndex * pageSize + row.index + 1;
-        },
-      },
-      {
         accessorKey: "timestamp",
         header: "Timestamp",
         cell: ({ getValue }) => {

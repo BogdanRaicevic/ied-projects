@@ -11,15 +11,6 @@ const noFirmas: FirmaSeminar[] = [];
 
 const seminariTableColumns: DataTableColumn<FirmaSeminar>[] = [
   {
-    header: "R. BR.",
-    id: "rowNumber",
-    size: 90,
-    cell: ({ row, table }) => {
-      const { pageIndex, pageSize } = table.atoms.pagination.get();
-      return pageIndex * pageSize + row.index + 1;
-    },
-  },
-  {
     accessorKey: "naziv",
     header: "Naziv firme",
     cell: ({ row }) => (

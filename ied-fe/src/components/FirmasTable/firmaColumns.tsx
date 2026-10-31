@@ -5,15 +5,6 @@ import type { DataTableColumn } from "../DataTable/DataTable";
 
 export const firmaColumns: DataTableColumn<FirmaType>[] = [
   {
-    header: "R. BR.",
-    id: "rowNumber",
-    size: 90,
-    cell: ({ row, table }) => {
-      const { pageIndex, pageSize } = table.atoms.pagination.get();
-      return pageIndex * pageSize + row.index + 1;
-    },
-  },
-  {
     header: "Naziv kompanije",
     accessorKey: "naziv_firme",
     size: 250,

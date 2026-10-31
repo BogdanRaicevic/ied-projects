@@ -4,12 +4,6 @@ import DataTable, { type DataTableColumn } from "../DataTable/DataTable";
 
 const seminariTableColumns: DataTableColumn<SeminarDetail>[] = [
   {
-    header: "R. BR.",
-    id: "rowNumber",
-    size: 90,
-    cell: ({ row }) => row.index + 1,
-  },
-  {
     accessorKey: "naziv",
     header: "Naziv seminara",
   },

@@ -7,13 +7,6 @@ export const getZaposleniColumns = (
   renderActions: (zaposleni: ZaposleniType) => ReactNode,
 ): DataTableColumn<ZaposleniType>[] => [
   {
-    header: "R. BR.",
-    id: "rowNumber",
-    size: 90,
-    // Client-side paging: row.index already counts across pages.
-    cell: ({ row }) => row.index + 1,
-  },
-  {
     header: "Akcije",
     id: "actions",
     size: 190,
