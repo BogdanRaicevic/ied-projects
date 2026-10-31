@@ -46,15 +46,20 @@ const rowNumberColumn = <T extends RowData>(): DataTableColumn<T> => ({
   },
 });
 
-type DataTableProps<T extends RowData> = {
+// No paging, or pagination + onPaginationChange together. With rowCount the
+// server pages the data; without it the table pages `data` itself.
+type DataTablePaging =
+  | { pagination?: never; onPaginationChange?: never; rowCount?: never }
+  | {
+      pagination: PaginationState;
+      onPaginationChange: (pagination: PaginationState) => void;
+      rowCount?: number;
+    };
+
+type DataTableProps<T extends RowData> = DataTablePaging & {
   columns: DataTableColumn<T>[];
   data: T[];
   isLoading?: boolean;
-  // Paging: pass pagination + onPaginationChange. With rowCount the server
-  // pages the data; without it the table pages `data` itself.
-  pagination?: PaginationState;
-  onPaginationChange?: (pagination: PaginationState) => void;
-  rowCount?: number;
   // Adds an expand button to each row; the panel renders in a full-width row below.
   renderDetailPanel?: (row: T) => ReactNode;
   // Column ids that stick to the left while scrolling. They must be the first
@@ -96,6 +101,9 @@ export default function DataTable<T extends RowData>({
   });
   const rows = table.getRowModel().rows;
   const columnCount = allColumns.length + (renderDetailPanel ? 1 : 0);
+  // With server paging the table only holds the current page, so say so.
+  const searchLabel =
+    rowCount === undefined ? "Pretraži tabelu" : "Pretraži ovu stranu";
 
   return (
     <Paper>
@@ -103,7 +111,7 @@ export default function DataTable<T extends RowData>({
       <Box sx={{ p: 1 }}>
         <DebouncedTextField
           size="small"
-          placeholder="Pretraži tabelu…"
+          placeholder={`${searchLabel}…`}
           onDebouncedChange={(value) => table.setGlobalFilter(value)}
           slotProps={{
             input: {
@@ -113,7 +121,7 @@ export default function DataTable<T extends RowData>({
                 </InputAdornment>
               ),
             },
-            htmlInput: { "aria-label": "Pretraži tabelu" },
+            htmlInput: { "aria-label": searchLabel },
           }}
         />
       </Box>
