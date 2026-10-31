@@ -2,12 +2,16 @@ import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import PushPinIcon from "@mui/icons-material/PushPin";
+import SearchIcon from "@mui/icons-material/Search";
 import {
   Box,
   ButtonBase,
   IconButton,
+  InputAdornment,
   LinearProgress,
+  MenuItem,
   Paper,
+  Select,
   Table,
   TableBody,
   TableCell,
@@ -16,6 +20,7 @@ import {
   TablePagination,
   TableRow,
   TableSortLabel,
+  TextField,
   Tooltip,
 } from "@mui/material";
 import { alpha } from "@mui/material/styles";
@@ -23,11 +28,17 @@ import type { SystemStyleObject, Theme } from "@mui/system";
 import {
   type Column,
   type ColumnDef,
+  columnFilteringFeature,
   columnPinningFeature,
   columnSizingFeature,
+  createFilteredRowModel,
   createPaginatedRowModel,
   createSortedRowModel,
   FlexRender,
+  filterFn_equalsString,
+  filterFn_includesString,
+  functionalUpdate,
+  globalFilteringFeature,
   type PaginationState,
   type RowData,
   rowExpandingFeature,
@@ -45,14 +56,19 @@ type DataTableColumnMeta = {
   // Click on the cell copies its value.
   copy?: boolean;
   cellSx?: (value: unknown) => SystemStyleObject<Theme>;
+  // With filters on: pick from these values instead of typing (use filterFn: "equalsString").
+  filterOptions?: { value: string; label: string }[];
 };
 
 const features = tableFeatures({
+  columnFilteringFeature,
+  globalFilteringFeature,
   columnPinningFeature,
   columnSizingFeature,
   rowExpandingFeature,
   rowPaginationFeature,
   rowSortingFeature,
+  filteredRowModel: createFilteredRowModel(),
   sortedRowModel: createSortedRowModel(),
   paginatedRowModel: createPaginatedRowModel(),
   // "auto" sorting only picks from registered fns
@@ -60,6 +76,10 @@ const features = tableFeatures({
     alphanumeric: sortFn_alphanumeric,
     datetime: sortFn_datetime,
     text: sortFn_text,
+  },
+  filterFns: {
+    equalsString: filterFn_equalsString,
+    includesString: filterFn_includesString,
   },
   columnMeta: {} as DataTableColumnMeta,
 });
@@ -99,11 +119,27 @@ export default function DataTable<T extends RowData>({
     columns,
     data,
     state: pagination && { pagination },
+    // Lets the table jump back to page 1 when filters change (client paging only).
+    onPaginationChange: (updater) =>
+      pagination && onPaginationChange?.(functionalUpdate(updater, pagination)),
     manualPagination: rowCount !== undefined,
     rowCount,
     getRowCanExpand: () => !!renderDetailPanel,
     initialState: { columnPinning: { start: pinnedLeft ?? [], end: [] } },
+    defaultColumn: { filterFn: "includesString" },
+    globalFilterFn: "includesString",
   });
+  // Column filters are hidden until opened; closing one also clears it, so a
+  // hidden filter never silently hides rows.
+  const [openFilters, setOpenFilters] = useState<string[]>([]);
+  const toggleFilter = (column: Column<typeof features, T>) => {
+    if (openFilters.includes(column.id)) {
+      column.setFilterValue(undefined);
+      setOpenFilters((ids) => ids.filter((id) => id !== column.id));
+    } else {
+      setOpenFilters((ids) => [...ids, column.id]);
+    }
+  };
   const rows = table.getRowModel().rows;
   const columnCount = columns.length + (renderDetailPanel ? 1 : 0);
 
@@ -141,6 +177,25 @@ export default function DataTable<T extends RowData>({
 
   return (
     <Paper>
+      {/* Search + column filters only filter the rows the table has (with server paging: the current page). */}
+      <Box sx={{ p: 1 }}>
+        <TextField
+          size="small"
+          placeholder="Pretraži tabelu…"
+          value={table.state.globalFilter ?? ""}
+          onChange={(e) => table.setGlobalFilter(e.target.value)}
+          slotProps={{
+            input: {
+              startAdornment: (
+                <InputAdornment position="start">
+                  <SearchIcon />
+                </InputAdornment>
+              ),
+            },
+            htmlInput: { "aria-label": "Pretraži tabelu" },
+          }}
+        />
+      </Box>
       {isLoading && <LinearProgress />}
       <TableContainer>
         {/* separate borders: with collapse, sticky cells leave see-through seams */}
@@ -161,34 +216,56 @@ export default function DataTable<T extends RowData>({
                       ...pinnedSx(header.column),
                     }}
                   >
-                    <Box
-                      sx={{
-                        maxWidth: contentWidth(header.column),
-                        display: "flex",
-                        alignItems: "center",
-                        gap: 0.5,
-                      }}
-                    >
-                      {header.column.getIsPinned() && (
-                        <PushPinIcon
-                          color="primary"
-                          sx={{ fontSize: 14, opacity: 0.7 }}
-                          titleAccess="Zakačena kolona"
-                        />
-                      )}
-                      {header.isPlaceholder ? null : header.column.getCanSort() ? (
-                        <TableSortLabel
-                          active={!!header.column.getIsSorted()}
-                          direction={header.column.getIsSorted() || "asc"}
-                          onClick={header.column.getToggleSortingHandler()}
-                          // MUI hides the icon until hover; keep it visible (sorted column is full opacity)
-                          sx={{ "& .MuiTableSortLabel-icon": { opacity: 0.4 } }}
-                        >
+                    <Box sx={{ maxWidth: contentWidth(header.column) }}>
+                      <Box
+                        sx={{ display: "flex", alignItems: "center", gap: 0.5 }}
+                      >
+                        {header.column.getIsPinned() && (
+                          <PushPinIcon
+                            color="primary"
+                            sx={{ fontSize: 14, opacity: 0.7 }}
+                            titleAccess="Zakačena kolona"
+                          />
+                        )}
+                        {header.isPlaceholder ? null : header.column.getCanSort() ? (
+                          <TableSortLabel
+                            active={!!header.column.getIsSorted()}
+                            direction={header.column.getIsSorted() || "asc"}
+                            onClick={header.column.getToggleSortingHandler()}
+                            // MUI hides the icon until hover; keep it visible (sorted column is full opacity)
+                            sx={{
+                              "& .MuiTableSortLabel-icon": { opacity: 0.4 },
+                            }}
+                          >
+                            <FlexRender header={header} />
+                          </TableSortLabel>
+                        ) : (
                           <FlexRender header={header} />
-                        </TableSortLabel>
-                      ) : (
-                        <FlexRender header={header} />
-                      )}
+                        )}
+                        {header.column.getCanFilter() && (
+                          <IconButton
+                            size="small"
+                            sx={{ p: 0.25 }}
+                            color={
+                              openFilters.includes(header.column.id)
+                                ? "primary"
+                                : "default"
+                            }
+                            aria-label={
+                              openFilters.includes(header.column.id)
+                                ? "Sakrij filter"
+                                : "Prikaži filter"
+                            }
+                            onClick={() => toggleFilter(header.column)}
+                          >
+                            <SearchIcon sx={{ fontSize: 16 }} />
+                          </IconButton>
+                        )}
+                      </Box>
+                      {header.column.getCanFilter() &&
+                        openFilters.includes(header.column.id) && (
+                          <ColumnFilter column={header.column} />
+                        )}
                     </Box>
                   </TableCell>
                 ))}
@@ -320,5 +397,48 @@ function CopyOnClick({
         <ContentCopyIcon sx={{ fontSize: 14, ml: 0.5, opacity: 0.5 }} />
       </ButtonBase>
     </Tooltip>
+  );
+}
+
+function ColumnFilter<T extends RowData>({
+  column,
+}: {
+  column: Column<typeof features, T>;
+}) {
+  const options = column.columnDef.meta?.filterOptions;
+  const header = column.columnDef.header;
+  const label = `Filter: ${typeof header === "string" ? header : column.id}`;
+
+  if (options) {
+    return (
+      <Select
+        displayEmpty
+        fullWidth
+        size="small"
+        variant="standard"
+        value={(column.getFilterValue() as string | undefined) ?? ""}
+        onChange={(e) => column.setFilterValue(e.target.value || undefined)}
+        inputProps={{ "aria-label": label }}
+      >
+        <MenuItem value="">Svi</MenuItem>
+        {options.map((option) => (
+          <MenuItem key={option.value} value={option.value}>
+            {option.label}
+          </MenuItem>
+        ))}
+      </Select>
+    );
+  }
+
+  return (
+    <TextField
+      fullWidth
+      size="small"
+      variant="standard"
+      placeholder="Filter…"
+      value={(column.getFilterValue() as string | undefined) ?? ""}
+      onChange={(e) => column.setFilterValue(e.target.value || undefined)}
+      slotProps={{ htmlInput: { "aria-label": label } }}
+    />
   );
 }

@@ -18,10 +18,11 @@ Status: **draft — awaiting review**.
 
 **Keep:** custom cells/headers/widths, pagination (server and client), loading
 bar, row colour, row actions column, detail panel, sticky left columns via a
-`pinnedLeft` prop, click to copy via column `meta: { copy: true }`, quick
-filters on Računi.
+`pinnedLeft` prop, click to copy via column `meta: { copy: true }`, sorting,
+filters on every table: search box above the table + a per-column filter
+opened with the header search icon.
 
-**Drop:** top scrollbar, global search, density, fullscreen, inline editing,
+**Drop:** top scrollbar, density, fullscreen, inline editing,
 filter modes, column actions menu.
 
 **Deferred (decide after migration, only if missed):** column hiding UI, pin
@@ -68,13 +69,17 @@ from header UI, drag to reorder, remembering column state across reloads.
 - `Firma.tsx` handlers take TanStack `Row` instead of `MRT_Row`.
 - **Review:** employees list on a firma page — edit, delete, prijavi na seminar.
 
-### 6. `feat(fe): quick filters on Računi, migrate PretrageRacuna`
-- Toggle buttons above the table: izdavač (`ied`, `bs`, `permanent`) and tip
-  računa (`predracun`, `avansniRacun`, `konacniRacun`, `racun`). Replace the
-  header dropdowns.
-- Keep the seminar text filter and sorting.
-- Filters apply to the current page only — same as today.
-- **Review:** each filter, sorting, paging.
+### 6. `refactor(fe): migrate PretrageRacuna to DataTable`
+- `DataTable` filters (every table): search box above the table + a per-column
+  filter, hidden until the header search icon opens it (closing clears it);
+  columns with `meta.filterOptions` get a single-value dropdown ("Svi" +
+  values) instead of text. Filters only the current page — the search form
+  above still filters server-side across all results.
+- Računi: dropdowns for tip računa and izdavač (`IZDAVAC_RACUNA_LABELS`).
+- Poziv-na-broj cell becomes a component (it called `useNavigate` inside a
+  cell function).
+- **Review:** table search, column filters, form search, paging, sorting,
+  poziv-na-broj link and copy.
 
 ### 7. `chore(fe): remove material-react-table`
 - Delete `hooks/useTopScrollbar.tsx`, remove `material-react-table` from
