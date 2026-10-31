@@ -21,6 +21,7 @@ import {
   TableRow,
   TableSortLabel,
   TextField,
+  type TextFieldProps,
   Tooltip,
 } from "@mui/material";
 import { alpha } from "@mui/material/styles";
@@ -50,7 +51,7 @@ import {
   tableFeatures,
   useTable,
 } from "@tanstack/react-table";
-import { Fragment, type ReactNode, useState } from "react";
+import { Fragment, type ReactNode, useEffect, useRef, useState } from "react";
 
 type DataTableColumnMeta = {
   // Click on the cell copies its value.
@@ -179,11 +180,10 @@ export default function DataTable<T extends RowData>({
     <Paper>
       {/* Search + column filters only filter the rows the table has (with server paging: the current page). */}
       <Box sx={{ p: 1 }}>
-        <TextField
+        <DebouncedTextField
           size="small"
           placeholder="Pretraži tabelu…"
-          value={table.state.globalFilter ?? ""}
-          onChange={(e) => table.setGlobalFilter(e.target.value)}
+          onDebouncedChange={(value) => table.setGlobalFilter(value)}
           slotProps={{
             input: {
               startAdornment: (
@@ -431,14 +431,35 @@ function ColumnFilter<T extends RowData>({
   }
 
   return (
-    <TextField
+    <DebouncedTextField
       fullWidth
       size="small"
       variant="standard"
       placeholder="Filter…"
-      value={(column.getFilterValue() as string | undefined) ?? ""}
-      onChange={(e) => column.setFilterValue(e.target.value || undefined)}
+      onDebouncedChange={(value) => column.setFilterValue(value || undefined)}
       slotProps={{ htmlInput: { "aria-label": label } }}
+    />
+  );
+}
+
+// Uncontrolled input that reports its value once typing pauses, so the table
+// doesn't re-filter on every keystroke.
+function DebouncedTextField({
+  onDebouncedChange,
+  ...props
+}: TextFieldProps & { onDebouncedChange: (value: string) => void }) {
+  const timer = useRef<ReturnType<typeof setTimeout>>(undefined);
+  // A pending update must not fire after unmount (closing a column filter clears it).
+  useEffect(() => () => clearTimeout(timer.current), []);
+
+  return (
+    <TextField
+      {...props}
+      onChange={(e) => {
+        const value = e.target.value;
+        clearTimeout(timer.current);
+        timer.current = setTimeout(() => onDebouncedChange(value), 300);
+      }}
     />
   );
 }
