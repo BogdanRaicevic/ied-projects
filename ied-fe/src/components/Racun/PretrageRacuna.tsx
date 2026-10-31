@@ -1,18 +1,19 @@
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
-import { Box, Chip, IconButton, Link, Tooltip } from "@mui/material";
-import { blue, green, purple, red } from "@mui/material/colors";
+import { Box, IconButton, Link, Tooltip } from "@mui/material";
 import type { PaginationState } from "@tanstack/react-table";
 import { formatDate } from "date-fns";
 import {
   IZDAVAC_RACUNA_LABELS,
   type PretrageRacunaType,
   type RacunType,
+  TIP_RACUNA_LABELS,
 } from "ied-shared";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { searchRacuni } from "../../api/racuni.api";
 import DataTable, { type DataTableColumn } from "../DataTable/DataTable";
 import { ParametriPretrageRacuna } from "./ParametriPretrageRacuna";
+import { IzdavacRacunaChip, TipRacunaChip } from "./RacunChips";
 
 type SearchState = {
   filterValues: PretrageRacunaType;
@@ -71,43 +72,11 @@ const racuniColumns: DataTableColumn<RacunType>[] = [
     header: "Tip računa",
     filterFn: "equalsString",
     meta: {
-      filterOptions: [
-        { value: "konacniRacun", label: "Konačni" },
-        { value: "avansniRacun", label: "Avansni" },
-        { value: "predracun", label: "Predračun" },
-        { value: "racun", label: "Račun" },
-      ],
+      filterOptions: Object.entries(TIP_RACUNA_LABELS).map(
+        ([value, label]) => ({ value, label }),
+      ),
     },
-    cell: ({ getValue }) => {
-      const value = getValue<string>();
-      let color: string;
-      let label: string = value;
-
-      switch (value) {
-        case "konacniRacun":
-          color = blue[200];
-          label = "Konačni";
-          break;
-        case "avansniRacun":
-          color = green[200];
-          label = "Avansni";
-          break;
-        case "predracun":
-          color = red[300];
-          label = "Predračun";
-          break;
-        default:
-          color = "default";
-      }
-
-      return (
-        <Chip
-          label={label}
-          sx={{ backgroundColor: color, color: "#fff" }}
-          size="small"
-        />
-      );
-    },
+    cell: ({ getValue }) => <TipRacunaChip tip={getValue<string>()} />,
   },
   {
     accessorKey: "created_at",
@@ -126,36 +95,7 @@ const racuniColumns: DataTableColumn<RacunType>[] = [
         ([value, label]) => ({ value, label }),
       ),
     },
-    cell: ({ getValue }) => {
-      const value = getValue<string>();
-      let color: string;
-      let label: string = value;
-
-      switch (value?.toLowerCase()) {
-        case "ied":
-          color = blue[500];
-          label = "IED";
-          break;
-        case "bs":
-          color = green[500];
-          label = "BS";
-          break;
-        case "permanent":
-          color = purple[500];
-          label = "Permanent";
-          break;
-        default:
-          color = "default";
-      }
-
-      return (
-        <Chip
-          label={label}
-          sx={{ backgroundColor: color, color: "#fff" }}
-          size="small"
-        />
-      );
-    },
+    cell: ({ getValue }) => <IzdavacRacunaChip izdavac={getValue<string>()} />,
   },
   {
     accessorFn: (row) => {

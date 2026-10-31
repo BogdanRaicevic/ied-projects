@@ -38,7 +38,7 @@ Tick items off (or delete them) as they're fixed.
 - [ ] **`useEffect` hooks with missing dependencies** (Biome
   `useExhaustiveDependencies`) — may act on stale values. Not audited yet:
   `pages/Racuni.tsx:68, 93, 119, 145` (145 misses `firma`/`seminar` — most
-  likely a real bug), `FirmasTable.tsx:16`, `ParametriPretrageRacuna.tsx:61`,
+  likely a real bug), `FirmasTable.tsx:16`, `ParametriPretrageRacuna.tsx:49`,
   `Racun/hooks/useRacunCalculations.ts:20`, `Seminari/SeminarForm.tsx:83`.
   For each: add the dep or prove it stable. (`SeminariTable.tsx:101` and
   `AvansSection.tsx:39` were checked: harmless, only stable setters/actions.)
