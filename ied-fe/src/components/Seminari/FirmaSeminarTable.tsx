@@ -1,6 +1,6 @@
 import { Box } from "@mui/material";
 import type { FirmaSeminar, FirmaSeminarSearchParams } from "ied-shared";
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import { useSearchFirmaSeminari } from "../../hooks/seminar/useSeminarQueries";
 import DataTable from "../DataTable/DataTable";
 import FirmaSeminarCharts from "./FirmaSeminarCharts";
@@ -26,10 +26,7 @@ export default function FirmaSeminarTable({
       queryParameters,
     });
 
-  const tableData = useMemo<FirmaSeminar[]>(
-    () => firmaSeminars?.firmas ?? noFirmas,
-    [firmaSeminars],
-  );
+  const tableData = firmaSeminars?.firmas ?? noFirmas;
 
   return (
     <DataTable

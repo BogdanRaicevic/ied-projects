@@ -14,6 +14,8 @@ import {
   useAuditLogs,
 } from "../hooks/auditLogs/useAuditLogQueries";
 
+const noAuditLogs: AuditLogType[] = [];
+
 export default function AuditLog() {
   const [queryParams, setQueryParams] = useState<AuditLogQueryParams>({
     userEmail: "",
@@ -35,7 +37,7 @@ export default function AuditLog() {
 
   const { data: auditStats } = useAuditLogStatsByDate(queryParams);
 
-  const auditLogs = data?.data ?? [];
+  const auditLogs = data?.data ?? noAuditLogs;
   const totalDocuments = data?.totalDocuments ?? 0;
 
   const onSearch = (data: AuditLogQueryParams) => {

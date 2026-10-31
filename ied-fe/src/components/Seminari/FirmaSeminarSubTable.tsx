@@ -7,5 +7,5 @@ export default function FirmaSeminarSubTable({
 }: {
   seminars: SeminarDetail[];
 }) {
-  return <DataTable columns={firmaSeminarSubColumns} data={seminars ?? []} />;
+  return <DataTable columns={firmaSeminarSubColumns} data={seminars} />;
 }

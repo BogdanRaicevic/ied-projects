@@ -6,12 +6,12 @@ import DataTable from "../DataTable/DataTable";
 import { ParametriPretrageRacuna } from "./ParametriPretrageRacuna";
 import { racuniColumns } from "./racuniColumns";
 
+const noRacuni: RacunType[] = [];
+
 type SearchState = {
   filterValues: PretrageRacunaType;
   pagination: PaginationState;
 };
-
-const noRacuni: RacunType[] = [];
 
 export const PretrageRacuna = () => {
   const [loading, setLoading] = useState<boolean>(true);
