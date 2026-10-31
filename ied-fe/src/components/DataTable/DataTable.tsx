@@ -412,6 +412,7 @@ function ColumnFilter<T extends RowData>({
   if (options) {
     return (
       <Select
+        autoFocus
         displayEmpty
         fullWidth
         size="small"
@@ -432,6 +433,7 @@ function ColumnFilter<T extends RowData>({
 
   return (
     <DebouncedTextField
+      autoFocus
       fullWidth
       size="small"
       variant="standard"
