@@ -9,6 +9,7 @@ companies all day. Favour dense, predictable screens over pretty ones.
 |---|---|---|
 | Components | MUI only; style with `sx` | everywhere |
 | Tables | `DataTable` (TanStack Table v9 + MUI `Table`): sorting, search + column filters, paging, `pinnedLeft`, `meta.copy` — props documented on `DataTableProps` in `components/DataTable/DataTable.tsx` | `Seminari/SeminariTable.tsx` |
+| Table columns | Never inside the component: `<name>Columns.tsx` next to the table exports `<name>Columns`, or `get<Name>Columns(handlers)` when cells need the table's handlers (call it in `useMemo`). R. BR. is added by `DataTable` | `FirmasTable/firmaColumns.tsx`, `Seminari/seminariColumns.tsx` |
 | Forms | RHF + zodResolver; multi-section forms like RacunV2 | `RacunV2/` |
 | Dialogs | MUI `Dialog`, one component per dialog in `components/Dialogs/` | `Dialogs/PretragaSaveDialog.tsx` |
 | Error / info inside a screen | MUI `<Alert severity=…>` near what failed | `FirmaForm.tsx` |

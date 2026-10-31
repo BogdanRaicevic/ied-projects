@@ -1,57 +1,13 @@
-import { Box, Link } from "@mui/material";
+import { Box } from "@mui/material";
 import type { FirmaSeminar, FirmaSeminarSearchParams } from "ied-shared";
 import { useMemo, useState } from "react";
-import { Link as RouterLink } from "react-router-dom";
 import { useSearchFirmaSeminari } from "../../hooks/seminar/useSeminarQueries";
-import DataTable, { type DataTableColumn } from "../DataTable/DataTable";
+import DataTable from "../DataTable/DataTable";
 import FirmaSeminarCharts from "./FirmaSeminarCharts";
 import FirmaSeminarSubTable from "./FirmaSeminarSubTable";
+import { firmaSeminarColumns } from "./firmaSeminarColumns";
 
 const noFirmas: FirmaSeminar[] = [];
-
-const seminariTableColumns: DataTableColumn<FirmaSeminar>[] = [
-  {
-    accessorKey: "naziv",
-    header: "Naziv firme",
-    cell: ({ row }) => (
-      <Link component={RouterLink} to={`/firma/${row.original.firmaId}`}>
-        {row.original.naziv || row.original.firmaId || "N/A"}
-      </Link>
-    ),
-  },
-  {
-    accessorKey: "email",
-    header: "Email firme",
-  },
-  {
-    accessorKey: "mesto",
-    header: "Mesto firme",
-  },
-  {
-    accessorKey: "tipFirme",
-    header: "Tip firme",
-  },
-  {
-    accessorKey: "delatnost",
-    header: "Delatnost firme",
-  },
-  {
-    accessorKey: "brojSeminara",
-    header: "Broj posećenih seminara",
-  },
-  {
-    accessorKey: "totalUcesnici",
-    header: "Ukupan broj učesnika",
-  },
-  {
-    accessorKey: "onlineUcesnici",
-    header: "Broj online učesnika",
-  },
-  {
-    accessorKey: "offlineUcesnici",
-    header: "Broj offline učesnika",
-  },
-];
 
 export default function FirmaSeminarTable({
   queryParameters,
@@ -77,7 +33,7 @@ export default function FirmaSeminarTable({
 
   return (
     <DataTable
-      columns={seminariTableColumns}
+      columns={firmaSeminarColumns}
       data={tableData}
       isLoading={isLoadingSeminars}
       pagination={pagination}

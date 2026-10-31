@@ -1,20 +1,11 @@
-import DeleteIcon from "@mui/icons-material/Delete";
-import EditIcon from "@mui/icons-material/Edit";
-import PersonAddIcon from "@mui/icons-material/PersonAdd";
-import { Box, IconButton, Tooltip } from "@mui/material";
 import { red } from "@mui/material/colors";
 import type { ZaposleniType } from "ied-shared";
 import { useMemo, useState } from "react";
 import DataTable from "../DataTable/DataTable";
-import { getZaposleniColumns } from "./zaposleniColumns";
+import { getZaposleniColumns, type ZaposleniActions } from "./zaposleniColumns";
 
-type ZaposleniTableProps = {
+type ZaposleniTableProps = ZaposleniActions & {
   zaposleni: ZaposleniType[];
-  onEdit: (zaposleni: ZaposleniType) => void;
-  onDelete: (zaposleni: ZaposleniType) => void;
-  onPrijaviNaSeminar: (zaposleni: ZaposleniType) => void;
-  isDeleting: boolean;
-  deletingZaposleniId?: string;
 };
 
 export const ZaposleniTable: React.FC<ZaposleniTableProps> = ({
@@ -29,37 +20,13 @@ export const ZaposleniTable: React.FC<ZaposleniTableProps> = ({
 
   const columns = useMemo(
     () =>
-      getZaposleniColumns((zaposleni) => (
-        <Box sx={{ display: "flex", gap: "1rem" }}>
-          <Tooltip title="Prijavi na seminar" color="success">
-            <IconButton onClick={() => onPrijaviNaSeminar(zaposleni)}>
-              <PersonAddIcon />
-            </IconButton>
-          </Tooltip>
-          <Tooltip title="Edit">
-            <IconButton onClick={() => onEdit(zaposleni)}>
-              <EditIcon />
-            </IconButton>
-          </Tooltip>
-          <Tooltip title="Delete">
-            <IconButton
-              color="error"
-              onClick={() => {
-                if (
-                  window.confirm(
-                    "Da li ste sigurni da želite da obrišete zaposlenog?",
-                  )
-                ) {
-                  onDelete(zaposleni);
-                }
-              }}
-              disabled={isDeleting && deletingZaposleniId === zaposleni._id}
-            >
-              <DeleteIcon />
-            </IconButton>
-          </Tooltip>
-        </Box>
-      )),
+      getZaposleniColumns({
+        onEdit,
+        onDelete,
+        onPrijaviNaSeminar,
+        isDeleting,
+        deletingZaposleniId,
+      }),
     [onEdit, onDelete, onPrijaviNaSeminar, isDeleting, deletingZaposleniId],
   );
 

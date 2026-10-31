@@ -47,8 +47,8 @@ const SeminariTableActionCell = memo(
     seminar,
     onEdit,
   }: {
-    seminar: Partial<SeminarZodType>;
-    onEdit: (seminar: Partial<SeminarZodType>) => void;
+    seminar: SeminarZodType;
+    onEdit: (seminar: SeminarZodType) => void;
   }) => {
     const deleteSeminarMutation = useDeleteSeminarMutation();
     const [isCertificateDialogOpen, setIsCertificateDialogOpen] =
