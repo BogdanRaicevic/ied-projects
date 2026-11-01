@@ -14,8 +14,8 @@ Tick items off (or delete them) as they're fixed.
   `database/cron.ts` even when `BACKUP_TO_S3=false`.
 - [ ] **Unvalidated request bodies** — firma/zaposleni create & update pass
   `req.body` into Mongoose (`firma.routes.ts`, `firma.service.ts`); also
-  `/pretrage/save|delete`, `/racuni/search`. (`/firma/search` and
-  `/export-*` are done.)
+  `/racuni/search`. (`/firma/search`, `/export-*` and
+  `/pretrage/save|delete` are done.)
 - [x] **Unauthenticated `/api/test`** — `routes/test.routes.ts`, mounted
   before `requireApiAuth`. Delete it.
 - [x] **Env not validated at startup** — `utils/envVariables.ts`; e.g. empty

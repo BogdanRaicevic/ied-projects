@@ -4,6 +4,10 @@ import {
   type Response,
   Router,
 } from "express";
+import { ParametriPretrageSchema } from "ied-shared";
+import { isValidObjectId } from "mongoose";
+import { z } from "zod";
+import { validateRequestBody } from "../middleware/validateSchema";
 import {
   deletePretraga,
   getAllPretrage,
@@ -11,6 +15,15 @@ import {
 } from "./../services/pretrage.service";
 
 const router = Router();
+
+const objectId = z.string().refine(isValidObjectId, "Invalid id");
+
+const SavePretragaSchema = z.object({
+  queryParameters: ParametriPretrageSchema,
+  pretraga: z.object({ id: objectId.optional(), naziv: z.string() }),
+});
+
+const DeletePretragaSchema = z.object({ id: objectId });
 
 router.get("/", async (_req: Request, res: Response, next: NextFunction) => {
   try {
@@ -21,25 +34,35 @@ router.get("/", async (_req: Request, res: Response, next: NextFunction) => {
   }
 });
 
-router.post("/save", async (req, res, next: NextFunction) => {
-  const { queryParameters, pretraga } = req.body;
+router.post(
+  "/save",
+  validateRequestBody(SavePretragaSchema),
+  async (req, res, next: NextFunction) => {
+    const { queryParameters, pretraga } = req.body as z.infer<
+      typeof SavePretragaSchema
+    >;
 
-  try {
-    await savePretraga(queryParameters, pretraga);
-    res.sendStatus(200);
-  } catch (error) {
-    next(error);
-  }
-});
+    try {
+      await savePretraga(queryParameters, pretraga);
+      res.sendStatus(200);
+    } catch (error) {
+      next(error);
+    }
+  },
+);
 
-router.post("/delete", async (req, res, next: NextFunction) => {
-  const { id } = req.body;
-  try {
-    await deletePretraga(id);
-    res.sendStatus(200);
-  } catch (error) {
-    next(error);
-  }
-});
+router.post(
+  "/delete",
+  validateRequestBody(DeletePretragaSchema),
+  async (req, res, next: NextFunction) => {
+    const { id } = req.body as z.infer<typeof DeletePretragaSchema>;
+    try {
+      await deletePretraga(id);
+      res.sendStatus(200);
+    } catch (error) {
+      next(error);
+    }
+  },
+);
 
 export default router;
