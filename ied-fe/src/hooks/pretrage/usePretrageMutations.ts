@@ -1,6 +1,7 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import type { ParametriPretrage } from "ied-shared";
 import { deletePretraga, savePretraga } from "../../api/pretrage.api";
+import { pretrageKeys } from "../queryKeys";
 
 export const useSavePretraga = () => {
   const queryClient = useQueryClient();
@@ -11,7 +12,7 @@ export const useSavePretraga = () => {
       pretraga: { id?: string; naziv: string };
     }) => savePretraga(params.queryParameters, params.pretraga),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["pretrage"] });
+      queryClient.invalidateQueries({ queryKey: pretrageKeys.all });
     },
   });
 };
@@ -22,7 +23,7 @@ export const useDeletePretraga = () => {
   return useMutation({
     mutationFn: deletePretraga,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["pretrage"] });
+      queryClient.invalidateQueries({ queryKey: pretrageKeys.all });
     },
   });
 };

@@ -5,25 +5,32 @@ import { getIzdavaciRacuna } from "../api/racuni.api";
 import { fetchAllStanjaFirme } from "../api/stanja_firme.api";
 import { fetchAllTipoviFirme } from "../api/tip_firme.api";
 import { fetchAllVelicineFirme } from "../api/velicina_firme.api";
+import {
+  delatnostKeys,
+  izdavacRacunaKeys,
+  stanjeFirmeKeys,
+  tipFirmeKeys,
+  velicinaFirmeKeys,
+} from "./queryKeys";
 
 export function useFetchPretragaData() {
   const { data: delatnosti } = useQuery({
-    queryKey: ["delatnosti"],
+    queryKey: delatnostKeys.all,
     queryFn: fetchAllDelatnosti,
   });
 
   const { data: tipoviFirme } = useQuery({
-    queryKey: ["tipoviFirme"],
+    queryKey: tipFirmeKeys.all,
     queryFn: fetchAllTipoviFirme,
   });
 
   const { data: velicineFirme } = useQuery({
-    queryKey: ["velicineFirme"],
+    queryKey: velicinaFirmeKeys.all,
     queryFn: fetchAllVelicineFirme,
   });
 
   const { data: stanjaFirme } = useQuery({
-    queryKey: ["stanjaFirme"],
+    queryKey: stanjeFirmeKeys.all,
     queryFn: fetchAllStanjaFirme,
   });
 
@@ -37,7 +44,7 @@ export function useFetchPretragaData() {
 
 export const useFetchIzdavaciRacuna = () => {
   return useQuery({
-    queryKey: ["izdavaciRacuna"],
+    queryKey: izdavacRacunaKeys.all,
     queryFn: (): Promise<IzdavacRacunaOption[]> => getIzdavaciRacuna(),
   });
 };

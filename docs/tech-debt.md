@@ -45,7 +45,7 @@ Tick items off (or delete them) as they're fixed.
 - [ ] FE components fetching in `useEffect` instead of TanStack Query:
   `Racun/PretrageRacuna`, `pages/Racuni.tsx`, `SeminariTableActionCell`,
   `PrijaveSeminarTable`, `SaveDataButton`, `RacunV2Content`.
-- [ ] Query keys: inline strings in mixed styles; `firmaQueryKey` defined twice.
+- [x] Query keys: inline strings in mixed styles; `firmaQueryKey` defined twice.
   Add a key factory per domain.
 - [ ] `api/*.ts` try/catch/console.error boilerplate; `seminari.api.ts`
   rethrows as `new Error(...)` losing the AxiosError. Add a response

@@ -7,6 +7,7 @@ import {
   deleteSeminar,
   updateSeminar,
 } from "../../api/seminari.api";
+import { seminarKeys } from "../queryKeys";
 
 export function useDeleteSeminarMutation() {
   const queryClient = useQueryClient();
@@ -14,7 +15,7 @@ export function useDeleteSeminarMutation() {
   return useMutation({
     mutationFn: (id: string) => deleteSeminar(id),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["seminari"] });
+      queryClient.invalidateQueries({ queryKey: seminarKeys.all });
     },
   });
 }
@@ -25,7 +26,7 @@ export function useCreateSeminarMutation() {
   return useMutation({
     mutationFn: (seminarData: SeminarZodType) => createSeminar(seminarData),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["seminari"] });
+      queryClient.invalidateQueries({ queryKey: seminarKeys.all });
     },
   });
 }
@@ -36,7 +37,7 @@ export function useUpdateSeminarMutation() {
   return useMutation({
     mutationFn: (seminarData: SeminarZodType) => updateSeminar(seminarData),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["seminari"] });
+      queryClient.invalidateQueries({ queryKey: seminarKeys.all });
     },
   });
 }
@@ -53,8 +54,7 @@ export function useDeletePrijavaMutation() {
       seminarId: string;
     }) => deletePrijava(zaposleniId, seminarId),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["seminari"] });
-      queryClient.invalidateQueries({ queryKey: ["firma-seminari"] });
+      queryClient.invalidateQueries({ queryKey: seminarKeys.all });
     },
   });
 }
@@ -71,8 +71,7 @@ export function useCreatePrijavaMutation() {
       prijava: PrijavaZodType;
     }) => createPrijava(seminarId, prijava),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["seminari"] });
-      queryClient.invalidateQueries({ queryKey: ["firma-seminari"] });
+      queryClient.invalidateQueries({ queryKey: seminarKeys.all });
     },
   });
 }
