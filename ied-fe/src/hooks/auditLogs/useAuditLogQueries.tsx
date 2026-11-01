@@ -5,6 +5,7 @@ import {
   getAuditLogData,
   getAuditLogStats,
 } from "../../api/auditLog.api";
+import { auditLogKeys } from "../queryKeys";
 
 export const useAuditLogs = ({
   params,
@@ -16,14 +17,14 @@ export const useAuditLogs = ({
   pageSize: number;
 }) => {
   return useQuery<AuditLogsResponse>({
-    queryKey: ["audit-log", params, pageIndex, pageSize],
+    queryKey: auditLogKeys.list({ params, pageIndex, pageSize }),
     queryFn: () => getAuditLogData({ pageSize, pageIndex, params }),
   });
 };
 
 export const useAuditLogStatsByDate = (params: AuditLogQueryParams) => {
   return useQuery({
-    queryKey: ["audit-log-stats", params],
+    queryKey: auditLogKeys.stats(params),
     queryFn: () => getAuditLogStats({ params }),
   });
 };

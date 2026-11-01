@@ -24,9 +24,10 @@ component → hooks/<domain>/use<X>Queries.ts → api/<x>.api.ts → BE
 
 - Read data with `useQuery`, write with `useMutation` + `invalidateQueries`.
 - Do **not** fetch in `useEffect` + `useState`; several older components do
-  (FirmasTable, PretrageRacuna, PredefinedPretrage, Racuni page). Migrate
+  (PretrageRacuna, Racuni page). Migrate
   them when you touch them.
-- Define a query key once per domain and reuse it in queries and mutations.
+- Query keys come only from the factories in `hooks/queryKeys.ts`; add new
+  keys there and reuse them in queries and mutations.
 
 ## Forms
 

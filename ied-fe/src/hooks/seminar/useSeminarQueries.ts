@@ -6,6 +6,7 @@ import type {
   SeminarSearchResults,
 } from "ied-shared";
 import { fetchFirmaSeminari, fetchSeminari } from "../../api/seminari.api";
+import { seminarKeys } from "../queryKeys";
 
 export function useSearchSeminari(params: {
   pageSize: number;
@@ -15,7 +16,7 @@ export function useSearchSeminari(params: {
   const { pageSize, pageIndex, queryParameters } = params;
 
   return useQuery({
-    queryKey: ["seminari", { pageSize, pageIndex, queryParameters }],
+    queryKey: seminarKeys.search({ pageSize, pageIndex, queryParameters }),
     queryFn: () => fetchSeminari(pageSize, pageIndex, queryParameters),
   });
 }
@@ -28,7 +29,11 @@ export function useSearchFirmaSeminari(params: {
   const { pageSize, pageIndex, queryParameters } = params;
 
   return useQuery({
-    queryKey: ["firma-seminari", { pageSize, pageIndex, queryParameters }],
+    queryKey: seminarKeys.firmaSeminari({
+      pageSize,
+      pageIndex,
+      queryParameters,
+    }),
     queryFn: () => fetchFirmaSeminari(pageSize, pageIndex, queryParameters),
   });
 }

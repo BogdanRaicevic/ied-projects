@@ -1,14 +1,13 @@
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import type { FirmaType, ParametriPretrage } from "ied-shared";
 import { fetchFirmaPretrage, fetchSingleFirma } from "../../api/firma.api";
-
-const firmaQueryKey = (firmaId?: string) => ["firma", firmaId];
+import { firmaKeys } from "../queryKeys";
 
 export const useGetFirma = (firmaId?: string) => {
   return useQuery<FirmaType, Error>({
     // If firmaId is undefined, the key will be ['firma', undefined].
     // The query will remain inactive until the key changes.
-    queryKey: firmaQueryKey(firmaId),
+    queryKey: firmaKeys.detail(firmaId),
     // The query function is only called if `enabled` is true
     queryFn: () => {
       if (!firmaId) {
@@ -27,7 +26,7 @@ export const useFirmaPretrage = (
   queryParameters: ParametriPretrage,
 ) =>
   useQuery({
-    queryKey: ["firme-pretrage", { pageIndex, pageSize, queryParameters }],
+    queryKey: firmaKeys.search({ pageIndex, pageSize, queryParameters }),
     queryFn: () => fetchFirmaPretrage(pageSize, pageIndex, queryParameters),
     // Firme are edited on another page; refetch on return to show changes.
     refetchOnMount: true,

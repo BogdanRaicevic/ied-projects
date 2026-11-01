@@ -3,17 +3,18 @@ import {
   fetchAllRadnaMesta,
   fetchAllRadnaMestaNames,
 } from "../../api/radno_mesto.api";
+import { radnoMestoKeys } from "../queryKeys";
 
 export const useGetRadnaMestaNames = () => {
   return useQuery({
-    queryKey: ["radnaMesta"],
+    queryKey: radnoMestoKeys.names(),
     queryFn: () => fetchAllRadnaMestaNames(),
   });
 };
 
 export const useGetRadnaMesta = () => {
   return useQuery({
-    queryKey: ["radnaMesta"],
+    queryKey: radnoMestoKeys.all,
     queryFn: () => fetchAllRadnaMesta(),
   });
 };
