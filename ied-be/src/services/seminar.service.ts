@@ -145,7 +145,10 @@ export const updatePrijava = async (
   const transformedPrijava = transformPrijavaToDb(prijava as PrijavaZodType);
 
   const updatedSeminar = await Seminar.findOneAndUpdate(
-    { _id: seminar_id, "prijave._id": transformedPrijava._id },
+    {
+      _id: { $eq: seminar_id },
+      "prijave._id": { $eq: transformedPrijava._id },
+    },
     { $set: { "prijave.$": transformedPrijava } },
     { returnDocument: "after" },
   ).lean();

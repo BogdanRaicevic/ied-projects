@@ -210,6 +210,9 @@ const renderCertificateFiles = async (
 export const generateCertificatesZipBuffer = async (
   sertifikatData: SertifikatType[],
 ): Promise<{ buffer: Buffer; fileName: string }> => {
+  if (!Array.isArray(sertifikatData)) {
+    throw new TypeError("Invalid request body: expected an array of certificates");
+  }
   const browser = await getBrowser();
   const archive = new PizZip();
 
