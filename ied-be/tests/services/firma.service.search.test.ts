@@ -27,6 +27,9 @@ describe("firma.service search", () => {
     it("should find ALL firmas, no filters", async () => {
       const result = await firmaService.search({});
       expect(result.totalDocuments).toBe(staticTestData.firme.length);
+      expect(result.firmas).toHaveLength(
+        Math.min(50, staticTestData.firme.length),
+      );
     });
 
     it("should filter by MESTA", async () => {

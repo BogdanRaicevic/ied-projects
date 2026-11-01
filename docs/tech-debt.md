@@ -50,8 +50,10 @@ Tick items off (or delete them) as they're fixed.
 - [ ] `api/*.ts` try/catch/console.error boilerplate; `seminari.api.ts`
   rethrows as `new Error(...)` losing the AxiosError. Add a response
   interceptor (incl. 401 handling) and drop the per-call catches.
-- [ ] Business logic in routes: `firma.routes.ts` (streaming, Clerk lookup),
-  `racuni_v2.routes.ts`, `email_suppression.routes.ts` (CSV parsing).
+- [x] Business logic in routes: `firma.routes.ts` search cursor moved into
+  the service. Left on purpose: the Clerk lookup (who is calling is HTTP
+  context; the service gets `userEmail`), CSV parsing (request decoding),
+  and the `racuni_v2` POC checks (rewritten with the v2 plan).
 - [ ] Inconsistent REST verbs/paths and status codes (201 on update,
   POST for delete).
 - [ ] Mixed file naming (`racuni_v2.routes.ts` vs `firmaQueryBuilder.ts`,
