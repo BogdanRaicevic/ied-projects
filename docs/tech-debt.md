@@ -15,7 +15,7 @@ Tick items off (or delete them) as they're fixed.
 - [ ] **Unvalidated request bodies** — firma/zaposleni create & update pass
   `req.body` into Mongoose (`firma.routes.ts`, `firma.service.ts`); also
   `/firma/search`, `/export-*`, `/pretrage/save|delete`, `/racuni/search`.
-- [ ] **Unauthenticated `/api/test`** — `routes/test.routes.ts`, mounted
+- [x] **Unauthenticated `/api/test`** — `routes/test.routes.ts`, mounted
   before `requireApiAuth`. Delete it.
 - [ ] **Env not validated at startup** — `utils/envVariables.ts`; e.g. empty
   `MONGO_URI` goes straight to `mongoose.connect`. Parse env with Zod.
@@ -36,7 +36,7 @@ Tick items off (or delete them) as they're fixed.
   `["firme-pretrage"]` but the table isn't a query (`FirmasTable.tsx`,
   `useFirmaMutations.ts`).
 - [ ] **No `pageSize` cap** on firma search streaming (`firma.routes.ts`).
-- [ ] **BE tests flaky locally** — MongoMemoryServer can exceed the default
+- [x] **BE tests flaky locally** — MongoMemoryServer can exceed the default
   10s launch timeout. Raise `instance.launchTimeout` in `tests/setup.ts`.
 
 ## P2 — consistency / maintainability
@@ -67,12 +67,13 @@ Tick items off (or delete them) as they're fixed.
 
 ## P3 — cleanup
 
-- [ ] Unused deps: `styled-components`, `@mui/styled-engine-sc` (ied-fe).
-- [ ] Unused env: `FF_RACUNI_V2` (ied-be), MySQL config in
-  `mongo-migrator/src/config.ts`.
-- [ ] `db.ts` `once("open")` listener never fires.
-- [ ] Stale `homepage` in `ied-fe/package.json`; root `README.md` is empty.
-- [ ] Typos: `ZaposleniFrom.tsx`, `trasnformedPrijava`.
+- [x] Unused deps: `styled-components`, `@mui/styled-engine-sc` (ied-fe).
+- [ ] MySQL config in `mongo-migrator/src/config.ts` — still imported by the
+  2024 migrations; only removable if those are retired.
+- [x] `db.ts` `once("open")` listener never fires.
+- [x] Stale `homepage` in `ied-fe/package.json`.
+- [ ] Root `README.md` is empty.
+- [x] Typos: `ZaposleniFrom.tsx`, `trasnformedPrijava`.
 - [ ] Puppeteer `--no-sandbox`.
 
 ## Blocked on Racuni V2 phase 2

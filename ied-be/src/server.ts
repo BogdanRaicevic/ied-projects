@@ -15,7 +15,6 @@ import racuniV2Routes from "./routes/racuni_v2.routes";
 import radnaMestaRoutes from "./routes/radno_mesto.routes";
 import seminarRoutes from "./routes/seminari.routes";
 import stanjaFirmeRoutes from "./routes/stanje_firme.routes";
-import testRoutes from "./routes/test.routes";
 import tipFirmeRoutes from "./routes/tip_firme.routes";
 import velicineFirmiRoutes from "./routes/velicina_firme.routes";
 import { env } from "./utils/envVariables";
@@ -47,7 +46,6 @@ app.use(
 app.use(express.json({ limit: "1mb" }));
 
 // Mounted before the auth gate below: intentionally unauthenticated.
-app.use("/api/test", testRoutes);
 
 app.use(requireApiAuth);
 
