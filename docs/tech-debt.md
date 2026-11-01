@@ -14,7 +14,8 @@ Tick items off (or delete them) as they're fixed.
   `database/cron.ts` even when `BACKUP_TO_S3=false`.
 - [ ] **Unvalidated request bodies** — firma/zaposleni create & update pass
   `req.body` into Mongoose (`firma.routes.ts`, `firma.service.ts`); also
-  `/firma/search`, `/export-*`, `/pretrage/save|delete`, `/racuni/search`.
+  `/pretrage/save|delete`, `/racuni/search`. (`/firma/search` and
+  `/export-*` are done.)
 - [x] **Unauthenticated `/api/test`** — `routes/test.routes.ts`, mounted
   before `requireApiAuth`. Delete it.
 - [x] **Env not validated at startup** — `utils/envVariables.ts`; e.g. empty
@@ -35,7 +36,7 @@ Tick items off (or delete them) as they're fixed.
 - [ ] **Firma search table never refreshes after mutations** — FE invalidates
   `["firme-pretrage"]` but the table isn't a query (`FirmasTable.tsx`,
   `useFirmaMutations.ts`).
-- [ ] **No `pageSize` cap** on firma search streaming (`firma.routes.ts`).
+- [x] **No `pageSize` cap** on firma search streaming (`firma.routes.ts`).
 - [x] **BE tests flaky locally** — MongoMemoryServer can exceed the default
   10s launch timeout. Raise `instance.launchTimeout` in `tests/setup.ts`.
 

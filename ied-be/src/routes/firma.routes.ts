@@ -7,9 +7,11 @@ import {
 import {
   type ContactTypeEnum,
   ContactTypes,
-  type ParametriPretrage,
+  ParametriPretrageSchema,
 } from "ied-shared";
+import { z } from "zod";
 import { createAuditMiddleware } from "../middleware/audit";
+import { validateRequestBody } from "../middleware/validateSchema";
 import { Firma, type FirmaType } from "../models/firma.model";
 import {
   create,
@@ -29,25 +31,29 @@ import { getClerkEmailFromRequest } from "../utils/utils";
 const router = Router();
 const firmaAudit = createAuditMiddleware(Firma);
 
-interface SearchRequest extends Request {
-  body: {
-    pageIndex?: number;
-    pageSize?: number;
-    queryParameters: ParametriPretrage;
-  };
-}
+const ExportRequestSchema = z.object({
+  queryParameters: ParametriPretrageSchema,
+});
+
+const SearchRequestSchema = ExportRequestSchema.extend({
+  pageIndex: z.number().int().min(0).default(0),
+  // 100 is the largest page size the table offers.
+  pageSize: z.number().int().min(1).max(100).default(10),
+});
 
 // table search
 router.post(
   "/search",
-  async (req: SearchRequest, res: Response, next: NextFunction) => {
+  validateRequestBody(SearchRequestSchema),
+  async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const { pageIndex = 0, pageSize = 10, ...query } = req.body;
-      const { queryParameters } = query;
+      const { pageIndex, pageSize, queryParameters } = req.body as z.infer<
+        typeof SearchRequestSchema
+      >;
       const paginationResult = await search(
         queryParameters,
-        Number(pageIndex),
-        Number(pageSize),
+        pageIndex,
+        pageSize,
       );
 
       const results: FirmaType[] = [];
@@ -75,30 +81,38 @@ router.post(
   },
 );
 
-router.post("/export-firma-data", async (req, res) => {
-  const { queryParameters } = req.body;
+router.post(
+  "/export-firma-data",
+  validateRequestBody(ExportRequestSchema),
+  async (req, res) => {
+    const { queryParameters } = req.body;
 
-  try {
-    const data = await exportSearchedFirmaData(queryParameters);
+    try {
+      const data = await exportSearchedFirmaData(queryParameters);
 
-    res.send(data);
-  } catch (error) {
-    console.error("Error exporting firma data:", error);
-    res.status(500).send("Error exporting firma data");
-  }
-});
+      res.send(data);
+    } catch (error) {
+      console.error("Error exporting firma data:", error);
+      res.status(500).send("Error exporting firma data");
+    }
+  },
+);
 
-router.post("/export-zaposleni-data", async (req, res) => {
-  const { queryParameters } = req.body;
-  try {
-    const data = await exportSearchedZaposleniData(queryParameters);
+router.post(
+  "/export-zaposleni-data",
+  validateRequestBody(ExportRequestSchema),
+  async (req, res) => {
+    const { queryParameters } = req.body;
+    try {
+      const data = await exportSearchedZaposleniData(queryParameters);
 
-    res.send(data);
-  } catch (error) {
-    console.error("Error exporting zaposleni data:", error);
-    res.status(500).send("Error exporting zaposleni data");
-  }
-});
+      res.send(data);
+    } catch (error) {
+      console.error("Error exporting zaposleni data:", error);
+      res.status(500).send("Error exporting zaposleni data");
+    }
+  },
+);
 
 // create new zapolseni
 router.post(
