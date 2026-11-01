@@ -43,7 +43,7 @@ Tick items off (or delete them) as they're fixed.
 ## P2 — consistency / maintainability
 
 - [ ] FE components fetching in `useEffect` instead of TanStack Query:
-  `Racun/PretrageRacuna`, `pages/Racuni.tsx`, `PrijaviZaposlenogNaSeminar`, `SeminariTableActionCell`,
+  `Racun/PretrageRacuna`, `pages/Racuni.tsx`, `SeminariTableActionCell`,
   `PrijaveSeminarTable`, `SaveDataButton`, `RacunV2Content`.
 - [ ] Query keys: inline strings in mixed styles; `firmaQueryKey` defined twice.
   Add a key factory per domain.

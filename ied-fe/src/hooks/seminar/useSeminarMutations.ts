@@ -1,6 +1,7 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import type { SeminarZodType } from "ied-shared";
+import type { PrijavaZodType, SeminarZodType } from "ied-shared";
 import {
+  createPrijava,
   createSeminar,
   deletePrijava,
   deleteSeminar,
@@ -53,6 +54,25 @@ export function useDeletePrijavaMutation() {
     }) => deletePrijava(zaposleniId, seminarId),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["seminari"] });
+      queryClient.invalidateQueries({ queryKey: ["firma-seminari"] });
+    },
+  });
+}
+
+export function useCreatePrijavaMutation() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: ({
+      seminarId,
+      prijava,
+    }: {
+      seminarId: string;
+      prijava: PrijavaZodType;
+    }) => createPrijava(seminarId, prijava),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["seminari"] });
+      queryClient.invalidateQueries({ queryKey: ["firma-seminari"] });
     },
   });
 }

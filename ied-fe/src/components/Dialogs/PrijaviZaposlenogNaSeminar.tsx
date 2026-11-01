@@ -22,7 +22,7 @@ import {
 import { addMonths, format, subMonths } from "date-fns";
 import type { FirmaType, PrijavaZodType, ZaposleniType } from "ied-shared";
 import { useEffect, useMemo, useState } from "react";
-import { createPrijava } from "../../api/seminari.api";
+import { useCreatePrijavaMutation } from "../../hooks/seminar/useSeminarMutations";
 import { useSearchSeminari } from "../../hooks/seminar/useSeminarQueries";
 
 export default function PrijavaNaSeminarDialog({
@@ -38,6 +38,7 @@ export default function PrijavaNaSeminarDialog({
   zaposleniData: ZaposleniType;
   onSuccess: (seminar: string) => void;
 }) {
+  const createPrijavaMutation = useCreatePrijavaMutation();
   const [prijavaState, setPrijavaState] = useState<
     "success" | "warning" | "error" | ""
   >("");
@@ -81,7 +82,10 @@ export default function PrijavaNaSeminarDialog({
     };
 
     try {
-      await createPrijava(selectedSeminarId, prijava);
+      await createPrijavaMutation.mutateAsync({
+        seminarId: selectedSeminarId,
+        prijava,
+      });
       onSuccess(
         fetchedSeminars?.seminari.find((s) => s._id === selectedSeminarId)
           ?.naziv || "",
