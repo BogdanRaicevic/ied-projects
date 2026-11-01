@@ -20,21 +20,17 @@ export const getAuditLogData = async ({
   pageIndex: number;
   params: AuditLogQueryParams;
 }): Promise<AuditLogsResponse> => {
-  try {
-    const res = await axiosInstanceWithAuth.get<AuditLogsResponse>(
-      "/api/audit-log",
-      {
-        params: {
-          pageSize,
-          pageIndex,
-          ...params,
-        },
+  const res = await axiosInstanceWithAuth.get<AuditLogsResponse>(
+    "/api/audit-log",
+    {
+      params: {
+        pageSize,
+        pageIndex,
+        ...params,
       },
-    );
-    return res.data;
-  } catch (error) {
-    throw new Error(`Error fetching audit log data: ${(error as any).message}`);
-  }
+    },
+  );
+  return res.data;
 };
 
 export const getAuditLogStats = async ({
@@ -42,17 +38,11 @@ export const getAuditLogStats = async ({
 }: {
   params: AuditLogQueryParams;
 }): Promise<AuditLogStatsByDateResponse> => {
-  try {
-    const res = await axiosInstanceWithAuth.get<AuditLogStatsByDateResponse>(
-      "/api/audit-log/user-changes-by-date",
-      {
-        params,
-      },
-    );
-    return res.data;
-  } catch (error) {
-    throw new Error(
-      `Error fetching audit log stats: ${(error as any).message}`,
-    );
-  }
+  const res = await axiosInstanceWithAuth.get<AuditLogStatsByDateResponse>(
+    "/api/audit-log/user-changes-by-date",
+    {
+      params,
+    },
+  );
+  return res.data;
 };

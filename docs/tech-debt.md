@@ -47,9 +47,10 @@ Tick items off (or delete them) as they're fixed.
   `PrijaveSeminarTable`, `SaveDataButton`, `RacunV2Content`.
 - [x] Query keys: inline strings in mixed styles; `firmaQueryKey` defined twice.
   Add a key factory per domain.
-- [ ] `api/*.ts` try/catch/console.error boilerplate; `seminari.api.ts`
-  rethrows as `new Error(...)` losing the AxiosError. Add a response
-  interceptor (incl. 401 handling) and drop the per-call catches.
+- [x] `api/*.ts` try/catch/console.error boilerplate: one response
+  interceptor in `api/interceptors/auth.ts` logs failures; callers get the
+  original AxiosError. No 401 handling: Clerk refreshes tokens and its
+  components already handle signed-out users.
 - [x] Business logic in routes: `firma.routes.ts` search cursor moved into
   the service. Left on purpose: the Clerk lookup (who is calling is HTTP
   context; the service gets `userEmail`), CSV parsing (request decoding),

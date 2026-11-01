@@ -222,11 +222,6 @@ router.put(
     // TODO: Investigate if we can have type on the query params to avoid this type assertion
     const { contactType } = req.query as { contactType: ContactTypeEnum };
 
-    if (!userEmail) {
-      res.status(401).send("Unauthorized");
-      return;
-    }
-
     if (
       !contactType ||
       (contactType !== ContactTypes.informativni_poziv &&
@@ -237,6 +232,10 @@ router.put(
     }
 
     try {
+      // requireApiAuth already checked the session; a missing email means the Clerk lookup failed.
+      if (!userEmail) {
+        throw new Error("Could not resolve the caller's email from Clerk");
+      }
       const firmaId = req.params.id;
 
       const updatedFirma = await updateLastContact({
