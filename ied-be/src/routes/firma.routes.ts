@@ -12,7 +12,7 @@ import {
 import { z } from "zod";
 import { createAuditMiddleware } from "../middleware/audit";
 import { validateRequestBody } from "../middleware/validateSchema";
-import { Firma, type FirmaType } from "../models/firma.model";
+import { Firma } from "../models/firma.model";
 import {
   create,
   createZaposleni,
@@ -50,31 +50,7 @@ router.post(
       const { pageIndex, pageSize, queryParameters } = req.body as z.infer<
         typeof SearchRequestSchema
       >;
-      const paginationResult = await search(
-        queryParameters,
-        pageIndex,
-        pageSize,
-      );
-
-      const results: FirmaType[] = [];
-      paginationResult.cursor.on("data", (doc) => {
-        results.push(doc);
-      });
-
-      paginationResult.cursor.on("end", async () => {
-        await paginationResult.cursor.close();
-        res.json({
-          firmas: results,
-          totalPages: paginationResult.totalPages,
-          totalDocuments: paginationResult.totalDocuments,
-        });
-      });
-
-      paginationResult.cursor.on("error", async (error) => {
-        await paginationResult.cursor.close();
-        console.error(error);
-        res.status(500).json({ message: "Internal server error" });
-      });
+      res.json(await search(queryParameters, pageIndex, pageSize));
     } catch (error) {
       next(error);
     }

@@ -88,12 +88,11 @@ export const search = async (
   const totalDocuments = await Firma.countDocuments(mongoQuery);
 
   return {
-    cursor: Firma.find(mongoQuery, { zaposleni: 0 })
+    firmas: await Firma.find(mongoQuery, { zaposleni: 0 })
       .populate("mesto", "naziv_mesto postanski_broj")
       .sort({ naziv_firme: 1 })
       .skip(skip)
-      .limit(pageSize)
-      .cursor(),
+      .limit(pageSize),
     totalDocuments,
     totalPages: Math.ceil(totalDocuments / pageSize),
   };
