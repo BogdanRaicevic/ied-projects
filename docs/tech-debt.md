@@ -33,7 +33,7 @@ Tick items off (or delete them) as they're fixed.
   id from the raw body/params with a fallback chain (`middleware/audit.ts`),
   so it does a DB read even for requests that then fail validation. Fix: one
   id source per route.
-- [ ] **Firma search table never refreshes after mutations** — FE invalidates
+- [x] **Firma search table never refreshes after mutations** — FE invalidates
   `["firme-pretrage"]` but the table isn't a query (`FirmasTable.tsx`,
   `useFirmaMutations.ts`).
 - [x] **No `pageSize` cap** on firma search streaming (`firma.routes.ts`).
@@ -43,8 +43,7 @@ Tick items off (or delete them) as they're fixed.
 ## P2 — consistency / maintainability
 
 - [ ] FE components fetching in `useEffect` instead of TanStack Query:
-  `FirmasTable`, `Racun/PretrageRacuna`, `PredefinedPretrage`,
-  `pages/Racuni.tsx`, `PrijaviZaposlenogNaSeminar`, `SeminariTableActionCell`,
+  `Racun/PretrageRacuna`, `pages/Racuni.tsx`, `PrijaviZaposlenogNaSeminar`, `SeminariTableActionCell`,
   `PrijaveSeminarTable`, `SaveDataButton`, `RacunV2Content`.
 - [ ] Query keys: inline strings in mixed styles; `firmaQueryKey` defined twice.
   Add a key factory per domain.

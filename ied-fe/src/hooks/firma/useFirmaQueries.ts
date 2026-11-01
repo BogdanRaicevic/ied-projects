@@ -1,6 +1,6 @@
-import { useQuery } from "@tanstack/react-query";
-import type { FirmaType } from "ied-shared";
-import { fetchSingleFirma } from "../../api/firma.api";
+import { keepPreviousData, useQuery } from "@tanstack/react-query";
+import type { FirmaType, ParametriPretrage } from "ied-shared";
+import { fetchFirmaPretrage, fetchSingleFirma } from "../../api/firma.api";
 
 const firmaQueryKey = (firmaId?: string) => ["firma", firmaId];
 
@@ -20,3 +20,16 @@ export const useGetFirma = (firmaId?: string) => {
     enabled: !!firmaId,
   });
 };
+
+export const useFirmaPretrage = (
+  pageIndex: number,
+  pageSize: number,
+  queryParameters: ParametriPretrage,
+) =>
+  useQuery({
+    queryKey: ["firme-pretrage", { pageIndex, pageSize, queryParameters }],
+    queryFn: () => fetchFirmaPretrage(pageSize, pageIndex, queryParameters),
+    // Firme are edited on another page; refetch on return to show changes.
+    refetchOnMount: true,
+    placeholderData: keepPreviousData,
+  });

@@ -3,27 +3,19 @@ import ZoomInIcon from "@mui/icons-material/ZoomIn";
 import ZoomOutIcon from "@mui/icons-material/ZoomOut";
 import { Autocomplete, Button, Grid, TextField } from "@mui/material";
 import type { PretragaType } from "ied-shared";
-import { Activity, useEffect, useState } from "react";
+import { Activity, useState } from "react";
 import {
-  deletePretraga,
-  fetchAllPretrage,
-  savePretraga,
-} from "../../api/pretrage.api";
+  useDeletePretraga,
+  useSavePretraga,
+} from "../../hooks/pretrage/usePretrageMutations";
+import { usePretrage } from "../../hooks/pretrage/usePretrageQueries";
 import { usePretragaStore } from "../../store/pretragaParameters.store";
 import PretragaSaveDialog from "../Dialogs/PretragaSaveDialog";
 
 export default function PredefinedPretrage() {
-  const [pretrage, setPretrage] = useState<PretragaType[]>([]);
-
-  const fetchPretrage = async () => {
-    const pretrage = await fetchAllPretrage();
-    setPretrage(pretrage);
-  };
-
-  // biome-ignore lint/correctness/useExhaustiveDependencies: This is a false positive, i want to run this effect only once
-  useEffect(() => {
-    fetchPretrage();
-  }, []);
+  const { data: pretrage } = usePretrage();
+  const savePretragaMutation = useSavePretraga();
+  const deletePretragaMutation = useDeletePretraga();
 
   const [openPretrageSaveDialog, setOpenPretrageSaveDialog] = useState(false);
   const [selectedPretraga, setSelectedPretraga] = useState<{
@@ -47,12 +39,14 @@ export default function PredefinedPretrage() {
 
   const handleSavePretraga = async (nazivPretrage: string, isNew: boolean) => {
     try {
-      await savePretraga(pretragaParameters, {
-        naziv: isNew ? nazivPretrage : selectedPretraga.naziv,
-        id: isNew ? undefined : selectedPretraga.id,
+      await savePretragaMutation.mutateAsync({
+        queryParameters: pretragaParameters,
+        pretraga: {
+          naziv: isNew ? nazivPretrage : selectedPretraga.naziv,
+          id: isNew ? undefined : selectedPretraga.id,
+        },
       });
       setOpenPretrageSaveDialog(false);
-      await fetchPretrage();
     } catch (error) {
       // TODO: show error snackbar or toast
       console.error("Failed to save pretraga:", error);
@@ -67,9 +61,7 @@ export default function PredefinedPretrage() {
       selectedPretraga
     ) {
       try {
-        await deletePretraga({ id: selectedPretraga.id });
-        // Optionally, you can update the state or UI to reflect the deletion
-        await fetchPretrage(); // Fetch updated pretrage data
+        await deletePretragaMutation.mutateAsync({ id: selectedPretraga.id });
       } catch (error) {
         // TODO: show error snackbar or toast
         console.error("Failed to delete pretraga:", error);
