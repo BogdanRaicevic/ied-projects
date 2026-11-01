@@ -5,7 +5,6 @@ import {
   RacunZod,
   type TipRacuna,
 } from "ied-shared";
-import { validateOrThrow } from "../utils/zodErrorHelper";
 import axiosInstanceWithAuth from "./interceptors/auth";
 
 export const getIzdavaciRacuna = async () => {
@@ -64,7 +63,6 @@ export const getRacunByPozivNaBrojAndIzdavac = async (
 };
 
 export const saveNewRacun = async (racun: RacunType): Promise<RacunType> => {
-  validateOrThrow(RacunZod, racun);
   if (racun._id || racun.pozivNaBroj) {
     return racun; // or handle as needed
   }
