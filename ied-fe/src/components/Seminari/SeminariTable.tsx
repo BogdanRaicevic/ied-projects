@@ -7,6 +7,7 @@ import SeminarForm from "./SeminarForm";
 import SeminarSubTable from "./SeminarSubTable";
 import { getSeminariColumns } from "./seminariColumns";
 
+// Stable reference: a new [] each render makes TanStack Table rebuild rows and reset expanded state.
 const noSeminari: SeminarZodType[] = [];
 
 export default function SeminariTable({

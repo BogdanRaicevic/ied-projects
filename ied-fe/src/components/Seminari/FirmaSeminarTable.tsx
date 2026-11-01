@@ -7,6 +7,7 @@ import FirmaSeminarCharts from "./FirmaSeminarCharts";
 import FirmaSeminarSubTable from "./FirmaSeminarSubTable";
 import { firmaSeminarColumns } from "./firmaSeminarColumns";
 
+// Stable reference: a new [] each render makes TanStack Table rebuild rows and reset expanded state.
 const noFirmas: FirmaSeminar[] = [];
 
 export default function FirmaSeminarTable({

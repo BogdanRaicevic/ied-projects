@@ -14,6 +14,7 @@ import {
   useAuditLogs,
 } from "../hooks/auditLogs/useAuditLogQueries";
 
+// Stable reference: a new [] each render makes TanStack Table rebuild rows and reset expanded state.
 const noAuditLogs: AuditLogType[] = [];
 
 export default function AuditLog() {

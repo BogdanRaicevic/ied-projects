@@ -6,6 +6,7 @@ import DataTable from "../DataTable/DataTable";
 import { ParametriPretrageRacuna } from "./ParametriPretrageRacuna";
 import { racuniColumns } from "./racuniColumns";
 
+// Stable reference: a new [] each render makes TanStack Table rebuild rows and reset expanded state.
 const noRacuni: RacunType[] = [];
 
 type SearchState = {
