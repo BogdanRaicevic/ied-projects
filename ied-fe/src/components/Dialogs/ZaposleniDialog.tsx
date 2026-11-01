@@ -1,6 +1,6 @@
 import { Box, Dialog, DialogContent, DialogTitle } from "@mui/material";
 import type { ZaposleniType } from "ied-shared";
-import { ZaposleniForm } from "../Zaposleni/ZaposleniFrom";
+import { ZaposleniForm } from "../Zaposleni/ZaposleniForm";
 
 type ZaposleniDialogProps = {
   zaposleni?: ZaposleniType;

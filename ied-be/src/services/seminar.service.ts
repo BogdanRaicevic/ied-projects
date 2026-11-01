@@ -94,7 +94,7 @@ export const createPrijava = async (
   validateMongoId(prijava.zaposleni_id);
   validateMongoId(prijava.firma_id);
 
-  const trasnformedPrijava = transformPrijavaToDb(prijava as PrijavaZodType);
+  const transformedPrijava = transformPrijavaToDb(prijava as PrijavaZodType);
 
   const seminar = await Seminar.findById(seminar_id);
   if (!seminar) {
@@ -103,7 +103,7 @@ export const createPrijava = async (
 
   // Verify zaposleni exists in firma
   const firma = await Firma.findOne({
-    "zaposleni._id": { $eq: trasnformedPrijava.zaposleni_id },
+    "zaposleni._id": { $eq: transformedPrijava.zaposleni_id },
   }).lean();
 
   if (!firma) {
@@ -114,9 +114,9 @@ export const createPrijava = async (
   const updatedSeminar = await Seminar.findOneAndUpdate(
     {
       _id: seminar_id,
-      "prijave.zaposleni_id": { $ne: trasnformedPrijava.zaposleni_id },
+      "prijave.zaposleni_id": { $ne: transformedPrijava.zaposleni_id },
     },
-    { $push: { prijave: trasnformedPrijava } },
+    { $push: { prijave: transformedPrijava } },
     { returnDocument: "after" },
   ).lean();
 
@@ -142,11 +142,11 @@ export const updatePrijava = async (
   validateMongoId(seminar_id);
   validateMongoId(prijava._id);
 
-  const trasnformedPrijava = transformPrijavaToDb(prijava as PrijavaZodType);
+  const transformedPrijava = transformPrijavaToDb(prijava as PrijavaZodType);
 
   const updatedSeminar = await Seminar.findOneAndUpdate(
-    { _id: seminar_id, "prijave._id": trasnformedPrijava._id },
-    { $set: { "prijave.$": trasnformedPrijava } },
+    { _id: seminar_id, "prijave._id": transformedPrijava._id },
+    { $set: { "prijave.$": transformedPrijava } },
     { returnDocument: "after" },
   ).lean();
 

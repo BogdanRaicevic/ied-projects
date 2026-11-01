@@ -15,9 +15,6 @@ export async function connectDB() {
     }
     dbConnection = mongoose.connection;
     dbConnection.on("error", console.error.bind(console, "connection error:"));
-    dbConnection.once("open", () => {
-      console.log("Database connected!");
-    });
   }
   return dbConnection; // Return the connection instance
 }
