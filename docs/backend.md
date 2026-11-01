@@ -52,5 +52,5 @@ Paths and verbs: match the router you're editing. Status codes: 201 create,
 
 ## Documents
 
-Puppeteer runs as a lazy singleton browser (`docx.service.ts`). Templates live
+Puppeteer runs as a lazy singleton browser (`pdf.service.ts`). Templates live
 in `src/templates/`. Preview HTML for invoices: `templates/invoices/preview/`.

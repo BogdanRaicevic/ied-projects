@@ -56,7 +56,7 @@ Tick items off (or delete them) as they're fixed.
   POST for delete).
 - [ ] Mixed file naming (`racuni_v2.routes.ts` vs `firmaQueryBuilder.ts`,
   `seminari.routes` vs `seminar.service`). Pick one when moving files.
-- [ ] Puppeteer/PDF code lives in `docx.service.ts` / `docx.utils.ts` —
+- [x] Puppeteer/PDF code lives in `docx.service.ts` / `docx.utils.ts` —
   split into `pdf.service.ts`.
 - [ ] Racun v1 Zustand store with untyped `updateNestedField(path, any)`.
 - [ ] Large components (>350 lines): `RacunV2/SummaryPanel`, `FirmaForm`,

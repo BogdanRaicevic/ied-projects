@@ -46,7 +46,7 @@ Error → status mapping: see "Rules" in `AGENTS.md`.
 |---|---|---|
 | Invoice v1 (.docx) | docxtemplater | `services/docx.service.ts`, `templates/*.docx` |
 | Invoice v2 (PDF) | Handlebars → Puppeteer | `templates/invoices/*.hbs`, `templates/invoiceRenderer.ts` |
-| Certificates (PDF/zip) | HTML string replace → Puppeteer | `templates/certificates/<brand>/` |
+| Certificates (PDF/zip) | HTML string replace → Puppeteer | `services/pdf.service.ts`, `templates/certificates/<brand>/` |
 
 ## Deployment
 
