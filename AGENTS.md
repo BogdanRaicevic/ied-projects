@@ -86,14 +86,12 @@ Details: [docs/backend.md](docs/backend.md), [docs/frontend.md](docs/frontend.md
   `prijava`, `racun`). Don't translate identifiers to English.
 - User-supplied strings used in `$regex` must go through `escapeRegex`
   (`ied-be/src/utils/utils.ts`). There are tests for this; keep it that way.
-- Validate every request body/query with a Zod schema via
-  `validateRequestBody` / `validateRequestQuery`. Don't pass `req.body`
-  straight into Mongoose. Caveat: `validateRequestQuery` only checks — it
-  does not replace `req.query` with the parsed (coerced) value, so query
-  values are still strings in the handler. Don't "fix" it with
-  `req.query = …` — it's getter-only in Express 5. It's a tech-debt item;
-  ask before changing it.
-- Errors: `ErrorWithCause` always becomes a **400** and a plain `Error`
+- Validate every request body with `validateRequestBody(Schema)` and every
+  query with `const q = Schema.parse(req.query)` inside the handler's
+  `try` (a `ZodError` becomes a 400 in `errorWrapper`). Use the parsed
+  value only — never cast or re-parse `req.query`. Don't pass `req.body`
+  straight into Mongoose.
+- Errors: `ZodError` and `ErrorWithCause` become a **400** and a plain `Error`
   becomes a **500** (`middleware/errorWrapper.ts`). For "not found", return
   `res.status(404)` from the route as existing routes do.
 - Every `/api/*` route is behind `requireApiAuth` (Clerk), except the

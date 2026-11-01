@@ -6,15 +6,9 @@ import {
   Router,
   raw,
 } from "express";
-import {
-  type SuppressedEmail,
-  SuppressedEmailSchema,
-} from "ied-shared";
+import { type SuppressedEmail, SuppressedEmailSchema } from "ied-shared";
 import { z } from "zod";
-import {
-  validateRequestBody,
-  validateRequestQuery,
-} from "../middleware/validateSchema";
+import { validateRequestBody } from "../middleware/validateSchema";
 import {
   addSuppressedEmail,
   deleteEmails,
@@ -117,10 +111,11 @@ router.delete(
 
 router.get(
   "/check-status",
-  validateRequestQuery(SuppressedEmailSchema.pick({ email: true })),
   async (req: Request, res: Response, next: NextFunction) => {
-    const email = req.query.email as string;
     try {
+      const { email } = SuppressedEmailSchema.pick({ email: true }).parse(
+        req.query,
+      );
       const isSuppressed = await isEmailSuppressed(email);
       res.status(200).json(isSuppressed);
     } catch (error) {
