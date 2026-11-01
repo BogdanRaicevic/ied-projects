@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 import { env } from "../utils/envVariables";
 
-const uri = env.mongo.uri ?? "";
+const uri = env.mongo.uri;
 let dbConnection: mongoose.Connection | null = null;
 
 export async function connectDB() {

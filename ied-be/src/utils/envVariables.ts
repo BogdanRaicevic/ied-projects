@@ -1,24 +1,39 @@
 import "dotenv/config";
+import { z } from "zod";
 
 // Load environment variables
 const config = process.env;
+
+// Fail at boot, not on first use. Report only key names: values are secrets.
+const required = z
+  .object({
+    MONGO_URI: z.string().trim().min(1),
+    BE_APP_PORT: z.coerce.number().int().positive(),
+    CLERK_PUBLISHABLE_KEY: z.string().trim().min(1),
+    CLERK_SECRET_KEY: z.string().trim().min(1),
+  })
+  .safeParse(config);
+if (!required.success) {
+  const keys = required.error.issues.map((issue) => issue.path.join("."));
+  throw new Error(`Missing or invalid env variables: ${keys.join(", ")}`);
+}
 
 export const env = {
   serverName: config.SERVER_NAME,
   nodeEnv: config.NODE_ENV || "development",
   be: {
-    appPort: Number(config.BE_APP_PORT),
+    appPort: required.data.BE_APP_PORT,
   },
   fe: {
     appUrl: config.FE_APP_URL,
     allowedPorts: config.FE_APP_ALLOWED_PORTS?.split(",").map(Number) || [],
   },
   mongo: {
-    uri: config.MONGO_URI,
+    uri: required.data.MONGO_URI,
   },
   clerk: {
-    publishableKey: config.CLERK_PUBLISHABLE_KEY,
-    secretKey: config.CLERK_SECRET_KEY,
+    publishableKey: required.data.CLERK_PUBLISHABLE_KEY,
+    secretKey: required.data.CLERK_SECRET_KEY,
   },
   aws: {
     region: config.AWS_REGION,
