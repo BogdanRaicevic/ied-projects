@@ -13,6 +13,7 @@ import { createFirmaQuery } from "../queryBuilders/firmaQueryBuilder";
 import {
   getSuppressedEmailsSet,
   isEmailSuppressed,
+  normalizeEmail,
 } from "./email_suppression.service";
 import { getZaposleniIdsFromSeminars } from "./seminar.service";
 
@@ -105,7 +106,7 @@ const withoutSuppressed = async <T extends { e_mail?: string }>(
     rows.map((r) => r.e_mail ?? ""),
   );
   return rows.filter(
-    (r) => !r.e_mail || !suppressedEmails.has(r.e_mail.toLowerCase()),
+    (r) => !r.e_mail || !suppressedEmails.has(normalizeEmail(r.e_mail)),
   );
 };
 

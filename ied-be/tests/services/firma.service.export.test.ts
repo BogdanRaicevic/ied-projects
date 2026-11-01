@@ -16,7 +16,8 @@ describe("firma.service exports", () => {
     await Firma.create([
       {
         naziv_firme: "A",
-        e_mail: "Bounced@example.com",
+        // Stored with stray whitespace and capitals, as in older data.
+        e_mail: " Bounced@example.com ",
         zaposleni: [
           { ime: "Ana", prezime: "A", e_mail: "bounced@example.com" },
           { ime: "Bora", prezime: "B", e_mail: "bora@example.com" },

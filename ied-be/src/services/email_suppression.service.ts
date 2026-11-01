@@ -29,7 +29,7 @@ type AddSuppressedEmailResult = {
   failures: SuppressedEmailFailure[];
 };
 
-const normalizeEmail = (email: string | undefined | null) =>
+export const normalizeEmail = (email: string | undefined | null) =>
   email?.trim().toLowerCase() ?? "";
 
 const normalizeReason = (reason: string | undefined | null) =>
@@ -198,7 +198,7 @@ export const getSuppressedEmailsSet = async (
   emails: string[],
 ): Promise<Set<string>> => {
   const normalizedEmails = [
-    ...new Set(emails.filter(Boolean).map((email) => email.toLowerCase())),
+    ...new Set(emails.map(normalizeEmail).filter(Boolean)),
   ];
 
   if (normalizedEmails.length === 0) {
