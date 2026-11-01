@@ -98,55 +98,35 @@ export const search = async (
   };
 };
 
+const withoutSuppressed = async <T extends { e_mail?: string }>(
+  rows: T[],
+): Promise<T[]> => {
+  const suppressedEmails = await getSuppressedEmailsSet(
+    rows.map((r) => r.e_mail ?? ""),
+  );
+  return rows.filter(
+    (r) => !r.e_mail || !suppressedEmails.has(r.e_mail.toLowerCase()),
+  );
+};
+
 export const exportSearchedFirmaData = async (
   queryParameters: ParametriPretrage,
 ): Promise<ExportFirma> => {
   const mongoQuery = await createFirmaQuery(queryParameters);
 
-  const cursor = Firma.find(mongoQuery, {
+  const firme = await Firma.find(mongoQuery, {
     naziv_firme: 1,
     e_mail: 1,
     _id: 0,
-  })
-    .lean()
-    .cursor();
+  }).lean();
 
-  const res: ExportFirma = [];
-  cursor.on("data", (doc) => {
-    // Rows without an email are kept so the export can list them separately.
-    res.push({
-      naziv_firme: doc.naziv_firme,
-      e_mail: doc.e_mail ?? "",
-    });
-  });
+  // Rows without an email are kept so the export can list them separately.
+  const res: ExportFirma = firme.map((doc) => ({
+    naziv_firme: doc.naziv_firme,
+    e_mail: doc.e_mail ?? "",
+  }));
 
-  return new Promise((resolve, reject) => {
-    cursor.once("end", async () => {
-      try {
-        await cursor.close();
-        const suppressedEmails = await getSuppressedEmailsSet(
-          res.map((r) => r.e_mail ?? ""),
-        );
-        resolve(
-          res.filter(
-            (r) => !r.e_mail || !suppressedEmails.has(r.e_mail.toLowerCase()),
-          ),
-        );
-      } catch (error) {
-        reject(error);
-      }
-    });
-
-    cursor.once("error", async (err) => {
-      try {
-        await cursor.close();
-        console.error("Error reading data from the database:", err);
-        reject(err);
-      } catch (error) {
-        reject(error);
-      }
-    });
-  });
+  return withoutSuppressed(res);
 };
 
 export const exportSearchedZaposleniData = async (
@@ -174,8 +154,8 @@ export const exportSearchedZaposleniData = async (
 
   const res: ExportZaposlenih = [];
 
-  // Write the data to the writable stream
-  cursor.on("data", (doc) => {
+  // Streams firme one at a time: full zaposleni arrays are too big to load at once.
+  for await (const doc of cursor) {
     if (doc.zaposleni) {
       for (const z of doc.zaposleni) {
         if (!z._id?.toString()) {
@@ -237,35 +217,9 @@ export const exportSearchedZaposleniData = async (
         }
       }
     }
-  });
+  }
 
-  return new Promise((resolve, reject) => {
-    cursor.once("end", async () => {
-      try {
-        await cursor.close();
-        const suppressedEmails = await getSuppressedEmailsSet(
-          res.map((r) => r.e_mail ?? ""),
-        );
-        resolve(
-          res.filter(
-            (r) => !r.e_mail || !suppressedEmails.has(r.e_mail.toLowerCase()),
-          ),
-        );
-      } catch (error) {
-        reject(error);
-      }
-    });
-
-    cursor.once("error", async (err) => {
-      try {
-        await cursor.close();
-        console.error("Error reading data from the database:", err);
-        reject(err);
-      } catch (error) {
-        reject(error);
-      }
-    });
-  });
+  return withoutSuppressed(res);
 };
 
 export const createZaposleni = async (
