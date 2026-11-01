@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { zDate, zOptionalDate } from "./date.zod";
 
 export const PrijavaSchema = z.object({
   _id: z.string().optional(),
@@ -16,7 +17,7 @@ export const PrijavaSchema = z.object({
     .enum(["telefon", "email", "drustvene_mreze"])
     .default("email"),
   komercijalista: z.string().optional(),
-  createdAt: z.coerce.date().optional(),
+  createdAt: zOptionalDate(),
 });
 
 export const SeminarSchema = z.object({
@@ -25,16 +26,16 @@ export const SeminarSchema = z.object({
   predavac: z.string().optional(),
   lokacija: z.string().optional(),
   offlineCena: z.coerce
-    .number()
+    .number<number | string>()
     .min(0)
     .nonnegative("Cena ne može biti negativna")
     .default(0),
   onlineCena: z.coerce
-    .number()
+    .number<number | string>()
     .min(0)
     .nonnegative("Cena ne može biti negativna")
     .default(0),
-  datumi: z.array(z.coerce.date()).default(() => [new Date()]),
+  datumi: z.array(zDate()).default(() => [new Date()]),
   detalji: z.string().optional(),
   prijave: z.array(PrijavaSchema).default([]),
   tipSeminara: z.string().nullable().optional(),
@@ -52,8 +53,8 @@ export const SeminarQueryParamsSchema = z.object({
   naziv: z.string().default(""),
   lokacija: z.string().default(""),
   predavac: z.string().default(""),
-  datumOd: z.coerce.date().optional(),
-  datumDo: z.coerce.date().optional(),
+  datumOd: zOptionalDate(),
+  datumDo: zOptionalDate(),
   tipSeminara: z.array(z.string()).default([]),
 });
 
@@ -62,8 +63,8 @@ export type SeminarZodType = z.infer<typeof SeminarSchema>;
 export type SeminarQueryParams = z.infer<typeof SeminarQueryParamsSchema>;
 
 export const ExtendedSearchSeminarZod = SeminarQueryParamsSchema.extend({
-  pageIndex: z.coerce.number().default(0),
-  pageSize: z.coerce.number().default(50),
+  pageIndex: z.coerce.number<number | string>().default(0),
+  pageSize: z.coerce.number<number | string>().default(50),
 });
 
 export type ExtendedSearchSeminarType = z.infer<
@@ -78,8 +79,8 @@ export const FirmaSeminarSearchParamsSchema = z.object({
   radnaMesta: z.array(z.string()).default([]),
   velicineFirme: z.array(z.string()).default([]),
   predavac: z.string().default(""),
-  datumOd: z.coerce.date().optional(),
-  datumDo: z.coerce.date().optional(),
+  datumOd: zOptionalDate(),
+  datumDo: zOptionalDate(),
   tipSeminara: z.array(z.string()).default([]),
 });
 
@@ -91,7 +92,7 @@ export const SeminarDetailSchema = z.object({
   seminar_id: z.string(),
   naziv: z.string(),
   predavac: z.string(),
-  datumi: z.array(z.coerce.date()),
+  datumi: z.array(zDate()),
   offlineCena: z.number(),
   onlineCena: z.number(),
   totalUcesnici: z.number(),
