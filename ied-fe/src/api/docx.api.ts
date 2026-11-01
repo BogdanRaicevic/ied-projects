@@ -1,11 +1,4 @@
-import {
-  type RacunType,
-  RacunZod,
-  SertifikatBatchZod,
-  type SertifikatType,
-  TipRacuna,
-} from "ied-shared";
-import { validateOrThrow } from "../utils/zodErrorHelper";
+import { type RacunType, type SertifikatType, TipRacuna } from "ied-shared";
 import axiosInstanceWithAuth from "./interceptors/auth";
 
 export const generateRacunDocument = async (racunData: RacunType) => {
@@ -15,8 +8,6 @@ export const generateRacunDocument = async (racunData: RacunType) => {
       `Tip računa ${racunData.tipRacuna} nije podržan za generisanje dokumenata.`,
     );
   }
-
-  validateOrThrow(RacunZod, racunData);
 
   const response = await axiosInstanceWithAuth.post(
     `/api/docx/modify-template`,
@@ -42,8 +33,6 @@ export const generateRacunDocument = async (racunData: RacunType) => {
 export const generateSertifikatPdfBatch = async (
   sertifikati: SertifikatType[],
 ) => {
-  validateOrThrow(SertifikatBatchZod, sertifikati);
-
   const response = await axiosInstanceWithAuth.post(
     `/api/docx/generate-pdf-files`,
     sertifikati,
