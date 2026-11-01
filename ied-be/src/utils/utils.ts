@@ -27,9 +27,8 @@ export const escapeRegex = (value: string): string =>
 // regardless of what timezone the server runs in (pure millisecond
 // arithmetic, no local-calendar mutation).
 // QUICK FIX: bounds arrive as ISO strings on paths where nothing parses them
-// into Dates before they reach here (GET /audit-log spreads the raw req.query
-// — validateRequestQuery never writes the parsed data back — and POST
-// /racuni/search has no body validation at all), which blew up on
+// into Dates before they reach here (POST /racuni/search has no body
+// validation at all), which blew up on
 // `to.getTime()`. Normalizing here keeps both endpoints alive; the real fix is
 // to parse at the boundary so this helper can go back to taking Dates only.
 const toDate = (value?: Date | string): Date | undefined => {

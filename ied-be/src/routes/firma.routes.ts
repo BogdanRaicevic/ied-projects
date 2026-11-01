@@ -4,11 +4,7 @@ import {
   type Response,
   Router,
 } from "express";
-import {
-  type ContactTypeEnum,
-  ContactTypes,
-  ParametriPretrageSchema,
-} from "ied-shared";
+import { ContactTypeEnum, ParametriPretrageSchema } from "ied-shared";
 import { z } from "zod";
 import { createAuditMiddleware } from "../middleware/audit";
 import { validateRequestBody } from "../middleware/validateSchema";
@@ -34,6 +30,8 @@ const firmaAudit = createAuditMiddleware(Firma);
 const ExportRequestSchema = z.object({
   queryParameters: ParametriPretrageSchema,
 });
+
+const LastContactQuerySchema = z.object({ contactType: ContactTypeEnum });
 
 const SearchRequestSchema = ExportRequestSchema.extend({
   pageIndex: z.number().int().min(0).default(0),
@@ -218,20 +216,9 @@ router.put(
   "/:id/last-contact",
   firmaAudit,
   async (req: Request<{ id: string }>, res: Response, next: NextFunction) => {
-    const userEmail = await getClerkEmailFromRequest(req);
-    // TODO: Investigate if we can have type on the query params to avoid this type assertion
-    const { contactType } = req.query as { contactType: ContactTypeEnum };
-
-    if (
-      !contactType ||
-      (contactType !== ContactTypes.informativni_poziv &&
-        contactType !== ContactTypes.komercijalni_poziv)
-    ) {
-      res.status(400).send("Invalid contact type");
-      return;
-    }
-
     try {
+      const { contactType } = LastContactQuerySchema.parse(req.query);
+      const userEmail = await getClerkEmailFromRequest(req);
       // requireApiAuth already checked the session; a missing email means the Clerk lookup failed.
       if (!userEmail) {
         throw new Error("Could not resolve the caller's email from Clerk");

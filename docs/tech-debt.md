@@ -27,8 +27,9 @@ Tick items off (or delete them) as they're fixed.
   `ErrorWithCause` as 400; services throw plain `Error` for not-found →
   500. Introduce `NotFoundError`/`ValidationError` (or `status` on
   `ErrorWithCause`) and map them.
-- [ ] **`validateRequestQuery` discards the parsed query** —
-  `middleware/validateSchema.ts`.
+- [x] **`validateRequestQuery` discards the parsed query** — removed;
+  handlers call `Schema.parse(req.query)` and use the result. `GET /racuni`
+  (v1) still reads raw `req.query`.
 - [ ] **Audit middleware** must run before validation because it reads the
   id from the raw body/params with a fallback chain (`middleware/audit.ts`),
   so it does a DB read even for requests that then fail validation. Fix: one
