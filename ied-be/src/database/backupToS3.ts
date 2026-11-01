@@ -1,4 +1,4 @@
-import { exec } from "node:child_process";
+import { execFile } from "node:child_process";
 import { createReadStream, existsSync, mkdirSync, unlinkSync } from "node:fs";
 import path from "node:path";
 import { S3Client } from "@aws-sdk/client-s3";
@@ -6,11 +6,6 @@ import { Upload } from "@aws-sdk/lib-storage";
 import { env } from "../utils/envVariables";
 import { __dirname } from "../utils/path";
 
-const BUCKET_NAME = env.aws.bucketName;
-if (!BUCKET_NAME) {
-  throw new Error("AWS bucket name is not defined in environment variables.");
-}
-const MONGO_URI = env.mongo.uri;
 const BACKUP_DIR = path.join(__dirname, "backup");
 
 const getCurrentDate = () => {
@@ -20,55 +15,50 @@ const getCurrentDate = () => {
 
 const getBackupFilename = () => `backup-${getCurrentDate()}.gz`;
 
-if (!existsSync(BACKUP_DIR)) {
-  mkdirSync(BACKUP_DIR, { recursive: true });
-}
-
-// Create an S3 instance
-if (!env.aws.accessKeyId || !env.aws.secretAccessKey) {
-  throw new Error("AWS credentials are not defined in environment variables.");
-}
-
-const s3Client = new S3Client({
-  region: env.aws.region,
-  credentials: {
-    accessKeyId: env.aws.accessKeyId as string,
-    secretAccessKey: env.aws.secretAccessKey as string,
-  },
-});
-
 const backupMongoDB = async () => {
   const fileName = getBackupFilename();
   const filePath = path.join(BACKUP_DIR, fileName);
 
   return new Promise<{ fileName: string; filePath: string }>(
     (resolve, reject) => {
-      const command = `mongodump --uri=${MONGO_URI} --archive=${filePath} --gzip`;
-
-      exec(command, (error, _stdout, stderr) => {
-        if (error) {
-          console.error(
-            `[${new Date().toISOString()}] Backup Creation Failed:`,
+      // No shell, and never log the URI: it contains credentials.
+      execFile(
+        "mongodump",
+        [`--uri=${env.mongo.uri}`, `--archive=${filePath}`, "--gzip"],
+        (error, _stdout, stderr) => {
+          if (error) {
+            console.error(
+              `[${new Date().toISOString()}] Backup Creation Failed:`,
+            );
+            console.error(
+              `stderr: ${stderr.replaceAll(env.mongo.uri, "<MONGO_URI>")}`,
+            );
+            // error.message embeds the full command line, URI included.
+            return reject(new Error(`mongodump exited with ${error.code}`));
+          }
+          console.log(
+            `[${new Date().toISOString()}] Backup created successfully`,
           );
-          console.error(`Command: ${command}`);
-          console.error(`Error: ${error.message}`);
-          console.error(`stderr: ${stderr}`);
-          return reject(error);
-        }
-        console.log(
-          `[${new Date().toISOString()}] Backup created successfully`,
-        );
-        resolve({ fileName, filePath });
-      });
+          resolve({ fileName, filePath });
+        },
+      );
     },
   );
 };
 
 const uploadToS3 = async (fileName: string, filePath: string) => {
+  const { region, bucketName, accessKeyId, secretAccessKey } = env.aws;
+  if (!bucketName || !accessKeyId || !secretAccessKey) {
+    throw new Error("AWS bucket name or credentials are not defined in env.");
+  }
+  const s3Client = new S3Client({
+    region,
+    credentials: { accessKeyId, secretAccessKey },
+  });
   const fileStream = createReadStream(filePath);
 
   const params = {
-    Bucket: BUCKET_NAME,
+    Bucket: bucketName,
     Key: `backups/${fileName}`,
     Body: fileStream,
     ContentType: "application/gzip",
@@ -95,6 +85,7 @@ const uploadToS3 = async (fileName: string, filePath: string) => {
 
 const runBackup = async () => {
   try {
+    mkdirSync(BACKUP_DIR, { recursive: true });
     const { fileName, filePath } = await backupMongoDB();
     await uploadToS3(fileName, filePath);
     console.log(

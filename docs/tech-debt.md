@@ -5,11 +5,11 @@ Tick items off (or delete them) as they're fixed.
 
 ## P0 — security / reliability
 
-- [ ] **Backup command injection & secret leak** — `ied-be/src/database/backupToS3.ts`
+- [x] **Backup command injection & secret leak** — `ied-be/src/database/backupToS3.ts`
   builds `mongodump --uri=${MONGO_URI}` as a shell string for `exec` and logs
   the full command (with credentials) on failure. Use `spawn` with an args
   array; never log the URI.
-- [ ] **Server can't boot without AWS creds** — `backupToS3.ts` throws at
+- [x] **Server can't boot without AWS creds** — `backupToS3.ts` throws at
   import time if bucket/keys are missing, and `server.ts` imports it via
   `database/cron.ts` even when `BACKUP_TO_S3=false`.
 - [ ] **Unvalidated request bodies** — firma/zaposleni create & update pass
@@ -17,7 +17,7 @@ Tick items off (or delete them) as they're fixed.
   `/firma/search`, `/export-*`, `/pretrage/save|delete`, `/racuni/search`.
 - [x] **Unauthenticated `/api/test`** — `routes/test.routes.ts`, mounted
   before `requireApiAuth`. Delete it.
-- [ ] **Env not validated at startup** — `utils/envVariables.ts`; e.g. empty
+- [x] **Env not validated at startup** — `utils/envVariables.ts`; e.g. empty
   `MONGO_URI` goes straight to `mongoose.connect`. Parse env with Zod.
 
 ## P1 — correctness
