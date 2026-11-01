@@ -37,6 +37,7 @@ export const PretrageRacuna = () => {
     totalPages: number;
     racuni: RacunType[];
   }>();
+  const navigate = useNavigate();
 
   const racuniColumns = useMemo<MRT_ColumnDef<RacunType>[]>(
     () => [
@@ -45,7 +46,6 @@ export const PretrageRacuna = () => {
         header: "Poziv na broj",
         Cell: ({ cell }) => {
           const value = cell.getValue<string>();
-          const navigate = useNavigate();
 
           const handleCopyClick = (event: React.MouseEvent) => {
             event.preventDefault(); // Prevent navigation
@@ -216,7 +216,7 @@ export const PretrageRacuna = () => {
         header: "PIB primaoca",
       },
     ],
-    [],
+    [navigate],
   );
 
   const [searchState, setSearchState] = useState<SearchState>({

@@ -26,6 +26,7 @@
       "correctness": {
         "useExhaustiveDependencies": "warn",
         "noNestedComponentDefinitions": "warn",
+        "noComponentHookFactories": "warn",
         "useUniqueElementIds": "off"
       },
       "complexity": {
