@@ -29,7 +29,7 @@ export function SubtotalStrip({
         p: 1.75,
       }}
     >
-      <Grid container spacing={2} alignItems="center">
+      <Grid container spacing={2} sx={{ alignItems: "center" }}>
         <SubtotalCell
           label="Popust"
           value={formatMoney(popustIznos, valuta)}
@@ -84,8 +84,8 @@ function SubtotalCell({
     >
       <Typography
         variant="caption"
-        display="block"
         sx={{
+          display: "block",
           color: emphasize ? `${accentColor}.main` : "text.secondary",
           fontWeight: emphasize ? 600 : 400,
           textTransform: emphasize ? "uppercase" : "none",

@@ -88,11 +88,7 @@ export function PrimalacRacunaSection() {
             </ToggleButton>
           </ToggleButtonGroup>
 
-          {tipPrimaoca === "firma" ? (
-            <FirmaFields />
-          ) : (
-            <FizickoLiceFields />
-          )}
+          {tipPrimaoca === "firma" ? <FirmaFields /> : <FizickoLiceFields />}
         </Stack>
       </CardContent>
 

@@ -27,6 +27,14 @@ export const IZDAVAC_RACUNA_LABELS: Record<IzdavacRacuna, string> = {
   [IzdavacRacuna.BS]: "BS",
 };
 
+/** Display labels for the invoice type (search form, tables, filters). */
+export const TIP_RACUNA_LABELS: Record<TipRacuna, string> = {
+  [TipRacuna.PREDRACUN]: "Predračun",
+  [TipRacuna.AVANSNI_RACUN]: "Avansni račun",
+  [TipRacuna.KONACNI_RACUN]: "Konačni račun",
+  [TipRacuna.RACUN]: "Račun",
+};
+
 /**
  * Single source of truth for the supported invoice currencies.
  *

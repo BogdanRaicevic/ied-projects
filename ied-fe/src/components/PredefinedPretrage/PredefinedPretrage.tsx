@@ -92,7 +92,7 @@ export default function PredefinedPretrage() {
   };
 
   return (
-    <Grid container spacing={2} mb={2}>
+    <Grid container spacing={2} sx={{ mb: 2 }}>
       <Grid size={7}>
         <Autocomplete
           options={pretrage || []}
@@ -108,7 +108,10 @@ export default function PredefinedPretrage() {
           }}
         />
       </Grid>
-      <Grid size={5} display="flex" justifyContent="flex-end" gap={2}>
+      <Grid
+        size={5}
+        sx={{ display: "flex", justifyContent: "flex-end", gap: 2 }}
+      >
         <Button
           variant="contained"
           size="large"

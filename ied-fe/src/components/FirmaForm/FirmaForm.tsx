@@ -310,7 +310,7 @@ export const FirmaForm: FC<FirmaFormProps> = ({ inputCompany }) => {
         isPrijavljen={isPrijavljen}
         onChange={handleMailingListChange}
       />
-      <Grid container m={0} spacing={2}>
+      <Grid container spacing={2} sx={{ m: 0 }}>
         {inputItems(InputTypesSchema.enum.Text).map((item) => {
           return (
             <Grid key={item.key} size={{ xs: 12, md: 6, lg: 4 }}>
@@ -390,8 +390,7 @@ export const FirmaForm: FC<FirmaFormProps> = ({ inputCompany }) => {
                 <Typography
                   variant="caption"
                   color="text.secondary"
-                  display="block"
-                  sx={{ mt: 0.5 }}
+                  sx={{ display: "block", mt: 0.5 }}
                 >
                   Kliknite na dugme ako ste kontaktirali ovu firmu
                 </Typography>
@@ -421,7 +420,7 @@ export const FirmaForm: FC<FirmaFormProps> = ({ inputCompany }) => {
                       <Typography variant="body2" color="text.secondary">
                         Kontaktirao/la:
                       </Typography>
-                      <Typography variant="body2" fontWeight={500}>
+                      <Typography variant="body2" sx={{ fontWeight: 500 }}>
                         {lastContact ? lastContact.e_mail : "—"}
                       </Typography>
                     </Box>
@@ -429,7 +428,7 @@ export const FirmaForm: FC<FirmaFormProps> = ({ inputCompany }) => {
                       <Typography variant="body2" color="text.secondary">
                         Datum:
                       </Typography>
-                      <Typography variant="body2" fontWeight={500}>
+                      <Typography variant="body2" sx={{ fontWeight: 500 }}>
                         {lastContact
                           ? formatDate(new Date(lastContact.date), "dd.MM.yyyy")
                           : "—"}
@@ -439,7 +438,7 @@ export const FirmaForm: FC<FirmaFormProps> = ({ inputCompany }) => {
                       <Typography variant="body2" color="text.secondary">
                         Način:
                       </Typography>
-                      <Typography variant="body2" fontWeight={500}>
+                      <Typography variant="body2" sx={{ fontWeight: 500 }}>
                         {lastContact ? lastContact.contact_type : "—"}
                       </Typography>
                     </Box>
@@ -448,9 +447,11 @@ export const FirmaForm: FC<FirmaFormProps> = ({ inputCompany }) => {
               </Grid>
               <Grid size={{ xs: 12, md: 4, lg: 4 }}>
                 <Grid
-                  display="flex"
-                  alignItems="center"
-                  justifyContent="center"
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
                 >
                   <Box sx={{ textAlign: "center" }}>
                     <Button
@@ -513,9 +514,11 @@ export const FirmaForm: FC<FirmaFormProps> = ({ inputCompany }) => {
 
         <Grid
           size={{ xs: 12 }}
-          display="flex"
-          justifyContent="space-between"
-          alignItems="center"
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+          }}
         >
           <Box>
             <Button

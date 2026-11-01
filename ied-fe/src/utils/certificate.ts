@@ -96,7 +96,9 @@ export const buildSingleSertifikat = (
       seminar_naziv: options.seminarName,
       datumi_seminara: formatSeminarDates(options.seminarDates),
       godina_seminara: formatYear(
-        options.seminarDates[0] ? new Date(options.seminarDates[0]) : new Date(),
+        options.seminarDates[0]
+          ? new Date(options.seminarDates[0])
+          : new Date(),
       ),
       templateKey: options.templateKey,
     } satisfies SertifikatType,

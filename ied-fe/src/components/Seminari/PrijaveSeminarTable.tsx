@@ -161,7 +161,7 @@ export default function PrijaveSeminarTable({
           </IconButton>
         </TableCell>
         <TableCell>
-          <Stack direction="row" spacing={0.5} alignItems="center">
+          <Stack direction="row" spacing={0.5} sx={{ alignItems: "center" }}>
             <Tooltip title="Kreiraj račun (V1)">
               <IconButton
                 color="success"

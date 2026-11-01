@@ -1,36 +1,14 @@
-import { ContentCopy } from "@mui/icons-material";
 import BusinessIcon from "@mui/icons-material/Business";
 import { colors, Icon, Link } from "@mui/material";
 import { FirmaSchema, type FirmaType } from "ied-shared";
-import type { MRT_ColumnDef } from "material-react-table";
+import type { DataTableColumn } from "../DataTable/DataTable";
 
-export const firmaColumns: MRT_ColumnDef<FirmaType>[] = [
-  {
-    header: "R. BR.",
-    accessorKey: "rowNumber",
-    size: 20,
-    enableSorting: false,
-    enableColumnActions: false,
-    enableColumnFilter: false,
-    enableColumnOrdering: false,
-    enableHiding: false,
-    muiTableHeadCellProps: {
-      sx: { position: "sticky", left: 0, zIndex: 2, background: "#fff" },
-    },
-    muiTableBodyCellProps: {
-      sx: { position: "sticky", left: 0, zIndex: 1, background: "#fff" },
-    },
-
-    Cell: ({ row, table }) => {
-      const pageIndex = table.getState().pagination.pageIndex;
-      const pageSize = table.getState().pagination.pageSize;
-      return pageIndex * pageSize + row.index + 1;
-    },
-  },
+export const firmaColumns: DataTableColumn<FirmaType>[] = [
   {
     header: "Naziv kompanije",
     accessorKey: "naziv_firme",
-    Cell: ({ row }: { row: { original: FirmaType } }) => {
+    size: 250,
+    cell: ({ row }) => {
       const firma = row.original;
       return (
         <Link
@@ -50,21 +28,14 @@ export const firmaColumns: MRT_ColumnDef<FirmaType>[] = [
   },
   {
     header: "Email",
+    size: 200,
     accessorKey: "e_mail",
-    enableClickToCopy: true,
-    muiCopyButtonProps: {
-      fullWidth: true,
-      startIcon: <ContentCopy />,
-      sx: { justifyContent: "flex-start" },
-    },
-    muiTableBodyCellProps({ cell }) {
-      const email = cell.getValue() as string;
-      const isValid = FirmaSchema.shape.e_mail.safeParse(email).success;
-      return {
-        sx: {
-          backgroundColor: isValid ? "inherit" : colors.red[100],
-        },
-      };
+    meta: {
+      copy: true,
+      cellSx: (email) =>
+        FirmaSchema.shape.e_mail.safeParse(email).success
+          ? {}
+          : { bgcolor: colors.red[100] },
     },
   },
 
@@ -74,13 +45,8 @@ export const firmaColumns: MRT_ColumnDef<FirmaType>[] = [
   },
   {
     header: "Mesto",
-    accessorKey: "mesto",
-    Cell: ({ row }: { row: { original: FirmaType } }) => {
-      const mesto = row.original.mesto;
-      return typeof mesto === "object" && mesto !== null
-        ? mesto.naziv_mesto
-        : "";
-    },
+    id: "mesto",
+    accessorFn: (firma) => firma.mesto?.naziv_mesto ?? "",
   },
   {
     header: "Postanski broj",
@@ -101,15 +67,9 @@ export const firmaColumns: MRT_ColumnDef<FirmaType>[] = [
   {
     header: "Komentari",
     accessorKey: "komentar",
-    muiTableHeadCellProps: {
-      sx: {
-        minWidth: "400px",
-      },
-    },
-    muiTableBodyCellProps: {
-      sx: {
-        whiteSpace: "pre-wrap", // Preserve line breaks and whitespace
-      },
+    size: 500,
+    meta: {
+      cellSx: () => ({ whiteSpace: "pre-wrap" }), // Preserve line breaks and whitespace
     },
   },
 ];

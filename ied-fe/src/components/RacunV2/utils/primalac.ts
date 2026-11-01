@@ -43,13 +43,9 @@ export const buildEmptyPrimalac = (
  * keys exclusive to the new branch end up dirty=true even when empty.
  * Value-based check is immune to that and is what we actually mean to ask.
  */
-export const hasPrimalacContent = (
-  current: PrimalacRacunaV2Form,
-): boolean => {
+export const hasPrimalacContent = (current: PrimalacRacunaV2Form): boolean => {
   return Object.entries(current).some(
     ([key, value]) =>
-      key !== "tipPrimaoca" &&
-      typeof value === "string" &&
-      value.trim() !== "",
+      key !== "tipPrimaoca" && typeof value === "string" && value.trim() !== "",
   );
 };

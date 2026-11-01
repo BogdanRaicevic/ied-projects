@@ -130,7 +130,7 @@ export default function PrijavaNaSeminarDialog({
     <Dialog open={open} onClose={onClose} maxWidth="lg">
       <DialogTitle>{"Prijavi osobu na seminar"}</DialogTitle>
       <DialogContent>
-        <Grid container spacing={2} alignItems="center">
+        <Grid container spacing={2} sx={{ alignItems: "center" }}>
           <Grid size={12}>
             <TextField
               sx={{ m: 2 }}
@@ -273,7 +273,7 @@ export default function PrijavaNaSeminarDialog({
                       <Typography
                         key={datum?.toString()}
                         variant="caption"
-                        display="block"
+                        sx={{ display: "block" }}
                       >
                         {format(new Date(datum), "dd.MM.yyyy")}
                       </Typography>

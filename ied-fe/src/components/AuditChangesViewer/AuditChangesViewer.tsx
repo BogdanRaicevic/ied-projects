@@ -11,7 +11,7 @@ interface Props {
 const renderValue = (value: any) => {
   if (typeof value === "object" && value !== null) {
     return (
-      <pre style={{ margin: 0, display: "inline" }}>
+      <pre style={{ margin: 0, display: "inline", whiteSpace: "pre-wrap" }}>
         {JSON.stringify(value)}
       </pre>
     );

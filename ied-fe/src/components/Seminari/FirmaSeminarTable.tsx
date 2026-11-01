@@ -1,24 +1,21 @@
-import { Box, Link } from "@mui/material";
+import { Box } from "@mui/material";
 import type { FirmaSeminar, FirmaSeminarSearchParams } from "ied-shared";
-import {
-  MaterialReactTable,
-  type MRT_ColumnDef,
-  type MRT_PaginationState,
-  useMaterialReactTable,
-} from "material-react-table";
-import { useMemo, useState } from "react";
-import { Link as RouterLink } from "react-router-dom";
+import { useState } from "react";
 import { useSearchFirmaSeminari } from "../../hooks/seminar/useSeminarQueries";
-import { useTopScrollbar } from "../../hooks/useTopScrollbar";
+import DataTable from "../DataTable/DataTable";
 import FirmaSeminarCharts from "./FirmaSeminarCharts";
 import FirmaSeminarSubTable from "./FirmaSeminarSubTable";
+import { firmaSeminarColumns } from "./firmaSeminarColumns";
+
+// Stable reference: a new [] each render makes TanStack Table rebuild rows and reset expanded state.
+const noFirmas: FirmaSeminar[] = [];
 
 export default function FirmaSeminarTable({
   queryParameters,
 }: {
   queryParameters: FirmaSeminarSearchParams;
 }) {
-  const [pagination, setPagination] = useState<MRT_PaginationState>({
+  const [pagination, setPagination] = useState({
     pageIndex: 0,
     pageSize: 25,
   });
@@ -30,102 +27,22 @@ export default function FirmaSeminarTable({
       queryParameters,
     });
 
-  const seminariTableColumns: MRT_ColumnDef<FirmaSeminar>[] = [
-    {
-      header: "R. BR.",
-      accessorKey: "rowNumber",
-      size: 20,
-      enableSorting: false,
-      enableColumnActions: false,
-      enableColumnFilter: false,
-      enableColumnOrdering: false,
-      enableHiding: false,
+  const tableData = firmaSeminars?.firmas ?? noFirmas;
 
-      Cell: ({ row, table }) => {
-        const pageIndex = table.getState().pagination.pageIndex;
-        const pageSize = table.getState().pagination.pageSize;
-        return pageIndex * pageSize + row.index + 1;
-      },
-    },
-    {
-      accessorKey: "naziv",
-      header: "Naziv firme",
-      Cell: ({ row }) => (
-        <Link component={RouterLink} to={`/firma/${row.original.firmaId}`}>
-          {row.original.naziv || row.original.firmaId || "N/A"}
-        </Link>
-      ),
-    },
-    {
-      accessorKey: "email",
-      header: "Email firme",
-    },
-    {
-      accessorKey: "mesto",
-      header: "Mesto firme",
-    },
-    {
-      accessorKey: "tipFirme",
-      header: "Tip firme",
-    },
-    {
-      accessorKey: "delatnost",
-      header: "Delatnost firme",
-    },
-    {
-      accessorKey: "brojSeminara",
-      header: "Broj posećenih seminara",
-    },
-    {
-      accessorKey: "totalUcesnici",
-      header: "Ukupan broj učesnika",
-    },
-    {
-      accessorKey: "onlineUcesnici",
-      header: "Broj online učesnika",
-    },
-    {
-      accessorKey: "offlineUcesnici",
-      header: "Broj offline učesnika",
-    },
-  ];
-
-  const scrollbarProps = useTopScrollbar<FirmaSeminar>();
-
-  const tableData = useMemo<FirmaSeminar[]>(
-    () => firmaSeminars?.firmas || [],
-    [firmaSeminars],
+  return (
+    <DataTable
+      columns={firmaSeminarColumns}
+      data={tableData}
+      isLoading={isLoadingSeminars}
+      pagination={pagination}
+      onPaginationChange={setPagination}
+      rowCount={firmaSeminars?.totalDocuments || 0}
+      renderDetailPanel={(firma) => (
+        <Box sx={{ padding: "16px" }}>
+          <FirmaSeminarCharts data={firma.seminars} />
+          <FirmaSeminarSubTable seminars={firma.seminars} />
+        </Box>
+      )}
+    />
   );
-
-  const table = useMaterialReactTable({
-    columns: useMemo<MRT_ColumnDef<FirmaSeminar>[]>(
-      () => seminariTableColumns,
-      [],
-    ),
-    state: {
-      isLoading: isLoadingSeminars,
-      showProgressBars: isLoadingSeminars,
-      pagination,
-    },
-    data: tableData,
-    enableColumnFilterModes: true,
-    enableColumnOrdering: true,
-    enableColumnPinning: true,
-    paginationDisplayMode: "default",
-    positionToolbarAlertBanner: "bottom",
-    manualPagination: true,
-    enablePagination: true,
-    rowCount: firmaSeminars?.totalDocuments || 0,
-    enableExpanding: true,
-    renderDetailPanel: ({ row }) => (
-      <Box sx={{ padding: "16px" }}>
-        <FirmaSeminarCharts data={row.original.seminars} />
-        <FirmaSeminarSubTable seminars={row.original.seminars} />
-      </Box>
-    ),
-    onPaginationChange: setPagination,
-    ...scrollbarProps,
-  });
-
-  return <MaterialReactTable table={table} />;
 }

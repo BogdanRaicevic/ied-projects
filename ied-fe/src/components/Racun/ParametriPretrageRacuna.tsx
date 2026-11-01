@@ -2,23 +2,24 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import {
   Box,
   Button,
-  Chip,
   InputLabel,
   MenuItem,
   Select,
   TextField,
 } from "@mui/material";
-import { blue, green, grey, purple, red } from "@mui/material/colors";
 import { DatePicker } from "@mui/x-date-pickers";
 import { subMonths } from "date-fns";
 import {
+  IZDAVAC_RACUNA_LABELS,
   type IzdavacRacuna,
   type PretrageRacunaType,
   PretrageRacunaZod,
+  TIP_RACUNA_LABELS,
   type TipRacuna,
 } from "ied-shared";
 import { useEffect } from "react";
 import { Controller, useForm } from "react-hook-form";
+import { IzdavacRacunaChip, TipRacunaChip } from "./RacunChips";
 
 interface ParametriPretrageRacunaProps {
   onSearch: (filters: PretrageRacunaType) => void;
@@ -40,19 +41,6 @@ export const ParametriPretrageRacuna = ({
     },
     resolver: zodResolver(PretrageRacunaZod),
   });
-
-  const tipRacunaChips: Record<string, { label: string; color: string }> = {
-    avansniRacun: { label: "Avans", color: green[200] },
-    predracun: { label: "Predračun", color: red[300] },
-    konacniRacun: { label: "Konačni Račun", color: blue[200] },
-    racun: { label: "Račun", color: grey[300] },
-  };
-
-  const izdavacRacunaChips: Record<string, { label: string; color: string }> = {
-    ied: { label: "IED", color: blue[500] },
-    bs: { label: "BS", color: green[500] },
-    permanent: { label: "Permanent", color: purple[500] },
-  };
 
   const handlePretraziClick = (filters: PretrageRacunaType) => {
     onSearch(filters);
@@ -114,28 +102,16 @@ export const ParametriPretrageRacuna = ({
 
               return (
                 <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
-                  {(selected as string[]).map((val) => {
-                    const cfg = tipRacunaChips[val];
-                    return (
-                      <Chip
-                        key={val}
-                        label={cfg?.label ?? val}
-                        size="small"
-                        sx={{ bgcolor: cfg?.color, color: "#fff" }}
-                      />
-                    );
-                  })}
+                  {(selected as string[]).map((val) => (
+                    <TipRacunaChip key={val} tip={val} />
+                  ))}
                 </Box>
               );
             }}
           >
-            {Object.entries(tipRacunaChips).map(([value, cfg]) => (
+            {Object.keys(TIP_RACUNA_LABELS).map((value) => (
               <MenuItem key={value} value={value}>
-                <Chip
-                  label={cfg.label}
-                  size="small"
-                  sx={{ bgcolor: cfg.color, color: "#fff" }}
-                />
+                <TipRacunaChip tip={value} />
               </MenuItem>
             ))}
           </Select>
@@ -184,28 +160,16 @@ export const ParametriPretrageRacuna = ({
 
               return (
                 <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
-                  {(selected as string[]).map((val) => {
-                    const cfg = izdavacRacunaChips[val];
-                    return (
-                      <Chip
-                        key={val}
-                        label={cfg?.label ?? val}
-                        size="small"
-                        sx={{ bgcolor: cfg?.color, color: "#fff" }}
-                      />
-                    );
-                  })}
+                  {(selected as string[]).map((val) => (
+                    <IzdavacRacunaChip key={val} izdavac={val} />
+                  ))}
                 </Box>
               );
             }}
           >
-            {Object.entries(izdavacRacunaChips).map(([value, cfg]) => (
+            {Object.keys(IZDAVAC_RACUNA_LABELS).map((value) => (
               <MenuItem key={value} value={value}>
-                <Chip
-                  label={cfg.label}
-                  size="small"
-                  sx={{ bgcolor: cfg.color, color: "#fff" }}
-                />
+                <IzdavacRacunaChip izdavac={value} />
               </MenuItem>
             ))}
           </Select>

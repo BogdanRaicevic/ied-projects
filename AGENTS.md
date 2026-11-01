@@ -126,6 +126,11 @@ Project skills live in `.agents/skills/` (Claude reads them via symlinks in
 | `mongodb-schema-design` | Changing Mongoose models / data shape |
 | `vercel-react-best-practices` | Re-renders, effects, bundle size in `ied-fe` |
 
+TanStack Table v9 ships its own skills in
+`ied-fe/node_modules/@tanstack/react-table/skills/` (getting-started,
+table-state, migrate-v8-to-v9). Read the matching one before changing
+`ied-fe/src/components/DataTable/`.
+
 `ied-fe` is a client-only Vite SPA: ignore skill rules about SSR, RSC,
 hydration, server actions or Next.js. This file and `docs/` win over a skill
 when they disagree — e.g. don't change the existing `QueryClient` defaults in
