@@ -5,38 +5,27 @@ import {
   type MRT_ColumnDef,
   useMaterialReactTable,
 } from "material-react-table";
-import { useEffect, useMemo, useState } from "react";
-import { fetchFirmaPretrage } from "../../api/firma.api";
+import { useMemo } from "react";
+import { useFirmaPretrage } from "../../hooks/firma/useFirmaQueries";
 import { useTopScrollbar } from "../../hooks/useTopScrollbar";
 import { usePretragaStore } from "../../store/pretragaParameters.store";
 import { firmaColumns } from "./firmaColumns";
 
 export const FirmasTable = () => {
-  const [data, setData] = useState<FirmaType[]>([]);
-  const [documents, setDocuments] = useState(1000);
-
   const { pagination, setPaginationParameters, appliedParameters } =
     usePretragaStore();
 
-  useEffect(() => {
-    const loadData = async () => {
-      const { pageIndex, pageSize } = pagination;
-      const res = await fetchFirmaPretrage(
-        pageSize,
-        pageIndex,
-        appliedParameters,
-      );
-      setData(res.firmas);
-      setDocuments(res.totalDocuments);
-    };
-    loadData();
-  }, [pagination.pageIndex, pagination.pageSize, appliedParameters]);
+  const { data: res, isFetching } = useFirmaPretrage(
+    pagination.pageIndex,
+    pagination.pageSize,
+    appliedParameters,
+  );
 
   const scrollbarProps = useTopScrollbar<FirmaType>();
 
   const table = useMaterialReactTable({
     columns: useMemo<MRT_ColumnDef<FirmaType>[]>(() => firmaColumns, []),
-    data: useMemo<FirmaType[]>(() => data, [data]),
+    data: res?.firmas ?? [],
     enableColumnFilterModes: true,
     enableColumnOrdering: true,
     enableColumnPinning: true,
@@ -54,8 +43,9 @@ export const FirmasTable = () => {
     enablePagination: true,
     state: {
       pagination,
+      showProgressBars: isFetching,
     },
-    rowCount: documents,
+    rowCount: res?.totalDocuments ?? 0,
     initialState: {
       columnPinning: {
         left: ["rowNumber", "naziv_firme"],
