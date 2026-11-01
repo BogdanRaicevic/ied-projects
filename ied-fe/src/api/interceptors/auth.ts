@@ -18,10 +18,12 @@ axiosInstanceWithAuth.interceptors.request.use(
 );
 
 // One place to log failed requests; callers get the original AxiosError.
+// Log only safe fields: error.config holds the Authorization header.
 axiosInstanceWithAuth.interceptors.response.use(undefined, (error) => {
   console.error(
     `API ${error.config?.method?.toUpperCase()} ${error.config?.url} failed:`,
-    error,
+    error.response?.status ?? error.code,
+    error.message,
   );
   return Promise.reject(error);
 });
