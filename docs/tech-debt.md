@@ -12,10 +12,9 @@ Tick items off (or delete them) as they're fixed.
 - [x] **Server can't boot without AWS creds** — `backupToS3.ts` throws at
   import time if bucket/keys are missing, and `server.ts` imports it via
   `database/cron.ts` even when `BACKUP_TO_S3=false`.
-- [ ] **Unvalidated request bodies** — firma/zaposleni create & update pass
-  `req.body` into Mongoose (`firma.routes.ts`, `firma.service.ts`); also
-  `/racuni/search`. (`/firma/search`, `/export-*` and
-  `/pretrage/save|delete` are done.)
+- [ ] **Unvalidated request bodies** — only `/racuni/search` (v1) left.
+  Firma/zaposleni create & update, `/firma/search`, `/export-*` and
+  `/pretrage/save|delete` are done.
 - [x] **Unauthenticated `/api/test`** — `routes/test.routes.ts`, mounted
   before `requireApiAuth`. Delete it.
 - [x] **Env not validated at startup** — `utils/envVariables.ts`; e.g. empty

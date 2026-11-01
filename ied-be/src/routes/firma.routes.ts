@@ -4,7 +4,12 @@ import {
   type Response,
   Router,
 } from "express";
-import { ContactTypeEnum, ParametriPretrageSchema } from "ied-shared";
+import {
+  ContactTypeEnum,
+  FirmaSchema,
+  ParametriPretrageSchema,
+  ZaposleniSchema,
+} from "ied-shared";
 import { z } from "zod";
 import { createAuditMiddleware } from "../middleware/audit";
 import { validateRequestBody } from "../middleware/validateSchema";
@@ -29,6 +34,15 @@ const firmaAudit = createAuditMiddleware(Firma);
 
 const ExportRequestSchema = z.object({
   queryParameters: ParametriPretrageSchema,
+});
+
+// Ids come from the URL; zaposleni and last_contacted have their own routes.
+const CreateFirmaSchema = FirmaSchema.omit({ _id: true, last_contacted: true });
+const UpdateFirmaSchema = CreateFirmaSchema.omit({ zaposleni: true }).partial();
+const CreateZaposleniSchema = ZaposleniSchema.omit({ _id: true });
+// Partial: the kontakt/prijava dialogs send only komentar (+ firmaKomentar).
+const UpdateZaposleniSchema = CreateZaposleniSchema.partial().extend({
+  firmaKomentar: z.string().max(10000).optional(),
 });
 
 const LastContactQuerySchema = z.object({ contactType: ContactTypeEnum });
@@ -92,6 +106,7 @@ router.post(
 router.post(
   "/:firmaId/zaposleni",
   firmaAudit,
+  validateRequestBody(CreateZaposleniSchema),
   async (
     req: Request<{ firmaId: string }>,
     res: Response,
@@ -111,6 +126,7 @@ router.post(
 router.put(
   "/:firmaId/zaposleni/:zaposleniId",
   firmaAudit,
+  validateRequestBody(UpdateZaposleniSchema),
   async (
     req: Request<{ firmaId: string; zaposleniId: string }>,
     res: Response,
@@ -182,6 +198,7 @@ router.delete(
 router.post(
   "/",
   firmaAudit,
+  validateRequestBody(CreateFirmaSchema),
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       const firma = await create(req.body);
@@ -196,6 +213,7 @@ router.post(
 router.put(
   "/:id",
   firmaAudit,
+  validateRequestBody(UpdateFirmaSchema),
   async (req: Request<{ id: string }>, res: Response, next: NextFunction) => {
     try {
       const firmaId = req.params.id;
