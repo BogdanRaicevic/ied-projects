@@ -14,11 +14,11 @@ import { SeminarSchema, type SeminarZodType } from "ied-shared";
 import { useEffect, useState } from "react";
 import {
   Controller,
-  type Resolver,
   type SubmitHandler,
   useForm,
   useWatch,
 } from "react-hook-form";
+import type { z } from "zod";
 import {
   useCreateSeminarMutation,
   useUpdateSeminarMutation,
@@ -52,13 +52,13 @@ export default function SeminarForm({
     reset,
     setValue,
     formState: { errors },
-  } = useForm<SeminarZodType>({
+  } = useForm<z.input<typeof SeminarSchema>, unknown, SeminarZodType>({
     defaultValues: {
       ...defaultSeminarData,
       ...seminar, // Merge with existing seminar data if provided
       datumi: seminar?.datumi?.map((datum) => new Date(datum) ?? new Date()),
     },
-    resolver: zodResolver(SeminarSchema) as Resolver<SeminarZodType>,
+    resolver: zodResolver(SeminarSchema),
   });
 
   const datumi = useWatch({ control, name: "datumi" }) ?? [];
@@ -276,7 +276,7 @@ export default function SeminarForm({
                   <DatePicker
                     format="yyyy-MM-dd"
                     label={`Datum održavanja ${index + 1}`}
-                    value={field.value ?? null}
+                    value={field.value ? new Date(field.value) : null}
                     onChange={(date) => {
                       if (date === null) {
                         return;

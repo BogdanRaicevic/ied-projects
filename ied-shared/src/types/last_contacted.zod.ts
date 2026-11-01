@@ -1,4 +1,5 @@
 import z from "zod";
+import { zDate } from "./date.zod";
 
 export const Email = z
   .email("Neispravna email adresa")
@@ -16,7 +17,7 @@ export const ContactTypeEnum = z.enum(ContactTypes);
 export type ContactTypeEnum = z.infer<typeof ContactTypeEnum>;
 
 export const LastContactedFromDB = z.object({
-  date: z.coerce.date(),
+  date: zDate(),
   e_mail: Email,
   contact_type: ContactTypeEnum,
 });

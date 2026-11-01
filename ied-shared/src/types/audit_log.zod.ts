@@ -1,4 +1,5 @@
 import z from "zod";
+import { zDate, zOptionalDate } from "./date.zod";
 
 export const AuditLogZod = z.object({
   userEmail: z.string(),
@@ -6,7 +7,7 @@ export const AuditLogZod = z.object({
   route: z.string(),
   before: z.object({}).nullable().optional(),
   after: z.object({}).nullable().optional(),
-  timestamp: z.coerce.date(),
+  timestamp: zDate(),
   resource: z.object({
     model: z.string(),
     id: z.string().optional(),
@@ -16,16 +17,16 @@ export const AuditLogZod = z.object({
 export const AuditLogQueryParamsZod = z.object({
   userEmail: z.string().optional(),
   method: z.string().optional(),
-  dateFrom: z.coerce.date().optional(),
-  dateTo: z.coerce.date().optional(),
+  dateFrom: zOptionalDate(),
+  dateTo: zOptionalDate(),
   model: z.string().optional(),
   resourceId: z.string().optional(),
 });
 
 export const AuditLogStatsQueryParamsSchema = z.object({
   userEmail: z.string(),
-  dateFrom: z.coerce.date().optional(),
-  dateTo: z.coerce.date().optional(),
+  dateFrom: zOptionalDate(),
+  dateTo: zOptionalDate(),
   model: z.string().optional().default("Firma"),
 });
 

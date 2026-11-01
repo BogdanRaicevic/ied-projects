@@ -1,8 +1,11 @@
 import { z } from "zod";
 import { VALUTA_VALUES } from "../constants/racuni";
+import { zDate } from "./date.zod";
 import { IzdavacRacuna, TipRacuna } from "./racuni.zod";
 
-const nonNegativeNumber = z.coerce.number().min(0, "Vrednost mora biti >= 0");
+const nonNegativeNumber = z.coerce
+  .number<number | string>()
+  .min(0, "Vrednost mora biti >= 0");
 const requiredNullableNonNegativeNumber = (requiredMessage: string) =>
   z
     .number()
@@ -13,37 +16,14 @@ const requiredNullableNonNegativeNumber = (requiredMessage: string) =>
       message: requiredMessage,
     });
 const percentage = z.coerce
-  .number()
+  .number<number | string>()
   .min(0, "Popust mora biti između 0 i 100")
   .max(100, "Popust mora biti između 0 i 100");
-const requiredDate = (requiredMessage: string) =>
-  z.preprocess(
-    (value) => {
-      if (value === null || value === undefined || value === "") {
-        return null;
-      }
-      if (value instanceof Date) {
-        return Number.isNaN(value.getTime()) ? null : value;
-      }
-      if (typeof value === "string" || typeof value === "number") {
-        const parsed = new Date(value);
-        return Number.isNaN(parsed.getTime()) ? null : parsed;
-      }
-      return value;
-    },
-    z
-      .date({ error: requiredMessage })
-      .nullable()
-      .refine((value): value is Date => value !== null, {
-        message: requiredMessage,
-      }),
-  );
-
 export const StavkaUslugaV2Zod = z.object({
   tipStavke: z.literal("usluga"),
   seminar_id: z.string().optional(),
   naziv: z.string().min(1, "Naziv usluge je obavezan"),
-  datum: z.coerce.date(),
+  datum: zDate(),
   lokacija: z.string().optional(),
   jedinicaMere: z.string().min(1).default("Broj ucesnika"),
   onlineKolicina: nonNegativeNumber.default(0),
@@ -117,7 +97,7 @@ const PredracunRacunV2Zod = BaseRacunV2Zod.extend({
 const AvansniRacunV2Zod = BaseRacunV2Zod.extend({
   tipRacuna: z.literal(TipRacuna.AVANSNI_RACUN),
   stavke: z.array(StavkaV2Zod).min(1, "Dodajte bar jednu stavku"),
-  datumUplateAvansa: requiredDate("Datum uplate avansa je obavezan"),
+  datumUplateAvansa: zDate("Datum uplate avansa je obavezan"),
 });
 
 const KonacniRacunV2Zod = BaseRacunV2Zod.extend({
