@@ -17,4 +17,13 @@ axiosInstanceWithAuth.interceptors.request.use(
   (error) => Promise.reject(error),
 );
 
+// One place to log failed requests; callers get the original AxiosError.
+axiosInstanceWithAuth.interceptors.response.use(undefined, (error) => {
+  console.error(
+    `API ${error.config?.method?.toUpperCase()} ${error.config?.url} failed:`,
+    error,
+  );
+  return Promise.reject(error);
+});
+
 export default axiosInstanceWithAuth;

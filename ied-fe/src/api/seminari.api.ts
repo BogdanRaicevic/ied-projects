@@ -1,3 +1,4 @@
+import axios from "axios";
 import type {
   FirmaSeminarSearchParams,
   PrijavaZodType,
@@ -17,16 +18,12 @@ export const createSeminar = async (seminarData: SeminarZodType) => {
     );
   }
 
-  try {
-    const response = await axiosInstanceWithAuth.post(
-      `/api/seminari/create`,
-      seminarData,
-    );
+  const response = await axiosInstanceWithAuth.post(
+    `/api/seminari/create`,
+    seminarData,
+  );
 
-    return response.data;
-  } catch (error) {
-    throw new Error(`Error creating seminar: ${(error as any).message}`);
-  }
+  return response.data;
 };
 
 export const updateSeminar = async (seminarData: SeminarZodType) => {
@@ -38,16 +35,12 @@ export const updateSeminar = async (seminarData: SeminarZodType) => {
     throw new Error("Seminar must contain an id");
   }
 
-  try {
-    const response = await axiosInstanceWithAuth.post(
-      `/api/seminari/update/${seminarData._id}`,
-      seminarData,
-    );
+  const response = await axiosInstanceWithAuth.post(
+    `/api/seminari/update/${seminarData._id}`,
+    seminarData,
+  );
 
-    return response.data;
-  } catch (error) {
-    throw new Error(`Error updating seminar: ${(error as any).message}`);
-  }
+  return response.data;
 };
 
 export const fetchSeminari = async (
@@ -55,35 +48,27 @@ export const fetchSeminari = async (
   pageIndex: number,
   queryParameters: SeminarQueryParams,
 ) => {
-  try {
-    const body = {
-      pageSize,
-      pageIndex,
-      ...queryParameters,
+  const body = {
+    pageSize,
+    pageIndex,
+    ...queryParameters,
+  };
+
+  const response: {
+    data: {
+      seminari: SeminarZodType[];
+      totalPages: number;
+      totalDocuments: number;
     };
+  } = await axiosInstanceWithAuth.post(`/api/seminari/search`, body);
 
-    const response: {
-      data: {
-        seminari: SeminarZodType[];
-        totalPages: number;
-        totalDocuments: number;
-      };
-    } = await axiosInstanceWithAuth.post(`/api/seminari/search`, body);
-
-    return response.data;
-  } catch (error) {
-    throw new Error(`Error fetching seminari data: ${(error as any).message}`);
-  }
+  return response.data;
 };
 
 export const fetchSeminarById = async (id: string) => {
-  try {
-    const response = await axiosInstanceWithAuth.get(`/api/seminari/${id}`);
+  const response = await axiosInstanceWithAuth.get(`/api/seminari/${id}`);
 
-    return response.data;
-  } catch (error) {
-    throw new Error(`Error fetching seminar data: ${(error as any).message}`);
-  }
+  return response.data;
 };
 
 export const createPrijava = async (
@@ -100,13 +85,13 @@ export const createPrijava = async (
     );
 
     return response.data;
-  } catch (error: any) {
-    if (error.response.status === 409) {
+  } catch (error) {
+    if (axios.isAxiosError(error) && error.response?.status === 409) {
       throw new Error("Zaposleni je već prijavljen na seminar", {
         cause: "duplicate",
       });
     }
-    throw new Error(`Error creating prijava: ${(error as any).message}`);
+    throw error;
   }
 };
 
@@ -114,27 +99,19 @@ export const deletePrijava = async (
   zaposleni_id: string,
   seminar_id: string,
 ) => {
-  try {
-    const response = await axiosInstanceWithAuth.delete(
-      `/api/seminari/delete-prijava/${seminar_id}/${zaposleni_id}`,
-    );
+  const response = await axiosInstanceWithAuth.delete(
+    `/api/seminari/delete-prijava/${seminar_id}/${zaposleni_id}`,
+  );
 
-    return response.data;
-  } catch (error) {
-    throw new Error(`Error deleting prijava: ${(error as any).message}`);
-  }
+  return response.data;
 };
 
 export const deleteSeminar = async (id: string) => {
-  try {
-    const response = await axiosInstanceWithAuth.delete(
-      `/api/seminari/delete/${id}`,
-    );
+  const response = await axiosInstanceWithAuth.delete(
+    `/api/seminari/delete/${id}`,
+  );
 
-    return response.data;
-  } catch (error) {
-    throw new Error(`Error deleting seminar: ${(error as any).message}`);
-  }
+  return response.data;
 };
 
 export const fetchFirmaSeminari = async (
@@ -142,20 +119,16 @@ export const fetchFirmaSeminari = async (
   pageIndex: number,
   queryParameters: FirmaSeminarSearchParams,
 ) => {
-  try {
-    const body = {
-      pageSize,
-      pageIndex,
-      queryParameters,
-    };
+  const body = {
+    pageSize,
+    pageIndex,
+    queryParameters,
+  };
 
-    const response = await axiosInstanceWithAuth.post(
-      `/api/seminari/firma-seminari`,
-      body,
-    );
+  const response = await axiosInstanceWithAuth.post(
+    `/api/seminari/firma-seminari`,
+    body,
+  );
 
-    return response.data;
-  } catch (error) {
-    throw new Error(`Error fetching seminari data: ${(error as any).message}`);
-  }
+  return response.data;
 };

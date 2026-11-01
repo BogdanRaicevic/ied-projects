@@ -26,7 +26,6 @@ export const generateAndDownloadRacunV2Pdf = async (
       getFallbackFileName(racunData),
     );
   } catch (error) {
-    console.error("Racun V2 PDF generation request error:", error);
     if (axios.isAxiosError(error) && error.response?.data instanceof Blob) {
       await throwBlobResponseError(
         error.response.data,

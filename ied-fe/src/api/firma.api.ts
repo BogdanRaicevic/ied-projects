@@ -13,84 +13,59 @@ export const fetchFirmaPretrage = async (
   pageIndex: number,
   queryParameters: ParametriPretrage,
 ) => {
-  try {
-    const body = {
-      pageSize: pageSize || 50,
-      pageIndex: pageIndex || 0,
-      queryParameters,
-    };
+  const body = {
+    pageSize: pageSize || 50,
+    pageIndex: pageIndex || 0,
+    queryParameters,
+  };
 
-    const response: {
-      data: { firmas: any[]; totalPages: number; totalDocuments: number };
-    } = await axiosInstanceWithAuth.post(`/api/firma/search`, body);
-    return response.data;
-  } catch (error) {
-    console.error("Error fetching firma data:", error);
-    throw error;
-  }
+  const response: {
+    data: { firmas: any[]; totalPages: number; totalDocuments: number };
+  } = await axiosInstanceWithAuth.post(`/api/firma/search`, body);
+  return response.data;
 };
 
 export const fetchSingleFirma = async (id: string): Promise<FirmaType> => {
-  try {
-    const response = await axiosInstanceWithAuth.get(`/api/firma/${id}`);
-    return response.data;
-  } catch (error) {
-    console.error("Error fetching single firma data:", error);
-    throw error;
-  }
+  const response = await axiosInstanceWithAuth.get(`/api/firma/${id}`);
+  return response.data;
 };
 
 export const exportFirmaData = async (
   queryParameters: ParametriPretrage,
 ): Promise<ExportFirma> => {
-  try {
-    const body = {
-      queryParameters,
-    };
+  const body = {
+    queryParameters,
+  };
 
-    const response = await axiosInstanceWithAuth.post(
-      `/api/firma/export-firma-data`,
-      body,
-    );
+  const response = await axiosInstanceWithAuth.post(
+    `/api/firma/export-firma-data`,
+    body,
+  );
 
-    return response.data;
-  } catch (error) {
-    console.error("Error exporting firma data:", error);
-    throw error;
-  }
+  return response.data;
 };
 
 export const exportZaposleniData = async (
   queryParameters: ParametriPretrage,
 ): Promise<ExportZaposlenih> => {
-  try {
-    const body = {
-      queryParameters,
-    };
+  const body = {
+    queryParameters,
+  };
 
-    const response = await axiosInstanceWithAuth.post(
-      `/api/firma/export-zaposleni-data`,
-      body,
-    );
+  const response = await axiosInstanceWithAuth.post(
+    `/api/firma/export-zaposleni-data`,
+    body,
+  );
 
-    return response.data;
-  } catch (error) {
-    console.error("Error exporting zaposleni data:", error);
-    throw error;
-  }
+  return response.data;
 };
 
 export const createNewFirma = async (company: Partial<FirmaType>) => {
-  try {
-    const response = await axiosInstanceWithAuth.post(`/api/firma`, company);
-    return {
-      data: response.data,
-      status: response.status,
-    };
-  } catch (error: any) {
-    console.error("Error creating new firma: ", error);
-    throw error;
-  }
+  const response = await axiosInstanceWithAuth.post(`/api/firma`, company);
+  return {
+    data: response.data,
+    status: response.status,
+  };
 };
 
 export const updateFirma = async (
@@ -101,51 +76,36 @@ export const updateFirma = async (
     throw new Error("Firma ID is required for update");
   }
 
-  try {
-    const response = await axiosInstanceWithAuth.put<Partial<FirmaType>>(
-      `/api/firma/${firmaId}`,
-      firma,
-    );
-    return {
-      data: response.data,
-      status: response.status,
-    };
-  } catch (error: any) {
-    console.error("Error updating firma: ", error);
-    throw error;
-  }
+  const response = await axiosInstanceWithAuth.put<Partial<FirmaType>>(
+    `/api/firma/${firmaId}`,
+    firma,
+  );
+  return {
+    data: response.data,
+    status: response.status,
+  };
 };
 
 export const deleteFirma = async (id: string) => {
-  try {
-    const response = await axiosInstanceWithAuth.delete(`/api/firma/${id}`);
-    return {
-      data: response.data,
-      status: response.status,
-    };
-  } catch (error) {
-    console.error("Error deleting firma: ", error);
-    throw error;
-  }
+  const response = await axiosInstanceWithAuth.delete(`/api/firma/${id}`);
+  return {
+    data: response.data,
+    status: response.status,
+  };
 };
 
 export const addZaposleniToFirma = async (
   firmaId: string,
   zaposleni: Partial<ZaposleniType>,
 ) => {
-  try {
-    const response = await axiosInstanceWithAuth.post(
-      `/api/firma/${firmaId}/zaposleni`,
-      zaposleni,
-    );
-    return {
-      data: response.data,
-      status: response.status,
-    };
-  } catch (error) {
-    console.error("Error adding zaposleni to firma: ", error);
-    throw error;
-  }
+  const response = await axiosInstanceWithAuth.post(
+    `/api/firma/${firmaId}/zaposleni`,
+    zaposleni,
+  );
+  return {
+    data: response.data,
+    status: response.status,
+  };
 };
 
 export const updateZaposleniInFirma = async (
@@ -153,53 +113,38 @@ export const updateZaposleniInFirma = async (
   zaposleniId: string,
   zaposleni: Partial<ZaposleniType>,
 ) => {
-  try {
-    const response = await axiosInstanceWithAuth.put(
-      `/api/firma/${firmaId}/zaposleni/${zaposleniId}`,
-      zaposleni,
-    );
-    return {
-      data: response.data,
-      status: response.status,
-    };
-  } catch (error) {
-    console.error("Error updating zaposleni in firma: ", error);
-    throw error;
-  }
+  const response = await axiosInstanceWithAuth.put(
+    `/api/firma/${firmaId}/zaposleni/${zaposleniId}`,
+    zaposleni,
+  );
+  return {
+    data: response.data,
+    status: response.status,
+  };
 };
 
 export const deleteZaposleniFromFirma = async (
   firmaId: string,
   zaposleniId: string,
 ) => {
-  try {
-    const response = await axiosInstanceWithAuth.delete(
-      `/api/firma/${firmaId}/zaposleni/${zaposleniId}`,
-    );
-    return {
-      data: response.data,
-      status: response.status,
-    };
-  } catch (error) {
-    console.error("Error deleting zaposleni from firma: ", error);
-    throw error;
-  }
+  const response = await axiosInstanceWithAuth.delete(
+    `/api/firma/${firmaId}/zaposleni/${zaposleniId}`,
+  );
+  return {
+    data: response.data,
+    status: response.status,
+  };
 };
 
 export const updateLastContactInFirma = async (
   firmaId: string,
   contactType: ContactTypeEnum,
 ) => {
-  try {
-    const response = await axiosInstanceWithAuth.put(
-      `/api/firma/${firmaId}/last-contact?contactType=${contactType}`,
-    );
-    return {
-      data: response.data,
-      status: response.status,
-    };
-  } catch (error) {
-    console.error("Error updating last contact in firma: ", error);
-    throw error;
-  }
+  const response = await axiosInstanceWithAuth.put(
+    `/api/firma/${firmaId}/last-contact?contactType=${contactType}`,
+  );
+  return {
+    data: response.data,
+    status: response.status,
+  };
 };
