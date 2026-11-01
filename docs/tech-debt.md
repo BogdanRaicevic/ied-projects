@@ -22,10 +22,9 @@ Tick items off (or delete them) as they're fixed.
 
 ## P1 — correctness
 
-- [ ] **Error → status mapping** — `errorWrapper.ts` sends every
-  `ErrorWithCause` as 400; services throw plain `Error` for not-found →
-  500. Introduce `NotFoundError`/`ValidationError` (or `status` on
-  `ErrorWithCause`) and map them.
+- [x] **Error → status mapping** — dropped `ErrorWithCause`: services throw
+  plain `Error` (500, in Sentry); expected outcomes return `null` and the
+  route sends 404/409.
 - [x] **`validateRequestQuery` discards the parsed query** — removed;
   handlers call `Schema.parse(req.query)` and use the result. `GET /racuni`
   (v1) still reads raw `req.query`.
@@ -66,7 +65,7 @@ Tick items off (or delete them) as they're fixed.
   `PretragaParameters`, `Racun/PretrageRacuna`, `UslugaStavkaCard`,
   `SeminarForm`, `pages/Racuni`.
 - [ ] `any` hot spots: `seminari.api.ts`, `Autocomplete/Multiple.tsx`,
-  `useEmailSuppression.tsx`, `ErrorWithCause.details`.
+  `useEmailSuppression.tsx`.
 
 ## P3 — cleanup
 

@@ -95,9 +95,11 @@ Details: [docs/backend.md](docs/backend.md), [docs/frontend.md](docs/frontend.md
   `try` (a `ZodError` becomes a 400 in `errorWrapper`). Use the parsed
   value only — never cast or re-parse `req.query`. Don't pass `req.body`
   straight into Mongoose.
-- Errors: `ZodError` and `ErrorWithCause` become a **400** and a plain `Error`
-  becomes a **500** (`middleware/errorWrapper.ts`). For "not found", return
-  `res.status(404)` from the route as existing routes do.
+- Errors: services throw a plain `Error` with a message a developer can act
+  on — it becomes a **500** and Sentry captures it. A `ZodError` becomes a
+  400. For an expected outcome the FE must tell apart (not found, duplicate),
+  return `null` from the service and send the status from the route
+  (`res.status(404)` / `409`).
 - Every `/api/*` route is behind `requireApiAuth` (Clerk), except the
   leftover `/api/test` (tech debt). Don't mount routes before it in
   `server.ts`.

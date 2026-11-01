@@ -1,6 +1,5 @@
 import type { NextFunction, Request, Response } from "express";
 import { ZodError } from "zod";
-import { ErrorWithCause } from "../utils/customErrors";
 
 export function errorWrapper(
   err: unknown,
@@ -13,15 +12,7 @@ export function errorWrapper(
     res.status(400).json({ message: "Validation failed", errors: err.issues });
     return;
   }
-  if (err instanceof ErrorWithCause) {
-    res.status(400).json({
-      status: "error",
-      message: err.message,
-      code: err.code,
-      details: err.details,
-    });
-    return;
-  } else if (err instanceof Error) {
+  if (err instanceof Error) {
     console.error(err);
     next(err);
   } else {
