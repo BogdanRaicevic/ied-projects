@@ -17,9 +17,10 @@ Sentry init in `src/instrument.ts`, env in `src/utils/envVariables.ts`
 ## Adding an endpoint
 
 1. Schema in `ied-shared/src/types/<entity>.zod.ts`, export from `index.ts`.
-2. Service function in `services/<entity>.service.ts`. Throw
-   `ErrorWithCause(message, code)` for expected failures. For not-found,
-   return `null` and let the route send 404.
+2. Service function in `services/<entity>.service.ts`. Throw a plain
+   `Error` for failures (500, captured by Sentry). For not-found or another
+   outcome the FE must tell apart, return `null` and let the route send the
+   status.
 3. Route in `routes/<entity>.routes.ts`:
 
    ```ts

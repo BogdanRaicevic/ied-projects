@@ -28,7 +28,6 @@ import {
   updatePrijava,
   updateSeminar,
 } from "../services/seminar.service";
-import { ErrorWithCause } from "../utils/customErrors";
 
 const router = Router();
 const seminariAudit = createAuditMiddleware(Seminar);
@@ -136,13 +135,17 @@ router.post(
     const prijava = req.body as z.infer<typeof PrijavaSchema>;
     try {
       const response = await createPrijava(id, prijava);
-      res.status(201).json(response);
-    } catch (error: unknown) {
-      if (error instanceof ErrorWithCause && error.code === "duplicate") {
-        res.status(409).json({ message: error.message });
-      } else {
-        next(error);
+      if (!response) {
+        res
+          .status(409)
+          .json({
+            message: "Zaposleni is already registered for this seminar",
+          });
+        return;
       }
+      res.status(201).json(response);
+    } catch (error) {
+      next(error);
     }
   },
 );
@@ -157,12 +160,8 @@ router.post(
     try {
       const response = await updatePrijava(id, prijava);
       res.status(201).json(response);
-    } catch (error: unknown) {
-      if (error instanceof ErrorWithCause && error.code === "duplicate") {
-        res.status(409).json({ message: error.message });
-      } else {
-        next(error);
-      }
+    } catch (error) {
+      next(error);
     }
   },
 );

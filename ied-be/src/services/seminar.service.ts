@@ -13,7 +13,6 @@ import {
   type SeminarType,
 } from "./../models/seminar.model";
 import { createSeminarQuery } from "../queryBuilders/seminariQueryBuilder";
-import { ErrorWithCause } from "../utils/customErrors";
 import {
   escapeRegex,
   toDateRangeFilter,
@@ -120,15 +119,8 @@ export const createPrijava = async (
     { returnDocument: "after" },
   ).lean();
 
-  // Existence was already confirmed above, so a null result here means the
-  // $ne guard rejected the update: the zaposleni is already registered.
-  if (!updatedSeminar) {
-    throw new ErrorWithCause(
-      "Zaposleni is already registered for this seminar",
-      "duplicate",
-    );
-  }
-
+  // Existence was already confirmed above, so null here means the $ne guard
+  // rejected the update: the zaposleni is already registered.
   return updatedSeminar;
 };
 

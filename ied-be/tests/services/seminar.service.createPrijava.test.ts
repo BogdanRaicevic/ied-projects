@@ -3,7 +3,6 @@ import { beforeEach, describe, expect, it } from "vitest";
 import { Firma } from "../../src/models/firma.model";
 import { Seminar } from "../../src/models/seminar.model";
 import { createPrijava } from "../../src/services/seminar.service";
-import { ErrorWithCause } from "../../src/utils/customErrors";
 
 // Regression coverage: createPrijava used to silently return null when the
 // zaposleni was already registered, and the route responded with
@@ -51,18 +50,10 @@ describe("seminar.service createPrijava", () => {
     expect(updated?.prijave).toHaveLength(1);
   });
 
-  it("throws a duplicate ErrorWithCause instead of silently returning null", async () => {
+  it("returns null for a duplicate and adds no second prijava", async () => {
     await createPrijava(seminarId, prijava());
 
-    let error: unknown;
-    try {
-      await createPrijava(seminarId, prijava());
-    } catch (e) {
-      error = e;
-    }
-
-    expect(error).toBeInstanceOf(ErrorWithCause);
-    expect((error as ErrorWithCause).code).toBe("duplicate");
+    expect(await createPrijava(seminarId, prijava())).toBeNull();
 
     const seminar = await Seminar.findById(seminarId).lean();
     expect(seminar?.prijave).toHaveLength(1);
