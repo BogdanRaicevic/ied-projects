@@ -69,8 +69,7 @@ Tick items off (or delete them) as they're fixed.
 ## P3 — cleanup
 
 - [x] Unused deps: `styled-components`, `@mui/styled-engine-sc` (ied-fe).
-- [ ] MySQL config in `mongo-migrator/src/config.ts` — still imported by the
-  2024 migrations; only removable if those are retired.
+- [x] MySQL leftovers in `mongo-migrator` (config, `mysql2`, 2024 import migrations).
 - [x] `db.ts` `once("open")` listener never fires.
 - [x] Stale `homepage` in `ied-fe/package.json`.
 - [ ] Root `README.md` is empty.
