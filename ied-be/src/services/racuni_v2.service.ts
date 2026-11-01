@@ -14,7 +14,7 @@ import {
 } from "../templates/invoiceRenderer";
 import { sanitizeFilename } from "../utils/docx.utils";
 import { env } from "../utils/envVariables";
-import { renderHtmlToPdfBuffer } from "./docx.service";
+import { renderHtmlToPdfBuffer } from "./pdf.service";
 
 type IzdavacConfig = (typeof izdavacRacuna)[number];
 

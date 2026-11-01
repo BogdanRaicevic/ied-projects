@@ -7,10 +7,8 @@ import {
   TipRacuna,
 } from "ied-shared";
 import { validateRequestBody } from "../middleware/validateSchema";
-import {
-  generateCertificatesZipBuffer,
-  generateDocxBuffer,
-} from "../services/docx.service";
+import { generateDocxBuffer } from "../services/docx.service";
+import { generateCertificatesZipBuffer } from "../services/pdf.service";
 import { getTemplateErrorDetails } from "../utils/docx.utils";
 
 const router = Router();
