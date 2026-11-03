@@ -156,7 +156,10 @@ jobs:
             nvm use || nvm use default
             set -u
           fi
-          pnpm exec pm2 stop all
+          # Avoid the possibly broken pnpm; a fresh server has no pm2 yet.
+          if [ -x ./node_modules/.bin/pm2 ]; then
+            ./node_modules/.bin/pm2 stop all
+          fi
 
           echo "==> [$TARGET_NAME] updating working tree to $REF"
           git fetch --all --tags --prune
