@@ -40,13 +40,24 @@ if [ -s "$NVM_DIR/nvm.sh" ]; then
   fi
 fi
 
-# Globals live per Node version, so a fresh Node has no pnpm. Install exactly
-# the version package.json pins — an older global pnpm delegating to the
-# pinned one is what crash-looped pm2 before.
+# Use exactly the pnpm package.json pins, installed by npm for THIS Node.
+# `pnpm -v` alone can't be trusted: any other pnpm (standalone in
+# ~/.local/share/pnpm, /usr/local/bin) hands off to a self-downloaded copy in
+# ~/.local/share/pnpm/.tools that has no native binary, still prints the pinned
+# version, and then turbo can't spawn it (exit 137). So check the npm-global
+# binary itself: its output must be the bare version — a wrong version, a
+# missing binary or the "running through Node.js" warning all mean reinstall.
 pinned_pnpm=$(node -p 'require("./package.json").packageManager.split("+")[0].split("@")[1]')
-if [ "$(pnpm -v 2>/dev/null || true)" != "$pinned_pnpm" ]; then
+npm_pnpm="$(npm prefix -g)/bin/pnpm"
+if [ "$("$npm_pnpm" -v 2>&1 || true)" != "$pinned_pnpm" ]; then
   echo "==> Installing pnpm $pinned_pnpm for $(node -v)"
-  npm install -g "pnpm@$pinned_pnpm"
+  npm install -g --ignore-scripts=false "pnpm@$pinned_pnpm"
+fi
+hash -r
+if [ "$(command -v pnpm)" != "$npm_pnpm" ]; then
+  echo "ERROR: 'pnpm' resolves to $(command -v pnpm), not $npm_pnpm." >&2
+  echo "       Another pnpm is earlier on PATH; remove it." >&2
+  exit 1
 fi
 
 for cmd in node pnpm git; do
