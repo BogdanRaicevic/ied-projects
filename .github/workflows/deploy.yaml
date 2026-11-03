@@ -151,7 +151,9 @@ jobs:
           if [ -s "$NVM_DIR/nvm.sh" ]; then
             set +u
             . "$NVM_DIR/nvm.sh"
-            nvm use
+            # Only needs *a* working node to stop pm2. The tree may already
+            # point at a newer .nvmrc than is installed; deploy.sh installs it.
+            nvm use || nvm use default
             set -u
           fi
           pnpm exec pm2 stop all
