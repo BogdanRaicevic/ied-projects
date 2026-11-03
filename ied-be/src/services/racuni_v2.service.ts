@@ -85,8 +85,7 @@ const buildInvoiceTemplateData = (
     pozivNaBroj: racunData.pozivNaBroj,
     datum: new Date(),
     mesto: "Beograd",
-    rokZaUplatu:
-      "rokZaUplatu" in racunData ? racunData.rokZaUplatu : undefined,
+    rokZaUplatu: "rokZaUplatu" in racunData ? racunData.rokZaUplatu : undefined,
     datumUplateAvansa:
       racunData.tipRacuna === TipRacuna.AVANSNI_RACUN
         ? racunData.datumUplateAvansa

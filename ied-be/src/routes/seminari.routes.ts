@@ -136,11 +136,9 @@ router.post(
     try {
       const response = await createPrijava(id, prijava);
       if (!response) {
-        res
-          .status(409)
-          .json({
-            message: "Zaposleni is already registered for this seminar",
-          });
+        res.status(409).json({
+          message: "Zaposleni is already registered for this seminar",
+        });
         return;
       }
       res.status(201).json(response);

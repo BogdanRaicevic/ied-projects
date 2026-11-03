@@ -21,11 +21,14 @@ export const savePretraga = async (
     const pretragaData: Partial<PretrageType> = {};
     pretragaData.nazivPretrage = pretraga.naziv || "pretraga bez imena";
 
-    const invalidMesta = queryParameters.mesta?.filter((mesto) => !Types.ObjectId.isValid(mesto));
+    const invalidMesta = queryParameters.mesta?.filter(
+      (mesto) => !Types.ObjectId.isValid(mesto),
+    );
     if (invalidMesta?.length) {
       throw new Error(`Invalid mesta IDs: ${invalidMesta.join(", ")}`);
     }
-    pretragaData.mesta = queryParameters.mesta?.map((mesto) => new Types.ObjectId(mesto)) ?? [];
+    pretragaData.mesta =
+      queryParameters.mesta?.map((mesto) => new Types.ObjectId(mesto)) ?? [];
     pretragaData.delatnosti = queryParameters.delatnosti;
     pretragaData.velicineFirme = queryParameters.velicineFirme;
     pretragaData.radnaMesta = queryParameters.radnaMesta;
@@ -44,11 +47,18 @@ export const savePretraga = async (
     pretragaData.emailZaposlenog = queryParameters.emailZaposlenog;
     pretragaData.firmaPrijavljeni = queryParameters.firmaPrijavljeni;
     pretragaData.zaposleniPrijavljeni = queryParameters.zaposleniPrijavljeni;
-    const invalidTipoviSeminara = queryParameters.tipoviSeminara?.filter((tipSeminara) => !Types.ObjectId.isValid(tipSeminara));
+    const invalidTipoviSeminara = queryParameters.tipoviSeminara?.filter(
+      (tipSeminara) => !Types.ObjectId.isValid(tipSeminara),
+    );
     if (invalidTipoviSeminara?.length) {
-      throw new Error(`Invalid tipoviSeminara IDs: ${invalidTipoviSeminara.join(", ")}`);
+      throw new Error(
+        `Invalid tipoviSeminara IDs: ${invalidTipoviSeminara.join(", ")}`,
+      );
     }
-    pretragaData.tipoviSeminara = queryParameters.tipoviSeminara?.map((tipSeminara) => new Types.ObjectId(tipSeminara)) ?? [];
+    pretragaData.tipoviSeminara =
+      queryParameters.tipoviSeminara?.map(
+        (tipSeminara) => new Types.ObjectId(tipSeminara),
+      ) ?? [];
     pretragaData.seminari = queryParameters.seminari;
 
     const p = await Pretrage.findOneAndUpdate(
