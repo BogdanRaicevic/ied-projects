@@ -44,7 +44,12 @@ npm_bin="$(npm prefix -g)/bin"
 npm_pnpm="$npm_bin/pnpm"
 if [ "$("$npm_pnpm" -v 2>&1 || true)" != "$pinned_pnpm" ]; then
   echo "==> Installing pnpm $pinned_pnpm for $(node -v)"
-  npm install -g --force --ignore-scripts=false "pnpm@$pinned_pnpm"
+  npm install -g --force --ignore-scripts=false --include=optional "pnpm@$pinned_pnpm"
+  # pnpm's `bin/pnpm` is a shebang-less placeholder until install.js swaps in
+  # the native binary from @pnpm/exe.<platform>. npm can skip that script; a
+  # shell still runs the placeholder (with the "running through Node.js"
+  # warning), but turbo execs it directly and dies with exit 137. Run it here.
+  (cd "$(npm root -g)/pnpm" && node install.js)
 fi
 export PATH="$npm_bin:$PATH"
 hash -r
@@ -90,10 +95,25 @@ echo "==> Running MongoDB migrations"
 pnpm --dir mongo-migrator run dev
 
 echo "==> Starting pm2"
+# The pm2 daemon keeps running the pm2 and Node it was first started with, so
+# a pm2 bump in package.json or a Node bump in .nvmrc never reaches it on its
+# own ("In-memory PM2 is out-of-date"). `pm2 update` saves the process list,
+# kills the daemon and starts a new one from node_modules on the current Node.
+pnpm exec pm2 update
 # startOrReload handles both the first deploy (apps not running yet) and every
 # one after it. --update-env re-reads the .env files on the box.
 pnpm exec pm2 startOrReload ecosystem.config.js --update-env
 pnpm exec pm2 save
+
+# `pm2 startup` writes the current Node's bin dir into the systemd unit, so
+# after a Node bump a reboot would resurrect the apps on the old Node (or fail
+# once it's removed). Regenerate the unit only when that path is stale.
+pm2_unit="/etc/systemd/system/pm2-$(id -un).service"
+node_bin_dir="$(dirname "$(command -v node)")"
+if [ "$(id -u)" -eq 0 ] && ! grep -qF "$node_bin_dir" "$pm2_unit" 2>/dev/null; then
+  echo "==> Refreshing pm2 boot service for $(node -v)"
+  pnpm exec pm2 startup systemd
+fi
 
 pnpm exec pm2 list
 echo "==> Deploy finished"
