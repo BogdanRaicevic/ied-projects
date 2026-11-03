@@ -24,19 +24,29 @@ if [ -s "$NVM_DIR/nvm.sh" ]; then
   set +u
   # shellcheck disable=SC1091
   . "$NVM_DIR/nvm.sh"
-  # Picks up the version declared in .nvmrc. Do NOT swallow a failure here:
-  # silently falling
-  # back to whatever node happens to be on PATH means building and running
-  # production on an unintended Node version.
+  # Installs (if missing) and activates the version in .nvmrc, so a Renovate
+  # Node bump doesn't need a manual `nvm install` on every box. Do NOT swallow
+  # a failure here: silently falling back to whatever node is on PATH means
+  # building and running production on an unintended Node version.
   nvm_status=0
-  nvm use || nvm_status=$?
+  nvm install || nvm_status=$?
+  # Reboots / `pm2 resurrect` / interactive shells pick up `default`.
+  [ "$nvm_status" -eq 0 ] && nvm alias default "$(nvm current)" >/dev/null
   set -u
 
   if [ "$nvm_status" -ne 0 ]; then
-    echo "ERROR: nvm could not activate the Node version in .nvmrc." >&2
-    echo "       Run 'nvm install' in $PWD on this server, then retry." >&2
+    echo "ERROR: nvm could not install/activate the Node version in .nvmrc." >&2
     exit 1
   fi
+fi
+
+# Globals live per Node version, so a fresh Node has no pnpm. Install exactly
+# the version package.json pins — an older global pnpm delegating to the
+# pinned one is what crash-looped pm2 before.
+pinned_pnpm=$(node -p 'require("./package.json").packageManager.split("+")[0].split("@")[1]')
+if [ "$(pnpm -v 2>/dev/null || true)" != "$pinned_pnpm" ]; then
+  echo "==> Installing pnpm $pinned_pnpm for $(node -v)"
+  npm install -g "pnpm@$pinned_pnpm"
 fi
 
 for cmd in node pnpm git; do
