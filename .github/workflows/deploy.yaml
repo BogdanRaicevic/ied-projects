@@ -166,9 +166,16 @@ jobs:
           # --force discards local edits to TRACKED files. Your .env files are
           # gitignored, so they are untouched — which is how each server keeps
           # its own configuration.
-          git checkout --force --detach "origin/$REF" 2>/dev/null \
-            || git checkout --force --detach "$REF"
-          git --no-pager log -1 --oneline
+          # A branch is checked out AS that branch, reset to the newest commit
+          # on origin (-B also drops any commits made on the box), tracking
+          # origin/<branch>. Tags and SHAs (rollbacks) stay detached.
+          if git show-ref --verify --quiet "refs/remotes/origin/$REF"; then
+            git checkout --force -B "$REF" "origin/$REF"
+            git branch --set-upstream-to="origin/$REF" "$REF"
+          else
+            git checkout --force --detach "$REF"
+          fi
+          git --no-pager log -1 --oneline --decorate
 
           # Run the freshly checked-out script, not the one that was on the box
           # a second ago. PM2 was already stopped before the checkout.
