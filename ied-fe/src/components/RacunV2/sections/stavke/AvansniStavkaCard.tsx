@@ -70,7 +70,12 @@ export function AvansniStavkaCard({ stavkaIndex, onRemove }: Props) {
       <CardHeader
         title={
           <Stack spacing={1}>
-            <Stack direction="row" spacing={1} alignItems="center" flexWrap="wrap">
+            <Stack
+              direction="row"
+              spacing={1}
+              alignItems="center"
+              flexWrap="wrap"
+            >
               <Chip label={typeLabel} color={accentColor} variant="filled" />
               <Typography
                 variant="overline"
@@ -84,7 +89,8 @@ export function AvansniStavkaCard({ stavkaIndex, onRemove }: Props) {
               </Typography>
             </Stack>
             <Typography variant="subtitle1" fontWeight={700}>
-              {stavka?.naziv?.trim() || `Nova ${isUsluga ? "usluga" : "stavka"}`}
+              {stavka?.naziv?.trim() ||
+                `Nova ${isUsluga ? "usluga" : "stavka"}`}
             </Typography>
           </Stack>
         }
@@ -147,7 +153,9 @@ export function AvansniStavkaCard({ stavkaIndex, onRemove }: Props) {
                       htmlInput: { min: 0, step: "0.01" },
                       input: {
                         endAdornment: (
-                          <InputAdornment position="end">{valuta}</InputAdornment>
+                          <InputAdornment position="end">
+                            {valuta}
+                          </InputAdornment>
                         ),
                       },
                     }}

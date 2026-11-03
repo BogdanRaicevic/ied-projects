@@ -14,7 +14,7 @@ type BuildSertifikatOptions = {
   imePrezime?: string;
 };
 
-const formatDay = (date: Date) => formatDate(date, "d", { locale: srLatn });
+const formatDay = (date: Date) => formatDate(date, "d.", { locale: srLatn });
 const formatMonth = (date: Date) =>
   formatDate(date, "MMMM", { locale: srLatn });
 const formatYear = (date: Date) => formatDate(date, "yyyy", { locale: srLatn });
@@ -26,9 +26,9 @@ const joinSerbian = (parts: string[]): string =>
     : `${parts.slice(0, -1).join(", ")} i ${parts[parts.length - 1]}`;
 
 // Consolidates seminar dates into a grammatically correct Serbian string:
-// - same month:  "1, 2 i 3 jun 2026"
-// - same year:   "31 januar i 1 februar 2026"
-// - diff years:  "31 decembar 2026 i 1 januar 2027"
+// - same month:  "1., 2. i 3. jun 2026"
+// - same year:   "31. januar i 1. februar 2026"
+// - diff years:  "31. decembar 2026 i 1. januar 2027"
 // Dates may arrive as Date objects or ISO strings (API data isn't always
 // coerced), so normalize to Date before doing any date math.
 const formatSeminarDates = (dates: (Date | string)[]): string => {
@@ -96,7 +96,9 @@ export const buildSingleSertifikat = (
       seminar_naziv: options.seminarName,
       datumi_seminara: formatSeminarDates(options.seminarDates),
       godina_seminara: formatYear(
-        options.seminarDates[0] ? new Date(options.seminarDates[0]) : new Date(),
+        options.seminarDates[0]
+          ? new Date(options.seminarDates[0])
+          : new Date(),
       ),
       templateKey: options.templateKey,
     } satisfies SertifikatType,

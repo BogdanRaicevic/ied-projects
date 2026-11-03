@@ -12,8 +12,7 @@ import { RacunLayout } from "./layouts/RacunLayout";
 import { RacunV2TabsShell } from "./RacunV2TabsShell";
 import { SummaryPanel } from "./SummaryPanel";
 
-const DEFAULT_SUBMIT_ERROR =
-  "Generisanje PDF-a nije uspelo. Pokušajte ponovo.";
+const DEFAULT_SUBMIT_ERROR = "Generisanje PDF-a nije uspelo. Pokušajte ponovo.";
 
 export function RacunV2Content() {
   const { control, handleSubmit, setValue } = useRacunV2Form();
@@ -79,10 +78,7 @@ export function RacunV2Content() {
               ) : null}
 
               {submitError ? (
-                <Alert
-                  severity="error"
-                  onClose={() => setSubmitError(null)}
-                >
+                <Alert severity="error" onClose={() => setSubmitError(null)}>
                   {submitError}
                 </Alert>
               ) : null}

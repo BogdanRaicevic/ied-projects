@@ -176,9 +176,12 @@ const renderCertificatePdf = async (
 // ZIP assembly
 // ---------------------------------------------------------------------------
 
-const getSertifikatPdfFileName = (sertifikat: SertifikatType): string =>
+// Some company names are absurdly long (full legal names), so cap that part.
+const MAX_FIRMA_NAZIV_LENGTH = 40;
+
+export const getSertifikatPdfFileName = (sertifikat: SertifikatType): string =>
   sanitizeFilename(
-    `${sertifikat.ime_prezime}_${sertifikat.broj_sertifikata}.pdf`,
+    `${sertifikat.broj_sertifikata}_${sertifikat.ime_prezime}_${sertifikat.firma_naziv.slice(0, MAX_FIRMA_NAZIV_LENGTH).trim()}.pdf`,
   );
 
 // Caps how many certificates render at once so we don't open dozens of
@@ -211,7 +214,9 @@ export const generateCertificatesZipBuffer = async (
   sertifikatData: SertifikatType[],
 ): Promise<{ buffer: Buffer; fileName: string }> => {
   if (!Array.isArray(sertifikatData)) {
-    throw new TypeError("Invalid request body: expected an array of certificates");
+    throw new TypeError(
+      "Invalid request body: expected an array of certificates",
+    );
   }
   const browser = await getBrowser();
   const archive = new PizZip();
