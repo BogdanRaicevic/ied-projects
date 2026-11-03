@@ -24,10 +24,8 @@ if [ -s "$NVM_DIR/nvm.sh" ]; then
   set +u
   # shellcheck disable=SC1091
   . "$NVM_DIR/nvm.sh"
-  # Installs (if missing) and activates the version in .nvmrc, so a Renovate
-  # Node bump doesn't need a manual `nvm install` on every box. Do NOT swallow
-  # a failure here: silently falling back to whatever node is on PATH means
-  # building and running production on an unintended Node version.
+  # Installs (if missing) and activates the version in .nvmrc. Do not fall
+  # back to another Node version if this fails.
   nvm_status=0
   nvm install || nvm_status=$?
   # Reboots / `pm2 resurrect` / interactive shells pick up `default`.
@@ -40,13 +38,19 @@ if [ -s "$NVM_DIR/nvm.sh" ]; then
   fi
 fi
 
-# Globals live per Node version, so a fresh Node has no pnpm. Install exactly
-# the version package.json pins — an older global pnpm delegating to the
-# pinned one is what crash-looped pm2 before.
+# Use the native pnpm pinned by package.json, installed for this Node version.
 pinned_pnpm=$(node -p 'require("./package.json").packageManager.split("+")[0].split("@")[1]')
-if [ "$(pnpm -v 2>/dev/null || true)" != "$pinned_pnpm" ]; then
+npm_bin="$(npm prefix -g)/bin"
+npm_pnpm="$npm_bin/pnpm"
+if [ "$("$npm_pnpm" -v 2>&1 || true)" != "$pinned_pnpm" ]; then
   echo "==> Installing pnpm $pinned_pnpm for $(node -v)"
-  npm install -g "pnpm@$pinned_pnpm"
+  npm install -g --force --ignore-scripts=false "pnpm@$pinned_pnpm"
+fi
+export PATH="$npm_bin:$PATH"
+hash -r
+if [ "$(pnpm -v 2>&1 || true)" != "$pinned_pnpm" ]; then
+  echo "ERROR: pnpm $pinned_pnpm was installed but cannot run natively." >&2
+  exit 1
 fi
 
 for cmd in node pnpm git; do
@@ -67,7 +71,7 @@ if [ "$(printf '%s\n%s\n' "$required_node" "$actual_node" | sort -V | head -1)" 
   exit 1
 fi
 
-echo "==> [${TARGET_NAME:-$(hostname)}] deploying $(git describe --tags --always) ($(node -v), pnpm $(pnpm -v))"
+echo "==> [${TARGET_NAME:-$(hostname)}] deploying $(git describe --tags --always) ($(node -v), npm $(npm -v), pnpm $(pnpm -v))"
 
 if [ "${PM2_ALREADY_STOPPED:-0}" != "1" ]; then
   echo "==> Stopping pm2"
