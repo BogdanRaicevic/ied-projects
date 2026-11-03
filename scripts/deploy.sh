@@ -95,15 +95,19 @@ echo "==> Running MongoDB migrations"
 pnpm --dir mongo-migrator run dev
 
 echo "==> Starting pm2"
-# The pm2 daemon keeps running the pm2 and Node it was first started with, so
-# a pm2 bump in package.json or a Node bump in .nvmrc never reaches it on its
-# own ("In-memory PM2 is out-of-date"). `pm2 update` saves the process list,
-# kills the daemon and starts a new one from node_modules on the current Node.
-pnpm exec pm2 update
-# startOrReload handles both the first deploy (apps not running yet) and every
-# one after it. --update-env re-reads the .env files on the box.
-pnpm exec pm2 startOrReload ecosystem.config.js --update-env
-pnpm exec pm2 save
+# Start from a clean slate every time. `pm2 kill` = `pm2 delete all` plus
+# stopping the daemon:
+#  - delete: pm2 stores the absolute path `script: "pnpm"` resolved to when an
+#    app was first registered and reuses it on restart/reload. Once that pnpm
+#    is gone or replaced, the apps crash-loop with uptime 0.
+#  - daemon: it keeps the pm2 and Node it was started with, so pm2/Node bumps
+#    never reach it ("In-memory PM2 is out-of-date").
+# The next `pm2 start` spawns a new daemon from node_modules on the current
+# Node and registers the apps from ecosystem.config.js with the current PATH
+# and .env. The apps are already stopped at this point, so no extra downtime.
+pnpm exec pm2 kill
+pnpm exec pm2 start ecosystem.config.js
+pnpm exec pm2 save --force
 
 # `pm2 startup` writes the current Node's bin dir into the systemd unit, so
 # after a Node bump a reboot would resurrect the apps on the old Node (or fail
