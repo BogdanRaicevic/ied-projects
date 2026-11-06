@@ -180,7 +180,7 @@ catalogs:
       specifier: ^18.0.9
       version: 18.0.9
     es-toolkit:
-      specifier: ^1.53.0
+      specifier: ^1.53.1
       version: 1.53.1
     globals:
       specifier: ^17.13.0
