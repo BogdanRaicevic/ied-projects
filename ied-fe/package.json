@@ -44,7 +44,7 @@
     "@types/node": "catalog:",
     "@types/react": "19.3.0",
     "@types/react-dom": "19.3.0",
-    "@vitejs/plugin-react": "^6.1.2",
+    "@vitejs/plugin-react": "^6.2.1",
     "globals": "catalog:",
     "typescript": "catalog:",
     "vite": "^8.3.5"
