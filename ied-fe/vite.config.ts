@@ -11,7 +11,8 @@ export default defineConfig({
     target: "esnext",
   },
   server: {
-    allowedHosts: ["ied-baza.ied-grupa.in.rs", "ied-baza.xyz", "bs-baza.xyz"],
+    // preview binds to localhost behind nginx, so the host check adds nothing; domains live in nginx config
+    allowedHosts: true,
     fs: {
       allow: [
         path.resolve(import.meta.dirname),
