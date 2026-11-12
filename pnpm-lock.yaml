@@ -224,7 +224,7 @@ importers:
         specifier: ^10.4.1
         version: 10.4.1
       fallow:
-        specifier: ^3.38.1
+        specifier: ^3.39.0
         version: 3.40.0
       pm2:
         specifier: ^7.1.2
