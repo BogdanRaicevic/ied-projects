@@ -11,7 +11,7 @@ export default defineConfig({
     target: "esnext",
   },
   server: {
-    allowedHosts: ["ied-baza.xyz", "bs-baza.xyz"],
+    allowedHosts: ["ied-baza.ied-grupa.in.rs", "ied-baza.xyz", "bs-baza.xyz"],
     fs: {
       allow: [
         path.resolve(import.meta.dirname),
