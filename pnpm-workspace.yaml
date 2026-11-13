@@ -6,7 +6,7 @@ packages:
 
 catalog:
   typescript: ^7.0.2
-  "@biomejs/biome": ^2.6.5
+  "@biomejs/biome": ^2.6.6
   "@types/node": ^26.6.6
   zod: ^4.6.7
   tsx: ^4.23.15
