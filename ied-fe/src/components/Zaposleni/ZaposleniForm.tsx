@@ -6,7 +6,7 @@ import { useForm } from "react-hook-form";
 import { useEmailSuppression } from "../../hooks/firma/useEmailSuppression";
 import { useGetRadnaMestaNames } from "../../hooks/radnoMesto/useRadnoMestoQueries";
 import Single from "../Autocomplete/Single";
-import MailingListSwitch from "../MailingListSwitch";
+import { MailingListSwitch } from "../MailingListSwitch/MailingListSwitch";
 
 type ZaposleniFormProps = {
   zaposleni?: ZaposleniType;

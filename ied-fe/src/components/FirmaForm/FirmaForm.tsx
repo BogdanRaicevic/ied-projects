@@ -45,7 +45,7 @@ import {
 } from "../../schemas/metadata";
 import AutocompleteSingle from "../Autocomplete/Single";
 import KontaktKomentarDialog from "../Dialogs/KontaktKomentarDialog";
-import MailingListSwitch from "../MailingListSwitch";
+import { MailingListSwitch } from "../MailingListSwitch/MailingListSwitch";
 import { firmaFormMetadata } from "./firmaFormMetadata";
 
 type FirmaFormProps = {

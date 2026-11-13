@@ -13,7 +13,7 @@ import { AuditChangesViewer } from "../components/AuditChangesViewer/AuditChange
 import AuditLogSearchForm from "../components/AuditChangesViewer/AuditLogSearchForm";
 import AuditOverview from "../components/AuditChangesViewer/AuditOverview";
 import AuditOverviewDetails from "../components/AuditChangesViewer/AuditOverviewDetails";
-import PageTitle from "../components/PageTitle";
+import PageTitle from "../components/PageTitle/PageTitle";
 import AddedChip from "../components/styled/AddedChip";
 import RemovedChip from "../components/styled/RemovedChip";
 import {

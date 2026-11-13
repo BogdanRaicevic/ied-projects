@@ -3,7 +3,7 @@ import { type RacunV2Form, TipRacuna } from "ied-shared";
 import { useState } from "react";
 import { useWatch } from "react-hook-form";
 import { generateAndDownloadRacunV2Pdf } from "../../api/racuni_v2.api";
-import PageTitle from "../PageTitle";
+import PageTitle from "../PageTitle/PageTitle";
 import { useRacunV2Form } from "./hooks/useRacunV2Form";
 import { AvansniLayout } from "./layouts/AvansniLayout";
 import { KonacniLayout } from "./layouts/KonacniLayout";

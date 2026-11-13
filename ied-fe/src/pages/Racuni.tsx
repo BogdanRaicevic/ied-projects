@@ -16,7 +16,7 @@ import {
   updateRacunById,
 } from "../api/racuni.api";
 import { fetchSeminarById } from "../api/seminari.api";
-import PageTitle from "../components/PageTitle";
+import PageTitle from "../components/PageTitle/PageTitle";
 import { CreateAvansForm } from "../components/Racun/CreateAvansForm";
 import { CreateKonacniRacunForm } from "../components/Racun/CreateKonacniRacunForm";
 import { CreatePredracunForm } from "../components/Racun/CreatePredracunForm";

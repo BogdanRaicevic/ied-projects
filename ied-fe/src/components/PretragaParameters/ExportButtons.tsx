@@ -1,6 +1,6 @@
 import type { ParametriPretrage } from "ied-shared";
 import { type Control, useWatch } from "react-hook-form";
-import ExportDataButton from "../SaveDataButton";
+import ExportDataButton from "../SaveDataButton/SaveDataButton";
 
 export function ExportButtons({
   control,

@@ -2,7 +2,7 @@ import { RedirectToSignIn, Show } from "@clerk/react";
 import Container from "@mui/material/Container";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Navigate, Route, Routes } from "react-router-dom";
-import Navigation from "./components/Navigation";
+import ApplicationNavBar from "./components/Navigation/ApplicationNavBar";
 import { AuditLog, Pretrage, Racuni, RacuniV2, Seminari } from "./pages";
 import Firma from "./pages/Firma";
 import { env } from "./utils/envVariables";
@@ -21,7 +21,7 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <Container component="main" maxWidth="lg">
-        <Navigation />
+        <ApplicationNavBar />
         <Show when="signed-out">
           <RedirectToSignIn />
         </Show>

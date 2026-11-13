@@ -29,8 +29,8 @@ import {
 import { formatDatumi } from "../../utils/helpers";
 import AutocompleteMultiple from "../Autocomplete/Multiple";
 import MultiSelectAutocomplete from "../Autocomplete/MultiSelectAutocomplete";
-import CheckboxList from "../CheckboxList";
-import NegationCheckbox from "../NegationCheckbox";
+import CheckboxList from "../CheckboxList/CheckboxList";
+import { NegationCheckbox } from "../NegationCheckbox/NegationCheckbox";
 import { ExportButtons } from "./ExportButtons";
 import { PrijaveRadioButtons } from "./PrijaveRadioButtons";
 
