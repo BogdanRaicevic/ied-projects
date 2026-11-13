@@ -100,7 +100,14 @@ router.delete(
   async (req: Request, res: Response, next: NextFunction) => {
     const { email } = req.body as Pick<SuppressedEmail, "email">;
     try {
-      await removeSuppressedEmail(email);
+      const removed = await removeSuppressedEmail(email);
+      if (removed === null) {
+        res.status(409).json({
+          message:
+            "Email is permanently suppressed (HARD_BOUNCE / SPAM_COMPLAINT)",
+        });
+        return;
+      }
 
       res.status(202).send("Suppressed email removed successfully");
     } catch (error) {

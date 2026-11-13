@@ -10,6 +10,13 @@ const VALID_SUPPRESSION_REASONS = new Set<SuppressionReasons>(
   Object.values(SUPPRESSION_REASONS),
 );
 const BULK_WRITE_CHUNK_SIZE = 500;
+// Bounced / spam-flagged addresses can never be re-subscribed or downgraded.
+const PERMANENT_REASONS = new Set<SuppressionReasons>([
+  SUPPRESSION_REASONS.HARD_BOUNCE,
+  SUPPRESSION_REASONS.SPAM_COMPLAINT,
+]);
+// Contacts store e_mail as typed; the suppression list stores it lowercase.
+const CASE_INSENSITIVE = { locale: "en", strength: 2 };
 
 type SuppressedEmailFailure = {
   row: number;
@@ -45,6 +52,25 @@ const chunkArray = <T>(items: T[], chunkSize: number) => {
   return chunks;
 };
 
+// Keeps the invariant: one prijavljeni value for every firma and zaposleni
+// that shares an email.
+const setPrijavljeniForEmails = (emails: string[], prijavljeni: boolean) =>
+  Promise.all([
+    Firma.updateMany(
+      { e_mail: { $in: emails } },
+      { $set: { prijavljeni } },
+      { collation: CASE_INSENSITIVE },
+    ).exec(),
+    Firma.updateMany(
+      { "zaposleni.e_mail": { $in: emails } },
+      { $set: { "zaposleni.$[z].prijavljeni": prijavljeni } },
+      {
+        arrayFilters: [{ "z.e_mail": { $in: emails } }],
+        collation: CASE_INSENSITIVE,
+      },
+    ).exec(),
+  ]);
+
 export const addSuppressedEmail = async (
   suppressedEmails: SuppressedEmail[],
 ) => {
@@ -77,24 +103,20 @@ export const addSuppressedEmail = async (
       return;
     }
 
-    // Last occurrence wins so repeated CSV rows collapse deterministically.
-    dedupedEntries.set(normalizedEmail, normalizedReason as SuppressionReasons);
+    // Last occurrence wins, except UNSUBSCRIBED never replaces a permanent reason.
+    const reason = normalizedReason as SuppressionReasons;
+    const previous = dedupedEntries.get(normalizedEmail);
+    if (
+      previous &&
+      PERMANENT_REASONS.has(previous) &&
+      !PERMANENT_REASONS.has(reason)
+    ) {
+      return;
+    }
+    dedupedEntries.set(normalizedEmail, reason);
   });
 
-  const operations = Array.from(dedupedEntries.entries()).map(
-    ([email, reason]) => ({
-      updateOne: {
-        filter: { email },
-        update: {
-          $set: {
-            email,
-            reason,
-          },
-        },
-        upsert: true,
-      },
-    }),
-  );
+  const entries = Array.from(dedupedEntries.entries());
 
   const result: AddSuppressedEmailResult = {
     totalRows: suppressedEmails.length,
@@ -108,21 +130,37 @@ export const addSuppressedEmail = async (
     failures,
   };
 
-  if (operations.length === 0) {
+  if (entries.length === 0) {
     return result;
   }
 
   try {
-    const chunks = chunkArray(operations, BULK_WRITE_CHUNK_SIZE);
+    const chunks = chunkArray(entries, BULK_WRITE_CHUNK_SIZE);
 
     for (const chunk of chunks) {
-      const bulkResult = await EmailSuppression.bulkWrite(chunk, {
+      const operations = chunk.map(([email, reason]) => ({
+        updateOne: {
+          filter: { email },
+          // UNSUBSCRIBED only inserts, so it can't overwrite a permanent reason.
+          update: PERMANENT_REASONS.has(reason)
+            ? { $set: { reason } }
+            : { $setOnInsert: { reason } },
+          upsert: true,
+        },
+      }));
+
+      const bulkResult = await EmailSuppression.bulkWrite(operations, {
         ordered: false,
       });
 
       result.upsertedCount += bulkResult.upsertedCount ?? 0;
       result.matchedCount += bulkResult.matchedCount ?? 0;
       result.modifiedCount += bulkResult.modifiedCount ?? 0;
+
+      await setPrijavljeniForEmails(
+        chunk.map(([email]) => email),
+        false,
+      );
     }
 
     return result;
@@ -133,9 +171,24 @@ export const addSuppressedEmail = async (
   }
 };
 
+/**
+ * Re-subscribe: removes an UNSUBSCRIBED email and sets prijavljeni=true on
+ * every contact with it. Returns null (→ 409) for a permanent reason.
+ */
 export const removeSuppressedEmail = async (email: string) => {
   try {
-    await EmailSuppression.deleteOne({ email: email.toLowerCase() }).exec();
+    const normalizedEmail = normalizeEmail(email);
+    const isPermanent = await EmailSuppression.exists({
+      email: normalizedEmail,
+      reason: { $in: [...PERMANENT_REASONS] },
+    });
+    if (isPermanent) {
+      return null;
+    }
+
+    await EmailSuppression.deleteOne({ email: normalizedEmail }).exec();
+    await setPrijavljeniForEmails([normalizedEmail], true);
+    return normalizedEmail;
   } catch (error) {
     console.error("Error removing suppressed email:", error);
     throw error;
