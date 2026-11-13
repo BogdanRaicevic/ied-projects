@@ -165,7 +165,7 @@ settings:
 catalogs:
   default:
     '@biomejs/biome':
-      specifier: ^2.6.5
+      specifier: ^2.6.6
       version: 2.6.6
     '@types/node':
       specifier: ^26.6.6
