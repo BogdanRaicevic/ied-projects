@@ -100,6 +100,19 @@ describe("removeSuppressedEmail (re-subscribe)", () => {
     expect(c?.zaposleni[0]?.prijavljeni).toBe(true);
   });
 
+  it("re-subscribes a contact unsubscribed without a suppression row (legacy)", async () => {
+    const firma = await Firma.create({
+      naziv_firme: "E",
+      e_mail: "legacy@firma.rs",
+      prijavljeni: false,
+    });
+
+    const result = await removeSuppressedEmail("legacy@firma.rs");
+
+    expect(result).not.toBeNull();
+    expect((await Firma.findById(firma._id).lean())?.prijavljeni).toBe(true);
+  });
+
   it("refuses a HARD_BOUNCE email: returns null, keeps it suppressed", async () => {
     await addSuppressedEmail([
       { email: "stay@firma.rs", reason: SUPPRESSION_REASONS.HARD_BOUNCE },

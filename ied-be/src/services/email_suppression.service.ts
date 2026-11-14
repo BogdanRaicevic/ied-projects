@@ -178,15 +178,26 @@ export const addSuppressedEmail = async (
 export const removeSuppressedEmail = async (email: string) => {
   try {
     const normalizedEmail = normalizeEmail(email);
-    const isPermanent = await EmailSuppression.exists({
+    const permanentReasons = [...PERMANENT_REASONS];
+
+    // The reason filter makes the delete itself refuse a permanent row, even
+    // if an upload upgraded it a moment ago.
+    const { deletedCount } = await EmailSuppression.deleteOne({
       email: normalizedEmail,
-      reason: { $in: [...PERMANENT_REASONS] },
-    });
-    if (isPermanent) {
+      reason: { $nin: permanentReasons },
+    }).exec();
+    // Nothing deleted: either permanent (refuse) or no row at all (legacy
+    // unsubscribed contact — re-subscribe still applies).
+    if (
+      deletedCount === 0 &&
+      (await EmailSuppression.exists({
+        email: normalizedEmail,
+        reason: { $in: permanentReasons },
+      }))
+    ) {
       return null;
     }
 
-    await EmailSuppression.deleteOne({ email: normalizedEmail }).exec();
     await setPrijavljeniForEmails([normalizedEmail], true);
     return normalizedEmail;
   } catch (error) {

@@ -117,10 +117,16 @@ function certReducer(s: CertState, e: CertEvent): CertState {
 In React: `const [state, send] = useReducer(certReducer, { status: "closed" })`.
 
 **5. Keep effects at the edges.** The reducer decides *what state we're in*;
-the handler does the async work and reports back with events:
+the handler does the async work and reports back with events. The effect
+must only run when the reducer would **accept** the event — otherwise a
+double click sends `SUBMIT` twice, the reducer correctly ignores the second
+one, and the handler still fires a second request:
 
 ```ts
+const canSubmit = state.status === "open" || state.status === "failed";
+
 const submit = async () => {
+  if (!canSubmit) return; // same rule as the reducer: SUBMIT ignored elsewhere
   send({ type: "SUBMIT" });
   try {
     await generateSertifikatPdfBatch([...]);
@@ -129,7 +135,12 @@ const submit = async () => {
     send({ type: "FAILURE", error: String(err) });
   }
 };
+
+<Button disabled={!canSubmit} onClick={submit}>Generiši</Button>
 ```
+
+React re-renders between two discrete clicks, so the second click already
+sees `submitting`. The disabled button is the visible half of the same rule.
 
 **6. Derive, don't store.** If value B can be computed from value A, don't
 keep both — they *will* drift. `isOpen` is `state.status !== "closed"`.
@@ -306,7 +317,17 @@ client-side but never saves), and search count ≠ export count.
 - `removeSuppressedEmail` (behind `DELETE /remove-email`, used by the
   re-subscribe toggle): permanent reason → returns `null`, route answers
   **409** (new). Otherwise deletes the row and
-  `setPrijavljeniForEmails([email], true)`.
+  `setPrijavljeniForEmails([email], true)`. The delete filters on
+  `reason: { $nin: permanent }`, so it can never remove a bounce/spam row,
+  even one upgraded a moment earlier. No row at all (legacy unsubscribed)
+  still re-subscribes.
+  - **Known race, accepted:** a re-subscribe and a bounce/spam upload for
+    the *same email in the same milliseconds* can end with contacts `true`
+    while the row is permanent. Not worth a transaction (needs a replica
+    set + retry logic): export filters through `withoutSuppressed`, so no
+    mail is sent, and the next contact save forces `false`. Cheap fix if it
+    ever matters: after setting `true`, re-check the row and set `false`
+    if one appeared — converges in every interleaving.
 - Migration `202611131200_sync_prijavljeni_with_email_suppressions.ts`:
   `prijavljeni: false` once for every email already on the list. Safe to
   re-run (verified by running it twice against the in-memory DB). Past
@@ -425,9 +446,25 @@ error state, and no cancellation.
 throttle the network, click next page twice quickly, watch rows vs. pager.
 
 **Green:** `useSearchRacuni(searchState)` in `hooks/racun/useRacunQueries.ts`
-with `searchState` in the query key, `placeholderData: keepPreviousData`.
-TanStack Query drops stale responses by key. Render an `Alert` on
-`isError`.
+with `searchState` in the query key. TanStack Query drops stale responses
+by key. Render an `Alert` on `isError`.
+
+`placeholderData: keepPreviousData` keeps `rowCount` (and so the pager)
+stable while the next page loads — without it `totalDocuments` drops to 0
+and the pager jumps. But it also keeps the *previous page's rows* under the
+*new* page number, which is the same mismatch this item fixes. So the table
+must not show placeholder rows as real ones:
+
+```ts
+state: {
+  pagination: searchState.pagination,
+  isLoading: isPending,          // first load
+  showProgressBars: isFetching,  // as FirmasTable does
+  showSkeletons: isPlaceholderData, // hide old rows while the new page loads
+},
+```
+
+Pager = requested page, body = skeletons until that page's rows arrive.
 
 **Refactor:** remove `loading` / `racuniData` state and the effect.
 
