@@ -199,9 +199,14 @@ export default function SeminarForm({
                     ),
                   },
                 }}
+                type="number"
+                value={field.value ?? ""}
+                onFocus={(e) => e.target.select()}
                 onChange={(e) =>
-                  field.onChange(parseFloat(e.target.value) || 0)
-                } // Parse to number
+                  field.onChange(
+                    e.target.value === "" ? null : Number(e.target.value),
+                  )
+                }
                 error={!!errors.offlineCena}
                 helperText={errors.offlineCena?.message}
                 fullWidth
@@ -227,9 +232,14 @@ export default function SeminarForm({
                     ),
                   },
                 }}
+                type="number"
+                value={field.value ?? ""}
+                onFocus={(e) => e.target.select()}
                 onChange={(e) =>
-                  field.onChange(parseFloat(e.target.value) || 0)
-                } // Parse to number
+                  field.onChange(
+                    e.target.value === "" ? null : Number(e.target.value),
+                  )
+                }
                 error={!!errors.onlineCena}
                 helperText={errors.onlineCena?.message}
                 fullWidth
