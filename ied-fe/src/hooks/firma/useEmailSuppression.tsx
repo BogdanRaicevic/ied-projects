@@ -44,7 +44,7 @@ export const useEmailSuppression = (
 
   const handleMailingListChange = useCallback(
     async (newValue: boolean) => {
-      // The switch is disabled without an email and for bounce/spam; the BE
+      // The switch is hidden without an email and for bounce/spam; the BE
       // refuses those too (409).
       if (!email) return;
 

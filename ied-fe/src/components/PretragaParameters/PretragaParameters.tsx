@@ -79,9 +79,10 @@ function countUsedPretragaParameters(params: ParametriPretrage): number {
   }
 
   for (const key of ["firmaMailingStatus", "zaposleniMailingStatus"] as const) {
+    const statusi = params[key];
     const isDefault =
-      params[key]?.length === 1 && params[key][0] === MAILING_STATUS.SUBSCRIBED;
-    if (!isDefault) filterCount++;
+      statusi?.length === 1 && statusi[0] === MAILING_STATUS.SUBSCRIBED;
+    if (statusi && !isDefault) filterCount++;
   }
 
   return filterCount;
