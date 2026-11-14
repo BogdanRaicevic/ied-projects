@@ -5,9 +5,9 @@ import {
   Divider,
   Grid,
   InputAdornment,
-  TextField,
 } from "@mui/material";
 import { Controller } from "react-hook-form";
+import { NumberField } from "../../Form/NumberField";
 import { useRacunV2Form } from "../hooks/useRacunV2Form";
 
 /**
@@ -37,22 +37,10 @@ export function UsloviPlacanjaSection() {
               name="rokZaUplatu"
               control={control}
               render={({ field, fieldState }) => (
-                <TextField
-                  value={field.value ?? ""}
-                  onChange={(event) => {
-                    const raw = event.target.value;
-                    if (raw === "") {
-                      field.onChange(null);
-                      return;
-                    }
-
-                    const nextValue = Number(raw);
-                    field.onChange(Number.isNaN(nextValue) ? null : nextValue);
-                  }}
-                  onBlur={field.onBlur}
+                <NumberField
+                  {...field}
                   fullWidth
                   required
-                  type="number"
                   label="Rok za uplatu"
                   slotProps={{
                     htmlInput: { min: 0, step: 1 },

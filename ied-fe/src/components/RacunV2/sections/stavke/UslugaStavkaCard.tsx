@@ -23,6 +23,7 @@ import {
 } from "ied-shared";
 import { useMemo } from "react";
 import { Controller, useWatch } from "react-hook-form";
+import { NumberField } from "../../../Form/NumberField";
 import { SubtotalStrip } from "../../components/SubtotalStrip";
 import { useRacunV2Form } from "../../hooks/useRacunV2Form";
 import { toDateOrNull } from "../../utils/date";
@@ -216,10 +217,9 @@ export function UslugaStavkaCard({ stavkaIndex, onRemove }: Props) {
                   name={`${baseName}.onlineKolicina`}
                   control={control}
                   render={({ field, fieldState }) => (
-                    <TextField
+                    <NumberField
                       {...field}
                       fullWidth
-                      type="number"
                       label="Broj učesnika"
                       slotProps={{ htmlInput: { min: 0 } }}
                       error={!!fieldState.error}
@@ -233,10 +233,9 @@ export function UslugaStavkaCard({ stavkaIndex, onRemove }: Props) {
                   name={`${baseName}.onlineCena`}
                   control={control}
                   render={({ field, fieldState }) => (
-                    <TextField
+                    <NumberField
                       {...field}
                       fullWidth
-                      type="number"
                       label="Cena po učesniku"
                       slotProps={{
                         htmlInput: { min: 0, step: "0.01" },
@@ -274,10 +273,9 @@ export function UslugaStavkaCard({ stavkaIndex, onRemove }: Props) {
                   name={`${baseName}.offlineKolicina`}
                   control={control}
                   render={({ field, fieldState }) => (
-                    <TextField
+                    <NumberField
                       {...field}
                       fullWidth
-                      type="number"
                       label="Broj učesnika"
                       slotProps={{ htmlInput: { min: 0 } }}
                       error={!!fieldState.error}
@@ -291,10 +289,9 @@ export function UslugaStavkaCard({ stavkaIndex, onRemove }: Props) {
                   name={`${baseName}.offlineCena`}
                   control={control}
                   render={({ field, fieldState }) => (
-                    <TextField
+                    <NumberField
                       {...field}
                       fullWidth
-                      type="number"
                       label="Cena po učesniku"
                       slotProps={{
                         htmlInput: { min: 0, step: "0.01" },
@@ -321,10 +318,9 @@ export function UslugaStavkaCard({ stavkaIndex, onRemove }: Props) {
                 name={`${baseName}.popust`}
                 control={control}
                 render={({ field, fieldState }) => (
-                  <TextField
+                  <NumberField
                     {...field}
                     fullWidth
-                    type="number"
                     label="Popust"
                     slotProps={{
                       htmlInput: { min: 0, max: 100, step: "0.01" },
@@ -346,10 +342,9 @@ export function UslugaStavkaCard({ stavkaIndex, onRemove }: Props) {
                   name={`${baseName}.stopaPdv`}
                   control={control}
                   render={({ field, fieldState }) => (
-                    <TextField
+                    <NumberField
                       {...field}
                       fullWidth
-                      type="number"
                       label="Stopa PDV-a"
                       slotProps={{
                         htmlInput: { min: 0, max: 50, step: "0.01" },

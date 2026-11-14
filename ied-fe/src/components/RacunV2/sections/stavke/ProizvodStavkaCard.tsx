@@ -21,6 +21,7 @@ import {
 } from "ied-shared";
 import { useMemo } from "react";
 import { Controller, useWatch } from "react-hook-form";
+import { NumberField } from "../../../Form/NumberField";
 import { SubtotalStrip } from "../../components/SubtotalStrip";
 import { useRacunV2Form } from "../../hooks/useRacunV2Form";
 
@@ -176,10 +177,9 @@ export function ProizvodStavkaCard({ stavkaIndex, onRemove }: Props) {
                 name={`${baseName}.kolicina`}
                 control={control}
                 render={({ field, fieldState }) => (
-                  <TextField
+                  <NumberField
                     {...field}
                     fullWidth
-                    type="number"
                     label="Količina"
                     slotProps={{ htmlInput: { min: 0 } }}
                     error={!!fieldState.error}
@@ -193,10 +193,9 @@ export function ProizvodStavkaCard({ stavkaIndex, onRemove }: Props) {
                 name={`${baseName}.cena`}
                 control={control}
                 render={({ field, fieldState }) => (
-                  <TextField
+                  <NumberField
                     {...field}
                     fullWidth
-                    type="number"
                     label="Cena"
                     slotProps={{
                       htmlInput: { min: 0, step: "0.01" },
@@ -222,10 +221,9 @@ export function ProizvodStavkaCard({ stavkaIndex, onRemove }: Props) {
                 name={`${baseName}.popust`}
                 control={control}
                 render={({ field, fieldState }) => (
-                  <TextField
+                  <NumberField
                     {...field}
                     fullWidth
-                    type="number"
                     label="Popust"
                     slotProps={{
                       htmlInput: { min: 0, max: 100, step: "0.01" },
@@ -247,10 +245,9 @@ export function ProizvodStavkaCard({ stavkaIndex, onRemove }: Props) {
                   name={`${baseName}.stopaPdv`}
                   control={control}
                   render={({ field, fieldState }) => (
-                    <TextField
+                    <NumberField
                       {...field}
                       fullWidth
-                      type="number"
                       label="Stopa PDV-a"
                       slotProps={{
                         htmlInput: { min: 0, max: 50, step: "0.01" },

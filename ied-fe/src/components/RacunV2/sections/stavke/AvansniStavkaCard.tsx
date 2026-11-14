@@ -23,6 +23,7 @@ import {
 } from "ied-shared";
 import { useMemo } from "react";
 import { Controller, useWatch } from "react-hook-form";
+import { NumberField } from "../../../Form/NumberField";
 import { useRacunV2Form } from "../../hooks/useRacunV2Form";
 
 type Props = {
@@ -142,12 +143,10 @@ export function AvansniStavkaCard({ stavkaIndex, onRemove }: Props) {
                 name={`${baseName}.avansBezPdv`}
                 control={control}
                 render={({ field, fieldState }) => (
-                  <TextField
+                  <NumberField
                     {...field}
-                    value={field.value ?? 0}
                     fullWidth
                     required
-                    type="number"
                     label="Avans bez PDV-a"
                     slotProps={{
                       htmlInput: { min: 0, step: "0.01" },
@@ -172,11 +171,9 @@ export function AvansniStavkaCard({ stavkaIndex, onRemove }: Props) {
                   name={`${baseName}.stopaPdv`}
                   control={control}
                   render={({ field, fieldState }) => (
-                    <TextField
+                    <NumberField
                       {...field}
-                      value={field.value ?? 20}
                       fullWidth
-                      type="number"
                       label="Stopa PDV-a"
                       slotProps={{
                         htmlInput: { min: 0, max: 50, step: "0.01" },

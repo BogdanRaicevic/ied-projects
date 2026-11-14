@@ -51,8 +51,8 @@ export function StavkeSection() {
 
   // Snapshot defaultStopaPdv at click time. Non-reactive on purpose — once a
   // stavka is appended, its rate is independent (Story 5.2.5 / 5.3.3 expose
-  // a per-stavka rate input). `getValues` returns the raw form value (the
-  // schema is z.coerce.number, so it could be a string from a TextField).
+  // a per-stavka rate input). `getValues` returns the raw form value, which
+  // is null while the field is empty.
   const readDefaultStopaPdv = (): number => {
     const raw = getValues("defaultStopaPdv");
     const parsed = Number(raw);

@@ -15,9 +15,8 @@ import type { StavkaProizvodV2Form, StavkaUslugaV2Form } from "ied-shared";
  * sees a stable value from the start; users overwrite as they type. `datum`
  * defaults to `null` to match MUI DatePicker convention for "no selection".
  *
- * The Zod schema uses `z.coerce.{number,date}` whose `z.input` type is
- * `unknown`, so these literal values typecheck cleanly against the form
- * types even though the parsed shapes are stricter.
+ * `datum` uses `z.coerce.date`, whose `z.input` type is loose, so `null`
+ * typechecks against the form type even though the parsed shape is stricter.
  */
 
 export const getEmptyUslugaStavka = (
