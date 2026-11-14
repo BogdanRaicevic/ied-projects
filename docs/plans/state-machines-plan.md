@@ -256,6 +256,11 @@ to prove it (red), how to fix it (green), cleanup (refactor).
 
 ### 1. Mailing-list subscription — data drift (BE)
 
+> **Next step:** the boolean `prijavljeni` is being replaced by a 4-state
+> `status_mailinga` — see [status-mailinga-plan.md](status-mailinga-plan.md).
+> The fix below stays valid until then; its migration
+> `202611131200_…` gets deleted there (never ran in production).
+
 **Intended design** (owner's description):
 
 - Every contact — firma **or** zaposleni, same rules for both — has
