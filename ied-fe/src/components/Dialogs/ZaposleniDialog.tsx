@@ -20,7 +20,12 @@ const ZaposleniDialog: React.FC<ZaposleniDialogProps> = ({
   errorMessage,
 }) => {
   return (
-    <Dialog open={open} onClose={onClose} maxWidth="lg">
+    <Dialog
+      open={open}
+      // Closing mid-save would let the old request's callbacks hit a reopened dialog.
+      onClose={isSaving ? undefined : onClose}
+      maxWidth="lg"
+    >
       <DialogTitle>Zaposleni</DialogTitle>
       <DialogContent>
         {errorMessage && <Alert severity="error">{errorMessage}</Alert>}

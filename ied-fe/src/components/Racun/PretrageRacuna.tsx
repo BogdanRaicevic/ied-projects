@@ -12,6 +12,7 @@ import {
   Tooltip,
 } from "@mui/material";
 import { blue, green, purple, red } from "@mui/material/colors";
+import { hashKey } from "@tanstack/react-query";
 import { formatDate } from "date-fns";
 import type { PretrageRacunaType, RacunType } from "ied-shared";
 import {
@@ -228,6 +229,7 @@ export const PretrageRacuna = () => {
     isFetching,
     isPlaceholderData,
     isError,
+    refetch,
   } = useSearchRacuni(
     searchState.pagination.pageIndex,
     searchState.pagination.pageSize,
@@ -235,6 +237,15 @@ export const PretrageRacuna = () => {
   );
 
   const handleSearch = (newFilters: PretrageRacunaType) => {
+    // Same filters on page 1 = same query key = no automatic fetch, but
+    // "Pretraži" must still refresh (retry after an error, new računi).
+    if (
+      searchState.pagination.pageIndex === 0 &&
+      hashKey([newFilters]) === hashKey([searchState.filterValues])
+    ) {
+      refetch();
+      return;
+    }
     setSearchState((prev) => ({
       filterValues: newFilters,
       pagination: { ...prev.pagination, pageIndex: 0 },
@@ -267,7 +278,7 @@ export const PretrageRacuna = () => {
       showProgressBars: isFetching,
       // keepPreviousData keeps the old page's rows while the new page loads;
       // hide them so the rows always match the pager.
-      showSkeletons: isPlaceholderData,
+      showSkeletons: isPending || isPlaceholderData,
     },
     rowCount: racuniData?.totalDocuments || 0,
     manualPagination: true,

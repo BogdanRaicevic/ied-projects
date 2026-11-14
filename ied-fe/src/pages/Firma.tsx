@@ -122,6 +122,7 @@ export default function Firma() {
   };
 
   const handleZaposleniSubmit = (zaposleniData: ZaposleniType) => {
+    setErrorAlert(null);
     const isEditing = !!zaposleniData._id;
 
     if (isEditing) {

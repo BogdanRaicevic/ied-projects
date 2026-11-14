@@ -125,7 +125,12 @@ export default function PrijavaNaSeminarDialog({
   };
 
   return (
-    <Dialog open={open} onClose={onClose} maxWidth="lg">
+    <Dialog
+      open={open}
+      // Reopening runs reset(), which detaches a running save and drops its onSuccess.
+      onClose={createPrijavaMutation.isPending ? undefined : onClose}
+      maxWidth="lg"
+    >
       <DialogTitle>{"Prijavi osobu na seminar"}</DialogTitle>
       <DialogContent>
         <Grid container spacing={2} alignItems="center">
@@ -313,7 +318,12 @@ export default function PrijavaNaSeminarDialog({
         >
           Sačuvaj prijavu
         </Button>
-        <Button onClick={onClose} variant="outlined" color="error">
+        <Button
+          onClick={onClose}
+          disabled={createPrijavaMutation.isPending}
+          variant="outlined"
+          color="error"
+        >
           Napusti
         </Button>
       </DialogActions>

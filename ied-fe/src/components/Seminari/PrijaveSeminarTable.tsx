@@ -129,7 +129,7 @@ export default function PrijaveSeminarTable({
       return;
     }
 
-    clearErrors();
+    setSubmitError(null);
     generateSertifikati.mutate([sertifikat], {
       onSuccess: () => setSelectedPrijava(null),
     });
