@@ -9,12 +9,14 @@ import {
   Grid,
   TextField,
 } from "@mui/material";
-import type {
-  MestoFromDBType,
-  ParametriPretrage,
-  TipSeminaraFromDB,
+import {
+  MAILING_STATUS,
+  MAILING_STATUS_LABEL,
+  type MestoFromDBType,
+  NEGACIJA,
+  type ParametriPretrage,
+  type TipSeminaraFromDB,
 } from "ied-shared";
-import { NEGACIJA } from "ied-shared";
 import { useCallback, useEffect, useMemo } from "react";
 import { Controller, useForm, useWatch } from "react-hook-form";
 import { useGetMesta } from "../../hooks/mesto/useMestoQueries";
@@ -32,7 +34,11 @@ import MultiSelectAutocomplete from "../Autocomplete/MultiSelectAutocomplete";
 import CheckboxList from "../CheckboxList";
 import NegationCheckbox from "../NegationCheckbox";
 import { ExportButtons } from "./ExportButtons";
-import { PrijaveRadioButtons } from "./PrijaveRadioButtons";
+
+const MAILING_STATUS_OPTIONS = Object.values(MAILING_STATUS).map((s) => ({
+  _id: s,
+  naziv: MAILING_STATUS_LABEL[s],
+}));
 
 function countUsedPretragaParameters(params: ParametriPretrage): number {
   let filterCount = 0;
@@ -72,19 +78,10 @@ function countUsedPretragaParameters(params: ParametriPretrage): number {
     }
   }
 
-  if (
-    (params.firmaPrijavljeni ?? defaultPretrageParameters.firmaPrijavljeni) !==
-    defaultPretrageParameters.firmaPrijavljeni
-  ) {
-    filterCount++;
-  }
-
-  if (
-    (params.zaposleniPrijavljeni ??
-      defaultPretrageParameters.zaposleniPrijavljeni) !==
-    defaultPretrageParameters.zaposleniPrijavljeni
-  ) {
-    filterCount++;
+  for (const key of ["firmaMailingStatus", "zaposleniMailingStatus"] as const) {
+    const isDefault =
+      params[key]?.length === 1 && params[key][0] === MAILING_STATUS.SUBSCRIBED;
+    if (!isDefault) filterCount++;
   }
 
   return filterCount;
@@ -447,27 +444,29 @@ export default function PretragaParameters() {
       </Grid>
 
       <Grid container spacing={2} mt={2}>
-        <PrijaveRadioButtons
-          name="firmaPrijavljeni"
-          control={control}
-          label="Firme prijavljene na mejling listu:"
-          options={{
-            all: "Sve",
-            subscribed: "Prijavljene",
-            unsubscribed: "Odjavljene",
-          }}
-        />
-
-        <PrijaveRadioButtons
-          name="zaposleniPrijavljeni"
-          control={control}
-          label="Zaposleni prijavljeni na mejling listu:"
-          options={{
-            all: "Svi",
-            subscribed: "Prijavljeni",
-            unsubscribed: "Odjavljeni",
-          }}
-        />
+        {(
+          [
+            ["firmaMailingStatus", "Firme — mejling lista"],
+            ["zaposleniMailingStatus", "Zaposleni — mejling lista"],
+          ] as const
+        ).map(([name, subheader]) => (
+          <Grid key={name} size={3}>
+            <Controller
+              name={name}
+              control={control}
+              render={({ field }) => (
+                <MultiSelectAutocomplete
+                  labelKey="naziv"
+                  options={MAILING_STATUS_OPTIONS}
+                  value={field.value || []}
+                  onChange={field.onChange}
+                  inputLabel={subheader}
+                  inputPlaceholder="Svi statusi"
+                />
+              )}
+            />
+          </Grid>
+        ))}
       </Grid>
 
       <Grid container spacing={2} columns={12} mt={4} mb={4}>

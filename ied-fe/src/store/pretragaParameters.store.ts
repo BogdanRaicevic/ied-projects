@@ -1,7 +1,7 @@
 import {
+  MAILING_STATUS,
   type NegacijaType,
   type ParametriPretrage,
-  PRIJAVA_STATUS,
 } from "ied-shared";
 import { create } from "zustand";
 
@@ -47,8 +47,9 @@ export const defaultPretrageParameters: ParametriPretrage = {
   seminari: [],
   imePrezime: "",
   emailZaposlenog: "",
-  firmaPrijavljeni: PRIJAVA_STATUS.all,
-  zaposleniPrijavljeni: PRIJAVA_STATUS.all,
+  // Default keeps search and export campaign-safe.
+  firmaMailingStatus: [MAILING_STATUS.SUBSCRIBED],
+  zaposleniMailingStatus: [MAILING_STATUS.SUBSCRIBED],
   tipoviSeminara: [],
 };
 
@@ -94,7 +95,11 @@ export const usePretragaStore = create<PretragaStore>((set, get) => ({
   loadFromStorage: () => {
     const savedPretragaParameters = localStorage.getItem(APPLIED_PRETRAGE);
     if (savedPretragaParameters) {
-      const appliedParameters = JSON.parse(savedPretragaParameters);
+      // Defaults first: parameters saved before a filter existed get its default.
+      const appliedParameters = {
+        ...defaultPretrageParameters,
+        ...JSON.parse(savedPretragaParameters),
+      };
       set({
         appliedParameters,
         pretragaParameters: appliedParameters,
