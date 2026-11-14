@@ -6,6 +6,7 @@ import { IzdavacRacuna, TipRacuna } from "./racuni.zod";
 const nonNegativeNumber = z
   .number("Vrednost je obavezna")
   .min(0, "Vrednost mora biti >= 0");
+const quantity = nonNegativeNumber.int("Mora biti ceo broj");
 const requiredNullableNonNegativeNumber = (requiredMessage: string) =>
   z
     .number()
@@ -26,9 +27,9 @@ export const StavkaUslugaV2Zod = z.object({
   datum: zDate(),
   lokacija: z.string().optional(),
   jedinicaMere: z.string().min(1).default("Broj ucesnika"),
-  onlineKolicina: nonNegativeNumber.default(0),
+  onlineKolicina: quantity.default(0),
   onlineCena: nonNegativeNumber.default(0),
-  offlineKolicina: nonNegativeNumber.default(0),
+  offlineKolicina: quantity.default(0),
   offlineCena: nonNegativeNumber.default(0),
   popust: percentage.default(0),
   stopaPdv: nonNegativeNumber.default(20),
@@ -39,7 +40,7 @@ export const StavkaProizvodV2Zod = z.object({
   tipStavke: z.literal("proizvod"),
   naziv: z.string().min(1, "Naziv proizvoda je obavezan"),
   jedinicaMere: z.string().min(1).default("Broj primeraka"),
-  kolicina: nonNegativeNumber.default(0),
+  kolicina: quantity.default(0),
   cena: nonNegativeNumber.default(0),
   popust: percentage.default(0),
   stopaPdv: nonNegativeNumber.default(20),

@@ -16,6 +16,7 @@ companies all day. Favour dense, predictable screens over pretty ones.
 | Labels & messages | Serbian, **with** diacritics (`želite`, `obrišete`), sentence case | |
 | Dates shown to users | `dd.MM.yyyy` via `date-fns` `format` | `KontaktKomentarDialog.tsx` |
 | Money | `formatMoney` from `ied-shared` | `RacunV2/SummaryPanel.tsx` |
+| Number inputs | `Form/NumberField` (`<NumberField {...field} />` in a `Controller`), never `TextField type="number"`; empty is `null`, schema field is plain `z.number()` | `RacunV2/sections/stavke/UslugaStavkaCard.tsx` |
 
 Every screen that loads data needs all three states: loading, error
 (`Alert`), and empty.
