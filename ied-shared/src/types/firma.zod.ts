@@ -55,8 +55,9 @@ export const FirmaSchema = z.object({
     .or(z.literal(""))
     .optional(),
   maticni_broj: z.string().or(z.literal("")).optional(),
-  // Read-only: the BE derives it from the email (suppression list).
-  mailing_status: z.enum(MAILING_STATUS).optional(),
+  // New contacts are subscribed (they asked us to); the BE still derives it
+  // from the email (suppression list) and ignores the client's value.
+  mailing_status: z.enum(MAILING_STATUS).default(MAILING_STATUS.SUBSCRIBED),
   mesto: z
     .object({
       _id: z.string(),
