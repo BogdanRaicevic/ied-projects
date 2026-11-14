@@ -39,15 +39,19 @@ about an email, and the UI, search and export should show and use all four:
    `SUBSCRIBED`. Nothing selected ("Svi statusi") or all four = no filter. **A status filter only judges
    contacts that have an email** (added during implementation): the firma
    filter never hides a firma without its own email, the zaposleni filter
-   never hides a firma whose zaposleni have no email. Same in table and
-   export.
+   never hides a firma whose zaposleni (those matching the other zaposleni
+   filters) have no email. Same in table and export.
 6. **Export follows the filter exactly** — whatever statuses are selected
    are exported, **including `HARD_BOUNCE` / `SPAM_COMPLAINT`**: that's
    intended, it's used to clean up the DB by hand. The special "drop
    suppressed on export" (`withoutSuppressed`) goes away; the default
    filter `SUBSCRIBED` keeps the default export campaign-safe. Export also
    drops firme with no email anywhere; rows without their own email stay
-   (listed separately, as before).
+   (listed separately, as before). **Each export applies only its own
+   status filter** (from review): the firma export ignores the zaposleni
+   status and vice versa, so a firma email isn't dropped because of its
+   zaposleni. A missing status filter (an old FE bundle during the deploy)
+   exports `SUBSCRIBED`, never everything; `[]` means no filter.
 7. **Field name** `mailing_status`. **Stored values stay English**
    (`SUBSCRIBED`, `UNSUBSCRIBED`, `HARD_BOUNCE`, `SPAM_COMPLAINT`) — the
    existing `SUPPRESSION_REASONS` constants and the values in the imported
@@ -56,7 +60,7 @@ about an email, and the UI, search and export should show and use all four:
    only run locally → **delete it**, fold into the new migration.
 9. **`email_suppressions` is the only source of truth.** A contact's
    status = the reason of its email's row, else `SUBSCRIBED`.
-   - **Legacy `prijavljeni: false` → `UNSUBSCRIBED`** (set from
+   - Legacy `prijavljeni: false` **with an email** → `UNSUBSCRIBED` (set from
      `komentar ~ /odjav/` by `202511012256_pull_odjave_to_property`; those
      values are correct). To keep the list the only truth, the migration
      first adds an `UNSUBSCRIBED` row for each such email (insert-only,
@@ -65,11 +69,8 @@ about an email, and the UI, search and export should show and use all four:
      3) — would silently flip them to `SUBSCRIBED`.
      - Side effect (decision 2, per email): other contacts sharing that
        email become `UNSUBSCRIBED` too.
-     - Legacy `false` **without an email**: no row is possible → stored
-       `UNSUBSCRIBED`. If an email is added later, status follows that
-       email (decision 3).
-   - Everything else without a row, including contacts without an email →
-     `SUBSCRIBED`.
+   - Without an email there can be no suppression row, so the status is
+     always `SUBSCRIBED`, regardless of the legacy boolean.
 
 ## The state machine (per email)
 
@@ -122,9 +123,7 @@ export const nextMailingStatus = (
 `email_suppressions` stays as is: it's the per-email record (and the
 source for contacts created later with an already-suppressed email).
 Invariant: **row with reason R ⇔ every contact with that email has
-`mailing_status: R`; no row ⇔ `SUBSCRIBED`.** Only exception: legacy
-contacts without an email that were `prijavljeni: false` stay
-`UNSUBSCRIBED` (decision 9).
+`mailing_status: R`; no row ⇔ `SUBSCRIBED`.**
 
 ## Changes by area
 
@@ -171,7 +170,8 @@ contacts without an email that were `prijavljeni: false` stay
   `mailing_status: { $in: selected }` (`mailingStatusFilter` skips none /
   all four). Email exemption (decision 5): firma — status matches *or* no
   own email; zaposleni — a zaposleni **with an email** matches the status
-  (plus the other zaposleni filters), *or* no zaposleni has an email.
+  (plus the other zaposleni filters), *or* no zaposleni matching the other
+  zaposleni filters has an email.
   `forExport` additionally requires an email on the firma or a zaposleni.
   The zaposleni export loop applies the same rule per row.
 - `services/pretrage.service.ts`: map the renamed saved-search fields.
@@ -206,22 +206,20 @@ contacts without an email that were `prijavljeni: false` stay
   (local only, decision 8).
 - New `202611141200_prijavljeni_to_mailing_status.ts` (re-runnable,
   decision 9):
-  0. Trim `e_mail` on firme and zaposleni (collation ignores case, not
-     whitespace, so `" a@b.rs "` would never match its row).
   1. Legacy unsubscribes → list: for every firma / zaposleni with
      `prijavljeni: false` and a non-empty email, upsert
      `{ email: <trimmed, lowercased>, reason: "UNSUBSCRIBED" }` with
-     `$setOnInsert` (never overwrites a bounce/spam row).
-  2. Every firma and zaposleni **with an email**:
-     `mailing_status: "SUBSCRIBED"`. Without an email:
-     `prijavljeni: false` → `"UNSUBSCRIBED"`, else `"SUBSCRIBED"`; once
-     `prijavljeni` is gone (re-run), leave their existing status alone.
-  3. For each reason, the emails on the list with that reason (chunked):
-     `mailing_status: <reason>` on matching firme and zaposleni
-     (case-insensitive collation + `arrayFilters`).
-  4. `$unset: { prijavljeni: "" }` on firme and `zaposleni.$[]`.
-  Re-run safe: step 1 is insert-only and finds nothing once `prijavljeni`
-  is gone; steps 2–3 recompute the same result from the list.
+     `$setOnInsert` (never overwrites a bounce/spam row). Invalid values
+     (`"a@x.rs; b@x.rs"`) are still added, so the contact stays
+     `UNSUBSCRIBED`; their firme are logged for a manual fix.
+  2. Load `email_suppressions` into a normalized email → reason map.
+  3. Stream firme once in chunks. For each firma and zaposleni, trim
+     `e_mail`, set `mailing_status` from the map (or `SUBSCRIBED` when there
+     is no row/email), and unset `prijavljeni` in the same update. Each
+     update is guarded by the firma's `updated_at`: if the app changed it
+     during the run, the migration stops and asks for a re-run.
+  Re-run safe: step 1 finds nothing after the old field is removed, and the
+  final pass derives the same result from `email_suppressions`.
 - New `202611141201_pretrage_mailing_status.ts` (saved searches in
   `pretrage`): `"subscribed"` → `["SUBSCRIBED"]`, `"unsubscribed"` →
   `["UNSUBSCRIBED", "HARD_BOUNCE", "SPAM_COMPLAINT"]` (today's meaning of
@@ -249,7 +247,10 @@ contacts without an email that were `prijavljeni: false` stay
   - `firma.service.search.status.test.ts` (new): the email exemption in
     table search; a zaposleni without an email never matches the status.
   - `firma.service.export.test.ts`: export follows the filter, keeps rows
-    without their own email, drops firme with no email anywhere.
+    without their own email, drops firme with no email anywhere; each
+    export uses only its own status filter; a missing filter → `SUBSCRIBED`.
+  - `email_suppression.service.test.ts`: `deleteEmails` resets the status
+    to `SUBSCRIBED` (decision 4).
   - Fixtures: `tests/fixtures/staticTestData.json`,
     `tests/utils/seedData.ts` (`prijavljeni` → `mailing_status`).
 - Migrations: run each twice against `mongodb-memory-server` with a
@@ -258,8 +259,8 @@ contacts without an email that were `prijavljeni: false` stay
   `prijavljeni: false` + email → `UNSUBSCRIBED` **and** an `UNSUBSCRIBED`
   row exists; another contact sharing that email → `UNSUBSCRIBED`; legacy
   `false` on an email that is already `HARD_BOUNCE` → stays `HARD_BOUNCE`;
-  legacy `false` without email → `UNSUBSCRIBED`; `true` without email →
-  `SUBSCRIBED`; `prijavljeni` field gone; second run changes nothing;
+  legacy `false` or `true` without email → `SUBSCRIBED`; `prijavljeni` field
+  gone; second run changes nothing;
   saved searches mapped.
 - FE: no test setup (see `docs/testing.md`) → manual check:
   switch on/off, chip + no switch for bounce/spam/no email, search
