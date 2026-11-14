@@ -2,59 +2,52 @@ import type { Connection } from "mongoose";
 
 // prijavljeni (boolean) → mailing_status, derived from email_suppressions
 // (the only source of truth): a contact's status is its email's reason, else
-// SUBSCRIBED. Trims contact emails first. Legacy prijavljeni=false is first added to the list as
-// UNSUBSCRIBED, so a later recompute keeps it. Contacts store e_mail as typed,
-// the list stores it lowercase, hence the case-insensitive collation.
-// Re-run safe: step 1 is insert-only and finds nothing once prijavljeni is
-// gone; steps 2–3 recompute the same result from the list.
+// SUBSCRIBED; a contact without an email is always SUBSCRIBED. Legacy
+// prijavljeni=false with an email is first added to the list as UNSUBSCRIBED.
+// The final pass trims emails, derives every status, and removes the old field
+// in one update per firma. Safe to re-run.
 const CHUNK_SIZE = 500;
-const CASE_INSENSITIVE = { locale: "en", strength: 2 };
-const NO_EMAIL = [null, ""];
-const HAS_ZAPOSLENI = { "zaposleni.0": { $exists: true } };
+// Rough check, only to log suspicious legacy values for a manual fix.
+const SIMPLE_EMAIL = /^[^\s@;,]+@[^\s@;,]+\.[^\s@;,]+$/;
+
+const normalizeEmail = (email: unknown) =>
+  typeof email === "string" ? email.trim().toLowerCase() : "";
 
 export const up = async (db: Connection) => {
   try {
     const firmas = db.collection("firmas");
     const suppressions = db.collection("email_suppressions");
 
-    // 0. Trim e_mail: collation ignores case, not whitespace, so " a@b.rs "
-    // would never match its row (new writes are already trimmed).
-    const EDGE_SPACE = /^\s|\s$/;
-    await firmas.updateMany({ e_mail: EDGE_SPACE }, [
-      { $set: { e_mail: { $trim: { input: "$e_mail" } } } },
-    ]);
-    await firmas.updateMany({ "zaposleni.e_mail": EDGE_SPACE }, [
-      {
-        $set: {
-          zaposleni: {
-            $map: {
-              input: "$zaposleni",
-              in: {
-                $cond: [
-                  { $eq: [{ $type: "$$this.e_mail" }, "string"] },
-                  {
-                    $mergeObjects: [
-                      "$$this",
-                      { e_mail: { $trim: { input: "$$this.e_mail" } } },
-                    ],
-                  },
-                  "$$this",
-                ],
-              },
-            },
-          },
-        },
-      },
-    ]);
+    // 1. Preserve legacy unsubscribes in the source-of-truth list.
+    const pendingLegacyEmails = new Set<string>();
+    const invalidEmailFirme = new Set<string>();
+    let rowsAdded = 0;
 
-    // 1. Legacy unsubscribes → list (never overwrites an existing reason).
-    const legacyEmails = new Set<string>();
-    const addEmail = (email: unknown) => {
-      const normalized =
-        typeof email === "string" ? email.trim().toLowerCase() : "";
-      if (normalized) legacyEmails.add(normalized);
+    const flushLegacyEmails = async () => {
+      if (pendingLegacyEmails.size === 0) return;
+      const result = await suppressions.bulkWrite(
+        [...pendingLegacyEmails].map((email) => ({
+          updateOne: {
+            filter: { email },
+            update: { $setOnInsert: { reason: "UNSUBSCRIBED" } },
+            upsert: true,
+          },
+        })),
+        { ordered: false },
+      );
+      rowsAdded += result.upsertedCount;
+      pendingLegacyEmails.clear();
     };
-    const cursor = firmas.find(
+
+    const addEmail = (email: unknown, firmaId: unknown) => {
+      const normalized = normalizeEmail(email);
+      if (!normalized) return;
+      pendingLegacyEmails.add(normalized);
+      if (!SIMPLE_EMAIL.test(normalized))
+        invalidEmailFirme.add(String(firmaId));
+    };
+
+    const legacyCursor = firmas.find(
       { $or: [{ prijavljeni: false }, { "zaposleni.prijavljeni": false }] },
       {
         projection: {
@@ -65,108 +58,110 @@ export const up = async (db: Connection) => {
         },
       },
     );
-    for await (const firma of cursor) {
-      if (firma.prijavljeni === false) addEmail(firma.e_mail);
+    for await (const firma of legacyCursor) {
+      if (firma.prijavljeni === false) addEmail(firma.e_mail, firma._id);
       for (const z of firma.zaposleni ?? []) {
-        if (z.prijavljeni === false) addEmail(z.e_mail);
+        if (z.prijavljeni === false) addEmail(z.e_mail, firma._id);
+      }
+      if (pendingLegacyEmails.size >= CHUNK_SIZE) await flushLegacyEmails();
+    }
+    await flushLegacyEmails();
+
+    // 2. Snapshot the source of truth for constant-time status lookups.
+    const statusByEmail = new Map<string, string>();
+    for await (const row of suppressions.find(
+      {},
+      { projection: { email: 1, reason: 1 } },
+    )) {
+      const email = normalizeEmail(row.email);
+      if (email && typeof row.reason === "string") {
+        statusByEmail.set(email, row.reason);
       }
     }
-    const emails = [...legacyEmails];
-    let rowsAdded = 0;
-    for (let i = 0; i < emails.length; i += CHUNK_SIZE) {
-      const result = await suppressions.bulkWrite(
-        emails.slice(i, i + CHUNK_SIZE).map((email) => ({
-          updateOne: {
-            filter: { email },
-            update: { $setOnInsert: { reason: "UNSUBSCRIBED" } },
-            upsert: true,
-          },
-        })),
-        { ordered: false },
+
+    // 3. One pass: trim emails, derive statuses, and remove prijavljeni.
+    type FirmaOperation = Parameters<typeof firmas.bulkWrite>[0][number];
+    const firmaOps: FirmaOperation[] = [];
+    let migrated = 0;
+    const flushFirmas = async () => {
+      if (firmaOps.length === 0) return;
+      const result = await firmas.bulkWrite(firmaOps, { ordered: false });
+      if (result.matchedCount !== firmaOps.length) {
+        throw new Error(
+          `${firmaOps.length - result.matchedCount} firme changed during migration; re-run it`,
+        );
+      }
+      migrated += result.modifiedCount;
+      firmaOps.length = 0;
+    };
+    const statusFor = (email: unknown) => {
+      const normalized = normalizeEmail(email);
+      return statusByEmail.get(normalized) ?? "SUBSCRIBED";
+    };
+
+    const firmaCursor = firmas.find(
+      {},
+      {
+        projection: {
+          e_mail: 1,
+          prijavljeni: 1,
+          updated_at: 1,
+          "zaposleni.e_mail": 1,
+          "zaposleni.prijavljeni": 1,
+        },
+      },
+    );
+    for await (const firma of firmaCursor) {
+      const filter: Record<string, unknown> = { _id: firma._id };
+      if (firma.updated_at !== undefined) filter.updated_at = firma.updated_at;
+
+      const set: Record<string, unknown> = {
+        mailing_status: statusFor(firma.e_mail),
+      };
+      const unset: Record<string, ""> = {};
+
+      if (
+        typeof firma.e_mail === "string" &&
+        firma.e_mail.trim() !== firma.e_mail
+      ) {
+        set.e_mail = firma.e_mail.trim();
+      }
+      if (Object.hasOwn(firma, "prijavljeni")) unset.prijavljeni = "";
+
+      firma.zaposleni?.forEach(
+        (z: { e_mail?: unknown; prijavljeni?: unknown }, index: number) => {
+          const prefix = `zaposleni.${index}`;
+          set[`${prefix}.mailing_status`] = statusFor(z.e_mail);
+          if (typeof z.e_mail === "string" && z.e_mail.trim() !== z.e_mail) {
+            set[`${prefix}.e_mail`] = z.e_mail.trim();
+          }
+          if (Object.hasOwn(z, "prijavljeni")) {
+            unset[`${prefix}.prijavljeni`] = "";
+          }
+        },
       );
-      rowsAdded += result.upsertedCount;
-    }
 
-    // 2. Baseline. With an email: SUBSCRIBED (step 3 sets the list's reason).
-    // Without: legacy false → UNSUBSCRIBED (no row possible), else SUBSCRIBED;
-    // once prijavljeni is gone, their status is left alone.
-    await firmas.updateMany(
-      { e_mail: { $nin: NO_EMAIL } },
-      { $set: { mailing_status: "SUBSCRIBED" } },
-    );
-    await firmas.updateMany(
-      { e_mail: { $in: NO_EMAIL }, prijavljeni: false },
-      { $set: { mailing_status: "UNSUBSCRIBED" } },
-    );
-    await firmas.updateMany(
-      { mailing_status: { $exists: false } },
-      { $set: { mailing_status: "SUBSCRIBED" } },
-    );
-    await firmas.updateMany(
-      HAS_ZAPOSLENI,
-      {
-        $set: { "zaposleni.$[z].mailing_status": "SUBSCRIBED" },
-      },
-      { arrayFilters: [{ "z.e_mail": { $nin: NO_EMAIL } }] },
-    );
-    await firmas.updateMany(
-      HAS_ZAPOSLENI,
-      {
-        $set: { "zaposleni.$[z].mailing_status": "UNSUBSCRIBED" },
-      },
-      {
-        arrayFilters: [
-          { "z.e_mail": { $in: NO_EMAIL }, "z.prijavljeni": false },
-        ],
-      },
-    );
-    await firmas.updateMany(
-      HAS_ZAPOSLENI,
-      {
-        $set: { "zaposleni.$[z].mailing_status": "SUBSCRIBED" },
-      },
-      { arrayFilters: [{ "z.mailing_status": { $exists: false } }] },
-    );
-
-    // 3. Every email on the list → its reason on matching contacts.
-    const rows = await suppressions
-      .find({}, { projection: { email: 1, reason: 1 } })
-      .toArray();
-    for (const reason of new Set(rows.map((r) => r.reason))) {
-      const reasonEmails = rows
-        .filter((r) => r.reason === reason)
-        .map((r) => r.email);
-      for (let i = 0; i < reasonEmails.length; i += CHUNK_SIZE) {
-        const chunk = reasonEmails.slice(i, i + CHUNK_SIZE);
-        await firmas.updateMany(
-          { e_mail: { $in: chunk } },
-          { $set: { mailing_status: reason } },
-          { collation: CASE_INSENSITIVE },
-        );
-        await firmas.updateMany(
-          { "zaposleni.e_mail": { $in: chunk } },
-          { $set: { "zaposleni.$[z].mailing_status": reason } },
-          {
-            arrayFilters: [{ "z.e_mail": { $in: chunk } }],
-            collation: CASE_INSENSITIVE,
+      firmaOps.push({
+        updateOne: {
+          filter,
+          update: {
+            $set: set,
+            ...(Object.keys(unset).length > 0 ? { $unset: unset } : {}),
           },
-        );
-      }
+        },
+      });
+      if (firmaOps.length >= CHUNK_SIZE) await flushFirmas();
     }
-
-    // 4. Drop the old field.
-    await firmas.updateMany(
-      { prijavljeni: { $exists: true } },
-      { $unset: { prijavljeni: "" } },
-    );
-    await firmas.updateMany(
-      { "zaposleni.prijavljeni": { $exists: true } },
-      { $unset: { "zaposleni.$[].prijavljeni": "" } },
-    );
+    await flushFirmas();
 
     console.log(
-      `Migration completed: ${rowsAdded} legacy unsubscribes added to email_suppressions, ${rows.length} suppressed emails applied to mailing_status.`,
+      `Migration completed: ${rowsAdded} legacy unsubscribes added, ${statusByEmail.size} suppressions loaded, ${migrated} firme migrated.`,
     );
+    if (invalidEmailFirme.size > 0) {
+      console.warn(
+        `${invalidEmailFirme.size} firme have a legacy unsubscribe with an invalid email (fix by hand): ${[...invalidEmailFirme].join(", ")}`,
+      );
+    }
   } catch (error) {
     console.error("Error migrating prijavljeni to mailing_status:", error);
     throw error;
