@@ -1,5 +1,6 @@
 import z from "zod";
 import { SUPPRESSION_REASONS } from "../constants/email";
+import { MAILING_STATUS } from "../constants/mailingStatus";
 import { LastContactedFromDB } from "./last_contacted.zod";
 
 export const EmailSchema = z
@@ -31,7 +32,7 @@ export const ZaposleniSchema = z.object({
   telefon: z.string().optional(),
   komentar: z.string().max(10000).optional(),
   radno_mesto: z.string().optional(),
-  prijavljeni: z.boolean(),
+  mailing_status: z.enum(MAILING_STATUS).default(MAILING_STATUS.SUBSCRIBED),
 });
 
 export const FirmaSchema = z.object({
@@ -54,7 +55,8 @@ export const FirmaSchema = z.object({
     .or(z.literal(""))
     .optional(),
   maticni_broj: z.string().or(z.literal("")).optional(),
-  prijavljeni: z.boolean(),
+  // Read-only: the BE derives it from the email (suppression list).
+  mailing_status: z.enum(MAILING_STATUS).optional(),
   mesto: z
     .object({
       _id: z.string(),

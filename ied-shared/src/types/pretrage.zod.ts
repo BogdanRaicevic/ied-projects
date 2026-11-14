@@ -1,5 +1,6 @@
 import z from "zod";
-import { NEGACIJA, PRIJAVA_STATUS } from "../constants/firma";
+import { NEGACIJA } from "../constants/firma";
+import { MAILING_STATUS } from "../constants/mailingStatus";
 
 export const ParametriPretrageSchema = z
   .object({
@@ -18,8 +19,8 @@ export const ParametriPretrageSchema = z
     komentar: z.string(),
     imePrezime: z.string(),
     emailZaposlenog: z.string(),
-    firmaPrijavljeni: z.enum(PRIJAVA_STATUS),
-    zaposleniPrijavljeni: z.enum(PRIJAVA_STATUS),
+    firmaMailingStatus: z.array(z.enum(MAILING_STATUS)),
+    zaposleniMailingStatus: z.array(z.enum(MAILING_STATUS)),
     tipoviSeminara: z.array(z.string()),
     seminari: z.array(z.string()),
   })
