@@ -4,7 +4,7 @@ import { Mesto } from "../../src/models/mesto.model";
 import * as firmaService from "../../src/services/firma.service";
 
 vi.mock("../../src/services/email_suppression.service", () => ({
-  isEmailSuppressed: vi.fn().mockResolvedValue(false),
+  isEmailSuppressed: vi.fn().mockResolvedValue(null),
 }));
 
 const mestoId = new mongoose.Types.ObjectId();
@@ -21,7 +21,6 @@ describe("firma.service", () => {
     delatnost: "IT",
     velicina_firme: "mala",
     stanje_firme: "aktivna",
-    prijavljeni: true,
   };
 
   beforeAll(async () => {
@@ -148,7 +147,6 @@ describe("firma.service", () => {
         radno_mesto: "Developer",
         telefon: "064-123-456",
         e_mail: "petar@firma.rs",
-        prijavljeni: true,
       };
 
       const updated = await firmaService.createZaposleni(
@@ -171,7 +169,6 @@ describe("firma.service", () => {
         radno_mesto: "",
         telefon: "064-111-222",
         e_mail: "marko@firma.rs",
-        prijavljeni: true,
       };
 
       const updated = await firmaService.createZaposleni(
@@ -193,7 +190,6 @@ describe("firma.service", () => {
         radno_mesto: "Manager",
         telefon: "064-333-444",
         e_mail: "jovan@firma.rs",
-        prijavljeni: true,
       };
 
       const withZaposleni = await firmaService.createZaposleni(

@@ -45,8 +45,9 @@ export const savePretraga = async (
     pretragaData.komentar = queryParameters.komentar;
     pretragaData.imePrezime = queryParameters.imePrezime;
     pretragaData.emailZaposlenog = queryParameters.emailZaposlenog;
-    pretragaData.firmaPrijavljeni = queryParameters.firmaPrijavljeni;
-    pretragaData.zaposleniPrijavljeni = queryParameters.zaposleniPrijavljeni;
+    pretragaData.firmaMailingStatus = queryParameters.firmaMailingStatus;
+    pretragaData.zaposleniMailingStatus =
+      queryParameters.zaposleniMailingStatus;
     const invalidTipoviSeminara = queryParameters.tipoviSeminara?.filter(
       (tipSeminara) => !Types.ObjectId.isValid(tipSeminara),
     );
