@@ -111,12 +111,26 @@ export const search = async (
   };
 };
 
+// Each export applies only its own level's status filter, so a firma's email
+// isn't dropped because of its zaposleni (and vice versa). A missing filter
+// (e.g. an old FE bundle during a deploy) means SUBSCRIBED, never everything.
+const withExportStatus = (
+  params: ParametriPretrage,
+  level: "firmaMailingStatus" | "zaposleniMailingStatus",
+): ParametriPretrage => ({
+  ...params,
+  firmaMailingStatus: undefined,
+  zaposleniMailingStatus: undefined,
+  [level]: params[level] ?? [MAILING_STATUS.SUBSCRIBED],
+});
+
 export const exportSearchedFirmaData = async (
   queryParameters: ParametriPretrage,
 ): Promise<ExportFirma> => {
-  const mongoQuery = await createFirmaQuery(queryParameters, {
-    forExport: true,
-  });
+  const mongoQuery = await createFirmaQuery(
+    withExportStatus(queryParameters, "firmaMailingStatus"),
+    { forExport: true },
+  );
 
   const firme = await Firma.find(mongoQuery, {
     naziv_firme: 1,
@@ -136,9 +150,11 @@ export const exportSearchedFirmaData = async (
 export const exportSearchedZaposleniData = async (
   queryParameters: ParametriPretrage,
 ): Promise<ExportZaposlenih> => {
-  const mongoQuery = await createFirmaQuery(queryParameters, {
-    forExport: true,
-  });
+  const exportParams = withExportStatus(
+    queryParameters,
+    "zaposleniMailingStatus",
+  );
+  const mongoQuery = await createFirmaQuery(exportParams, { forExport: true });
 
   const seminarAttendees: string[] = await getZaposleniIdsFromSeminars(
     queryParameters.seminari || [],
@@ -159,7 +175,7 @@ export const exportSearchedZaposleniData = async (
     .cursor();
 
   const res: ExportZaposlenih = [];
-  const statusi = mailingStatusFilter(queryParameters.zaposleniMailingStatus);
+  const statusi = mailingStatusFilter(exportParams.zaposleniMailingStatus);
 
   // Streams firme one at a time: full zaposleni arrays are too big to load at once.
   for await (const doc of cursor) {
