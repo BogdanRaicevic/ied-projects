@@ -1,16 +1,28 @@
 import { Box, FormLabel, Switch } from "@mui/material";
+import {
+  isPermanent,
+  MAILING_STATUS,
+  MAILING_STATUS_LABEL,
+  type MailingStatus,
+} from "ied-shared";
 
 type MailingListSwitchProps = {
-  isPrijavljen: boolean;
+  status: MailingStatus;
+  hasEmail: boolean;
   onChange: (newValue: boolean) => void;
 };
 
 export const MailingListSwitch: React.FC<MailingListSwitchProps> = ({
-  isPrijavljen,
+  status,
+  hasEmail,
   onChange,
 }) => {
+  const isPrijavljen = status === MAILING_STATUS.SUBSCRIBED;
   const prijavljeni = "prijavljeni" as const;
-  const odjavljeni = "odjavljeni" as const;
+  // Bounce / spam show their own label in place of "odjavljeni".
+  const odjavljeni = isPermanent(status)
+    ? MAILING_STATUS_LABEL[status].toLowerCase()
+    : "odjavljeni";
 
   const odjavaColor = isPrijavljen ? "gray" : "darkred";
   const odjavaText = isPrijavljen ? odjavljeni : odjavljeni.toUpperCase();
@@ -33,7 +45,8 @@ export const MailingListSwitch: React.FC<MailingListSwitchProps> = ({
           {odjavaText}
         </FormLabel>
         <Switch
-          checked={isPrijavljen || false}
+          checked={isPrijavljen}
+          disabled={!hasEmail || isPermanent(status)}
           onChange={(e) => onChange(e.target.checked)}
           color="success"
         />
@@ -48,6 +61,7 @@ export const MailingListSwitch: React.FC<MailingListSwitchProps> = ({
         >
           {prijavaText}
         </FormLabel>
+        {!hasEmail && <FormLabel sx={{ m: 1 }}>nema email</FormLabel>}
       </Box>
     </Box>
   );

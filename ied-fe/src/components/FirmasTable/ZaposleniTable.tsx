@@ -3,7 +3,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import { Box, IconButton, Tooltip } from "@mui/material";
 import { red } from "@mui/material/colors";
-import type { ZaposleniType } from "ied-shared";
+import { MAILING_STATUS, type ZaposleniType } from "ied-shared";
 import {
   MaterialReactTable,
   type MRT_ColumnDef,
@@ -86,7 +86,10 @@ export const ZaposleniTable: React.FC<ZaposleniTableProps> = ({
     muiTableBodyRowProps: ({ row }) => ({
       sx: {
         backgroundColor:
-          row.original.prijavljeni === false ? red[100] : "inherit",
+          (row.original.mailing_status ?? MAILING_STATUS.SUBSCRIBED) !==
+          MAILING_STATUS.SUBSCRIBED
+            ? red[100]
+            : "inherit",
       },
     }),
     ...scrollbarProps,
