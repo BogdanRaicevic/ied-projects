@@ -219,7 +219,7 @@ export const deleteEmails = async (emails: string[]) => {
 
   try {
     const normalizedEmails = [
-      ...new Set(emails.map((email) => email.toLowerCase())),
+      ...new Set(emails.map(normalizeEmail).filter(Boolean)),
     ];
 
     // Perform deletions
@@ -228,6 +228,7 @@ export const deleteEmails = async (emails: string[]) => {
         { e_mail: { $in: normalizedEmails } },
         // No email → SUBSCRIBED (a cleared bounce would otherwise stay red).
         { $set: { e_mail: "", mailing_status: MAILING_STATUS.SUBSCRIBED } },
+        { collation: CASE_INSENSITIVE },
       ).exec(),
       Firma.updateMany(
         { "zaposleni.e_mail": { $in: normalizedEmails } },
@@ -237,7 +238,10 @@ export const deleteEmails = async (emails: string[]) => {
             "zaposleni.$[employee].mailing_status": MAILING_STATUS.SUBSCRIBED,
           },
         },
-        { arrayFilters: [{ "employee.e_mail": { $in: normalizedEmails } }] },
+        {
+          arrayFilters: [{ "employee.e_mail": { $in: normalizedEmails } }],
+          collation: CASE_INSENSITIVE,
+        },
       ).exec(),
     ]);
 

@@ -162,12 +162,12 @@ describe("deleteEmails", () => {
     const { HARD_BOUNCE, SUBSCRIBED } = MAILING_STATUS;
     const firma = await Firma.create({
       naziv_firme: "G",
-      e_mail: "gone@firma.rs",
+      e_mail: "Gone@Firma.rs",
       mailing_status: HARD_BOUNCE,
-      zaposleni: [zaposleni("gone@firma.rs", HARD_BOUNCE)],
+      zaposleni: [zaposleni("GONE@firma.rs", HARD_BOUNCE)],
     });
 
-    await deleteEmails(["gone@firma.rs"]);
+    await deleteEmails(["  gone@FIRMA.rs  "]);
 
     const g = await Firma.findById(firma._id).lean();
     expect(g).toMatchObject({ e_mail: "", mailing_status: SUBSCRIBED });
