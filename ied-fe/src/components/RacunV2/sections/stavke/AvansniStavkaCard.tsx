@@ -8,7 +8,6 @@ import {
   Divider,
   Grid,
   IconButton,
-  InputAdornment,
   Stack,
   TextField,
   Typography,
@@ -148,16 +147,8 @@ export function AvansniStavkaCard({ stavkaIndex, onRemove }: Props) {
                     fullWidth
                     required
                     label="Avans bez PDV-a"
-                    slotProps={{
-                      htmlInput: { min: 0, step: "0.01" },
-                      input: {
-                        endAdornment: (
-                          <InputAdornment position="end">
-                            {valuta}
-                          </InputAdornment>
-                        ),
-                      },
-                    }}
+                    min={0}
+                    endAdornment={valuta}
                     error={!!fieldState.error}
                     helperText={fieldState.error?.message ?? " "}
                   />
@@ -175,14 +166,9 @@ export function AvansniStavkaCard({ stavkaIndex, onRemove }: Props) {
                       {...field}
                       fullWidth
                       label="Stopa PDV-a"
-                      slotProps={{
-                        htmlInput: { min: 0, max: 50, step: "0.01" },
-                        input: {
-                          endAdornment: (
-                            <InputAdornment position="end">%</InputAdornment>
-                          ),
-                        },
-                      }}
+                      min={0}
+                      max={50}
+                      endAdornment="%"
                       error={!!fieldState.error}
                       helperText={fieldState.error?.message ?? " "}
                     />

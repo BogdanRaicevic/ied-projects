@@ -8,7 +8,6 @@ import {
   Divider,
   Grid,
   IconButton,
-  InputAdornment,
   Stack,
   TextField,
   Typography,
@@ -221,7 +220,7 @@ export function UslugaStavkaCard({ stavkaIndex, onRemove }: Props) {
                       {...field}
                       fullWidth
                       label="Broj učesnika"
-                      slotProps={{ htmlInput: { min: 0 } }}
+                      min={0}
                       error={!!fieldState.error}
                       helperText={fieldState.error?.message ?? " "}
                     />
@@ -237,16 +236,8 @@ export function UslugaStavkaCard({ stavkaIndex, onRemove }: Props) {
                       {...field}
                       fullWidth
                       label="Cena po učesniku"
-                      slotProps={{
-                        htmlInput: { min: 0, step: "0.01" },
-                        input: {
-                          endAdornment: (
-                            <InputAdornment position="end">
-                              {valuta}
-                            </InputAdornment>
-                          ),
-                        },
-                      }}
+                      min={0}
+                      endAdornment={valuta}
                       error={!!fieldState.error}
                       helperText={fieldState.error?.message ?? " "}
                     />
@@ -277,7 +268,7 @@ export function UslugaStavkaCard({ stavkaIndex, onRemove }: Props) {
                       {...field}
                       fullWidth
                       label="Broj učesnika"
-                      slotProps={{ htmlInput: { min: 0 } }}
+                      min={0}
                       error={!!fieldState.error}
                       helperText={fieldState.error?.message ?? " "}
                     />
@@ -293,16 +284,8 @@ export function UslugaStavkaCard({ stavkaIndex, onRemove }: Props) {
                       {...field}
                       fullWidth
                       label="Cena po učesniku"
-                      slotProps={{
-                        htmlInput: { min: 0, step: "0.01" },
-                        input: {
-                          endAdornment: (
-                            <InputAdornment position="end">
-                              {valuta}
-                            </InputAdornment>
-                          ),
-                        },
-                      }}
+                      min={0}
+                      endAdornment={valuta}
                       error={!!fieldState.error}
                       helperText={fieldState.error?.message ?? " "}
                     />
@@ -322,14 +305,9 @@ export function UslugaStavkaCard({ stavkaIndex, onRemove }: Props) {
                     {...field}
                     fullWidth
                     label="Popust"
-                    slotProps={{
-                      htmlInput: { min: 0, max: 100, step: "0.01" },
-                      input: {
-                        endAdornment: (
-                          <InputAdornment position="end">%</InputAdornment>
-                        ),
-                      },
-                    }}
+                    min={0}
+                    max={100}
+                    endAdornment="%"
                     error={!!fieldState.error}
                     helperText={fieldState.error?.message ?? " "}
                   />
@@ -346,14 +324,9 @@ export function UslugaStavkaCard({ stavkaIndex, onRemove }: Props) {
                       {...field}
                       fullWidth
                       label="Stopa PDV-a"
-                      slotProps={{
-                        htmlInput: { min: 0, max: 50, step: "0.01" },
-                        input: {
-                          endAdornment: (
-                            <InputAdornment position="end">%</InputAdornment>
-                          ),
-                        },
-                      }}
+                      min={0}
+                      max={50}
+                      endAdornment="%"
                       error={!!fieldState.error}
                       helperText={fieldState.error?.message ?? " "}
                     />

@@ -202,12 +202,7 @@ export function IzdavacRacunaSection() {
                         fieldState.error?.message ??
                         "Menja samo podrazumevanu vrednost za nove stavke."
                       }
-                      slotProps={{
-                        htmlInput: {
-                          min: 0,
-                          step: 1,
-                        },
-                      }}
+                      min={0}
                     />
                   )}
                 />
