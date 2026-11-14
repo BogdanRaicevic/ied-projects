@@ -239,10 +239,10 @@ importers:
   ied-be:
     dependencies:
       '@aws-sdk/client-s3':
-        specifier: ^3.1163.0
+        specifier: ^3.1164.0
         version: 3.1167.0
       '@aws-sdk/lib-storage':
-        specifier: ^3.1163.0
+        specifier: ^3.1164.0
         version: 3.1167.0(@aws-sdk/client-s3@3.1167.0)
       '@clerk/express':
         specifier: ^2.1.88
