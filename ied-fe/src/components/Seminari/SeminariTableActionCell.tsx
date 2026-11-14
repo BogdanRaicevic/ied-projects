@@ -207,7 +207,7 @@ const SeminariTableActionCell = memo(
         return;
       }
 
-      clearErrors();
+      setSubmitError(null);
       generateSertifikati.mutate(sertifikati, {
         onSuccess: () => setIsCertificateDialogOpen(false),
       });

@@ -555,3 +555,28 @@ window.__block = (match, mode = "fail") => {
   sertifikat → `__block("generate-pdf-files")` → confirm: error shown,
   dialog open. `__block("generate-pdf-files", "hang")` → confirm → Esc /
   backdrop click: dialog stays open, buttons disabled.
+
+### Independent review of items 2–5 (follow-ups)
+
+Fixed:
+
+- Item 5: first load showed fake rows — `showSkeletons: false` overrides
+  MRT's `isLoading` skeletons → `isPending || isPlaceholderData`.
+- Item 5: "Pretraži" with unchanged filters on page 1 didn't refetch (same
+  query key) → `refetch()` in that case, so retry after an error works.
+- Item 2: a stale page error stayed after a successful retry → cleared on
+  every submit.
+- Items 2 and 4: dialogs could be closed mid-save; reopening let the old
+  request close the new dialog (2) or detached the running mutation via
+  `reset()` so its `onSuccess` (the PRIJAVA komentar) never ran (4) →
+  close blocked while saving.
+
+Accepted, not fixed:
+
+- Item 5: a failed load of page N > 1 — `data` is undefined on error, MRT
+  sees `rowCount` 0 and jumps to page 1, hiding the error. Rows still
+  match the pager; the user just doesn't see that page N failed. Fix only
+  if it bites (keep the last known total in a ref).
+- Item 2: "Sačuvaj zaposlenog" is briefly disabled if opened right after a
+  prijava, because the PRIJAVA komentar update uses the same
+  `updateZaposleni` mutation.
