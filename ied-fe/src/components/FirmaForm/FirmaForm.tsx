@@ -23,6 +23,7 @@ import {
   ContactTypes,
   FirmaSchema,
   type FirmaType,
+  MAILING_STATUS,
   type ZaposleniType,
 } from "ied-shared";
 import { Activity, type FC, useEffect, useState } from "react";
@@ -283,7 +284,7 @@ export const FirmaForm: FC<FirmaFormProps> = ({ inputCompany }) => {
       });
   };
 
-  const isPrijavljen = Boolean(watch("prijavljeni"));
+  const mailingStatus = watch("mailing_status") ?? MAILING_STATUS.SUBSCRIBED;
   const email = watch("e_mail");
 
   const { suppressionWarning, handleMailingListChange, withEmailBlur } =
@@ -307,7 +308,8 @@ export const FirmaForm: FC<FirmaFormProps> = ({ inputCompany }) => {
       sx={{ mt: 4 }}
     >
       <MailingListSwitch
-        isPrijavljen={isPrijavljen}
+        status={mailingStatus}
+        hasEmail={Boolean(email)}
         onChange={handleMailingListChange}
       />
       <Grid container m={0} spacing={2}>

@@ -1,8 +1,13 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Box, Button, TextField, Typography } from "@mui/material";
-import { ZaposleniSchema, type ZaposleniType } from "ied-shared";
+import {
+  MAILING_STATUS,
+  ZaposleniSchema,
+  type ZaposleniType,
+} from "ied-shared";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
+import type { z } from "zod";
 import { useEmailSuppression } from "../../hooks/firma/useEmailSuppression";
 import { useGetRadnaMestaNames } from "../../hooks/radnoMesto/useRadnoMestoQueries";
 import Single from "../Autocomplete/Single";
@@ -26,7 +31,7 @@ export function ZaposleniForm({
     setValue,
     trigger,
     formState: { errors },
-  } = useForm<ZaposleniType>({
+  } = useForm<z.input<typeof ZaposleniSchema>, unknown, ZaposleniType>({
     resolver: zodResolver(ZaposleniSchema),
     defaultValues: {
       ime: "",
@@ -36,7 +41,7 @@ export function ZaposleniForm({
       radno_mesto: "",
       komentar: "",
       ...zaposleni,
-      prijavljeni: zaposleni?.prijavljeni ?? true,
+      mailing_status: zaposleni?.mailing_status ?? MAILING_STATUS.SUBSCRIBED,
     },
   });
 
@@ -60,7 +65,7 @@ export function ZaposleniForm({
 
   const { data: radnaMesta, isLoading: isRadnaMestaLoading } =
     useGetRadnaMestaNames();
-  const isPrijavljen = watch("prijavljeni");
+  const mailingStatus = watch("mailing_status") ?? MAILING_STATUS.SUBSCRIBED;
   const email = watch("e_mail");
 
   const { suppressionWarning, handleMailingListChange, withEmailBlur } =
@@ -75,7 +80,8 @@ export function ZaposleniForm({
   return (
     <Box component="form">
       <MailingListSwitch
-        isPrijavljen={isPrijavljen}
+        status={mailingStatus}
+        hasEmail={Boolean(email)}
         onChange={handleMailingListChange}
       />
       <TextField

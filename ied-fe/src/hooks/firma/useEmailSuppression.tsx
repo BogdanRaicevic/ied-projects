@@ -1,4 +1,4 @@
-import { SUPPRESSION_REASONS } from "ied-shared";
+import { isPermanent, MAILING_STATUS } from "ied-shared";
 import { useCallback, useEffect, useState } from "react";
 import type { UseFormSetValue } from "react-hook-form";
 import {
@@ -23,16 +23,14 @@ export const useEmailSuppression = (
     }
 
     try {
+      // Status follows the email, also one typed but not saved yet.
       const suppressed = await checkIfEmailIsSuppressed(email);
-      if (suppressed === SUPPRESSION_REASONS.UNSUBSCRIBED) {
+      setValue("mailing_status", suppressed ?? MAILING_STATUS.SUBSCRIBED);
+      if (suppressed === MAILING_STATUS.UNSUBSCRIBED) {
         setSuppressionWarning(
           "Ovaj email je na listi za odjavu. Možete ga ponovo prijaviti.",
         );
-        setValue("prijavljeni", false);
-      } else if (
-        suppressed === SUPPRESSION_REASONS.HARD_BOUNCE ||
-        suppressed === SUPPRESSION_REASONS.SPAM_COMPLAINT
-      ) {
+      } else if (suppressed && isPermanent(suppressed)) {
         setSuppressionWarning(
           `Ovaj email je u listi za suzbijanje ${suppressed}. Ne možete ga prijaviti na mailing listu.`,
         );
@@ -46,25 +44,15 @@ export const useEmailSuppression = (
 
   const handleMailingListChange = useCallback(
     async (newValue: boolean) => {
-      if (!email) {
-        setValue("prijavljeni", newValue);
-        return;
-      }
+      // The switch is disabled without an email and for bounce/spam; the BE
+      // refuses those too (409).
+      if (!email) return;
 
       try {
-        const status = await checkIfEmailIsSuppressed(email);
-        if (status && status !== SUPPRESSION_REASONS.UNSUBSCRIBED) {
-          console.error(`Cannot subscribe ${email}. Reason: ${status}`);
-          setValue("prijavljeni", false);
-          return;
-        }
-
-        if (newValue === false) {
-          await addEmailToSuppressionList(email);
-          setValue("prijavljeni", false);
-        } else {
+        if (newValue) {
           await removeEmailFromSuppressionList(email);
-          setValue("prijavljeni", true);
+        } else {
+          await addEmailToSuppressionList(email);
         }
         await handleEmailChange();
       } catch (error) {

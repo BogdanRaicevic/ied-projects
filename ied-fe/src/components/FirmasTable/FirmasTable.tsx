@@ -1,5 +1,5 @@
 import { red } from "@mui/material/colors";
-import type { FirmaType } from "ied-shared";
+import { type FirmaType, MAILING_STATUS } from "ied-shared";
 import {
   MaterialReactTable,
   type MRT_ColumnDef,
@@ -54,7 +54,10 @@ export const FirmasTable = () => {
     muiTableBodyRowProps: ({ row }) => ({
       sx: {
         backgroundColor:
-          row.original.prijavljeni === false ? red[100] : "inherit",
+          (row.original.mailing_status ?? MAILING_STATUS.SUBSCRIBED) !==
+          MAILING_STATUS.SUBSCRIBED
+            ? red[100]
+            : "inherit",
       },
     }),
     ...scrollbarProps,
