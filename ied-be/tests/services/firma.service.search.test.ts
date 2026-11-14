@@ -1,4 +1,4 @@
-import { type ParametriPretrage, PRIJAVA_STATUS } from "ied-shared";
+import type { MailingStatus, ParametriPretrage } from "ied-shared";
 import { beforeAll, describe, expect, it, vi } from "vitest";
 import { Firma } from "../../src/models/firma.model";
 import { Mesto } from "../../src/models/mesto.model";
@@ -8,8 +8,21 @@ import * as firmaService from "../../src/services/firma.service";
 import staticTestData from "../fixtures/staticTestData.json";
 
 vi.mock("../../src/services/email_suppression.service", () => ({
-  isEmailSuppressed: vi.fn().mockResolvedValue(false),
+  isEmailSuppressed: vi.fn().mockResolvedValue(null),
 }));
+
+const ALL_STATUSES: MailingStatus[] = [
+  "SUBSCRIBED",
+  "UNSUBSCRIBED",
+  "HARD_BOUNCE",
+  "SPAM_COMPLAINT",
+];
+const countFirme = (statusi: string[]) =>
+  staticTestData.firme.filter((f) => statusi.includes(f.mailing_status)).length;
+const countFirmeWithZaposleni = (statusi: string[]) =>
+  staticTestData.firme.filter((f) =>
+    f.zaposleni.some((z) => statusi.includes(z.mailing_status)),
+  ).length;
 
 describe("firma.service search", () => {
   const beogradMestoId = staticTestData.mesta.find(
@@ -72,14 +85,25 @@ describe("firma.service search", () => {
       expect(result.totalDocuments).toBeLessThan(staticTestData.firme.length);
     });
 
-    it("should filter by PRIJAVLJENI status", async () => {
-      const result = await firmaService.search({
-        firmaPrijavljeni: PRIJAVA_STATUS.subscribed,
-      });
+    it.each<[string, MailingStatus[], number]>([
+      ["one", ["SUBSCRIBED"], countFirme(["SUBSCRIBED"])],
+      [
+        "several",
+        ["UNSUBSCRIBED", "HARD_BOUNCE"],
+        countFirme(["UNSUBSCRIBED", "HARD_BOUNCE"]),
+      ],
+      ["none (no filter)", [], staticTestData.firme.length],
+      ["all four (no filter)", ALL_STATUSES, staticTestData.firme.length],
+    ])(
+      "should filter by firma MAILING STATUS: %s",
+      async (_, statusi, expected) => {
+        const result = await firmaService.search({
+          firmaMailingStatus: statusi,
+        });
 
-      expect(result.totalDocuments).toBeGreaterThan(0);
-      expect(result.totalDocuments).toBeLessThan(staticTestData.firme.length);
-    });
+        expect(result.totalDocuments).toBe(expected);
+      },
+    );
 
     it("should search by text in NAZIV FIRME", async () => {
       const queryParameters: ParametriPretrage = { imeFirme: "as" };
@@ -91,6 +115,26 @@ describe("firma.service search", () => {
   });
 
   describe("Zaposleni related search", () => {
+    it.each<[string, MailingStatus[], number]>([
+      ["one", ["UNSUBSCRIBED"], countFirmeWithZaposleni(["UNSUBSCRIBED"])],
+      [
+        "several",
+        ["SUBSCRIBED", "SPAM_COMPLAINT"],
+        countFirmeWithZaposleni(["SUBSCRIBED", "SPAM_COMPLAINT"]),
+      ],
+      ["none (no filter)", [], staticTestData.firme.length],
+      ["all four (no filter)", ALL_STATUSES, staticTestData.firme.length],
+    ])(
+      "should filter by zaposleni MAILING STATUS: %s",
+      async (_, statusi, expected) => {
+        const result = await firmaService.search({
+          zaposleniMailingStatus: statusi,
+        });
+
+        expect(result.totalDocuments).toBe(expected);
+      },
+    );
+
     it("should filter by RADNA MESTA", async () => {
       const queryParameters: ParametriPretrage = {
         radnaMesta: ["Developer"],

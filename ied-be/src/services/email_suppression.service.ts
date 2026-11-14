@@ -262,22 +262,3 @@ export const isEmailSuppressed = async (email?: string) => {
 
   return result !== null ? result.reason : null;
 };
-
-export const getSuppressedEmailsSet = async (
-  emails: string[],
-): Promise<Set<string>> => {
-  const normalizedEmails = [
-    ...new Set(emails.map(normalizeEmail).filter(Boolean)),
-  ];
-
-  if (normalizedEmails.length === 0) {
-    return new Set();
-  }
-
-  const suppressed = await EmailSuppression.find(
-    { email: { $in: normalizedEmails } },
-    { email: 1 },
-  ).lean();
-
-  return new Set(suppressed.map((s) => s.email));
-};

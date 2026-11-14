@@ -1,11 +1,32 @@
-import { NEGACIJA, type ParametriPretrage, PRIJAVA_STATUS } from "ied-shared";
+import {
+  MAILING_STATUS,
+  type MailingStatus,
+  NEGACIJA,
+  type ParametriPretrage,
+} from "ied-shared";
 import { type QueryFilter, Types } from "mongoose";
 import type { FirmaType } from "../models/firma.model";
 import { Seminar, type SeminarType } from "../models/seminar.model";
 import type { Zaposleni } from "../models/zaposleni.model";
 import { escapeRegex } from "../utils/utils";
 
-export const createFirmaQuery = async (params: ParametriPretrage) => {
+// Statuses to filter by, or undefined when none or all four are selected.
+export const mailingStatusFilter = (selected?: MailingStatus[]) =>
+  selected?.length &&
+  new Set(selected).size < Object.keys(MAILING_STATUS).length
+    ? selected
+    : undefined;
+
+const NO_EMAIL = [null, ""];
+const HAS_EMAIL = { e_mail: { $nin: NO_EMAIL } };
+
+// A status filter only judges contacts that have an email: it never hides a
+// firma without its own email, nor one whose zaposleni have none.
+// `forExport` also drops firme with no email anywhere (nothing to send to).
+export const createFirmaQuery = async (
+  params: ParametriPretrage,
+  { forExport = false } = {},
+) => {
   const query: QueryFilter<FirmaType> = {};
 
   const negations = params?.negacije || [];
@@ -110,13 +131,14 @@ export const createFirmaQuery = async (params: ParametriPretrage) => {
     }
   }
 
-  if (params?.firmaPrijavljeni !== undefined) {
-    if (params.firmaPrijavljeni === PRIJAVA_STATUS.subscribed) {
-      query.prijavljeni = true;
-    } else if (params.firmaPrijavljeni === PRIJAVA_STATUS.unsubscribed) {
-      query.prijavljeni = false;
-    }
-    // skip if all
+  const firmaStatusi = mailingStatusFilter(params?.firmaMailingStatus);
+  if (firmaStatusi) {
+    query.$and.push({
+      $or: [
+        { mailing_status: { $in: firmaStatusi } },
+        { e_mail: { $in: NO_EMAIL } },
+      ],
+    });
   }
 
   // ____ ZAPOSLENI FILTERS ____
@@ -161,17 +183,40 @@ export const createFirmaQuery = async (params: ParametriPretrage) => {
     };
   }
 
-  if (params?.zaposleniPrijavljeni !== undefined) {
-    if (params.zaposleniPrijavljeni === PRIJAVA_STATUS.subscribed) {
-      zaposleniQuery.prijavljeni = true;
-    } else if (params.zaposleniPrijavljeni === PRIJAVA_STATUS.unsubscribed) {
-      zaposleniQuery.prijavljeni = false;
-    }
-    // skip if all
+  const zaposleniStatusi = mailingStatusFilter(params?.zaposleniMailingStatus);
+  const hasZaposleniFilter = Object.keys(zaposleniQuery).length > 0;
+  if (zaposleniStatusi) {
+    query.$and.push({
+      $or: [
+        {
+          zaposleni: {
+            $elemMatch: {
+              ...zaposleniQuery,
+              mailing_status: { $in: zaposleniStatusi },
+              // Only a zaposleni with an email counts. $and, not e_mail:
+              // that key may already hold the emailZaposlenog regex.
+              $and: [HAS_EMAIL],
+            },
+          },
+        },
+        {
+          $and: [
+            { zaposleni: { $not: { $elemMatch: HAS_EMAIL } } },
+            ...(hasZaposleniFilter
+              ? [{ zaposleni: { $elemMatch: zaposleniQuery } }]
+              : []),
+          ],
+        },
+      ],
+    });
+  } else if (hasZaposleniFilter) {
+    query.$and.push({ zaposleni: { $elemMatch: zaposleniQuery } });
   }
 
-  if (Object.keys(zaposleniQuery).length > 0) {
-    query.$and.push({ zaposleni: { $elemMatch: zaposleniQuery } });
+  if (forExport) {
+    query.$and.push({
+      $or: [HAS_EMAIL, { zaposleni: { $elemMatch: HAS_EMAIL } }],
+    });
   }
 
   if (query.$and.length === 0) {

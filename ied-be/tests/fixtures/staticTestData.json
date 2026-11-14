@@ -2116,7 +2116,7 @@
       "tip_firme": "JP",
       "delatnost": "Saobraćaj",
       "stanje_firme": "aktivna",
-      "prijavljeni": true,
+      "mailing_status": "SUBSCRIBED",
       "mesto": "9afeb30bd0abd1dacbb245aa",
       "zaposleni": [
         {
@@ -2126,7 +2126,7 @@
           "radno_mesto": "Sales",
           "telefon": "(884) 288-2463 x3868",
           "e_mail": "lennie16@gmail.com",
-          "prijavljeni": true
+          "mailing_status": "SUBSCRIBED"
         }
       ],
       "__v": 0
@@ -2142,7 +2142,7 @@
       "tip_firme": "AD",
       "delatnost": "Proizvodnja",
       "stanje_firme": "blokada",
-      "prijavljeni": true,
+      "mailing_status": "SUBSCRIBED",
       "mesto": "f3b3aed3a8ce86c42fbcfdda",
       "zaposleni": [
         {
@@ -2152,7 +2152,7 @@
           "radno_mesto": "Developer",
           "telefon": "(333) 431-5990",
           "e_mail": "daron81@gmail.com",
-          "prijavljeni": false
+          "mailing_status": "UNSUBSCRIBED"
         },
         {
           "_id": "8d1f8aae987473520dcf2630",
@@ -2161,7 +2161,7 @@
           "radno_mesto": "Sales",
           "telefon": "1-516-531-9820 x81665",
           "e_mail": "albert_doyle49@yahoo.com",
-          "prijavljeni": false
+          "mailing_status": "UNSUBSCRIBED"
         }
       ],
       "__v": 0
@@ -2177,7 +2177,7 @@
       "tip_firme": "JP",
       "delatnost": "Proizvodnja",
       "stanje_firme": "blokada",
-      "prijavljeni": true,
+      "mailing_status": "SUBSCRIBED",
       "mesto": "eb1cde952aa0ffa90db36d83",
       "zaposleni": [
         {
@@ -2187,7 +2187,7 @@
           "radno_mesto": "Sales",
           "telefon": "(971) 606-4249 x70981",
           "e_mail": "brennon29@hotmail.com",
-          "prijavljeni": false
+          "mailing_status": "UNSUBSCRIBED"
         },
         {
           "_id": "c6e82bda0ca74aed9fdbf043",
@@ -2196,7 +2196,7 @@
           "radno_mesto": "nema",
           "telefon": "(229) 258-1455",
           "e_mail": "khalil99@yahoo.com",
-          "prijavljeni": false
+          "mailing_status": "UNSUBSCRIBED"
         },
         {
           "_id": "1fa2218482174c14da297cdc",
@@ -2205,7 +2205,7 @@
           "radno_mesto": "Support",
           "telefon": "362.885.3162",
           "e_mail": "charley19@yahoo.com",
-          "prijavljeni": true
+          "mailing_status": "SUBSCRIBED"
         },
         {
           "_id": "6a5ea350690efb7c6b45093b",
@@ -2214,7 +2214,7 @@
           "radno_mesto": "nema",
           "telefon": "(387) 244-0121",
           "e_mail": "carla73@yahoo.com",
-          "prijavljeni": false
+          "mailing_status": "UNSUBSCRIBED"
         },
         {
           "_id": "0eb8aa64a192b862167ef280",
@@ -2223,7 +2223,7 @@
           "radno_mesto": "nema",
           "telefon": "587-257-0178 x9318",
           "e_mail": "beverly_waters21@yahoo.com",
-          "prijavljeni": true
+          "mailing_status": "SUBSCRIBED"
         },
         {
           "_id": "4dbd03f849ed46f1cfae01fd",
@@ -2232,7 +2232,7 @@
           "radno_mesto": "Support",
           "telefon": "(454) 767-6274",
           "e_mail": "jimmy.rippin@yahoo.com",
-          "prijavljeni": false
+          "mailing_status": "UNSUBSCRIBED"
         },
         {
           "_id": "aa88aca3c7f973f517a73e9f",
@@ -2241,7 +2241,7 @@
           "radno_mesto": "HR",
           "telefon": "653-618-4261 x6736",
           "e_mail": "roy.wintheiser@hotmail.com",
-          "prijavljeni": false
+          "mailing_status": "UNSUBSCRIBED"
         },
         {
           "_id": "5f8f10847ff585eca6d3dd91",
@@ -2250,7 +2250,7 @@
           "radno_mesto": "Designer",
           "telefon": "(375) 244-2275",
           "e_mail": "theodore25@gmail.com",
-          "prijavljeni": true
+          "mailing_status": "SUBSCRIBED"
         }
       ],
       "__v": 0
@@ -2266,7 +2266,7 @@
       "tip_firme": "Preduzetnik",
       "delatnost": "Usluge",
       "stanje_firme": "stecaj",
-      "prijavljeni": false,
+      "mailing_status": "UNSUBSCRIBED",
       "mesto": "eb1cde952aa0ffa90db36d83",
       "zaposleni": [
         {
@@ -2276,7 +2276,7 @@
           "radno_mesto": "Administrator",
           "telefon": "645.407.2423 x3679",
           "e_mail": "winston53@gmail.com",
-          "prijavljeni": true
+          "mailing_status": "SUBSCRIBED"
         },
         {
           "_id": "a3cecdb91c9c61a31e5a94cb",
@@ -2285,7 +2285,7 @@
           "radno_mesto": "HR",
           "telefon": "1-264-612-7507 x27860",
           "e_mail": "stella57@yahoo.com",
-          "prijavljeni": false
+          "mailing_status": "UNSUBSCRIBED"
         },
         {
           "_id": "e8c7de2dafd8cf1306c68b97",
@@ -2294,7 +2294,7 @@
           "radno_mesto": "Developer",
           "telefon": "1-786-384-3675 x82966",
           "e_mail": "janet87@hotmail.com",
-          "prijavljeni": true
+          "mailing_status": "SUBSCRIBED"
         },
         {
           "_id": "c099dadbedaabf95a8b7c8cd",
@@ -2303,7 +2303,7 @@
           "radno_mesto": "HR",
           "telefon": "1-785-387-5330 x37895",
           "e_mail": "godfrey59@hotmail.com",
-          "prijavljeni": true
+          "mailing_status": "SUBSCRIBED"
         },
         {
           "_id": "42aedbcfe1c022ac1a332a8a",
@@ -2312,7 +2312,7 @@
           "radno_mesto": "Sales",
           "telefon": "1-753-631-4656",
           "e_mail": "muriel6@gmail.com",
-          "prijavljeni": true
+          "mailing_status": "SUBSCRIBED"
         },
         {
           "_id": "94baccc06b9e6d0f22fdf4e9",
@@ -2321,7 +2321,7 @@
           "radno_mesto": "Administrator",
           "telefon": "420.643.5721",
           "e_mail": "will.stamm@hotmail.com",
-          "prijavljeni": true
+          "mailing_status": "SUBSCRIBED"
         },
         {
           "_id": "fbe718eb5d7bfdd2cf0ae65c",
@@ -2330,7 +2330,7 @@
           "radno_mesto": "HR",
           "telefon": "(797) 716-0756 x674",
           "e_mail": "garth48@hotmail.com",
-          "prijavljeni": true
+          "mailing_status": "SUBSCRIBED"
         },
         {
           "_id": "9cf924debf25bdd34c6eb9db",
@@ -2339,7 +2339,7 @@
           "radno_mesto": "HR",
           "telefon": "(607) 496-4801",
           "e_mail": "kip31@gmail.com",
-          "prijavljeni": false
+          "mailing_status": "UNSUBSCRIBED"
         }
       ],
       "__v": 0
@@ -2355,7 +2355,7 @@
       "tip_firme": "JP",
       "delatnost": "Usluge",
       "stanje_firme": "blokada",
-      "prijavljeni": false,
+      "mailing_status": "UNSUBSCRIBED",
       "mesto": "3d6c99df614ecf1ca089decb",
       "zaposleni": [
         {
@@ -2365,7 +2365,7 @@
           "radno_mesto": "Administrator",
           "telefon": "497.519.8399",
           "e_mail": "ruth_ortiz70@hotmail.com",
-          "prijavljeni": false
+          "mailing_status": "UNSUBSCRIBED"
         },
         {
           "_id": "5d4ec55f8cb177d3f2ccfbb2",
@@ -2374,7 +2374,7 @@
           "radno_mesto": "nema",
           "telefon": "(621) 272-9142 x29478",
           "e_mail": "karl.boyer63@gmail.com",
-          "prijavljeni": false
+          "mailing_status": "UNSUBSCRIBED"
         },
         {
           "_id": "ddbecc5699edfb3a6bc30ce6",
@@ -2383,7 +2383,7 @@
           "radno_mesto": "HR",
           "telefon": "1-672-734-2089 x4893",
           "e_mail": "kelli.kiehn@hotmail.com",
-          "prijavljeni": false
+          "mailing_status": "UNSUBSCRIBED"
         },
         {
           "_id": "96bdd39f6a71b7cde43fdcd4",
@@ -2392,7 +2392,7 @@
           "radno_mesto": "Designer",
           "telefon": "(929) 943-7521 x963",
           "e_mail": "robyn_bauch@gmail.com",
-          "prijavljeni": true
+          "mailing_status": "SUBSCRIBED"
         },
         {
           "_id": "ebb0d4b264dd40a72e22b3ff",
@@ -2401,7 +2401,7 @@
           "radno_mesto": "Designer",
           "telefon": "1-376-330-8318 x531",
           "e_mail": "morris.sawayn47@hotmail.com",
-          "prijavljeni": true
+          "mailing_status": "SUBSCRIBED"
         }
       ],
       "__v": 0
@@ -2417,7 +2417,7 @@
       "tip_firme": "AD",
       "delatnost": "Obrazovanje",
       "stanje_firme": "aktivna",
-      "prijavljeni": false,
+      "mailing_status": "UNSUBSCRIBED",
       "mesto": "8bd5fca7ddf006f33a1fa0bb",
       "zaposleni": [
         {
@@ -2427,7 +2427,7 @@
           "radno_mesto": "Sales",
           "telefon": "503-836-2717 x39359",
           "e_mail": "frank_kuhic@yahoo.com",
-          "prijavljeni": false
+          "mailing_status": "UNSUBSCRIBED"
         },
         {
           "_id": "fcb3083e356ebedd2ecbefcc",
@@ -2436,7 +2436,7 @@
           "radno_mesto": "Direktor",
           "telefon": "337.516.0384 x8518",
           "e_mail": "michael_langosh@hotmail.com",
-          "prijavljeni": true
+          "mailing_status": "SUBSCRIBED"
         },
         {
           "_id": "ffc02ed3759aab29bbedc792",
@@ -2445,7 +2445,7 @@
           "radno_mesto": "Administrator",
           "telefon": "(285) 227-9733 x31131",
           "e_mail": "carolina84@hotmail.com",
-          "prijavljeni": false
+          "mailing_status": "UNSUBSCRIBED"
         },
         {
           "_id": "8af130e9246a0cdcd619f90c",
@@ -2454,7 +2454,7 @@
           "radno_mesto": "Administrator",
           "telefon": "264-729-2268 x09110",
           "e_mail": "isabel.koepp@gmail.com",
-          "prijavljeni": false
+          "mailing_status": "UNSUBSCRIBED"
         },
         {
           "_id": "acfa2a65d2635dc372db9e01",
@@ -2463,7 +2463,7 @@
           "radno_mesto": "nema",
           "telefon": "745.677.2445",
           "e_mail": "sylvester55@gmail.com",
-          "prijavljeni": false
+          "mailing_status": "UNSUBSCRIBED"
         },
         {
           "_id": "ab19cdfdbeb4a5b6ada4eba3",
@@ -2472,7 +2472,7 @@
           "radno_mesto": "Sales",
           "telefon": "(916) 774-7303 x8418",
           "e_mail": "bernice.prohaska74@gmail.com",
-          "prijavljeni": true
+          "mailing_status": "SUBSCRIBED"
         },
         {
           "_id": "facdcadc4b5948dbef05df74",
@@ -2481,7 +2481,7 @@
           "radno_mesto": "Developer",
           "telefon": "(994) 254-4553 x42863",
           "e_mail": "jo58@yahoo.com",
-          "prijavljeni": false
+          "mailing_status": "UNSUBSCRIBED"
         }
       ],
       "__v": 0
@@ -2497,7 +2497,7 @@
       "tip_firme": "DOO",
       "delatnost": "Saobraćaj",
       "stanje_firme": "blokada",
-      "prijavljeni": true,
+      "mailing_status": "SUBSCRIBED",
       "mesto": "f3b3aed3a8ce86c42fbcfdda",
       "zaposleni": [
         {
@@ -2507,7 +2507,7 @@
           "radno_mesto": "Designer",
           "telefon": "431-866-3631 x800",
           "e_mail": "angie61@yahoo.com",
-          "prijavljeni": false
+          "mailing_status": "UNSUBSCRIBED"
         },
         {
           "_id": "30fe9b31a38c3bd992d95aab",
@@ -2516,7 +2516,7 @@
           "radno_mesto": "Support",
           "telefon": "1-675-945-8526",
           "e_mail": "delphine81@hotmail.com",
-          "prijavljeni": false
+          "mailing_status": "UNSUBSCRIBED"
         },
         {
           "_id": "d5945bd885faa06e9cd9a1a5",
@@ -2525,7 +2525,7 @@
           "radno_mesto": "Designer",
           "telefon": "(245) 453-7580 x8731",
           "e_mail": "lindsey48@hotmail.com",
-          "prijavljeni": true
+          "mailing_status": "SUBSCRIBED"
         },
         {
           "_id": "8ccddcebd9cd9946beddaf8d",
@@ -2534,7 +2534,7 @@
           "radno_mesto": "Direktor",
           "telefon": "629-967-4066 x40132",
           "e_mail": "felix88@gmail.com",
-          "prijavljeni": false
+          "mailing_status": "UNSUBSCRIBED"
         },
         {
           "_id": "a9c4035eefaf14b934c1c50d",
@@ -2543,7 +2543,7 @@
           "radno_mesto": "Support",
           "telefon": "1-732-358-8452",
           "e_mail": "armand.rodriguez98@gmail.com",
-          "prijavljeni": true
+          "mailing_status": "SUBSCRIBED"
         },
         {
           "_id": "b54acf4e1a7af9dceaaa396f",
@@ -2552,7 +2552,7 @@
           "radno_mesto": "Designer",
           "telefon": "364.237.5158 x262",
           "e_mail": "alisa.schultz43@gmail.com",
-          "prijavljeni": false
+          "mailing_status": "UNSUBSCRIBED"
         },
         {
           "_id": "cbb17bce5c5cec4dfba1eee5",
@@ -2561,7 +2561,7 @@
           "radno_mesto": "nema",
           "telefon": "(737) 273-0054",
           "e_mail": "carroll.dicki76@gmail.com",
-          "prijavljeni": true
+          "mailing_status": "SUBSCRIBED"
         },
         {
           "_id": "e3142e62cd05e9efc14daa76",
@@ -2570,7 +2570,7 @@
           "radno_mesto": "Direktor",
           "telefon": "1-535-446-5711 x645",
           "e_mail": "christopher_gislason@yahoo.com",
-          "prijavljeni": true
+          "mailing_status": "SUBSCRIBED"
         }
       ],
       "__v": 0
@@ -2586,7 +2586,7 @@
       "tip_firme": "Preduzetnik",
       "delatnost": "Proizvodnja",
       "stanje_firme": "aktivna",
-      "prijavljeni": false,
+      "mailing_status": "UNSUBSCRIBED",
       "mesto": "e644cdfeaeaf026ebdffefa7",
       "zaposleni": [
         {
@@ -2596,7 +2596,7 @@
           "radno_mesto": "nema",
           "telefon": "(751) 508-2026 x0119",
           "e_mail": "allen85@yahoo.com",
-          "prijavljeni": true
+          "mailing_status": "SUBSCRIBED"
         },
         {
           "_id": "ec3a7e43bff9c4170b209e57",
@@ -2605,7 +2605,7 @@
           "radno_mesto": "Administrator",
           "telefon": "918.768.5283 x03237",
           "e_mail": "emilia.bauch6@hotmail.com",
-          "prijavljeni": true
+          "mailing_status": "SUBSCRIBED"
         }
       ],
       "__v": 0
@@ -2621,7 +2621,7 @@
       "tip_firme": "Preduzetnik",
       "delatnost": "Građevinarstvo",
       "stanje_firme": "aktivna",
-      "prijavljeni": false,
+      "mailing_status": "UNSUBSCRIBED",
       "mesto": "e644cdfeaeaf026ebdffefa7",
       "zaposleni": [
         {
@@ -2631,7 +2631,7 @@
           "radno_mesto": "HR",
           "telefon": "786-312-5897 x51101",
           "e_mail": "kole.dicki65@hotmail.com",
-          "prijavljeni": false
+          "mailing_status": "UNSUBSCRIBED"
         },
         {
           "_id": "cbfa6ff47da1e684da0cc475",
@@ -2640,7 +2640,7 @@
           "radno_mesto": "Support",
           "telefon": "881-396-7815 x94525",
           "e_mail": "leland95@hotmail.com",
-          "prijavljeni": true
+          "mailing_status": "SUBSCRIBED"
         },
         {
           "_id": "18abee3a1c6dadda2c858e1e",
@@ -2649,7 +2649,7 @@
           "radno_mesto": "Direktor",
           "telefon": "(997) 976-0893 x62776",
           "e_mail": "kaylah21@yahoo.com",
-          "prijavljeni": true
+          "mailing_status": "SUBSCRIBED"
         },
         {
           "_id": "a9c3e7d8b3b7d3bab1aeeeef",
@@ -2658,7 +2658,7 @@
           "radno_mesto": "HR",
           "telefon": "945.831.4643",
           "e_mail": "joshua.wilderman70@yahoo.com",
-          "prijavljeni": true
+          "mailing_status": "SUBSCRIBED"
         }
       ],
       "__v": 0
@@ -2674,7 +2674,7 @@
       "tip_firme": "DOO",
       "delatnost": "IT",
       "stanje_firme": "stecaj",
-      "prijavljeni": true,
+      "mailing_status": "SUBSCRIBED",
       "mesto": "9afeb30bd0abd1dacbb245aa",
       "zaposleni": [
         {
@@ -2684,7 +2684,7 @@
           "radno_mesto": "Designer",
           "telefon": "1-657-201-8965",
           "e_mail": "sherry.ankunding49@yahoo.com",
-          "prijavljeni": false
+          "mailing_status": "UNSUBSCRIBED"
         },
         {
           "_id": "7d3814afb927a2dae4f55bf6",
@@ -2693,7 +2693,7 @@
           "radno_mesto": "Administrator",
           "telefon": "284-910-0152 x326",
           "e_mail": "nicholas.emmerich92@yahoo.com",
-          "prijavljeni": true
+          "mailing_status": "SUBSCRIBED"
         },
         {
           "_id": "34e380bb03de1b7d2ded0fe3",
@@ -2702,7 +2702,7 @@
           "radno_mesto": "nema",
           "telefon": "768.254.7823 x00941",
           "e_mail": "vicky41@gmail.com",
-          "prijavljeni": true
+          "mailing_status": "SUBSCRIBED"
         },
         {
           "_id": "c38f65b3a67acddcd2525ed5",
@@ -2711,7 +2711,7 @@
           "radno_mesto": "Sales",
           "telefon": "951-408-6568 x21164",
           "e_mail": "evan.hauck@gmail.com",
-          "prijavljeni": true
+          "mailing_status": "SUBSCRIBED"
         },
         {
           "_id": "faaa0cc31aa1cbcc3a7cebc0",
@@ -2720,7 +2720,7 @@
           "radno_mesto": "Developer",
           "telefon": "(924) 489-3448",
           "e_mail": "demarcus.roberts@gmail.com",
-          "prijavljeni": true
+          "mailing_status": "SUBSCRIBED"
         },
         {
           "_id": "4df9a3f9fbfd36f5d39d5fa7",
@@ -2729,7 +2729,7 @@
           "radno_mesto": "Developer",
           "telefon": "813.520.0087",
           "e_mail": "gerard.beer6@hotmail.com",
-          "prijavljeni": true
+          "mailing_status": "SUBSCRIBED"
         },
         {
           "_id": "25ceb3f380b01f7f2e05559d",
@@ -2738,7 +2738,7 @@
           "radno_mesto": "Direktor",
           "telefon": "1-928-767-2336 x2117",
           "e_mail": "edna82@hotmail.com",
-          "prijavljeni": true
+          "mailing_status": "SUBSCRIBED"
         }
       ],
       "__v": 0
@@ -2754,7 +2754,7 @@
       "tip_firme": "DOO",
       "delatnost": "Trgovina",
       "stanje_firme": "stecaj",
-      "prijavljeni": false,
+      "mailing_status": "UNSUBSCRIBED",
       "mesto": "9afeb30bd0abd1dacbb245aa",
       "zaposleni": [
         {
@@ -2764,7 +2764,7 @@
           "radno_mesto": "Direktor",
           "telefon": "1-453-408-6429 x113",
           "e_mail": "ramona71@hotmail.com",
-          "prijavljeni": true
+          "mailing_status": "SUBSCRIBED"
         },
         {
           "_id": "215bac2b9f30fcb3f4b50c7e",
@@ -2773,7 +2773,7 @@
           "radno_mesto": "Direktor",
           "telefon": "1-656-636-3196 x3498",
           "e_mail": "angelita_hane78@yahoo.com",
-          "prijavljeni": true
+          "mailing_status": "SUBSCRIBED"
         },
         {
           "_id": "8b0a3d338d6fee3c7d009b26",
@@ -2782,7 +2782,7 @@
           "radno_mesto": "Developer",
           "telefon": "295.369.3111 x5313",
           "e_mail": "lucas_fadel@gmail.com",
-          "prijavljeni": false
+          "mailing_status": "UNSUBSCRIBED"
         },
         {
           "_id": "3b76f1fce55fd25b5e4bbc9c",
@@ -2791,7 +2791,7 @@
           "radno_mesto": "HR",
           "telefon": "(440) 308-4682",
           "e_mail": "corrine_greenholt97@yahoo.com",
-          "prijavljeni": false
+          "mailing_status": "UNSUBSCRIBED"
         },
         {
           "_id": "debc3ea79fab0353db0ecfcd",
@@ -2800,7 +2800,7 @@
           "radno_mesto": "Manager",
           "telefon": "685-209-9939 x2542",
           "e_mail": "julianne.mante@yahoo.com",
-          "prijavljeni": true
+          "mailing_status": "SUBSCRIBED"
         }
       ],
       "__v": 0
@@ -2816,7 +2816,7 @@
       "tip_firme": "Preduzetnik",
       "delatnost": "Građevinarstvo",
       "stanje_firme": "blokada",
-      "prijavljeni": true,
+      "mailing_status": "SUBSCRIBED",
       "mesto": "f3b3aed3a8ce86c42fbcfdda",
       "zaposleni": [
         {
@@ -2826,7 +2826,7 @@
           "radno_mesto": "HR",
           "telefon": "953.964.1319 x66737",
           "e_mail": "golden.watsica53@gmail.com",
-          "prijavljeni": false
+          "mailing_status": "UNSUBSCRIBED"
         },
         {
           "_id": "9edb3a214e81f0322d198ea0",
@@ -2835,7 +2835,7 @@
           "radno_mesto": "Administrator",
           "telefon": "576.204.8489 x5001",
           "e_mail": "jared19@gmail.com",
-          "prijavljeni": true
+          "mailing_status": "SUBSCRIBED"
         },
         {
           "_id": "58e4eb440dabd9fe9bb31caf",
@@ -2844,7 +2844,7 @@
           "radno_mesto": "Manager",
           "telefon": "1-476-513-9043",
           "e_mail": "mauricio.marks@hotmail.com",
-          "prijavljeni": false
+          "mailing_status": "UNSUBSCRIBED"
         },
         {
           "_id": "d6eba04f4482ad7c8624987f",
@@ -2853,7 +2853,7 @@
           "radno_mesto": "nema",
           "telefon": "(932) 338-5796 x18794",
           "e_mail": "david_shields@hotmail.com",
-          "prijavljeni": true
+          "mailing_status": "SUBSCRIBED"
         }
       ],
       "__v": 0
@@ -2869,7 +2869,7 @@
       "tip_firme": "JP",
       "delatnost": "IT",
       "stanje_firme": "aktivna",
-      "prijavljeni": false,
+      "mailing_status": "UNSUBSCRIBED",
       "mesto": "f3b3aed3a8ce86c42fbcfdda",
       "zaposleni": [
         {
@@ -2879,7 +2879,7 @@
           "radno_mesto": "Designer",
           "telefon": "235-878-1691 x78562",
           "e_mail": "gayle_dibbert34@yahoo.com",
-          "prijavljeni": true
+          "mailing_status": "SUBSCRIBED"
         },
         {
           "_id": "d2638f58a15837fe2c790ab1",
@@ -2888,7 +2888,7 @@
           "radno_mesto": "Support",
           "telefon": "690-331-0911 x959",
           "e_mail": "malcolm.leannon@hotmail.com",
-          "prijavljeni": true
+          "mailing_status": "SUBSCRIBED"
         }
       ],
       "__v": 0
@@ -2904,7 +2904,7 @@
       "tip_firme": "AD",
       "delatnost": "Saobraćaj",
       "stanje_firme": "aktivna",
-      "prijavljeni": false,
+      "mailing_status": "UNSUBSCRIBED",
       "mesto": "9afeb30bd0abd1dacbb245aa",
       "zaposleni": [
         {
@@ -2914,7 +2914,7 @@
           "radno_mesto": "Direktor",
           "telefon": "1-405-945-8905",
           "e_mail": "antonio39@hotmail.com",
-          "prijavljeni": false
+          "mailing_status": "UNSUBSCRIBED"
         }
       ],
       "__v": 0
@@ -2930,7 +2930,7 @@
       "tip_firme": "AD",
       "delatnost": "Trgovina",
       "stanje_firme": "aktivna",
-      "prijavljeni": false,
+      "mailing_status": "UNSUBSCRIBED",
       "mesto": "9afeb30bd0abd1dacbb245aa",
       "zaposleni": [
         {
@@ -2940,7 +2940,7 @@
           "radno_mesto": "nema",
           "telefon": "249-209-7343 x622",
           "e_mail": "holly_schiller@yahoo.com",
-          "prijavljeni": true
+          "mailing_status": "SUBSCRIBED"
         },
         {
           "_id": "237b529c1f8deacdb6c354bd",
@@ -2949,7 +2949,7 @@
           "radno_mesto": "HR",
           "telefon": "203.616.4077",
           "e_mail": "deshawn_thiel59@yahoo.com",
-          "prijavljeni": true
+          "mailing_status": "SUBSCRIBED"
         },
         {
           "_id": "99ed3fc4bf8e00a138fcbfca",
@@ -2958,7 +2958,7 @@
           "radno_mesto": "nema",
           "telefon": "615.479.2324 x97588",
           "e_mail": "tyrone_ward@hotmail.com",
-          "prijavljeni": true
+          "mailing_status": "SUBSCRIBED"
         },
         {
           "_id": "f6d4ee0c8964bb7ac837da8f",
@@ -2967,7 +2967,7 @@
           "radno_mesto": "Manager",
           "telefon": "958-560-0981",
           "e_mail": "jerry_marvin@yahoo.com",
-          "prijavljeni": true
+          "mailing_status": "SUBSCRIBED"
         },
         {
           "_id": "bd8d09eec7174bef60ab3b4a",
@@ -2976,7 +2976,7 @@
           "radno_mesto": "Administrator",
           "telefon": "1-424-453-1937",
           "e_mail": "merle.lakin@yahoo.com",
-          "prijavljeni": true
+          "mailing_status": "SUBSCRIBED"
         },
         {
           "_id": "dcac1aa1af56860f49ba6c5d",
@@ -2985,7 +2985,7 @@
           "radno_mesto": "Manager",
           "telefon": "736-312-6340 x177",
           "e_mail": "shea_will63@gmail.com",
-          "prijavljeni": true
+          "mailing_status": "SUBSCRIBED"
         }
       ],
       "__v": 0
@@ -3001,7 +3001,7 @@
       "tip_firme": "DOO",
       "delatnost": "Saobraćaj",
       "stanje_firme": "stecaj",
-      "prijavljeni": false,
+      "mailing_status": "UNSUBSCRIBED",
       "mesto": "8bd5fca7ddf006f33a1fa0bb",
       "zaposleni": [
         {
@@ -3011,7 +3011,7 @@
           "radno_mesto": "Support",
           "telefon": "(693) 430-1306 x425",
           "e_mail": "jorge7@hotmail.com",
-          "prijavljeni": false
+          "mailing_status": "UNSUBSCRIBED"
         },
         {
           "_id": "6807dcdb393ea54aecdf2ebe",
@@ -3020,7 +3020,7 @@
           "radno_mesto": "nema",
           "telefon": "1-600-992-8179 x092",
           "e_mail": "buddy.murray@yahoo.com",
-          "prijavljeni": true
+          "mailing_status": "SUBSCRIBED"
         },
         {
           "_id": "adfac8dcb14330ede4d393ed",
@@ -3029,7 +3029,7 @@
           "radno_mesto": "Sales",
           "telefon": "667-337-9744",
           "e_mail": "maxine_brakus88@gmail.com",
-          "prijavljeni": false
+          "mailing_status": "UNSUBSCRIBED"
         },
         {
           "_id": "c864db834929aeb46ceaee89",
@@ -3038,7 +3038,7 @@
           "radno_mesto": "Direktor",
           "telefon": "(818) 510-0372",
           "e_mail": "antonio12@hotmail.com",
-          "prijavljeni": false
+          "mailing_status": "UNSUBSCRIBED"
         },
         {
           "_id": "9b2da42bab316dcde8a97f5a",
@@ -3047,7 +3047,7 @@
           "radno_mesto": "nema",
           "telefon": "314-858-1893 x1439",
           "e_mail": "sean_kertzmann@yahoo.com",
-          "prijavljeni": false
+          "mailing_status": "UNSUBSCRIBED"
         },
         {
           "_id": "9cff881ca533285fae1d9649",
@@ -3056,7 +3056,7 @@
           "radno_mesto": "Direktor",
           "telefon": "701.799.7401",
           "e_mail": "ann.paucek39@gmail.com",
-          "prijavljeni": false
+          "mailing_status": "UNSUBSCRIBED"
         },
         {
           "_id": "facbcd5d88beaac09e0cc2ea",
@@ -3065,7 +3065,7 @@
           "radno_mesto": "Developer",
           "telefon": "1-450-276-6036 x39705",
           "e_mail": "alfredo_waelchi@hotmail.com",
-          "prijavljeni": true
+          "mailing_status": "SUBSCRIBED"
         },
         {
           "_id": "d2c7621a7c5fbdc8de00aa9b",
@@ -3074,7 +3074,7 @@
           "radno_mesto": "Administrator",
           "telefon": "646-450-0012 x3019",
           "e_mail": "rosamond12@gmail.com",
-          "prijavljeni": false
+          "mailing_status": "UNSUBSCRIBED"
         }
       ],
       "__v": 0
@@ -3090,7 +3090,7 @@
       "tip_firme": "AD",
       "delatnost": "Proizvodnja",
       "stanje_firme": "stecaj",
-      "prijavljeni": false,
+      "mailing_status": "UNSUBSCRIBED",
       "mesto": "7fb45baeeb5f8a47e6abce2e",
       "zaposleni": [
         {
@@ -3100,7 +3100,7 @@
           "radno_mesto": "Developer",
           "telefon": "216-676-1533",
           "e_mail": "alexandro_jacobi@yahoo.com",
-          "prijavljeni": false
+          "mailing_status": "UNSUBSCRIBED"
         },
         {
           "_id": "ef314ff9de62feab3b1a9be5",
@@ -3109,7 +3109,7 @@
           "radno_mesto": "Developer",
           "telefon": "1-281-321-7307 x8315",
           "e_mail": "joanne.murazik@hotmail.com",
-          "prijavljeni": true
+          "mailing_status": "SUBSCRIBED"
         }
       ],
       "__v": 0
@@ -3125,7 +3125,7 @@
       "tip_firme": "AD",
       "delatnost": "Građevinarstvo",
       "stanje_firme": "blokada",
-      "prijavljeni": true,
+      "mailing_status": "SUBSCRIBED",
       "mesto": "7fb45baeeb5f8a47e6abce2e",
       "zaposleni": [
         {
@@ -3135,7 +3135,7 @@
           "radno_mesto": "Direktor",
           "telefon": "(221) 900-1085 x7609",
           "e_mail": "rosemary_stiedemann62@gmail.com",
-          "prijavljeni": false
+          "mailing_status": "UNSUBSCRIBED"
         },
         {
           "_id": "fdd9a08a6fad35b059ba4cb5",
@@ -3144,7 +3144,7 @@
           "radno_mesto": "Support",
           "telefon": "(956) 286-4061 x02914",
           "e_mail": "nora20@gmail.com",
-          "prijavljeni": false
+          "mailing_status": "UNSUBSCRIBED"
         }
       ],
       "__v": 0
@@ -3160,7 +3160,7 @@
       "tip_firme": "Preduzetnik",
       "delatnost": "Građevinarstvo",
       "stanje_firme": "blokada",
-      "prijavljeni": false,
+      "mailing_status": "UNSUBSCRIBED",
       "mesto": "e644cdfeaeaf026ebdffefa7",
       "zaposleni": [
         {
@@ -3170,7 +3170,7 @@
           "radno_mesto": "Direktor",
           "telefon": "764-959-0288",
           "e_mail": "damien12@yahoo.com",
-          "prijavljeni": false
+          "mailing_status": "UNSUBSCRIBED"
         },
         {
           "_id": "dfaad4df0eed770f2e1ecb4e",
@@ -3179,7 +3179,7 @@
           "radno_mesto": "Manager",
           "telefon": "878-696-4932 x9751",
           "e_mail": "leann.parker@hotmail.com",
-          "prijavljeni": false
+          "mailing_status": "UNSUBSCRIBED"
         },
         {
           "_id": "efdfadd3310c174eb74aeff7",
@@ -3188,7 +3188,7 @@
           "radno_mesto": "nema",
           "telefon": "444-708-4497",
           "e_mail": "debbie_sipes-von@hotmail.com",
-          "prijavljeni": true
+          "mailing_status": "SUBSCRIBED"
         },
         {
           "_id": "f78d3fb6157adfe89ebbaa0e",
@@ -3197,7 +3197,7 @@
           "radno_mesto": "nema",
           "telefon": "(689) 281-7951",
           "e_mail": "chasity11@hotmail.com",
-          "prijavljeni": false
+          "mailing_status": "UNSUBSCRIBED"
         },
         {
           "_id": "9a3cf37cbde00bf6ad37ec60",
@@ -3206,7 +3206,7 @@
           "radno_mesto": "nema",
           "telefon": "812.562.0083",
           "e_mail": "alisa83@yahoo.com",
-          "prijavljeni": false
+          "mailing_status": "UNSUBSCRIBED"
         },
         {
           "_id": "fdcac22d22afe72f9d3c714d",
@@ -3215,7 +3215,7 @@
           "radno_mesto": "Sales",
           "telefon": "1-934-973-8237 x33629",
           "e_mail": "brooke70@yahoo.com",
-          "prijavljeni": false
+          "mailing_status": "UNSUBSCRIBED"
         }
       ],
       "__v": 0
@@ -3231,7 +3231,7 @@
       "tip_firme": "DOO",
       "delatnost": "Usluge",
       "stanje_firme": "stecaj",
-      "prijavljeni": false,
+      "mailing_status": "UNSUBSCRIBED",
       "mesto": "f3b3aed3a8ce86c42fbcfdda",
       "zaposleni": [
         {
@@ -3241,7 +3241,7 @@
           "radno_mesto": "Administrator",
           "telefon": "1-386-735-0276 x78377",
           "e_mail": "lena_kautzer80@gmail.com",
-          "prijavljeni": true
+          "mailing_status": "SUBSCRIBED"
         }
       ],
       "__v": 0
@@ -3257,7 +3257,7 @@
       "tip_firme": "DOO",
       "delatnost": "Saobraćaj",
       "stanje_firme": "blokada",
-      "prijavljeni": true,
+      "mailing_status": "SUBSCRIBED",
       "mesto": "8bd5fca7ddf006f33a1fa0bb",
       "zaposleni": [
         {
@@ -3267,7 +3267,7 @@
           "radno_mesto": "Direktor",
           "telefon": "(606) 661-7046 x7543",
           "e_mail": "marion_medhurst27@yahoo.com",
-          "prijavljeni": false
+          "mailing_status": "UNSUBSCRIBED"
         },
         {
           "_id": "66addf5ad43bd2d5c4a54da6",
@@ -3276,7 +3276,7 @@
           "radno_mesto": "Designer",
           "telefon": "1-303-673-7702 x612",
           "e_mail": "arno_parisian@hotmail.com",
-          "prijavljeni": true
+          "mailing_status": "SUBSCRIBED"
         },
         {
           "_id": "fc9dfed5d6ca1c9edcf4bae4",
@@ -3285,7 +3285,7 @@
           "radno_mesto": "Manager",
           "telefon": "(210) 689-4271 x2492",
           "e_mail": "courtney.huel-stanton54@gmail.com",
-          "prijavljeni": false
+          "mailing_status": "UNSUBSCRIBED"
         },
         {
           "_id": "bee80bb1ba128ccfe8a8d2b1",
@@ -3294,7 +3294,7 @@
           "radno_mesto": "Support",
           "telefon": "245.915.1346 x4441",
           "e_mail": "darlene71@hotmail.com",
-          "prijavljeni": true
+          "mailing_status": "SUBSCRIBED"
         },
         {
           "_id": "fe7f6fb8b65f7cef2d9ea665",
@@ -3303,7 +3303,7 @@
           "radno_mesto": "HR",
           "telefon": "443.406.7133 x62156",
           "e_mail": "philip_pacocha81@hotmail.com",
-          "prijavljeni": false
+          "mailing_status": "UNSUBSCRIBED"
         }
       ],
       "__v": 0
@@ -3319,7 +3319,7 @@
       "tip_firme": "Preduzetnik",
       "delatnost": "Usluge",
       "stanje_firme": "aktivna",
-      "prijavljeni": false,
+      "mailing_status": "UNSUBSCRIBED",
       "mesto": "3d6c99df614ecf1ca089decb",
       "zaposleni": [
         {
@@ -3329,7 +3329,7 @@
           "radno_mesto": "Support",
           "telefon": "(644) 359-0600 x3467",
           "e_mail": "esta.rippin@hotmail.com",
-          "prijavljeni": true
+          "mailing_status": "SUBSCRIBED"
         },
         {
           "_id": "3cc2aebc94c3e26eaddbb9f0",
@@ -3338,7 +3338,7 @@
           "radno_mesto": "Direktor",
           "telefon": "338-703-2236 x078",
           "e_mail": "omar_labadie@gmail.com",
-          "prijavljeni": false
+          "mailing_status": "UNSUBSCRIBED"
         },
         {
           "_id": "9ea0f6fbdbbf0ddb90aaf514",
@@ -3347,7 +3347,7 @@
           "radno_mesto": "Support",
           "telefon": "(701) 303-8355 x3750",
           "e_mail": "rudolph_wuckert@gmail.com",
-          "prijavljeni": false
+          "mailing_status": "UNSUBSCRIBED"
         },
         {
           "_id": "fecf668f12f7abeacdfcaafe",
@@ -3356,7 +3356,7 @@
           "radno_mesto": "Support",
           "telefon": "531.427.5633 x6469",
           "e_mail": "roma58@gmail.com",
-          "prijavljeni": true
+          "mailing_status": "SUBSCRIBED"
         },
         {
           "_id": "eced80c3f28f0d9d0cbfbf75",
@@ -3365,7 +3365,7 @@
           "radno_mesto": "Direktor",
           "telefon": "992-931-5268",
           "e_mail": "randall.breitenberg22@yahoo.com",
-          "prijavljeni": false
+          "mailing_status": "UNSUBSCRIBED"
         },
         {
           "_id": "0d2c0ddcfdb23dc1a4dad8e5",
@@ -3374,7 +3374,7 @@
           "radno_mesto": "Designer",
           "telefon": "593.298.4416",
           "e_mail": "cary.cassin99@gmail.com",
-          "prijavljeni": false
+          "mailing_status": "UNSUBSCRIBED"
         },
         {
           "_id": "3a72eff0f89aeab8211d0bb6",
@@ -3383,7 +3383,7 @@
           "radno_mesto": "Manager",
           "telefon": "984-208-6264 x69185",
           "e_mail": "elza.trantow83@gmail.com",
-          "prijavljeni": false
+          "mailing_status": "UNSUBSCRIBED"
         },
         {
           "_id": "b3b102c87daead8fdfd3bd3a",
@@ -3392,7 +3392,7 @@
           "radno_mesto": "Administrator",
           "telefon": "1-751-241-3546",
           "e_mail": "lynne39@gmail.com",
-          "prijavljeni": true
+          "mailing_status": "SUBSCRIBED"
         }
       ],
       "__v": 0
@@ -3408,7 +3408,7 @@
       "tip_firme": "Preduzetnik",
       "delatnost": "IT",
       "stanje_firme": "blokada",
-      "prijavljeni": false,
+      "mailing_status": "UNSUBSCRIBED",
       "mesto": "9afeb30bd0abd1dacbb245aa",
       "zaposleni": [
         {
@@ -3418,7 +3418,7 @@
           "radno_mesto": "Sales",
           "telefon": "696-961-0232 x640",
           "e_mail": "janice82@hotmail.com",
-          "prijavljeni": false
+          "mailing_status": "UNSUBSCRIBED"
         }
       ],
       "__v": 0
@@ -3434,7 +3434,7 @@
       "tip_firme": "JP",
       "delatnost": "IT",
       "stanje_firme": "blokada",
-      "prijavljeni": true,
+      "mailing_status": "SUBSCRIBED",
       "mesto": "8bd5fca7ddf006f33a1fa0bb",
       "zaposleni": [
         {
@@ -3444,7 +3444,7 @@
           "radno_mesto": "Manager",
           "telefon": "460.811.5087 x8126",
           "e_mail": "andy98@gmail.com",
-          "prijavljeni": true
+          "mailing_status": "SUBSCRIBED"
         },
         {
           "_id": "dcdae140fa30e9b14ef466e7",
@@ -3453,7 +3453,7 @@
           "radno_mesto": "Direktor",
           "telefon": "1-954-550-5902 x10202",
           "e_mail": "judy40@hotmail.com",
-          "prijavljeni": false
+          "mailing_status": "UNSUBSCRIBED"
         },
         {
           "_id": "a10be8713f4a3cab851cebef",
@@ -3462,7 +3462,7 @@
           "radno_mesto": "Administrator",
           "telefon": "(831) 544-9935 x371",
           "e_mail": "hattie.beer-bins@hotmail.com",
-          "prijavljeni": false
+          "mailing_status": "UNSUBSCRIBED"
         },
         {
           "_id": "d4d947d9c4da4bda8d8eceaa",
@@ -3471,7 +3471,7 @@
           "radno_mesto": "nema",
           "telefon": "1-238-917-0566 x281",
           "e_mail": "amy94@gmail.com",
-          "prijavljeni": true
+          "mailing_status": "SUBSCRIBED"
         },
         {
           "_id": "a9e9c0a4df71e098f34aebdf",
@@ -3480,7 +3480,7 @@
           "radno_mesto": "Support",
           "telefon": "1-787-422-0657 x94296",
           "e_mail": "golda.prohaska54@gmail.com",
-          "prijavljeni": true
+          "mailing_status": "SUBSCRIBED"
         },
         {
           "_id": "cde30ea7b47d0e4e2c01c4ee",
@@ -3489,7 +3489,7 @@
           "radno_mesto": "nema",
           "telefon": "539-297-5857 x388",
           "e_mail": "darion76@hotmail.com",
-          "prijavljeni": false
+          "mailing_status": "UNSUBSCRIBED"
         },
         {
           "_id": "55dbacdfc69d7d81b12bfa7b",
@@ -3498,7 +3498,7 @@
           "radno_mesto": "Administrator",
           "telefon": "(548) 763-4930",
           "e_mail": "loy_gleason78@yahoo.com",
-          "prijavljeni": false
+          "mailing_status": "UNSUBSCRIBED"
         }
       ],
       "__v": 0
@@ -3514,7 +3514,7 @@
       "tip_firme": "DOO",
       "delatnost": "IT",
       "stanje_firme": "blokada",
-      "prijavljeni": false,
+      "mailing_status": "UNSUBSCRIBED",
       "mesto": "f3b3aed3a8ce86c42fbcfdda",
       "zaposleni": [
         {
@@ -3524,7 +3524,7 @@
           "radno_mesto": "nema",
           "telefon": "261.972.1988 x2315",
           "e_mail": "jackson96@yahoo.com",
-          "prijavljeni": true
+          "mailing_status": "SUBSCRIBED"
         },
         {
           "_id": "cd8edc0e8d4fdd1bcc7aee4f",
@@ -3533,7 +3533,7 @@
           "radno_mesto": "Developer",
           "telefon": "496.652.5815 x20629",
           "e_mail": "wendell70@yahoo.com",
-          "prijavljeni": true
+          "mailing_status": "SUBSCRIBED"
         },
         {
           "_id": "9b1ccf1b2a9ca6382bd4ae1d",
@@ -3542,7 +3542,7 @@
           "radno_mesto": "Direktor",
           "telefon": "471-639-4048 x96461",
           "e_mail": "randolph54@gmail.com",
-          "prijavljeni": false
+          "mailing_status": "UNSUBSCRIBED"
         },
         {
           "_id": "ede20a6db2a21a222cffbcfb",
@@ -3551,7 +3551,7 @@
           "radno_mesto": "Developer",
           "telefon": "1-634-877-0206",
           "e_mail": "stan_fisher@yahoo.com",
-          "prijavljeni": true
+          "mailing_status": "SUBSCRIBED"
         }
       ],
       "__v": 0
@@ -3567,7 +3567,7 @@
       "tip_firme": "DOO",
       "delatnost": "Saobraćaj",
       "stanje_firme": "stecaj",
-      "prijavljeni": true,
+      "mailing_status": "SUBSCRIBED",
       "mesto": "9afeb30bd0abd1dacbb245aa",
       "zaposleni": [
         {
@@ -3577,7 +3577,7 @@
           "radno_mesto": "Manager",
           "telefon": "370.282.8838",
           "e_mail": "audie_labadie68@gmail.com",
-          "prijavljeni": true
+          "mailing_status": "SUBSCRIBED"
         },
         {
           "_id": "53fdd1d32b1f5c5e8ae57666",
@@ -3586,7 +3586,7 @@
           "radno_mesto": "nema",
           "telefon": "(695) 571-7612 x81761",
           "e_mail": "ollie89@gmail.com",
-          "prijavljeni": true
+          "mailing_status": "SUBSCRIBED"
         },
         {
           "_id": "b1d706941eeb96f8a7fadfcd",
@@ -3595,7 +3595,7 @@
           "radno_mesto": "Developer",
           "telefon": "1-396-230-8774 x335",
           "e_mail": "jermaine.becker-stanton31@hotmail.com",
-          "prijavljeni": true
+          "mailing_status": "SUBSCRIBED"
         },
         {
           "_id": "a06d9d48cfd977bfa43d3ed2",
@@ -3604,7 +3604,7 @@
           "radno_mesto": "Designer",
           "telefon": "554.873.2021 x300",
           "e_mail": "woodrow.kuphal-rice@yahoo.com",
-          "prijavljeni": false
+          "mailing_status": "UNSUBSCRIBED"
         }
       ],
       "__v": 0
@@ -3620,7 +3620,7 @@
       "tip_firme": "AD",
       "delatnost": "Saobraćaj",
       "stanje_firme": "stecaj",
-      "prijavljeni": false,
+      "mailing_status": "UNSUBSCRIBED",
       "mesto": "7fb45baeeb5f8a47e6abce2e",
       "zaposleni": [
         {
@@ -3630,7 +3630,7 @@
           "radno_mesto": "Designer",
           "telefon": "1-519-419-0185 x9364",
           "e_mail": "wm.bailey@hotmail.com",
-          "prijavljeni": false
+          "mailing_status": "UNSUBSCRIBED"
         },
         {
           "_id": "fa52aad1618fbf2b58af819b",
@@ -3639,7 +3639,7 @@
           "radno_mesto": "Sales",
           "telefon": "835.728.3099 x15430",
           "e_mail": "derek13@yahoo.com",
-          "prijavljeni": false
+          "mailing_status": "UNSUBSCRIBED"
         },
         {
           "_id": "eee2e3e2ea7edfeeabcbbeb4",
@@ -3648,7 +3648,7 @@
           "radno_mesto": "Manager",
           "telefon": "1-255-811-4213",
           "e_mail": "ebony73@hotmail.com",
-          "prijavljeni": true
+          "mailing_status": "SUBSCRIBED"
         }
       ],
       "__v": 0
@@ -3664,7 +3664,7 @@
       "tip_firme": "AD",
       "delatnost": "Usluge",
       "stanje_firme": "stecaj",
-      "prijavljeni": true,
+      "mailing_status": "SUBSCRIBED",
       "mesto": "8bd5fca7ddf006f33a1fa0bb",
       "zaposleni": [
         {
@@ -3674,7 +3674,7 @@
           "radno_mesto": "Sales",
           "telefon": "862.912.6521 x5928",
           "e_mail": "brian21@yahoo.com",
-          "prijavljeni": true
+          "mailing_status": "SUBSCRIBED"
         },
         {
           "_id": "46a8e8609ee1bc65389da3cc",
@@ -3683,7 +3683,7 @@
           "radno_mesto": "Manager",
           "telefon": "803.303.8757 x073",
           "e_mail": "fatima_zulauf31@gmail.com",
-          "prijavljeni": false
+          "mailing_status": "UNSUBSCRIBED"
         },
         {
           "_id": "68222bca8fb6caa996abc085",
@@ -3692,7 +3692,7 @@
           "radno_mesto": "Designer",
           "telefon": "1-978-798-2878 x1739",
           "e_mail": "lindsey49@gmail.com",
-          "prijavljeni": false
+          "mailing_status": "UNSUBSCRIBED"
         },
         {
           "_id": "911fcf68ab9c9eabbdeddc5d",
@@ -3701,7 +3701,7 @@
           "radno_mesto": "Support",
           "telefon": "203-269-6065 x7602",
           "e_mail": "clark30@yahoo.com",
-          "prijavljeni": false
+          "mailing_status": "UNSUBSCRIBED"
         }
       ],
       "__v": 0
@@ -3717,7 +3717,7 @@
       "tip_firme": "JP",
       "delatnost": "Proizvodnja",
       "stanje_firme": "stecaj",
-      "prijavljeni": true,
+      "mailing_status": "SUBSCRIBED",
       "mesto": "eb1cde952aa0ffa90db36d83",
       "zaposleni": [
         {
@@ -3727,7 +3727,7 @@
           "radno_mesto": "HR",
           "telefon": "(843) 818-6050 x500",
           "e_mail": "velma.turcotte@yahoo.com",
-          "prijavljeni": true
+          "mailing_status": "SUBSCRIBED"
         },
         {
           "_id": "bf2098f6d13b191da04e71ae",
@@ -3736,7 +3736,7 @@
           "radno_mesto": "Designer",
           "telefon": "348-892-9922",
           "e_mail": "ronnie_stoltenberg@hotmail.com",
-          "prijavljeni": false
+          "mailing_status": "UNSUBSCRIBED"
         },
         {
           "_id": "ca6dddcf9cb0e0dbafe29b96",
@@ -3745,7 +3745,7 @@
           "radno_mesto": "Direktor",
           "telefon": "1-672-961-5367 x68068",
           "e_mail": "jerrod_heathcote@yahoo.com",
-          "prijavljeni": true
+          "mailing_status": "SUBSCRIBED"
         }
       ],
       "__v": 0
@@ -3761,7 +3761,7 @@
       "tip_firme": "Preduzetnik",
       "delatnost": "Građevinarstvo",
       "stanje_firme": "aktivna",
-      "prijavljeni": true,
+      "mailing_status": "SUBSCRIBED",
       "mesto": "7fb45baeeb5f8a47e6abce2e",
       "zaposleni": [
         {
@@ -3771,7 +3771,7 @@
           "radno_mesto": "Administrator",
           "telefon": "1-380-393-4014",
           "e_mail": "ceasar84@hotmail.com",
-          "prijavljeni": false
+          "mailing_status": "UNSUBSCRIBED"
         },
         {
           "_id": "a972c9ef6c1f7dfcedbfb2e8",
@@ -3780,7 +3780,7 @@
           "radno_mesto": "Manager",
           "telefon": "1-669-802-3154",
           "e_mail": "june_konopelski@hotmail.com",
-          "prijavljeni": true
+          "mailing_status": "SUBSCRIBED"
         },
         {
           "_id": "97a0b35633bebbfb0d8bd47c",
@@ -3789,7 +3789,7 @@
           "radno_mesto": "Designer",
           "telefon": "1-553-221-0770 x4009",
           "e_mail": "henrietta.vandervort@yahoo.com",
-          "prijavljeni": false
+          "mailing_status": "UNSUBSCRIBED"
         }
       ],
       "__v": 0
@@ -3805,7 +3805,7 @@
       "tip_firme": "Preduzetnik",
       "delatnost": "Saobraćaj",
       "stanje_firme": "blokada",
-      "prijavljeni": false,
+      "mailing_status": "UNSUBSCRIBED",
       "mesto": "9afeb30bd0abd1dacbb245aa",
       "zaposleni": [
         {
@@ -3815,7 +3815,7 @@
           "radno_mesto": "Sales",
           "telefon": "931.928.4063 x17622",
           "e_mail": "kassandra.tremblay@yahoo.com",
-          "prijavljeni": false
+          "mailing_status": "UNSUBSCRIBED"
         },
         {
           "_id": "1bad2d125be77f2e389bd6fc",
@@ -3824,7 +3824,7 @@
           "radno_mesto": "Administrator",
           "telefon": "(976) 634-1112",
           "e_mail": "lonnie.gleichner77@hotmail.com",
-          "prijavljeni": true
+          "mailing_status": "SUBSCRIBED"
         },
         {
           "_id": "eb2bf4e5eec2ce7ee7daedbb",
@@ -3833,7 +3833,7 @@
           "radno_mesto": "HR",
           "telefon": "(993) 666-9164 x36354",
           "e_mail": "dana97@hotmail.com",
-          "prijavljeni": true
+          "mailing_status": "SUBSCRIBED"
         },
         {
           "_id": "ebfff675c1c9fab5768cadc9",
@@ -3842,7 +3842,7 @@
           "radno_mesto": "Sales",
           "telefon": "223.838.4177 x45728",
           "e_mail": "lisa68@hotmail.com",
-          "prijavljeni": false
+          "mailing_status": "UNSUBSCRIBED"
         },
         {
           "_id": "69df12ea7dbe7bbb922badaa",
@@ -3851,7 +3851,7 @@
           "radno_mesto": "HR",
           "telefon": "325-317-4847 x571",
           "e_mail": "janet1@gmail.com",
-          "prijavljeni": true
+          "mailing_status": "SUBSCRIBED"
         },
         {
           "_id": "5d3b9f39ea93e7562dbabbd4",
@@ -3860,7 +3860,7 @@
           "radno_mesto": "HR",
           "telefon": "1-330-747-3008",
           "e_mail": "guiseppe.johns@yahoo.com",
-          "prijavljeni": true
+          "mailing_status": "SUBSCRIBED"
         }
       ],
       "__v": 0
@@ -3876,7 +3876,7 @@
       "tip_firme": "DOO",
       "delatnost": "Usluge",
       "stanje_firme": "aktivna",
-      "prijavljeni": false,
+      "mailing_status": "UNSUBSCRIBED",
       "mesto": "7fb45baeeb5f8a47e6abce2e",
       "zaposleni": [
         {
@@ -3886,7 +3886,7 @@
           "radno_mesto": "Direktor",
           "telefon": "243-731-9063 x9832",
           "e_mail": "jake_gleason54@yahoo.com",
-          "prijavljeni": false
+          "mailing_status": "UNSUBSCRIBED"
         },
         {
           "_id": "9ec7baba51de1dfd7c080eae",
@@ -3895,7 +3895,7 @@
           "radno_mesto": "Developer",
           "telefon": "570.660.0943",
           "e_mail": "diamond_bernier@hotmail.com",
-          "prijavljeni": false
+          "mailing_status": "UNSUBSCRIBED"
         },
         {
           "_id": "6c3fea823bb5f6ea9ceb5c81",
@@ -3904,7 +3904,7 @@
           "radno_mesto": "Manager",
           "telefon": "1-854-806-8393",
           "e_mail": "taylor_wehner58@gmail.com",
-          "prijavljeni": true
+          "mailing_status": "SUBSCRIBED"
         },
         {
           "_id": "313aabab96e04cdbccdd3bf5",
@@ -3913,7 +3913,7 @@
           "radno_mesto": "Administrator",
           "telefon": "(818) 905-8033 x1241",
           "e_mail": "noah8@gmail.com",
-          "prijavljeni": false
+          "mailing_status": "UNSUBSCRIBED"
         },
         {
           "_id": "9d78ed5b14eaa776ead9a736",
@@ -3922,7 +3922,7 @@
           "radno_mesto": "Support",
           "telefon": "555-684-6052",
           "e_mail": "ramiro_batz@hotmail.com",
-          "prijavljeni": true
+          "mailing_status": "SUBSCRIBED"
         },
         {
           "_id": "3f6da5f4d12dbccec6b0a230",
@@ -3931,7 +3931,7 @@
           "radno_mesto": "Manager",
           "telefon": "811-631-0546 x9065",
           "e_mail": "samuel81@gmail.com",
-          "prijavljeni": true
+          "mailing_status": "SUBSCRIBED"
         },
         {
           "_id": "dde5d28d74d03dedefe287f7",
@@ -3940,7 +3940,7 @@
           "radno_mesto": "Manager",
           "telefon": "264-849-4640 x733",
           "e_mail": "fredrick.tremblay@hotmail.com",
-          "prijavljeni": false
+          "mailing_status": "UNSUBSCRIBED"
         }
       ],
       "__v": 0
@@ -3956,7 +3956,7 @@
       "tip_firme": "AD",
       "delatnost": "Usluge",
       "stanje_firme": "blokada",
-      "prijavljeni": true,
+      "mailing_status": "SUBSCRIBED",
       "mesto": "e644cdfeaeaf026ebdffefa7",
       "zaposleni": [
         {
@@ -3966,7 +3966,7 @@
           "radno_mesto": "Direktor",
           "telefon": "(363) 707-4580",
           "e_mail": "tony95@gmail.com",
-          "prijavljeni": true
+          "mailing_status": "SUBSCRIBED"
         },
         {
           "_id": "01bac568162081f84aef5f4d",
@@ -3975,7 +3975,7 @@
           "radno_mesto": "Direktor",
           "telefon": "1-783-748-9347 x748",
           "e_mail": "estell.bednar@yahoo.com",
-          "prijavljeni": false
+          "mailing_status": "UNSUBSCRIBED"
         },
         {
           "_id": "5a335b04e78462eaed1c3e53",
@@ -3984,7 +3984,7 @@
           "radno_mesto": "Manager",
           "telefon": "695-921-7030 x43768",
           "e_mail": "rose61@hotmail.com",
-          "prijavljeni": false
+          "mailing_status": "UNSUBSCRIBED"
         },
         {
           "_id": "6b01f9f2aba427a0f0a1c508",
@@ -3993,7 +3993,7 @@
           "radno_mesto": "Developer",
           "telefon": "850-859-1854 x139",
           "e_mail": "calvin_cummerata@gmail.com",
-          "prijavljeni": false
+          "mailing_status": "UNSUBSCRIBED"
         },
         {
           "_id": "bfbd7ffd25bbbaff7f3adcf1",
@@ -4002,7 +4002,7 @@
           "radno_mesto": "Manager",
           "telefon": "1-442-643-6178 x90635",
           "e_mail": "lolita66@yahoo.com",
-          "prijavljeni": true
+          "mailing_status": "SUBSCRIBED"
         },
         {
           "_id": "e3538dc6cffd4f1ac26c84bf",
@@ -4011,7 +4011,7 @@
           "radno_mesto": "Developer",
           "telefon": "801.376.0468 x8762",
           "e_mail": "ethyl75@hotmail.com",
-          "prijavljeni": true
+          "mailing_status": "SUBSCRIBED"
         },
         {
           "_id": "d6cceb27dfa57dedc0ad7be7",
@@ -4020,7 +4020,7 @@
           "radno_mesto": "Administrator",
           "telefon": "276.893.2770 x5756",
           "e_mail": "brandy.russel25@yahoo.com",
-          "prijavljeni": false
+          "mailing_status": "UNSUBSCRIBED"
         },
         {
           "_id": "d32fbfa6180bbdddd7adfc12",
@@ -4029,7 +4029,7 @@
           "radno_mesto": "Developer",
           "telefon": "881-847-7506",
           "e_mail": "ashley.zboncak60@yahoo.com",
-          "prijavljeni": true
+          "mailing_status": "SUBSCRIBED"
         }
       ],
       "__v": 0
@@ -4045,7 +4045,7 @@
       "tip_firme": "JP",
       "delatnost": "Proizvodnja",
       "stanje_firme": "aktivna",
-      "prijavljeni": false,
+      "mailing_status": "UNSUBSCRIBED",
       "mesto": "9afeb30bd0abd1dacbb245aa",
       "zaposleni": [
         {
@@ -4055,7 +4055,7 @@
           "radno_mesto": "Developer",
           "telefon": "591-928-8638 x1874",
           "e_mail": "burnice_brakus@gmail.com",
-          "prijavljeni": true
+          "mailing_status": "SUBSCRIBED"
         }
       ],
       "__v": 0
@@ -4071,7 +4071,7 @@
       "tip_firme": "JP",
       "delatnost": "Proizvodnja",
       "stanje_firme": "stecaj",
-      "prijavljeni": true,
+      "mailing_status": "SUBSCRIBED",
       "mesto": "9afeb30bd0abd1dacbb245aa",
       "zaposleni": [
         {
@@ -4081,7 +4081,7 @@
           "radno_mesto": "Administrator",
           "telefon": "1-241-586-8963 x88398",
           "e_mail": "brandi.rowe@gmail.com",
-          "prijavljeni": false
+          "mailing_status": "UNSUBSCRIBED"
         },
         {
           "_id": "de66f84ef961d3ec32673b68",
@@ -4090,7 +4090,7 @@
           "radno_mesto": "Support",
           "telefon": "(856) 712-6299 x0029",
           "e_mail": "jo_grady61@gmail.com",
-          "prijavljeni": true
+          "mailing_status": "SUBSCRIBED"
         },
         {
           "_id": "8cdecf1ab59573b04828ecb7",
@@ -4099,7 +4099,7 @@
           "radno_mesto": "Manager",
           "telefon": "853-723-5135",
           "e_mail": "ignacio.conroy@yahoo.com",
-          "prijavljeni": true
+          "mailing_status": "SUBSCRIBED"
         }
       ],
       "__v": 0
@@ -4115,7 +4115,7 @@
       "tip_firme": "AD",
       "delatnost": "Trgovina",
       "stanje_firme": "aktivna",
-      "prijavljeni": true,
+      "mailing_status": "SUBSCRIBED",
       "mesto": "7cd046d13bfcecf5d90febfa",
       "zaposleni": [
         {
@@ -4125,7 +4125,7 @@
           "radno_mesto": "Sales",
           "telefon": "674-904-7013 x57338",
           "e_mail": "rahsaan78@hotmail.com",
-          "prijavljeni": true
+          "mailing_status": "SUBSCRIBED"
         },
         {
           "_id": "f50e2277b2dee20a88badbef",
@@ -4134,7 +4134,7 @@
           "radno_mesto": "nema",
           "telefon": "1-656-592-8585 x690",
           "e_mail": "ian.abbott@gmail.com",
-          "prijavljeni": true
+          "mailing_status": "SUBSCRIBED"
         },
         {
           "_id": "f5a67649cf7fad05243af46d",
@@ -4143,7 +4143,7 @@
           "radno_mesto": "Designer",
           "telefon": "480.690.2509 x3279",
           "e_mail": "martha10@yahoo.com",
-          "prijavljeni": true
+          "mailing_status": "SUBSCRIBED"
         },
         {
           "_id": "6d0ad3db00c8dec77eef8dfd",
@@ -4152,7 +4152,7 @@
           "radno_mesto": "Sales",
           "telefon": "372.521.0597",
           "e_mail": "kim.rosenbaum@gmail.com",
-          "prijavljeni": false
+          "mailing_status": "UNSUBSCRIBED"
         }
       ],
       "__v": 0
@@ -4168,7 +4168,7 @@
       "tip_firme": "AD",
       "delatnost": "Obrazovanje",
       "stanje_firme": "aktivna",
-      "prijavljeni": false,
+      "mailing_status": "UNSUBSCRIBED",
       "mesto": "eb1cde952aa0ffa90db36d83",
       "zaposleni": [
         {
@@ -4178,7 +4178,7 @@
           "radno_mesto": "Support",
           "telefon": "486-682-4220 x4049",
           "e_mail": "xavier_moen69@hotmail.com",
-          "prijavljeni": true
+          "mailing_status": "SUBSCRIBED"
         },
         {
           "_id": "336f7a677582d776bfefcdde",
@@ -4187,7 +4187,7 @@
           "radno_mesto": "nema",
           "telefon": "1-948-831-7576 x474",
           "e_mail": "marisol.legros@gmail.com",
-          "prijavljeni": true
+          "mailing_status": "SUBSCRIBED"
         },
         {
           "_id": "ee4609dc3be5619a78b0a9cb",
@@ -4196,7 +4196,7 @@
           "radno_mesto": "nema",
           "telefon": "936-987-5468",
           "e_mail": "sidney_schamberger@gmail.com",
-          "prijavljeni": true
+          "mailing_status": "SUBSCRIBED"
         },
         {
           "_id": "b6cd3179de4ce342fb0a38ab",
@@ -4205,7 +4205,7 @@
           "radno_mesto": "Support",
           "telefon": "422.873.1614 x278",
           "e_mail": "clifton.labadie28@gmail.com",
-          "prijavljeni": false
+          "mailing_status": "UNSUBSCRIBED"
         },
         {
           "_id": "3776f30efffbcddd84f804e9",
@@ -4214,7 +4214,7 @@
           "radno_mesto": "Developer",
           "telefon": "(748) 285-5019 x1983",
           "e_mail": "bessie_abernathy-ernser10@hotmail.com",
-          "prijavljeni": true
+          "mailing_status": "SUBSCRIBED"
         },
         {
           "_id": "3eda909c72c15a696ca76c4d",
@@ -4223,7 +4223,7 @@
           "radno_mesto": "Support",
           "telefon": "614.394.1515 x016",
           "e_mail": "jade.wilkinson45@hotmail.com",
-          "prijavljeni": true
+          "mailing_status": "SUBSCRIBED"
         },
         {
           "_id": "6577569aeb5dccb1f71e60a6",
@@ -4232,7 +4232,7 @@
           "radno_mesto": "Support",
           "telefon": "(350) 371-3589 x2711",
           "e_mail": "lila.volkman@yahoo.com",
-          "prijavljeni": false
+          "mailing_status": "UNSUBSCRIBED"
         }
       ],
       "__v": 0
@@ -4248,7 +4248,7 @@
       "tip_firme": "Preduzetnik",
       "delatnost": "Usluge",
       "stanje_firme": "stecaj",
-      "prijavljeni": true,
+      "mailing_status": "SUBSCRIBED",
       "mesto": "eb1cde952aa0ffa90db36d83",
       "zaposleni": [
         {
@@ -4258,7 +4258,7 @@
           "radno_mesto": "Developer",
           "telefon": "(412) 636-0608 x122",
           "e_mail": "moises.crist46@yahoo.com",
-          "prijavljeni": true
+          "mailing_status": "SUBSCRIBED"
         },
         {
           "_id": "01d09d92ef39ddb3bf326e0a",
@@ -4267,7 +4267,7 @@
           "radno_mesto": "Direktor",
           "telefon": "863.457.9721 x9163",
           "e_mail": "gilbert_roberts@yahoo.com",
-          "prijavljeni": true
+          "mailing_status": "SUBSCRIBED"
         },
         {
           "_id": "3af12e8ff7ffbc397997a1ef",
@@ -4276,7 +4276,7 @@
           "radno_mesto": "Sales",
           "telefon": "952.292.6363 x4506",
           "e_mail": "carrie.lebsack@gmail.com",
-          "prijavljeni": true
+          "mailing_status": "SUBSCRIBED"
         },
         {
           "_id": "6995fdadec1b5ac5f0fac8ba",
@@ -4285,7 +4285,7 @@
           "radno_mesto": "nema",
           "telefon": "479.212.5229 x4124",
           "e_mail": "kurt.raynor26@yahoo.com",
-          "prijavljeni": true
+          "mailing_status": "SUBSCRIBED"
         }
       ],
       "__v": 0
@@ -4301,7 +4301,7 @@
       "tip_firme": "Preduzetnik",
       "delatnost": "Proizvodnja",
       "stanje_firme": "stecaj",
-      "prijavljeni": true,
+      "mailing_status": "SUBSCRIBED",
       "mesto": "7cd046d13bfcecf5d90febfa",
       "zaposleni": [
         {
@@ -4311,7 +4311,7 @@
           "radno_mesto": "Sales",
           "telefon": "563-300-1376 x749",
           "e_mail": "andre13@yahoo.com",
-          "prijavljeni": true
+          "mailing_status": "SUBSCRIBED"
         },
         {
           "_id": "07fa76c0dd2809aedafde2ad",
@@ -4320,7 +4320,7 @@
           "radno_mesto": "Designer",
           "telefon": "818.367.8819 x0295",
           "e_mail": "rosanna.frami15@yahoo.com",
-          "prijavljeni": false
+          "mailing_status": "UNSUBSCRIBED"
         }
       ],
       "__v": 0
@@ -4336,7 +4336,7 @@
       "tip_firme": "JP",
       "delatnost": "IT",
       "stanje_firme": "blokada",
-      "prijavljeni": true,
+      "mailing_status": "SUBSCRIBED",
       "mesto": "f3b3aed3a8ce86c42fbcfdda",
       "zaposleni": [
         {
@@ -4346,7 +4346,7 @@
           "radno_mesto": "Direktor",
           "telefon": "(902) 285-6618",
           "e_mail": "kayla5@hotmail.com",
-          "prijavljeni": true
+          "mailing_status": "SUBSCRIBED"
         },
         {
           "_id": "affe0aaf84db1aca2d005e66",
@@ -4355,7 +4355,7 @@
           "radno_mesto": "Administrator",
           "telefon": "1-348-291-6790 x4215",
           "e_mail": "shane_goodwin@yahoo.com",
-          "prijavljeni": true
+          "mailing_status": "SUBSCRIBED"
         }
       ],
       "__v": 0
@@ -4371,7 +4371,7 @@
       "tip_firme": "JP",
       "delatnost": "IT",
       "stanje_firme": "aktivna",
-      "prijavljeni": true,
+      "mailing_status": "SUBSCRIBED",
       "mesto": "eb1cde952aa0ffa90db36d83",
       "zaposleni": [
         {
@@ -4381,7 +4381,7 @@
           "radno_mesto": "Developer",
           "telefon": "(453) 232-7463 x202",
           "e_mail": "max.crooks@hotmail.com",
-          "prijavljeni": true
+          "mailing_status": "SUBSCRIBED"
         }
       ],
       "__v": 0
@@ -4397,7 +4397,7 @@
       "tip_firme": "AD",
       "delatnost": "Trgovina",
       "stanje_firme": "blokada",
-      "prijavljeni": false,
+      "mailing_status": "UNSUBSCRIBED",
       "mesto": "7cd046d13bfcecf5d90febfa",
       "zaposleni": [
         {
@@ -4407,7 +4407,7 @@
           "radno_mesto": "nema",
           "telefon": "237-315-2357 x731",
           "e_mail": "jack_hettinger@yahoo.com",
-          "prijavljeni": true
+          "mailing_status": "SUBSCRIBED"
         },
         {
           "_id": "ecf1bd5cab1d52efaddcda03",
@@ -4416,7 +4416,7 @@
           "radno_mesto": "HR",
           "telefon": "(643) 925-1478",
           "e_mail": "jake.daniel@yahoo.com",
-          "prijavljeni": false
+          "mailing_status": "UNSUBSCRIBED"
         },
         {
           "_id": "b1c8ce08282c66daff7f9ff3",
@@ -4425,7 +4425,7 @@
           "radno_mesto": "Support",
           "telefon": "1-577-239-4499 x338",
           "e_mail": "chad46@gmail.com",
-          "prijavljeni": true
+          "mailing_status": "SUBSCRIBED"
         },
         {
           "_id": "0265ded6f7dd024f6bebfedf",
@@ -4434,7 +4434,7 @@
           "radno_mesto": "HR",
           "telefon": "(263) 915-2612 x54774",
           "e_mail": "patrick.okuneva@gmail.com",
-          "prijavljeni": true
+          "mailing_status": "SUBSCRIBED"
         },
         {
           "_id": "ed1134fb23d6affd2b3141f7",
@@ -4443,7 +4443,7 @@
           "radno_mesto": "Manager",
           "telefon": "876-410-0695 x8908",
           "e_mail": "bessie86@yahoo.com",
-          "prijavljeni": false
+          "mailing_status": "UNSUBSCRIBED"
         }
       ],
       "__v": 0
@@ -4459,7 +4459,7 @@
       "tip_firme": "AD",
       "delatnost": "Saobraćaj",
       "stanje_firme": "blokada",
-      "prijavljeni": true,
+      "mailing_status": "SUBSCRIBED",
       "mesto": "9afeb30bd0abd1dacbb245aa",
       "zaposleni": [
         {
@@ -4469,7 +4469,7 @@
           "radno_mesto": "Direktor",
           "telefon": "1-691-344-7232",
           "e_mail": "lindsay.greenholt@yahoo.com",
-          "prijavljeni": false
+          "mailing_status": "UNSUBSCRIBED"
         },
         {
           "_id": "fef5bea88aebbf246db4e4f0",
@@ -4478,7 +4478,7 @@
           "radno_mesto": "Manager",
           "telefon": "227.852.3161",
           "e_mail": "golda.cruickshank77@yahoo.com",
-          "prijavljeni": true
+          "mailing_status": "SUBSCRIBED"
         },
         {
           "_id": "4c64807dce8cf0ffd0ee35b6",
@@ -4487,7 +4487,7 @@
           "radno_mesto": "Sales",
           "telefon": "614-575-8838 x41529",
           "e_mail": "ivan37@gmail.com",
-          "prijavljeni": true
+          "mailing_status": "SUBSCRIBED"
         },
         {
           "_id": "d6dd558fdaafbf6a30aceb5b",
@@ -4496,7 +4496,7 @@
           "radno_mesto": "Designer",
           "telefon": "360-830-2170",
           "e_mail": "jamel.feest76@gmail.com",
-          "prijavljeni": false
+          "mailing_status": "UNSUBSCRIBED"
         },
         {
           "_id": "64fdcbab7cce72780cd2ce5c",
@@ -4505,7 +4505,7 @@
           "radno_mesto": "Developer",
           "telefon": "1-982-899-6928",
           "e_mail": "keagan.goodwin@gmail.com",
-          "prijavljeni": true
+          "mailing_status": "SUBSCRIBED"
         },
         {
           "_id": "feb8cdcd4edb9adb3f8dadfa",
@@ -4514,7 +4514,7 @@
           "radno_mesto": "nema",
           "telefon": "610-597-9656 x293",
           "e_mail": "ora_berge25@yahoo.com",
-          "prijavljeni": false
+          "mailing_status": "UNSUBSCRIBED"
         },
         {
           "_id": "db0d486bd1a777d1c06d3184",
@@ -4523,7 +4523,7 @@
           "radno_mesto": "Sales",
           "telefon": "853-643-3220 x5708",
           "e_mail": "ricardo_hessel@yahoo.com",
-          "prijavljeni": true
+          "mailing_status": "SUBSCRIBED"
         }
       ],
       "__v": 0
@@ -4539,7 +4539,7 @@
       "tip_firme": "JP",
       "delatnost": "IT",
       "stanje_firme": "aktivna",
-      "prijavljeni": false,
+      "mailing_status": "UNSUBSCRIBED",
       "mesto": "8bd5fca7ddf006f33a1fa0bb",
       "zaposleni": [
         {
@@ -4549,7 +4549,7 @@
           "radno_mesto": "Developer",
           "telefon": "1-379-203-0545 x16824",
           "e_mail": "leland86@gmail.com",
-          "prijavljeni": true
+          "mailing_status": "SUBSCRIBED"
         },
         {
           "_id": "fbbfdb3caf3a305d44348f6a",
@@ -4558,7 +4558,7 @@
           "radno_mesto": "Direktor",
           "telefon": "(388) 648-9023",
           "e_mail": "guido38@hotmail.com",
-          "prijavljeni": true
+          "mailing_status": "SUBSCRIBED"
         },
         {
           "_id": "b2f616d073c594aef9e15ffc",
@@ -4567,7 +4567,7 @@
           "radno_mesto": "Designer",
           "telefon": "869-537-9730 x579",
           "e_mail": "carroll_hickle@gmail.com",
-          "prijavljeni": false
+          "mailing_status": "UNSUBSCRIBED"
         },
         {
           "_id": "e8fb6ff82fb0ea6bfc8f2bad",
@@ -4576,7 +4576,7 @@
           "radno_mesto": "nema",
           "telefon": "681-851-1919 x667",
           "e_mail": "glen_spencer27@yahoo.com",
-          "prijavljeni": false
+          "mailing_status": "UNSUBSCRIBED"
         },
         {
           "_id": "df24c8dafadea0a682bd1bef",
@@ -4585,7 +4585,7 @@
           "radno_mesto": "Support",
           "telefon": "942.515.4175 x35026",
           "e_mail": "alison99@hotmail.com",
-          "prijavljeni": false
+          "mailing_status": "UNSUBSCRIBED"
         },
         {
           "_id": "5549fa38d0f2cdb53ee9cdef",
@@ -4594,7 +4594,7 @@
           "radno_mesto": "Sales",
           "telefon": "652.392.1445 x93717",
           "e_mail": "elisa.konopelski@hotmail.com",
-          "prijavljeni": false
+          "mailing_status": "UNSUBSCRIBED"
         },
         {
           "_id": "41e0dfccdbbaee277dfc641a",
@@ -4603,7 +4603,7 @@
           "radno_mesto": "Administrator",
           "telefon": "662-499-9228",
           "e_mail": "shelly22@hotmail.com",
-          "prijavljeni": true
+          "mailing_status": "SUBSCRIBED"
         }
       ],
       "__v": 0
@@ -4619,7 +4619,7 @@
       "tip_firme": "DOO",
       "delatnost": "IT",
       "stanje_firme": "blokada",
-      "prijavljeni": true,
+      "mailing_status": "SUBSCRIBED",
       "mesto": "7fb45baeeb5f8a47e6abce2e",
       "zaposleni": [
         {
@@ -4629,7 +4629,7 @@
           "radno_mesto": "Manager",
           "telefon": "952-634-7075 x124",
           "e_mail": "theresa.considine@hotmail.com",
-          "prijavljeni": false
+          "mailing_status": "UNSUBSCRIBED"
         },
         {
           "_id": "fc6bc73e62e51fe4acb2b8a7",
@@ -4638,7 +4638,7 @@
           "radno_mesto": "Designer",
           "telefon": "827-762-8542 x8681",
           "e_mail": "willie.johnson@yahoo.com",
-          "prijavljeni": true
+          "mailing_status": "SUBSCRIBED"
         },
         {
           "_id": "9558aa2cae70aeb54ceb4c82",
@@ -4647,7 +4647,7 @@
           "radno_mesto": "Sales",
           "telefon": "953.668.4252",
           "e_mail": "nannie21@hotmail.com",
-          "prijavljeni": false
+          "mailing_status": "UNSUBSCRIBED"
         },
         {
           "_id": "dabd815bd7cbdc03deb9eedf",
@@ -4656,7 +4656,7 @@
           "radno_mesto": "nema",
           "telefon": "(751) 795-0634 x707",
           "e_mail": "thomas_fritsch@yahoo.com",
-          "prijavljeni": false
+          "mailing_status": "UNSUBSCRIBED"
         },
         {
           "_id": "925a5eccfb1ebd32fdde82cb",
@@ -4665,7 +4665,7 @@
           "radno_mesto": "Developer",
           "telefon": "482.488.4763",
           "e_mail": "jazmyne.kemmer@hotmail.com",
-          "prijavljeni": false
+          "mailing_status": "UNSUBSCRIBED"
         },
         {
           "_id": "f5dfbdf5a020dc1ff999231f",
@@ -4674,7 +4674,7 @@
           "radno_mesto": "nema",
           "telefon": "(575) 961-2437 x77211",
           "e_mail": "ramiro.windler57@gmail.com",
-          "prijavljeni": true
+          "mailing_status": "SUBSCRIBED"
         },
         {
           "_id": "eeadfe3fa347441e2bc10270",
@@ -4683,7 +4683,7 @@
           "radno_mesto": "Direktor",
           "telefon": "(694) 480-7535 x839",
           "e_mail": "karen33@hotmail.com",
-          "prijavljeni": true
+          "mailing_status": "SUBSCRIBED"
         },
         {
           "_id": "8a0f0f6c30d6e0b5adf338b4",
@@ -4692,7 +4692,7 @@
           "radno_mesto": "Developer",
           "telefon": "(643) 988-8730 x1516",
           "e_mail": "grady.raynor90@hotmail.com",
-          "prijavljeni": false
+          "mailing_status": "UNSUBSCRIBED"
         }
       ],
       "__v": 0
@@ -4708,7 +4708,7 @@
       "tip_firme": "DOO",
       "delatnost": "Obrazovanje",
       "stanje_firme": "stecaj",
-      "prijavljeni": true,
+      "mailing_status": "SUBSCRIBED",
       "mesto": "f3b3aed3a8ce86c42fbcfdda",
       "zaposleni": [
         {
@@ -4718,7 +4718,7 @@
           "radno_mesto": "Designer",
           "telefon": "881-922-1082 x27801",
           "e_mail": "hugh9@yahoo.com",
-          "prijavljeni": true
+          "mailing_status": "SUBSCRIBED"
         },
         {
           "_id": "ddcd6bb2acebbb57f9ad6fe8",
@@ -4727,7 +4727,7 @@
           "radno_mesto": "Direktor",
           "telefon": "(769) 494-2082",
           "e_mail": "antwon57@yahoo.com",
-          "prijavljeni": true
+          "mailing_status": "SUBSCRIBED"
         },
         {
           "_id": "ebb8e6edf33eb6f34a00bf11",
@@ -4736,7 +4736,7 @@
           "radno_mesto": "Administrator",
           "telefon": "(998) 968-3419 x667",
           "e_mail": "phyllis_heller17@hotmail.com",
-          "prijavljeni": false
+          "mailing_status": "UNSUBSCRIBED"
         }
       ],
       "__v": 0
@@ -4752,7 +4752,7 @@
       "tip_firme": "JP",
       "delatnost": "Obrazovanje",
       "stanje_firme": "blokada",
-      "prijavljeni": false,
+      "mailing_status": "UNSUBSCRIBED",
       "mesto": "7cd046d13bfcecf5d90febfa",
       "zaposleni": [
         {
@@ -4762,7 +4762,7 @@
           "radno_mesto": "Direktor",
           "telefon": "(210) 293-6039 x41733",
           "e_mail": "harriet12@yahoo.com",
-          "prijavljeni": true
+          "mailing_status": "SUBSCRIBED"
         },
         {
           "_id": "2cabe7c32fc7ebfcbd6f3f3f",
@@ -4771,7 +4771,7 @@
           "radno_mesto": "nema",
           "telefon": "1-748-264-5158 x233",
           "e_mail": "aric_crist62@yahoo.com",
-          "prijavljeni": false
+          "mailing_status": "UNSUBSCRIBED"
         },
         {
           "_id": "96edad2ed266f485fddab1f3",
@@ -4780,7 +4780,7 @@
           "radno_mesto": "Sales",
           "telefon": "1-723-931-1776 x23905",
           "e_mail": "kristopher.simonis66@yahoo.com",
-          "prijavljeni": false
+          "mailing_status": "UNSUBSCRIBED"
         }
       ],
       "__v": 0
@@ -4796,7 +4796,7 @@
       "tip_firme": "Preduzetnik",
       "delatnost": "Obrazovanje",
       "stanje_firme": "stecaj",
-      "prijavljeni": false,
+      "mailing_status": "UNSUBSCRIBED",
       "mesto": "7fb45baeeb5f8a47e6abce2e",
       "zaposleni": [
         {
@@ -4806,7 +4806,7 @@
           "radno_mesto": "HR",
           "telefon": "(469) 729-5819",
           "e_mail": "delaney8@yahoo.com",
-          "prijavljeni": false
+          "mailing_status": "UNSUBSCRIBED"
         },
         {
           "_id": "3fd440cc5bc5432e4d07a49b",
@@ -4815,7 +4815,7 @@
           "radno_mesto": "Manager",
           "telefon": "1-804-530-6988 x76669",
           "e_mail": "arlene.schmitt@hotmail.com",
-          "prijavljeni": false
+          "mailing_status": "UNSUBSCRIBED"
         },
         {
           "_id": "ff8fd0beadcba38197dca8eb",
@@ -4824,7 +4824,7 @@
           "radno_mesto": "nema",
           "telefon": "731.640.6588 x80215",
           "e_mail": "keith15@gmail.com",
-          "prijavljeni": true
+          "mailing_status": "SUBSCRIBED"
         },
         {
           "_id": "d9e50ea6c3bb2c44e905fc84",
@@ -4833,7 +4833,7 @@
           "radno_mesto": "Support",
           "telefon": "1-955-540-4053 x6635",
           "e_mail": "dwight.heathcote@hotmail.com",
-          "prijavljeni": false
+          "mailing_status": "UNSUBSCRIBED"
         },
         {
           "_id": "d5b2a6ee9c3ada291b0fba6d",
@@ -4842,7 +4842,7 @@
           "radno_mesto": "Support",
           "telefon": "1-605-541-6156 x351",
           "e_mail": "mariano3@gmail.com",
-          "prijavljeni": true
+          "mailing_status": "SUBSCRIBED"
         },
         {
           "_id": "cc60eef4a84a32fbed1b61bf",
@@ -4851,7 +4851,7 @@
           "radno_mesto": "Manager",
           "telefon": "476-253-8026",
           "e_mail": "karen.leannon11@yahoo.com",
-          "prijavljeni": true
+          "mailing_status": "SUBSCRIBED"
         }
       ],
       "__v": 0
@@ -4867,7 +4867,7 @@
       "tip_firme": "DOO",
       "delatnost": "Trgovina",
       "stanje_firme": "stecaj",
-      "prijavljeni": true,
+      "mailing_status": "SUBSCRIBED",
       "mesto": "3d6c99df614ecf1ca089decb",
       "zaposleni": [
         {
@@ -4877,7 +4877,7 @@
           "radno_mesto": "nema",
           "telefon": "1-343-228-5412 x6210",
           "e_mail": "cathy1@gmail.com",
-          "prijavljeni": true
+          "mailing_status": "SUBSCRIBED"
         }
       ],
       "__v": 0
@@ -4893,7 +4893,7 @@
       "tip_firme": "Preduzetnik",
       "delatnost": "Obrazovanje",
       "stanje_firme": "aktivna",
-      "prijavljeni": true,
+      "mailing_status": "SUBSCRIBED",
       "mesto": "7fb45baeeb5f8a47e6abce2e",
       "zaposleni": [
         {
@@ -4903,7 +4903,7 @@
           "radno_mesto": "Direktor",
           "telefon": "349.744.8584 x09445",
           "e_mail": "marvin_stiedemann@yahoo.com",
-          "prijavljeni": false
+          "mailing_status": "UNSUBSCRIBED"
         }
       ],
       "__v": 0
@@ -5119,14 +5119,8 @@
   "pretrage": [
     {
       "nazivPretrage": "christen electronics hypothesise",
-      "mesta": [
-        "3d6c99df614ecf1ca089decb",
-        "eb1cde952aa0ffa90db36d83"
-      ],
-      "delatnosti": [
-        "Obrazovanje",
-        "Usluge"
-      ],
+      "mesta": ["3d6c99df614ecf1ca089decb", "eb1cde952aa0ffa90db36d83"],
+      "delatnosti": ["Obrazovanje", "Usluge"],
       "tipoviFirme": [],
       "radnaMesta": [],
       "velicineFirme": [],
@@ -5142,14 +5136,8 @@
     },
     {
       "nazivPretrage": "yippee till phew",
-      "mesta": [
-        "9afeb30bd0abd1dacbb245aa",
-        "7fb45baeeb5f8a47e6abce2e"
-      ],
-      "delatnosti": [
-        "Trgovina",
-        "Građevinarstvo"
-      ],
+      "mesta": ["9afeb30bd0abd1dacbb245aa", "7fb45baeeb5f8a47e6abce2e"],
+      "delatnosti": ["Trgovina", "Građevinarstvo"],
       "tipoviFirme": [],
       "radnaMesta": [],
       "velicineFirme": [],
@@ -5165,14 +5153,8 @@
     },
     {
       "nazivPretrage": "well-lit waver regularly",
-      "mesta": [
-        "7cd046d13bfcecf5d90febfa",
-        "f3b3aed3a8ce86c42fbcfdda"
-      ],
-      "delatnosti": [
-        "Usluge",
-        "Građevinarstvo"
-      ],
+      "mesta": ["7cd046d13bfcecf5d90febfa", "f3b3aed3a8ce86c42fbcfdda"],
+      "delatnosti": ["Usluge", "Građevinarstvo"],
       "tipoviFirme": [],
       "radnaMesta": [],
       "velicineFirme": [],
@@ -5188,14 +5170,8 @@
     },
     {
       "nazivPretrage": "characterization e-mail whose",
-      "mesta": [
-        "eb1cde952aa0ffa90db36d83",
-        "f3b3aed3a8ce86c42fbcfdda"
-      ],
-      "delatnosti": [
-        "IT",
-        "Obrazovanje"
-      ],
+      "mesta": ["eb1cde952aa0ffa90db36d83", "f3b3aed3a8ce86c42fbcfdda"],
+      "delatnosti": ["IT", "Obrazovanje"],
       "tipoviFirme": [],
       "radnaMesta": [],
       "velicineFirme": [],
@@ -5211,14 +5187,8 @@
     },
     {
       "nazivPretrage": "govern unexpectedly till",
-      "mesta": [
-        "3d6c99df614ecf1ca089decb",
-        "8bd5fca7ddf006f33a1fa0bb"
-      ],
-      "delatnosti": [
-        "Trgovina",
-        "IT"
-      ],
+      "mesta": ["3d6c99df614ecf1ca089decb", "8bd5fca7ddf006f33a1fa0bb"],
+      "delatnosti": ["Trgovina", "IT"],
       "tipoviFirme": [],
       "radnaMesta": [],
       "velicineFirme": [],
