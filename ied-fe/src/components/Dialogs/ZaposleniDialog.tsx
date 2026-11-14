@@ -1,4 +1,4 @@
-import { Box, Dialog, DialogContent, DialogTitle } from "@mui/material";
+import { Alert, Box, Dialog, DialogContent, DialogTitle } from "@mui/material";
 import type { ZaposleniType } from "ied-shared";
 import { ZaposleniForm } from "../Zaposleni/ZaposleniForm";
 
@@ -7,6 +7,8 @@ type ZaposleniDialogProps = {
   open: boolean;
   onClose: () => void;
   onSubmit: (data: ZaposleniType) => void;
+  isSaving: boolean;
+  errorMessage: string | null;
 };
 
 const ZaposleniDialog: React.FC<ZaposleniDialogProps> = ({
@@ -14,13 +16,20 @@ const ZaposleniDialog: React.FC<ZaposleniDialogProps> = ({
   open,
   onClose,
   onSubmit,
+  isSaving,
+  errorMessage,
 }) => {
   return (
     <Dialog open={open} onClose={onClose} maxWidth="lg">
       <DialogTitle>Zaposleni</DialogTitle>
       <DialogContent>
+        {errorMessage && <Alert severity="error">{errorMessage}</Alert>}
         <Box sx={{ p: 2 }}>
-          <ZaposleniForm zaposleni={zaposleni} onSubmit={onSubmit} />
+          <ZaposleniForm
+            zaposleni={zaposleni}
+            onSubmit={onSubmit}
+            isSaving={isSaving}
+          />
         </Box>
       </DialogContent>
     </Dialog>

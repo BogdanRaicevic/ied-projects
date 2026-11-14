@@ -6,8 +6,10 @@ import TableViewIcon from "@mui/icons-material/TableView";
 import { Box, SpeedDial, SpeedDialAction, SpeedDialIcon } from "@mui/material";
 import type { SeminarZodType } from "ied-shared";
 import { memo, useMemo, useState } from "react";
-import { generateSertifikatPdfBatch } from "../../api/docx.api";
-import { useDeleteSeminarMutation } from "../../hooks/seminar/useSeminarMutations";
+import {
+  useDeleteSeminarMutation,
+  useGenerateSertifikatiMutation,
+} from "../../hooks/seminar/useSeminarMutations";
 import {
   buildBatchSertifikati,
   getCertificateWarning,
@@ -54,8 +56,19 @@ const SeminariTableActionCell = memo(
     const [isCertificateDialogOpen, setIsCertificateDialogOpen] =
       useState(false);
     const [isSpeedDialOpen, setIsSpeedDialOpen] = useState(false);
+    // Local validation message; server errors come from the mutation.
     const [submitError, setSubmitError] = useState<string | null>(null);
-    const [isSubmitting, setIsSubmitting] = useState(false);
+    const generateSertifikati = useGenerateSertifikatiMutation();
+    const errorMessage =
+      submitError ??
+      (generateSertifikati.error
+        ? generateSertifikati.error.message ||
+          "Došlo je do greške prilikom generisanja sertifikata."
+        : null);
+    const clearErrors = () => {
+      setSubmitError(null);
+      generateSertifikati.reset();
+    };
 
     const closeSpeedDial = () => setIsSpeedDialOpen(false);
     const openSpeedDial = () => setIsSpeedDialOpen(true);
@@ -133,12 +146,12 @@ const SeminariTableActionCell = memo(
         );
       }
 
-      if (submitError) {
-        messages.unshift(submitError);
+      if (errorMessage) {
+        messages.unshift(errorMessage);
       }
 
       return messages;
-    }, [seminar.datumi, seminar.naziv, seminar.prijave, submitError]);
+    }, [seminar.datumi, seminar.naziv, seminar.prijave, errorMessage]);
 
     const disableDialogConfirm = useMemo(() => {
       if (
@@ -157,20 +170,20 @@ const SeminariTableActionCell = memo(
     }, [seminar.datumi, seminar.naziv, seminar.prijave]);
 
     const handleOpenCertificateDialog = () => {
-      setSubmitError(null);
+      clearErrors();
       setIsCertificateDialogOpen(true);
     };
 
     const handleCloseCertificateDialog = () => {
-      if (isSubmitting) {
+      if (generateSertifikati.isPending) {
         return;
       }
 
-      setSubmitError(null);
+      clearErrors();
       setIsCertificateDialogOpen(false);
     };
 
-    const handleGenerateCertificates = async ({
+    const handleGenerateCertificates = ({
       certificateNumber,
       templateKey,
     }: CertificateDialogSubmitValues) => {
@@ -194,23 +207,10 @@ const SeminariTableActionCell = memo(
         return;
       }
 
-      try {
-        setIsSubmitting(true);
-        setSubmitError(null);
-
-        await generateSertifikatPdfBatch(sertifikati);
-
-        setIsCertificateDialogOpen(false);
-      } catch (error) {
-        console.error("Error generating certificates:", error);
-        setSubmitError(
-          error instanceof Error
-            ? error.message
-            : "Došlo je do greške prilikom generisanja sertifikata.",
-        );
-      } finally {
-        setIsSubmitting(false);
-      }
+      clearErrors();
+      generateSertifikati.mutate(sertifikati, {
+        onSuccess: () => setIsCertificateDialogOpen(false),
+      });
     };
 
     const speedDialActions = [
@@ -288,10 +288,10 @@ const SeminariTableActionCell = memo(
           inputLabel="Početni broj sertifikata"
           alertMessages={dialogMessages}
           alertSeverity={
-            disableDialogConfirm || submitError ? "error" : "warning"
+            disableDialogConfirm || errorMessage ? "error" : "warning"
           }
           disableConfirm={disableDialogConfirm}
-          isSubmitting={isSubmitting}
+          isSubmitting={generateSertifikati.isPending}
           onClose={handleCloseCertificateDialog}
           onConfirm={handleGenerateCertificates}
         />

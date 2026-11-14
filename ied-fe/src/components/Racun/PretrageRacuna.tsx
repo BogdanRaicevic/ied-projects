@@ -1,5 +1,6 @@
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import {
+  Alert,
   Box,
   Chip,
   FormControl,
@@ -19,9 +20,9 @@ import {
   type MRT_PaginationState,
   useMaterialReactTable,
 } from "material-react-table";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { searchRacuni } from "../../api/racuni.api";
+import { useSearchRacuni } from "../../hooks/racun/useRacunQueries";
 import { useTopScrollbar } from "../../hooks/useTopScrollbar";
 import { ParametriPretrageRacuna } from "./ParametriPretrageRacuna";
 
@@ -31,12 +32,6 @@ type SearchState = {
 };
 
 export const PretrageRacuna = () => {
-  const [loading, setLoading] = useState<boolean>(true);
-  const [racuniData, setRacuniData] = useState<{
-    totalDocuments: number;
-    totalPages: number;
-    racuni: RacunType[];
-  }>();
   const navigate = useNavigate();
 
   const racuniColumns = useMemo<MRT_ColumnDef<RacunType>[]>(
@@ -227,6 +222,18 @@ export const PretrageRacuna = () => {
     },
   });
 
+  const {
+    data: racuniData,
+    isPending,
+    isFetching,
+    isPlaceholderData,
+    isError,
+  } = useSearchRacuni(
+    searchState.pagination.pageIndex,
+    searchState.pagination.pageSize,
+    searchState.filterValues,
+  );
+
   const handleSearch = (newFilters: PretrageRacunaType) => {
     setSearchState((prev) => ({
       filterValues: newFilters,
@@ -255,8 +262,12 @@ export const PretrageRacuna = () => {
       sx: { minWidth: "300px" },
     },
     state: {
-      isLoading: loading,
       pagination: searchState.pagination,
+      isLoading: isPending,
+      showProgressBars: isFetching,
+      // keepPreviousData keeps the old page's rows while the new page loads;
+      // hide them so the rows always match the pager.
+      showSkeletons: isPlaceholderData,
     },
     rowCount: racuniData?.totalDocuments || 0,
     manualPagination: true,
@@ -276,30 +287,15 @@ export const PretrageRacuna = () => {
     ...scrollbarProps,
   });
 
-  useEffect(() => {
-    const fetchRacuni = async () => {
-      try {
-        setLoading(true);
-        const data = await searchRacuni(
-          searchState.pagination.pageIndex,
-          searchState.pagination.pageSize,
-          searchState.filterValues,
-        );
-        setRacuniData(data);
-      } catch (err) {
-        console.error(err);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchRacuni();
-  }, [searchState]);
-
   return (
     <div>
       <h1>Pretrage Racuna</h1>
       <ParametriPretrageRacuna onSearch={handleSearch} />
+      {isError && (
+        <Alert severity="error" sx={{ mb: 2 }}>
+          Greška pri učitavanju računa. Pokušajte ponovo.
+        </Alert>
+      )}
       <MaterialReactTable table={racuniTable} />
     </div>
   );

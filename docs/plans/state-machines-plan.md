@@ -1,7 +1,9 @@
 # Implicit state machines — primer and fix plan
 
-Status: **item 1 implemented** (BE + migration, tests green); items 2–5
-planned. Each item below becomes its own PR,
+Status: **items 1–5 implemented.** Item 1 on `refactor/state-machines`
+(BE + migration, tests green); items 2–5 on `fix/fe-state-machines`
+(stacked on it). Item 1 is followed up by
+[status-mailinga-plan.md](status-mailinga-plan.md). Each item below becomes its own PR,
 done red → green → refactor: first prove the bug, then the smallest fix,
 then cleanup.
 
@@ -385,9 +387,16 @@ make the save fail (e.g. BE stopped, or invalid data the BE rejects) →
 submit. Today: dialog closes, input lost, error alert shows.
 
 **Green:** delete line 155. Same steps: dialog stays open with the input.
+Keeping the dialog open exposed two more things, fixed in the same change:
 
-**Refactor:** pass `mutation.isPending` to the dialog to disable submit
-while saving. A reducer only if the page grows more dialog states.
+- "Sačuvaj zaposlenog" is disabled while the add/update mutation is
+  pending (`isSaving` prop) — otherwise a double click now adds the
+  zaposleni twice (add isn't idempotent).
+- The error is shown **inside** the dialog (`errorMessage` prop); the page
+  `Alert` sits behind the modal backdrop. It's cleared when the dialog is
+  opened.
+
+No reducer: the page has no more dialog states than before.
 
 ### 3. Certificate dialog — duplicated, redundant flags (FE)
 
@@ -406,9 +415,13 @@ directly (known tech debt).
 failing → error shown, dialog open; close while submitting → still open;
 submit OK → closed. Re-check after the refactor.
 
-**Refactor:** `useGenerateSertifikat()` mutation hook in `hooks/seminar/`
-(gives `isPending`, `error`, `reset`), and the open/selected pair becomes
-one `useState<PrijavaZodType | null>`. No reducer needed.
+**Refactor (done):** `useGenerateSertifikatiMutation()` in
+`hooks/seminar/useSeminarMutations.ts` (also removes the direct
+`api/docx.api` call from both components). `isSubmitting` →
+`isPending`; server error → `mutation.error`. `submitError` stays, but
+only for local "can't build the certificate" validation messages. In
+`PrijaveSeminarTable` the dialog is open iff `selectedPrijava !== null`
+(`isCertificateDialogOpen` deleted). No reducer needed.
 
 ### 4. `PrijavaNaSeminarDialog` — dead state, double submit (FE)
 
@@ -450,8 +463,11 @@ error state, and no cancellation.
 **Red (browser):** stop the BE → open Računi → empty table, no error. Race:
 throttle the network, click next page twice quickly, watch rows vs. pager.
 
-**Green:** `useSearchRacuni(searchState)` in `hooks/racun/useRacunQueries.ts`
-with `searchState` in the query key. TanStack Query drops stale responses
+**Green:** `useSearchRacuni(pageIndex, pageSize, filterValues)` in
+`hooks/racun/useRacunQueries.ts` (key `racunKeys.search`), with
+`refetchOnMount: true` like `useFirmaPretrage` — the app default is
+`false`, and the old effect always fetched on mount (new računi are
+created on another page). TanStack Query drops stale responses
 by key. Render an `Alert` on `isError`.
 
 `placeholderData: keepPreviousData` keeps `rowCount` (and so the pager)
@@ -491,10 +507,51 @@ Pager = requested page, body = skeletons until that page's rows arrive.
 
 ## PR order
 
-| # | PR | Proof |
-|---|---|---|
-| 1 | `fix(ied-be)`: suppression upload sets `prijavljeni: false` on matching firme + zaposleni, + migration (item 1) | BE test, red first |
-| 2 | `fix(ied-fe)`: keep zaposleni dialog open on failed save (item 2) | browser repro |
-| 3 | `fix(ied-fe)`: racuni search via `useQuery` (item 5) | browser repro |
-| 4 | `fix(ied-fe)`: prijava dialog double submit (item 4) | browser repro |
-| 5 | `refactor(ied-fe)`: certificate dialog via mutation hook (item 3) | browser characterization |
+| PR | Branch | Items | Proof |
+|---|---|---|---|
+| 1 | `refactor/state-machines` | 1 (BE + migration) | BE tests, red first |
+| 2 | `fix/fe-state-machines` (rebase on `main` after PR 1) | 2, 3, 4, 5 | browser repro — red on `refactor/state-machines`, green on this branch |
+
+### Browser repro (red on `refactor/state-machines`, green on `fix/fe-state-machines`)
+
+None of these write to the DB: requests are failed or stalled in the
+browser. Paste the snippet in DevTools → Console on the page first.
+
+```js
+// Fail (mode "fail") or hang forever (mode "hang") every XHR whose URL
+// matches `match`, without sending it. Reload the page to undo.
+window.__block = (match, mode = "fail") => {
+  const open = XMLHttpRequest.prototype.open;
+  const send = XMLHttpRequest.prototype.send;
+  window.__blocked = 0;
+  XMLHttpRequest.prototype.open = function (m, url, ...rest) {
+    this.__hit = String(url).includes(match);
+    return open.call(this, m, url, ...rest);
+  };
+  XMLHttpRequest.prototype.send = function (...args) {
+    if (!this.__hit) return send.apply(this, args);
+    window.__blocked++;
+    if (mode === "fail") {
+      this.open("GET", "http://127.0.0.1:9/"); // nothing listens → network error
+      return send.call(this);
+    }
+  };
+};
+```
+
+- **Item 2:** open a firma → `__block("/zaposleni")` → "Dodaj zaposlenog"
+  → fill in → save. Red: dialog closes, input gone. Green: dialog stays
+  open with the input and the error inside it. Then
+  `__block("/zaposleni", "hang")` + save: green = button disabled.
+- **Item 4:** firma → zaposleni → "Prijavi na seminar" → pick a seminar →
+  `__block("create-prijava", "hang")` → click "Sačuvaj prijavu" 3×, then
+  `__blocked`. Red: `3`. Green: `1` (button disabled after the first).
+- **Item 5:** Računi page → `__block("/api/racuni/search")` → change page.
+  Red: empty table, no message. Green: error `Alert`. Race: reload,
+  DevTools → Network → "Slow 4G", click next page twice fast. Red: rows
+  of the previous page can end up under the pager. Green: skeletons until
+  the requested page arrives, then its rows.
+- **Item 3 (characterization, same before and after):** seminar →
+  sertifikat → `__block("generate-pdf-files")` → confirm: error shown,
+  dialog open. `__block("generate-pdf-files", "hang")` → confirm → Esc /
+  backdrop click: dialog stays open, buttons disabled.

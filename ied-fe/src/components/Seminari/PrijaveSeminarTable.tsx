@@ -20,8 +20,10 @@ import {
 import type { PrijavaZodType } from "ied-shared";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { generateSertifikatPdfBatch } from "../../api/docx.api";
-import { useDeletePrijavaMutation } from "../../hooks/seminar/useSeminarMutations";
+import {
+  useDeletePrijavaMutation,
+  useGenerateSertifikatiMutation,
+} from "../../hooks/seminar/useSeminarMutations";
 import {
   buildSingleSertifikat,
   getCertificateWarning,
@@ -46,10 +48,20 @@ export default function PrijaveSeminarTable({
   const [selectedPrijava, setSelectedPrijava] = useState<PrijavaZodType | null>(
     null,
   );
-  const [isCertificateDialogOpen, setIsCertificateDialogOpen] = useState(false);
   const [certificateName, setCertificateName] = useState("");
+  // Local validation message; server errors come from the mutation.
   const [submitError, setSubmitError] = useState<string | null>(null);
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const generateSertifikati = useGenerateSertifikatiMutation();
+  const errorMessage =
+    submitError ??
+    (generateSertifikati.error
+      ? generateSertifikati.error.message ||
+        "Došlo je do greške prilikom generisanja sertifikata."
+      : null);
+  const clearErrors = () => {
+    setSubmitError(null);
+    generateSertifikati.reset();
+  };
 
   const deletePrijava = useDeletePrijavaMutation();
 
@@ -73,18 +85,16 @@ export default function PrijaveSeminarTable({
   const handleOpenCertificateDialog = (prijava: PrijavaZodType) => {
     setSelectedPrijava(prijava);
     setCertificateName(getPrijavaFullName(prijava));
-    setSubmitError(null);
-    setIsCertificateDialogOpen(true);
+    clearErrors();
   };
 
   const handleCloseCertificateDialog = () => {
-    if (isSubmitting) {
+    if (generateSertifikati.isPending) {
       return;
     }
 
     setSelectedPrijava(null);
-    setSubmitError(null);
-    setIsCertificateDialogOpen(false);
+    clearErrors();
   };
 
   const selectedWarning = selectedPrijava
@@ -92,11 +102,11 @@ export default function PrijaveSeminarTable({
     : "Prijava nije izabrana.";
 
   const dialogMessages = [
-    ...(submitError ? [submitError] : []),
+    ...(errorMessage ? [errorMessage] : []),
     ...(selectedWarning ? [selectedWarning] : []),
   ];
 
-  const handleGenerateSingleCertificate = async ({
+  const handleGenerateSingleCertificate = ({
     certificateNumber,
     templateKey,
   }: CertificateDialogSubmitValues) => {
@@ -119,24 +129,10 @@ export default function PrijaveSeminarTable({
       return;
     }
 
-    try {
-      setIsSubmitting(true);
-      setSubmitError(null);
-
-      await generateSertifikatPdfBatch([sertifikat]);
-
-      setSelectedPrijava(null);
-      setIsCertificateDialogOpen(false);
-    } catch (error) {
-      console.error("Error generating certificate:", error);
-      setSubmitError(
-        error instanceof Error
-          ? error.message
-          : "Došlo je do greške prilikom generisanja sertifikata.",
-      );
-    } finally {
-      setIsSubmitting(false);
-    }
+    clearErrors();
+    generateSertifikati.mutate([sertifikat], {
+      onSuccess: () => setSelectedPrijava(null),
+    });
   };
 
   // Story 7.2.1/7.2.2: V2 entry mirrors V1's nav-state shape
@@ -270,7 +266,7 @@ export default function PrijaveSeminarTable({
         </TableCell>
       </TableRow>
       <CertificateNumberDialog
-        open={isCertificateDialogOpen}
+        open={selectedPrijava !== null}
         title="Za jedan sertifikat, postavi broj sertifikata"
         description={
           selectedPrijava
@@ -281,13 +277,13 @@ export default function PrijaveSeminarTable({
         alertMessages={dialogMessages}
         alertSeverity={dialogMessages.length > 0 ? "error" : "warning"}
         disableConfirm={Boolean(selectedWarning)}
-        isSubmitting={isSubmitting}
+        isSubmitting={generateSertifikati.isPending}
         nameField={{
           label: "Ime i prezime na sertifikatu",
           value: certificateName,
           onChange: (value) => {
             setCertificateName(value);
-            setSubmitError(null);
+            clearErrors();
           },
         }}
         onClose={handleCloseCertificateDialog}

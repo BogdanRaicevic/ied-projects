@@ -89,6 +89,7 @@ export default function Firma() {
 
   const handleEdit = (row: MRT_Row<ZaposleniType>) => {
     setSelectedRow(row);
+    setErrorAlert(null);
     setOpenZaposelniDialog(true);
   };
 
@@ -151,8 +152,6 @@ export default function Firma() {
         },
       });
     }
-
-    setOpenZaposelniDialog(false);
   };
 
   const handlePrijaviNaSeminar = () => {
@@ -192,6 +191,7 @@ export default function Firma() {
             type="button"
             onClick={() => {
               setSelectedRow(null);
+              setErrorAlert(null);
               setOpenZaposelniDialog(true);
             }}
           >
@@ -231,6 +231,11 @@ export default function Firma() {
             open={openZaposleniDialog}
             onClose={handleClose}
             onSubmit={handleZaposleniSubmit}
+            isSaving={
+              addZaposleniMutation.isPending ||
+              updateZaposleniMutation.isPending
+            }
+            errorMessage={errorAlert}
           />
           <PrijavaNaSeminarDialog
             open={openPrijavaNaSeminarDialog}

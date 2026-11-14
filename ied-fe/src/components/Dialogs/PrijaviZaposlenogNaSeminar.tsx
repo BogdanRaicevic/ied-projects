@@ -39,9 +39,8 @@ export default function PrijavaNaSeminarDialog({
   onSuccess: (seminar: string) => void;
 }) {
   const createPrijavaMutation = useCreatePrijavaMutation();
-  const [prijavaState, setPrijavaState] = useState<
-    "success" | "warning" | "error" | ""
-  >("");
+  const { reset: resetPrijavaMutation } = createPrijavaMutation;
+  const isDuplicate = createPrijavaMutation.error?.cause === "duplicate";
   const [selectedSeminarId, setSelectedSeminarId] = useState<string>("");
   const [prisustvo, setPrisustvo] =
     useState<Pick<PrijavaZodType, "prisustvo">["prisustvo"]>("online");
@@ -53,15 +52,15 @@ export default function PrijavaNaSeminarDialog({
 
   useEffect(() => {
     if (open) {
-      setPrijavaState("");
+      resetPrijavaMutation();
       setSelectedSeminarId("");
       setPrisustvo("online");
       setVrstaPrijave("email");
       setKomercijalista(undefined);
     }
-  }, [open]);
+  }, [open, resetPrijavaMutation]);
 
-  const handleSavePrijava = async () => {
+  const handleSavePrijava = () => {
     if (!companyData?._id || !zaposleniData?._id || !selectedSeminarId) {
       throw new Error("Nedostaju podaci o firmi, zaposlenom ili seminaru");
     }
@@ -81,22 +80,17 @@ export default function PrijavaNaSeminarDialog({
       komercijalista: komercijalista || undefined,
     };
 
-    try {
-      await createPrijavaMutation.mutateAsync({
-        seminarId: selectedSeminarId,
-        prijava,
-      });
-      onSuccess(
-        fetchedSeminars?.seminari.find((s) => s._id === selectedSeminarId)
-          ?.naziv || "",
-      );
-    } catch (error: any) {
-      if (error.cause === "duplicate") {
-        setPrijavaState("warning");
-      } else {
-        setPrijavaState("error");
-      }
-    }
+    // Errors land in createPrijavaMutation.error and drive the alerts below.
+    createPrijavaMutation.mutate(
+      { seminarId: selectedSeminarId, prijava },
+      {
+        onSuccess: () =>
+          onSuccess(
+            fetchedSeminars?.seminari.find((s) => s._id === selectedSeminarId)
+              ?.naziv || "",
+          ),
+      },
+    );
   };
 
   const queryParameters = useMemo(
@@ -296,12 +290,12 @@ export default function PrijavaNaSeminarDialog({
           </Grid>
         </Grid>
       </DialogContent>
-      {prijavaState === "error" && (
+      {createPrijavaMutation.error && !isDuplicate && (
         <Alert severity="error" sx={{ m: 2 }}>
           Neuspešno čuvanje prijave na seminar
         </Alert>
       )}
-      {prijavaState === "warning" && (
+      {isDuplicate && (
         <Alert severity="warning" sx={{ m: 2 }}>
           Zaposleni je već prijavljen na seminar
         </Alert>
@@ -310,7 +304,8 @@ export default function PrijavaNaSeminarDialog({
         <Button
           disabled={
             !selectedSeminarId ||
-            (vrstaPrijave === "telefon" && !komercijalista)
+            (vrstaPrijave === "telefon" && !komercijalista) ||
+            createPrijavaMutation.isPending
           }
           variant="contained"
           color="success"
