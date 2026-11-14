@@ -1,9 +1,8 @@
 # `prijavljeni: boolean` → `status_mailinga` (4 states) — plan
 
 Status: **plan approved, all questions answered, not started.** Written to be picked up
-in a fresh session. Read [AGENTS.md](../../AGENTS.md) and
-[state-machines-plan.md](state-machines-plan.md) (Part 1 = method,
-item 1 = the bug fix this builds on) first.
+in a fresh session. Read [AGENTS.md](../../AGENTS.md) first. The
+suppression bug fix this builds on is already on `main`.
 
 ## Why
 
@@ -211,7 +210,7 @@ contacts without an email that were `prijavljeni: false` stay
 ### docs
 
 - `docs/domain-glossary.md`: add `status_mailinga` + the four labels.
-- `state-machines-plan.md` item 1: mark superseded by this plan.
+- `state-machines-plan.md`: deleted (all items done).
 
 ## Tests (red → green)
 
@@ -237,7 +236,7 @@ contacts without an email that were `prijavljeni: false` stay
   legacy `false` without email → `UNSUBSCRIBED`; `true` without email →
   `SUBSCRIBED`; `prijavljeni` field gone; second run changes nothing;
   saved searches mapped.
-- FE: no test setup (decided in state-machines-plan) → manual check:
+- FE: no test setup (see `docs/testing.md`) → manual check:
   switch on/off, disabled for bounce/spam/no email, search checkboxes,
   export.
 
