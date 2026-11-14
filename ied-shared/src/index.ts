@@ -1,6 +1,7 @@
 export * from "./calculations/racuniV2";
 export * from "./constants/email";
 export * from "./constants/firma";
+export * from "./constants/mailingStatus";
 export * from "./constants/racuni";
 export * from "./types/audit_log.zod";
 export * from "./types/date.zod";
