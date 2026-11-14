@@ -5,7 +5,7 @@ runs one file (with `--` it silently runs all of them).
 
 | Workspace | What's tested | Setup |
 |---|---|---|
-| `ied-shared` | Invoice calculators, money formatting (`src/**/*.test.ts`) | none |
+| `ied-shared` | Invoice calculators, money formatting, `mailing_status` transitions (`src/**/*.test.ts`) | none |
 | `ied-be` | Services against a real in-memory Mongo (`tests/services/`) | `tests/setup.ts` starts MongoMemoryServer per file |
 | `ied-fe` | nothing yet; when added: Playwright journeys (Clerk test login first), not jsdom component tests | — |
 | `mongo-migrator` | nothing | — |
