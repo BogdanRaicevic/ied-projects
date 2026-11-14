@@ -1,4 +1,4 @@
-import type { ParametriPretrage } from "ied-shared";
+import { MAILING_STATUS, type ParametriPretrage } from "ied-shared";
 import { beforeAll, describe, expect, it } from "vitest";
 import { Firma } from "../../src/models/firma.model";
 import {
@@ -91,8 +91,43 @@ describe("firma.service exports", () => {
     ).toEqual(["B", "D"]);
   });
 
-  it("no filter exports every status", async () => {
-    expect(nazivi(await exportSearchedFirmaData({}))).toEqual(["A", "B", "D"]);
-    expect(await exportSearchedZaposleniData({})).toHaveLength(4);
+  it("each export applies only its own status filter", async () => {
+    const { SUBSCRIBED, HARD_BOUNCE } = MAILING_STATUS;
+    // the zaposleni filter doesn't drop firma D's row
+    expect(
+      nazivi(
+        await exportSearchedFirmaData({
+          firmaMailingStatus: [SUBSCRIBED],
+          zaposleniMailingStatus: [HARD_BOUNCE],
+        }),
+      ),
+    ).toEqual(["B", "D"]);
+    // the bounced firma A doesn't drop its subscribed zaposleni Bora
+    expect(
+      (
+        await zaposleni({
+          firmaMailingStatus: [SUBSCRIBED],
+          zaposleniMailingStatus: [SUBSCRIBED],
+        })
+      ).map((z) => z.imePrezime),
+    ).toEqual(["Bora B", "Dina D", "Ema E"]);
+  });
+
+  it("an empty filter exports every status", async () => {
+    expect(
+      nazivi(await exportSearchedFirmaData({ firmaMailingStatus: [] })),
+    ).toEqual(["A", "B", "D"]);
+    expect(
+      await exportSearchedZaposleniData({ zaposleniMailingStatus: [] }),
+    ).toHaveLength(4);
+  });
+
+  it("a missing filter (old FE bundle) exports only SUBSCRIBED", async () => {
+    expect(nazivi(await exportSearchedFirmaData({}))).toEqual(["B", "D"]);
+    expect((await zaposleni({})).map((z) => z.imePrezime)).toEqual([
+      "Bora B",
+      "Dina D",
+      "Ema E",
+    ]);
   });
 });
