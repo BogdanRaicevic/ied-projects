@@ -14,13 +14,13 @@ describe("firma.service exports", () => {
       {
         naziv_firme: "A",
         e_mail: "bounced@example.com",
-        mailing_status: "HARD_BOUNCE",
+        mailing_status: MAILING_STATUS.HARD_BOUNCE,
         zaposleni: [
           {
             ime: "Ana",
             prezime: "A",
             e_mail: "bounced@example.com",
-            mailing_status: "HARD_BOUNCE",
+            mailing_status: MAILING_STATUS.HARD_BOUNCE,
           },
           { ime: "Bora", prezime: "B", e_mail: "bora@example.com" },
         ],
@@ -29,10 +29,14 @@ describe("firma.service exports", () => {
       { naziv_firme: "C" },
       {
         naziv_firme: "D",
-        mailing_status: "UNSUBSCRIBED",
+        mailing_status: MAILING_STATUS.UNSUBSCRIBED,
         zaposleni: [
           { ime: "Dina", prezime: "D", e_mail: "dina@example.com" },
-          { ime: "Ema", prezime: "E", mailing_status: "UNSUBSCRIBED" },
+          {
+            ime: "Ema",
+            prezime: "E",
+            mailing_status: MAILING_STATUS.UNSUBSCRIBED,
+          },
         ],
       },
     ]),
@@ -49,13 +53,18 @@ describe("firma.service exports", () => {
   it("firme follow the filter; no own email is kept, no email anywhere is dropped", async () => {
     expect(
       nazivi(
-        await exportSearchedFirmaData({ firmaMailingStatus: ["SUBSCRIBED"] }),
+        await exportSearchedFirmaData({
+          firmaMailingStatus: [MAILING_STATUS.SUBSCRIBED],
+        }),
       ),
     ).toEqual(["B", "D"]);
     expect(
       nazivi(
         await exportSearchedFirmaData({
-          firmaMailingStatus: ["HARD_BOUNCE", "SPAM_COMPLAINT"],
+          firmaMailingStatus: [
+            MAILING_STATUS.HARD_BOUNCE,
+            MAILING_STATUS.SPAM_COMPLAINT,
+          ],
         }),
       ),
     ).toEqual(["A", "D"]);
@@ -64,7 +73,7 @@ describe("firma.service exports", () => {
   it("zaposleni follow the filter, including bounce/spam; no email is kept", async () => {
     expect(
       await zaposleni({
-        zaposleniMailingStatus: ["SUBSCRIBED"],
+        zaposleniMailingStatus: [MAILING_STATUS.SUBSCRIBED],
       }),
     ).toEqual([
       { imePrezime: "Bora B", firma_naziv: "A", e_mail: "bora@example.com" },
@@ -73,7 +82,7 @@ describe("firma.service exports", () => {
     ]);
     expect(
       await zaposleni({
-        zaposleniMailingStatus: ["HARD_BOUNCE"],
+        zaposleniMailingStatus: [MAILING_STATUS.HARD_BOUNCE],
       }),
     ).toEqual([
       { imePrezime: "Ana A", firma_naziv: "A", e_mail: "bounced@example.com" },
@@ -84,8 +93,8 @@ describe("firma.service exports", () => {
     expect(
       nazivi(
         await exportSearchedFirmaData({
-          firmaMailingStatus: ["SUBSCRIBED"],
-          zaposleniMailingStatus: ["SUBSCRIBED"],
+          firmaMailingStatus: [MAILING_STATUS.SUBSCRIBED],
+          zaposleniMailingStatus: [MAILING_STATUS.SUBSCRIBED],
         }),
       ),
     ).toEqual(["B", "D"]);

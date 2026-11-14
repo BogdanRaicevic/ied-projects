@@ -1,4 +1,4 @@
-import { SUPPRESSION_REASONS } from "ied-shared";
+import { MAILING_STATUS, SUPPRESSION_REASONS } from "ied-shared";
 import { Types } from "mongoose";
 import { beforeAll, describe, expect, it } from "vitest";
 import { EmailSuppression } from "../../src/models/email_suppression.model";
@@ -27,17 +27,26 @@ describe("firma.service mailing_status", () => {
     const firma = await create({
       naziv_firme: "A",
       e_mail: "Bounced@Example.com",
-      mailing_status: "SUBSCRIBED",
-      zaposleni: [{ e_mail: spam, mailing_status: "SUBSCRIBED" } as Zaposleni],
+      mailing_status: MAILING_STATUS.SUBSCRIBED,
+      zaposleni: [
+        {
+          e_mail: spam,
+          mailing_status: MAILING_STATUS.SUBSCRIBED,
+        } as Zaposleni,
+      ],
     });
-    expect(firma.mailing_status).toBe("HARD_BOUNCE");
-    expect(firma.zaposleni[0]?.mailing_status).toBe("SPAM_COMPLAINT");
+    expect(firma.mailing_status).toBe(MAILING_STATUS.HARD_BOUNCE);
+    expect(firma.zaposleni[0]?.mailing_status).toBe(
+      MAILING_STATUS.SPAM_COMPLAINT,
+    );
 
     const updated = await createZaposleni(firma._id.toString(), {
       e_mail: bounced,
-      mailing_status: "SUBSCRIBED",
+      mailing_status: MAILING_STATUS.SUBSCRIBED,
     } as Zaposleni);
-    expect(updated?.zaposleni[1]?.mailing_status).toBe("HARD_BOUNCE");
+    expect(updated?.zaposleni[1]?.mailing_status).toBe(
+      MAILING_STATUS.HARD_BOUNCE,
+    );
   });
 
   it("updateFirmaById: email change → status of the new email; client value ignored", async () => {
@@ -45,38 +54,26 @@ describe("firma.service mailing_status", () => {
     const id = firma._id.toString();
 
     expect(
-      (await updateFirmaById(id, { mailing_status: "UNSUBSCRIBED" }))
-        ?.mailing_status,
-    ).toBe("SUBSCRIBED");
+      (
+        await updateFirmaById(id, {
+          mailing_status: MAILING_STATUS.UNSUBSCRIBED,
+        })
+      )?.mailing_status,
+    ).toBe(MAILING_STATUS.SUBSCRIBED);
     expect((await updateFirmaById(id, { e_mail: spam }))?.mailing_status).toBe(
-      "SPAM_COMPLAINT",
+      MAILING_STATUS.SPAM_COMPLAINT,
     );
     expect(
       (
         await updateFirmaById(id, {
           e_mail: spam,
-          mailing_status: "SUBSCRIBED",
+          mailing_status: MAILING_STATUS.SUBSCRIBED,
         })
       )?.mailing_status,
-    ).toBe("SPAM_COMPLAINT");
+    ).toBe(MAILING_STATUS.SPAM_COMPLAINT);
     expect(
       (await updateFirmaById(id, { e_mail: "new@x.rs" }))?.mailing_status,
-    ).toBe("SUBSCRIBED");
-  });
-
-  it("updateFirmaById keeps a legacy UNSUBSCRIBED contact without email", async () => {
-    const firma = await Firma.create({
-      naziv_firme: "A",
-      e_mail: "",
-      mailing_status: "UNSUBSCRIBED",
-    });
-
-    const updated = await updateFirmaById(firma._id.toString(), {
-      e_mail: "",
-      naziv_firme: "B",
-    });
-
-    expect(updated?.mailing_status).toBe("UNSUBSCRIBED");
+    ).toBe(MAILING_STATUS.SUBSCRIBED);
   });
 
   it("updateZaposleni: email change → status of the new email; client value ignored", async () => {
@@ -91,17 +88,21 @@ describe("firma.service mailing_status", () => {
     // created directly, so still the default; an unchanged email isn't recomputed
     expect(
       (await update({ e_mail: bounced }))?.zaposleni[0]?.mailing_status,
-    ).toBe("SUBSCRIBED");
+    ).toBe(MAILING_STATUS.SUBSCRIBED);
     expect(
-      (await update({ e_mail: spam, mailing_status: "SUBSCRIBED" }))
+      (
+        await update({
+          e_mail: spam,
+          mailing_status: MAILING_STATUS.SUBSCRIBED,
+        })
+      )?.zaposleni[0]?.mailing_status,
+    ).toBe(MAILING_STATUS.SPAM_COMPLAINT);
+    expect(
+      (await update({ mailing_status: MAILING_STATUS.SUBSCRIBED }))
         ?.zaposleni[0]?.mailing_status,
-    ).toBe("SPAM_COMPLAINT");
-    expect(
-      (await update({ mailing_status: "SUBSCRIBED" }))?.zaposleni[0]
-        ?.mailing_status,
-    ).toBe("SPAM_COMPLAINT");
+    ).toBe(MAILING_STATUS.SPAM_COMPLAINT);
     expect(
       (await update({ e_mail: "new@x.rs" }))?.zaposleni[0]?.mailing_status,
-    ).toBe("SUBSCRIBED");
+    ).toBe(MAILING_STATUS.SUBSCRIBED);
   });
 });

@@ -1,4 +1,5 @@
 import { faker } from "@faker-js/faker";
+import { MAILING_STATUS } from "ied-shared";
 import { Types } from "mongoose";
 import {
   Delatnost,
@@ -103,7 +104,9 @@ function generateZaposleni(overrides: any = {}) {
     radno_mesto: faker.helpers.arrayElement(TEST_DATA_CONFIG.RADNA_MESTA),
     telefon: faker.phone.number({ style: "human" }),
     e_mail: faker.internet.email().toLowerCase(),
-    mailing_status: faker.datatype.boolean() ? "SUBSCRIBED" : "UNSUBSCRIBED",
+    mailing_status: faker.datatype.boolean()
+      ? MAILING_STATUS.SUBSCRIBED
+      : MAILING_STATUS.UNSUBSCRIBED,
     ...overrides,
   };
 }
@@ -127,7 +130,9 @@ function generateFirma(mesta: MestoType[], overrides: any = {}) {
     delatnost: faker.helpers.arrayElement(TEST_DATA_CONFIG.DELATNOSTI),
     velicina_firme: faker.helpers.arrayElement(TEST_DATA_CONFIG.VELICINA_FIRME),
     stanje_firme: faker.helpers.arrayElement(TEST_DATA_CONFIG.STANJE_FIRME),
-    mailing_status: faker.datatype.boolean() ? "SUBSCRIBED" : "UNSUBSCRIBED",
+    mailing_status: faker.datatype.boolean()
+      ? MAILING_STATUS.SUBSCRIBED
+      : MAILING_STATUS.UNSUBSCRIBED,
     mesto: selectedMesto._id,
     ...overrides,
   };

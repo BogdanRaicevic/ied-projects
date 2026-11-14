@@ -21,8 +21,7 @@ const statusForEmail = async (email?: string): Promise<MailingStatus> =>
   (await isEmailSuppressed(email)) ?? MAILING_STATUS.SUBSCRIBED;
 
 // mailing_status follows the email and is never taken from the client. Only
-// recomputed when the email changes, so a legacy UNSUBSCRIBED contact without
-// an email keeps its status.
+// recomputed when the email changes: an unchanged email already has it.
 const syncMailingStatus = async (
   data: { e_mail?: string; mailing_status?: MailingStatus },
   persistedEmail: () => Promise<string | undefined>,
