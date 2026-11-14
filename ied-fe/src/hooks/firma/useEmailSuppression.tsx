@@ -1,3 +1,4 @@
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { isPermanent, MAILING_STATUS } from "ied-shared";
 import { useCallback, useEffect, useState } from "react";
 import type { UseFormSetValue } from "react-hook-form";
@@ -6,12 +7,14 @@ import {
   checkIfEmailIsSuppressed,
   removeEmailFromSuppressionList,
 } from "../../api/email_suppression.api";
+import { firmaKeys } from "../queryKeys";
 
 export const useEmailSuppression = (
   email: string | undefined,
   setValue: UseFormSetValue<any>,
   opts: { autoInit?: boolean } = { autoInit: true },
 ) => {
+  const queryClient = useQueryClient();
   const [suppressionWarning, setSuppressionWarning] = useState<string | null>(
     null,
   );
@@ -42,26 +45,41 @@ export const useEmailSuppression = (
     }
   }, [email, setValue]);
 
+  const { mutate: changeMailingList, isPending } = useMutation({
+    mutationFn: ({
+      emailToChange,
+      newValue,
+    }: {
+      emailToChange: string;
+      newValue: boolean;
+    }) =>
+      newValue
+        ? removeEmailFromSuppressionList(emailToChange)
+        : addEmailToSuppressionList(emailToChange),
+    onError: (error) => {
+      console.error("Error handling mailing list change:", error);
+    },
+    onSettled: async () => {
+      await Promise.all([
+        handleEmailChange(),
+        // One email can belong to multiple firme/zaposleni.
+        queryClient.invalidateQueries({
+          queryKey: firmaKeys.all,
+          refetchType: "all",
+        }),
+      ]);
+    },
+  });
+
   const handleMailingListChange = useCallback(
-    async (newValue: boolean) => {
+    (newValue: boolean) => {
       // The switch is hidden without an email and for bounce/spam; the BE
       // refuses those too (409).
       if (!email) return;
 
-      try {
-        if (newValue) {
-          await removeEmailFromSuppressionList(email);
-        } else {
-          await addEmailToSuppressionList(email);
-        }
-        await handleEmailChange();
-      } catch (error) {
-        console.error("Error handling mailing list change:", error);
-        await handleEmailChange();
-        throw error;
-      }
+      changeMailingList({ emailToChange: email, newValue });
     },
-    [email, setValue, handleEmailChange],
+    [email, changeMailingList],
   );
 
   // optional automatic re-check on email change
@@ -85,6 +103,7 @@ export const useEmailSuppression = (
     suppressionWarning,
     handleMailingListChange,
     handleEmailChange,
+    isPending,
     withEmailBlur,
   };
 };

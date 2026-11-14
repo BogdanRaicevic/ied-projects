@@ -9,6 +9,7 @@ import {
 type MailingListSwitchProps = {
   status: MailingStatus;
   hasEmail: boolean;
+  isPending: boolean;
   onChange: (newValue: boolean) => void;
 };
 
@@ -24,6 +25,7 @@ const STATUS_COLOR = {
 export const MailingListSwitch: React.FC<MailingListSwitchProps> = ({
   status,
   hasEmail,
+  isPending,
   onChange,
 }) => (
   <Box sx={{ m: 1, display: "flex", alignItems: "center", gap: 1 }}>
@@ -40,6 +42,7 @@ export const MailingListSwitch: React.FC<MailingListSwitchProps> = ({
     {hasEmail && !isPermanent(status) && (
       <Switch
         checked={status === MAILING_STATUS.SUBSCRIBED}
+        disabled={isPending}
         onChange={(e) => onChange(e.target.checked)}
         color="success"
         slotProps={{ input: { "aria-label": "Prijavljen na mejling listu" } }}

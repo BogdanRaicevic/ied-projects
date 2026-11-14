@@ -287,8 +287,12 @@ export const FirmaForm: FC<FirmaFormProps> = ({ inputCompany }) => {
   const mailingStatus = watch("mailing_status") ?? MAILING_STATUS.SUBSCRIBED;
   const email = watch("e_mail");
 
-  const { suppressionWarning, handleMailingListChange, withEmailBlur } =
-    useEmailSuppression(email, setValue);
+  const {
+    suppressionWarning,
+    handleMailingListChange,
+    isPending: isMailingStatusPending,
+    withEmailBlur,
+  } = useEmailSuppression(email, setValue);
 
   const previousContacts = inputCompany?.last_contacted || [];
   const lastContact = previousContacts[previousContacts.length - 1];
@@ -310,6 +314,7 @@ export const FirmaForm: FC<FirmaFormProps> = ({ inputCompany }) => {
       <MailingListSwitch
         status={mailingStatus}
         hasEmail={Boolean(email)}
+        isPending={isMailingStatusPending}
         onChange={handleMailingListChange}
       />
       <Grid container m={0} spacing={2}>

@@ -68,8 +68,12 @@ export function ZaposleniForm({
   const mailingStatus = watch("mailing_status") ?? MAILING_STATUS.SUBSCRIBED;
   const email = watch("e_mail");
 
-  const { suppressionWarning, handleMailingListChange, withEmailBlur } =
-    useEmailSuppression(email, setValue);
+  const {
+    suppressionWarning,
+    handleMailingListChange,
+    isPending: isMailingStatusPending,
+    withEmailBlur,
+  } = useEmailSuppression(email, setValue);
 
   useEffect(() => {
     if (zaposleni?.e_mail) {
@@ -82,6 +86,7 @@ export function ZaposleniForm({
       <MailingListSwitch
         status={mailingStatus}
         hasEmail={Boolean(email)}
+        isPending={isMailingStatusPending}
         onChange={handleMailingListChange}
       />
       <TextField
