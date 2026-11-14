@@ -3,19 +3,38 @@ import {
   type Email,
   type ExportFirma,
   type ExportZaposlenih,
+  MAILING_STATUS,
+  type MailingStatus,
   NEGACIJA,
   type ParametriPretrage,
-  PRIJAVA_STATUS,
 } from "ied-shared";
 import { Firma, type FirmaType } from "../models/firma.model";
 import type { Zaposleni } from "../models/zaposleni.model";
-import { createFirmaQuery } from "../queryBuilders/firmaQueryBuilder";
 import {
-  getSuppressedEmailsSet,
-  isEmailSuppressed,
-  normalizeEmail,
-} from "./email_suppression.service";
+  createFirmaQuery,
+  mailingStatusFilter,
+} from "../queryBuilders/firmaQueryBuilder";
+import { isEmailSuppressed, normalizeEmail } from "./email_suppression.service";
 import { getZaposleniIdsFromSeminars } from "./seminar.service";
+
+const statusForEmail = async (email?: string): Promise<MailingStatus> =>
+  (await isEmailSuppressed(email)) ?? MAILING_STATUS.SUBSCRIBED;
+
+// mailing_status follows the email and is never taken from the client. Only
+// recomputed when the email changes, so a legacy UNSUBSCRIBED contact without
+// an email keeps its status.
+const syncMailingStatus = async (
+  data: { e_mail?: string; mailing_status?: MailingStatus },
+  persistedEmail: () => Promise<string | undefined>,
+) => {
+  delete data.mailing_status;
+  if (
+    data.e_mail !== undefined &&
+    normalizeEmail(data.e_mail) !== normalizeEmail(await persistedEmail())
+  ) {
+    data.mailing_status = await statusForEmail(data.e_mail);
+  }
+};
 
 export const findFirmaById = async (id: string): Promise<FirmaType | null> => {
   try {
@@ -37,9 +56,9 @@ export const deleteFirmaById = async (
 export const create = async (
   firmaData: Partial<FirmaType>,
 ): Promise<FirmaType> => {
-  const isSuppressed = await isEmailSuppressed(firmaData.e_mail);
-  if (isSuppressed) {
-    firmaData.prijavljeni = false;
+  firmaData.mailing_status = await statusForEmail(firmaData.e_mail);
+  for (const z of firmaData.zaposleni ?? []) {
+    z.mailing_status = await statusForEmail(z.e_mail);
   }
 
   const firma = new Firma(firmaData);
@@ -55,17 +74,10 @@ export const updateFirmaById = async (
   firmaData: Partial<FirmaType>,
 ): Promise<FirmaType | null> => {
   try {
-    // A partial update that omits e_mail must still be checked against the
-    // firma's actual persisted address, not skip suppression entirely.
-    const effectiveEmail =
-      firmaData.e_mail !== undefined
-        ? firmaData.e_mail
-        : (await Firma.findById(id, { e_mail: 1 }).lean())?.e_mail;
-
-    const isSuppressed = await isEmailSuppressed(effectiveEmail);
-    if (isSuppressed) {
-      firmaData.prijavljeni = false;
-    }
+    await syncMailingStatus(
+      firmaData,
+      async () => (await Firma.findById(id, { e_mail: 1 }).lean())?.e_mail,
+    );
 
     return await Firma.findOneAndUpdate(
       { _id: id },
@@ -99,21 +111,12 @@ export const search = async (
   };
 };
 
-const withoutSuppressed = async <T extends { e_mail?: string }>(
-  rows: T[],
-): Promise<T[]> => {
-  const suppressedEmails = await getSuppressedEmailsSet(
-    rows.map((r) => r.e_mail ?? ""),
-  );
-  return rows.filter(
-    (r) => !r.e_mail || !suppressedEmails.has(normalizeEmail(r.e_mail)),
-  );
-};
-
 export const exportSearchedFirmaData = async (
   queryParameters: ParametriPretrage,
 ): Promise<ExportFirma> => {
-  const mongoQuery = await createFirmaQuery(queryParameters);
+  const mongoQuery = await createFirmaQuery(queryParameters, {
+    forExport: true,
+  });
 
   const firme = await Firma.find(mongoQuery, {
     naziv_firme: 1,
@@ -127,13 +130,15 @@ export const exportSearchedFirmaData = async (
     e_mail: doc.e_mail ?? "",
   }));
 
-  return withoutSuppressed(res);
+  return res;
 };
 
 export const exportSearchedZaposleniData = async (
   queryParameters: ParametriPretrage,
 ): Promise<ExportZaposlenih> => {
-  const mongoQuery = await createFirmaQuery(queryParameters);
+  const mongoQuery = await createFirmaQuery(queryParameters, {
+    forExport: true,
+  });
 
   const seminarAttendees: string[] = await getZaposleniIdsFromSeminars(
     queryParameters.seminari || [],
@@ -154,6 +159,7 @@ export const exportSearchedZaposleniData = async (
     .cursor();
 
   const res: ExportZaposlenih = [];
+  const statusi = mailingStatusFilter(queryParameters.zaposleniMailingStatus);
 
   // Streams firme one at a time: full zaposleni arrays are too big to load at once.
   for await (const doc of cursor) {
@@ -164,18 +170,8 @@ export const exportSearchedZaposleniData = async (
           continue;
         }
 
-        if (
-          queryParameters.zaposleniPrijavljeni === PRIJAVA_STATUS.subscribed &&
-          z.prijavljeni !== true
-        ) {
-          continue;
-        }
-
-        if (
-          queryParameters.zaposleniPrijavljeni ===
-            PRIJAVA_STATUS.unsubscribed &&
-          z.prijavljeni !== false
-        ) {
+        // Same rule as the query: the status filter only judges an email.
+        if (statusi && z.e_mail && !statusi.includes(z.mailing_status)) {
           continue;
         }
 
@@ -220,7 +216,7 @@ export const exportSearchedZaposleniData = async (
     }
   }
 
-  return withoutSuppressed(res);
+  return res;
 };
 
 export const createZaposleni = async (
@@ -232,10 +228,7 @@ export const createZaposleni = async (
       zaposleniData.radno_mesto = "nema";
     }
 
-    const isSuppressed = await isEmailSuppressed(zaposleniData.e_mail);
-    if (isSuppressed) {
-      zaposleniData.prijavljeni = false;
-    }
+    zaposleniData.mailing_status = await statusForEmail(zaposleniData.e_mail);
 
     const updatedFirma = await Firma.findByIdAndUpdate(
       firmaId,
@@ -262,22 +255,16 @@ export const updateZaposleni = async (
 
     const { firmaKomentar, ...zaposleniUpdateData } = zaposleniData;
 
-    // A partial update that omits e_mail must still be checked against the
-    // zaposleni's actual persisted address, not skip suppression entirely.
-    const effectiveEmail =
-      zaposleniData.e_mail !== undefined
-        ? zaposleniData.e_mail
-        : (
-            await Firma.findOne(
-              { _id: firmaId, "zaposleni._id": zaposleniId },
-              { "zaposleni.$": 1 },
-            ).lean()
-          )?.zaposleni?.[0]?.e_mail;
-
-    const isSuppressed = await isEmailSuppressed(effectiveEmail);
-    if (isSuppressed) {
-      zaposleniUpdateData.prijavljeni = false;
-    }
+    await syncMailingStatus(
+      zaposleniUpdateData,
+      async () =>
+        (
+          await Firma.findOne(
+            { _id: firmaId, "zaposleni._id": zaposleniId },
+            { "zaposleni.$": 1 },
+          ).lean()
+        )?.zaposleni?.[0]?.e_mail,
+    );
     const updateObject: Record<string, unknown> = {};
     for (const key in zaposleniUpdateData) {
       updateObject[`zaposleni.$.${key}`] =

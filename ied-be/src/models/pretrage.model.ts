@@ -1,8 +1,8 @@
 import {
+  MAILING_STATUS,
+  type MailingStatus,
   NEGACIJA,
   type NegacijaType,
-  PRIJAVA_STATUS,
-  type PrijavaStatusType,
 } from "ied-shared";
 import { model, Schema, type Types } from "mongoose";
 
@@ -24,8 +24,8 @@ export type PretrageType = {
   komentar: string;
   imePrezime: string;
   emailZaposlenog: string;
-  firmaPrijavljeni?: PrijavaStatusType;
-  zaposleniPrijavljeni?: PrijavaStatusType;
+  firmaMailingStatus: MailingStatus[];
+  zaposleniMailingStatus: MailingStatus[];
   tipoviSeminara: Types.ObjectId[];
   seminari: string[];
 };
@@ -48,14 +48,10 @@ const pretrageSchema = new Schema<PretrageType>(
     komentar: { type: String },
     imePrezime: { type: String },
     emailZaposlenog: { type: String },
-    firmaPrijavljeni: {
-      type: String,
-      enum: Object.values(PRIJAVA_STATUS),
-    },
-    zaposleniPrijavljeni: {
-      type: String,
-      enum: Object.values(PRIJAVA_STATUS),
-    },
+    firmaMailingStatus: [{ type: String, enum: Object.values(MAILING_STATUS) }],
+    zaposleniMailingStatus: [
+      { type: String, enum: Object.values(MAILING_STATUS) },
+    ],
     tipoviSeminara: [{ type: Schema.Types.ObjectId, ref: "TipSeminara" }],
     seminari: [{ type: String, ref: "Seminar" }],
   },

@@ -1,6 +1,6 @@
 import { Alert, Box, Button, CircularProgress } from "@mui/material";
 import { format } from "date-fns/format";
-import type { FirmaType, ZaposleniType } from "ied-shared";
+import { type FirmaType, MAILING_STATUS, type ZaposleniType } from "ied-shared";
 import type { MRT_Row } from "material-react-table";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
@@ -30,7 +30,7 @@ const defaultFirmaData: FirmaType = {
   jbkjs: "",
   maticni_broj: "",
   delatnost: "",
-  prijavljeni: true,
+  mailing_status: MAILING_STATUS.SUBSCRIBED,
   mesto: undefined,
 };
 
@@ -41,7 +41,7 @@ const defaultZaposleniData: ZaposleniType = {
   telefon: "",
   komentar: "",
   radno_mesto: "",
-  prijavljeni: true,
+  mailing_status: MAILING_STATUS.SUBSCRIBED,
 };
 
 export default function Firma() {

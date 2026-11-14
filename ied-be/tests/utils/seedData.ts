@@ -103,7 +103,7 @@ function generateZaposleni(overrides: any = {}) {
     radno_mesto: faker.helpers.arrayElement(TEST_DATA_CONFIG.RADNA_MESTA),
     telefon: faker.phone.number({ style: "human" }),
     e_mail: faker.internet.email().toLowerCase(),
-    prijavljeni: faker.datatype.boolean(),
+    mailing_status: faker.datatype.boolean() ? "SUBSCRIBED" : "UNSUBSCRIBED",
     ...overrides,
   };
 }
@@ -127,7 +127,7 @@ function generateFirma(mesta: MestoType[], overrides: any = {}) {
     delatnost: faker.helpers.arrayElement(TEST_DATA_CONFIG.DELATNOSTI),
     velicina_firme: faker.helpers.arrayElement(TEST_DATA_CONFIG.VELICINA_FIRME),
     stanje_firme: faker.helpers.arrayElement(TEST_DATA_CONFIG.STANJE_FIRME),
-    prijavljeni: faker.datatype.boolean(),
+    mailing_status: faker.datatype.boolean() ? "SUBSCRIBED" : "UNSUBSCRIBED",
     mesto: selectedMesto._id,
     ...overrides,
   };

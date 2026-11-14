@@ -10,12 +10,3 @@ export const NEGACIJA = {
 } as const;
 
 export type NegacijaType = (typeof NEGACIJA)[keyof typeof NEGACIJA];
-
-export const PRIJAVA_STATUS = {
-  all: "all",
-  subscribed: "subscribed",
-  unsubscribed: "unsubscribed",
-} as const;
-
-export type PrijavaStatusType =
-  (typeof PRIJAVA_STATUS)[keyof typeof PRIJAVA_STATUS];
