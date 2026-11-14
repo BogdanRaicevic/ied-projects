@@ -1,4 +1,8 @@
 import {
+  isPermanent,
+  MAILING_STATUS,
+  type MailingStatus,
+  nextMailingStatus,
   SUPPRESSION_REASONS,
   type SuppressedEmail,
   type SuppressionReasons,
@@ -11,10 +15,8 @@ const VALID_SUPPRESSION_REASONS = new Set<SuppressionReasons>(
 );
 const BULK_WRITE_CHUNK_SIZE = 500;
 // Bounced / spam-flagged addresses can never be re-subscribed or downgraded.
-const PERMANENT_REASONS = new Set<SuppressionReasons>([
-  SUPPRESSION_REASONS.HARD_BOUNCE,
-  SUPPRESSION_REASONS.SPAM_COMPLAINT,
-]);
+const PERMANENT_REASONS =
+  Object.values(SUPPRESSION_REASONS).filter(isPermanent);
 // Contacts store e_mail as typed; the suppression list stores it lowercase.
 const CASE_INSENSITIVE = { locale: "en", strength: 2 };
 
@@ -52,18 +54,18 @@ const chunkArray = <T>(items: T[], chunkSize: number) => {
   return chunks;
 };
 
-// Keeps the invariant: one prijavljeni value for every firma and zaposleni
-// that shares an email.
-const setPrijavljeniForEmails = (emails: string[], prijavljeni: boolean) =>
+// The only writer of mailing_status for existing contacts. Keeps the
+// invariant: every firma and zaposleni that shares an email has one status.
+const setStatusForEmails = (emails: string[], status: MailingStatus) =>
   Promise.all([
     Firma.updateMany(
       { e_mail: { $in: emails } },
-      { $set: { prijavljeni } },
+      { $set: { mailing_status: status } },
       { collation: CASE_INSENSITIVE },
     ).exec(),
     Firma.updateMany(
       { "zaposleni.e_mail": { $in: emails } },
-      { $set: { "zaposleni.$[z].prijavljeni": prijavljeni } },
+      { $set: { "zaposleni.$[z].mailing_status": status } },
       {
         arrayFilters: [{ "z.e_mail": { $in: emails } }],
         collation: CASE_INSENSITIVE,
@@ -103,17 +105,14 @@ export const addSuppressedEmail = async (
       return;
     }
 
-    // Last occurrence wins, except UNSUBSCRIBED never replaces a permanent reason.
-    const reason = normalizedReason as SuppressionReasons;
     const previous = dedupedEntries.get(normalizedEmail);
-    if (
-      previous &&
-      PERMANENT_REASONS.has(previous) &&
-      !PERMANENT_REASONS.has(reason)
-    ) {
-      return;
-    }
-    dedupedEntries.set(normalizedEmail, reason);
+    dedupedEntries.set(
+      normalizedEmail,
+      nextMailingStatus(previous ?? MAILING_STATUS.SUBSCRIBED, {
+        type: "IMPORT",
+        reason: normalizedReason as SuppressionReasons,
+      }),
+    );
   });
 
   const entries = Array.from(dedupedEntries.entries());
@@ -142,7 +141,7 @@ export const addSuppressedEmail = async (
         updateOne: {
           filter: { email },
           // UNSUBSCRIBED only inserts, so it can't overwrite a permanent reason.
-          update: PERMANENT_REASONS.has(reason)
+          update: isPermanent(reason)
             ? { $set: { reason } }
             : { $setOnInsert: { reason } },
           upsert: true,
@@ -157,10 +156,18 @@ export const addSuppressedEmail = async (
       result.matchedCount += bulkResult.matchedCount ?? 0;
       result.modifiedCount += bulkResult.modifiedCount ?? 0;
 
-      await setPrijavljeniForEmails(
-        chunk.map(([email]) => email),
-        false,
-      );
+      // Contacts get the row's final reason: an UNSUBSCRIBED import onto a
+      // permanent row keeps the permanent one.
+      const rows = await EmailSuppression.find(
+        { email: { $in: chunk.map(([email]) => email) } },
+        { email: 1, reason: 1 },
+      ).lean();
+      for (const status of new Set(rows.map((r) => r.reason))) {
+        await setStatusForEmails(
+          rows.filter((r) => r.reason === status).map((r) => r.email),
+          status,
+        );
+      }
     }
 
     return result;
@@ -172,19 +179,17 @@ export const addSuppressedEmail = async (
 };
 
 /**
- * Re-subscribe: removes an UNSUBSCRIBED email and sets prijavljeni=true on
- * every contact with it. Returns null (→ 409) for a permanent reason.
+ * Re-subscribe: removes an UNSUBSCRIBED email and sets SUBSCRIBED on every
+ * contact with it. Returns null (→ 409) for a permanent reason.
  */
 export const removeSuppressedEmail = async (email: string) => {
   try {
     const normalizedEmail = normalizeEmail(email);
-    const permanentReasons = [...PERMANENT_REASONS];
-
     // The reason filter makes the delete itself refuse a permanent row, even
     // if an upload upgraded it a moment ago.
     const { deletedCount } = await EmailSuppression.deleteOne({
       email: normalizedEmail,
-      reason: { $nin: permanentReasons },
+      reason: { $nin: PERMANENT_REASONS },
     }).exec();
     // Nothing deleted: either permanent (refuse) or no row at all (legacy
     // unsubscribed contact — re-subscribe still applies).
@@ -192,13 +197,13 @@ export const removeSuppressedEmail = async (email: string) => {
       deletedCount === 0 &&
       (await EmailSuppression.exists({
         email: normalizedEmail,
-        reason: { $in: permanentReasons },
+        reason: { $in: PERMANENT_REASONS },
       }))
     ) {
       return null;
     }
 
-    await setPrijavljeniForEmails([normalizedEmail], true);
+    await setStatusForEmails([normalizedEmail], MAILING_STATUS.SUBSCRIBED);
     return normalizedEmail;
   } catch (error) {
     console.error("Error removing suppressed email:", error);

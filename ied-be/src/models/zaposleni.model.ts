@@ -1,3 +1,4 @@
+import { MAILING_STATUS, type MailingStatus } from "ied-shared";
 import { Schema, Types } from "mongoose";
 
 export type Zaposleni = {
@@ -12,7 +13,7 @@ export type Zaposleni = {
   kontaktiran_puta: number;
   ucesce_na_seminarima: number;
   komentar: string;
-  prijavljeni: boolean;
+  mailing_status: MailingStatus;
   created_at: Date;
   updated_at: Date;
 };
@@ -27,7 +28,11 @@ export const zaposleniSchema = new Schema<Zaposleni>(
     telefon: String,
     e_mail: String,
     komentar: String,
-    prijavljeni: { type: Boolean, default: true },
+    mailing_status: {
+      type: String,
+      enum: Object.values(MAILING_STATUS),
+      default: MAILING_STATUS.SUBSCRIBED,
+    },
   },
   {
     timestamps: { createdAt: "created_at", updatedAt: "updated_at" },

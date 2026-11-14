@@ -1,3 +1,4 @@
+import { MAILING_STATUS, type MailingStatus } from "ied-shared";
 import { model, Schema, type Types } from "mongoose";
 import {
   type LastContactedType,
@@ -27,7 +28,7 @@ type FirmaType = {
   velicina_firme: string;
   jbkjs: string;
   maticni_broj: string;
-  prijavljeni: boolean;
+  mailing_status: MailingStatus;
   mesto: Types.ObjectId;
   last_contacted: LastContactedType[];
 };
@@ -52,7 +53,11 @@ const firmaSchema = new Schema<FirmaType>(
     zaposleni: { type: [zaposleniSchema], default: [] },
     jbkjs: String,
     maticni_broj: String,
-    prijavljeni: { type: Boolean, default: true },
+    mailing_status: {
+      type: String,
+      enum: Object.values(MAILING_STATUS),
+      default: MAILING_STATUS.SUBSCRIBED,
+    },
     mesto: { type: Schema.Types.ObjectId, ref: "Mesto" },
     last_contacted: { type: [lastContactedSchema], default: [] },
   },
