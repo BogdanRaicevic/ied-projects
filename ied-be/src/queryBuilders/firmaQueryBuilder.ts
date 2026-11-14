@@ -21,7 +21,8 @@ const NO_EMAIL = [null, ""];
 const HAS_EMAIL = { e_mail: { $nin: NO_EMAIL } };
 
 // A status filter only judges contacts that have an email: it never hides a
-// firma without its own email, nor one whose zaposleni have none.
+// firma without its own email, nor one whose zaposleni (those matching the
+// other zaposleni filters) have none.
 // `forExport` also drops firme with no email anywhere (nothing to send to).
 export const createFirmaQuery = async (
   params: ParametriPretrage,
@@ -199,14 +200,21 @@ export const createFirmaQuery = async (
             },
           },
         },
-        {
-          $and: [
-            { zaposleni: { $not: { $elemMatch: HAS_EMAIL } } },
-            ...(hasZaposleniFilter
-              ? [{ zaposleni: { $elemMatch: zaposleniQuery } }]
-              : []),
-          ],
-        },
+        // Exempt: no zaposleni matching the other filters has an email.
+        hasZaposleniFilter
+          ? {
+              $and: [
+                { zaposleni: { $elemMatch: zaposleniQuery } },
+                {
+                  zaposleni: {
+                    $not: {
+                      $elemMatch: { ...zaposleniQuery, $and: [HAS_EMAIL] },
+                    },
+                  },
+                },
+              ],
+            }
+          : { zaposleni: { $not: { $elemMatch: HAS_EMAIL } } },
       ],
     });
   } else if (hasZaposleniFilter) {

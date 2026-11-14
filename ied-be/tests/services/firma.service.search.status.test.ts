@@ -1,4 +1,4 @@
-import type { ParametriPretrage } from "ied-shared";
+import { MAILING_STATUS, type ParametriPretrage } from "ied-shared";
 import { beforeAll, describe, expect, it } from "vitest";
 import { Firma } from "../../src/models/firma.model";
 import { search } from "../../src/services/firma.service";
@@ -45,6 +45,20 @@ describe("firma.service search by mailing_status", () => {
           { ime: "N", mailing_status: "UNSUBSCRIBED" },
         ],
       },
+      // The direktor has no email; the one with an email isn't a direktor.
+      {
+        naziv_firme: "rm",
+        e_mail: "rm@x.rs",
+        zaposleni: [
+          { ime: "Dir", radno_mesto: "direktor" },
+          {
+            ime: "Rac",
+            radno_mesto: "racunovodja",
+            e_mail: "rac@x.rs",
+            mailing_status: MAILING_STATUS.UNSUBSCRIBED,
+          },
+        ],
+      },
     ]),
   );
 
@@ -63,6 +77,12 @@ describe("firma.service search by mailing_status", () => {
     const result = await nazivi({ zaposleniMailingStatus: ["SUBSCRIBED"] });
     expect(result).not.toContain("sub");
     expect(result).not.toContain("legacy");
+  });
+
+  it("the exemption only looks at zaposleni matching the other filters", async () => {
+    expect(await nazivi({ ...DEFAULT, radnaMesta: ["direktor"] })).toEqual([
+      "rm",
+    ]);
   });
 
   it("other zaposleni filters still apply to zaposleni without email", async () => {
