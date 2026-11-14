@@ -1,11 +1,4 @@
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  Divider,
-  Grid,
-  InputAdornment,
-} from "@mui/material";
+import { Card, CardContent, CardHeader, Divider, Grid } from "@mui/material";
 import { Controller } from "react-hook-form";
 import { NumberField } from "../../Form/NumberField";
 import { useRacunV2Form } from "../hooks/useRacunV2Form";
@@ -42,14 +35,8 @@ export function UsloviPlacanjaSection() {
                   fullWidth
                   required
                   label="Rok za uplatu"
-                  slotProps={{
-                    htmlInput: { min: 0, step: 1 },
-                    input: {
-                      endAdornment: (
-                        <InputAdornment position="end">dana</InputAdornment>
-                      ),
-                    },
-                  }}
+                  min={0}
+                  endAdornment="dana"
                   error={!!fieldState.error}
                   helperText={
                     fieldState.error?.message ??

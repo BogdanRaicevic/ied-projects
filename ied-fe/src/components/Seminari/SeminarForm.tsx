@@ -8,7 +8,6 @@ import {
   Snackbar,
   TextField,
 } from "@mui/material";
-import InputAdornment from "@mui/material/InputAdornment";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { SeminarSchema, type SeminarZodType } from "ied-shared";
 import { useEffect, useState } from "react";
@@ -193,13 +192,7 @@ export default function SeminarForm({
                 label="Offline cena"
                 name="offlineCena"
                 sx={{ m: 1 }}
-                slotProps={{
-                  input: {
-                    startAdornment: (
-                      <InputAdornment position="start">RSD</InputAdornment>
-                    ),
-                  },
-                }}
+                startAdornment="RSD"
                 error={!!errors.offlineCena}
                 helperText={errors.offlineCena?.message}
                 fullWidth
@@ -218,13 +211,7 @@ export default function SeminarForm({
                 label="Online cena"
                 name="onlineCena"
                 sx={{ m: 1 }}
-                slotProps={{
-                  input: {
-                    startAdornment: (
-                      <InputAdornment position="start">RSD</InputAdornment>
-                    ),
-                  },
-                }}
+                startAdornment="RSD"
                 error={!!errors.onlineCena}
                 helperText={errors.onlineCena?.message}
                 fullWidth
