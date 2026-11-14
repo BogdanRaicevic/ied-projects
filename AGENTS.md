@@ -46,8 +46,10 @@ build, lint and test on every PR to `main`.
   `ied-shared/src/types/<entity>.zod.ts`, exported from `ied-shared/src/index.ts`.
   BE validates with it, FE forms resolve with it. Never redefine it locally.
   Dates: `zDate()` / `zOptionalDate()` (`date.zod.ts`), never bare
-  `z.coerce.date()` — it turns `null` into 1970-01-01. Other coercions declare
-  their input: `z.coerce.number<number | string>()`. Forms with a resolver:
+  `z.coerce.date()` — it turns `null` into 1970-01-01. Numbers typed in a
+  form: plain `z.number()` + `Form/NumberField` — `z.coerce.number()` turns
+  an empty field into 0. Coerce only query params, and declare the input:
+  `z.coerce.number<number | string>()`. Forms with a resolver:
   `useForm<z.input<typeof S>, unknown, z.output<typeof S>>` — no casts.
 - **BE endpoint** → `routes/<x>.routes.ts` (HTTP only: validate, call service,
   respond) → `services/<x>.service.ts` (business logic + DB) →

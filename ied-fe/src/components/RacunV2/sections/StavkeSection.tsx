@@ -51,13 +51,8 @@ export function StavkeSection() {
 
   // Snapshot defaultStopaPdv at click time. Non-reactive on purpose — once a
   // stavka is appended, its rate is independent (Story 5.2.5 / 5.3.3 expose
-  // a per-stavka rate input). `getValues` returns the raw form value, which
-  // is null while the field is empty.
-  const readDefaultStopaPdv = (): number => {
-    const raw = getValues("defaultStopaPdv");
-    const parsed = Number(raw);
-    return Number.isFinite(parsed) && parsed >= 0 ? parsed : 20;
-  };
+  // a per-stavka rate input). Null while the field is empty → fall back to 20.
+  const readDefaultStopaPdv = (): number => getValues("defaultStopaPdv") ?? 20;
 
   const handleAddUsluga = () => {
     append(getEmptyUslugaStavka(readDefaultStopaPdv()));

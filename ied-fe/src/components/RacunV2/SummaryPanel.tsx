@@ -239,7 +239,7 @@ export function SummaryPanel() {
             {hasMetadata ? (
               <InfoBlock title="Rok i naplata">
                 {tipRacunaHasRokZaUplatu(tipRacuna) ? (
-                  <RokZaUplatuRow days={Number(rokZaUplatu) || null} />
+                  <RokZaUplatuRow days={rokZaUplatu ?? null} />
                 ) : null}
                 {tipRacuna === TipRacuna.AVANSNI_RACUN ? (
                   <DatumUplateAvansaRow
