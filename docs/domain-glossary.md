@@ -20,6 +20,7 @@ Identifiers in code stay in Serbian. This maps them to meaning.
 | `radno_mesto` / `radna_mesta` | Job position of a zaposleni | |
 | `odjava` | Unsubscribe (from mailing) | |
 | `email_suppression` | Emails that must not be contacted | |
+| `mailing_status` | Mailing status of a firma/zaposleni, per email: `SUBSCRIBED` (Prijavljeni), `UNSUBSCRIBED` (Odjavljeni), `HARD_BOUNCE` (Neispravan email), `SPAM_COMPLAINT` (Spamovali su nas). Bounce/spam are permanent. Written only from `email_suppressions` | `constants/mailingStatus.ts`, `email_suppression.service.ts` |
 | `last_contacted` | When/how a firma was last contacted | |
 | `audit_log` | Change history of firma/seminar documents | `middleware/audit.ts` |
 | `sertifikat` | Attendance certificate (PDF, per brand) | `templates/certificates/` |
