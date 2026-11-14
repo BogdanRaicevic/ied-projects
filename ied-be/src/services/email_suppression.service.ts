@@ -226,11 +226,17 @@ export const deleteEmails = async (emails: string[]) => {
     const [firmaResult, zaposleniResult] = await Promise.all([
       Firma.updateMany(
         { e_mail: { $in: normalizedEmails } },
-        { $set: { e_mail: "" } },
+        // No email → SUBSCRIBED (a cleared bounce would otherwise stay red).
+        { $set: { e_mail: "", mailing_status: MAILING_STATUS.SUBSCRIBED } },
       ).exec(),
       Firma.updateMany(
         { "zaposleni.e_mail": { $in: normalizedEmails } },
-        { $set: { "zaposleni.$[employee].e_mail": "" } },
+        {
+          $set: {
+            "zaposleni.$[employee].e_mail": "",
+            "zaposleni.$[employee].mailing_status": MAILING_STATUS.SUBSCRIBED,
+          },
+        },
         { arrayFilters: [{ "employee.e_mail": { $in: normalizedEmails } }] },
       ).exec(),
     ]);

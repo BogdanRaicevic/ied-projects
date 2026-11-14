@@ -1,9 +1,14 @@
-import { type MailingStatus, SUPPRESSION_REASONS } from "ied-shared";
+import {
+  MAILING_STATUS,
+  type MailingStatus,
+  SUPPRESSION_REASONS,
+} from "ied-shared";
 import { describe, expect, it } from "vitest";
 import { EmailSuppression } from "../../src/models/email_suppression.model";
 import { Firma } from "../../src/models/firma.model";
 import {
   addSuppressedEmail,
+  deleteEmails,
   removeSuppressedEmail,
 } from "../../src/services/email_suppression.service";
 
@@ -139,5 +144,26 @@ describe("removeSuppressedEmail (re-subscribe)", () => {
     expect((await Firma.findById(firma._id).lean())?.mailing_status).toBe(
       "HARD_BOUNCE",
     );
+  });
+});
+
+describe("deleteEmails", () => {
+  it("clears the email and resets the status: no email → SUBSCRIBED", async () => {
+    const { HARD_BOUNCE, SUBSCRIBED } = MAILING_STATUS;
+    const firma = await Firma.create({
+      naziv_firme: "G",
+      e_mail: "gone@firma.rs",
+      mailing_status: HARD_BOUNCE,
+      zaposleni: [zaposleni("gone@firma.rs", HARD_BOUNCE)],
+    });
+
+    await deleteEmails(["gone@firma.rs"]);
+
+    const g = await Firma.findById(firma._id).lean();
+    expect(g).toMatchObject({ e_mail: "", mailing_status: SUBSCRIBED });
+    expect(g?.zaposleni[0]).toMatchObject({
+      e_mail: "",
+      mailing_status: SUBSCRIBED,
+    });
   });
 });
