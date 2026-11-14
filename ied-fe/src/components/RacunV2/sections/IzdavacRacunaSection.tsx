@@ -24,6 +24,7 @@ import {
 } from "ied-shared";
 import { Controller, useWatch } from "react-hook-form";
 import { useFetchIzdavaciRacuna } from "../../../hooks/useFetchData";
+import { NumberField } from "../../Form/NumberField";
 import { useRacunV2Form } from "../hooks/useRacunV2Form";
 
 const getTekuciRacuniOptions = (
@@ -192,10 +193,9 @@ export function IzdavacRacunaSection() {
                   name="defaultStopaPdv"
                   control={control}
                   render={({ field, fieldState }) => (
-                    <TextField
+                    <NumberField
                       {...field}
                       fullWidth
-                      type="number"
                       label="Podrazumevana stopa PDV-a (za nove stavke)"
                       error={!!fieldState.error}
                       helperText={

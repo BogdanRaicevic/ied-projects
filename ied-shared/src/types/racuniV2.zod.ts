@@ -3,8 +3,8 @@ import { VALUTA_VALUES } from "../constants/racuni";
 import { zDate } from "./date.zod";
 import { IzdavacRacuna, TipRacuna } from "./racuni.zod";
 
-const nonNegativeNumber = z.coerce
-  .number<number | string>()
+const nonNegativeNumber = z
+  .number("Vrednost je obavezna")
   .min(0, "Vrednost mora biti >= 0");
 const requiredNullableNonNegativeNumber = (requiredMessage: string) =>
   z
@@ -15,8 +15,8 @@ const requiredNullableNonNegativeNumber = (requiredMessage: string) =>
     .refine((value): value is number => value !== null, {
       message: requiredMessage,
     });
-const percentage = z.coerce
-  .number<number | string>()
+const percentage = z
+  .number("Popust je obavezan")
   .min(0, "Popust mora biti između 0 i 100")
   .max(100, "Popust mora biti između 0 i 100");
 export const StavkaUslugaV2Zod = z.object({
