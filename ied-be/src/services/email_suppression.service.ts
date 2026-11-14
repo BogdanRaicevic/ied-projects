@@ -262,12 +262,13 @@ export const deleteEmails = async (emails: string[]) => {
 };
 
 export const isEmailSuppressed = async (email?: string) => {
-  if (!email) {
+  const normalizedEmail = normalizeEmail(email);
+  if (!normalizedEmail) {
     return null;
   }
 
   const result = await EmailSuppression.findOne({
-    email: email.toLowerCase(),
+    email: normalizedEmail,
   }).exec();
 
   return result !== null ? result.reason : null;

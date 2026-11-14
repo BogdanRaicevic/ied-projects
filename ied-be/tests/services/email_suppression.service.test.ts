@@ -9,6 +9,7 @@ import { Firma } from "../../src/models/firma.model";
 import {
   addSuppressedEmail,
   deleteEmails,
+  isEmailSuppressed,
   removeSuppressedEmail,
 } from "../../src/services/email_suppression.service";
 
@@ -154,6 +155,20 @@ describe("removeSuppressedEmail (re-subscribe)", () => {
     expect((await Firma.findById(firma._id).lean())?.mailing_status).toBe(
       MAILING_STATUS.HARD_BOUNCE,
     );
+  });
+});
+
+describe("isEmailSuppressed", () => {
+  it("normalizes whitespace and case", async () => {
+    await EmailSuppression.create({
+      email: "check@firma.rs",
+      reason: SUPPRESSION_REASONS.HARD_BOUNCE,
+    });
+
+    expect(await isEmailSuppressed("  CHECK@firma.rs  ")).toBe(
+      SUPPRESSION_REASONS.HARD_BOUNCE,
+    );
+    expect(await isEmailSuppressed("   ")).toBeNull();
   });
 });
 
