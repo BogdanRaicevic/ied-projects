@@ -1,10 +1,14 @@
 import { describe, expect, it } from "vitest";
-import { type MailingStatus, nextMailingStatus } from "./mailingStatus";
+import {
+  MAILING_STATUS,
+  type MailingStatus,
+  nextMailingStatus,
+} from "./mailingStatus";
 
-const S = "SUBSCRIBED";
-const U = "UNSUBSCRIBED";
-const HB = "HARD_BOUNCE";
-const SP = "SPAM_COMPLAINT";
+const S = MAILING_STATUS.SUBSCRIBED;
+const U = MAILING_STATUS.UNSUBSCRIBED;
+const HB = MAILING_STATUS.HARD_BOUNCE;
+const SP = MAILING_STATUS.SPAM_COMPLAINT;
 
 // Rows = current status; columns = UNSUBSCRIBE, RESUBSCRIBE,
 // import UNSUBSCRIBED, import HARD_BOUNCE, import SPAM_COMPLAINT.

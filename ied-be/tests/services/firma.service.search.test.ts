@@ -1,4 +1,8 @@
-import type { MailingStatus, ParametriPretrage } from "ied-shared";
+import {
+  MAILING_STATUS,
+  type MailingStatus,
+  type ParametriPretrage,
+} from "ied-shared";
 import { beforeAll, describe, expect, it, vi } from "vitest";
 import { Firma } from "../../src/models/firma.model";
 import { Mesto } from "../../src/models/mesto.model";
@@ -12,10 +16,10 @@ vi.mock("../../src/services/email_suppression.service", () => ({
 }));
 
 const ALL_STATUSES: MailingStatus[] = [
-  "SUBSCRIBED",
-  "UNSUBSCRIBED",
-  "HARD_BOUNCE",
-  "SPAM_COMPLAINT",
+  MAILING_STATUS.SUBSCRIBED,
+  MAILING_STATUS.UNSUBSCRIBED,
+  MAILING_STATUS.HARD_BOUNCE,
+  MAILING_STATUS.SPAM_COMPLAINT,
 ];
 const countFirme = (statusi: string[]) =>
   staticTestData.firme.filter((f) => statusi.includes(f.mailing_status)).length;
@@ -86,11 +90,15 @@ describe("firma.service search", () => {
     });
 
     it.each<[string, MailingStatus[], number]>([
-      ["one", ["SUBSCRIBED"], countFirme(["SUBSCRIBED"])],
+      [
+        "one",
+        [MAILING_STATUS.SUBSCRIBED],
+        countFirme([MAILING_STATUS.SUBSCRIBED]),
+      ],
       [
         "several",
-        ["UNSUBSCRIBED", "HARD_BOUNCE"],
-        countFirme(["UNSUBSCRIBED", "HARD_BOUNCE"]),
+        [MAILING_STATUS.UNSUBSCRIBED, MAILING_STATUS.HARD_BOUNCE],
+        countFirme([MAILING_STATUS.UNSUBSCRIBED, MAILING_STATUS.HARD_BOUNCE]),
       ],
       ["none (no filter)", [], staticTestData.firme.length],
       ["all four (no filter)", ALL_STATUSES, staticTestData.firme.length],
@@ -116,11 +124,18 @@ describe("firma.service search", () => {
 
   describe("Zaposleni related search", () => {
     it.each<[string, MailingStatus[], number]>([
-      ["one", ["UNSUBSCRIBED"], countFirmeWithZaposleni(["UNSUBSCRIBED"])],
+      [
+        "one",
+        [MAILING_STATUS.UNSUBSCRIBED],
+        countFirmeWithZaposleni([MAILING_STATUS.UNSUBSCRIBED]),
+      ],
       [
         "several",
-        ["SUBSCRIBED", "SPAM_COMPLAINT"],
-        countFirmeWithZaposleni(["SUBSCRIBED", "SPAM_COMPLAINT"]),
+        [MAILING_STATUS.SUBSCRIBED, MAILING_STATUS.SPAM_COMPLAINT],
+        countFirmeWithZaposleni([
+          MAILING_STATUS.SUBSCRIBED,
+          MAILING_STATUS.SPAM_COMPLAINT,
+        ]),
       ],
       ["none (no filter)", [], staticTestData.firme.length],
       ["all four (no filter)", ALL_STATUSES, staticTestData.firme.length],

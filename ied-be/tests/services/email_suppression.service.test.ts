@@ -36,8 +36,8 @@ describe("addSuppressedEmail", () => {
       naziv_firme: "B",
       e_mail: "b@firma.rs",
       zaposleni: [
-        zaposleni("sync.test@FIRMA.rs", "SUBSCRIBED"),
-        zaposleni("other@firma.rs", "SUBSCRIBED"),
+        zaposleni("sync.test@FIRMA.rs", MAILING_STATUS.SUBSCRIBED),
+        zaposleni("other@firma.rs", MAILING_STATUS.SUBSCRIBED),
       ],
     });
 
@@ -47,18 +47,18 @@ describe("addSuppressedEmail", () => {
 
     const a = await Firma.findById(firmaA._id).lean();
     const b = await Firma.findById(firmaB._id).lean();
-    expect(a?.mailing_status).toBe("HARD_BOUNCE");
-    expect(b?.zaposleni[0]?.mailing_status).toBe("HARD_BOUNCE");
+    expect(a?.mailing_status).toBe(MAILING_STATUS.HARD_BOUNCE);
+    expect(b?.zaposleni[0]?.mailing_status).toBe(MAILING_STATUS.HARD_BOUNCE);
     // untouched: different email
-    expect(b?.mailing_status).toBe("SUBSCRIBED");
-    expect(b?.zaposleni[1]?.mailing_status).toBe("SUBSCRIBED");
+    expect(b?.mailing_status).toBe(MAILING_STATUS.SUBSCRIBED);
+    expect(b?.zaposleni[1]?.mailing_status).toBe(MAILING_STATUS.SUBSCRIBED);
   });
 
   it("never downgrades HARD_BOUNCE / SPAM_COMPLAINT to UNSUBSCRIBED", async () => {
     const firma = await Firma.create({
       naziv_firme: "P",
       e_mail: "Bounce@perm.rs",
-      zaposleni: [zaposleni("spam@PERM.rs", "SUBSCRIBED")],
+      zaposleni: [zaposleni("spam@PERM.rs", MAILING_STATUS.SUBSCRIBED)],
     });
     await addSuppressedEmail([
       { email: "bounce@perm.rs", reason: SUPPRESSION_REASONS.HARD_BOUNCE },
@@ -70,12 +70,16 @@ describe("addSuppressedEmail", () => {
       { email: "SPAM@perm.rs", reason: SUPPRESSION_REASONS.UNSUBSCRIBED },
     ]);
 
-    expect(await reasonOf("bounce@perm.rs")).toBe("HARD_BOUNCE");
-    expect(await reasonOf("spam@perm.rs")).toBe("SPAM_COMPLAINT");
+    expect(await reasonOf("bounce@perm.rs")).toBe(
+      SUPPRESSION_REASONS.HARD_BOUNCE,
+    );
+    expect(await reasonOf("spam@perm.rs")).toBe(
+      SUPPRESSION_REASONS.SPAM_COMPLAINT,
+    );
     // contacts keep the row's reason, not the UNSUBSCRIBED of the import
     const p = await Firma.findById(firma._id).lean();
-    expect(p?.mailing_status).toBe("HARD_BOUNCE");
-    expect(p?.zaposleni[0]?.mailing_status).toBe("SPAM_COMPLAINT");
+    expect(p?.mailing_status).toBe(MAILING_STATUS.HARD_BOUNCE);
+    expect(p?.zaposleni[0]?.mailing_status).toBe(MAILING_STATUS.SPAM_COMPLAINT);
   });
 
   it("within one upload, a permanent reason wins over UNSUBSCRIBED in any order", async () => {
@@ -86,8 +90,12 @@ describe("addSuppressedEmail", () => {
       { email: "order2@perm.rs", reason: SUPPRESSION_REASONS.SPAM_COMPLAINT },
     ]);
 
-    expect(await reasonOf("order1@perm.rs")).toBe("HARD_BOUNCE");
-    expect(await reasonOf("order2@perm.rs")).toBe("SPAM_COMPLAINT");
+    expect(await reasonOf("order1@perm.rs")).toBe(
+      SUPPRESSION_REASONS.HARD_BOUNCE,
+    );
+    expect(await reasonOf("order2@perm.rs")).toBe(
+      SUPPRESSION_REASONS.SPAM_COMPLAINT,
+    );
   });
 });
 
@@ -99,8 +107,8 @@ describe("removeSuppressedEmail (re-subscribe)", () => {
     const firma = await Firma.create({
       naziv_firme: "C",
       e_mail: "Back@Firma.rs",
-      mailing_status: "UNSUBSCRIBED",
-      zaposleni: [zaposleni("BACK@firma.rs", "UNSUBSCRIBED")],
+      mailing_status: MAILING_STATUS.UNSUBSCRIBED,
+      zaposleni: [zaposleni("BACK@firma.rs", MAILING_STATUS.UNSUBSCRIBED)],
     });
 
     const result = await removeSuppressedEmail("back@FIRMA.rs");
@@ -108,22 +116,22 @@ describe("removeSuppressedEmail (re-subscribe)", () => {
     expect(result).not.toBeNull();
     expect(await reasonOf("back@firma.rs")).toBeUndefined();
     const c = await Firma.findById(firma._id).lean();
-    expect(c?.mailing_status).toBe("SUBSCRIBED");
-    expect(c?.zaposleni[0]?.mailing_status).toBe("SUBSCRIBED");
+    expect(c?.mailing_status).toBe(MAILING_STATUS.SUBSCRIBED);
+    expect(c?.zaposleni[0]?.mailing_status).toBe(MAILING_STATUS.SUBSCRIBED);
   });
 
   it("re-subscribes a contact unsubscribed without a suppression row (legacy)", async () => {
     const firma = await Firma.create({
       naziv_firme: "E",
       e_mail: "legacy@firma.rs",
-      mailing_status: "UNSUBSCRIBED",
+      mailing_status: MAILING_STATUS.UNSUBSCRIBED,
     });
 
     const result = await removeSuppressedEmail("legacy@firma.rs");
 
     expect(result).not.toBeNull();
     expect((await Firma.findById(firma._id).lean())?.mailing_status).toBe(
-      "SUBSCRIBED",
+      MAILING_STATUS.SUBSCRIBED,
     );
   });
 
@@ -134,15 +142,17 @@ describe("removeSuppressedEmail (re-subscribe)", () => {
     const firma = await Firma.create({
       naziv_firme: "D",
       e_mail: "stay@firma.rs",
-      mailing_status: "HARD_BOUNCE",
+      mailing_status: MAILING_STATUS.HARD_BOUNCE,
     });
 
     const result = await removeSuppressedEmail("stay@firma.rs");
 
     expect(result).toBeNull();
-    expect(await reasonOf("stay@firma.rs")).toBe("HARD_BOUNCE");
+    expect(await reasonOf("stay@firma.rs")).toBe(
+      SUPPRESSION_REASONS.HARD_BOUNCE,
+    );
     expect((await Firma.findById(firma._id).lean())?.mailing_status).toBe(
-      "HARD_BOUNCE",
+      MAILING_STATUS.HARD_BOUNCE,
     );
   });
 });

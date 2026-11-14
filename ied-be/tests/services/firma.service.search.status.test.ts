@@ -8,23 +8,33 @@ import { search } from "../../src/services/firma.service";
 describe("firma.service search by mailing_status", () => {
   beforeAll(() =>
     Firma.create([
-      { naziv_firme: "hb", e_mail: "hb@x.rs", mailing_status: "HARD_BOUNCE" },
+      {
+        naziv_firme: "hb",
+        e_mail: "hb@x.rs",
+        mailing_status: MAILING_STATUS.HARD_BOUNCE,
+      },
       { naziv_firme: "none" },
       {
         naziv_firme: "firmOnly",
         e_mail: "ok@x.rs",
         zaposleni: [
-          { ime: "Z", radno_mesto: "Dev", mailing_status: "UNSUBSCRIBED" },
+          {
+            ime: "Z",
+            radno_mesto: "Dev",
+            mailing_status: MAILING_STATUS.UNSUBSCRIBED,
+          },
         ],
       },
       {
         naziv_firme: "zapUnsub",
         e_mail: "ok2@x.rs",
-        zaposleni: [{ e_mail: "u@x.rs", mailing_status: "UNSUBSCRIBED" }],
+        zaposleni: [
+          { e_mail: "u@x.rs", mailing_status: MAILING_STATUS.UNSUBSCRIBED },
+        ],
       },
       {
         naziv_firme: "zapOnly",
-        mailing_status: "UNSUBSCRIBED",
+        mailing_status: MAILING_STATUS.UNSUBSCRIBED,
         zaposleni: [{ e_mail: "y@x.rs", radno_mesto: "Ops" }],
       },
       // Same shape: the only zaposleni with an email is unsubscribed. The
@@ -33,16 +43,16 @@ describe("firma.service search by mailing_status", () => {
         naziv_firme: "sub",
         e_mail: "s@x.rs",
         zaposleni: [
-          { e_mail: "u1@x.rs", mailing_status: "UNSUBSCRIBED" },
-          { ime: "N", mailing_status: "SUBSCRIBED" },
+          { e_mail: "u1@x.rs", mailing_status: MAILING_STATUS.UNSUBSCRIBED },
+          { ime: "N", mailing_status: MAILING_STATUS.SUBSCRIBED },
         ],
       },
       {
         naziv_firme: "legacy",
         e_mail: "l@x.rs",
         zaposleni: [
-          { e_mail: "u2@x.rs", mailing_status: "UNSUBSCRIBED" },
-          { ime: "N", mailing_status: "UNSUBSCRIBED" },
+          { e_mail: "u2@x.rs", mailing_status: MAILING_STATUS.UNSUBSCRIBED },
+          { ime: "N", mailing_status: MAILING_STATUS.UNSUBSCRIBED },
         ],
       },
       // The direktor has no email; the one with an email isn't a direktor.
@@ -65,8 +75,8 @@ describe("firma.service search by mailing_status", () => {
   const nazivi = async (params: ParametriPretrage) =>
     (await search(params)).firmas.map((f) => f.naziv_firme).sort();
   const DEFAULT: ParametriPretrage = {
-    firmaMailingStatus: ["SUBSCRIBED"],
-    zaposleniMailingStatus: ["SUBSCRIBED"],
+    firmaMailingStatus: [MAILING_STATUS.SUBSCRIBED],
+    zaposleniMailingStatus: [MAILING_STATUS.SUBSCRIBED],
   };
 
   it("default filters keep firme and zaposleni without email", async () => {
@@ -74,7 +84,9 @@ describe("firma.service search by mailing_status", () => {
   });
 
   it("a zaposleni without email doesn't count as a match for the status filter", async () => {
-    const result = await nazivi({ zaposleniMailingStatus: ["SUBSCRIBED"] });
+    const result = await nazivi({
+      zaposleniMailingStatus: [MAILING_STATUS.SUBSCRIBED],
+    });
     expect(result).not.toContain("sub");
     expect(result).not.toContain("legacy");
   });
@@ -92,10 +104,8 @@ describe("firma.service search by mailing_status", () => {
   });
 
   it("bounce filter: only the bounced firma plus firme without own email", async () => {
-    expect(await nazivi({ firmaMailingStatus: ["HARD_BOUNCE"] })).toEqual([
-      "hb",
-      "none",
-      "zapOnly",
-    ]);
+    expect(
+      await nazivi({ firmaMailingStatus: [MAILING_STATUS.HARD_BOUNCE] }),
+    ).toEqual(["hb", "none", "zapOnly"]);
   });
 });
