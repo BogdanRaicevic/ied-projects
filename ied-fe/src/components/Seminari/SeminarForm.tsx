@@ -24,6 +24,7 @@ import {
   useUpdateSeminarMutation,
 } from "../../hooks/seminar/useSeminarMutations";
 import { useFetchTipoviSeminara } from "../../hooks/tipSeminara/useTipSeminaraQueries";
+import { NumberField } from "../Form/NumberField";
 
 export default function SeminarForm({
   seminar,
@@ -187,7 +188,7 @@ export default function SeminarForm({
             name="offlineCena"
             control={control}
             render={({ field }) => (
-              <TextField
+              <NumberField
                 {...field}
                 label="Offline cena"
                 name="offlineCena"
@@ -199,14 +200,6 @@ export default function SeminarForm({
                     ),
                   },
                 }}
-                type="number"
-                value={field.value ?? ""}
-                onFocus={(e) => e.target.select()}
-                onChange={(e) =>
-                  field.onChange(
-                    e.target.value === "" ? null : Number(e.target.value),
-                  )
-                }
                 error={!!errors.offlineCena}
                 helperText={errors.offlineCena?.message}
                 fullWidth
@@ -220,7 +213,7 @@ export default function SeminarForm({
             name="onlineCena"
             control={control}
             render={({ field }) => (
-              <TextField
+              <NumberField
                 {...field}
                 label="Online cena"
                 name="onlineCena"
@@ -232,14 +225,6 @@ export default function SeminarForm({
                     ),
                   },
                 }}
-                type="number"
-                value={field.value ?? ""}
-                onFocus={(e) => e.target.select()}
-                onChange={(e) =>
-                  field.onChange(
-                    e.target.value === "" ? null : Number(e.target.value),
-                  )
-                }
                 error={!!errors.onlineCena}
                 helperText={errors.onlineCena?.message}
                 fullWidth
