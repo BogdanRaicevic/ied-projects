@@ -11,9 +11,14 @@ import MailingListSwitch from "../MailingListSwitch";
 type ZaposleniFormProps = {
   zaposleni?: ZaposleniType;
   onSubmit: (zaposleniData: ZaposleniType) => void;
+  isSaving: boolean;
 };
 
-export function ZaposleniForm({ zaposleni, onSubmit }: ZaposleniFormProps) {
+export function ZaposleniForm({
+  zaposleni,
+  onSubmit,
+  isSaving,
+}: ZaposleniFormProps) {
   const {
     register,
     handleSubmit,
@@ -147,6 +152,7 @@ export function ZaposleniForm({ zaposleni, onSubmit }: ZaposleniFormProps) {
       </Box>
       <Button
         onClick={handleSubmit(handleDodajZaposlenog, onError)}
+        disabled={isSaving}
         sx={{ m: 1 }}
         variant="contained"
         type="submit"

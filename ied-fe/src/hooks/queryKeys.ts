@@ -15,6 +15,11 @@ export const seminarKeys = {
     [...seminarKeys.all, "firma-seminari", params] as const,
 };
 
+export const racunKeys = {
+  all: ["racuni"] as const,
+  search: (params: object) => [...racunKeys.all, "search", params] as const,
+};
+
 export const pretrageKeys = {
   all: ["pretrage"] as const,
 };

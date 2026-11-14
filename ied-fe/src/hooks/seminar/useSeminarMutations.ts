@@ -1,5 +1,10 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import type { PrijavaZodType, SeminarZodType } from "ied-shared";
+import type {
+  PrijavaZodType,
+  SeminarZodType,
+  SertifikatType,
+} from "ied-shared";
+import { generateSertifikatPdfBatch } from "../../api/docx.api";
 import {
   createPrijava,
   createSeminar,
@@ -73,5 +78,13 @@ export function useCreatePrijavaMutation() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: seminarKeys.all });
     },
+  });
+}
+
+export function useGenerateSertifikatiMutation() {
+  return useMutation({
+    mutationFn: (sertifikati: SertifikatType[]) =>
+      generateSertifikatPdfBatch(sertifikati),
+    onError: (error) => console.error("Error generating certificates:", error),
   });
 }
