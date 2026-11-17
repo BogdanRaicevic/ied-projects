@@ -1,9 +1,4 @@
-import {
-  type NextFunction,
-  type Request,
-  type Response,
-  Router,
-} from "express";
+import { type Request, type Response, Router } from "express";
 import { AuditLogQueryParamsZod } from "ied-shared";
 import z from "zod";
 import {
@@ -26,48 +21,24 @@ const statsParams = (query: unknown) => {
 };
 
 // Not called by the FE; used manually (curl/Bruno/Postman).
-router.get(
-  "/user-changes",
-  async (req: Request, res: Response, next: NextFunction) => {
-    try {
-      res.json(await getUserChangesStats(statsParams(req.query)));
-    } catch (error) {
-      next(error);
-    }
-  },
-);
+router.get("/user-changes", async (req: Request, res: Response) => {
+  res.json(await getUserChangesStats(statsParams(req.query)));
+});
 
 // Not called by the FE; used manually (curl/Bruno/Postman).
-router.get(
-  "/user-changes-v2",
-  async (req: Request, res: Response, next: NextFunction) => {
-    try {
-      res.json(await getUserChanges(statsParams(req.query)));
-    } catch (error) {
-      next(error);
-    }
-  },
-);
+router.get("/user-changes-v2", async (req: Request, res: Response) => {
+  res.json(await getUserChanges(statsParams(req.query)));
+});
 
-router.get(
-  "/user-changes-by-date",
-  async (req: Request, res: Response, next: NextFunction) => {
-    try {
-      res.json(await getUserChangesByDate(statsParams(req.query)));
-    } catch (error) {
-      next(error);
-    }
-  },
-);
+router.get("/user-changes-by-date", async (req: Request, res: Response) => {
+  res.json(await getUserChangesByDate(statsParams(req.query)));
+});
 
-router.get("/", async (req: Request, res: Response, next: NextFunction) => {
-  try {
-    const { pageIndex, pageSize, ...filterParams } =
-      AuditLogGetQuerySchema.parse(req.query);
-    res.json(await getAuditLogs({ pageIndex, pageSize, filterParams }));
-  } catch (error) {
-    next(error);
-  }
+router.get("/", async (req: Request, res: Response) => {
+  const { pageIndex, pageSize, ...filterParams } = AuditLogGetQuerySchema.parse(
+    req.query,
+  );
+  res.json(await getAuditLogs({ pageIndex, pageSize, filterParams }));
 });
 
 export default router;

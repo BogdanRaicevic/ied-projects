@@ -1,9 +1,4 @@
-import {
-  type NextFunction,
-  type Request,
-  type Response,
-  Router,
-} from "express";
+import { type Request, type Response, Router } from "express";
 import { ParametriPretrageSchema } from "ied-shared";
 import { isValidObjectId } from "mongoose";
 import { z } from "zod";
@@ -25,43 +20,31 @@ const SavePretragaSchema = z.object({
 
 const DeletePretragaSchema = z.object({ id: objectId });
 
-router.get("/", async (_req: Request, res: Response, next: NextFunction) => {
-  try {
-    const result = await getAllPretrage();
-    res.json(result || []);
-  } catch (error) {
-    next(error);
-  }
+router.get("/", async (_req: Request, res: Response) => {
+  const result = await getAllPretrage();
+  res.json(result || []);
 });
 
 router.post(
   "/save",
   validateRequestBody(SavePretragaSchema),
-  async (req, res, next: NextFunction) => {
+  async (req, res) => {
     const { queryParameters, pretraga } = req.body as z.infer<
       typeof SavePretragaSchema
     >;
 
-    try {
-      await savePretraga(queryParameters, pretraga);
-      res.sendStatus(200);
-    } catch (error) {
-      next(error);
-    }
+    await savePretraga(queryParameters, pretraga);
+    res.sendStatus(200);
   },
 );
 
 router.post(
   "/delete",
   validateRequestBody(DeletePretragaSchema),
-  async (req, res, next: NextFunction) => {
+  async (req, res) => {
     const { id } = req.body as z.infer<typeof DeletePretragaSchema>;
-    try {
-      await deletePretraga(id);
-      res.sendStatus(200);
-    } catch (error) {
-      next(error);
-    }
+    await deletePretraga(id);
+    res.sendStatus(200);
   },
 );
 

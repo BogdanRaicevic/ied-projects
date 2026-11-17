@@ -1,9 +1,4 @@
-import {
-  type NextFunction,
-  type Request,
-  type Response,
-  Router,
-} from "express";
+import { type Request, type Response, Router } from "express";
 import {
   ContactTypeEnum,
   FirmaSchema,
@@ -57,15 +52,11 @@ const SearchRequestSchema = ExportRequestSchema.extend({
 router.post(
   "/search",
   validateRequestBody(SearchRequestSchema),
-  async (req: Request, res: Response, next: NextFunction) => {
-    try {
-      const { pageIndex, pageSize, queryParameters } = req.body as z.infer<
-        typeof SearchRequestSchema
-      >;
-      res.json(await search(queryParameters, pageIndex, pageSize));
-    } catch (error) {
-      next(error);
-    }
+  async (req: Request, res: Response) => {
+    const { pageIndex, pageSize, queryParameters } = req.body as z.infer<
+      typeof SearchRequestSchema
+    >;
+    res.json(await search(queryParameters, pageIndex, pageSize));
   },
 );
 
@@ -92,18 +83,10 @@ router.post(
   "/:firmaId/zaposleni",
   firmaAudit,
   validateRequestBody(CreateZaposleniSchema),
-  async (
-    req: Request<{ firmaId: string }>,
-    res: Response,
-    next: NextFunction,
-  ) => {
-    try {
-      const { firmaId } = req.params;
-      const updatedFirma = await createZaposleni(firmaId, req.body);
-      res.status(200).json(updatedFirma);
-    } catch (error) {
-      next(error);
-    }
+  async (req: Request<{ firmaId: string }>, res: Response) => {
+    const { firmaId } = req.params;
+    const updatedFirma = await createZaposleni(firmaId, req.body);
+    res.status(200).json(updatedFirma);
   },
 );
 
@@ -115,19 +98,10 @@ router.put(
   async (
     req: Request<{ firmaId: string; zaposleniId: string }>,
     res: Response,
-    next: NextFunction,
   ) => {
-    try {
-      const { firmaId, zaposleniId } = req.params;
-      const updatedFirma = await updateZaposleni(
-        firmaId,
-        zaposleniId,
-        req.body,
-      );
-      res.status(201).json(updatedFirma);
-    } catch (error) {
-      next(error);
-    }
+    const { firmaId, zaposleniId } = req.params;
+    const updatedFirma = await updateZaposleni(firmaId, zaposleniId, req.body);
+    res.status(201).json(updatedFirma);
   },
 );
 
@@ -137,45 +111,32 @@ router.delete(
   async (
     req: Request<{ firmaId: string; zaposleniId: string }>,
     res: Response,
-    next: NextFunction,
   ) => {
-    try {
-      const { firmaId, zaposleniId } = req.params;
-      await deleteZaposleni(firmaId, zaposleniId);
-      res.status(204).send();
-    } catch (error) {
-      next(error);
-    }
+    const { firmaId, zaposleniId } = req.params;
+    await deleteZaposleni(firmaId, zaposleniId);
+    res.status(204).send();
   },
 );
 
 // Get firma
-router.get("/:id", async (req: Request, res: Response, next: NextFunction) => {
+router.get("/:id", async (req: Request, res: Response) => {
   const { id } = req.params;
-  try {
-    const firma = await findFirmaById(String(id));
-    if (!firma) {
-      res.status(404).send("Firma not found");
-      return;
-    }
-    res.json(firma);
-  } catch (error) {
-    next(error);
+  const firma = await findFirmaById(String(id));
+  if (!firma) {
+    res.status(404).send("Firma not found");
+    return;
   }
+  res.json(firma);
 });
 
 // Delete firma
 router.delete(
   "/:id",
   firmaAudit,
-  async (req: Request<{ id: string }>, res: Response, next: NextFunction) => {
-    try {
-      const firmaId = req.params.id;
-      const firma = await deleteFirmaById(firmaId);
-      res.json(firma || []);
-    } catch (error) {
-      next(error);
-    }
+  async (req: Request<{ id: string }>, res: Response) => {
+    const firmaId = req.params.id;
+    const firma = await deleteFirmaById(firmaId);
+    res.json(firma || []);
   },
 );
 
@@ -184,13 +145,9 @@ router.post(
   "/",
   firmaAudit,
   validateRequestBody(CreateFirmaSchema),
-  async (req: Request, res: Response, next: NextFunction) => {
-    try {
-      const firma = await create(req.body);
-      res.status(201).json(firma);
-    } catch (error) {
-      next(error);
-    }
+  async (req: Request, res: Response) => {
+    const firma = await create(req.body);
+    res.status(201).json(firma);
   },
 );
 
@@ -199,17 +156,13 @@ router.put(
   "/:id",
   firmaAudit,
   validateRequestBody(UpdateFirmaSchema),
-  async (req: Request<{ id: string }>, res: Response, next: NextFunction) => {
-    try {
-      const firmaId = req.params.id;
-      const firma = await updateFirmaById(firmaId, req.body);
-      if (firma) {
-        res.json(firma);
-      } else {
-        res.status(404).send("Firma not found");
-      }
-    } catch (error) {
-      next(error);
+  async (req: Request<{ id: string }>, res: Response) => {
+    const firmaId = req.params.id;
+    const firma = await updateFirmaById(firmaId, req.body);
+    if (firma) {
+      res.json(firma);
+    } else {
+      res.status(404).send("Firma not found");
     }
   },
 );
@@ -218,28 +171,24 @@ router.put(
 router.put(
   "/:id/last-contact",
   firmaAudit,
-  async (req: Request<{ id: string }>, res: Response, next: NextFunction) => {
-    try {
-      const { contactType } = LastContactQuerySchema.parse(req.query);
-      const userEmail = await getClerkEmailFromRequest(req);
-      // requireApiAuth already checked the session; a missing email means the Clerk lookup failed.
-      if (!userEmail) {
-        throw new Error("Could not resolve the caller's email from Clerk");
-      }
-      const firmaId = req.params.id;
+  async (req: Request<{ id: string }>, res: Response) => {
+    const { contactType } = LastContactQuerySchema.parse(req.query);
+    const userEmail = await getClerkEmailFromRequest(req);
+    // requireApiAuth already checked the session; a missing email means the Clerk lookup failed.
+    if (!userEmail) {
+      throw new Error("Could not resolve the caller's email from Clerk");
+    }
+    const firmaId = req.params.id;
 
-      const updatedFirma = await updateLastContact({
-        firmaId,
-        userEmail,
-        contactType,
-      });
-      if (updatedFirma) {
-        res.status(200).json(updatedFirma);
-      } else {
-        res.status(404).send("Firma not found");
-      }
-    } catch (error) {
-      next(error);
+    const updatedFirma = await updateLastContact({
+      firmaId,
+      userEmail,
+      contactType,
+    });
+    if (updatedFirma) {
+      res.status(200).json(updatedFirma);
+    } else {
+      res.status(404).send("Firma not found");
     }
   },
 );

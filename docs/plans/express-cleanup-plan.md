@@ -108,23 +108,6 @@ doesn't read the body).
 
 ---
 
-## PR 4 (optional): remove the `try { … } catch (e) { next(e) }` boilerplate
-
-Express 5 already sends a rejected promise from an async handler to the
-error handler. About 50 of these blocks in `routes/` do nothing.
-
-**Approach:** do it in one mechanical PR after PR 1, so that PR 1's diff
-stays readable. This **changes a documented pattern**, so the same PR must
-also update:
-- `AGENTS.md` ("Validate every request body …": drop "inside the handler's `try`");
-- `docs/backend.md` (the route example around line 31).
-
-Whether to do it: there is no change in behaviour. The benefit is less noise,
-and new code stops copying the pattern. Skip it if the churn isn't worth it
-to you.
-
----
-
 ## Skipped on purpose (not worth the change)
 
 - **One shape for all error bodies** (`text` vs `{ message }` vs `{ error }`).
