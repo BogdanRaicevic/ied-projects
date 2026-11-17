@@ -94,7 +94,7 @@ Details: [docs/backend.md](docs/backend.md), [docs/frontend.md](docs/frontend.md
   (`ied-be/src/utils/utils.ts`). There are tests for this; keep it that way.
 - Validate every request body with `validateRequestBody(Schema)` and every
   query with `const q = Schema.parse(req.query)` inside the handler (a
-  `ZodError` becomes a 400 in `errorWrapper`). Use the parsed
+  `ZodError` becomes a 400 in `zodErrorHandler`, before Sentry). Use the parsed
   value only — never cast or re-parse `req.query`. Don't pass `req.body`
   straight into Mongoose.
 - Errors: services throw a plain `Error` with a message a developer can act
@@ -104,7 +104,7 @@ Details: [docs/backend.md](docs/backend.md), [docs/frontend.md](docs/frontend.md
   (`res.status(404)` / `409`).
 - Don't wrap route handlers in `try`/`catch` to call `next(error)`:
   Express 5 already passes thrown errors and rejected promises to the error
-  middleware (Sentry, then `errorWrapper`). Catch only to recover or to
+  middleware (`zodErrorHandler`, Sentry, then `errorWrapper`). Catch only to recover or to
   rethrow with context (`throw new Error("…", { cause })`); never catch and
   answer a 500 yourself — that hides the error from Sentry.
 - Every `/api/*` route is behind `requireApiAuth` (Clerk), except the

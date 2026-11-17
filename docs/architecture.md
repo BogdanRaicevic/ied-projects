@@ -27,7 +27,8 @@
 3. `requireApiAuth` — 401 without a Clerk user
 4. Routers under `/api/*`
 5. Per route: optional `createAuditMiddleware(Model)` → `validateRequestBody(Schema)` → handler → service
-6. `Sentry.setupExpressErrorHandler`, then `errorWrapper`
+6. `zodErrorHandler` (ZodError → 400, kept out of Sentry), then
+   `Sentry.setupExpressErrorHandler`, then `errorWrapper`
 
 Error → status mapping: see "Rules" in `AGENTS.md`.
 
