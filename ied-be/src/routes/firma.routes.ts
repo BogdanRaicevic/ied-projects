@@ -74,15 +74,7 @@ router.post(
   validateRequestBody(ExportRequestSchema),
   async (req, res) => {
     const { queryParameters } = req.body;
-
-    try {
-      const data = await exportSearchedFirmaData(queryParameters);
-
-      res.send(data);
-    } catch (error) {
-      console.error("Error exporting firma data:", error);
-      res.status(500).send("Error exporting firma data");
-    }
+    res.send(await exportSearchedFirmaData(queryParameters));
   },
 );
 
@@ -91,14 +83,7 @@ router.post(
   validateRequestBody(ExportRequestSchema),
   async (req, res) => {
     const { queryParameters } = req.body;
-    try {
-      const data = await exportSearchedZaposleniData(queryParameters);
-
-      res.send(data);
-    } catch (error) {
-      console.error("Error exporting zaposleni data:", error);
-      res.status(500).send("Error exporting zaposleni data");
-    }
+    res.send(await exportSearchedZaposleniData(queryParameters));
   },
 );
 

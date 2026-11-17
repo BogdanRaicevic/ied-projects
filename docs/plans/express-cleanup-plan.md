@@ -6,6 +6,9 @@ Review date: 2026-11-17. Scope: `ied-be/src/server.ts`, `middleware/`, `routes/`
 errors are handled, plus a few wrong status codes. Do the work as small PRs,
 in this order. Each PR is independent and safe to stop after.
 
+Completed items are removed from this file, so everything listed here is
+still to do.
+
 Rule for every PR: keep it to the smallest diff that fixes the item. Don't
 "clean up while you're there". Run `pnpm typecheck && pnpm lint:error` and
 `pnpm -F ied-be test:run` before calling it done.
@@ -56,22 +59,6 @@ export function errorWrapper(err: unknown, _req: Request, res: Response, next: N
 
 Watch out: a version that always sends 500 would turn malformed-JSON and
 payload-too-large requests into 500s.
-
-### 1c. Five handlers catch errors themselves, so Sentry never sees them
-
-| File | Line | Route |
-|---|---|---|
-| `routes/docx.routes.ts` | 38–44 | `POST /modify-template` |
-| `routes/docx.routes.ts` | 59–65 | `POST /generate-pdf-files` |
-| `routes/firma.routes.ts` | 82–85 | `POST /export-firma-data` |
-| `routes/firma.routes.ts` | 98–101 | `POST /export-zaposleni-data` |
-| `routes/racuni_v2.routes.ts` | 46–52 | `POST /generate` |
-
-**Approach:** delete the `try`/`catch` blocks. With Express 5 the rejection
-reaches the error handler from 1b. The FE does not read the `details` /
-`error` fields these return (it doesn't read `response.data.details` or
-`.error` anywhere), so nothing on the FE changes. Keep the existing 400
-checks in `docx` and `racuni_v2`; those are expected outcomes, not errors.
 
 ### Test
 

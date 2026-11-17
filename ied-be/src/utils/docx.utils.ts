@@ -31,30 +31,6 @@ export const sanitizeFilename = (str: string): string => {
 export const formatToLocalDate = (date: Date): string =>
   formatDate(date, "dd.MM.yyyy");
 
-export const getTemplateErrorDetails = (error: unknown): string => {
-  let errorDetails = error instanceof Error ? error.message : "Unknown error";
-  if (error && typeof error === "object" && "properties" in error) {
-    const err = error as {
-      properties?: {
-        errors?: Array<{
-          name?: string;
-          message?: string;
-          properties?: { id?: string };
-        }>;
-      };
-    };
-    if (err.properties?.errors) {
-      errorDetails = err.properties.errors
-        .map(
-          (e) =>
-            `${e.name || "Error"}: ${e.message || ""} (${e.properties?.id || "unknown"})`,
-        )
-        .join("; ");
-    }
-  }
-  return errorDetails;
-};
-
 export const escapeHtml = (value: string): string =>
   value
     .replace(/&/g, "&amp;")
