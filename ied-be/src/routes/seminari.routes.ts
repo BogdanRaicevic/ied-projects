@@ -86,7 +86,11 @@ router.get("/all-seminars", async (_req: Request, res: Response) => {
 
 router.get("/:id", async (req: Request<{ id: string }>, res: Response) => {
   const seminar = await getSeminarById(req.params.id);
-  res.status(200).json(seminar);
+  if (!seminar) {
+    res.status(404).send("Seminar not found");
+    return;
+  }
+  res.json(seminar);
 });
 
 router.post(
@@ -115,7 +119,7 @@ router.post(
     const { id } = req.params;
     const prijava = req.body as z.infer<typeof PrijavaSchema>;
     const response = await updatePrijava(id, prijava);
-    res.status(201).json(response);
+    res.json(response);
   },
 );
 

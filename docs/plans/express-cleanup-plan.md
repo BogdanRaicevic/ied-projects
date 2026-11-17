@@ -49,26 +49,6 @@ Add cases with a stub `res` to `ied-be/tests/utils/errorWrapper.test.ts`:
 
 ---
 
-## PR 2: wrong status codes (changes the API, so update BE and FE together)
-
-| Where | Now | Should be |
-|---|---|---|
-| `firma.routes.ts` `PUT /:firmaId/zaposleni/:zaposleniId` | 201 | 200 (it's an update) |
-| `seminari.routes.ts` `POST /update-prijava/:id` | 201 | 200 |
-| `firma.routes.ts` `DELETE /:id` | 200 with `firma \|\| []` | 404 when the service returns `null` |
-| `seminari.routes.ts` `GET /:id` | 200 with `null` | 404 when not found |
-| `email_suppression.routes.ts` lines 107, 128 | 202 Accepted | 200 (the work finishes synchronously) |
-| `velicina_firme.routes.ts` `GET /` | 404 branch on a list | delete the branch (`find()` never returns `null`) |
-
-**Approach:** change the status codes only, nothing else. On the FE, axios
-throws on a 404, so check the callers:
-- `deleteFirma` (`ied-fe/src/api/firma.api.ts:89`) returns `status`; check
-  what its callers do with it.
-- `GET /api/seminari/:id` (`ied-fe/src/api/seminari.api.ts:69`): check what
-  its query does on an error.
-
----
-
 ## PR 3: validation that bypasses the house pattern
 
 | Where | Now | Fix |
