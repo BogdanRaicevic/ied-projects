@@ -23,3 +23,10 @@ allowBuilds:
   mongodb-memory-server: true
   puppeteer: true
   esbuild: false
+overrides:
+  # TODO (low priority): remove once @semantic-release/release-notes-generator
+  # ships a stable version depending on conventional-changelog-writer@9 (15.0.0
+  # is in beta). Until then this forces writer 9, which the
+  # conventionalcommits@10 preset needs. Alternative: replace semantic-release
+  # with release-please and drop the override with it.
+  "@semantic-release/release-notes-generator>conventional-changelog-writer": ^9.3.0
