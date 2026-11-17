@@ -10,26 +10,39 @@ export type MailingStatus = keyof typeof MAILING_STATUS;
 
 export const MAILING_STATUS_LABEL: Record<MailingStatus, string> = {
   SUBSCRIBED: "Prijavljeni",
+  INACTIVE: "Neaktivni",
   UNSUBSCRIBED: "Odjavljeni",
   HARD_BOUNCE: "Neispravan email",
   SPAM_COMPLAINT: "Spamovali su nas",
 };
 
-export const isPermanent = (
-  s: MailingStatus,
-): s is "HARD_BOUNCE" | "SPAM_COMPLAINT" =>
-  s === MAILING_STATUS.HARD_BOUNCE || s === MAILING_STATUS.SPAM_COMPLAINT;
+// Only spam is permanent: some Sendy/listmonk hard bounces were reachable.
+export const isPermanent = (s: MailingStatus): s is "SPAM_COMPLAINT" =>
+  s === MAILING_STATUS.SPAM_COMPLAINT;
+
+/** The statuses staff can pick by hand; spam comes only from imports. */
+export type SettableMailingStatus = Exclude<MailingStatus, "SPAM_COMPLAINT">;
+
+// An import never replaces a higher rank.
+const RANK = {
+  SUBSCRIBED: 0,
+  INACTIVE: 1,
+  UNSUBSCRIBED: 2,
+  HARD_BOUNCE: 3,
+  SPAM_COMPLAINT: 4,
+} as const satisfies Record<MailingStatus, number>;
+
+export const outranks = (a: MailingStatus, b: MailingStatus) =>
+  RANK[a] > RANK[b];
 
 type ImportEvent = { type: "IMPORT"; reason: SuppressionReasons };
 type MailingEvent =
-  | { type: "UNSUBSCRIBE" }
-  | { type: "RESUBSCRIBE" }
+  | { type: "SET"; status: SettableMailingStatus }
   | ImportEvent;
 
 /**
- * Transition table of a mailing status. null = refused: bounce and spam are
- * permanent, the switch can't change them. An UNSUBSCRIBED import never
- * downgrades a permanent status; a permanent import always wins.
+ * Transition table of a mailing status. null = refused: spam is permanent,
+ * staff can't change it. An import keeps a higher-ranked status (see RANK).
  */
 export function nextMailingStatus(
   s: MailingStatus,
@@ -44,8 +57,7 @@ export function nextMailingStatus(
   e: MailingEvent,
 ): MailingStatus | null {
   if (e.type === "IMPORT") {
-    return isPermanent(s) && !isPermanent(e.reason) ? s : e.reason;
+    return outranks(s, e.reason) ? s : e.reason;
   }
-  if (isPermanent(s)) return null;
-  return e.type === "UNSUBSCRIBE" ? "UNSUBSCRIBED" : "SUBSCRIBED";
+  return isPermanent(s) ? null : e.status;
 }

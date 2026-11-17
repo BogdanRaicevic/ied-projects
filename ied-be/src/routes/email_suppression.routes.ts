@@ -14,6 +14,7 @@ import {
   deleteEmails,
   isEmailSuppressed,
   removeSuppressedEmail,
+  setSuppressedEmail,
 } from "../services/email_suppression.service";
 
 const router = Router();
@@ -67,12 +68,15 @@ router.put(
   async (req: Request, res: Response, next: NextFunction) => {
     const { email, reason } = req.body as SuppressedEmail;
     try {
-      const result = await addSuppressedEmail([{ email, reason }]);
+      const result = await setSuppressedEmail(email, reason);
+      if (result === null) {
+        res.status(409).json({
+          message: "Email is permanently suppressed (SPAM_COMPLAINT)",
+        });
+        return;
+      }
 
-      res.status(200).json({
-        message: "Suppressed email added successfully",
-        ...result,
-      });
+      res.status(200).json({ message: "Suppressed email set successfully" });
     } catch (error) {
       next(error);
     }
@@ -103,8 +107,7 @@ router.delete(
       const removed = await removeSuppressedEmail(email);
       if (removed === null) {
         res.status(409).json({
-          message:
-            "Email is permanently suppressed (HARD_BOUNCE / SPAM_COMPLAINT)",
+          message: "Email is permanently suppressed (SPAM_COMPLAINT)",
         });
         return;
       }

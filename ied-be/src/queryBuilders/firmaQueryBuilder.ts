@@ -10,7 +10,7 @@ import { Seminar, type SeminarType } from "../models/seminar.model";
 import type { Zaposleni } from "../models/zaposleni.model";
 import { escapeRegex } from "../utils/utils";
 
-// Statuses to filter by, or undefined when none or all four are selected.
+// Statuses to filter by, or undefined when none or all are selected.
 export const mailingStatusFilter = (selected?: MailingStatus[]) =>
   selected?.length &&
   new Set(selected).size < Object.keys(MAILING_STATUS).length

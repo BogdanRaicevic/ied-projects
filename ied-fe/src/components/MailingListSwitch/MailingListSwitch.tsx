@@ -1,27 +1,34 @@
-import { Box, Chip, FormLabel, Switch } from "@mui/material";
+import {
+  Box,
+  Chip,
+  FormLabel,
+  ToggleButton,
+  ToggleButtonGroup,
+} from "@mui/material";
 import {
   isPermanent,
   MAILING_STATUS,
   MAILING_STATUS_LABEL,
   type MailingStatus,
+  type SettableMailingStatus,
 } from "ied-shared";
 
 type MailingListSwitchProps = {
   status: MailingStatus;
   hasEmail: boolean;
   isPending: boolean;
-  onChange: (newValue: boolean) => void;
+  onChange: (status: SettableMailingStatus) => void;
 };
 
-const STATUS_COLOR = {
-  SUBSCRIBED: "success",
-  UNSUBSCRIBED: "warning",
-  HARD_BOUNCE: "error",
-  SPAM_COMPLAINT: "error",
-} as const satisfies Record<MailingStatus, string>;
+const OPTIONS = [
+  { status: MAILING_STATUS.SUBSCRIBED, color: "success" },
+  { status: MAILING_STATUS.INACTIVE, color: "info" },
+  { status: MAILING_STATUS.UNSUBSCRIBED, color: "warning" },
+  { status: MAILING_STATUS.HARD_BOUNCE, color: "error" },
+  { status: MAILING_STATUS.SPAM_COMPLAINT, color: "error" },
+] as const satisfies { status: MailingStatus; color: string }[];
 
-// One row: the status chip, plus the switch only when it can change
-// something (not without an email, not for permanent bounce / spam).
+// Spam is never picked by hand, and once set it locks the whole control.
 export const MailingListSwitch: React.FC<MailingListSwitchProps> = ({
   status,
   hasEmail,
@@ -31,22 +38,30 @@ export const MailingListSwitch: React.FC<MailingListSwitchProps> = ({
   <Box sx={{ m: 1, display: "flex", alignItems: "center", gap: 1 }}>
     <FormLabel>Mejling lista</FormLabel>
     {hasEmail ? (
-      <Chip
+      <ToggleButtonGroup
         size="small"
-        label={MAILING_STATUS_LABEL[status]}
-        color={STATUS_COLOR[status]}
-      />
+        exclusive
+        value={status}
+        disabled={isPending || isPermanent(status)}
+        // exclusive emits null when the selected button is clicked again
+        onChange={(_, next: SettableMailingStatus | null) => {
+          if (next) onChange(next);
+        }}
+        aria-label="Status na mejling listi"
+      >
+        {OPTIONS.map((o) => (
+          <ToggleButton
+            key={o.status}
+            value={o.status}
+            color={o.color}
+            disabled={isPermanent(o.status) || undefined}
+          >
+            {MAILING_STATUS_LABEL[o.status]}
+          </ToggleButton>
+        ))}
+      </ToggleButtonGroup>
     ) : (
       <Chip size="small" label="Nema email" />
-    )}
-    {hasEmail && !isPermanent(status) && (
-      <Switch
-        checked={status === MAILING_STATUS.SUBSCRIBED}
-        disabled={isPending}
-        onChange={(e) => onChange(e.target.checked)}
-        color="success"
-        slotProps={{ input: { "aria-label": "Prijavljen na mejling listu" } }}
-      />
     )}
   </Box>
 );

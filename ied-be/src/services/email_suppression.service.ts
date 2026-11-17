@@ -3,6 +3,7 @@ import {
   MAILING_STATUS,
   type MailingStatus,
   nextMailingStatus,
+  outranks,
   SUPPRESSION_REASONS,
   type SuppressedEmail,
   type SuppressionReasons,
@@ -14,9 +15,10 @@ const VALID_SUPPRESSION_REASONS = new Set<SuppressionReasons>(
   Object.values(SUPPRESSION_REASONS),
 );
 const BULK_WRITE_CHUNK_SIZE = 500;
-// Bounced / spam-flagged addresses can never be re-subscribed or downgraded.
+// Spam-flagged addresses can never be re-subscribed or downgraded.
 const PERMANENT_REASONS =
   Object.values(SUPPRESSION_REASONS).filter(isPermanent);
+const ALL_REASONS = Object.values(SUPPRESSION_REASONS);
 // Contacts store e_mail as typed; the suppression list stores it lowercase.
 const CASE_INSENSITIVE = { locale: "en", strength: 2 };
 
@@ -53,6 +55,28 @@ const chunkArray = <T>(items: T[], chunkSize: number) => {
 
   return chunks;
 };
+
+// Inserts the row, or overwrites a reason not in `keep`. The two ops don't
+// depend on each other's order, so they're safe in an unordered bulkWrite.
+const upsertReason = (
+  email: string,
+  reason: SuppressionReasons,
+  keep: SuppressionReasons[],
+) => [
+  {
+    updateOne: {
+      filter: { email },
+      update: { $setOnInsert: { reason } },
+      upsert: true,
+    },
+  },
+  {
+    updateOne: {
+      filter: { email, reason: { $nin: keep } },
+      update: { $set: { reason } },
+    },
+  },
+];
 
 // The only writer of mailing_status for existing contacts. Keeps the
 // invariant: every firma and zaposleni that shares an email has one status.
@@ -137,16 +161,14 @@ export const addSuppressedEmail = async (
     const chunks = chunkArray(entries, BULK_WRITE_CHUNK_SIZE);
 
     for (const chunk of chunks) {
-      const operations = chunk.map(([email, reason]) => ({
-        updateOne: {
-          filter: { email },
-          // UNSUBSCRIBED only inserts, so it can't overwrite a permanent reason.
-          update: isPermanent(reason)
-            ? { $set: { reason } }
-            : { $setOnInsert: { reason } },
-          upsert: true,
-        },
-      }));
+      // An import never overwrites a higher-ranked reason (see RANK).
+      const operations = chunk.flatMap(([email, reason]) =>
+        upsertReason(
+          email,
+          reason,
+          ALL_REASONS.filter((r) => outranks(r, reason)),
+        ),
+      );
 
       const bulkResult = await EmailSuppression.bulkWrite(operations, {
         ordered: false,
@@ -156,8 +178,8 @@ export const addSuppressedEmail = async (
       result.matchedCount += bulkResult.matchedCount ?? 0;
       result.modifiedCount += bulkResult.modifiedCount ?? 0;
 
-      // Contacts get the row's final reason: an UNSUBSCRIBED import onto a
-      // permanent row keeps the permanent one.
+      // Contacts get the row's final reason: an import onto a higher-ranked
+      // row keeps that one.
       const rows = await EmailSuppression.find(
         { email: { $in: chunk.map(([email]) => email) } },
         { email: 1, reason: 1 },
@@ -179,8 +201,32 @@ export const addSuppressedEmail = async (
 };
 
 /**
- * Re-subscribe: removes an UNSUBSCRIBED email and sets SUBSCRIBED on every
- * contact with it. Returns null (→ 409) for a permanent reason.
+ * Staff choice (e.g. INACTIVE → UNSUBSCRIBED and back): overrides any
+ * non-permanent reason and syncs every contact with the email. Returns null
+ * (→ 409) when the email is already spam.
+ */
+export const setSuppressedEmail = async (
+  email: string,
+  reason: SuppressionReasons,
+) => {
+  const normalizedEmail = normalizeEmail(email);
+  await EmailSuppression.bulkWrite(
+    upsertReason(normalizedEmail, reason, PERMANENT_REASONS),
+    { ordered: false },
+  );
+  const row = await EmailSuppression.findOne(
+    { email: normalizedEmail },
+    { reason: 1 },
+  ).lean();
+  if (row?.reason !== reason) return null;
+
+  await setStatusForEmails([normalizedEmail], reason);
+  return normalizedEmail;
+};
+
+/**
+ * Re-subscribe: removes a non-permanent email and sets SUBSCRIBED on every
+ * contact with it. Returns null (→ 409) for spam.
  */
 export const removeSuppressedEmail = async (email: string) => {
   try {

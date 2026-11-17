@@ -440,4 +440,3 @@ describe("racuniV2 calculators — calcInvoiceTotals", () => {
     expect(totals.ukupnaNaknada).toBe(1009);
   });
 });
-
