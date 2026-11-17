@@ -15,28 +15,7 @@ Rule for every PR: keep it to the smallest diff that fixes the item. Don't
 
 ---
 
-## PR 1: error handler and Sentry (backend only, highest value)
-
-### 1a. Validation 400s are reported to Sentry as 500s
-
-`server.ts` registers `Sentry.setupExpressErrorHandler(app)` **before**
-`errorWrapper`. Sentry captures any error without a `status` field as a 500
-(`defaultShouldHandleError` in `@sentry/core`). A `ZodError` has no
-`status`, so every `Schema.parse(req.query)` failure creates a Sentry issue,
-even though the client correctly gets a 400.
-
-**Approach:** split `errorWrapper` into two handlers and put Sentry between them:
-
-```ts
-// server.ts
-app.use(zodErrorHandler);            // ZodError → 400, never reaches Sentry
-Sentry.setupExpressErrorHandler(app);
-app.use(errorWrapper);               // everything else
-```
-
-Don't use Sentry's `shouldHandleError` for this: setting it replaces the
-default `status >= 500` filter, and then body-parser 400s/413s would start
-going to Sentry too.
+## PR 1: JSON error responses (backend only)
 
 ### 1b. 500s are answered with Express's HTML page
 
@@ -63,14 +42,10 @@ payload-too-large requests into 500s.
 ### Test
 
 There are no HTTP tests and no `supertest`. Don't add a dependency for this.
-Write a unit test, `tests/middleware/errorWrapper.test.ts`, with a stub `res`
-and three cases:
-- a `ZodError` gives 400 with `errors`;
+Add cases with a stub `res` to `ied-be/tests/utils/errorWrapper.test.ts`:
 - `Error("x")` gives 500 with `{ message: "Internal server error" }`;
-- `{ status: 413 }` gives 413.
-
-Manual check: send a bad query to an `audit-log` route. You should get a 400
-and no new Sentry issue.
+- `{ status: 413 }` gives 413;
+- with `headersSent: true` it calls `next(err)` and sends nothing.
 
 ---
 
@@ -134,3 +109,26 @@ doesn't read the body).
   searched for these patterns.
 - What `NODE_ENV` the production servers run with. This decides whether 1b
   currently leaks stack traces.
+
+---
+
+## Last: only after everything above is resolved
+
+### `validateRequestBody` answers unexpected errors with its own 500
+
+`ied-be/src/middleware/validateSchema.ts` wraps `schema.safeParseAsync` in a
+`try`/`catch` that logs the error and sends
+`500 { message: "Internal server error during validation process" }`. It's
+the same kind of bug as the old inline 500s in the routes: the error never
+reaches Sentry's error handler, so it never becomes an issue.
+
+`safeParseAsync` doesn't throw on invalid input; it returns
+`{ success: false }`. The `catch` only fires when an async refine or
+transform inside a schema throws, which is a real bug, and that should
+reach Sentry.
+
+**Approach:** delete the `try`/`catch` and keep the `safeParseAsync` +
+400 branch as it is. Express 5 sends the rejection to the error middleware.
+Add a test in `ied-be/tests/` with a schema whose `refine` throws, and check
+that the middleware's promise rejects with that error and no response is
+sent. Express turns that rejection into `next(err)`.

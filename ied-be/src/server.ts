@@ -3,7 +3,7 @@ import * as Sentry from "@sentry/node";
 import cors from "cors";
 import express from "express";
 import { connectDB } from "./database/db";
-import { errorWrapper } from "./middleware/errorWrapper";
+import { errorWrapper, zodErrorHandler } from "./middleware/errorWrapper";
 import { requireApiAuth } from "./middleware/requireApiAuth";
 import delatnostiRoutes from "./routes/delatnost.routes";
 import docxRoutes from "./routes/docx.routes";
@@ -64,6 +64,8 @@ app.use("/api/racuni-v2", racuniV2Routes);
 app.use("/api/audit-log", auditLogRoutes);
 app.use("/api/email-suppression", emailSuppressionRoutes);
 app.use("/api/tip-seminara", tipSeminaraRoutes);
+
+app.use(zodErrorHandler);
 
 Sentry.setupExpressErrorHandler(app);
 
