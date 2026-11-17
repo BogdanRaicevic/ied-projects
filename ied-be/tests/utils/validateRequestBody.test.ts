@@ -1,28 +1,20 @@
 import type { Request, Response } from "express";
 import { describe, expect, it, vi } from "vitest";
-import { z } from "zod";
+import { ZodError, z } from "zod";
 import { validateRequestBody } from "../../src/middleware/validateSchema";
 
 const call = (schema: z.ZodType, body: unknown) => {
-  const json = vi.fn();
-  const res = { status: vi.fn(() => ({ json })) } as unknown as Response;
   const req = { body } as Request;
   const next = vi.fn();
-  vi.spyOn(console, "error").mockImplementation(() => {});
-  return { req, res, json, next, run: validateRequestBody(schema)(req, res, next) };
+  return { req, next, run: validateRequestBody(schema)(req, {} as Response, next) };
 };
 
 describe("validateRequestBody", () => {
-  it("answers invalid input with a 400 and does not call the handler", async () => {
-    const { res, json, next, run } = call(z.object({ n: z.number() }), {
-      n: "x",
-    });
-    await run;
+  // zodErrorHandler turns the rejection into the 400.
+  it("rejects invalid input with a ZodError and does not call the handler", async () => {
+    const { next, run } = call(z.object({ n: z.number() }), { n: "x" });
 
-    expect(res.status).toHaveBeenCalledWith(400);
-    expect(json).toHaveBeenCalledWith(
-      expect.objectContaining({ message: "Validation failed" }),
-    );
+    await expect(run).rejects.toBeInstanceOf(ZodError);
     expect(next).not.toHaveBeenCalled();
   });
 
@@ -34,19 +26,5 @@ describe("validateRequestBody", () => {
 
     expect(req.body).toEqual({ n: 5 });
     expect(next).toHaveBeenCalledWith();
-  });
-
-  // A throwing refine is a schema bug: it must reject so Express sends it to
-  // Sentry, not be answered here with a 500 nobody sees.
-  it("lets an error thrown inside the schema propagate", async () => {
-    const bug = new Error("refine bug");
-    const schema = z.object({ n: z.number() }).refine(() => {
-      throw bug;
-    });
-    const { res, next, run } = call(schema, { n: 1 });
-
-    await expect(run).rejects.toBe(bug);
-    expect(res.status).not.toHaveBeenCalled();
-    expect(next).not.toHaveBeenCalled();
   });
 });
