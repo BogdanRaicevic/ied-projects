@@ -29,43 +29,33 @@ export const saveRacun = async (racun: RacunType) => {
 };
 
 export const getRacunById = async (id: string) => {
-  try {
-    const racun = await RacunBaseModel.findById(id).lean();
-    if (!racun) {
-      throw new Error(`Racun with ID ${id} not found.`);
-    }
-    return racun;
-  } catch (error) {
-    console.error(`Error getting Racun by ID ${id}:`, error);
-    throw error;
+  const racun = await RacunBaseModel.findById(id).lean();
+  if (!racun) {
+    throw new Error(`Racun with ID ${id} not found.`);
   }
+  return racun;
 };
 
 export const updateRacunById = async (id: string, updatedRacun: RacunType) => {
-  try {
-    const DiscriminatorModel =
-      RacunBaseModel.discriminators?.[updatedRacun.tipRacuna];
+  const DiscriminatorModel =
+    RacunBaseModel.discriminators?.[updatedRacun.tipRacuna];
 
-    if (!DiscriminatorModel) {
-      throw new Error(`Unknown racun type: ${updatedRacun.tipRacuna}`);
-    }
-
-    const racun = await DiscriminatorModel.findByIdAndUpdate(
-      id,
-      { $set: updatedRacun },
-      {
-        returnDocument: "after",
-        runValidators: true,
-      },
-    );
-    if (!racun) {
-      throw new Error(`Racun with ID ${id} not found for update.`);
-    }
-    return racun;
-  } catch (error) {
-    console.error(`Error updating Racun by ID ${id}:`, error);
-    throw error;
+  if (!DiscriminatorModel) {
+    throw new Error(`Unknown racun type: ${updatedRacun.tipRacuna}`);
   }
+
+  const racun = await DiscriminatorModel.findByIdAndUpdate(
+    id,
+    { $set: updatedRacun },
+    {
+      returnDocument: "after",
+      runValidators: true,
+    },
+  );
+  if (!racun) {
+    throw new Error(`Racun with ID ${id} not found for update.`);
+  }
+  return racun;
 };
 
 export const searchRacuni = async (
@@ -104,26 +94,18 @@ export const getRacunByPozivNaBrojAndIzdavac = async (
   izdavacRacuna: IzdavacRacuna,
   tipRacuna?: TipRacuna,
 ) => {
-  try {
-    const racun = await RacunBaseModel.findOne({
-      pozivNaBroj: { $eq: pozivNaBroj },
-      izdavacRacuna: { $eq: izdavacRacuna },
-      ...(tipRacuna && { tipRacuna: { $eq: tipRacuna } }),
-    }).lean();
+  const racun = await RacunBaseModel.findOne({
+    pozivNaBroj: { $eq: pozivNaBroj },
+    izdavacRacuna: { $eq: izdavacRacuna },
+    ...(tipRacuna && { tipRacuna: { $eq: tipRacuna } }),
+  }).lean();
 
-    if (!racun) {
-      throw new Error(
-        `Racun with PozivNaBroj ${pozivNaBroj}, IzdavacRacuna ${izdavacRacuna} and Tip Racuna ${tipRacuna} not found.`,
-      );
-    }
-    return racun;
-  } catch (error) {
-    console.error(
-      `Error getting Racun by PozivNaBroj ${pozivNaBroj}, IzdavacRacuna ${izdavacRacuna} and Tip Racuna ${tipRacuna}:`,
-      error,
+  if (!racun) {
+    throw new Error(
+      `Racun with PozivNaBroj ${pozivNaBroj}, IzdavacRacuna ${izdavacRacuna} and Tip Racuna ${tipRacuna} not found.`,
     );
-    throw error;
   }
+  return racun;
 };
 
 const validateAndCalculateRacun = (racun: RacunType): RacunType => {

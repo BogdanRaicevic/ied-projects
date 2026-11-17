@@ -121,7 +121,8 @@ const findLeanById = async <T>(
     return await Model.findById(id).lean();
   } catch (error) {
     console.error(
-      `Audit middleware could not fetch ${Model.modelName} (${context}) with id: ${id}`,
+      `Audit middleware could not fetch ${Model.modelName} (${context}) with id:`,
+      id,
       error,
     );
     return null;

@@ -3,6 +3,8 @@ import { ZodError } from "zod";
 
 // console.info, not console.error: instrument.ts forwards log/warn/error to
 // Sentry Logs, and client errors don't belong there. They still reach pm2.
+// Request data never goes in the first argument: console.* reads it as a
+// format string, so a %c in a URL there would swallow the next argument.
 
 // Registered before Sentry's error handler: a ZodError is bad client input,
 // not a server bug, so it must not become a Sentry issue.
@@ -14,7 +16,11 @@ export function zodErrorHandler(
 ) {
   // From validateRequestBody and from Schema.parse(req.query) in handlers.
   if (err instanceof ZodError) {
-    console.info(`${req.method} ${req.originalUrl} → 400`, err.issues);
+    console.info(
+      "Validation failed:",
+      `${req.method} ${req.originalUrl} → 400`,
+      err.issues,
+    );
     res.status(400).json({ message: "Validation failed", errors: err.issues });
     return;
   }
@@ -43,11 +49,11 @@ export function errorWrapper(
   const line = `${req.method} ${req.originalUrl} → ${status}`;
 
   if (status < 500) {
-    console.info(line, message);
+    console.info("Request rejected:", line, message);
     res.status(status).json({ message });
     return;
   }
   // The cause stays in pm2 and Sentry, not in the response.
-  console.error(line, err);
+  console.error("Request failed:", line, err);
   res.status(500).json({ message: "Internal server error" });
 }
