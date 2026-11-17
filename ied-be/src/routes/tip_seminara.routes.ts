@@ -1,5 +1,6 @@
 import { type Request, type Response, Router } from "express";
 import { type TipSeminara, TipSeminaraSchema } from "ied-shared";
+import { validateRequestBody } from "../middleware/validateSchema";
 import {
   createTipSeminara,
   deleteTipSeminara,
@@ -17,28 +18,20 @@ router.get("/all-tip-seminara", async (_req: Request, res: Response) => {
 
 router.post(
   "/create",
+  validateRequestBody(TipSeminaraSchema),
   async (req: Request<{}, {}, TipSeminara>, res: Response) => {
-    const parsed = TipSeminaraSchema.safeParse(req.body);
-    if (!parsed.success) {
-      res.status(400).json({ message: "Invalid request body" });
-      return;
-    }
-    const result = await createTipSeminara(parsed.data);
+    const result = await createTipSeminara(req.body);
     res.status(201).json(result);
   },
 );
 
 router.put(
   "/update/:id",
+  validateRequestBody(TipSeminaraSchema),
   async (req: Request<{ id: string }, {}, TipSeminara>, res: Response) => {
-    const parsed = TipSeminaraSchema.safeParse(req.body);
-    if (!parsed.success) {
-      res.status(400).json({ message: "Invalid request body" });
-      return;
-    }
     validateMongoId(req.params.id);
 
-    const result = await updateTipSeminara(req.params.id, parsed.data);
+    const result = await updateTipSeminara(req.params.id, req.body);
     res.status(200).json(result);
   },
 );

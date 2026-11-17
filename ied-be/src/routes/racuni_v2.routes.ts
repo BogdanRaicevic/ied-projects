@@ -1,43 +1,37 @@
 import { type Request, type Response, Router } from "express";
-import { type RacunV2Form, RacunV2Zod, TipRacuna } from "ied-shared";
+import { type RacunV2Parsed, RacunV2Zod, TipRacuna } from "ied-shared";
+import { validateRequestBody } from "../middleware/validateSchema";
 import { generateRacunV2Pdf } from "../services/racuni_v2.service";
 
 const router = Router();
 
 router.post(
   "/generate",
-  async (req: Request<{}, any, RacunV2Form>, res: Response) => {
-    const parsed = await RacunV2Zod.safeParseAsync(req.body);
-
-    if (!parsed.success) {
-      res.status(400).json({
-        message: "Validation failed",
-        errors: parsed.error.issues,
-      });
-      return;
-    }
+  validateRequestBody(RacunV2Zod),
+  async (req: Request<{}, any, RacunV2Parsed>, res: Response) => {
+    const racun = req.body;
 
     if (
-      parsed.data.tipRacuna !== TipRacuna.PREDRACUN &&
-      parsed.data.tipRacuna !== TipRacuna.AVANSNI_RACUN
+      racun.tipRacuna !== TipRacuna.PREDRACUN &&
+      racun.tipRacuna !== TipRacuna.AVANSNI_RACUN
     ) {
       res.status(400).json({
         message:
           "Racun V2 PDF POC currently supports only Predracun and Avansni racun.",
-        tipRacuna: parsed.data.tipRacuna,
+        tipRacuna: racun.tipRacuna,
       });
       return;
     }
 
-    if (parsed.data.valuta !== "RSD") {
+    if (racun.valuta !== "RSD") {
       res.status(400).json({
         message: "Racun V2 PDF POC currently supports only RSD.",
-        valuta: parsed.data.valuta,
+        valuta: racun.valuta,
       });
       return;
     }
 
-    const { buffer, fileName } = await generateRacunV2Pdf(parsed.data);
+    const { buffer, fileName } = await generateRacunV2Pdf(racun);
     res.setHeader("Content-Type", "application/pdf");
     res.setHeader("Content-Disposition", `attachment; filename=${fileName}`);
     res.send(buffer);

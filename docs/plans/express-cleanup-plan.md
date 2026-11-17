@@ -49,20 +49,6 @@ Add cases with a stub `res` to `ied-be/tests/utils/errorWrapper.test.ts`:
 
 ---
 
-## PR 3: validation that bypasses the house pattern
-
-| Where | Now | Fix |
-|---|---|---|
-| `racuni.routes.ts` `GET /` (lines ~120–155) | manual `typeof` checks + `Request<{}, any, any, RacunQueryType>` cast | `const q = Schema.parse(req.query)` inside the handler (AGENTS.md rule) |
-| `tip_seminara.routes.ts` `POST /create`, `PUT /update/:id` | manual `safeParse` returning a 400 without the issues | `validateRequestBody(TipSeminaraSchema)` |
-| `racuni_v2.routes.ts` `POST /generate` | manual `safeParseAsync` | `validateRequestBody(RacunV2Zod)`; keep the two POC 400 checks after it |
-
-**Approach:** swap one pattern for the other in each route. Responses stay
-the same, except that `tip_seminara` 400s now include `errors` (the FE
-doesn't read the body).
-
----
-
 ## Skipped on purpose (not worth the change)
 
 - **One shape for all error bodies** (`text` vs `{ message }` vs `{ error }`).
@@ -89,26 +75,3 @@ doesn't read the body).
   searched for these patterns.
 - What `NODE_ENV` the production servers run with. This decides whether 1b
   currently leaks stack traces.
-
----
-
-## Last: only after everything above is resolved
-
-### `validateRequestBody` answers unexpected errors with its own 500
-
-`ied-be/src/middleware/validateSchema.ts` wraps `schema.safeParseAsync` in a
-`try`/`catch` that logs the error and sends
-`500 { message: "Internal server error during validation process" }`. It's
-the same kind of bug as the old inline 500s in the routes: the error never
-reaches Sentry's error handler, so it never becomes an issue.
-
-`safeParseAsync` doesn't throw on invalid input; it returns
-`{ success: false }`. The `catch` only fires when an async refine or
-transform inside a schema throws, which is a real bug, and that should
-reach Sentry.
-
-**Approach:** delete the `try`/`catch` and keep the `safeParseAsync` +
-400 branch as it is. Express 5 sends the rejection to the error middleware.
-Add a test in `ied-be/tests/` with a schema whose `refine` throws, and check
-that the middleware's promise rejects with that error and no response is
-sent. Express turns that rejection into `next(err)`.
