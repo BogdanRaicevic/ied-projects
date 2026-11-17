@@ -1,11 +1,5 @@
-import { type Request, type Response, Router } from "express";
-import {
-  type ExtendedSearchRacunType,
-  ExtendedSearchRacunZod,
-  RacunQueryZod,
-  type RacunType,
-  RacunZod,
-} from "ied-shared";
+import { Router } from "express";
+import { ExtendedSearchRacunZod, RacunQueryZod, RacunZod } from "ied-shared";
 import { izdavacRacuna } from "../constants/izdavacRacuna.const";
 import { validateRequestBody } from "../middleware/validateSchema";
 import {
@@ -18,7 +12,7 @@ import {
 
 const router = Router();
 
-router.get("/izdavaci", async (_req: Request, res: Response) => {
+router.get("/izdavaci", async (_req, res) => {
   const result = izdavacRacuna.map((i) => {
     return {
       id: i.id,
@@ -32,7 +26,7 @@ router.get("/izdavaci", async (_req: Request, res: Response) => {
 router.post(
   "/search",
   validateRequestBody(ExtendedSearchRacunZod),
-  async (req: Request<{}, {}, ExtendedSearchRacunType>, res: Response) => {
+  async (req, res) => {
     const { pageIndex, pageSize, ...queryParameters } = req.body;
 
     const result = await searchRacuni(pageIndex, pageSize, queryParameters);
@@ -40,7 +34,7 @@ router.post(
   },
 );
 
-router.get("/:id", async (req: Request<{ id: string }>, res: Response) => {
+router.get("/:id", async (req, res) => {
   const { id } = req.params;
   const racun = await getRacunById(id);
   if (!racun) {
@@ -50,31 +44,23 @@ router.get("/:id", async (req: Request<{ id: string }>, res: Response) => {
   res.json(racun);
 });
 
-router.post(
-  "/save",
-  validateRequestBody(RacunZod),
-  async (req: Request<{}, any, RacunType>, res: Response) => {
-    const result = await saveRacun(req.body);
-    res.json(result || []);
-  },
-);
+router.post("/save", validateRequestBody(RacunZod), async (req, res) => {
+  const result = await saveRacun(req.body);
+  res.json(result || []);
+});
 
-router.put(
-  "/update/:id",
-  validateRequestBody(RacunZod),
-  async (req: Request<{ id: string }, any, RacunType>, res: Response) => {
-    const { id } = req.params;
-    const racun = req.body;
-    const result = await updateRacunById(id, racun);
-    if (!result) {
-      res.status(404).send("Racun not found");
-      return;
-    }
-    res.json(result);
-  },
-);
+router.put("/update/:id", validateRequestBody(RacunZod), async (req, res) => {
+  const { id } = req.params;
+  const racun = req.body;
+  const result = await updateRacunById(id, racun);
+  if (!result) {
+    res.status(404).send("Racun not found");
+    return;
+  }
+  res.json(result);
+});
 
-router.get("/", async (req: Request, res: Response) => {
+router.get("/", async (req, res) => {
   const { pozivNaBroj, izdavacRacuna, tipRacuna } = RacunQueryZod.parse(
     req.query,
   );

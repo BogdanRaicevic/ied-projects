@@ -16,7 +16,12 @@ describe("firma.service", () => {
     PIB: "123456789",
     telefon: "011-123-456",
     e_mail: "test@firma.rs",
-    mesto: mestoId,
+    // The shape the FE sends; Mongoose stores it as a reference to mestoId.
+    mesto: {
+      _id: mestoId.toString(),
+      naziv_mesto: "Beograd",
+      postanski_broj: "11000",
+    },
     tip_firme: "DOO",
     delatnost: "IT",
     velicina_firme: "mala",

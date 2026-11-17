@@ -1,9 +1,12 @@
-import { MAILING_STATUS, SUPPRESSION_REASONS } from "ied-shared";
+import {
+  MAILING_STATUS,
+  SUPPRESSION_REASONS,
+  type ZaposleniType,
+} from "ied-shared";
 import { Types } from "mongoose";
 import { beforeAll, describe, expect, it } from "vitest";
 import { EmailSuppression } from "../../src/models/email_suppression.model";
 import { Firma } from "../../src/models/firma.model";
-import type { Zaposleni } from "../../src/models/zaposleni.model";
 import {
   create,
   createZaposleni,
@@ -32,7 +35,7 @@ describe("firma.service mailing_status", () => {
         {
           e_mail: spam,
           mailing_status: MAILING_STATUS.SUBSCRIBED,
-        } as Zaposleni,
+        },
       ],
     });
     expect(firma.mailing_status).toBe(MAILING_STATUS.HARD_BOUNCE);
@@ -43,7 +46,7 @@ describe("firma.service mailing_status", () => {
     const updated = await createZaposleni(firma._id.toString(), {
       e_mail: bounced,
       mailing_status: MAILING_STATUS.SUBSCRIBED,
-    } as Zaposleni);
+    });
     expect(updated?.zaposleni[1]?.mailing_status).toBe(
       MAILING_STATUS.HARD_BOUNCE,
     );
@@ -82,7 +85,7 @@ describe("firma.service mailing_status", () => {
       naziv_firme: "A",
       zaposleni: [{ _id: zaposleniId, ime: "Marko", e_mail: bounced }],
     });
-    const update = (data: Partial<Zaposleni>) =>
+    const update = (data: Partial<ZaposleniType>) =>
       updateZaposleni(firma._id.toString(), zaposleniId.toString(), data);
 
     // created directly, so still the default; an unchanged email isn't recomputed

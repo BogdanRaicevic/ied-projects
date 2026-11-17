@@ -1,5 +1,5 @@
-import { type Request, type Response, Router } from "express";
-import { type TipSeminara, TipSeminaraSchema } from "ied-shared";
+import { Router } from "express";
+import { TipSeminaraSchema } from "ied-shared";
 import { validateRequestBody } from "../middleware/validateSchema";
 import {
   createTipSeminara,
@@ -11,7 +11,7 @@ import { validateMongoId } from "../utils/utils";
 
 const router = Router();
 
-router.get("/all-tip-seminara", async (_req: Request, res: Response) => {
+router.get("/all-tip-seminara", async (_req, res) => {
   const result = await getAllTipSeminara();
   res.json(result || []);
 });
@@ -19,7 +19,7 @@ router.get("/all-tip-seminara", async (_req: Request, res: Response) => {
 router.post(
   "/create",
   validateRequestBody(TipSeminaraSchema),
-  async (req: Request<{}, {}, TipSeminara>, res: Response) => {
+  async (req, res) => {
     const result = await createTipSeminara(req.body);
     res.status(201).json(result);
   },
@@ -28,7 +28,7 @@ router.post(
 router.put(
   "/update/:id",
   validateRequestBody(TipSeminaraSchema),
-  async (req: Request<{ id: string }, {}, TipSeminara>, res: Response) => {
+  async (req, res) => {
     validateMongoId(req.params.id);
 
     const result = await updateTipSeminara(req.params.id, req.body);
@@ -36,13 +36,10 @@ router.put(
   },
 );
 
-router.delete(
-  "/delete/:id",
-  async (req: Request<{ id: string }>, res: Response) => {
-    validateMongoId(req.params.id);
-    await deleteTipSeminara(req.params.id);
-    res.status(200).json({ message: "Tip seminara deleted successfully" });
-  },
-);
+router.delete("/delete/:id", async (req, res) => {
+  validateMongoId(req.params.id);
+  await deleteTipSeminara(req.params.id);
+  res.status(200).json({ message: "Tip seminara deleted successfully" });
+});
 
 export default router;

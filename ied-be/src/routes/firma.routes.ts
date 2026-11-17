@@ -1,4 +1,4 @@
-import { type Request, type Response, Router } from "express";
+import { Router } from "express";
 import {
   ContactTypeEnum,
   FirmaSchema,
@@ -52,10 +52,8 @@ const SearchRequestSchema = ExportRequestSchema.extend({
 router.post(
   "/search",
   validateRequestBody(SearchRequestSchema),
-  async (req: Request, res: Response) => {
-    const { pageIndex, pageSize, queryParameters } = req.body as z.infer<
-      typeof SearchRequestSchema
-    >;
+  async (req, res) => {
+    const { pageIndex, pageSize, queryParameters } = req.body;
     res.json(await search(queryParameters, pageIndex, pageSize));
   },
 );
@@ -83,7 +81,7 @@ router.post(
   "/:firmaId/zaposleni",
   firmaAudit,
   validateRequestBody(CreateZaposleniSchema),
-  async (req: Request<{ firmaId: string }>, res: Response) => {
+  async (req, res) => {
     const { firmaId } = req.params;
     const updatedFirma = await createZaposleni(firmaId, req.body);
     res.status(200).json(updatedFirma);
@@ -95,10 +93,7 @@ router.put(
   "/:firmaId/zaposleni/:zaposleniId",
   firmaAudit,
   validateRequestBody(UpdateZaposleniSchema),
-  async (
-    req: Request<{ firmaId: string; zaposleniId: string }>,
-    res: Response,
-  ) => {
+  async (req, res) => {
     const { firmaId, zaposleniId } = req.params;
     const updatedFirma = await updateZaposleni(firmaId, zaposleniId, req.body);
     res.json(updatedFirma);
@@ -108,10 +103,7 @@ router.put(
 router.delete(
   "/:firmaId/zaposleni/:zaposleniId",
   firmaAudit,
-  async (
-    req: Request<{ firmaId: string; zaposleniId: string }>,
-    res: Response,
-  ) => {
+  async (req, res) => {
     const { firmaId, zaposleniId } = req.params;
     await deleteZaposleni(firmaId, zaposleniId);
     res.status(204).send();
@@ -119,9 +111,9 @@ router.delete(
 );
 
 // Get firma
-router.get("/:id", async (req: Request, res: Response) => {
+router.get("/:id", async (req, res) => {
   const { id } = req.params;
-  const firma = await findFirmaById(String(id));
+  const firma = await findFirmaById(id);
   if (!firma) {
     res.status(404).send("Firma not found");
     return;
@@ -130,26 +122,22 @@ router.get("/:id", async (req: Request, res: Response) => {
 });
 
 // Delete firma
-router.delete(
-  "/:id",
-  firmaAudit,
-  async (req: Request<{ id: string }>, res: Response) => {
-    const firmaId = req.params.id;
-    const firma = await deleteFirmaById(firmaId);
-    if (!firma) {
-      res.status(404).send("Firma not found");
-      return;
-    }
-    res.json(firma);
-  },
-);
+router.delete("/:id", firmaAudit, async (req, res) => {
+  const firmaId = req.params.id;
+  const firma = await deleteFirmaById(firmaId);
+  if (!firma) {
+    res.status(404).send("Firma not found");
+    return;
+  }
+  res.json(firma);
+});
 
 // Create new firma
 router.post(
   "/",
   firmaAudit,
   validateRequestBody(CreateFirmaSchema),
-  async (req: Request, res: Response) => {
+  async (req, res) => {
     const firma = await create(req.body);
     res.status(201).json(firma);
   },
@@ -160,7 +148,7 @@ router.put(
   "/:id",
   firmaAudit,
   validateRequestBody(UpdateFirmaSchema),
-  async (req: Request<{ id: string }>, res: Response) => {
+  async (req, res) => {
     const firmaId = req.params.id;
     const firma = await updateFirmaById(firmaId, req.body);
     if (firma) {
@@ -172,29 +160,25 @@ router.put(
 );
 
 // add new contact to firma
-router.put(
-  "/:id/last-contact",
-  firmaAudit,
-  async (req: Request<{ id: string }>, res: Response) => {
-    const { contactType } = LastContactQuerySchema.parse(req.query);
-    const userEmail = await getClerkEmailFromRequest(req);
-    // requireApiAuth already checked the session; a missing email means the Clerk lookup failed.
-    if (!userEmail) {
-      throw new Error("Could not resolve the caller's email from Clerk");
-    }
-    const firmaId = req.params.id;
+router.put("/:id/last-contact", firmaAudit, async (req, res) => {
+  const { contactType } = LastContactQuerySchema.parse(req.query);
+  const userEmail = await getClerkEmailFromRequest(req);
+  // requireApiAuth already checked the session; a missing email means the Clerk lookup failed.
+  if (!userEmail) {
+    throw new Error("Could not resolve the caller's email from Clerk");
+  }
+  const firmaId = req.params.id;
 
-    const updatedFirma = await updateLastContact({
-      firmaId,
-      userEmail,
-      contactType,
-    });
-    if (updatedFirma) {
-      res.status(200).json(updatedFirma);
-    } else {
-      res.status(404).send("Firma not found");
-    }
-  },
-);
+  const updatedFirma = await updateLastContact({
+    firmaId,
+    userEmail,
+    contactType,
+  });
+  if (updatedFirma) {
+    res.status(200).json(updatedFirma);
+  } else {
+    res.status(404).send("Firma not found");
+  }
+});
 
 export default router;

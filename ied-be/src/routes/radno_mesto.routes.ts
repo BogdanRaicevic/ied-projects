@@ -1,4 +1,4 @@
-import { type Request, type Response, Router } from "express";
+import { Router } from "express";
 import {
   getAllRadnaMesta,
   getAllRadnaMestaNames,
@@ -6,12 +6,12 @@ import {
 
 const router = Router();
 
-router.get("/all-names", async (_req: Request, res: Response) => {
+router.get("/all-names", async (_req, res) => {
   const result = await getAllRadnaMestaNames();
   res.json(result || []);
 });
 
-router.get("/all", async (_req: Request, res: Response) => {
+router.get("/all", async (_req, res) => {
   const result = await getAllRadnaMesta();
   res.json(result || []);
 });
