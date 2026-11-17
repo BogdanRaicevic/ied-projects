@@ -4,6 +4,7 @@ import {
   type MailingStatus,
   nextMailingStatus,
   outranks,
+  type SetSuppressedEmail,
   SUPPRESSION_REASONS,
   type SuppressedEmail,
   type SuppressionReasons,
@@ -35,7 +36,6 @@ type AddSuppressedEmailResult = {
   duplicateRows: number;
   invalidRows: number;
   upsertedCount: number;
-  matchedCount: number;
   modifiedCount: number;
   failures: SuppressedEmailFailure[];
 };
@@ -56,8 +56,8 @@ const chunkArray = <T>(items: T[], chunkSize: number) => {
   return chunks;
 };
 
-// Inserts the row, or overwrites a reason not in `keep`. The two ops don't
-// depend on each other's order, so they're safe in an unordered bulkWrite.
+// Inserts the row, or overwrites a reason not in `keep`. Correct in either op
+// order for one writer; concurrent writers to one email can race (rare).
 const upsertReason = (
   email: string,
   reason: SuppressionReasons,
@@ -148,7 +148,6 @@ export const addSuppressedEmail = async (
       suppressedEmails.length - failures.length - dedupedEntries.size,
     invalidRows: failures.length,
     upsertedCount: 0,
-    matchedCount: 0,
     modifiedCount: 0,
     failures,
   };
@@ -175,7 +174,6 @@ export const addSuppressedEmail = async (
       });
 
       result.upsertedCount += bulkResult.upsertedCount ?? 0;
-      result.matchedCount += bulkResult.matchedCount ?? 0;
       result.modifiedCount += bulkResult.modifiedCount ?? 0;
 
       // Contacts get the row's final reason: an import onto a higher-ranked
@@ -207,7 +205,7 @@ export const addSuppressedEmail = async (
  */
 export const setSuppressedEmail = async (
   email: string,
-  reason: SuppressionReasons,
+  reason: SetSuppressedEmail["reason"],
 ) => {
   const normalizedEmail = normalizeEmail(email);
   await EmailSuppression.bulkWrite(
@@ -218,9 +216,13 @@ export const setSuppressedEmail = async (
     { email: normalizedEmail },
     { reason: 1 },
   ).lean();
-  if (row?.reason !== reason) return null;
+  if (row && isPermanent(row.reason)) return null;
 
-  await setStatusForEmails([normalizedEmail], reason);
+  // row.reason, not reason: a concurrent import may have raised it.
+  await setStatusForEmails(
+    [normalizedEmail],
+    row?.reason ?? MAILING_STATUS.SUBSCRIBED,
+  );
   return normalizedEmail;
 };
 

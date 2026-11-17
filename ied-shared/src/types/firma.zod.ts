@@ -80,3 +80,12 @@ export const SuppressedEmailSchema = z.object({
 });
 
 export type SuppressedEmail = z.infer<typeof SuppressedEmailSchema>;
+
+// What staff can set by hand: spam comes only from imports.
+export const SetSuppressedEmailSchema = SuppressedEmailSchema.extend({
+  reason: z
+    .enum(SUPPRESSION_REASONS)
+    .exclude([SUPPRESSION_REASONS.SPAM_COMPLAINT]),
+});
+
+export type SetSuppressedEmail = z.infer<typeof SetSuppressedEmailSchema>;

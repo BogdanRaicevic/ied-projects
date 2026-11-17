@@ -85,8 +85,8 @@ export const useEmailSuppression = (
 
   const handleMailingListChange = useCallback(
     (status: SettableMailingStatus) => {
-      // The control is hidden without an email and for bounce/spam; the BE
-      // refuses those too (409).
+      // The control is hidden without an email and locked for spam; the BE
+      // refuses spam too (409).
       if (!email) return;
 
       changeMailingList({ emailToChange: email, status });

@@ -131,6 +131,19 @@ describe("addSuppressedEmail with INACTIVE", () => {
 });
 
 describe("setSuppressedEmail (staff choice)", () => {
+  it("inserts a row for an email without one", async () => {
+    const firma = await Firma.create({ naziv_firme: "N", e_mail: "New@In.rs" });
+
+    expect(
+      await setSuppressedEmail("new@in.rs", SUPPRESSION_REASONS.INACTIVE),
+    ).not.toBeNull();
+
+    expect(await reasonOf("new@in.rs")).toBe(SUPPRESSION_REASONS.INACTIVE);
+    expect((await Firma.findById(firma._id).lean())?.mailing_status).toBe(
+      MAILING_STATUS.INACTIVE,
+    );
+  });
+
   it("moves UNSUBSCRIBED → INACTIVE and syncs every contact", async () => {
     await addSuppressedEmail([
       { email: "pick@firma.rs", reason: SUPPRESSION_REASONS.UNSUBSCRIBED },
@@ -211,9 +224,18 @@ describe("removeSuppressedEmail (re-subscribe)", () => {
     await addSuppressedEmail([
       { email: "hb-back@firma.rs", reason: SUPPRESSION_REASONS.HARD_BOUNCE },
     ]);
+    const firma = await Firma.create({
+      naziv_firme: "H",
+      e_mail: "hb-back@firma.rs",
+      mailing_status: MAILING_STATUS.HARD_BOUNCE,
+      zaposleni: [zaposleni("HB-back@firma.rs", MAILING_STATUS.HARD_BOUNCE)],
+    });
 
     expect(await removeSuppressedEmail("hb-back@firma.rs")).not.toBeNull();
     expect(await reasonOf("hb-back@firma.rs")).toBeUndefined();
+    const h = await Firma.findById(firma._id).lean();
+    expect(h?.mailing_status).toBe(MAILING_STATUS.SUBSCRIBED);
+    expect(h?.zaposleni[0]?.mailing_status).toBe(MAILING_STATUS.SUBSCRIBED);
   });
 
   it("refuses a SPAM_COMPLAINT email: returns null, keeps it suppressed", async () => {

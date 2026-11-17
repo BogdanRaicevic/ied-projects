@@ -6,7 +6,12 @@ import {
   Router,
   raw,
 } from "express";
-import { type SuppressedEmail, SuppressedEmailSchema } from "ied-shared";
+import {
+  type SetSuppressedEmail,
+  SetSuppressedEmailSchema,
+  type SuppressedEmail,
+  SuppressedEmailSchema,
+} from "ied-shared";
 import { z } from "zod";
 import { validateRequestBody } from "../middleware/validateSchema";
 import {
@@ -32,6 +37,10 @@ router.put(
   rawCsvParser,
   async (req: Request, res: Response, next: NextFunction) => {
     try {
+      // ?reason=INACTIVE fills rows without a reason (an email-only list).
+      const { reason } = SuppressedEmailSchema.pick({ reason: true })
+        .partial()
+        .parse(req.query);
       if (!req.body || req.body.length === 0) {
         return res.status(400).send("No file uploaded");
       }
@@ -53,9 +62,13 @@ router.put(
         },
       );
 
-      await addSuppressedEmail(records);
+      const result = await addSuppressedEmail(
+        reason
+          ? records.map((r) => ({ ...r, reason: r.reason || reason }))
+          : records,
+      );
 
-      res.status(202).send("Suppressed emails added successfully");
+      res.status(200).json(result);
     } catch (error) {
       next(error);
     }
@@ -64,9 +77,9 @@ router.put(
 
 router.put(
   "/add-email",
-  validateRequestBody(SuppressedEmailSchema),
+  validateRequestBody(SetSuppressedEmailSchema),
   async (req: Request, res: Response, next: NextFunction) => {
-    const { email, reason } = req.body as SuppressedEmail;
+    const { email, reason } = req.body as SetSuppressedEmail;
     try {
       const result = await setSuppressedEmail(email, reason);
       if (result === null) {

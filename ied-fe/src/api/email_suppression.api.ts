@@ -1,11 +1,11 @@
-import type { SuppressedEmail, SuppressionReasons } from "ied-shared";
+import type { SetSuppressedEmail, SuppressionReasons } from "ied-shared";
 import axiosInstanceWithAuth from "./interceptors/auth";
 
 export const addEmailToSuppressionList = async (
   email: string,
-  reason: SuppressionReasons,
+  reason: SetSuppressedEmail["reason"],
 ) => {
-  const suppressedEmail: SuppressedEmail = { email, reason };
+  const suppressedEmail: SetSuppressedEmail = { email, reason };
 
   const response = await axiosInstanceWithAuth.put(
     `/api/email-suppression/add-email`,
