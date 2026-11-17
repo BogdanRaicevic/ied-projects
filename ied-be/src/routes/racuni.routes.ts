@@ -1,6 +1,7 @@
 import { type Request, type Response, Router } from "express";
 import {
-  type PretrageRacunaType,
+  type ExtendedSearchRacunType,
+  ExtendedSearchRacunZod,
   RacunQueryZod,
   type RacunType,
   RacunZod,
@@ -30,15 +31,9 @@ router.get("/izdavaci", async (_req: Request, res: Response) => {
 
 router.post(
   "/search",
-  async (
-    req: Request<
-      {},
-      {},
-      { pageSize: number; pageIndex: number } & PretrageRacunaType
-    >,
-    res: Response,
-  ) => {
-    const { pageIndex = 0, pageSize = 10, ...queryParameters } = req.body;
+  validateRequestBody(ExtendedSearchRacunZod),
+  async (req: Request<{}, {}, ExtendedSearchRacunType>, res: Response) => {
+    const { pageIndex, pageSize, ...queryParameters } = req.body;
 
     const result = await searchRacuni(pageIndex, pageSize, queryParameters);
     res.json(result);

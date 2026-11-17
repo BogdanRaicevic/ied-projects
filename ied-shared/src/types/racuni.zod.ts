@@ -110,6 +110,11 @@ export const PretrageRacunaZod = z.object({
   nazivSeminara: z.string().optional(),
 });
 
+export const ExtendedSearchRacunZod = PretrageRacunaZod.extend({
+  pageIndex: z.number().int().min(0).default(0),
+  pageSize: z.number().int().min(1).max(100).default(10),
+});
+
 // Inferred Types
 export type RacunType = z.infer<typeof RacunZod>;
 export type PrimalacRacunaType = z.infer<typeof PrimalacRacunaZod>;
@@ -117,4 +122,5 @@ export type SeminarRacunType = z.infer<typeof SeminarRacunZod>;
 export type CalculationsRacunType = z.infer<typeof CalculationsRacunZod>;
 export type RacunQueryType = z.infer<typeof RacunQueryZod>;
 export type PretrageRacunaType = z.infer<typeof PretrageRacunaZod>;
+export type ExtendedSearchRacunType = z.infer<typeof ExtendedSearchRacunZod>;
 export type IzdavacRacunaOption = z.infer<typeof IzdavacRacunaOptionZod>;
