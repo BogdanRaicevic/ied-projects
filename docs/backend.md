@@ -27,15 +27,14 @@ Sentry init in `src/instrument.ts`, env in `src/utils/envVariables.ts`
    router.post(
      "/",
      validateRequestBody(EntitySchema),
-     async (req, res, next) => {
-       try {
-         res.status(201).json(await createEntity(req.body));
-       } catch (error) {
-         next(error);
-       }
+     async (req, res) => {
+       res.status(201).json(await createEntity(req.body));
      },
    );
    ```
+
+   No `try`/`catch`: Express 5 sends thrown errors and rejected promises to
+   the error middleware.
 
    Add `createAuditMiddleware(Model)` **before** `validateRequestBody`, as
    existing routes do, if changes must appear in the audit log (it reads the

@@ -1,9 +1,4 @@
-import {
-  type NextFunction,
-  type Request,
-  type Response,
-  Router,
-} from "express";
+import { type Request, type Response, Router } from "express";
 import {
   type PretrageRacunaType,
   type RacunQueryType,
@@ -22,23 +17,16 @@ import {
 
 const router = Router();
 
-router.get(
-  "/izdavaci",
-  async (_req: Request, res: Response, next: NextFunction) => {
-    try {
-      const result = izdavacRacuna.map((i) => {
-        return {
-          id: i.id,
-          tekuciRacuni: i.tekuciRacuni,
-        };
-      });
+router.get("/izdavaci", async (_req: Request, res: Response) => {
+  const result = izdavacRacuna.map((i) => {
+    return {
+      id: i.id,
+      tekuciRacuni: i.tekuciRacuni,
+    };
+  });
 
-      res.json(result);
-    } catch (error) {
-      next(error);
-    }
-  },
-);
+  res.json(result);
+});
 
 router.post(
   "/search",
@@ -49,113 +37,77 @@ router.post(
       { pageSize: number; pageIndex: number } & PretrageRacunaType
     >,
     res: Response,
-    next: NextFunction,
   ) => {
-    try {
-      const { pageIndex = 0, pageSize = 10, ...queryParameters } = req.body;
+    const { pageIndex = 0, pageSize = 10, ...queryParameters } = req.body;
 
-      const result = await searchRacuni(pageIndex, pageSize, queryParameters);
-      res.json(result);
-    } catch (error) {
-      next(error);
-    }
+    const result = await searchRacuni(pageIndex, pageSize, queryParameters);
+    res.json(result);
   },
 );
 
-router.get(
-  "/:id",
-  async (req: Request<{ id: string }>, res: Response, next: NextFunction) => {
-    try {
-      const { id } = req.params;
-      const racun = await getRacunById(id);
-      if (!racun) {
-        res.status(404).send("Racun not found");
-        return;
-      }
-      res.json(racun);
-    } catch (error) {
-      next(error);
-    }
-  },
-);
+router.get("/:id", async (req: Request<{ id: string }>, res: Response) => {
+  const { id } = req.params;
+  const racun = await getRacunById(id);
+  if (!racun) {
+    res.status(404).send("Racun not found");
+    return;
+  }
+  res.json(racun);
+});
 
 router.post(
   "/save",
   validateRequestBody(RacunZod),
-  async (
-    req: Request<{}, any, RacunType>,
-    res: Response,
-    next: NextFunction,
-  ) => {
-    try {
-      const result = await saveRacun(req.body);
-      res.json(result || []);
-    } catch (error) {
-      next(error);
-    }
+  async (req: Request<{}, any, RacunType>, res: Response) => {
+    const result = await saveRacun(req.body);
+    res.json(result || []);
   },
 );
 
 router.put(
   "/update/:id",
   validateRequestBody(RacunZod),
-  async (
-    req: Request<{ id: string }, any, RacunType>,
-    res: Response,
-    next: NextFunction,
-  ) => {
-    try {
-      const { id } = req.params;
-      const racun = req.body;
-      const result = await updateRacunById(id, racun);
-      if (!result) {
-        res.status(404).send("Racun not found");
-        return;
-      }
-      res.json(result);
-    } catch (error) {
-      next(error);
+  async (req: Request<{ id: string }, any, RacunType>, res: Response) => {
+    const { id } = req.params;
+    const racun = req.body;
+    const result = await updateRacunById(id, racun);
+    if (!result) {
+      res.status(404).send("Racun not found");
+      return;
     }
+    res.json(result);
   },
 );
 
 router.get(
   "/",
-  async (
-    req: Request<{}, any, any, RacunQueryType>,
-    res: Response,
-    next: NextFunction,
-  ) => {
-    try {
-      const { pozivNaBroj, izdavacRacuna, tipRacuna } = req.query;
+  async (req: Request<{}, any, any, RacunQueryType>, res: Response) => {
+    const { pozivNaBroj, izdavacRacuna, tipRacuna } = req.query;
 
-      if (
-        typeof pozivNaBroj !== "string" ||
-        typeof izdavacRacuna !== "string" ||
-        (tipRacuna && typeof tipRacuna !== "string")
-      ) {
-        res.status(400).send("Invalid query parameter types");
-        return;
-      }
-
-      if (!pozivNaBroj || !izdavacRacuna) {
-        res.status(400).send("Missing required query parameters");
-        return;
-      }
-
-      const racun = await getRacunByPozivNaBrojAndIzdavac(
-        pozivNaBroj,
-        izdavacRacuna,
-        tipRacuna,
-      );
-      if (!racun) {
-        res.status(404).send("Racun not found");
-        return;
-      }
-      res.json(racun);
-    } catch (error) {
-      next(error);
+    if (
+      typeof pozivNaBroj !== "string" ||
+      typeof izdavacRacuna !== "string" ||
+      (tipRacuna && typeof tipRacuna !== "string")
+    ) {
+      res.status(400).send("Invalid query parameter types");
+      return;
     }
+
+    if (!pozivNaBroj || !izdavacRacuna) {
+      res.status(400).send("Missing required query parameters");
+      return;
+    }
+
+    const racun = await getRacunByPozivNaBrojAndIzdavac(
+      pozivNaBroj,
+      izdavacRacuna,
+      tipRacuna,
+    );
+    if (!racun) {
+      res.status(404).send("Racun not found");
+      return;
+    }
+    res.json(racun);
   },
 );
 
