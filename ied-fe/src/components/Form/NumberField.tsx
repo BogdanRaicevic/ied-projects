@@ -97,21 +97,20 @@ export function NumberField({
             label={label}
             inputRef={props.ref}
             value={state.inputValue}
-            // Handlers go only through slotProps.input: InputBase calls both
-            // its own and inputProps' handlers, so passing both fires twice.
-            slotProps={{
-              input: {
-                ...props,
-                onFocus: (e: FocusEvent<HTMLInputElement>) => {
-                  props.onFocus?.(e);
-                  e.target.select();
-                },
-                onBlur: (e: FocusEvent<HTMLInputElement>) => {
-                  props.onBlur?.(e);
-                  onBlur?.();
-                },
-              },
+            // As in the MUI docs: InputBase replaces onChange/onFocus/onBlur from
+            // slotProps.input with its own, which only call these top-level ones.
+            onBlur={(e: FocusEvent<HTMLInputElement>) => {
+              props.onBlur?.(e);
+              onBlur?.();
             }}
+            onChange={props.onChange}
+            onKeyUp={props.onKeyUp}
+            onKeyDown={props.onKeyDown}
+            onFocus={(e: FocusEvent<HTMLInputElement>) => {
+              props.onFocus?.(e);
+              e.target.select();
+            }}
+            slotProps={{ input: props }}
             aria-describedby={helperText ? helperTextId : undefined}
             startAdornment={
               startAdornment ? (
