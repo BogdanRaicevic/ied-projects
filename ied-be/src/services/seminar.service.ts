@@ -73,12 +73,7 @@ export const searchSeminars = async (qq: ExtendedSearchSeminarType) => {
 export const getSeminarById = async (id: string) => {
   validateMongoId(id);
 
-  const seminar = await Seminar.findById(id).lean();
-  if (!seminar) {
-    throw new Error("Seminar not found");
-  }
-
-  return seminar;
+  return await Seminar.findById(id).lean();
 };
 
 export const getAllSeminars = async () => {

@@ -101,7 +101,7 @@ router.put(
   ) => {
     const { firmaId, zaposleniId } = req.params;
     const updatedFirma = await updateZaposleni(firmaId, zaposleniId, req.body);
-    res.status(201).json(updatedFirma);
+    res.json(updatedFirma);
   },
 );
 
@@ -136,7 +136,11 @@ router.delete(
   async (req: Request<{ id: string }>, res: Response) => {
     const firmaId = req.params.id;
     const firma = await deleteFirmaById(firmaId);
-    res.json(firma || []);
+    if (!firma) {
+      res.status(404).send("Firma not found");
+      return;
+    }
+    res.json(firma);
   },
 );
 

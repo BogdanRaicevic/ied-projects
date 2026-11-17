@@ -87,7 +87,7 @@ router.delete(
     const emails = req.body as string[];
     await deleteEmails(emails);
 
-    res.status(202).send("Suppressed emails deleted successfully");
+    res.status(200).send("Suppressed emails deleted successfully");
   },
 );
 
@@ -104,7 +104,7 @@ router.delete(
       return;
     }
 
-    res.status(202).send("Suppressed email removed successfully");
+    res.status(200).send("Suppressed email removed successfully");
   },
 );
 
