@@ -1,7 +1,7 @@
 import { type Request, type Response, Router } from "express";
 import {
   type PretrageRacunaType,
-  type RacunQueryType,
+  RacunQueryZod,
   type RacunType,
   RacunZod,
 } from "ied-shared";
@@ -79,36 +79,20 @@ router.put(
   },
 );
 
-router.get(
-  "/",
-  async (req: Request<{}, any, any, RacunQueryType>, res: Response) => {
-    const { pozivNaBroj, izdavacRacuna, tipRacuna } = req.query;
-
-    if (
-      typeof pozivNaBroj !== "string" ||
-      typeof izdavacRacuna !== "string" ||
-      (tipRacuna && typeof tipRacuna !== "string")
-    ) {
-      res.status(400).send("Invalid query parameter types");
-      return;
-    }
-
-    if (!pozivNaBroj || !izdavacRacuna) {
-      res.status(400).send("Missing required query parameters");
-      return;
-    }
-
-    const racun = await getRacunByPozivNaBrojAndIzdavac(
-      pozivNaBroj,
-      izdavacRacuna,
-      tipRacuna,
-    );
-    if (!racun) {
-      res.status(404).send("Racun not found");
-      return;
-    }
-    res.json(racun);
-  },
-);
+router.get("/", async (req: Request, res: Response) => {
+  const { pozivNaBroj, izdavacRacuna, tipRacuna } = RacunQueryZod.parse(
+    req.query,
+  );
+  const racun = await getRacunByPozivNaBrojAndIzdavac(
+    pozivNaBroj,
+    izdavacRacuna,
+    tipRacuna,
+  );
+  if (!racun) {
+    res.status(404).send("Racun not found");
+    return;
+  }
+  res.json(racun);
+});
 
 export default router;
