@@ -1,3 +1,4 @@
+import { format } from "node:util";
 import type { Request, Response } from "express";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { z } from "zod";
@@ -45,6 +46,7 @@ describe("zodErrorHandler", () => {
     expect(next).not.toHaveBeenCalled();
     // Logged for pm2 without going through console.error (Sentry Logs).
     expect(console.info).toHaveBeenCalledWith(
+      "Validation failed:",
       "POST /api/x → 400",
       expect.any(Array),
     );
@@ -72,7 +74,28 @@ describe("errorWrapper", () => {
 
     expect(res.status).toHaveBeenCalledWith(500);
     expect(json).toHaveBeenCalledWith({ message: "Internal server error" });
-    expect(console.error).toHaveBeenCalledWith("POST /api/x → 500", error);
+    expect(console.error).toHaveBeenCalledWith(
+      "Request failed:",
+      "POST /api/x → 500",
+      error,
+    );
+  });
+
+  // With the URL as the first argument, Node reads %c in it as a format code
+  // and drops the error from the log.
+  it("keeps the error in the log when the URL contains a format code", () => {
+    const error = new Error("template exploded");
+    const reqWithCode = {
+      method: "GET",
+      originalUrl: "/api/x?q=%c4",
+    } as Request;
+
+    errorWrapper(error, reqWithCode, mockRes().res, vi.fn());
+
+    const [args = []] = vi.mocked(console.error).mock.calls;
+    const logged = format(...args);
+    expect(logged).toContain("GET /api/x?q=%c4 → 500");
+    expect(logged).toContain("template exploded");
   });
 
   it("answers a thrown non-Error as a JSON 500", () => {
