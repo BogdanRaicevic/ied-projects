@@ -192,4 +192,3 @@ export type RacunBaseType = {
   };
   pozivNaBroj: string;
 };
-

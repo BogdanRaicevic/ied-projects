@@ -1,5 +1,9 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { isPermanent, MAILING_STATUS } from "ied-shared";
+import {
+  isPermanent,
+  MAILING_STATUS,
+  type SettableMailingStatus,
+} from "ied-shared";
 import { useCallback, useEffect, useState } from "react";
 import type { UseFormSetValue } from "react-hook-form";
 import {
@@ -33,6 +37,14 @@ export const useEmailSuppression = (
         setSuppressionWarning(
           "Ovaj email je na listi za odjavu. Možete ga ponovo prijaviti.",
         );
+      } else if (suppressed === MAILING_STATUS.HARD_BOUNCE) {
+        setSuppressionWarning(
+          "Ovaj email je označen kao neispravan. Prijavite ga ponovo samo ako ste sigurni da je ispravan.",
+        );
+      } else if (suppressed === MAILING_STATUS.INACTIVE) {
+        setSuppressionWarning(
+          "Ovaj email je neaktivan (ne otvara naše mejlove). Možete ga ponovo prijaviti.",
+        );
       } else if (suppressed && isPermanent(suppressed)) {
         setSuppressionWarning(
           `Ovaj email je u listi za suzbijanje ${suppressed}. Ne možete ga prijaviti na mailing listu.`,
@@ -48,14 +60,14 @@ export const useEmailSuppression = (
   const { mutate: changeMailingList, isPending } = useMutation({
     mutationFn: ({
       emailToChange,
-      newValue,
+      status,
     }: {
       emailToChange: string;
-      newValue: boolean;
+      status: SettableMailingStatus;
     }) =>
-      newValue
+      status === MAILING_STATUS.SUBSCRIBED
         ? removeEmailFromSuppressionList(emailToChange)
-        : addEmailToSuppressionList(emailToChange),
+        : addEmailToSuppressionList(emailToChange, status),
     onError: (error) => {
       console.error("Error handling mailing list change:", error);
     },
@@ -72,12 +84,12 @@ export const useEmailSuppression = (
   });
 
   const handleMailingListChange = useCallback(
-    (newValue: boolean) => {
-      // The switch is hidden without an email and for bounce/spam; the BE
+    (status: SettableMailingStatus) => {
+      // The control is hidden without an email and for bounce/spam; the BE
       // refuses those too (409).
       if (!email) return;
 
-      changeMailingList({ emailToChange: email, newValue });
+      changeMailingList({ emailToChange: email, status });
     },
     [email, changeMailingList],
   );

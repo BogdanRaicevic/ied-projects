@@ -238,8 +238,8 @@ export const calcInvoiceTotals = (
         tipRacuna === TipRacuna.AVANSNI_RACUN
           ? calcAvansniStavkaSubtotal(stavka, context)
           : stavka.tipStavke === "usluga"
-          ? calcSeminarStavkaSubtotal(stavka, context)
-          : calcProizvodStavkaSubtotal(stavka, context);
+            ? calcSeminarStavkaSubtotal(stavka, context)
+            : calcProizvodStavkaSubtotal(stavka, context);
 
       return {
         ...subtotal,
@@ -308,4 +308,3 @@ export const calcInvoiceTotals = (
     stavkaSubtotali,
   };
 };
-
