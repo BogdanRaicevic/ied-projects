@@ -9,7 +9,6 @@ import {
 import { validateRequestBody } from "../middleware/validateSchema";
 import { generateDocxBuffer } from "../services/docx.service";
 import { generateCertificatesZipBuffer } from "../services/pdf.service";
-import { getTemplateErrorDetails } from "../utils/docx.utils";
 
 const router = Router();
 
@@ -27,21 +26,13 @@ router.post(
       return;
     }
 
-    try {
-      const { buffer, fileName } = generateDocxBuffer(tipRacuna, req.body);
-      res.setHeader(
-        "Content-Type",
-        "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-      );
-      res.setHeader("Content-Disposition", `attachment; filename=${fileName}`);
-      res.send(buffer);
-    } catch (error) {
-      console.error("Template processing error:", error);
-      res.status(500).json({
-        error: "Error processing template",
-        details: getTemplateErrorDetails(error),
-      });
-    }
+    const { buffer, fileName } = generateDocxBuffer(tipRacuna, req.body);
+    res.setHeader(
+      "Content-Type",
+      "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+    );
+    res.setHeader("Content-Disposition", `attachment; filename=${fileName}`);
+    res.send(buffer);
   },
 );
 
@@ -49,20 +40,10 @@ router.post(
   "/generate-pdf-files",
   validateRequestBody(SertifikatBatchZod),
   async (req: Request<{}, any, SertifikatType[]>, res) => {
-    try {
-      const { buffer, fileName } = await generateCertificatesZipBuffer(
-        req.body,
-      );
-      res.setHeader("Content-Type", "application/zip");
-      res.setHeader("Content-Disposition", `attachment; filename=${fileName}`);
-      res.send(buffer);
-    } catch (error) {
-      console.error("PDF certificate generation error:", error);
-      res.status(500).json({
-        error: "Error generating PDF certificates",
-        details: getTemplateErrorDetails(error),
-      });
-    }
+    const { buffer, fileName } = await generateCertificatesZipBuffer(req.body);
+    res.setHeader("Content-Type", "application/zip");
+    res.setHeader("Content-Disposition", `attachment; filename=${fileName}`);
+    res.send(buffer);
   },
 );
 
