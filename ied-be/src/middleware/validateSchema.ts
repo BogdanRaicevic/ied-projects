@@ -10,18 +10,8 @@ export const validateRequestBody =
     schema: S,
     // biome-ignore lint/suspicious/noExplicitAny: see comment above
   ): RequestHandler<any, unknown, z.output<S>> =>
-  async (req, res, next) => {
-    const result = await schema.safeParseAsync(req.body);
-
-    if (!result.success) {
-      console.error("Validation Errors:", result.error.issues);
-      res.status(400).json({
-        message: "Validation failed",
-        errors: result.error.issues,
-      });
-      return;
-    }
-
-    req.body = result.data;
+  async (req, _res, next) => {
+    // A ZodError rejects to zodErrorHandler: 400, logged, kept out of Sentry.
+    req.body = await schema.parseAsync(req.body);
     next();
   };

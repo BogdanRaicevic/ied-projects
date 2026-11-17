@@ -1,32 +1,53 @@
 import type { NextFunction, Request, Response } from "express";
 import { ZodError } from "zod";
 
+// console.info, not console.error: instrument.ts forwards log/warn/error to
+// Sentry Logs, and client errors don't belong there. They still reach pm2.
+
 // Registered before Sentry's error handler: a ZodError is bad client input,
 // not a server bug, so it must not become a Sentry issue.
 export function zodErrorHandler(
   err: unknown,
-  _req: Request,
+  req: Request,
   res: Response,
   next: NextFunction,
 ) {
-  // Handlers parse input with Schema.parse(); same shape as validateRequestBody.
+  // From validateRequestBody and from Schema.parse(req.query) in handlers.
   if (err instanceof ZodError) {
+    console.info(`${req.method} ${req.originalUrl} → 400`, err.issues);
     res.status(400).json({ message: "Validation failed", errors: err.issues });
     return;
   }
   next(err);
 }
 
+// Last handler: logs every error with its request for pm2 and answers JSON
+// instead of Express's HTML page. Sentry has already captured the 5xx ones.
 export function errorWrapper(
   err: unknown,
-  _req: Request,
+  req: Request,
   res: Response,
   next: NextFunction,
 ) {
-  if (err instanceof Error) {
-    console.error(err);
+  // A response that already started can only be closed, which Express does.
+  if (res.headersSent) {
     next(err);
-  } else {
-    res.status(500).send("An unknown error occurred");
+    return;
   }
+
+  // body-parser errors carry their own status: 400 bad JSON, 413 too large.
+  const { status = 500, message } = (err ?? {}) as {
+    status?: number;
+    message?: string;
+  };
+  const line = `${req.method} ${req.originalUrl} → ${status}`;
+
+  if (status < 500) {
+    console.info(line, message);
+    res.status(status).json({ message });
+    return;
+  }
+  // The cause stays in pm2 and Sentry, not in the response.
+  console.error(line, err);
+  res.status(500).json({ message: "Internal server error" });
 }
