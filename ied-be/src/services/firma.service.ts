@@ -3,13 +3,14 @@ import {
   type Email,
   type ExportFirma,
   type ExportZaposlenih,
+  type FirmaType as FirmaInput,
   MAILING_STATUS,
   type MailingStatus,
   NEGACIJA,
   type ParametriPretrage,
+  type ZaposleniType,
 } from "ied-shared";
 import { Firma, type FirmaType } from "../models/firma.model";
-import type { Zaposleni } from "../models/zaposleni.model";
 import {
   createFirmaQuery,
   mailingStatusFilter,
@@ -53,7 +54,7 @@ export const deleteFirmaById = async (
 };
 
 export const create = async (
-  firmaData: Partial<FirmaType>,
+  firmaData: Partial<FirmaInput>,
 ): Promise<FirmaType> => {
   firmaData.mailing_status = await statusForEmail(firmaData.e_mail);
   for (const z of firmaData.zaposleni ?? []) {
@@ -70,7 +71,7 @@ export const create = async (
 
 export const updateFirmaById = async (
   id: string,
-  firmaData: Partial<FirmaType>,
+  firmaData: Partial<FirmaInput>,
 ): Promise<FirmaType | null> => {
   try {
     await syncMailingStatus(
@@ -236,7 +237,7 @@ export const exportSearchedZaposleniData = async (
 
 export const createZaposleni = async (
   firmaId: string,
-  zaposleniData: Zaposleni,
+  zaposleniData: ZaposleniType,
 ) => {
   try {
     if (zaposleniData.radno_mesto === "") {
@@ -261,7 +262,7 @@ export const createZaposleni = async (
 export const updateZaposleni = async (
   firmaId: string,
   zaposleniId: string,
-  zaposleniData: Partial<Zaposleni> & { firmaKomentar?: string },
+  zaposleniData: Partial<ZaposleniType> & { firmaKomentar?: string },
 ) => {
   try {
     if (zaposleniData.radno_mesto === "") {

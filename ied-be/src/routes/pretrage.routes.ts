@@ -1,4 +1,4 @@
-import { type Request, type Response, Router } from "express";
+import { Router } from "express";
 import { ParametriPretrageSchema } from "ied-shared";
 import { isValidObjectId } from "mongoose";
 import { z } from "zod";
@@ -20,7 +20,7 @@ const SavePretragaSchema = z.object({
 
 const DeletePretragaSchema = z.object({ id: objectId });
 
-router.get("/", async (_req: Request, res: Response) => {
+router.get("/", async (_req, res) => {
   const result = await getAllPretrage();
   res.json(result || []);
 });
@@ -29,9 +29,7 @@ router.post(
   "/save",
   validateRequestBody(SavePretragaSchema),
   async (req, res) => {
-    const { queryParameters, pretraga } = req.body as z.infer<
-      typeof SavePretragaSchema
-    >;
+    const { queryParameters, pretraga } = req.body;
 
     await savePretraga(queryParameters, pretraga);
     res.sendStatus(200);
@@ -42,7 +40,7 @@ router.post(
   "/delete",
   validateRequestBody(DeletePretragaSchema),
   async (req, res) => {
-    const { id } = req.body as z.infer<typeof DeletePretragaSchema>;
+    const { id } = req.body;
     await deletePretraga(id);
     res.sendStatus(200);
   },

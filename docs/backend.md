@@ -36,6 +36,10 @@ Sentry init in `src/instrument.ts`, env in `src/utils/envVariables.ts`
    No `try`/`catch`: Express 5 sends thrown errors and rejected promises to
    the error middleware.
 
+   No `req`/`res` annotations and no `req.body as X`: `validateRequestBody`
+   types `req.body` from the schema, and Express types `req.params` from the
+   route path.
+
    Add `createAuditMiddleware(Model)` **before** `validateRequestBody`, as
    existing routes do, if changes must appear in the audit log (it reads the
    id from the raw body/params).

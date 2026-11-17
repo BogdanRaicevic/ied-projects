@@ -1,11 +1,16 @@
 import { getAuth } from "@clerk/express";
 import { isEqual } from "es-toolkit";
-import type { NextFunction, Request, Response } from "express";
+import type { NextFunction, Request, RequestHandler, Response } from "express";
 import { type Model, Types } from "mongoose";
 import { AuditLog } from "../models/audit_log.model";
 import { getClerkEmailFromRequest } from "../utils/utils";
 
-export const createAuditMiddleware = <T>(Model: Model<T>) => {
+// `any` params: a plain `Request` here would force every route using this
+// middleware to `string | string[]` params (hence the old `as string` casts).
+export const createAuditMiddleware = <T>(
+  Model: Model<T>,
+  // biome-ignore lint/suspicious/noExplicitAny: see comment above
+): RequestHandler<any> => {
   return async (req: Request, res: Response, next: NextFunction) => {
     const { method, originalUrl, params, body } = req;
     if (method === "GET") {

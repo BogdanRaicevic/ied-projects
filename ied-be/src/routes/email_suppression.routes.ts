@@ -1,7 +1,6 @@
 import { parse } from "csv-parse";
-import { type Request, type Response, Router, raw } from "express";
+import { Router, raw } from "express";
 import {
-  type SetSuppressedEmail,
   SetSuppressedEmailSchema,
   type SuppressedEmail,
   SuppressedEmailSchema,
@@ -26,48 +25,44 @@ const normalizeCsvHeader = (header: string[]) =>
       .toLowerCase(),
   );
 
-router.put(
-  "/add-csv-list",
-  rawCsvParser,
-  async (req: Request, res: Response) => {
-    // ?reason=INACTIVE fills rows without a reason (an email-only list).
-    const { reason } = SuppressedEmailSchema.pick({ reason: true })
-      .partial()
-      .parse(req.query);
-    if (!req.body || req.body.length === 0) {
-      return res.status(400).send("No file uploaded");
-    }
-    // Parse CSV from buffer
-    const records: SuppressedEmail[] = await new Promise((resolve, reject) => {
-      parse(
-        req.body,
-        {
-          columns: normalizeCsvHeader,
-          trim: true,
-          skip_empty_lines: true,
-        },
-        (err, records) => {
-          if (err) reject(err);
-          else resolve(records as SuppressedEmail[]);
-        },
-      );
-    });
-
-    const result = await addSuppressedEmail(
-      reason
-        ? records.map((r) => ({ ...r, reason: r.reason || reason }))
-        : records,
+router.put("/add-csv-list", rawCsvParser, async (req, res) => {
+  // ?reason=INACTIVE fills rows without a reason (an email-only list).
+  const { reason } = SuppressedEmailSchema.pick({ reason: true })
+    .partial()
+    .parse(req.query);
+  if (!req.body || req.body.length === 0) {
+    return res.status(400).send("No file uploaded");
+  }
+  // Parse CSV from buffer
+  const records: SuppressedEmail[] = await new Promise((resolve, reject) => {
+    parse(
+      req.body,
+      {
+        columns: normalizeCsvHeader,
+        trim: true,
+        skip_empty_lines: true,
+      },
+      (err, records) => {
+        if (err) reject(err);
+        else resolve(records as SuppressedEmail[]);
+      },
     );
+  });
 
-    res.status(200).json(result);
-  },
-);
+  const result = await addSuppressedEmail(
+    reason
+      ? records.map((r) => ({ ...r, reason: r.reason || reason }))
+      : records,
+  );
+
+  res.status(200).json(result);
+});
 
 router.put(
   "/add-email",
   validateRequestBody(SetSuppressedEmailSchema),
-  async (req: Request, res: Response) => {
-    const { email, reason } = req.body as SetSuppressedEmail;
+  async (req, res) => {
+    const { email, reason } = req.body;
     const result = await setSuppressedEmail(email, reason);
     if (result === null) {
       res.status(409).json({
@@ -83,8 +78,8 @@ router.put(
 router.delete(
   "/delete-emails",
   validateRequestBody(z.array(z.string())),
-  async (req: Request, res: Response) => {
-    const emails = req.body as string[];
+  async (req, res) => {
+    const emails = req.body;
     await deleteEmails(emails);
 
     res.status(200).send("Suppressed emails deleted successfully");
@@ -94,8 +89,8 @@ router.delete(
 router.delete(
   "/remove-email",
   validateRequestBody(SuppressedEmailSchema.pick({ email: true })),
-  async (req: Request, res: Response) => {
-    const { email } = req.body as Pick<SuppressedEmail, "email">;
+  async (req, res) => {
+    const { email } = req.body;
     const removed = await removeSuppressedEmail(email);
     if (removed === null) {
       res.status(409).json({
@@ -108,7 +103,7 @@ router.delete(
   },
 );
 
-router.get("/check-status", async (req: Request, res: Response) => {
+router.get("/check-status", async (req, res) => {
   const { email } = SuppressedEmailSchema.pick({ email: true }).parse(
     req.query,
   );
