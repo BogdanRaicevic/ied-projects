@@ -1,3 +1,9 @@
+## [1.27.1](https://github.com/BogdanRaicevic/ied-projects/compare/v1.27.0...v1.27.1) (2026-11-18)
+
+### Bug Fixes
+
+* **ied-be:** update Sentry configuration to enhance data privacy ([969ef10](https://github.com/BogdanRaicevic/ied-projects/commit/969ef10772f83d3eba523f111c841b3c6b7694f8))
+
 ## [1.27.0](https://github.com/BogdanRaicevic/ied-projects/compare/v1.26.5...v1.27.0) (2026-11-17)
 
 ### Features
