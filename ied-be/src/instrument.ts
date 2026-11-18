@@ -11,9 +11,10 @@ Sentry.init({
   tracesSampleRate: isProduction ? 1.0 : 0.1,
   dataCollection: {
     userInfo: false,
+    cookies: false,
+    httpBodies: [],
   },
   includeLocalVariables: false,
-  enableLogs: true,
   serverName: env.serverName || "development",
   integrations: [
     // send console.log, console.warn, and console.error calls as logs to Sentry
