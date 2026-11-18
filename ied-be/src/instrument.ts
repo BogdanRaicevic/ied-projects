@@ -9,7 +9,9 @@ Sentry.init({
   dsn: dsn || undefined,
   enabled: Boolean(dsn),
   tracesSampleRate: isProduction ? 1.0 : 0.1,
-  sendDefaultPii: false,
+  dataCollection: {
+    userInfo: false,
+  },
   includeLocalVariables: false,
   enableLogs: true,
   serverName: env.serverName || "development",
