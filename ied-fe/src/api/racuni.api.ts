@@ -7,11 +7,6 @@ import {
 } from "ied-shared";
 import axiosInstanceWithAuth from "./interceptors/auth";
 
-export const getIzdavaciRacuna = async () => {
-  const response = await axiosInstanceWithAuth.get(`/api/racuni/izdavaci`);
-  return response.data;
-};
-
 export const searchRacuni = async (
   pageIndex: number,
   pageSize: number,

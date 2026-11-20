@@ -54,5 +54,7 @@ data and certificate template.
 | `permanent` (`perm`) | Permanent Educom — not a PDV obveznik |
 | `bs` | Balkanski savet za održivi razvoj i edukaciju |
 
-Source of truth: `ied-be/src/constants/izdavacRacuna.const.ts` and
-`ied-shared/src/constants/racuni.ts`.
+Source of truth: the `izdavaci` collection (`ied-be/src/models/izdavac.model.ts`,
+`GET /api/izdavaci`), read by V1 and V2. Each server's database holds only its
+own izdavači, pasted by hand from `ied-be/src/constants/izdavacRacuna.const.ts`.
+Ids: `IzdavacRacuna` in `ied-shared/src/types/racuni.zod.ts`.

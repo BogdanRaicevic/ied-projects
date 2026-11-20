@@ -20,7 +20,7 @@ router.post(
       return;
     }
 
-    const { buffer, fileName } = generateDocxBuffer(tipRacuna, req.body);
+    const { buffer, fileName } = await generateDocxBuffer(tipRacuna, req.body);
     res.setHeader(
       "Content-Type",
       "application/vnd.openxmlformats-officedocument.wordprocessingml.document",

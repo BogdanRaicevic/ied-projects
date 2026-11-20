@@ -1,10 +1,10 @@
-import { IzdavacRacuna, type RacunV2Form, TipRacuna } from "ied-shared";
+import { type IzdavacRacuna, type RacunV2Form, TipRacuna } from "ied-shared";
 import type { RacunV2SeminariPrefill } from "./buildPrefillFromSeminari";
 
 const DEFAULT_STOPA_PDV = 20;
 
-const getCommonDefaults = () => ({
-  izdavacRacuna: IzdavacRacuna.IED,
+const getCommonDefaults = (izdavacRacuna: IzdavacRacuna) => ({
+  izdavacRacuna,
   tekuciRacun: "",
   pozivNaBroj: "",
   valuta: "RSD" as const,
@@ -35,9 +35,10 @@ const getCommonDefaults = () => ({
  */
 export const getDefaultValues = (
   tipRacuna: TipRacuna,
+  izdavacRacuna: IzdavacRacuna,
   prefill?: RacunV2SeminariPrefill,
 ): RacunV2Form => {
-  const commonDefaults = getCommonDefaults();
+  const commonDefaults = getCommonDefaults(izdavacRacuna);
 
   if (prefill) {
     return {

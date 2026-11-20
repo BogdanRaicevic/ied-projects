@@ -2,6 +2,7 @@ import { Alert, Box, CircularProgress, Stack, Typography } from "@mui/material";
 import { useRacunV2SeminariPrefill } from "../components/RacunV2/hooks/useRacunV2SeminariPrefill";
 import { RacunV2Content } from "../components/RacunV2/RacunV2Content";
 import { RacunV2FormProvider } from "../components/RacunV2/RacunV2FormProvider";
+import { useFetchIzdavaciRacuna } from "../hooks/useFetchData";
 
 /**
  * Page entry for `/racuni-v2`.
@@ -31,22 +32,38 @@ import { RacunV2FormProvider } from "../components/RacunV2/RacunV2FormProvider";
  */
 export default function RacuniV2() {
   const { status, prefill, errorMessage } = useRacunV2SeminariPrefill();
+  // The first izdavač in this server's database is the form default.
+  const { data: izdavaci, isPending, isError } = useFetchIzdavaciRacuna();
 
-  if (status === "loading") {
-    return <PrefillLoadingPlaceholder />;
+  if (status === "loading" || isPending) {
+    return <LoadingPlaceholder />;
+  }
+
+  const defaultIzdavac = izdavaci?.[0]?.id;
+  if (!defaultIzdavac) {
+    return (
+      <Alert severity="error">
+        {isError
+          ? "Greška pri učitavanju izdavalaca računa."
+          : "Nema izdavalaca računa u bazi."}
+      </Alert>
+    );
   }
 
   return (
     <Stack spacing={2}>
       {errorMessage ? <Alert severity="warning">{errorMessage}</Alert> : null}
-      <RacunV2FormProvider initialPrefill={prefill}>
+      <RacunV2FormProvider
+        izdavacRacuna={defaultIzdavac}
+        initialPrefill={prefill}
+      >
         <RacunV2Content />
       </RacunV2FormProvider>
     </Stack>
   );
 }
 
-function PrefillLoadingPlaceholder() {
+function LoadingPlaceholder() {
   return (
     <Box
       sx={{
@@ -60,7 +77,7 @@ function PrefillLoadingPlaceholder() {
     >
       <CircularProgress />
       <Typography variant="body2" color="text.secondary">
-        Učitavanje podataka iz Seminara...
+        Učitavanje podataka...
       </Typography>
     </Box>
   );

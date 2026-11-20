@@ -17,8 +17,6 @@ import {
 import {
   IZDAVAC_RACUNA_LABELS,
   IzdavacRacuna,
-  type IzdavacRacunaOption,
-  isIzdavacPdvObveznik,
   VALUTA_LABELS,
   VALUTA_VALUES,
 } from "ied-shared";
@@ -26,16 +24,6 @@ import { Controller, useWatch } from "react-hook-form";
 import { useFetchIzdavaciRacuna } from "../../../hooks/useFetchData";
 import { NumberField } from "../../Form/NumberField";
 import { useRacunV2Form } from "../hooks/useRacunV2Form";
-
-const getTekuciRacuniOptions = (
-  izdavaci: IzdavacRacunaOption[] | undefined,
-  selectedIzdavac: IzdavacRacuna,
-) => {
-  return (
-    izdavaci?.find((option) => option.id === selectedIzdavac)?.tekuciRacuni ??
-    []
-  );
-};
 
 export function IzdavacRacunaSection() {
   const { control, setValue } = useRacunV2Form();
@@ -46,11 +34,9 @@ export function IzdavacRacunaSection() {
   });
 
   const { data: izdavaciRacuna, isLoading, isError } = useFetchIzdavaciRacuna();
-  const pdvObveznik = isIzdavacPdvObveznik(selectedIzdavac);
-  const tekuciRacuniOptions = getTekuciRacuniOptions(
-    izdavaciRacuna,
-    selectedIzdavac,
-  );
+  const izdavac = izdavaciRacuna?.find(({ id }) => id === selectedIzdavac);
+  const pdvObveznik = izdavac?.pdvObveznik ?? true;
+  const tekuciRacuniOptions = izdavac?.tekuciRacuni ?? [];
 
   return (
     <Card variant="outlined">
@@ -91,9 +77,9 @@ export function IzdavacRacunaSection() {
                         });
                       }}
                     >
-                      {Object.values(IzdavacRacuna).map((value) => (
-                        <MenuItem key={value} value={value}>
-                          {IZDAVAC_RACUNA_LABELS[value]}
+                      {izdavaciRacuna?.map(({ id }) => (
+                        <MenuItem key={id} value={id}>
+                          {IZDAVAC_RACUNA_LABELS[id]}
                         </MenuItem>
                       ))}
                     </Select>
@@ -124,10 +110,7 @@ export function IzdavacRacunaSection() {
                         label="Tekući račun"
                         onBlur={field.onBlur}
                         error={!!fieldState.error}
-                        helperText={
-                          fieldState.error?.message ??
-                          "Lista dolazi iz postojećeg V1 read-only endpointa."
-                        }
+                        helperText={fieldState.error?.message}
                       />
                     )}
                     noOptionsText={

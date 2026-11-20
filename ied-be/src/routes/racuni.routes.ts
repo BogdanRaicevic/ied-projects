@@ -1,6 +1,5 @@
 import { Router } from "express";
 import { ExtendedSearchRacunZod, RacunQueryZod, RacunZod } from "ied-shared";
-import { izdavacRacuna } from "../constants/izdavacRacuna.const";
 import { validateRequestBody } from "../middleware/validateSchema";
 import {
   getRacunById,
@@ -11,17 +10,6 @@ import {
 } from "../services/racuni.service";
 
 const router = Router();
-
-router.get("/izdavaci", async (_req, res) => {
-  const result = izdavacRacuna.map((i) => {
-    return {
-      id: i.id,
-      tekuciRacuni: i.tekuciRacuni,
-    };
-  });
-
-  res.json(result);
-});
 
 router.post(
   "/search",

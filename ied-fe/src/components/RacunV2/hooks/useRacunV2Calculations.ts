@@ -2,12 +2,12 @@ import {
   calcInvoiceTotals,
   calcKonacniDeduction,
   IzdavacRacuna,
-  isIzdavacPdvObveznik,
   type RacunV2KonacniDeduction,
   TipRacuna,
 } from "ied-shared";
 import { useMemo } from "react";
 import { useWatch } from "react-hook-form";
+import { useIzdavac } from "../../../hooks/useFetchData";
 import { useRacunV2Form } from "./useRacunV2Form";
 
 const EMPTY_LINKED_AVANSI: ReadonlyArray<RacunV2KonacniDeduction> = [];
@@ -39,7 +39,7 @@ export const useRacunV2Calculations = () => {
   const stavke = useWatch({ control, name: "stavke", defaultValue: [] });
   const placeno = useWatch({ control, name: "placeno", defaultValue: 0 });
 
-  const pdvObveznik = isIzdavacPdvObveznik(izdavacRacuna);
+  const pdvObveznik = useIzdavac(izdavacRacuna)?.pdvObveznik ?? true;
   const context = useMemo(() => ({ pdvObveznik }), [pdvObveznik]);
 
   const konacniDeduction = useMemo(
