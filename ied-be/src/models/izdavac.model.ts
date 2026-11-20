@@ -3,7 +3,7 @@ import { model, Schema } from "mongoose";
 
 const izdavacSchema = new Schema<IzdavacType>(
   {
-    id: {
+    sifra: {
       type: String,
       enum: Object.values(IzdavacRacuna),
       required: true,
@@ -17,7 +17,8 @@ const izdavacSchema = new Schema<IzdavacType>(
     tekuciRacuni: { type: [String], default: [] },
     pdvObveznik: { type: Boolean, required: true },
   },
-  { collection: "izdavaci" },
+  // No `id` virtual: the business key is `sifra`, Mongo's key is `_id`.
+  { collection: "izdavaci", id: false },
 );
 
 export const Izdavac = model<IzdavacType>("Izdavac", izdavacSchema);

@@ -29,9 +29,7 @@ export const IzdavacRacunaSection = () => {
       return null;
     }
 
-    return allIzdavaciData?.find(
-      (f: { id: string; tekuciRacuni: string[] }) => f.id === selectedIzdavac,
-    );
+    return allIzdavaciData?.find((f) => f.sifra === selectedIzdavac);
   }, [selectedIzdavac, isLoading, allIzdavaciData]);
 
   const tekuciRacuniOptions = currentIzdavacData?.tekuciRacuni || [];

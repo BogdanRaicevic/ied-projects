@@ -34,7 +34,9 @@ export function IzdavacRacunaSection() {
   });
 
   const { data: izdavaciRacuna, isLoading, isError } = useFetchIzdavaciRacuna();
-  const izdavac = izdavaciRacuna?.find(({ id }) => id === selectedIzdavac);
+  const izdavac = izdavaciRacuna?.find(
+    ({ sifra }) => sifra === selectedIzdavac,
+  );
   const pdvObveznik = izdavac?.pdvObveznik ?? true;
   const tekuciRacuniOptions = izdavac?.tekuciRacuni ?? [];
 
@@ -77,9 +79,9 @@ export function IzdavacRacunaSection() {
                         });
                       }}
                     >
-                      {izdavaciRacuna?.map(({ id }) => (
-                        <MenuItem key={id} value={id}>
-                          {IZDAVAC_RACUNA_LABELS[id]}
+                      {izdavaciRacuna?.map(({ sifra }) => (
+                        <MenuItem key={sifra} value={sifra}>
+                          {IZDAVAC_RACUNA_LABELS[sifra]}
                         </MenuItem>
                       ))}
                     </Select>

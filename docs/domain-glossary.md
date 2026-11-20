@@ -48,7 +48,7 @@ Identifiers in code stay in Serbian. This maps them to meaning.
 The same app serves several related organisations. Each has its own invoice
 data and certificate template.
 
-| id | Name |
+| sifra | Name |
 |---|---|
 | `ied` | Institut za Ekonomsku Diplomatiju |
 | `permanent` (`perm`) | Permanent Educom — not a PDV obveznik |
@@ -56,5 +56,5 @@ data and certificate template.
 
 Source of truth: the `izdavaci` collection (`ied-be/src/models/izdavac.model.ts`,
 `GET /api/izdavaci`), read by V1 and V2. Each server's database holds only its
-own izdavači, pasted by hand from `ied-be/src/constants/izdavacRacuna.const.ts`.
-Ids: `IzdavacRacuna` in `ied-shared/src/types/racuni.zod.ts`.
+own izdavači. Šifre: `IzdavacRacuna` in `ied-shared/src/types/racuni.zod.ts`.
+The document `_id` is Mongo's own id.

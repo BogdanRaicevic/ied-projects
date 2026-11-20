@@ -3,13 +3,13 @@ import { afterEach, describe, expect, it } from "vitest";
 import { Izdavac } from "../../src/models/izdavac.model";
 import { getIzdavac, getIzdavaci } from "../../src/services/izdavac.service";
 
-const izdavac = (id: IzdavacRacuna, pdvObveznik = true) => ({
-  id,
-  naziv: id,
+const izdavac = (sifra: IzdavacRacuna, pdvObveznik = true) => ({
+  sifra,
+  naziv: sifra,
   kontaktTelefoni: [],
   pib: 100000000,
   maticniBroj: 10000000,
-  tekuciRacuni: [`${id}-racun`],
+  tekuciRacuni: [`${sifra}-racun`],
   pdvObveznik,
 });
 
@@ -22,16 +22,16 @@ describe("izdavac.service", () => {
     await Izdavac.create(izdavac(IzdavacRacuna.BS));
     await Izdavac.create(izdavac(IzdavacRacuna.IED));
 
-    const ids = (await getIzdavaci()).map(({ id }) => id);
+    const sifre = (await getIzdavaci()).map(({ sifra }) => sifra);
 
-    expect(ids).toEqual([IzdavacRacuna.BS, IzdavacRacuna.IED]);
+    expect(sifre).toEqual([IzdavacRacuna.BS, IzdavacRacuna.IED]);
   });
 
-  it("returns one izdavač by id", async () => {
+  it("returns one izdavač by sifra", async () => {
     await Izdavac.create(izdavac(IzdavacRacuna.PERMANENT, false));
 
     expect(await getIzdavac(IzdavacRacuna.PERMANENT)).toMatchObject({
-      id: IzdavacRacuna.PERMANENT,
+      sifra: IzdavacRacuna.PERMANENT,
       pdvObveznik: false,
       tekuciRacuni: ["permanent-racun"],
     });

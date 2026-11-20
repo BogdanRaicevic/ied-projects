@@ -39,7 +39,7 @@ export default function RacuniV2() {
     return <LoadingPlaceholder />;
   }
 
-  const defaultIzdavac = izdavaci?.[0]?.id;
+  const defaultIzdavac = izdavaci?.[0]?.sifra;
   if (!defaultIzdavac) {
     return (
       <Alert severity="error">
