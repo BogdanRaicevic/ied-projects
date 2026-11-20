@@ -49,5 +49,5 @@ export const useFetchIzdavaciRacuna = () => {
   });
 };
 
-export const useIzdavac = (id: IzdavacRacuna | undefined) =>
-  useFetchIzdavaciRacuna().data?.find((izdavac) => izdavac.id === id);
+export const useIzdavac = (sifra: IzdavacRacuna | undefined) =>
+  useFetchIzdavaciRacuna().data?.find((izdavac) => izdavac.sifra === sifra);

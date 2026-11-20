@@ -25,7 +25,7 @@ const LOGOS: Record<IzdavacRacuna, string> = {
 
 const selectIzdavac = (izdavac: IzdavacType) => {
   const { updateField } = useRacunStore.getState();
-  updateField("izdavacRacuna", izdavac.id);
+  updateField("izdavacRacuna", izdavac.sifra);
   updateField("tekuciRacun", "");
   updateField("stopaPdv", izdavac.pdvObveznik ? 20 : 0);
 };
@@ -46,14 +46,14 @@ export default function SelectIzdavacRacuna() {
     if (
       first &&
       !isDisabled &&
-      !izdavaci.some(({ id }) => id === selectedIzdavac)
+      !izdavaci.some(({ sifra }) => sifra === selectedIzdavac)
     ) {
       selectIzdavac(first);
     }
   }, [izdavaci, isDisabled, selectedIzdavac]);
 
   const handleChange = (event: SelectChangeEvent<string>) => {
-    const izdavac = izdavaci.find(({ id }) => id === event.target.value);
+    const izdavac = izdavaci.find(({ sifra }) => sifra === event.target.value);
     if (izdavac) {
       selectIzdavac(izdavac);
     }
@@ -77,11 +77,11 @@ export default function SelectIzdavacRacuna() {
           disabled={isDisabled}
           variant={isDisabled ? "filled" : "outlined"}
         >
-          {izdavaci.map(({ id }) => (
-            <MenuItem key={id} value={id}>
+          {izdavaci.map(({ sifra }) => (
+            <MenuItem key={sifra} value={sifra}>
               <img
-                src={LOGOS[id]}
-                alt={IZDAVAC_RACUNA_LABELS[id]}
+                src={LOGOS[sifra]}
+                alt={IZDAVAC_RACUNA_LABELS[sifra]}
                 style={{ maxWidth: "200px", width: "100%" }}
               />
             </MenuItem>

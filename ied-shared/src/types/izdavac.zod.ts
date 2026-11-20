@@ -1,10 +1,11 @@
 import { z } from "zod";
 import { IzdavacRacuna } from "./racuni.zod";
 
-// One document of the `izdavaci` collection (GET /api/izdavaci). Same fields
-// as ied-be/src/constants/izdavacRacuna.const.ts, which is pasted from.
+// One document of the `izdavaci` collection (GET /api/izdavaci).
+// `sifra` is the business code. `_id` is assigned by Mongo.
 export const IzdavacZod = z.object({
-  id: z.enum(IzdavacRacuna),
+  _id: z.string().optional(),
+  sifra: z.enum(IzdavacRacuna),
   naziv: z.string(),
   kontaktTelefoni: z.array(z.string()),
   pib: z.number(),
