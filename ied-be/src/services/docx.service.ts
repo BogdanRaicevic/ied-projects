@@ -1,10 +1,10 @@
 import fs from "node:fs";
 import path from "node:path";
 import Docxtemplater from "docxtemplater";
-import { IzdavacRacuna, type RacunType } from "ied-shared";
+import type { RacunType } from "ied-shared";
 import PizZip from "pizzip";
-import { izdavacRacuna } from "../constants/izdavacRacuna.const";
 import { formatToLocalDate, sanitizeFilename } from "../utils/docx.utils";
+import { getIzdavac } from "./izdavac.service";
 
 const templatesDir = path.resolve(import.meta.dirname, "../templates");
 
@@ -12,10 +12,10 @@ const templatesDir = path.resolve(import.meta.dirname, "../templates");
 // DOCX invoice generation
 // ---------------------------------------------------------------------------
 
-export const generateDocxBuffer = (
+export const generateDocxBuffer = async (
   templateName: string,
   racunData: RacunType,
-): { buffer: Buffer; fileName: string } => {
+): Promise<{ buffer: Buffer; fileName: string }> => {
   const sanitizedTemplateName = templateName.replace(/[^a-zA-Z0-9-_.]/g, "");
   if (sanitizedTemplateName !== templateName) {
     throw new Error("Invalid template name format");
@@ -38,15 +38,14 @@ export const generateDocxBuffer = (
     errorLogging: true,
   });
 
+  const izdavac = await getIzdavac(racunData.izdavacRacuna);
   const dataForDocumentRendering = {
     ...racunData,
-    izdavacRacuna: {
-      ...izdavacRacuna.find((d) => d.id === racunData.izdavacRacuna),
-    },
+    izdavacRacuna: izdavac,
     datumIzdavanjaRacuna: formatToLocalDate(new Date()),
     hasOnline: (racunData.seminar.brojUcesnikaOnline || 0) > 0,
     hasOffline: (racunData.seminar.brojUcesnikaOffline || 0) > 0,
-    shouldRenderPdvBlock: racunData.izdavacRacuna !== IzdavacRacuna.PERMANENT,
+    shouldRenderPdvBlock: izdavac.pdvObveznik,
     seminar: {
       ...(racunData.seminar ?? {}),
       datum: racunData.seminar?.datum

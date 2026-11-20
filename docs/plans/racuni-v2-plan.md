@@ -23,7 +23,6 @@ Open work only. Delete an item when it ships.
 - Konačni searches for its avansni and deducts the amounts.
 - EUR: for foreign companies, with its own PDV code. Later.
 - No instalments: avans is paid separately, konačni pays the rest.
-- Izdavači per deployment: one server IED + Permanent, the other BS.
 - Model 97: optional.
 - Edits are logged in `audit_log`.
 
@@ -42,9 +41,6 @@ Open work only. Delete an item when it ships.
   to another.
 - **List first.** `+ Novi` → pick type → form for that type. No type tabs, so
   nothing to reset. A saved document opens in the same form.
-- **Izdavači per deployment:** BE env `IZDAVACI_RACUNA=ied,permanent` or
-  `IZDAVACI_RACUNA=bs`; unset = all three. V2 lists and accepts only those.
-  Izdavač data stays in `izdavacRacuna.const.ts`. V1 unchanged.
 - **Model 97:** switch per izdavač. The PDF prints model 97 and two check
   digits before the number (`26110008` → `9626110008`). Later; no data change.
 - **Storage:** primalac, stavke and totals are stored as sent; Zod validates them.
@@ -76,22 +72,23 @@ Open work only. Delete an item when it ships.
 
 - Fix the account in `ied-be/src/constants/izdavacRacuna.const.ts`: IED and
   Permanent both list `205-0000000227245-69`.
-- Add `IZDAVACI_RACUNA` to each server's `.env` when step 1 ships.
+- **On release, before the deploy:** paste the izdavači from
+  `ied-be/src/constants/izdavacRacuna.const.ts`, `pdvObveznik` included, into
+  the `izdavaci` collection: `ied` + `permanent` on one server, `bs` on the
+  other. Same for your local database. Without them V1 and V2 can't make
+  invoices. The first one pasted is the V2 form default.
 
 ## Work, in order
 
-1. **Izdavači per deployment.** Env var + `GET /api/racuni-v2/izdavaci`. V2
-   form uses it: default = first, select hidden when only one. Save rejects
-   other izdavači.
-2. **Save.** `racunV2.model.ts`. Numbering in the service, tested: every table
+1. **Save.** `racunV2.model.ts`. Numbering in the service, tested: every table
    row, parallel saves. `POST /`, `PUT /:id`, `DELETE /:id`, `GET /:id`,
    `GET /:id/pdf`, audit middleware; remove `POST /generate`. FE: one button,
    datum izdavanja, optional poziv na broj; remove the two-step confirm and the
    developer texts ("Phase 1…"). `AGENTS.md`: drop "not persisted yet".
-3. **List.** `GET /api/racuni-v2?q=&page=` (poziv na broj or primalac, newest
+2. **List.** `GET /api/racuni-v2?q=&page=` (poziv na broj or primalac, newest
    first). List page with `+ Novi`, open, PDF, delete. Form without type tabs.
-   Seminari "Kreiraj V2 račun" opens a new predračun. Ships with 2.
-4. **Konačni and račun PDFs.** `konacni.hbs`, `racun.hbs`; avansni search
+   Seminari "Kreiraj V2 račun" opens a new predračun. Ships with 1.
+3. **Konačni and račun PDFs.** `konacni.hbs`, `racun.hbs`; avansni search
    (V2 + V1), deduction, block reuse.
 
 Later: EUR · plaćeno/stornirano + lock · model 97 · NBS IPS QR code (the

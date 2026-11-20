@@ -14,12 +14,12 @@ import {
 import { alpha } from "@mui/material/styles";
 import {
   calcProizvodStavkaSubtotal,
-  isIzdavacPdvObveznik,
   type StavkaProizvodV2Form,
   type Valuta,
 } from "ied-shared";
 import { useMemo } from "react";
 import { Controller, useWatch } from "react-hook-form";
+import { useIzdavac } from "../../../../hooks/useFetchData";
 import { NumberField } from "../../../Form/NumberField";
 import { SubtotalStrip } from "../../components/SubtotalStrip";
 import { useRacunV2Form } from "../../hooks/useRacunV2Form";
@@ -58,7 +58,7 @@ export function ProizvodStavkaCard({ stavkaIndex, onRemove }: Props) {
   const valuta = useWatch({ control, name: "valuta" }) as Valuta;
   const stavka = useWatch({ control, name: `stavke.${stavkaIndex}` });
 
-  const pdvObveznik = isIzdavacPdvObveznik(izdavacRacuna);
+  const pdvObveznik = useIzdavac(izdavacRacuna)?.pdvObveznik ?? true;
 
   const subtotal = useMemo(
     // useWatch returns the discriminated-union element type; this card only

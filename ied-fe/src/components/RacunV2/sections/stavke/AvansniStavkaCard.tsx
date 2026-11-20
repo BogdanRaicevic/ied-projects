@@ -16,12 +16,12 @@ import { alpha } from "@mui/material/styles";
 import {
   calcAvansniStavkaSubtotal,
   formatMoney,
-  isIzdavacPdvObveznik,
   type StavkaRacunaV2Form,
   type Valuta,
 } from "ied-shared";
 import { useMemo } from "react";
 import { Controller, useWatch } from "react-hook-form";
+import { useIzdavac } from "../../../../hooks/useFetchData";
 import { NumberField } from "../../../Form/NumberField";
 import { useRacunV2Form } from "../../hooks/useRacunV2Form";
 
@@ -37,7 +37,7 @@ export function AvansniStavkaCard({ stavkaIndex, onRemove }: Props) {
   const valuta = useWatch({ control, name: "valuta" }) as Valuta;
   const stavka = useWatch({ control, name: `stavke.${stavkaIndex}` });
 
-  const pdvObveznik = isIzdavacPdvObveznik(izdavacRacuna);
+  const pdvObveznik = useIzdavac(izdavacRacuna)?.pdvObveznik ?? true;
   const isUsluga = stavka?.tipStavke === "usluga";
   const accentColor = isUsluga ? "info" : "success";
   const typeLabel = isUsluga ? "Usluga" : "Proizvod";

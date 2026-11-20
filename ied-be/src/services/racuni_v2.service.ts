@@ -1,10 +1,9 @@
 import {
   calcInvoiceTotals,
-  isIzdavacPdvObveznik,
+  type IzdavacType,
   type RacunV2Parsed,
   TipRacuna,
 } from "ied-shared";
-import { izdavacRacuna } from "../constants/izdavacRacuna.const";
 import {
   type InvoiceTemplateData,
   type InvoiceTemplateName,
@@ -14,9 +13,8 @@ import {
 } from "../templates/invoiceRenderer";
 import { sanitizeFilename } from "../utils/docx.utils";
 import { env } from "../utils/envVariables";
+import { getIzdavac } from "./izdavac.service";
 import { renderHtmlToPdfBuffer } from "./pdf.service";
-
-type IzdavacConfig = (typeof izdavacRacuna)[number];
 
 /**
  * Maps each supported `tipRacuna` to the Handlebars template it renders.
@@ -37,7 +35,8 @@ export const generateRacunV2Pdf = async (
   racunData: RacunV2Parsed,
 ): Promise<{ buffer: Buffer; fileName: string }> => {
   const templateName = pickTemplateName(racunData.tipRacuna);
-  const viewModel = buildInvoiceTemplateData(racunData);
+  const izdavac = await getIzdavac(racunData.izdavacRacuna);
+  const viewModel = buildInvoiceTemplateData(racunData, izdavac);
   const html = renderInvoice(templateName, viewModel, { css: "inline" });
   const buffer = await renderHtmlToPdfBuffer(html, {
     format: "A4",
@@ -73,8 +72,9 @@ const pickTemplateName = (tipRacuna: TipRacuna): InvoiceTemplateName => {
  */
 const buildInvoiceTemplateData = (
   racunData: RacunV2Parsed,
+  izdavac: IzdavacType,
 ): InvoiceTemplateData => {
-  const pdvObveznik = isIzdavacPdvObveznik(racunData.izdavacRacuna);
+  const { pdvObveznik } = izdavac;
   const totals = calcInvoiceTotals(
     racunData.stavke,
     { pdvObveznik },
@@ -92,7 +92,7 @@ const buildInvoiceTemplateData = (
         : undefined,
     valuta: racunData.valuta,
     pdvObveznik,
-    izdavac: buildIzdavacProfile(racunData),
+    izdavac: buildIzdavacProfile(izdavac),
     primalac: buildPrimalacView(racunData),
     uplata: parseTekuciRacun(racunData.tekuciRacun),
     stavke: racunData.stavke,
@@ -101,14 +101,7 @@ const buildInvoiceTemplateData = (
   };
 };
 
-const buildIzdavacProfile = (racunData: RacunV2Parsed): IzdavacProfile => {
-  const issuer = izdavacRacuna.find(
-    (item) => item.id === racunData.izdavacRacuna,
-  );
-  if (!issuer) {
-    throw new Error(`Unknown izdavac racuna: ${racunData.izdavacRacuna}`);
-  }
-
+const buildIzdavacProfile = (issuer: IzdavacType): IzdavacProfile => {
   const { naziv, adresa } = splitIzdavacNaziv(issuer.naziv);
 
   return {
@@ -121,7 +114,7 @@ const buildIzdavacProfile = (racunData: RacunV2Parsed): IzdavacProfile => {
 };
 
 const splitIzdavacNaziv = (
-  fullNaziv: IzdavacConfig["naziv"],
+  fullNaziv: string,
 ): Pick<IzdavacProfile, "naziv" | "adresa"> => {
   const [naziv = fullNaziv, ...addressParts] = fullNaziv.split(",");
   return {

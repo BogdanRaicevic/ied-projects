@@ -60,16 +60,6 @@ export enum IzdavacRacuna {
   BS = "bs",
 }
 
-/**
- * Wire shape returned by `GET /api/racuni/izdavaci` (BE: `racuni.routes.ts`).
- * Consumed by both V1 and V2 izdavac sections via `useFetchIzdavaciRacuna`.
- * Lives here so BE and FE share a single contract.
- */
-export const IzdavacRacunaOptionZod = z.object({
-  id: z.enum(IzdavacRacuna),
-  tekuciRacuni: z.array(z.string()),
-});
-
 export const RacunZod = z.object({
   izdavacRacuna: z.enum(IzdavacRacuna),
   tipRacuna: z.enum(TipRacuna),
@@ -123,4 +113,3 @@ export type CalculationsRacunType = z.infer<typeof CalculationsRacunZod>;
 export type RacunQueryType = z.infer<typeof RacunQueryZod>;
 export type PretrageRacunaType = z.infer<typeof PretrageRacunaZod>;
 export type ExtendedSearchRacunType = z.infer<typeof ExtendedSearchRacunZod>;
-export type IzdavacRacunaOption = z.infer<typeof IzdavacRacunaOptionZod>;
