@@ -351,7 +351,7 @@ importers:
         specifier: ^1.9.0
         version: 1.9.0(@types/react@19.3.0)(date-fns@4.4.0)(react-dom@19.3.1(react@19.3.1))(react@19.3.1)
       '@clerk/react':
-        specifier: ^6.18.7
+        specifier: ^6.18.8
         version: 6.19.1(react-dom@19.3.1(react@19.3.1))(react@19.3.1)
       '@emotion/react':
         specifier: ^11.14.0
