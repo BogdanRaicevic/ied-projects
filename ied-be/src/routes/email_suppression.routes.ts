@@ -14,7 +14,10 @@ import {
   removeSuppressedEmail,
   setSuppressedEmail,
 } from "../services/email_suppression.service";
-import { syncListmonk } from "../services/listmonk.service";
+import {
+  isListmonkConfigured,
+  runListmonkSync,
+} from "../services/listmonk.service";
 
 const router = Router();
 const rawCsvParser = raw({ type: "text/csv", limit: "10mb" });
@@ -112,9 +115,17 @@ router.get("/check-status", async (req, res) => {
   res.status(200).json(isSuppressed);
 });
 
-// Same as the nightly job, on demand.
-router.post("/sync-listmonk", async (_req, res) => {
-  res.status(200).json(await syncListmonk());
+// Same as the nightly job, on demand. Runs in the background: a full sync can
+// outlast the proxy timeout. Result goes to the log, errors to Sentry.
+router.post("/sync-listmonk", (_req, res) => {
+  if (!isListmonkConfigured()) {
+    res
+      .status(503)
+      .json({ message: "Listmonk is not configured on this server" });
+    return;
+  }
+  void runListmonkSync();
+  res.sendStatus(202);
 });
 
 export default router;
