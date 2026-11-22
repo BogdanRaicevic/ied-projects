@@ -45,6 +45,11 @@ export const env = {
   sentry: {
     dsn: config.SENTRY_DSN,
   },
+  listmonk: {
+    url: config.LISTMONK_URL,
+    apiUser: config.LISTMONK_API_USER,
+    apiToken: config.LISTMONK_API_TOKEN,
+  },
   features: {
     // Hides the QR payment block on Racuni V2 PDFs until a real QR encoder
     // ships. Defaults to false so production never renders the placeholder
