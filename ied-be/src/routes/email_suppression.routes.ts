@@ -14,6 +14,7 @@ import {
   removeSuppressedEmail,
   setSuppressedEmail,
 } from "../services/email_suppression.service";
+import { syncListmonk } from "../services/listmonk.service";
 
 const router = Router();
 const rawCsvParser = raw({ type: "text/csv", limit: "10mb" });
@@ -109,6 +110,11 @@ router.get("/check-status", async (req, res) => {
   );
   const isSuppressed = await isEmailSuppressed(email);
   res.status(200).json(isSuppressed);
+});
+
+// Same as the nightly job, on demand.
+router.post("/sync-listmonk", async (_req, res) => {
+  res.status(200).json(await syncListmonk());
 });
 
 export default router;
