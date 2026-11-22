@@ -1,21 +1,17 @@
-import { SUPPRESSION_REASONS } from "ied-shared";
+import * as Sentry from "@sentry/node";
+import { SUPPRESSION_REASONS, type SuppressionReasons } from "ied-shared";
 import { z } from "zod";
 import { env } from "../utils/envVariables";
 import { addSuppressedEmail } from "./email_suppression.service";
 
-const SOURCES = [
-  ["/api/bounces?type=hard", SUPPRESSION_REASONS.HARD_BOUNCE],
-  ["/api/bounces?type=complaint", SUPPRESSION_REASONS.SPAM_COMPLAINT],
-  ["/api/subscribers?status=blocklisted", SUPPRESSION_REASONS.UNSUBSCRIBED],
-  [
-    "/api/subscribers?subscription_status=unsubscribed",
-    SUPPRESSION_REASONS.UNSUBSCRIBED,
-  ],
-] as const;
-
 const ListmonkResultsSchema = z.object({
   data: z.object({ results: z.array(z.object({ email: z.string() })) }),
 });
+
+export const isListmonkConfigured = () => {
+  const { url, apiUser, apiToken } = env.listmonk;
+  return Boolean(url && apiUser && apiToken);
+};
 
 const fetchEmails = async (path: string) => {
   const { url, apiUser, apiToken } = env.listmonk;
@@ -39,13 +35,44 @@ const fetchEmails = async (path: string) => {
   return body.data.data.results.map((r) => r.email);
 };
 
-// Re-reads everything each run: addSuppressedEmail never lowers a status, so
-// re-importing is a no-op for emails already suppressed.
+// Mirrors listmonk's current blocklist. Bounce history outlives an unblock in
+// listmonk, so bounces only pick the reason for emails still blocklisted.
 export const syncListmonk = async () => {
-  const lists = await Promise.all(
-    SOURCES.map(async ([path, reason]) =>
-      (await fetchEmails(path)).map((email) => ({ email, reason })),
-    ),
-  );
-  return addSuppressedEmail(lists.flat());
+  const [blocklisted, hard, complaint] = await Promise.all([
+    fetchEmails("/api/subscribers?status=blocklisted"),
+    fetchEmails("/api/bounces?type=hard"),
+    fetchEmails("/api/bounces?type=complaint"),
+  ]);
+  const blocked = new Set(blocklisted);
+  const withReason = (emails: string[], reason: SuppressionReasons) =>
+    emails
+      .filter((email) => blocked.has(email))
+      .map((email) => ({ email, reason }));
+
+  // addSuppressedEmail keeps the highest-ranked reason per email.
+  return addSuppressedEmail([
+    ...withReason(blocklisted, SUPPRESSION_REASONS.UNSUBSCRIBED),
+    ...withReason(hard, SUPPRESSION_REASONS.HARD_BOUNCE),
+    ...withReason(complaint, SUPPRESSION_REASONS.SPAM_COMPLAINT),
+  ]);
+};
+
+let running = false;
+
+// Cron and route entry: logs the result, sends errors to Sentry.
+export const runListmonkSync = async () => {
+  if (running) {
+    console.log("Listmonk sync skipped - already running");
+    return;
+  }
+  running = true;
+  try {
+    const { failures, ...counts } = await syncListmonk();
+    console.log("Listmonk sync done:", counts, failures.slice(0, 20));
+  } catch (error) {
+    Sentry.captureException(error);
+    console.error("Listmonk sync failed:", error);
+  } finally {
+    running = false;
+  }
 };

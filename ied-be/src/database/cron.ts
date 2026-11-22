@@ -1,6 +1,8 @@
-import * as Sentry from "@sentry/node";
 import { CronJob } from "cron";
-import { syncListmonk } from "../services/listmonk.service";
+import {
+  isListmonkConfigured,
+  runListmonkSync,
+} from "../services/listmonk.service";
 import { env } from "../utils/envVariables";
 import runBackup from "./backupToS3";
 
@@ -33,17 +35,11 @@ job.start();
 new CronJob(
   "0 2 * * *", // nightly at 02:00
   async () => {
-    if (!env.listmonk.url) {
-      console.log("Listmonk sync skipped - LISTMONK_URL not set");
+    if (!isListmonkConfigured()) {
+      console.log("Listmonk sync skipped - not configured");
       return;
     }
-    try {
-      const { failures, ...counts } = await syncListmonk();
-      console.log("Listmonk sync done:", counts, failures.slice(0, 20));
-    } catch (error) {
-      Sentry.captureException(error);
-      console.error("Listmonk sync failed:", error);
-    }
+    await runListmonkSync();
   },
   null,
   true,
