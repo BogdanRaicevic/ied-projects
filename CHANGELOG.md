@@ -1,3 +1,14 @@
+## [1.28.0](https://github.com/BogdanRaicevic/ied-projects/compare/v1.27.1...v1.28.0) (2026-11-22)
+
+### Features
+
+* **be:** pull bounces, unsubscribes and spam reports from listmonk ([b6fa5db](https://github.com/BogdanRaicevic/ied-projects/commit/b6fa5dbccc27e91ccf930bad2faec4bb6ed6d3b3))
+* **be:** run the listmonk sync nightly and on demand ([37e7814](https://github.com/BogdanRaicevic/ied-projects/commit/37e78142b695f20a3910408f663c9d21ef753408))
+
+### Bug Fixes
+
+* **be:** mirror listmonk's current blocklist instead of its history ([f692912](https://github.com/BogdanRaicevic/ied-projects/commit/f692912dfbb143aa56163fee522d6d9ae79901b4))
+
 ## [1.27.1](https://github.com/BogdanRaicevic/ied-projects/compare/v1.27.0...v1.27.1) (2026-11-18)
 
 ### Bug Fixes
