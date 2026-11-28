@@ -195,8 +195,8 @@ catalogs:
       specifier: ^17.14.0
       version: 17.14.0
     mongoose:
-      specifier: ^9.12.1
-      version: 9.12.1
+      specifier: ^9.12.3
+      version: 9.13.1
     tsx:
       specifier: ^4.23.15
       version: 4.23.15
@@ -294,7 +294,7 @@ importers:
         version: link:../ied-shared
       mongoose:
         specifier: 'catalog:'
-        version: 9.12.1(socks@2.8.9)
+        version: 9.13.1(socks@2.8.9)
       node-cache:
         specifier: ^5.1.2
         version: 5.1.2
@@ -486,7 +486,7 @@ importers:
         version: link:../ied-shared
       mongoose:
         specifier: 'catalog:'
-        version: 9.12.1(socks@2.8.9)
+        version: 9.13.1(socks@2.8.9)
     devDependencies:
       '@biomejs/biome':
         specifier: 'catalog:'
@@ -3445,8 +3445,8 @@ packages:
       socks:
         optional: true
 
-  mongodb@7.8.0:
-    resolution: {integrity: sha512-p2NKagbQ41+daACG/ZSvhTzeAo+DoEyWE9Cmpf/SyP3pTC43+X0mwKE/44PpKtCxp5wOxnXz+t2pXEZRSkt9Yg==}
+  mongodb@7.9.1:
+    resolution: {integrity: sha512-OWtk/bcf8tx4Qe6lB8OsMksOwGGhC2FH+zl5UNwE+L7uz2VQDhCcnJThAvInEaBrEDaSsUWlMRbuFR4/TjF44w==}
     engines: {node: '>=20.19.0'}
     peerDependencies:
       '@aws-sdk/credential-providers': ^3.806.0
@@ -3472,8 +3472,8 @@ packages:
       socks:
         optional: true
 
-  mongoose@9.12.1:
-    resolution: {integrity: sha512-wPw1NKurTDShT+kr/JJvhdwPKIJkxFJv5GEbv++QahN8snPR9Fp/BFg6nQbbCyUHBB8DexwwlCQW6SfBD99QCg==}
+  mongoose@9.13.1:
+    resolution: {integrity: sha512-P2rNBaSgGIYDrAQtN/4xmsSMFy00UKhWED5pTuhpSzknopozrtdgRu9KFrZZmxpFX7Z4f2Jl5nFoo8iHVBzE/A==}
     engines: {node: '>=20.19.0'}
 
   mpath@0.9.0:
@@ -7335,7 +7335,7 @@ snapshots:
     optionalDependencies:
       socks: 2.8.9
 
-  mongodb@7.8.0(socks@2.8.9):
+  mongodb@7.9.1(socks@2.8.9):
     dependencies:
       '@mongodb-js/saslprep': 1.5.0
       bson: 7.3.2
@@ -7343,11 +7343,11 @@ snapshots:
     optionalDependencies:
       socks: 2.8.9
 
-  mongoose@9.12.1(socks@2.8.9):
+  mongoose@9.13.1(socks@2.8.9):
     dependencies:
       '@standard-schema/spec': 1.1.0
       kareem: 3.4.1
-      mongodb: 7.8.0(socks@2.8.9)
+      mongodb: 7.9.1(socks@2.8.9)
       mpath: 0.9.0
       mquery: 6.0.1
       ms: 2.1.3
